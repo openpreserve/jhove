@@ -1,0 +1,17 @@
+USGS Open-File Report 99-396, "Bathymetry, Sidescan Sonar Image, Surface
+Sediments, and Surficial Geological Map of the Inner Shelf off Sarasota,
+Florida: Preliminary discussion and GIS database release," by David Twichell
+and Valerie Paskevich, USGS, 1999.
+
+Copied 2003-08-15 from <http://pubs.usgs.gov/of/of99-396/htmldocs/data.htm>.
+
+compis.tif  Completed sidescan sonar mosaic with black background. (18 MB)
+compis.htm  Metadata
+compis.txt  Georeferencing report
+compis.tfw  ESRI world file
+
+bathy1.tif  Bathymetry image of study area. Bathymetry shown in a gradiated
+            pseudo-color table. (18 MB)
+bathy1.htm  Metadata
+bathy1.txt  Georeferencing report
+bathy1.tfw  ESRI world file
