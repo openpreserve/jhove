@@ -41,7 +41,7 @@ public final class TaggedProfile extends PdfProfile
         try {
             PdfDictionary docCatDict = _module.getCatalogDict ();
             if (docCatDict == null){
-                reportReasonForNonCompliance(ErrorCodes.tagged.no_catalog_dict,
+                reportReasonForNonCompliance(
                                              "PDF.has.no.catalog.dictionary");
                 return false;
             }
@@ -56,12 +56,12 @@ public final class TaggedProfile extends PdfProfile
                         _module.resolveIndirectObject (docCatDict.get ("MarkInfo"));
                 if (markInfo == null) {
                     reportReasonForNonCompliance(
-                            ErrorCodes.tagged.catalog_dict_has_no_markinfo,
+
                             "PDF.catalog.dictionary.has.no.MarkInfo.entry");
                     return false;
                 }
             } catch (ClassCastException e){
-                reportReasonForNonCompliance(ErrorCodes.tagged.markinfo_is_not_a_dict,
+                reportReasonForNonCompliance(
                                              "PDF.catalog.dictionary.entry."
                                              + "MarkInfo.is.not.a.dictionary");
                 return false;
@@ -72,13 +72,13 @@ public final class TaggedProfile extends PdfProfile
                         (PdfSimpleObject) markInfo.get ("Marked");
                 if (!marked.isTrue ()) {
                     reportReasonForNonCompliance(
-                            ErrorCodes.tagged.markinfo_marked_is_false,
+
                             "PDF.catalog.dictionary.entry.MarkInfo.entry."
                             + "Marked.is.false");
                     return false;
                 }
             } catch (ClassCastException e){
-                reportReasonForNonCompliance(ErrorCodes.tagged.marked_is_not_simple,
+                reportReasonForNonCompliance(
                                              "PDF.catalog.dictionary.entry."
                                              + "MarkInfo.entry.Marked.is.not.a."
                                              + "simple.object");
@@ -97,7 +97,7 @@ public final class TaggedProfile extends PdfProfile
         catch (Exception e) {
             // An exception thrown anywhere means some assumption
             // has been violated, so it doesn't meet the profile.
-            reportReasonForNonCompliance(ErrorCodes.tagged.exception_was_thrown,
+            reportReasonForNonCompliance(
                                          e.getMessage());
             return false;
         }

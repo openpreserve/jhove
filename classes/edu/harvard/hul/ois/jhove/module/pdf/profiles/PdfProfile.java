@@ -14,12 +14,15 @@ import edu.harvard.hul.ois.jhove.module.pdf.PdfDictionary;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfSimpleObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfStream;
+import edu.harvard.hul.ois.jhove.module.pdf.PdfIndirectObj;
 
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.ResourceBundle;
+import java.util.MissingResourceException;
 
 /**
  *  Abstract class for PDF profile checkers.
@@ -48,6 +51,8 @@ public abstract class PdfProfile
 
     private List _reasonsForNonCompliance;
 
+    private ResourceBundle errors;
+
     /**
      *   Creates a PdfProfile.
      *   Subclass constructors should call the super constructor,
@@ -59,6 +64,7 @@ public abstract class PdfProfile
     public PdfProfile (PdfModule module)
     {
         _module = module;
+        errors = ResourceBundle.getBundle("edu.harvard.hul.ois.jhove.module.pdf.profiles.ProfileErrorBundle");
     }
 
 
@@ -66,15 +72,18 @@ public abstract class PdfProfile
 
     /**
      * Use this method to report if the given file does not match this profile
-     * @param errorcode The unique errorcode for exactly what went wrong. Should
-     * identify the exact check that failed. Must be unique
-     * @param explanation A human readable explanation of what went wrong. Should
-     * be understandable by a superuser with some understading of the profile.
-     * Can be inexact, as the gritty details should be identified by the errorcode
+     * @param key The error key, to be looked up in this profiles resource bundle
      */
-    protected void reportReasonForNonCompliance(int errorcode, String explanation){
-        _reasonsForNonCompliance.add(new Property("Error "+errorcode,
-                                                  PropertyType.STRING,explanation));
+    protected void reportReasonForNonCompliance(String key){
+        String error = "";
+
+        try{
+            error = errors.getString(key);
+        }catch (MissingResourceException e){
+            error = key;
+        }
+        _reasonsForNonCompliance.add(new Property("Error",
+                                                  PropertyType.STRING,error));
     }
 
     /**
@@ -144,6 +153,23 @@ public abstract class PdfProfile
      */
     public abstract boolean satisfiesThisProfile ();
 
+    protected PdfObject deref(Object ref){
+        if(ref instanceof PdfIndirectObj){
+            try {
+                return _module.resolveIndirectObject((PdfObject)ref);
+            } catch (Exception e) {
+                throw new Error("Invalid PDF",e);
+            }
+        } else if (ref instanceof PdfObject){
+            return (PdfObject)ref;
+        }else if (ref == null){
+            return null;
+        } else {
+            throw new Error("Weird object encountered");
+        }
+
+    }
+    
 
 
     /**

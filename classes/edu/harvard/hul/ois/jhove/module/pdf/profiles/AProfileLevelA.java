@@ -10,7 +10,9 @@ import edu.harvard.hul.ois.jhove.module.pdf.PdfArray;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfDictionary;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfSimpleObject;
+import edu.harvard.hul.ois.jhove.module.pdf.PdfMalformedException;
 import edu.harvard.hul.ois.jhove.module.pdf.profiles.tagged.TaggedProfile;
+import edu.harvard.hul.ois.jhove.RFC1766Lang;
 
 import java.util.Iterator;
 import java.util.List;
@@ -20,23 +22,27 @@ import java.util.Vector;
 /**
  *  PDF profile checker for PDF/A-1 documents, Level A.
  *  See ISO draft ISO/TC171/SC2, "Document Imaging Applications
- *  Application Issues".
+ *  Application Issues".<p>
  *
  *  This profile checker is dependent on AProfileLevelB and TaggedProfile. In
- *  addition, it performs checks of the fonts, as required by the Level A specs
+ *  addition, it performs checks of the fonts, as required by the Level A specs<p>
  *
+ *  Updated to report errors by Asger Blekinge-Rasmussen, the State and
+ *  University Library of Denmark<p>
+ * 
  * @author Gary McGath
+ * @author Asger Blekinge-Rasmussen
  *
  */
 public class AProfileLevelA extends PdfProfile {
 
         private boolean _levelA;
 
-    /* TaggedProfile to which this profile is linked. */
+    /** TaggedProfile to which this profile is linked. */
     private TaggedProfile _taggedProfile;
 
 
-    /* AProfileLevelB to which this profile is linked. */
+    /** AProfileLevelB to which this profile is linked. */
     private AProfileLevelB _aProfileLevelB;
 
     /**
@@ -52,6 +58,7 @@ public class AProfileLevelA extends PdfProfile {
     }
 
     /**
+     * TODO update
      * Returns <code>true</code> if the document satisfies the profile
      * at Level A.  This returns a meaningful result only if 
      * <code>satisfiesThisProfile()</code> has previously
@@ -65,8 +72,7 @@ public class AProfileLevelA extends PdfProfile {
         if (_taggedProfile != null &&
             !_taggedProfile.isAlreadyOK ()) {
             _levelA = false;
-            reportReasonForNonCompliance(ErrorCodes.pdfa_a.not_a_compliant_tagged_pdf,
-                                         "Not a compliant "
+            reportReasonForNonCompliance("Not a compliant "
                                          +_taggedProfile.getText());
 
         }
@@ -74,15 +80,63 @@ public class AProfileLevelA extends PdfProfile {
         if (_aProfileLevelB != null &&
             !_aProfileLevelB.isAlreadyOK ()) {
             _levelA = false;
-            reportReasonForNonCompliance(ErrorCodes.pdfa_a.not_a_compliant_pdfa_lvl_b,
-                                         "Not a compliant "
+            reportReasonForNonCompliance("Not a compliant "
                                          +_aProfileLevelB.getText());
 
         }
 
+        try {
+            if (!fontsOK()
+                | !catalogOK()    ){
+                _levelA = false;
+            }
+        }
+        catch (Exception e) {//Possible: reportBroken file method or something?
+            //TODO: HAck, fix
+            reportReasonForNonCompliance(
+                    e.getMessage());
+            _levelA = false;
 
-        return fontsOK() && _levelA;
+        }
+        return _levelA;
 
+    }
+
+    /**
+     * Checks if the Catalog dictionary contains a Lang attribute, as per section
+     * 6.8.4
+     * @return true, if lang is present.
+     * @throws PdfMalformedException if the file has no catalog dictionary.
+     * Probably can't happen
+     */
+    private boolean catalogOK() throws PdfMalformedException {
+
+
+        boolean _return = true;
+        PdfDictionary cat = _module.getCatalogDict ();
+        if (cat == null) {
+            throw new PdfMalformedException("PDF.has.no.catalog.Dictionary");
+        }
+
+        // The document catalog dictionary language "should" be present.
+        // If it does, the value "shall" contain
+        // a valid RFC1766 language string.
+
+        PdfSimpleObject lang = (PdfSimpleObject) cat.get ("Lang");
+        if (lang != null) { //So, no error if the object is not there. Is this intentional?
+            String langstring = lang.getStringValue();
+            if (langstring != null){
+                RFC1766Lang l = new RFC1766Lang (langstring);
+                if (!l.isSyntaxCorrect ()) {
+                    reportReasonForNonCompliance("PDF.catalog.dictionary.has.a.lang.entry.in.a.invalid.syntax");
+                    _return = false;
+                }
+            }else{
+                reportReasonForNonCompliance("PDF.catalog.dictionary.has.a.lang.entry.with.no.lang.string");
+                _return = false;
+            }
+        }
+        return _return;
 
     }
 
@@ -131,7 +185,7 @@ public class AProfileLevelA extends PdfProfile {
         }
         catch (Exception e) {
             reportReasonForNonCompliance(
-                    ErrorCodes.pdfa_a.exception_was_thrown, e.getMessage());
+                     e.getMessage());
             return false;
         }
         return true;
@@ -166,7 +220,7 @@ public class AProfileLevelA extends PdfProfile {
                 Vector descVector = descendants.getContent();
                 boolean orderingOK=true;
                 for (int i=0;i<descVector.size();i++){
-                    PdfDictionary cidfont = (PdfDictionary) descVector.get(i);  //each of these is a CIDFont 
+                    PdfDictionary cidfont = (PdfDictionary) deref(descVector.get(i));  //each of these is a CIDFont 
                     PdfDictionary info = (PdfDictionary) cidfont.get("CIDSystemInfo"); //Which must have a CIDSystemInfo 
                     PdfObject order =  info.get("Ordering"); //Which must have an Ordering 
 
@@ -208,7 +262,7 @@ public class AProfileLevelA extends PdfProfile {
                 }
             }
         } catch (Exception e) {
-            reportReasonForNonCompliance(ErrorCodes.pdfa_a.exception_was_thrown,
+            reportReasonForNonCompliance(
                                          e.getMessage());
             return false;
         }

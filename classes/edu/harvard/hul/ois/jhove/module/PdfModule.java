@@ -1869,31 +1869,22 @@ public class PdfModule
     {
         _filtersList = new LinkedList ();
         _docTreeRoot.startWalk ();
-        try {
-            for (;;) {
-                // Get all the page objects in the document sequentially
-                PageObject page = _docTreeRoot.nextPageObject ();
-                if (page == null) {
-                    break;
-                }
-                // Get the streams for the page and walk through them
-                List streams = page.getContentStreams ();
-                if (streams != null) {
-                    ListIterator streamIter = streams.listIterator ();
-                    while (streamIter.hasNext ()) {
-                        PdfStream stream = (PdfStream) streamIter.next ();
-                        Filter[] filters = stream.getFilters ();
-                        extractFilters (filters, stream);
-                    }
+        for (;;) {
+            // Get all the page objects in the document sequentially
+            PageObject page = _docTreeRoot.nextPageObject ();
+            if (page == null) {
+                break;
+            }
+            // Get the streams for the page and walk through them
+            List streams = page.getContentStreams ();
+            if (streams != null) {
+                ListIterator streamIter = streams.listIterator ();
+                while (streamIter.hasNext ()) {
+                    PdfStream stream = (PdfStream) streamIter.next ();
+                    Filter[] filters = stream.getFilters ();
+                    extractFilters (filters, stream);
                 }
             }
-        }
-        catch (PdfException e) {
-            e.disparage (info);
-            info.setMessage (new ErrorMessage
-                    (e.getMessage (), _parser.getOffset ()));
-            // Continue parsing if it's only invalid
-            return (e instanceof PdfInvalidException);
         }
         return true;
     }
@@ -2356,6 +2347,11 @@ public class PdfModule
      *  returns the object it resolves to, otherwise returns
      *  the object itself.  In particular, calling with null will
      *  return null.
+     * @param indObj the possible indirect object to resolve
+     * @return the true pdfobject, which could be indObj
+     * @throws edu.harvard.hul.ois.jhove.module.pdf.PdfException If the internal
+     * structure of the pdf file is invalid
+     * @throws java.io.IOException If there is a problem reading the file
      */
     public PdfObject resolveIndirectObject(PdfObject indObj)
             throws PdfException, IOException
@@ -2380,14 +2376,17 @@ public class PdfModule
     /** Returns an object of a given number.  This may involve
      *  recursion into object streams, in which case it calls itself.
      *
-     *  @param objIndex   The object number to look up
-     *  @param recGuard   The maximum permitted number of recursion levels;
+     * @param objIndex   The object number to look up
+     * @param recGuard   The maximum permitted number of recursion levels;
      *                    no particular value is required, but 30 or more
      *                    should avoid false exceptions.
+     * @return the object requested
+     * @throws edu.harvard.hul.ois.jhove.module.pdf.PdfException If the internal
+     * structure of the pdffile contains invalid data or infinite loops
+     * @throws java.io.IOException if there is a problem reading the file
      */
     protected PdfObject getObject (int objIndex, int recGuard)
-            throws PdfException, IOException
-    {
+            throws IOException, PdfException {
         /* Guard against infinite recursion */
         if (recGuard <= 0) {
             throw new PdfMalformedException ("Improper nesting of object streams");
@@ -2400,40 +2399,34 @@ public class PdfModule
         if (offset < 0) {
             /* The object is located in an object stream. Need to get the
              * object stream first. */
-            try {
-                int streamObjIndex = _xref2[objIndex][0];
-                PdfObject streamObj;
-                ObjectStream ostrm;
-                if (streamObjIndex ==_cachedStreamIndex) {
-                    ostrm = _cachedObjectStream;
-                    // Reset it
+
+            int streamObjIndex = _xref2[objIndex][0];
+            PdfObject streamObj;
+            ObjectStream ostrm;
+            if (streamObjIndex ==_cachedStreamIndex) {
+                ostrm = _cachedObjectStream;
+                // Reset it
+                if (ostrm.isValid ()) {
+                    ostrm.readIndex ();
+                }
+            }
+            else {
+                streamObj =
+                        resolveIndirectObject (getObject (streamObjIndex, recGuard - 1));
+                if (streamObj instanceof PdfStream) {
+                    ostrm = new ObjectStream ((PdfStream) streamObj, _raf);
                     if (ostrm.isValid ()) {
                         ostrm.readIndex ();
+                        _cachedObjectStream = ostrm;
+                        _cachedStreamIndex = streamObjIndex;
+                    }
+                    else {
+                        throw new PdfMalformedException (nogood);
                     }
                 }
-                else {
-                    streamObj =
-                            resolveIndirectObject (getObject (streamObjIndex, recGuard - 1));
-                    if (streamObj instanceof PdfStream) {
-                        ostrm = new ObjectStream ((PdfStream) streamObj, _raf);
-                        if (ostrm.isValid ()) {
-                            ostrm.readIndex ();
-                            _cachedObjectStream = ostrm;
-                            _cachedStreamIndex = streamObjIndex;
-                        }
-                        else {
-                            throw new PdfMalformedException (nogood);
-                        }
-                    }
-                }
-                /* And finally extract the object from the object stream. */
-                return _cachedObjectStream.getObject (objIndex);
             }
-            catch (Exception e) {
-                e.printStackTrace ();
-                /* Fall through with error */
-            }
-            throw new PdfMalformedException (nogood);
+            /* And finally extract the object from the object stream. */
+            return _cachedObjectStream.getObject (objIndex);
         }
         else {
             _parser.seek (offset);
@@ -2495,7 +2488,7 @@ public class PdfModule
         case F_TYPE1:
             return _type1FontsMap;
         case F_TT:
-            return _trueTypeFontsMap;    //TODO: Why no truetype font map selecable???
+            return _trueTypeFontsMap;
         case F_TYPE3:
             return _type3FontsMap;
         case F_MM1:

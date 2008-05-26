@@ -98,7 +98,7 @@ public class PdfStream extends PdfObject
      *  this Stream.  The elements of the array are Filter
      *  objects.
      */
-    public Filter[] getFilters () throws PdfException
+    public Filter[] getFilters () 
     {
         return _filters;
     }

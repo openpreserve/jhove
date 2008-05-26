@@ -93,10 +93,13 @@ public class ObjectStream {
 
 
     /** Reads the index of the object stream.
+     * @throws PdfInvalidException If the object stream contains an unsupported filter
+     * @throws java.io.IOException If there is a problem reading the file
+     * @throws PdfMalformedException If the index contain invalid numbers
+
      */
-    public void readIndex () 
-        throws PdfException, IOException
-    {
+    public void readIndex ()
+            throws PdfMalformedException, IOException, PdfInvalidException {
         Stream strm = _ostrm.getStream ();
         strm.setFilters (_ostrm.getFilters ());
         strm.initRead (_raf);

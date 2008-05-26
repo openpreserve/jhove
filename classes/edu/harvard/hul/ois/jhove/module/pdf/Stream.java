@@ -47,7 +47,8 @@ public class Stream
     }
 
     /** Returns the length of the stream.  This is 0, unless
-     *  the Stream's setLength method has been called. 
+     *  the Stream's setLength method has been called.
+     * @return the length of the stream
      */
     public long getLength ()
     {
@@ -58,7 +59,8 @@ public class Stream
      *  Sets the length field.
      *  This should be the length of the stream proper 
      *  (not counting its dictionary) before filtering, in other words,
-     *  the number of bytes stored in the file. 
+     *  the number of bytes stored in the file.
+     * @param length the length
      */
     public void setLength (long length)
     {
@@ -66,7 +68,8 @@ public class Stream
     }
 
     /** Returns the current offset in the stream.  This is -1, unless
-     *  the Stream's setOffset method has been called. 
+     *  the Stream's setOffset method has been called.
+     * @return the offset in bytes
      */
     public long getOffset ()
     {
@@ -75,6 +78,7 @@ public class Stream
 
     /**
      *  Sets the offset field.
+     * @param offset the offset in bytes
      */
     public void setOffset (long offset)
     {
@@ -84,6 +88,7 @@ public class Stream
     
     /** Sets the array of filters used by the stream.
      *  This must be called before initRead.
+     * @param filters The filters to use
      */
     public void setFilters (Filter[] filters) 
     {
@@ -91,12 +96,15 @@ public class Stream
     }
 
 
-    /** Prepares for reading the Stream. 
-     *  If the filter List includes one which we don't support, throws a
-     *  PdfException.  This supports the abbreviated filter names
-     *  in Appendix H of the PDF spec. */
-    public void initRead (RandomAccessFile raf) 
-            throws IOException, PdfException 
+    /** Prepares for reading the Stream. This method reads the filter list, and
+     * supports the abbreviated filter names
+     *  in Appendix H of the PDF spec.
+     * @param raf The file containing the stream
+     * @throws PdfInvalidException If the filter List includes one which we don't support
+     * @throws java.io.IOException If there are problems reading the file
+     */
+    public void initRead (RandomAccessFile raf)
+            throws IOException, PdfInvalidException
     {
         _bytesRead = 0;
         raf.seek(_offset);
@@ -143,12 +151,17 @@ public class Stream
             else if ("RunLengthDecode".equals (filtName) || "RL".equals (filtName)) {
                 is = new RunLengthFilterStream (is);
             }
+            else {
+                throw new PdfInvalidException("Filter list includes unknown filter '"+filtName+"'" );
+            }
         }
         _inStream = is;
     }
     
     
     /** Reads a byte from the Stream, applying the Filters if any.
+     * @return the byte read, as an int
+     * @throws java.io.IOException if there was a problem reading the stream
      */
     public int read() throws IOException 
     {
@@ -161,7 +174,10 @@ public class Stream
     }
     
     /** Reads a sequence of bytes from the Stream, applying the
-     *  Filters if any. 
+     *  Filters if any.
+     * @param b the array to fill
+     * @return the number of bytes read
+     * @throws java.io.IOException if there was a problem reading the stream
      */
     public int read (byte[] b) throws IOException
     {
@@ -172,7 +188,11 @@ public class Stream
         return n;
     }
     
-    /** Skips a specified number of bytes in the stream. */
+    /** Skips a specified number of bytes in the stream.
+     * @param n the number of bytes to skip
+     * @return the number of bytes skipped
+     * @throws java.io.IOException If there is a problem reading the file
+     */
     public long skipBytes (long n) throws IOException
     {
         long val = _inStream.skip(n);
@@ -182,9 +202,14 @@ public class Stream
 
     /** Reads an ASCII string, which may be preceded by white space.
      *  Will eat the first white space character after the ASCII
-     *  string. */
-    public int readAsciiInt () throws IOException, PdfException
-    {
+     *  string.
+     *
+     * @return the ascii integer as an int
+     * @throws PdfMalformedException If the first non-whitespace char encountered
+     * is not a digit.
+     * @throws java.io.IOException If there are problems reading the file
+     */
+    public int readAsciiInt () throws IOException, PdfMalformedException {
         boolean digitSeen = false;
         int val = 0;
         for (;;) {
@@ -207,9 +232,13 @@ public class Stream
     
     /** Advances to a specified offset in the stream.  The offset
      *  is defined as the number of decompressed bytes which
-     *  precede the position in the stream.  Returns <code>true</code>
+     *  precede the position in the stream.
+     * @param offset the new offset
+     * @return <code>true</code>
      *  if the advance is successful, <code>false</code> if the
      *  point has already been passed or some other failure occurs.
+     *
+     * @throws java.io.IOException If there is a problem reading the stream
      */
     public boolean advanceTo (int offset) throws IOException {
         if (offset < _bytesRead) {
