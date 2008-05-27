@@ -8,6 +8,7 @@ package edu.harvard.hul.ois.jhove.module.pdf.profiles;
 import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
+import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.Parser;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfArray;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfDictionary;
@@ -15,8 +16,10 @@ import edu.harvard.hul.ois.jhove.module.pdf.PdfObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfSimpleObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfStream;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfIndirectObj;
+import edu.harvard.hul.ois.jhove.module.pdf.PdfException;
 
 import java.io.RandomAccessFile;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +37,7 @@ public abstract class PdfProfile
      ******************************************************************/
 
     /** The module invoking this profile. */
-    protected PdfModule _module;
+    protected PdfModuleQueryInterface _module;
 
     /** A brief human-readable description of the profile. */
     protected String _profileText;
@@ -61,10 +64,11 @@ public abstract class PdfProfile
      *   @param module   The PDFModule we're working under
      *
      */
-    public PdfProfile (PdfModule module)
+    public PdfProfile (PdfModuleQueryInterface module)
     {
         _module = module;
         errors = ResourceBundle.getBundle("edu.harvard.hul.ois.jhove.module.pdf.profiles.ProfileErrorBundle");
+        _reasonsForNonCompliance = new ArrayList();//so that individual elements can be tested
     }
 
 
@@ -153,6 +157,107 @@ public abstract class PdfProfile
      */
     public abstract boolean satisfiesThisProfile ();
 
+
+    /**
+     * Casting method. Casts the object, and resolves it, if it is a indirect
+     * object
+     * @param ref The object to cast
+     * @return The object as a PdfSimpleObject
+     */
+    protected PdfSimpleObject toPdfSimpleObject(Object ref) {
+        if (ref instanceof PdfObject){
+            PdfObject ref2 = null;
+            try{
+                ref2 = _module.resolveIndirectObject((PdfObject)ref);
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+            return (PdfSimpleObject)ref2;//throws classcast exceptions
+        }else if (ref == null){
+            return null;
+        } else{//The object is not a PdfObject. Something is seriously wrong
+            throw new Error("Tried to cast something was not a PdfObject");
+        }
+
+    }
+
+    /**
+     * Casting method. Casts the object, and resolves it, if it is a indirect
+     * object
+     * @param ref The object to cast
+     * @return The object as a PdfStream
+     */
+    protected PdfStream toPdfStream(Object ref){
+        if (ref instanceof PdfObject){
+            PdfObject ref2 = null;
+            try{
+                ref2 = _module.resolveIndirectObject((PdfObject)ref);
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+            return (PdfStream) ref2;//throws classcast exceptions
+        }else if (ref == null){
+            return null;
+        } else{//The object is not a PdfObject. Something is seriously wrong
+            throw new Error("Tried to cast something was not a PdfObject");
+        }
+
+    }
+
+
+    /**
+     * Casting method. Casts the object, and resolves it, if it is a indirect
+     * object
+     * @param ref The object to cast
+     * @return The object as a PdfDictionary
+     */
+    protected PdfDictionary toPdfDictionary(Object ref){
+        if (ref instanceof PdfObject){
+            PdfObject ref2 = null;
+            try{
+                ref2 = _module.resolveIndirectObject((PdfObject)ref);
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+            return (PdfDictionary) ref2;//throws classcast exceptions
+        }else if (ref == null){
+            return null;
+        } else{//The object is not a PdfObject. Something is seriously wrong
+            throw new Error("Tried to cast something was not a PdfObject");
+        }
+
+    }
+
+
+    /**
+     * Casting method. Casts the object, and resolves it, if it is a indirect
+     * object
+     * @param ref The object to cast
+     * @return The object as a PdfArray
+     */
+    protected PdfArray toPdfArray(Object ref){
+        if (ref instanceof PdfObject){
+            PdfObject ref2 = null;
+            try{
+                ref2 = _module.resolveIndirectObject((PdfObject)ref);
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+            return (PdfArray) ref2;//throws classcast exceptions
+        }else if (ref == null){
+            return null;
+        } else{//The object is not a PdfObject. Something is seriously wrong
+            throw new Error("Tried to cast something was not a PdfObject");
+        }
+
+    }
+
+    /**
+     * Wrapper to dereference indirect objects. If the object is not indirect,
+     * just return it.
+     * @param ref the object to derefence
+     * @return the referenced object.
+     */
     protected PdfObject deref(Object ref){
         if(ref instanceof PdfIndirectObj){
             try {

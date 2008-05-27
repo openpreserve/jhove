@@ -10,6 +10,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="JUnit" level="project" />
     <orderEntryProperties />
+    <javadoc-paths>
+      <root url="file://$MODULE_DIR$/doc" />
+    </javadoc-paths>
   </component>
 </module>
 

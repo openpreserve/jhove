@@ -1,6 +1,7 @@
 package edu.harvard.hul.ois.jhove.module.pdf.profiles;
 
 import edu.harvard.hul.ois.jhove.module.PdfModule;
+import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.Keyword;
 import edu.harvard.hul.ois.jhove.module.pdf.Numeric;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfArray;
@@ -24,7 +25,7 @@ public final class LinearizedProfile extends PdfProfile
      *   Creates a PdfProfile object for subsequent testing.
      *
      */
-    public LinearizedProfile (PdfModule module) 
+    public LinearizedProfile (PdfModuleQueryInterface module) 
     {
         super (module);
         _profileText = "Linearized PDF";

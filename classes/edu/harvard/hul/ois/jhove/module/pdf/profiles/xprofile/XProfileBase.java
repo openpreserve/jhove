@@ -1,6 +1,7 @@
 package edu.harvard.hul.ois.jhove.module.pdf.profiles.xprofile;
 
 import edu.harvard.hul.ois.jhove.module.PdfModule;
+import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.PageObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PageTreeNode;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfArray;
@@ -43,7 +44,7 @@ public abstract class XProfileBase extends PdfProfile
      *   @param  xType    The type of PDF/X profile being checked
      *
      */
-    public XProfileBase (PdfModule module, int xType) 
+    public XProfileBase (PdfModuleQueryInterface module, int xType)
     {
         super (module);
 	_bleedBoxPresent = false;

@@ -9,6 +9,7 @@ package edu.harvard.hul.ois.jhove.module.pdf.profiles;
 import edu.harvard.hul.ois.jhove.RFC1766Lang;
 import edu.harvard.hul.ois.jhove.XMPHandler;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
+import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.DocNode;
 import edu.harvard.hul.ois.jhove.module.pdf.PageObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PageTreeNode;
@@ -121,7 +122,7 @@ public final class AProfileLevelB extends PdfProfile
      *   @param  module   The module under which we are checking the profile.
      *
      */
-    public AProfileLevelB(PdfModule module)
+    public AProfileLevelB(PdfModuleQueryInterface module)
     {
         super (module);
         _profileText = "ISO PDF/A-1, Level B";
@@ -201,7 +202,7 @@ public final class AProfileLevelB extends PdfProfile
      dictionary. The ID entry is required. Section 6.1.3
      * @return boolean True if the Trailer Dictionary adheres to these demands
      */
-    private boolean trailerDictOK ()  {
+    protected boolean trailerDictOK ()  {
         boolean _return = true;
         PdfDictionary trailerDict = _module.getTrailerDict ();
         if (trailerDict == null) {
@@ -237,14 +238,14 @@ public final class AProfileLevelB extends PdfProfile
 
         try {
             // It must have an unfiltered Metadata stream, section 6.7.2
-            PdfStream metadata = (PdfStream)deref(cat.get ("Metadata"));
+            PdfStream metadata = toPdfStream(cat.get ("Metadata"));
             if (!metadataOK (metadata)) {
                 reportReasonForNonCompliance("There.is.an.yet.undefined.metadata.problem.temp.message");
                 _return = false;
             }
 
             // If it has an interactive form, it must meet certain criteria
-            PdfDictionary form = (PdfDictionary) deref(cat.get ("AcroForm"));
+            PdfDictionary form = toPdfDictionary(cat.get ("AcroForm"));
             if (form != null) {
                 if (!formOK (form)) {
                     _return = false;
@@ -253,21 +254,21 @@ public final class AProfileLevelB extends PdfProfile
 
             // It may not contain an AA entry , section 6.6.2
             if (cat.get ("AA") != null){
-                reportReasonForNonCompliance("PDF.contain.embedded.javascript");
+                reportReasonForNonCompliance("PDF.catalog.has.AA.key");
                 _return = false;
             }
 
             // It may not contain an OCProperties entry, section 6.1.13
             if (cat.get ("OCProperties") != null) {
-                reportReasonForNonCompliance("PDF.has.optional.content");
+                reportReasonForNonCompliance("PDF.catalog.has.OCProperties.key");
                 _return = false;
             }
 
             //The names dictionary must not contain the entry EmbeddedFiles, section 6.1.11
-            PdfDictionary names = (PdfDictionary) _module.resolveIndirectObject(cat.get("Names"));
+            PdfDictionary names = toPdfDictionary(cat.get("Names"));
 
             if (names != null && names.get("EmbeddedFiles") != null) {
-                reportReasonForNonCompliance("The.pdf.contain.embedded.files");
+                reportReasonForNonCompliance("PDf.catalog.names.has.EmbeddedFiles.key");
                 _return = false;
             }
 
@@ -308,7 +309,7 @@ public final class AProfileLevelB extends PdfProfile
             while (iter.hasNext ()) {
                 String registry = null;
                 String ordering = null;
-                PdfDictionary font = (PdfDictionary) iter.next ();
+                PdfDictionary font = toPdfDictionary(iter.next ());
                 //TODO: Font might be null now, but unlikely
 
                 // The Encoding entry can be a predefined name
@@ -322,18 +323,17 @@ public final class AProfileLevelB extends PdfProfile
 
                     // it's a CMap dictionary.
                     PdfDictionary info =
-                            (PdfDictionary) _module.resolveIndirectObject
-                                    (((PdfDictionary) enc).get ("CIDSystemInfo"));
-                    ob = (PdfSimpleObject) info.get ("Registry");
+                            toPdfDictionary(toPdfDictionary(enc).get ("CIDSystemInfo"));
+                    ob = toPdfSimpleObject( info.get ("Registry"));
                     registry = ob.getStringValue ();
-                    ob = (PdfSimpleObject) info.get ("Ordering");
+                    ob = toPdfSimpleObject( info.get ("Ordering"));
                     ordering = ob.getStringValue ();
                     //TODO: This code just throws if something is not expected??
                 }//TODO: Else??
 
 
                 PdfArray descendants =
-                        (PdfArray) font.get ("DescendantFonts");
+                        toPdfArray(font.get ("DescendantFonts"));
                 // PDF 1.4 and previous allow only a single
                 // descendant font, and this must be a CIDFont.
                 // While Adobe warns that this may change in a
@@ -351,11 +351,10 @@ public final class AProfileLevelB extends PdfProfile
              * subfont = (PdfDictionary)
              *                  _module.resolveIndirectObject (subfont);
              */
-                PdfObject objFont = (PdfObject) subfonts.elementAt (0);
-                PdfDictionary subfont = (PdfDictionary)
-                        _module.resolveIndirectObject (objFont);
+                PdfObject objFont = deref( subfonts.elementAt (0));
+                PdfDictionary subfont = toPdfDictionary(objFont);
                 PdfSimpleObject subtype =
-                        (PdfSimpleObject) subfont.get ("Subtype");
+                        toPdfSimpleObject(subfont.get ("Subtype"));
                 /*
                 * Fix conributed by FCLA, 2007-05-30, to permit the
                 * comparison of a general PdfSimpleObject to a string.
@@ -372,9 +371,8 @@ public final class AProfileLevelB extends PdfProfile
                 // first subfont, save the registration and
                 // ordering strings.  Otherwise make sure they match.
                 PdfDictionary info =
-                        (PdfDictionary) _module.resolveIndirectObject
-                                (subfont.get ("CIDSystemInfo"));
-                ob = (PdfSimpleObject) info.get ("Registry");
+                        toPdfDictionary(subfont.get ("CIDSystemInfo"));
+                ob = toPdfSimpleObject(info.get ("Registry"));
                 String obstr = ob.getStringValue ();
                 if (registry == null) {
                     registry = obstr;
@@ -384,7 +382,7 @@ public final class AProfileLevelB extends PdfProfile
                         return false;
                     }
                 }
-                ob = (PdfSimpleObject) info.get ("Ordering");
+                ob = toPdfSimpleObject(info.get ("Ordering"));
                 obstr = ob.getStringValue ();
                 /* Fix contributed by FCLA, 2007-05-30, to fix an apparent
              * typo.
@@ -401,12 +399,12 @@ public final class AProfileLevelB extends PdfProfile
                 }
                 // A type 2 subfont must meet certain restrictions
                 if ("CIDFontType2".equals (subtype)) {
-                    PdfObject cgmap = subfont.get ("CIDToGIDMap");
+                    PdfObject cgmap = deref(subfont.get ("CIDToGIDMap"));
                     if (cgmap == null) {
                         return false;
                     }
                     if (cgmap instanceof PdfSimpleObject) {
-                        if (!"Identity".equals (((PdfSimpleObject)cgmap).getStringValue ())) {
+                        if (!"Identity".equals ((toPdfSimpleObject(cgmap)).getStringValue ())) {
                             return false;
                         }
                     }
@@ -427,21 +425,20 @@ public final class AProfileLevelB extends PdfProfile
     private boolean ttFontEncodingOK (PdfDictionary font)
     {
         try {
-            PdfDictionary desc = (PdfDictionary)
-                    _module.resolveIndirectObject (font.get ("FontDescriptor"));
+            PdfDictionary desc = toPdfDictionary(font.get ("FontDescriptor"));
             // Not all fonts -- in particular, the standard 14 --
             // are required to have FontDescriptors.  How do we
             // handle encoding in those cases?
             if (desc == null) {
                 return true;  // for now, give benefit of doubt
             }
-            PdfSimpleObject flagObj = (PdfSimpleObject)
-                    desc.get ("Flags");
+            PdfSimpleObject flagObj = toPdfSimpleObject(
+                    desc.get ("Flags"));
             int flags = flagObj.getIntValue ();
             if ((flags & 4) == 0) {
                 // It's a nonsymbolic font, check the Encoding
                 PdfSimpleObject encoding =
-                        (PdfSimpleObject) font.get ("Encoding");
+                        toPdfSimpleObject(font.get ("Encoding"));
                 String encStr = encoding.getStringValue ();
                 if (!"MacRomanEncoding".equals (encStr) &&
                     !"WinAnsiEncoding".equals (encStr)) {
@@ -468,7 +465,7 @@ public final class AProfileLevelB extends PdfProfile
 
         // The NeedAppearances flag either shall not be present
         // or shall be false. Section 6.9
-        PdfSimpleObject needapp = (PdfSimpleObject) form.get ("NeedAppearances");
+        PdfSimpleObject needapp = toPdfSimpleObject(form.get ("NeedAppearances"));
         if (needapp != null) {
             if (!needapp.isFalse ()) {
                 reportReasonForNonCompliance("The.interactive.form.has.NeedAppearances.set.see.section.6.9");
@@ -476,10 +473,10 @@ public final class AProfileLevelB extends PdfProfile
             }
         }
 
-        PdfArray fields = (PdfArray) form.get ("Fields");
+        PdfArray fields = toPdfArray(form.get ("Fields"));
         Vector fieldVec = fields.getContent ();
         for (int i = 0; i < fieldVec.size (); i++) {
-            PdfDictionary field = (PdfDictionary) fieldVec.elementAt (i);
+            PdfDictionary field = toPdfDictionary(fieldVec.elementAt (i));
             if (!fieldOK (field)) {
                 _return = false;
             }
@@ -501,12 +498,12 @@ public final class AProfileLevelB extends PdfProfile
         // A Widget annotation dictionary or Field dictionary
         // shall not contain the AA keys, section 6.6.2
         if (field.get ("AA") != null) {
-            reportReasonForNonCompliance("PDF.contain.embedded.javascript");
+            reportReasonForNonCompliance("PDF.form.field.has.AA.key");
             _return = false;
         }
 
         // A Widget annotation dictionary or Field dictionary
-        // shall not contain the AA keys, section 6.9
+        // shall not contain the A keys, section 6.9
         if (field.get ("A") != null) {
             reportReasonForNonCompliance("PDF.has.action.associated.with.interactive.form.field");
             _return = false;
@@ -521,7 +518,7 @@ public final class AProfileLevelB extends PdfProfile
 
 
 
-        PdfArray kids = (PdfArray) field.get ("Kids");
+        PdfArray kids = toPdfArray(field.get ("Kids"));
         // Now, just to complicate things, the contents of
         // the array might be subfield dictionaries or might
         // be widget annotations.  Oh, and neither one has
@@ -530,7 +527,7 @@ public final class AProfileLevelB extends PdfProfile
         if (kids != null) {
             Vector kidVec = kids.getContent ();
             for (int i = 0; i < kidVec.size (); i++) {
-                PdfDictionary kid = (PdfDictionary) kidVec.elementAt (i);
+                PdfDictionary kid = toPdfDictionary(kidVec.elementAt (i));
                 // The safest way to check if this is a field seems
                 // to be to look for the required Parent entry.
                 if (kid.get ("Parent") != null) {
@@ -591,7 +588,7 @@ public final class AProfileLevelB extends PdfProfile
                     if (annots != null) {
                         Vector annVec = annots.getContent ();
                         for (int i = 0; i < annVec.size (); i++) {
-                            annotationOK((PdfDictionary) _module.resolveIndirectObject((PdfObject)annVec.get(i))) ;
+                            annotationOK(toPdfDictionary(annVec.get(i))) ;
                             _return = false;
                         }
                     }
@@ -604,25 +601,19 @@ public final class AProfileLevelB extends PdfProfile
                 if (rsrc != null) {
 
                     // Check color spaces.
-                    PdfDictionary cs = (PdfDictionary)
-                            _module.resolveIndirectObject
-                                    (rsrc.get ("ColorSpace"));
+                    PdfDictionary cs = toPdfDictionary(rsrc.get ("ColorSpace"));
                     if (!colorSpaceOK (cs)) {//TODO: colours... DO ya thing
                         _return = false;
                     }
 
                     // Check extended graphics state.
-                    PdfDictionary gs = (PdfDictionary)
-                            _module.resolveIndirectObject
-                                    (rsrc.get ("ExtGState"));
+                    PdfDictionary gs = toPdfDictionary(rsrc.get ("ExtGState"));
                     if (!extGStateOK (gs)) {//TODO: colours... DO ya thing
                         _return = false;
                     }
 
                     // Check XObjects.
-                    PdfDictionary xo = (PdfDictionary)
-                            _module.resolveIndirectObject
-                                    (rsrc.get ("XObject"));
+                    PdfDictionary xo = toPdfDictionary(rsrc.get ("XObject"));
                     if (!xObjectsOK (xo)) {
                         _return = false;
                     }
@@ -635,31 +626,25 @@ public final class AProfileLevelB extends PdfProfile
                     if (streams != null) {
                         Iterator iter = streams.listIterator ();
                         while (iter.hasNext ()) {
-                            PdfStream stream = (PdfStream) iter.next ();
+                            PdfStream stream = toPdfStream( iter.next ());
                             if (!streamOK(stream)){
                                 _return = false;
                             }
                             PdfDictionary dict = stream.getDict ();
                             PdfDictionary rs =
-                                    (PdfDictionary) dict.get ("Resources");
+                                    toPdfDictionary(dict.get ("Resources"));
                             if (rs != null) {
-                                PdfDictionary cs = (PdfDictionary)
-                                        _module.resolveIndirectObject
-                                                (rs.get ("ColorSpace"));
+                                PdfDictionary cs = toPdfDictionary(rs.get ("ColorSpace"));
                                 if (!colorSpaceOK (cs)) {
                                     _return = false;
                                 }
 
-                                PdfDictionary gs = (PdfDictionary)
-                                        _module.resolveIndirectObject
-                                                (rs.get ("ExtGState"));
+                                PdfDictionary gs = toPdfDictionary(rs.get ("ExtGState"));
                                 if (!extGStateOK (gs)) {
                                     _return = false;
                                 }
 
-                                PdfDictionary xo = (PdfDictionary)
-                                        _module.resolveIndirectObject
-                                                (rs.get ("XObject"));
+                                PdfDictionary xo = toPdfDictionary(rs.get ("XObject"));
                                 if (!xObjectsOK (xo)) {
                                     _return = false;
                                 }
@@ -718,7 +703,7 @@ public final class AProfileLevelB extends PdfProfile
         // Also check page objects for annotations.
         // Must be one of the prescribed types, but not
         // Movie, Sound, or FileAttachment.
-        PdfSimpleObject subtypeObj = (PdfSimpleObject) annDict.get ("Subtype");
+        PdfSimpleObject subtypeObj = toPdfSimpleObject(annDict.get ("Subtype"));
         String subtypeVal = subtypeObj.getStringValue ();
         boolean stOK = false;
 
@@ -751,8 +736,8 @@ public final class AProfileLevelB extends PdfProfile
 
         // if the CA key is present, it must have a
         // value of 1.0. Section 6.5.3
-        PdfSimpleObject ca = (PdfSimpleObject)
-                annDict.get ("CA");
+        PdfSimpleObject ca = toPdfSimpleObject(
+                annDict.get ("CA"));
         if (ca != null) {
             double caVal = ca.getDoubleValue ();
             if (caVal != 1.0) {
@@ -767,8 +752,8 @@ public final class AProfileLevelB extends PdfProfile
         int hiddenFlag = 1 << 1;
         int invisibleFlag = 1 << 0;
         int noViewFlag = 1 << 5;
-        PdfSimpleObject f = (PdfSimpleObject)
-                annDict.get ("F");
+        PdfSimpleObject f = toPdfSimpleObject(
+                annDict.get ("F"));
         int fint = f.getIntValue();
 
         if ((fint & printFlag) != printFlag) {//error
@@ -813,7 +798,7 @@ public final class AProfileLevelB extends PdfProfile
         }
 
 
-        PdfDictionary ap = (PdfDictionary) annDict.get("AP");
+        PdfDictionary ap = toPdfDictionary(annDict.get("AP"));
         if (ap != null){
             PdfObject n = ap.get("N");
             if (!(n instanceof PdfStream)) {
@@ -854,10 +839,10 @@ public final class AProfileLevelB extends PdfProfile
         // checking device ("uncalibrated") color spaces
         Iterator iter = cs.iterator ();
         while (iter.hasNext ()) {
-            PdfObject res = (PdfObject) iter.next ();
+            PdfObject res = (PdfObject)(iter.next ());
             if (res instanceof PdfArray) {
                 Vector resv = ((PdfArray) res).getContent ();
-                PdfSimpleObject snameobj = (PdfSimpleObject) resv.elementAt (0);
+                PdfSimpleObject snameobj = toPdfSimpleObject(resv.elementAt (0));
                 String sname = snameobj.getStringValue ();
                 boolean oldHasUncalCS = hasUncalCS;
                 if ("DeviceCMYK".equals (sname)) {
@@ -896,14 +881,8 @@ public final class AProfileLevelB extends PdfProfile
         // in the document catalog dictionary.
         PdfDictionary catDict = _module.getCatalogDict ();
         PdfArray intentsArray = null;
-        try {//TODO do something about these exceptions
-            intentsArray = (PdfArray) _module.resolveIndirectObject
-                    (catDict.get ("OutputIntents"));
-        } catch (PdfException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+
+        intentsArray = toPdfArray(catDict.get ("OutputIntents"));
         return intentsArray;
     }
 
@@ -924,11 +903,11 @@ public final class AProfileLevelB extends PdfProfile
                 // the same DestOutputProfile object or none, and there
                 // must be at least one that as one and has GTS_PDFA1 as
                 // the value of its S key.
-                PdfDictionary intent = (PdfDictionary) intVec.elementAt (0);
+                PdfDictionary intent = toPdfDictionary(intVec.elementAt (0));
                 PdfSimpleObject outCond =
-                        (PdfSimpleObject) intent.get ("OutputCondition");
+                        toPdfSimpleObject(intent.get ("OutputCondition"));
                 if (outCond != null) {
-                    PdfStream outProfile = (PdfStream) _module.resolveIndirectObject
+                    PdfStream outProfile = toPdfStream
                             (intent.get ("DestOutputProfile"));
                     if (outProfile != null) {
                         if (theOutProfile != null) {
@@ -941,7 +920,7 @@ public final class AProfileLevelB extends PdfProfile
                             // All subsequent output profiles must matcht his.
                             theOutProfile = outProfile;
                         }
-                        PdfSimpleObject subtype = (PdfSimpleObject) intent.get ("S");
+                        PdfSimpleObject subtype = toPdfSimpleObject( intent.get ("S"));
                         if (subtype != null) {
                             if ("GTS_PDFA1".equals (subtype.getStringValue())) {
                                 pdfaProfileSeen = true;
@@ -977,13 +956,12 @@ public final class AProfileLevelB extends PdfProfile
             return true;
         }
         try {
-            PdfDictionary item = (PdfDictionary) outlineDict.get ("First");
+            PdfDictionary item = toPdfDictionary(outlineDict.get ("First"));
             while (item != null) {
                 if (!checkOutlineItem (item)) {
                     return false;
                 }
-                item = (PdfDictionary) _module.resolveIndirectObject
-                        (((PdfDictionary) item).get ("Next"));
+                item = toPdfDictionary(item.get ("Next"));
             }
         }
         catch (Exception e) {
@@ -998,20 +976,18 @@ public final class AProfileLevelB extends PdfProfile
     {
         // Check if there are actions for this item
         try {
-            PdfDictionary action = (PdfDictionary) item.get ("A");
+            PdfDictionary action = toPdfDictionary(item.get ("A"));
             if (action != null) {
                 if (!actionOK (action)) {
                     return false;
                 }
             }
-            PdfDictionary child = (PdfDictionary)
-                    _module.resolveIndirectObject (item.get ("First"));
+            PdfDictionary child = toPdfDictionary(item.get ("First"));
             while (child != null) {
                 if (!checkOutlineItem (child)) {
                     return false;
                 }
-                child = (PdfDictionary)
-                        _module.resolveIndirectObject (child.get ("Next"));
+                child = toPdfDictionary(child.get ("Next"));
             }
         }
         catch (Exception e) {
@@ -1028,7 +1004,7 @@ public final class AProfileLevelB extends PdfProfile
         // For some reason, an action's type is an "S" entry, not
         // a "Subtype" entry.
         try {
-            PdfSimpleObject actType = (PdfSimpleObject) action.get ("S");
+            PdfSimpleObject actType = toPdfSimpleObject( action.get ("S"));
             String actStr = actType.getStringValue ();
 
             for (i = 0; i < excludedActions.length; i++) {
@@ -1038,7 +1014,7 @@ public final class AProfileLevelB extends PdfProfile
             }
 
             if ("Named".equals(actStr)){//Only 4 named actions allowed
-                PdfSimpleObject actName = (PdfSimpleObject) action.get("N");
+                PdfSimpleObject actName = toPdfSimpleObject(action.get("N"));
                 String actNameStr = actName.getStringValue();
                 for (i = 0; i < allowedNamedActions.length; i++) {
                     if (!allowedNamedActions[i].equals (actStr)) {
@@ -1050,7 +1026,7 @@ public final class AProfileLevelB extends PdfProfile
             // An action can have a "Next" entry which is either
             // another action or an array of actions.  Need to follow
             // the whole tree to make sure all actions are legit.
-            PdfObject next = action.get ("Next");
+            PdfObject next = deref(action.get ("Next"));
             if (next instanceof PdfDictionary) {
                 if (!actionOK ((PdfDictionary) next)) {
                     return false;
@@ -1059,8 +1035,8 @@ public final class AProfileLevelB extends PdfProfile
             else if (next instanceof PdfArray) {
                 Vector nextVec = ((PdfArray) next).getContent ();
                 for (i = 0; i < nextVec.size (); i++) {
-                    PdfDictionary nact = (PdfDictionary)
-                            nextVec.elementAt (i);
+                    PdfDictionary nact = toPdfDictionary(
+                            nextVec.elementAt (i));
                     if (!actionOK (nact)) {
                         return false;
                     }
@@ -1094,14 +1070,14 @@ public final class AProfileLevelB extends PdfProfile
                 return false;
             }
             if (tr2 != null) {
-                String tr2Val = ((PdfSimpleObject) tr2).getStringValue ();
+                String tr2Val = toPdfSimpleObject( tr2).getStringValue ();
                 if (!"Default".equals (tr2Val)) {
                     return false;
                 }
             }
 
             // RI is restricted to the traditional 4 rendering intents
-            PdfSimpleObject ri = (PdfSimpleObject) gs.get ("RI");
+            PdfSimpleObject ri = toPdfSimpleObject(gs.get ("RI"));
             if (ri != null) {
                 String riVal = ri.getStringValue ();
                 if (!validIntentString (riVal)) {
@@ -1110,7 +1086,7 @@ public final class AProfileLevelB extends PdfProfile
             }
 
             // SMask is allowed only with a value of "None".
-            PdfSimpleObject smask = (PdfSimpleObject) gs.get ("SMask");
+            PdfSimpleObject smask = toPdfSimpleObject(gs.get ("SMask"));
             if (smask != null) {
                 String smVal = smask.getStringValue ();
                 if (!"None".equals (smVal)) {
@@ -1120,7 +1096,7 @@ public final class AProfileLevelB extends PdfProfile
 
             // BM, if present, must be "Normal" or "Compatible"
             PdfSimpleObject blendMode =
-                    (PdfSimpleObject) gs.get ("BM");
+                    toPdfSimpleObject( gs.get ("BM"));
             if (blendMode != null) {
                 String bmVal = blendMode.getStringValue ();
                 if (!"Normal".equals (bmVal) &&
@@ -1130,7 +1106,7 @@ public final class AProfileLevelB extends PdfProfile
             }
 
             // CA and ca must be 1.0, if present
-            PdfSimpleObject ca = (PdfSimpleObject) gs.get ("CA");
+            PdfSimpleObject ca = toPdfSimpleObject( gs.get ("CA"));
             double caVal;
             if (ca != null) {
                 caVal = ca.getDoubleValue ();
@@ -1138,7 +1114,7 @@ public final class AProfileLevelB extends PdfProfile
                     return false;
                 }
             }
-            ca = (PdfSimpleObject) gs.get ("ca");
+            ca = toPdfSimpleObject( gs.get ("ca"));
             if (ca != null) {
                 caVal = ca.getDoubleValue ();
                 if (caVal != 1.0) {
@@ -1163,7 +1139,7 @@ public final class AProfileLevelB extends PdfProfile
         try {
             // PostScript XObjects aren't allowed.
             // Image XObjects must meet certain tests.
-            PdfSimpleObject subtype = (PdfSimpleObject) xo.get ("Subtype");
+            PdfSimpleObject subtype = toPdfSimpleObject( xo.get ("Subtype"));
             if (subtype != null) {
                 String subtypeVal = subtype.getStringValue ();
                 if ("PS".equals (subtypeVal)) {
@@ -1177,7 +1153,7 @@ public final class AProfileLevelB extends PdfProfile
                     }
                 }
                 if ("Form".equals (subtypeVal)) {
-                    PdfSimpleObject subtype2 = (PdfSimpleObject) xo.get("Subtype2");
+                    PdfSimpleObject subtype2 = toPdfSimpleObject( xo.get("Subtype2"));
 
                     if ("PS".equals(subtype2.getStringValue())){//really a Postscript object
                         _return = false;
@@ -1238,7 +1214,7 @@ public final class AProfileLevelB extends PdfProfile
             }
 
             // Interpolate is allowed only if its value is false.
-            PdfSimpleObject interp = (PdfSimpleObject) xo.get ("Interpolate");
+            PdfSimpleObject interp = toPdfSimpleObject( xo.get ("Interpolate"));
             if (interp != null) {
                 if (!interp.isFalse ()) {
                     _return = false;
@@ -1248,7 +1224,7 @@ public final class AProfileLevelB extends PdfProfile
 
             // Intent must be one of the four standard rendering intents,
             // if present.
-            PdfSimpleObject intent = (PdfSimpleObject) xo.get ("Intent");
+            PdfSimpleObject intent = toPdfSimpleObject( xo.get ("Intent"));
             if (intent != null) {
                 String intentStr = intent.getStringValue ();
                 if(!validIntentString(intentStr)){

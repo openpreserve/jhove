@@ -6,6 +6,7 @@
 package edu.harvard.hul.ois.jhove.module.pdf.profiles;
 
 import edu.harvard.hul.ois.jhove.module.PdfModule;
+import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfArray;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfDictionary;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfObject;
@@ -52,7 +53,7 @@ public class AProfileLevelA extends PdfProfile {
      *   @param  module   The module under which we are checking the profile.
      *
      */
-    public AProfileLevelA(PdfModule module) {
+    public AProfileLevelA(PdfModuleQueryInterface module) {
         super (module);
         _profileText = "ISO PDF/A-1, Level A";
     }
