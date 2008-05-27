@@ -6,7 +6,6 @@
 
 package edu.harvard.hul.ois.jhove.module.pdf.profiles;
 
-import edu.harvard.hul.ois.jhove.RFC1766Lang;
 import edu.harvard.hul.ois.jhove.XMPHandler;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
 import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
@@ -19,20 +18,16 @@ import edu.harvard.hul.ois.jhove.module.pdf.PdfObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfSimpleObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfStream;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfXMPSource;
-import edu.harvard.hul.ois.jhove.module.pdf.PdfException;
-import edu.harvard.hul.ois.jhove.module.pdf.PdfMalformedException;
-import edu.harvard.hul.ois.jhove.module.pdf.PdfIndirectObj;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import javax.xml.parsers.SAXParserFactory;
 import java.io.UnsupportedEncodingException;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import java.util.Arrays;
 
 /**
  *  PDF profile checker for PDF/A-1 documents.
@@ -228,7 +223,7 @@ public final class AProfileLevelB extends PdfProfile
      * @return true, if the catalog adhered to all the requirements. Otherwise
      * false, and the reason will be reported.
      */
-    private boolean catalogOK ()  {
+    protected boolean catalogOK ()  {
         boolean _return = true;
         PdfDictionary cat = _module.getCatalogDict ();
         if (cat == null) {
@@ -283,7 +278,7 @@ public final class AProfileLevelB extends PdfProfile
     }
 
     //Firstlevel check
-    private boolean fontsOK ()
+    protected boolean fontsOK ()
     {
         if (!type0FontsOK ()) {//TODO: reports down in the method
             return false;
@@ -554,7 +549,7 @@ public final class AProfileLevelB extends PdfProfile
      </ul>
      * @return if all the checks are positive
      */
-    private boolean resourcesOK () {
+    protected boolean resourcesOK () {
         boolean _return = true;
         PageTreeNode docTreeRoot = _module.getDocumentTree ();
         //The Tree consist of PageTree objects, and Page objects as the leaves.
@@ -1167,7 +1162,7 @@ public final class AProfileLevelB extends PdfProfile
         catch (Exception e) {
             return false;
         }
-        return true;
+        return _return;
     }
 
     /** Checks if a Form xobject is valid.  This overrides the method in
