@@ -1,10 +1,8 @@
 package edu.harvard.hul.ois.jhove.module.pdf.profiles.tagged;
 
 import edu.harvard.hul.ois.jhove.module.PdfModule;
-import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfDictionary;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfSimpleObject;
-import edu.harvard.hul.ois.jhove.module.pdf.profiles.ErrorCodes;
 import edu.harvard.hul.ois.jhove.module.pdf.profiles.PdfProfile;
 
 /**
@@ -25,7 +23,7 @@ public final class TaggedProfile extends PdfProfile
      *   @param  module   The module under which we are checking the profile.
      *
      */
-    public TaggedProfile (PdfModuleQueryInterface module) 
+    public TaggedProfile (PdfModule module) 
     {
         super (module);
         _profileText = "Tagged PDF";

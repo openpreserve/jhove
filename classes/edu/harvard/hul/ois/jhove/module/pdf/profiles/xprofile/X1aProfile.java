@@ -1,7 +1,6 @@
 package edu.harvard.hul.ois.jhove.module.pdf.profiles.xprofile;
 
 import edu.harvard.hul.ois.jhove.module.PdfModule;
-import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 
 /**
  *  PDF profile checker for PDF/X-1a documents.
@@ -26,7 +25,7 @@ public final class X1aProfile extends XProfileBase
      *   @param  module   The module under which we are checking the profile.
      *
      */
-    public X1aProfile (PdfModuleQueryInterface module) 
+    public X1aProfile (PdfModule module)
     {
         super (module, XProfileBase.PDFX1A);
         _profileText = "ISO PDF/X-1a";

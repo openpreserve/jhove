@@ -7,7 +7,6 @@
 package edu.harvard.hul.ois.jhove.module.pdf.profiles.xprofile;
 
 import edu.harvard.hul.ois.jhove.module.PdfModule;
-import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.DocNode;
 import edu.harvard.hul.ois.jhove.module.pdf.NameTreeNode;
 import edu.harvard.hul.ois.jhove.module.pdf.PageObject;
@@ -42,7 +41,7 @@ public final class X1Profile extends XProfileBase
      *   @param  module   The module under which we are checking the profile.
      *
      */
-    public X1Profile (PdfModuleQueryInterface module) 
+    public X1Profile (PdfModule module) 
     {
         super (module, XProfileBase.PDFX1);
         _profileText = "ISO PDF/X-1";

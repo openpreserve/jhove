@@ -6,7 +6,6 @@
 package edu.harvard.hul.ois.jhove.module.pdf.profiles.tagged;
 
 import edu.harvard.hul.ois.jhove.module.PdfModule;
-import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.Name;
 import edu.harvard.hul.ois.jhove.module.pdf.Numeric;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfArray;
@@ -34,7 +33,7 @@ public class StructureElement
 {
     private StructureTree _tree;
     private PdfDictionary _dict;
-    private PdfModuleQueryInterface _module;
+    private PdfModule _module;
     private List children;
     private String _structType;
     private boolean _structIsInline;

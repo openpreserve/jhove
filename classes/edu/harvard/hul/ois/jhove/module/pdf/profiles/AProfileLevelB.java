@@ -8,7 +8,6 @@ package edu.harvard.hul.ois.jhove.module.pdf.profiles;
 
 import edu.harvard.hul.ois.jhove.XMPHandler;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
-import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.DocNode;
 import edu.harvard.hul.ois.jhove.module.pdf.PageObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PageTreeNode;
@@ -117,7 +116,7 @@ public final class AProfileLevelB extends PdfProfile
      *   @param  module   The module under which we are checking the profile.
      *
      */
-    public AProfileLevelB(PdfModuleQueryInterface module)
+    public AProfileLevelB(PdfModule module)
     {
         super (module);
         _profileText = "ISO PDF/A-1, Level B";

@@ -6,7 +6,6 @@
 package edu.harvard.hul.ois.jhove.module.pdf.profiles.tagged;
 
 import edu.harvard.hul.ois.jhove.module.PdfModule;
-import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.Parser;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfArray;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfDictionary;
@@ -31,7 +30,7 @@ import java.util.Vector;
  */
 public class StructureTree
 {
-    private PdfModuleQueryInterface _module;
+    private PdfModule _module;
     private RandomAccessFile _raf;
     private Parser _parser;
     private PdfDictionary _rootDict;
@@ -53,7 +52,7 @@ public class StructureTree
      *  @param raf        The document file object
      *  @param parser     The Parser being used
      */
-    public StructureTree (PdfModuleQueryInterface module, RandomAccessFile raf,
+    public StructureTree (PdfModule module, RandomAccessFile raf,
                           Parser parser) throws PdfException
     {
         _module = module;
@@ -150,7 +149,7 @@ public class StructureTree
 
 
     /** Returns the module associated with this object. */
-    public PdfModuleQueryInterface getModule ()
+    public PdfModule getModule ()
     {
         return _module;
     }

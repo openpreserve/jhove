@@ -104,7 +104,7 @@ import java.util.Vector;
  *  Module for identification and validation of PDF files.
  */
 public class PdfModule
-        extends ModuleBase implements PdfModuleQueryInterface {
+        extends ModuleBase  {
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/

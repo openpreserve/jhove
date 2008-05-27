@@ -8,24 +8,21 @@ package edu.harvard.hul.ois.jhove.module.pdf.profiles;
 import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
-import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.Parser;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfArray;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfDictionary;
+import edu.harvard.hul.ois.jhove.module.pdf.PdfIndirectObj;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfSimpleObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfStream;
-import edu.harvard.hul.ois.jhove.module.pdf.PdfIndirectObj;
-import edu.harvard.hul.ois.jhove.module.pdf.PdfException;
 
 import java.io.RandomAccessFile;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
-import java.util.ResourceBundle;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
 /**
  *  Abstract class for PDF profile checkers.
@@ -37,7 +34,7 @@ public abstract class PdfProfile
      ******************************************************************/
 
     /** The module invoking this profile. */
-    protected PdfModuleQueryInterface _module;
+    protected PdfModule _module;
 
     /** A brief human-readable description of the profile. */
     protected String _profileText;
@@ -64,7 +61,7 @@ public abstract class PdfProfile
      *   @param module   The PDFModule we're working under
      *
      */
-    public PdfProfile (PdfModuleQueryInterface module)
+    public PdfProfile (PdfModule module)
     {
         _module = module;
         errors = ResourceBundle.getBundle("edu.harvard.hul.ois.jhove.module.pdf.profiles.ProfileErrorBundle");

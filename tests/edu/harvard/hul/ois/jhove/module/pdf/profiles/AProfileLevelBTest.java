@@ -8,7 +8,7 @@ package edu.harvard.hul.ois.jhove.module.pdf.profiles;
  */
 
 import edu.harvard.hul.ois.jhove.Property;
-import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
+import edu.harvard.hul.ois.jhove.module.PdfModule;
 import edu.harvard.hul.ois.jhove.module.SimplestPdfTestModule;
 import junit.framework.TestCase;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class AProfileLevelBTest extends TestCase {
 
     AProfileLevelB aProfileLevelB;
-    PdfModuleQueryInterface module;
+    PdfModule module;
 
     /**
      * Sets up the fixture, for example, open a network connection. This method

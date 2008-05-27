@@ -5,15 +5,14 @@
 
 package edu.harvard.hul.ois.jhove.module.pdf.profiles;
 
+import edu.harvard.hul.ois.jhove.RFC1766Lang;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
-import edu.harvard.hul.ois.jhove.module.PdfModuleQueryInterface;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfArray;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfDictionary;
+import edu.harvard.hul.ois.jhove.module.pdf.PdfMalformedException;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfSimpleObject;
-import edu.harvard.hul.ois.jhove.module.pdf.PdfMalformedException;
 import edu.harvard.hul.ois.jhove.module.pdf.profiles.tagged.TaggedProfile;
-import edu.harvard.hul.ois.jhove.RFC1766Lang;
 
 import java.util.Iterator;
 import java.util.List;
@@ -53,7 +52,7 @@ public class AProfileLevelA extends PdfProfile {
      *   @param  module   The module under which we are checking the profile.
      *
      */
-    public AProfileLevelA(PdfModuleQueryInterface module) {
+    public AProfileLevelA(PdfModule module) {
         super (module);
         _profileText = "ISO PDF/A-1, Level A";
     }
