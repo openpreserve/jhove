@@ -1,13 +1,12 @@
 package edu.harvard.hul.ois.jhove.module;
 
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.RepInfo;
 import junit.framework.TestCase;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.List;
-
-import edu.harvard.hul.ois.jhove.RepInfo;
-import edu.harvard.hul.ois.jhove.Property;
 /*
 The State and University of Aarhus PLANETS project.
 Author Asger Blekinge-Rasmussen
@@ -69,13 +68,13 @@ public class PdfModuleTest extends TestCase {
             pdfModule.parse(raf, info);
             if (info.getWellFormed() == RepInfo.TRUE){
                 if(info.getValid() == RepInfo.TRUE){
-                    if (info.getProfile().contains("ISO PDF/A-1, Level A")){
+                    if (info.getProfile().contains("ISO PDF/A-1, Level B")){
                         fail("Should not have been pdf/a");
                     } else{
                         List reasons = (List) (info.getProperty(
                                 "Profile NonCompliance Reasons").getValue());
                         for (int i=0;i<reasons.size(); i++){
-                            if (((Property)(reasons.get(i))).getName().equals("ISO PDF/A-1, Level A")){
+                            if (((Property)(reasons.get(i))).getName().equals("ISO PDF/A-1, Level B")){
                                 List theseReasons = (List)(((Property)(reasons.get(i))).getValue());
                                 for (int j=0;j<theseReasons.size(); j++){
                                     Property reason = (Property) theseReasons.get(j);

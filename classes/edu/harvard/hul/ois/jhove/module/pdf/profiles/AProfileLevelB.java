@@ -276,10 +276,14 @@ public final class AProfileLevelB extends PdfProfile
         return _return;
     }
 
-    //Firstlevel check
+    /**
+     * The primary method to evaluate if the pdf file contains font information
+     * not allowed by the spec. At the moment, just calls type0FontsOk()
+     * @return true if the fonts are all allowed by the pdfa/1-lvl b spec
+     */
     protected boolean fontsOK ()
     {
-        if (!type0FontsOK ()) {//TODO: reports down in the method
+        if (!type0FontsOK ()) {
             return false;
         }
         return true;
@@ -590,6 +594,8 @@ public final class AProfileLevelB extends PdfProfile
                 //Interesting fields:  Resources, Contents(Stream), Metadata (Stream)
                 // and more
 
+
+                //TODO: Look into tidying this method up
                 // Check for node-level resources
                 PdfDictionary rsrc = docNode.getResources ();
                 if (rsrc != null) {
@@ -1125,64 +1131,76 @@ public final class AProfileLevelB extends PdfProfile
 
     protected boolean xObjectOK (PdfDictionary xo)
     {
-        if (xo == null) {//TODO: Think about this one...
+        if (xo == null) {//Not possible, but good practise
             // no XObject means no problem
             return true;
         }
         boolean _return = true;
-        try {
-            // PostScript XObjects aren't allowed.
-            // Image XObjects must meet certain tests.
-            PdfSimpleObject subtype = toPdfSimpleObject( xo.get ("Subtype"));
-            if (subtype != null) {
-                String subtypeVal = subtype.getStringValue ();
-                if ("PS".equals (subtypeVal)) {
-                    // PS XObjects aren't allowed.
-                    _return = false;
-                    //TODO: Log here
-                }
-                if ("Image".equals (subtypeVal)) {
-                    if (!imageObjectOK (xo)) {
-                        _return = false;
-                    }
-                }
-                if ("Form".equals (subtypeVal)) {
-                    PdfSimpleObject subtype2 = toPdfSimpleObject( xo.get("Subtype2"));
 
-                    if ("PS".equals(subtype2.getStringValue())){//really a Postscript object
-                        _return = false;
-                        //TODO: log
-                    } else if (!formObjectOK (xo)) {
-                        _return = false;
-                    }
+        // PostScript XObjects aren't allowed.
+        // Image XObjects must meet certain tests.
+        PdfSimpleObject subtype = toPdfSimpleObject( xo.get ("Subtype"));
+        if (subtype != null) {
+            String subtypeVal = subtype.getStringValue ();
+            if ("PS".equals (subtypeVal)) { //section 6.2.7
+                reportReasonForNonCompliance("File.has.Postscript.object");
+                _return = false;
+            }
+            if ("Image".equals (subtypeVal)) {
+                if (!imageObjectOK (xo)) {
+                    _return = false;
                 }
             }
-        }
-        catch (Exception e) {
-            return false;
+            if ("Form".equals (subtypeVal)) {
+                if (!formObjectOK (xo)) {
+                    _return = false;
+                }
+            }
         }
         return _return;
     }
 
     /** Checks if a Form xobject is valid.  This overrides the method in
-     XProfileBase. */
+     * XProfileBase.
+     * @param xo the form xobject to check
+     * @return true if the object passed the tests
+     */
     protected boolean formObjectOK (PdfDictionary xo)
     {
         boolean _return = true;
 
         if (xo.get("OPI") != null){//section 6.2.5
             _return = false;
-            //TODO: log
+            reportReasonForNonCompliance("PDF.form.object.has.OPI.key");
         }
         if (xo.get("PS") != null){//section 6.2.5
             _return = false;
-            //TODO: log
+            reportReasonForNonCompliance("PDF.form.object.has.PS.key");
+        }
+        PdfSimpleObject subtype2 = toPdfSimpleObject(xo.get("Subtype2"));
+        if(subtype2 != null){//section 6.2.5
+            if ("PS".equals(subtype2.getStringValue())){
+                _return = false;
+                reportReasonForNonCompliance("PDF.form.has.subtype2.with.PS.value");
+            }
         }
 
-        if (xo.get ("Ref") != null) {
+        if (xo.get ("Ref") != null) { //section 6.2.6
             _return = false;
-            //TODO: log
+            reportReasonForNonCompliance("PDF.form.has.Ref.key");
         }
+
+        PdfDictionary group = toPdfDictionary(xo.get("Group"));//section 6.4
+        if (group != null){
+            PdfSimpleObject s = toPdfSimpleObject(group.get("S"));
+            if (s!= null && "Transparency".equals(s.getStringValue())){
+                _return = false;
+                reportReasonForNonCompliance(
+                        "Form.object.includes.group.object.with.S.key.with."
+                        + "value.transparency");
+            }
+        }
+
         return _return;
     }
 
@@ -1196,42 +1214,38 @@ public final class AProfileLevelB extends PdfProfile
     protected boolean imageObjectOK (PdfDictionary xo)
     {
         boolean _return = true;
-        try {
-            // OPI and Alternates keys are disallowed
-            if (xo.get ("OPI") != null){//section 6.2.4
-                _return = false;
-                //TODO: log
-            }
-            if (xo.get ("Alternates") != null) {//section 6.2.4
-                _return = false;
-                //TODO: log
-            }
 
-            // Interpolate is allowed only if its value is false.
-            PdfSimpleObject interp = toPdfSimpleObject( xo.get ("Interpolate"));
-            if (interp != null) {
-                if (!interp.isFalse ()) {
-                    _return = false;
-                    //TODO: log
-                }
-            }
-
-            // Intent must be one of the four standard rendering intents,
-            // if present.
-            PdfSimpleObject intent = toPdfSimpleObject( xo.get ("Intent"));
-            if (intent != null) {
-                String intentStr = intent.getStringValue ();
-                if(!validIntentString(intentStr)){
-                    _return = false;
-                    //TODO: log
-                }
-            }
-
-        }
-        catch (Exception e) {
+        // OPI and Alternates keys are disallowed
+        if (xo.get ("OPI") != null){//section 6.2.4
             _return = false;
-            //TODO: log
+            reportReasonForNonCompliance("PDF.image.object.has.OPI.key");
         }
+        if (xo.get ("Alternates") != null) {//section 6.2.4
+            _return = false;
+            reportReasonForNonCompliance("PDF.image.has.Alternates.key");
+        }
+
+        // Interpolate is allowed only if its value is false.
+        PdfSimpleObject interp = toPdfSimpleObject( xo.get ("Interpolate"));
+        if (interp != null) {
+            if (!interp.isFalse ()) {
+                _return = false;
+                reportReasonForNonCompliance("PDF.image.has.Interpolate.key");
+            }
+        }
+
+        // Intent must be one of the four standard rendering intents,
+        // if present.
+        PdfSimpleObject intent = toPdfSimpleObject( xo.get ("Intent"));
+        if (intent != null) {
+            String intentStr = intent.getStringValue ();
+            if(!validIntentString(intentStr)){
+                _return = false;
+                reportReasonForNonCompliance("PDF.image.use.unknown.rendering.Intent");
+            }
+        }
+
+
         return _return;
     }
 
@@ -1247,12 +1261,14 @@ public final class AProfileLevelB extends PdfProfile
         return validIntentStringList.contains(str);
     }
 
-    /** See if the metadata stream from the catalog dictionary is OK
+    /** See if the metadata stream from the catalog dictionary is OK. At the moment
+     * just parse the XMP stream as xml, do not check anything in it.
      * @param metadata the metadata stream to examine
      * @return true if the metadata stream is OK
      */
     private boolean metadataOK (PdfStream metadata)
-    {  //TODO: THIS METHOD DOES NOT REPORT
+    {
+        boolean _return = true;
         // Presence of metadata is required
         if (metadata == null) {
             return false;
@@ -1260,8 +1276,9 @@ public final class AProfileLevelB extends PdfProfile
         try {
             PdfDictionary metaDict = metadata.getDict ();
             if (metaDict.get ("Filter") != null) {
-                // We just metadata we didn't like. Filters aren't allowed.
-                return false;
+                _return = false;
+                reportReasonForNonCompliance(
+                        "PDF.metadata.dict.contains.Filter.key");
             }
 
             // Create an InputSource to feed the parser.
@@ -1291,15 +1308,18 @@ public final class AProfileLevelB extends PdfProfile
                         parser.parse (src);
                     }
                     catch (UnsupportedEncodingException uee) {
-                        return false;
+                        _return = false;
+                        reportReasonForNonCompliance(
+                                "PDF.XMP.stream.uses.unknown.encoding");
                     }
                 }
             }
         }
         catch (Exception e) {
-            return false;
+            reportReasonForNonCompliance("Parsing.the.XMP.stream.failed");
+            _return = false;
         }
-        return true;
+        return _return;
     }
 
 }
