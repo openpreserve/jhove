@@ -72,6 +72,7 @@ public abstract class PdfProfile
     {
         _raf = raf;
         _parser = parser;
+        _alreadyOK = false;
         boolean sp = satisfiesThisProfile ();
         if (sp) {
             _alreadyOK = true;
