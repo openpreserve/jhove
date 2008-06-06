@@ -1054,7 +1054,7 @@ public class XmlHandler
         }
         else if (PropertyType.AESAUDIOMETADATA.equals (propType)) {
             aesArray = (AESAudioMetadata []) property.getValue ();
-            n = nisoArray.length;
+            n = aesArray.length;
         }
 
         for (int i = 0; i < n; i++) {

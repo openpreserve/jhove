@@ -102,7 +102,7 @@ public class CountedInputStream extends FilterInputStream {
      *  actually skipped.
      */
     public long skip (long n) throws IOException {
-        long bytesRead = skip (n);
+        long bytesRead = super.skip (n);
         if (bytesLeft < bytesRead) {
             bytesLeft = 0;
         }

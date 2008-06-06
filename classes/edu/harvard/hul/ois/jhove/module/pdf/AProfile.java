@@ -404,7 +404,7 @@ public final class AProfile extends PdfProfile
                     }
                 }
                 // A type 2 subfont must meet certain restrictions
-                if ("CIDFontType2".equals (subtype)) {
+                if ("CIDFontType2".equals (subtype.getStringValue())) {
                     PdfObject cgmap = subfont.get ("CIDToGIDMap");
                     if (cgmap == null) {
                         return false;
