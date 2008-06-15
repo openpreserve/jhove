@@ -162,7 +162,7 @@ public class ConfigHandler
     }
     
     /** Returns the MIX schema version specified by the config file.
-     *  Acceptable values are "0.2" and "1.0".
+     *  Acceptable values are "0.2" and "1.0" and "2.0".
      */
     public String getMixVsn () 
     {
