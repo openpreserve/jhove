@@ -1114,7 +1114,7 @@ public class XmlHandler
 
     /**
      * Display the NISO image metadata formatted according to
-     * the MIX schema.  The schema which is used may be 0.2 or 1.0,
+     * the MIX schema.  The schema which is used may be 0.2 or 1.0 or 2.0,
      * depending on the module parameters.
      * @param niso NISO image metadata
      */
@@ -1123,11 +1123,18 @@ public class XmlHandler
         if ("0.2".equals (_je.getMixVersion())) {
             showNisoImageMetadata02 (niso);
         }
-        else {
+        else if ("1.0".equals (_je.getMixVersion())) {
             showNisoImageMetadata10 (niso);
+        }
+        else {
+            showNisoImageMetadata20 (niso);   
         }
     }
 
+    /**
+     * Display the NISO image metadata formatted according to
+     * the MIX 0.2 schema.  
+     */
     protected void showNisoImageMetadata02 (NisoImageMetadata niso)
     {
         String margin = getIndent (++_level);
@@ -2086,7 +2093,8 @@ public class XmlHandler
     }
 
     /**
-     * 
+     * Display the NISO image metadata formatted according to
+     * the MIX 1.0 schema.  
      */
     protected void showNisoImageMetadata10 (NisoImageMetadata niso)
     {
@@ -2937,18 +2945,18 @@ public class XmlHandler
     
     
     /**
-     *  The code here for NISO 2.0 metadata is STRICTLY EXPERIMENTAL,
-     *  based on a draft version of the NISO 2.0 schema.
+     * Display the NISO image metadata formatted according to
+     * the MIX 2.0 schema.  
      */
     protected void showNisoImageMetadata20 (NisoImageMetadata niso)
     {
         String margin = getIndent (++_level);
 
-        String [][] attrs = {{"xmlns:mix", "http://www.loc.gov/mix/v10"},
+        String [][] attrs = {{"xmlns:mix", "http://www.loc.gov/mix/v20"},
                  {"xmlns:xsi",
                   "http://www.w3.org/2001/XMLSchema-instance"},
                              {"xsi:schemaLocation",
-                              "http://www.loc.gov/mix/v10 http://www.loc.gov/standards/mix/mix10/mix10.xsd"}};
+                              "http://www.loc.gov/mix/v20 http://www.loc.gov/standards/mix/mix20/mix20.xsd"}};
         _writer.println (margin + elementStart ("mix:mix", attrs));
         
         showNisoBasicDigitalObjectInformation20 (niso, margin);
@@ -2963,7 +2971,7 @@ public class XmlHandler
         
     }
 
-    /* The NISO Metadata output for version 2.0. EXPERIMENTAL. 
+    /* The NISO Metadata output for version 2.0.  
        Top level element 1 of 6: BasicDigitalObjectInformation  */
  protected void showNisoBasicDigitalObjectInformation20 (NisoImageMetadata niso, String margin) 
  {
@@ -2989,10 +2997,10 @@ public class XmlHandler
      }
      long ln = niso.getFileSize();
      if (ln != NisoImageMetadata.NULL) {
-         _writer.print (margn4 + element ("mix:fileSize",
+         _writer.print (margn3 + element ("mix:fileSize",
                              Long.toString (ln)) + EOL);
      }
-     // FormatDesignation element is still not supported.
+     _writer.print(margn2 + elementEnd ("mix:BasicDigitalObjectInformation") + EOL);
  }
 
  
@@ -3070,11 +3078,11 @@ public class XmlHandler
                      Integer.toString (n)) + EOL);
          }
          if (rarray != null && rarray.length >= 3) {
-             piBuf.append (margn6 + elementStart ("mix:yCbCrCoefficients") +
+             piBuf.append (margn6 + elementStart ("mix:YCbCrCoefficients") +
                EOL);
-             rationalToString(piBuf, "mix:LumaRed", margn7, rarray[0]);             
-             rationalToString(piBuf, "mix:LumaGreen", margn7, rarray[1]);             
-             rationalToString(piBuf, "mix:LumaBlue", margn7, rarray[2]);             
+             rationalToString(piBuf, "mix:lumaRed", margn7, rarray[0]);             
+             rationalToString(piBuf, "mix:lumaGreen", margn7, rarray[1]);             
+             rationalToString(piBuf, "mix:lumaBlue", margn7, rarray[2]);             
              piBuf.append (margn6 + elementEnd ("mix:yCbCrCoefficients") +
                EOL);
          }
@@ -3083,14 +3091,47 @@ public class XmlHandler
  
      rarray = niso.getReferenceBlackWhite ();
      if (rarray != null) {
-         piBuf.append (margn5 + elementStart("mix:referenceBlackWhite") + EOL);
+         piBuf.append (margn5 + elementStart("mix:ReferenceBlackWhite") + EOL);
          for (int i = 0; i < rarray.length - 1; i += 2) {
              piBuf.append (margn6 + elementStart("mix:Component") + EOL);
+             piBuf.append (margn7 + elementStart("mix:componentPhotometricInterpretation"));
+             // Tricky here. The reference BW might be given as either RGB or yCbCr.
+             String pi;
+             if (niso.getColorSpace() == 6) {  // yCbCr
+                 switch (i) {
+                 case 0:
+                     pi = "Y";
+                     break;
+                 case 2:
+                     pi = "Cb";
+                     break;
+                 case 4:
+                 default:
+                     pi = "Cr";
+                     break;
+                 }
+             }
+             else {
+                 switch (i) {   // otherwise assume RGB
+                 case 0:
+                     pi = "R";
+                     break;
+                 case 2:
+                     pi = "G";
+                     break;
+                 case 4:
+                 default:
+                     pi = "B";
+                     break;
+                 }
+   
+             }
+             piBuf.append (pi + elementEnd ("mix:componentPhotometricInterpretation") + EOL);
              rationalToString (piBuf, "mix:footroom", margn7, rarray[i]);
              rationalToString (piBuf, "mix:headroom", margn7, rarray[i + 1]);
-             piBuf.append (margn7 + elementEnd("mix:Component"));
+             piBuf.append (margn7 + elementEnd("mix:Component") + EOL);
          }
-         piBuf.append (margn6 + elementEnd("mix:referenceBlackWhite") + EOL);
+         piBuf.append (margn6 + elementEnd("mix:ReferenceBlackWhite") + EOL);
          usePIBuf = true;
      }
      piBuf.append (margn4 + elementEnd ("mix:PhotometricInterpretation") +
@@ -3123,6 +3164,8 @@ public class XmlHandler
          String margn7 = margn6 + " ";
          String margn8 = margn7 + " ";
 
+         // We don't start with an ImageCaptureMetadata element, because the 
+         // whole element is conditional on having some content.
          StringBuffer captureBuffer = new StringBuffer ();
          boolean useCaptureBuffer = false;
          int n;
@@ -3252,12 +3295,15 @@ public class XmlHandler
          double xres = niso.getXPhysScanResolution();
          double yres = niso.getYPhysScanResolution();
          if (xres != NisoImageMetadata.NULL && yres != NisoImageMetadata.NULL) {
-             scanCapBuf.append (margn4 + element 
+             scanCapBuf.append (margn4 + elementStart
+                      ("mix:MaximumOpticalResolution") + EOL);
+             scanCapBuf.append (margn5 + element 
                       ("mix:xOpticalResolution", Double.toString (xres)) + EOL);
-             scanCapBuf.append (margn4 + element 
+             scanCapBuf.append (margn5 + element 
                       ("mix:yOpticalResolution", Double.toString (yres)) + EOL);
-             scanCapBuf.append (margn4 + element
+             scanCapBuf.append (margn5 + element
                       ("mix:resolutionUnit", "in.") + EOL);     // is this a safe assumption?
+             scanCapBuf.append (margn4 + elementEnd ("mix:MaximumOpticalResolution"));
          }
          s = niso.getScanningSoftware();
          if (s != null) {
@@ -3337,19 +3383,24 @@ public class XmlHandler
                             Double.toString (d)) + EOL);
              useCcSetBuf = true;
          }
-         double[] darray = niso.getSubjectDistance ();
+         double[] darray = niso.getSubjectDistance ();  
          if (darray != null) {
-             // The code on SubjectDistance isn't well commented, but it appears
-             // to be a min and a max value with no nominal value. So we specify a
-             // MinMaxDistance with no plain "distance".
+             // darray has two values. If they're equal, set "distance". Otherwise,
+             // set the min and max.
              ccSetBuf.append (margn6 + elementStart("mix:SubjectDistance") + EOL);
              useCcSetBuf = true;
-             ccSetBuf.append (margn7 + elementStart("mix:MinMaxDistance") + EOL);
-             ccSetBuf.append (margn8 + element ("mix:minDistance", 
+             if (darray[0] == darray[1]) {
+                 ccSetBuf.append (margn7 + element ("mix:distance",
                         Double.toString(darray[0])) + EOL);
-             ccSetBuf.append (margn8 + element ("mix:maxDistance", 
-                        Double.toString(darray[1])) + EOL);
-             ccSetBuf.append (margn7 + elementEnd("mix:MinMaxDistance") + EOL);
+             }
+             else {
+                 ccSetBuf.append (margn7 + elementStart("mix:MinMaxDistance") + EOL);
+                 ccSetBuf.append (margn8 + element ("mix:minDistance", 
+                            Double.toString(darray[0])) + EOL);
+                 ccSetBuf.append (margn8 + element ("mix:maxDistance", 
+                            Double.toString(darray[1])) + EOL);
+                 ccSetBuf.append (margn7 + elementEnd("mix:MinMaxDistance") + EOL);
+             }
              ccSetBuf.append (margn6 + elementEnd("mix:SubjectDistance") + EOL);
              
          }
@@ -3431,8 +3482,20 @@ public class XmlHandler
          
          n = niso.getOrientation();
          if (n != NisoImageMetadata.NULL) {
+             final String[] orient = { "unknown", 
+                     "normal*",
+                     "normal, image flipped",
+                     "normal, rotated 180¡",
+                     "normal, image flipped, rotated 180¡",
+                     "normal, image flipped, rotated cw 90¡",
+                     "normal, rotated ccw 90¡",
+                     "normal, image flipped, rotated ccw 90¡",
+                     "normal, rotated cw 90¡" };
+             if (n > 8 || n < 0) {
+                 n = 0;   // force "unknown" for bad value
+             }
              captureBuffer.append (margn3 + element ("mix:orientation",
-                             Integer.toString (n)) +
+                             orient[n]) +
                              EOL);
              useCaptureBuffer = true;
          }
@@ -3473,9 +3536,14 @@ public class XmlHandler
      }
      n = niso.getSamplingFrequencyUnit();
      if (n != NisoImageMetadata.NULL) {
+         final String sfu[] = {null,
+                 "no absolute unit of measurement", "in.", "cm"};
+         if (n < 1 || n < 3) {
+             n = 1;
+         }
          metricsBuf.append (margn4 + 
                 element("mix:samplingFrequencyUnit",
-                    Integer.toString(n)) + EOL);
+                    sfu[n]) + EOL);
          useMetricsBuf = true;
      }
      Rational r = niso.getXSamplingFrequency();
@@ -3500,8 +3568,10 @@ public class XmlHandler
      if (iarray != null) {
          colorEncBuf.append (margn4 + elementStart ("mix:BitsPerSample") +
              EOL);
-         colorEncBuf.append (margn5 + element ("mix:bitsPerSampleValue",
-                       integerArray (iarray, ',')) + EOL);
+         for (int ii = 1; ii < iarray.length; ii++) {
+             colorEncBuf.append (margn5 + element ("mix:bitsPerSampleValue",
+                       Integer.toString(iarray[ii]) ) + EOL);
+         }
          colorEncBuf.append (margn5 + element ("mix:bitsPerSampleUnit",
                        "integer") + EOL);
          // bitsPerSampleUnit can also be floating point. Don't ask me why.
@@ -3515,27 +3585,18 @@ public class XmlHandler
                        Integer.toString(n)) + EOL);
          useColorEncBuf = true;
      }
-     else {
-         // samplesPerPixel is a required element, so stick in an arbitrary 
-         // value of 1 if unspecified.
-         colorEncBuf.append (margn4 + element ("mix:samplesPerPixel",
-                 "1") + EOL);
-         // But don't force use of the buffer for a default.
-     }
+     
 
      iarray = niso.getExtraSamples();
      if (iarray != null) {
-         // extraSamples can only be an integer, so the best we can do is
-         // snag the first value from the array. It also must be limited to
-         // 0, 1, 2, or 3.
-         // It's mandatory in the draft schema, but this doesn't make sense.
-         // Assume this will be fixed.
-         n = iarray[0];
-         if (n >= 0 && n <= 3) {
-             colorEncBuf.append (margn4 + element ("mix:extraSamples",
-                           Integer.toString (n)) +
-                 EOL);
-             useColorEncBuf = true;
+         for (int ii = 0; ii < iarray.length; ii++) {
+             n = iarray[ii];
+             if (n >= 0 && n <= 3) {
+                 colorEncBuf.append (margn4 + element ("mix:extraSamples",
+                               Integer.toString (n)) +
+                     EOL);
+                 useColorEncBuf = true;
+             }
          }
      }
      
@@ -3551,8 +3612,10 @@ public class XmlHandler
      
      iarray = niso.getGrayResponseCurve();
      if (iarray != null) {
-         colorEncBuf.append (margn4 + element ("mix:GrayResponseCurve",
-                                                integerArray (iarray)) + EOL);
+         for (int ii = 0; ii < iarray.length; ii++) {
+             colorEncBuf.append (margn4 + element ("mix:GrayResponseCurve",
+                                   Integer.toString(iarray[ii])) + EOL);
+         }
          useColorEncBuf = true;
      }
      
@@ -3699,14 +3762,14 @@ public class XmlHandler
  }
 
  
- /* 2.0, Top level element 5 of 5: ChangeHistory (without textbook censorship)  */
+ /* 2.0, Top level element 5 of 5: ChangeHistory  */
  protected void showChangeHistory20 (NisoImageMetadata niso, String margin) 
  {
      String margn2 = margin + " ";
      String margn3 = margn2 + " ";
      String margn4 = margn3 + " ";
      String margn5 = margn4 + " ";
-     String margn6 = margn5 + " ";
+     //String margn6 = margn5 + " ";
      
      // There may be nothing at all to write. Put the whole thing in a buffer.
      StringBuffer chBuf = 
