@@ -1708,6 +1708,9 @@ public class PdfModule
     protected void findExternalStreams (RepInfo info) throws IOException 
     {
         _extStreamsList = new LinkedList ();
+		// stop processing if there is no root for the document tree
+		if (_docTreeRoot == null)
+	 		return;
         _docTreeRoot.startWalk ();
         for (;;) {
             // Get all the page objects in the document sequentially
@@ -1743,6 +1746,9 @@ public class PdfModule
                 throws IOException
     {
         _filtersList = new LinkedList ();
+		// stop processing if there is no root for the document tree
+		if (_docTreeRoot == null)
+	 		return false;
         _docTreeRoot.startWalk ();
         try {
             for (;;) {
