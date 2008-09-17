@@ -3083,7 +3083,7 @@ public class XmlHandler
              rationalToString(piBuf, "mix:lumaRed", margn7, rarray[0]);             
              rationalToString(piBuf, "mix:lumaGreen", margn7, rarray[1]);             
              rationalToString(piBuf, "mix:lumaBlue", margn7, rarray[2]);             
-             piBuf.append (margn6 + elementEnd ("mix:yCbCrCoefficients") +
+             piBuf.append (margn6 + elementEnd ("mix:YCbCrCoefficients") +
                EOL);
          }
          piBuf.append (margn5 + elementEnd ("mix:YCbCr") + EOL);
