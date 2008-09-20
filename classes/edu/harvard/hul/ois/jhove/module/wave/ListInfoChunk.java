@@ -194,6 +194,11 @@ public class ListInfoChunk extends Superchunk {
             else if (!chunk.readChunk (info)) {
                 return false;
             }
+            if ((chunkSize & 1) != 0) {
+                // Must come out to an even byte boundary
+                _module.skipBytes (_dstream, 1, _module);
+                --bytesLeft;
+            }
         }
         return true;
     }
