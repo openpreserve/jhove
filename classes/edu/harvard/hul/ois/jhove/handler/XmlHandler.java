@@ -3538,7 +3538,7 @@ public class XmlHandler
      if (n != NisoImageMetadata.NULL) {
          final String sfu[] = {null,
                  "no absolute unit of measurement", "in.", "cm"};
-         if (n < 1 || n < 3) {
+         if (n < 1 || n > 3) {
              n = 1;
          }
          metricsBuf.append (margn4 + 
