@@ -45,8 +45,12 @@ public class HtmlStack extends LinkedList {
     /** Pops top element from element stack.  If we ever decide
      * to go to a different stack implementation, it's necessary
      * only to change these methods.  Also, they add some
-     * type checking. */
-    protected void pop ()
+     * type checking.
+     * 
+     * Name changed from "pop" to "popp" to avoid a conflict in Java 1.6
+     * with the List class.
+     *  */
+    protected void popp ()
     {
         removeLast ();
     }

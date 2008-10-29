@@ -327,7 +327,7 @@ public abstract class HtmlDocDesc {
             if (elementStack.size () <= 2) {
                 break;
             }
-            elementStack.pop ();
+            elementStack.popp ();
             top = elementStack.top ().getElement ();
             if (top.allowsPCData ()) {
                 elem.processPCData (elementStack, metadata);
@@ -397,7 +397,7 @@ public abstract class HtmlDocDesc {
             if ("body".equals (name) || "frameset".equals (name)) {
                 // Pop implied head end tag.  Is this too much
                 // special-casing?
-                elementStack.pop ();
+                elementStack.popp ();
                 elementStack.push (elem);
                 return  true;
             }
@@ -406,7 +406,7 @@ public abstract class HtmlDocDesc {
                     bodyElement.allowsTag (name, this)) {
                 // Similar to above case except that the head is
                 // implicitly terminated.
-                elementStack.pop ();
+                elementStack.popp ();
                 JHOpenTag fakeTag = new JHOpenTag ("body");
                 fakeTag.setElement (bodyElement);
                 elementStack.push (fakeTag);
@@ -451,7 +451,7 @@ public abstract class HtmlDocDesc {
                             elem.getColumn ()));
                     }
                 }
-                elementStack.pop ();
+                elementStack.popp ();
                 top = elementStack.top ();
                 //topElem = top.getElement ();
                 if (top.allowsTag (name, this)) {
