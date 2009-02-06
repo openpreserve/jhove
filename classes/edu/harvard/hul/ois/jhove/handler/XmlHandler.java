@@ -1143,7 +1143,7 @@ public class XmlHandler
 			     {"xmlns:xsi",
 			      "http://www.w3.org/2001/XMLSchema-instance"},
                              {"xsi:schemaLocation",
-                              "http://www.loc.gov/mix/ http://www.loc.gov/mix/mix.xsd"}};
+                              "http://www.loc.gov/mix/ http://www.loc.gov/mix/mix02.xsd"}};
         _writer.println (margin + elementStart ("mix:mix", attrs));
         
         showNisoBasicImageParameters02 (niso, margin);
