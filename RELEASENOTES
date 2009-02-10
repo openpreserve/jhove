@@ -1,7 +1,43 @@
 JHOVE - JSTOR/Harvard Object Validation Environment
-Copyright 2003-2008 by JSTOR and the President and Fellows of Harvard College
+Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details)
+
+RELEASE NOTES FOR JHOVE 1.2
+2009-02-10
+
+GENERAL
+
+   1. A bug has been fixed in CountedInputStream, which could potentially
+      have caused infinite recursion in some modules.
+
+HTML MODULE
+
+   1. An incompatibility with Java 1.6 has been fixed.
+   
+PDF MODULE
+
+   1. A null pointer exception would be thrown for PDF documents without a
+      document root tree. This has been fixed.
+   2. A source of possible false positives in PDF profiles has been fixed.
+   3. Certain checks weren't being done to Type 2 fonts, and some PDF/A 
+      profile violations might have been missed as a result. This has
+      been fixed.
+   
+WAVE MODULE
+
+   1. Sub-chunks of the 'adtl' chunk are now constrained to even byte
+      boundaries.
+      
+XML HANDLER
+
+   1. MIX 2.0 is now supported.
+   2. The URL for the MIX 0.2 schema has changed to reflect the change
+      on the LOC MIX site.
+   3. The handler was sometimes incorrectly reporting whether the 
+      AESAudioMetadata property had an empty value or not. This has
+      been fixed.
+
 
 RELEASE NOTES FOR JHOVE 1.1 
 Rev. 2008-02-22
