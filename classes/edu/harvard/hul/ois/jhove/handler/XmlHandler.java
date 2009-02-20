@@ -2417,16 +2417,16 @@ public class XmlHandler
             scanCapBuf.append (margn4 + elementStart ("mix:ScannerModel") +
 			       EOL);
             if (model != null) {
-                scanCapBuf.append (margn5 + element ("mix:scannerModelName") +
+                scanCapBuf.append (margn5 + element ("mix:scannerModelName", model) +
 				   EOL);
             }
             if (modelNum != null) {
-                scanCapBuf.append (margn5 + element ("mix:scannerModelNumber")+
+                scanCapBuf.append (margn5 + element ("mix:scannerModelNumber", modelNum)+
 				   EOL);
             }
             if (serNum != null) {
                 scanCapBuf.append (margn5 +
-				   element ("mix:scannerModelSerialNo") + EOL);
+				   element ("mix:scannerModelSerialNo", serNum) + EOL);
             }
             scanCapBuf.append (margn4 + elementEnd ("mix:ScannerModel") + EOL);
         }
@@ -3279,16 +3279,16 @@ public class XmlHandler
              scanCapBuf.append (margn4 + elementStart ("mix:ScannerModel") +
                     EOL);
              if (model != null) {
-                 scanCapBuf.append (margn5 + element ("mix:scannerModelName") +
+                 scanCapBuf.append (margn5 + element ("mix:scannerModelName", model) +
                     EOL);
              }
              if (modelNum != null) {
-                 scanCapBuf.append (margn5 + element ("mix:scannerModelNumber")+
+                 scanCapBuf.append (margn5 + element ("mix:scannerModelNumber", modelNum)+
                     EOL);
              }
              if (serNum != null) {
                  scanCapBuf.append (margn5 +
-                    element ("mix:scannerModelSerialNo") + EOL);
+                    element ("mix:scannerModelSerialNo", serNum) + EOL);
              }
              scanCapBuf.append (margn4 + elementEnd ("mix:ScannerModel") + EOL);
          }
