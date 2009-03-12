@@ -3011,7 +3011,7 @@ public class TiffIFD
                 _interoperabilityIFD = readLong (type, count, value);
             }
             else if (tag == IPTCNAA) {
-                checkType  (tag, type, ASCII, LONG);
+                
                 if (type == ASCII) {
                     String s = readASCII (count, value);
                     long [] larray = new long [s.length ()];
@@ -3020,8 +3020,17 @@ public class TiffIFD
                     }
                     _iptc = larray;
                 }
-                else {
+                else if (type == LONG) {
                     _iptc = readLongArray (type, count, value);
+                }
+                else {
+                    checkType  (tag, type, BYTE, UNDEFINED);
+                    int[] b = readByteArray(type, count, value);
+                    long [] larray = new long [b.length];
+                    for (int i = 0; i < b.length; i++) {
+                        larray[i] = b[i];
+                        _iptc = larray;
+                    }
                 }
             }
             else if (tag == ISOSPEEDRATINGS) {
