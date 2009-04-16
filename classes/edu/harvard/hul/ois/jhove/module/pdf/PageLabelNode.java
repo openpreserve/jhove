@@ -178,6 +178,9 @@ public class PageLabelNode
                 _currentNumsIndex = 0;
                 PdfArray pairArray = (PdfArray) 
                     _module.resolveIndirectObject (_currentLeaf._dict.get ("Nums"));
+                if (pairArray == null) {
+                    throw new PdfInvalidException ("Missing expected element in page number dictionary");
+                }
                 _currentNumsVec = pairArray.getContent ();
                 _currentNumsLength = _currentNumsVec.size ();
             }
@@ -197,7 +200,11 @@ public class PageLabelNode
             
             return true;
         }
+        catch (PdfInvalidException e) {
+            throw e;
+        }
         catch (Exception e) {
+            e.printStackTrace();
             throw new PdfInvalidException ("Invalid date in page number tree");
         }
     }
