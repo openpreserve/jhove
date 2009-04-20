@@ -60,6 +60,7 @@ public abstract class TiffProfile
     public final boolean satisfiesProfile (IFD ifd)
     {
         boolean sp = satisfiesThisProfile (ifd);
+        _alreadyOK = false;        
         if (sp) {
             _alreadyOK = true;
         }
