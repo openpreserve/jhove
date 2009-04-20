@@ -614,7 +614,8 @@ public abstract class HandlerBase
 	}
 	n = 0;
         while ((n = buffer.indexOf ("\"", n)) > -1) {
-            buffer.insert (n+1, "&quot;");
+            // [LP] fix for invalid escaping, "" quotes were accidentally left in place.
+            buffer.replace (n, n+1, "&quot;");
             n +=7;
         }
 
