@@ -3644,12 +3644,13 @@ public class PdfModule
                 itemList);
         try {
             PdfObject item = resolveIndirectObject (dict.get ("First"));
-            /* Uncomment the following "if" line to allow testing
-               of broken DDAP files */
-            //if (item != null)   // TEMPORARY
-            if (item == null || !(item instanceof PdfDictionary)) {
-                throw new PdfInvalidException ("Outline dictionary missing required entry");
-            }
+            // In PDF 1.4, "First" and "Last" are unconditionally required. However,
+            // in 1.6, they can be omitted if there are no open or closed outline items.
+            // Strictly speaking, we should do several additional checks, but letting the
+            // outline go as empty seems sufficient.
+//            if (item == null || !(item instanceof PdfDictionary)) {
+//                throw new PdfInvalidException ("Outline dictionary missing required entry");
+//            }
             int listCount = 0;          // Guard against looping
             while (item != null) {
                 Integer onum = new Integer (item.getObjNumber ());
