@@ -127,7 +127,7 @@ public class PdfFlateInputStream extends FilterInputStream {
             return -1;
         }
         if (predictor == 1) {
-            return iis.read ();
+            return readIISByte ();
         }
         if (rowBufOff == rowLen) {
             // Starting out, or previous row exhausted.
@@ -161,7 +161,9 @@ public class PdfFlateInputStream extends FilterInputStream {
         }
         if (predictor == 1) {
             // predictor of 1 means no predictor.
-            return iis.read (b, off, len);
+            //return iis.read (b, off, len);
+            // That can't be right, can it?
+            return readIISBytes(b, off, len);
         }
         if (rowBufOff == rowLen) {
             // Starting out, or previous row exhausted.
@@ -180,6 +182,9 @@ public class PdfFlateInputStream extends FilterInputStream {
         return len;
     }
     
+    public long skip (long n) throws IOException {
+        return skipIISBytes(n);
+    }
     
     /* Takes bytes from the input buffer and turn them into bytes in the output buffer.
      * Returns the number of bytes available.
@@ -306,6 +311,21 @@ public class PdfFlateInputStream extends FilterInputStream {
         }
         return len;
     } 
+    
+    /** Skip a specified number of bytes. */
+    private long skipIISBytes (long n) throws IOException {
+        if (iisBufOff >= iisBufLen && !iisEof) {
+            readIIS ();
+        }
+        if (iisEof) {
+            return -1;
+        }
+        if (iisBufLen - iisBufOff < n) {
+            n = iisBufLen + iisBufOff;
+        }
+        iisBufOff += n;
+        return n;
+    }
     
     /** Fill up the IIS buffer.  Should be called only by
      *  other IIS buffer-specific routines. */
