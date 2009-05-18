@@ -171,7 +171,7 @@ public class CrossRefStream {
     public boolean readNextObject () throws IOException
     {
         /* Get the field type. */
-        int wid = _fieldSizes[0];
+        int wid;
         Stream is = _xstrm.getStream ();
         int i;
         int b;
@@ -179,6 +179,7 @@ public class CrossRefStream {
         for (;;) {
             /* Loop till we find an actual object; we just count
              * type 0's, which are free entries. */
+            wid  = _fieldSizes[0];
             if (_entriesRead++ >= _index[1]) {
                 return false;       // Read full complement
             }
