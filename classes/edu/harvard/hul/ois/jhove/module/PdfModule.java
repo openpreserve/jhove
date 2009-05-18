@@ -1280,6 +1280,7 @@ public class PdfModule
                             (_docCatDictRef);
         }
         catch (Exception e) {
+            e.printStackTrace();
         }
         if (_docCatDict == null) {
             // If it fails here, it's ill-formed, not
@@ -1610,8 +1611,12 @@ public class PdfModule
             if (_pagesDictRef == null) {
                 throw new PdfInvalidException ("Document page tree not found");
             }
-            PdfDictionary pagesDict = (PdfDictionary)
-                        resolveIndirectObject (_pagesDictRef);
+            
+            PdfObject pagesObj = resolveIndirectObject (_pagesDictRef);
+            if (!(pagesObj instanceof PdfDictionary)) 
+                throw new PdfMalformedException ("Invalid page dictionary object");
+            PdfDictionary pagesDict = (PdfDictionary) pagesObj;
+            
             _docTreeRoot = new PageTreeNode (this, null, pagesDict);
             _docTreeRoot.buildSubtree (true, 100);
         }
@@ -1621,6 +1626,12 @@ public class PdfModule
                         (e.getMessage (), _parser.getOffset ()));
             // Continue parsing if it's only invalid
             return (e instanceof PdfInvalidException);
+        }
+        catch (Exception e) {
+            // Catch any odd exceptions
+            info.setMessage (new ErrorMessage (e.getClass().getName(), _parser.getOffset ()));
+            info.setWellFormed(false);
+            return false;
         }
         return true;
     }
