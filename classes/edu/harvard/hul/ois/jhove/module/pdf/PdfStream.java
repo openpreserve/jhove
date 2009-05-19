@@ -162,6 +162,14 @@ public class PdfStream extends PdfObject
                     PdfSimpleObject f = (PdfSimpleObject) vec.get(i);
                     val[i] = new Filter (f.getStringValue());
                     if (parmVec != null) {
+                        PdfObject parm = (PdfObject) parmVec.get(i);
+                        // Parameter may be the null object.
+                        if (parm instanceof PdfSimpleObject) {
+                            PdfSimpleObject sParm = (PdfSimpleObject) parm;
+                            if ("null".equals (sParm.getStringValue ())) {
+                                continue;
+                            }
+                        }
                         val[i].setDecodeParms((PdfDictionary) parmVec.get(i));
                     }
                 }
