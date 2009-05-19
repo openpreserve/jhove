@@ -26,10 +26,11 @@
 #
 # Configuration constants:
 
-JHOVE_HOME=/users/stephen/projects/jhove
+#JHOVE_HOME=/users/gary/dev/jhove
+JHOVE_HOME=[fill in path to jhove directory]
 
-JAVA_HOME=/usr/java      # Java JRE directory
-JAVA=$JAVA_HOME/bin/java # Java interpreter
+JAVA_HOME=/usr/java      # Java JRE directory -- change to your local java home
+JAVA=$JAVA_HOME/bin/java # Java interpreter -- usually won't need change
 
 #XTRA_JARS=/users/stephen/xercesImpl.jar
 EXTRA_JARS=              # Extra .jar files to add to CLASSPATH

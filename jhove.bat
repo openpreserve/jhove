@@ -29,8 +29,10 @@ REM JAVA_HOME  Java JRE directory
 REM JAVA       Java interpreter
 REM EXTRA_JARS Extra jar files to add to CLASSPATH
 
+#Change JHOVE_HOME if location of JHOVE is different from the following
 SET JHOVE_HOME="C:\Program Files\jhove"
 
+#Change JAVA_HOME to your installed Java directory
 SET JAVA_HOME="C:\Program Files\java\j2re1.4.1_02"
 SET JAVA=%JAVA_HOME%\bin\java
 
