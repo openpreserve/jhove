@@ -15,7 +15,7 @@
   </target>
 
   <target name="jpeg2000" depends="jpeg2000-init" description="Compile the JPEG 2000 module">
-    <javac srcdir="." debug="{$dbg}" classpath="${classpath}"/>
+    <javac compiler="javac1.4" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
   </target>
 
   <target name="jpeg2000-clean" description="Delete backup files" >
