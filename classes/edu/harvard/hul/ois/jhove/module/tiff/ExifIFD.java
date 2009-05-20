@@ -253,9 +253,9 @@ public class ExifIFD
 
     /** Instantiate an <code>ExifIFD</code> object.
      * @param offset IFD offset
+     * @param info  the RepInfo object
      * @param raf TIFF file
      * @param bigEndian True if big-endian file
-     * @param type IFD type
      */
     public ExifIFD (long offset, RepInfo info, RandomAccessFile raf,
                     boolean bigEndian)

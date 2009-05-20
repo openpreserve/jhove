@@ -19,7 +19,7 @@ public final class RFC1766Lang
     /**
      * Constructor. 
      *
-     * @param   The ASCII string for the language code.
+     * @param   str	The ASCII string for the language code.
      */
     public RFC1766Lang (String str) 
     {

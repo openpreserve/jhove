@@ -114,7 +114,7 @@ public class Literal
      *  Append a hex character.  This is used only for hex literals
      *  (those that start with '<'). 
      *
-     *  @param  The integer 8-bit code for a hex character
+     *  @param  ch	The integer 8-bit code for a hex character
      */
     public void appendHex (int ch) throws PdfException
     {
@@ -136,7 +136,7 @@ public class Literal
      *  This is used for literals delimited
      *  by parentheses, as opposed to hex strings.
      *
-     *  @param  ch   The tokenizer, passed to give access to its getChar
+     *  @param  tok   The tokenizer, passed to give access to its getChar
      *               function.
      *  @return      <code>true</code> if the character was processed
      *               normally, <code>false</code> if a terminating

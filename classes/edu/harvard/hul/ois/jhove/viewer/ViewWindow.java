@@ -41,7 +41,8 @@ public class ViewWindow extends InfoWindow {
      *  Constructor.
      * 
      *  @param app    The associated App object.
-     *  @param info   The RepInfo object containing the analysis results.
+     *  @param base   The JhoveBase object for the application.
+     *  @param jhwin  The main JhoveWindow.
      */  
     public ViewWindow (App app, JhoveBase base, JhoveWindow jhwin) 
     {

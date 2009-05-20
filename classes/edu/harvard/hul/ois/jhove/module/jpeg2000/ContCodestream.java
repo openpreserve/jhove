@@ -85,7 +85,7 @@ public class ContCodestream {
      *  the image.  These are made available after reading through
      *  accessor functions.
      * 
-     *  @param   image  The image which this codestream defines.
+     *  @param   cs     The image which this codestream defines.
      *                  Must have a non-null <code>codestream</code> 
      *                  field.
      *  

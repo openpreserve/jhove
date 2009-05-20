@@ -362,11 +362,7 @@ public class Jpeg2000Module extends ModuleBase {
      *   argment to all read calls, so that we can compute relative
      *   positions in the stream based on _nByte.
      * 
-     *   @param stream    An InputStream, positioned at its beginning,
-     *                    which is generated from the object to be parsed.
-     *                    If multiple calls to <code>parse</code> are made 
-     *                    on the basis of a nonzero value being returned,
-     *                    a new InputStream must be provided each time.
+     *   @param raf    A RandomAccessFile to be parsed.
      * 
      *   @param info      A fresh (on the first call) RepInfo object 
      *                    which will be modified

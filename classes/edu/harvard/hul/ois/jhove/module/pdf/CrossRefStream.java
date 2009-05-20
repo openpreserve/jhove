@@ -46,7 +46,7 @@ public class CrossRefStream {
     /**
      * Constructor.
      * 
-     * @param   PdfStream object which contains a presumed
+     * @param   xstrm	PdfStream object which contains a presumed
      *          cross-reference stream.
      */
     public CrossRefStream(PdfStream xstrm) {

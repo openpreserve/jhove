@@ -184,7 +184,7 @@ public class XmlModule
     /**
      * Per-action initialization.
      *
-     * @param The module parameter; under command-line Jhove, the -p parameter.
+     * @param	param The module parameter; under command-line Jhove, the -p parameter.
      *        If the first character is 's', then signature checking requires
      *        a document declaration, and the rest of the URL is considered
      *        as follows.

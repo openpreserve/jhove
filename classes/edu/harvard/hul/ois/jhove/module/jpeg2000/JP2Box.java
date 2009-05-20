@@ -137,7 +137,8 @@ public abstract class JP2Box extends BoxHolder {
      *  to be checked by the BoxHolder.  These include 
      *  BinaryFilterBox and CrossReferenceBox.
      * 
-     *  @param type    4-character string indicating the box type
+     *  @param hType    4-character string indicating the box type
+     *  @param parent   parent BoxHolder
      */
     public static JP2Box boxMaker (String hType, BoxHolder parent)
     {

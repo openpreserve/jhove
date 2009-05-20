@@ -68,7 +68,6 @@ public class GlobalParametersIFD extends IFD {
      * @param offset IFD offset
      * @param raf TIFF file
      * @param bigEndian True if big-endian file
-     * @param type IFD type
      */
     public GlobalParametersIFD (long offset, RepInfo info, 
                     RandomAccessFile raf,

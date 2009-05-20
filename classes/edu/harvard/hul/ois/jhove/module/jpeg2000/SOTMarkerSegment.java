@@ -21,8 +21,6 @@ public class SOTMarkerSegment extends MarkerSegment {
     /**
      * Constructor
      * 
-     * @param ccs
-     * @param cs
      */
     public SOTMarkerSegment() 
     {

@@ -139,8 +139,6 @@ public abstract class Tokenizer
 
     /** 
      *  Constructor.
-     *  @param file  The RandomAccessFile object which provides
-     *               us with access to the PDF document.
      */
     public Tokenizer ()
     {
