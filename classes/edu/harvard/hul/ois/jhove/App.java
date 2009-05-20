@@ -50,7 +50,7 @@ public class App
      *   @param usage           String summarizing command line usage, to
      *                          output when app name is typed with no
      *                          arguments or flags.
-     *   @param args            Array of command line arguments. 
+     *   @param rights            Copyright or other rights statement.
      */
     public App (String name, String release, int [] date, String usage,
                 String rights)

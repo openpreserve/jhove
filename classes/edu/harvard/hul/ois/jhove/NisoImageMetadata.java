@@ -1575,7 +1575,7 @@ public class NisoImageMetadata
     }
 
     /** Set 8.3.4    PerformanceData.
-     * @param  Performance data filename or URN
+     * @param  performanceData	Performance data filename or URN
      */
     public void setPerformanceData (String performanceData)
     {
@@ -1703,7 +1703,7 @@ public class NisoImageMetadata
     }
 
     /** Set 6.1.4.2 ICC profile URL.
-     * @param url Profile URL
+     * @param URL Profile URL
      */
     public void setProfileURL (String URL)
     {
@@ -1743,7 +1743,7 @@ public class NisoImageMetadata
     }
 
     /** Set 8.1.2 sampling frequency unit.
-     * @param plane Sampling frequency unit
+     * @param unit Sampling frequency unit
      */
     public void setSamplingFrequencyUnit (int unit)
     {
@@ -1839,7 +1839,7 @@ public class NisoImageMetadata
     }
 
     /** Set 8.1.7 source X dimension.
-     * @param dimension X dimension
+     * @param x   X dimension
      */
     public void setSourceXDimension (double x)
     {
@@ -1855,7 +1855,7 @@ public class NisoImageMetadata
     }
 
     /** Set 8.1.8 source Y dimension.
-     * @param dimension Y dimension
+     * @param y   Y dimension
      */
     public void setSourceYDimension (double y)
     {

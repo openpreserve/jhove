@@ -158,9 +158,9 @@ public class GPSInfoIFD
 
     /** Instantiate an <code>GPSInfoIFD</code> object.
      * @param offset IFD offset
+     * @param info   The RepInfo object
      * @param raf TIFF file
      * @param bigEndian True if big-endian file
-     * @param type IFD type
      */
     public GPSInfoIFD (long offset, RepInfo info, RandomAccessFile raf,
 		       boolean bigEndian)

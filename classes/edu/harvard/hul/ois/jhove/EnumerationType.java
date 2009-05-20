@@ -51,7 +51,7 @@ public abstract class EnumerationType
 
     /**
      * Type equality test.
-     * @param enum Enumerated type
+     * @param enm Enumerated type
      * @return True, if equal
      */
     public boolean equals (EnumerationType enm)

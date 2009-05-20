@@ -491,7 +491,7 @@ public class RepInfo implements Cloneable
     /**
      *  Set the well-formed flag
      * 
-     *  @param valid    Boolean argument that maps to
+     *  @param wellFormed    Boolean argument that maps to
      *                  an integer value:
      *                  true maps to TRUE, and false to FALSE.
      */
