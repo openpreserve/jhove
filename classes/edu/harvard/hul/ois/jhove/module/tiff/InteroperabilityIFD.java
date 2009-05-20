@@ -35,7 +35,7 @@ public class InteroperabilityIFD
 
     /** Instantiate an <code>InteroperabilityIFD</code> object.
      * @param offset IFD offset
-     * @info the RepInfo object
+     * @param info the RepInfo object
      * @param raf TIFF file
      * @param bigEndian True if big-endian file
      */
