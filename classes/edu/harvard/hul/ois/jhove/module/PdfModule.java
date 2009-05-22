@@ -397,7 +397,7 @@ public class PdfModule
     /**
      * Per-action initialization.  May be called multiple times.
      *
-     * @param The module parameter; under command-line Jhove, the -p parameter.
+     * @param param	The module parameter; under command-line Jhove, the -p parameter.
      *        If the parameter contains the indicated characters, then the
      *        specified information is omitted; otherwise, it is included.
      *        (This is the reverse of the behavior prior to beta 3.)
