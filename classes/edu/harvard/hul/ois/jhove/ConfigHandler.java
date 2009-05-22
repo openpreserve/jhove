@@ -5,6 +5,9 @@
 
 package edu.harvard.hul.ois.jhove;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.*;
 import org.xml.sax.*;
 
@@ -22,6 +25,10 @@ public class ConfigHandler
     protected StringBuffer _content;
     private Map _extension;
 
+    /** The schema name */
+    private final static String configSchemaName =
+        "jhoveConfig.xsd";
+    
     /** The list of handlers.  Each element in the List is an
      *  array of two Strings representing the class and the initialization
      *  string. */
@@ -78,6 +85,7 @@ public class ConfigHandler
      */
     public ConfigHandler ()
     {
+System.out.println ("ConfigHandler constructor");
         _module  = new ArrayList ();
         _handler = new ArrayList ();
         _modParams = new ArrayList ();
@@ -288,21 +296,21 @@ public class ConfigHandler
 			    String rawName)
 	throws SAXException
     {
-	if (_isModule) {
-	    if (rawName.equals ("class")) {
-		_class = _content.toString ();
-	    }
-            else if (rawName.equals ("init")) {
-                _init = _content.toString ();
-            }
-            else if (rawName.equals ("param")) {
-                _param.add (_content.toString ());
-            }
+        if (_isModule) {
+            if (rawName.equals ("class")) {
+                _class = _content.toString ();
+        }
+        else if (rawName.equals ("init")) {
+            _init = _content.toString ();
+        }
+        else if (rawName.equals ("param")) {
+            _param.add (_content.toString ());
+        }
 	    else if (rawName.equals ("module")) {
-		String [] tuple = { _class, _init };
-		_module.add (tuple);
-                _modParams.add (_param);
-		_isModule = false;
+            String [] tuple = { _class, _init };
+            _module.add (tuple);
+            _modParams.add (_param);
+            _isModule = false;
 	    }
 	}
 	else if (_isHandler) {
@@ -361,5 +369,28 @@ public class ConfigHandler
 	else if (!rawName.equals ("jhoveConfig")) {
 	    _extension.put (rawName, _content.toString ().trim ());
 	}
+    }
+    
+    /** EntityResolver designed to locate the config schema. It tries to find it
+     *  as a local resource.
+     *  
+     *  It appears that not all SAX implementations will actually call this
+     *  function for schema resolution, so this isn't a guarantee that the
+     *  schema in the config file won't be called directly. But hopefully
+     *  it will cut down on the burden on the server with the official
+     *  schema copy.
+     */
+    public InputSource resolveEntity (String publicId, String systemId)
+                    throws SAXException, IOException {
+        if (systemId.endsWith (configSchemaName)) {
+            try {
+                URL resURL = this.getClass().getResource("jhoveConfig.xsd");
+                InputStream strm = resURL.openStream ();
+                return new InputSource (strm);
+            }
+            catch (Exception e) {}
+        }
+        // If we couldn't get the local resource, use default location methods
+        return super.resolveEntity (publicId, systemId);
     }
 }

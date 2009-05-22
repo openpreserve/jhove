@@ -224,6 +224,8 @@ public class JhoveBase
                 _logger.info ("Using SAX parser " + parser.getClass ().getName ());
                 ConfigHandler configHandler = new ConfigHandler ();
                 parser.setContentHandler (configHandler);
+                parser.setEntityResolver(configHandler);
+System.out.println ("Setting entity resolver for configHandler");
                 /* Attempt to set schema awareness to avoid validation
                  * errors.
                  */
@@ -244,6 +246,8 @@ public class JhoveBase
                         fileURL += '/';
                     }
                     fileURL += canonicalPath;
+System.out.println ("parsing " + fileURL);
+System.out.println ("Entity resolver = " + parser.getEntityResolver().getClass().getName());
                     parser.parse (fileURL);
                         }
                 catch (IOException e) {

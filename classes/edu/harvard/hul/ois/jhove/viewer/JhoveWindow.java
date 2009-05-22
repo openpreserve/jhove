@@ -643,6 +643,7 @@ public class JhoveWindow extends JFrame
             }
             fileURL += canonicalPath;
             parser.setContentHandler (configHandler);
+            parser.setEntityResolver (configHandler);
             parser.setFeature ("http://xml.org/sax/features/validation",
                            true);
             parser.parse (fileURL);
