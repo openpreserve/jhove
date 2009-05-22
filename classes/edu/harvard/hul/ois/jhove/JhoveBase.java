@@ -828,20 +828,25 @@ public class JhoveBase
 
 	    /* Module accepts stream input. */
 
-	    InputStream stream = new FileInputStream (file);
-	    if (_signature) {
-		module.checkSignatures (file, stream, info);
-	    }
-	    else {
-            int parseIndex = module.parse (stream, info, 0);
-            /* If parse returns non-zero, reparse with a fresh stream. */
-            while (parseIndex != 0) {
-                stream.close ();
-                stream = new FileInputStream (file);
-                parseIndex = module.parse (stream, info, parseIndex);
-            }
-	    }
-	    stream.close ();
+        
+        InputStream stream = new FileInputStream (file);
+        try {
+    	    if (_signature) {
+    		module.checkSignatures (file, stream, info);
+    	    }
+    	    else {
+                int parseIndex = module.parse (stream, info, 0);
+                /* If parse returns non-zero, reparse with a fresh stream. */
+                while (parseIndex != 0) {
+                    stream.close ();
+                    stream = new FileInputStream (file);
+                    parseIndex = module.parse (stream, info, parseIndex);
+                }
+    	    }
+        }
+        finally {
+            stream.close ();
+        }
 	}
         return true;    // Successful processing
     }
