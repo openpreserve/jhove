@@ -85,7 +85,6 @@ public class ConfigHandler
      */
     public ConfigHandler ()
     {
-System.out.println ("ConfigHandler constructor");
         _module  = new ArrayList ();
         _handler = new ArrayList ();
         _modParams = new ArrayList ();

@@ -225,7 +225,6 @@ public class JhoveBase
                 ConfigHandler configHandler = new ConfigHandler ();
                 parser.setContentHandler (configHandler);
                 parser.setEntityResolver(configHandler);
-System.out.println ("Setting entity resolver for configHandler");
                 /* Attempt to set schema awareness to avoid validation
                  * errors.
                  */
@@ -246,8 +245,6 @@ System.out.println ("Setting entity resolver for configHandler");
                         fileURL += '/';
                     }
                     fileURL += canonicalPath;
-System.out.println ("parsing " + fileURL);
-System.out.println ("Entity resolver = " + parser.getEntityResolver().getClass().getName());
                     parser.parse (fileURL);
                         }
                 catch (IOException e) {
