@@ -1,6 +1,6 @@
 @ECHO OFF
 REM JHOVE - JSTOR/Harvard Object Validation Environment
-REM Copyright 2003-2005 by JSTOR and the President and Fellows of Harvard College
+REM Copyright 2003-2006 by JSTOR and the President and Fellows of Harvard College
 REM JHOVE is made available under the GNU General Public License (see the
 REM file LICENSE for details)
 REM
@@ -29,10 +29,10 @@ REM JAVA_HOME  Java JRE directory
 REM JAVA       Java interpreter
 REM EXTRA_JARS Extra jar files to add to CLASSPATH
 
-#Change JHOVE_HOME if location of JHOVE is different from the following
+REM Change JHOVE_HOME if location of JHOVE is different from the following
 SET JHOVE_HOME="C:\Program Files\jhove"
 
-#Change JAVA_HOME to your installed Java directory
+REM Change JAVA_HOME to your installed Java directory
 SET JAVA_HOME="C:\Program Files\java\j2re1.4.1_02"
 SET JAVA=%JAVA_HOME%\bin\java
 
@@ -51,11 +51,12 @@ REM Retrieve a copy of all command line arguments to pass to the application
 
 SET ARGS=
 :WHILE
-IF "%1"=="" GOTO LOOP
+IF %1x==x GOTO LOOP
   SET ARGS=%ARGS% %1
   SHIFT
   GOTO WHILE
 :LOOP
+
 
 REM Set the CLASSPATH and invoke the Java loader
 %JAVA% -classpath %CP% Jhove %ARGS%
