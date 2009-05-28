@@ -1601,6 +1601,11 @@ public class PdfModule
             // Keep parsing if it's only invalid
             return (e instanceof PdfInvalidException);
         }
+        catch (Exception e) {
+            info.setWellFormed(false);
+            info.setMessage (new ErrorMessage ("Unexpected exception " +
+                    e.getClass().getName()));
+        }
         return true;
     }
 
@@ -1652,6 +1657,12 @@ public class PdfModule
             // Continue parsing if it's only invalid
             return (e instanceof PdfInvalidException);
         }
+        catch (Exception e) {
+            info.setWellFormed(false);
+            info.setMessage (new ErrorMessage ("Unexpected exception " +
+                    e.getClass().getName()));
+            return false;
+        }
         return true;        // always succeeds
     }
     
@@ -1688,7 +1699,6 @@ public class PdfModule
                 if (msg != null && msg.startsWith ("ENC=")) {
                     String encoding = msg.substring (5);
                     try {
-                        //Reader rdr = new InputStreamReader (stream, encoding);
                         src = new PdfXMPSource (metadata, getFile (), encoding);
                         parser.parse (src);
                         _xmpProp = src.makeProperty ();
@@ -1723,27 +1733,34 @@ public class PdfModule
 		if (_docTreeRoot == null)
 	 		return;
         _docTreeRoot.startWalk ();
-        for (;;) {
-            // Get all the page objects in the document sequentially
-            PageObject page = _docTreeRoot.nextPageObject ();
-            if (page == null) {
-                break;
-            }
-            // Get the streams for the page and walk through them
-            List streams = page.getContentStreams ();
-            if (streams != null) {
-                ListIterator streamIter = streams.listIterator ();
-                while (streamIter.hasNext ()) {
-                    PdfStream stream = (PdfStream) streamIter.next ();
-                    String specStr = stream.getFileSpecification ();
-                    if (specStr != null) {
-                        Property prop = new Property ("File",
-                                PropertyType.STRING,
-                                specStr);
-                        _extStreamsList.add (prop);
+        try {
+            for (;;) {
+                // Get all the page objects in the document sequentially
+                PageObject page = _docTreeRoot.nextPageObject ();
+                if (page == null) {
+                    break;
+                }
+                // Get the streams for the page and walk through them
+                List streams = page.getContentStreams ();
+                if (streams != null) {
+                    ListIterator streamIter = streams.listIterator ();
+                    while (streamIter.hasNext ()) {
+                        PdfStream stream = (PdfStream) streamIter.next ();
+                        String specStr = stream.getFileSpecification ();
+                        if (specStr != null) {
+                            Property prop = new Property ("File",
+                                    PropertyType.STRING,
+                                    specStr);
+                            _extStreamsList.add (prop);
+                        }
                     }
                 }
             }
+        }
+        catch (Exception e) {
+            info.setWellFormed(false);
+            info.setMessage (new ErrorMessage ("Unexpected exception " +
+                    e.getClass().getName()));
         }
     }
 
@@ -2048,6 +2065,11 @@ public class PdfModule
             info.setMessage (new ErrorMessage 
                 (e.getMessage (), _parser.getOffset ()));
         }
+        catch (Exception e) {
+            info.setWellFormed(false);
+            info.setMessage (new ErrorMessage ("Unexpected exception " +
+                    e.getClass().getName()));
+        }
     }            
 
     /* Convert a Filter name to a NISO compression scheme value.
@@ -2073,18 +2095,18 @@ public class PdfModule
         _type3FontsMap = new HashMap ();
         _cid0FontsMap = new HashMap ();
         _cid2FontsMap = new HashMap ();
-        _docTreeRoot.startWalk ();
-        for (;;) {
-            // This time we need all the page objects and page tree
-            // nodes, because resources can be inherited from
-            // page tree nodes.
-            DocNode node = _docTreeRoot.nextDocNode ();
-            if (node == null) {
-                break;
-            }
-            // Get the fonts for the node 
-            PdfDictionary fonts = null; 
             try {
+        _docTreeRoot.startWalk ();
+            for (;;) {
+             // This time we need all the page objects and page tree
+             // nodes, because resources can be inherited from
+             // page tree nodes.
+                DocNode node = _docTreeRoot.nextDocNode ();
+                if (node == null) {
+                    break;
+                }
+                // Get the fonts for the node 
+                PdfDictionary fonts = null; 
                 fonts = node.getFontResources ();
                 if (fonts != null) {
                     // In order to make sure we have a collection of
@@ -2110,21 +2132,21 @@ public class PdfModule
                     }
                 }
             }
-            catch (PdfException e) {
-                e.disparage (info);
-                info.setMessage (new ErrorMessage 
-                    (e.getMessage (), _parser.getOffset ()));
-                return;
-            }
-            catch (Exception e) {
-                // Unexpected exception.
-                _logger.warning( "PdfModule.findFonts: " + e.toString ());
-                info.setWellFormed (false);
-                info.setMessage (new ErrorMessage
-                    ("Unexpected error in findFonts", e.toString (), 
-                        _parser.getOffset ()));
-                return;
-            }
+        }
+        catch (PdfException e) {
+            e.disparage (info);
+            info.setMessage (new ErrorMessage 
+                (e.getMessage (), _parser.getOffset ()));
+            return;
+        }
+        catch (Exception e) {
+            // Unexpected exception.
+            _logger.warning( "PdfModule.findFonts: " + e.toString ());
+            info.setWellFormed (false);
+            info.setMessage (new ErrorMessage
+                ("Unexpected error in findFonts", e.toString (), 
+                    _parser.getOffset ()));
+            return;
         }
     }
 
@@ -2291,11 +2313,13 @@ public class PdfModule
         }
         if (offset < 0) {
             /* The object is located in an object stream. Need to get the
-             * object stream first. */
+             * object stream first. 
+             * Be cautious dealing with _cachedStreamIndex and _cachedObjectStream;
+             * these can be modified by a recursive call to getObject. */
             try {
                 int streamObjIndex = _xref2[objIndex][0];
                 PdfObject streamObj;
-                ObjectStream ostrm;
+                ObjectStream ostrm = null;
                 if (streamObjIndex ==_cachedStreamIndex) {
                     ostrm = _cachedObjectStream;
                     // Reset it
@@ -2319,7 +2343,7 @@ public class PdfModule
                     }
                 }
                 /* And finally extract the object from the object stream. */
-                return _cachedObjectStream.getObject (objIndex);
+                return ostrm.getObject (objIndex);
             }
             catch (Exception e) {
                 e.printStackTrace ();
