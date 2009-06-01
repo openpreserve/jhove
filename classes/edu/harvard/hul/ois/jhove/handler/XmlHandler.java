@@ -2170,7 +2170,7 @@ public class XmlHandler
             _writer.print (margn4 + elementStart ("mix:Compression") + EOL);
             if (comp != NisoImageMetadata.NULL) {
                 _writer.print (margn5 + element ("mix:compressionScheme",
-                                               Integer.toString (comp)) + EOL);
+                        Integer.toString (comp)) + EOL);
             }
             // TODO it isn't clear how to get from compression level to compression ratio
 
@@ -2978,28 +2978,94 @@ public class XmlHandler
      String margn2 = margin + " ";
      String margn3 = margn2 + " ";
      String margn4 = margn3 + " ";
-     //String margn5 = margn4 + " ";
+     String margn5 = margn4 + " ";
 
      _writer.println (margn2 + elementStart ("mix:BasicDigitalObjectInformation"));
      
      StringBuffer objIDBuf = new StringBuffer
         (margn3 + elementStart ("mix:ObjectIdentifier") + EOL);
-     boolean useObjIDBuf = false;
      objIDBuf.append (margn4 + element ("mix:objectIdentifierType", "JHOVE") + EOL);
      String s = niso.getImageIdentifier ();
      if (s != null) {
          objIDBuf.append (margn4 + element ("mix:objectIdentifierValue", s) + EOL);
-         useObjIDBuf = true;
      }
      objIDBuf.append (margn3 + elementEnd ("mix:ObjectIdentifier") + EOL);
-     if (useObjIDBuf) {
-         _writer.print (objIDBuf.toString ());
-     }
+     _writer.print (objIDBuf.toString ());
      long ln = niso.getFileSize();
      if (ln != NisoImageMetadata.NULL) {
          _writer.print (margn3 + element ("mix:fileSize",
                              Long.toString (ln)) + EOL);
      }
+     
+     if ((s = niso.getByteOrder ()) != null) {
+         // Convert strings to MIX 1.0 form
+         if (s.startsWith ("big")) {
+             s = "big endian";
+         }
+         else if (s.startsWith ("little")) {
+             s = "little endian";
+         }
+         _writer.print (margn3 + element ("mix:byteOrder", s) + EOL);
+     }
+     
+     int comp = niso.getCompressionScheme ();
+     int level = niso.getCompressionLevel ();
+     String compStr;
+     switch (comp) {
+     case 1:
+         compStr = "Uncompressed";
+         break;
+     case 2:
+         compStr = "CCITT 1D";
+         break;
+     case 3:
+         compStr = "Group 3 Fax";
+         break;
+     case 4:
+         compStr = "Group 4 Fax";
+         break;
+     case 5:
+         compStr = "LZW";
+         break;
+     case 6:
+         compStr = "JPEG";
+         break;
+     case 32773:
+         compStr = "PackBits";
+         break;
+     default:
+         compStr = "Unknown";
+         break;
+     }
+     if (comp != NisoImageMetadata.NULL || level != NisoImageMetadata.NULL) {
+         _writer.print (margn3 + elementStart ("mix:Compression") + EOL);
+         if (comp != NisoImageMetadata.NULL) {
+             _writer.print (margn4 + element ("mix:compressionScheme",
+                                            compStr) + EOL);
+         }
+         // TODO it isn't clear how to get from compression level to compression ratio
+
+         _writer.print (margn3 + elementEnd ("mix:Compression") + EOL);
+     }
+     
+     // NOTE: Checksum method and value are never set currently. If they are, the
+     // values set will need to be converted to meaningful MIX values. This code is left
+     // here just as a reminder.
+     int n = niso.getChecksumMethod ();
+     s = niso.getChecksumValue ();
+     if (n != NisoImageMetadata.NULL || s != null) {
+         _writer.print (margn4 + elementStart ("mix:Fixity") + EOL);
+         if (n != NisoImageMetadata.NULL) {
+             _writer.print (margn5 + element ("mix:messageDigestAlgorithm",
+                                 Integer.toString (n)) + EOL);
+         }
+         if (s != null) {
+             _writer.print (margn5 + element ("mix:messageDigest", s) + EOL);
+         }
+         _writer.println (margn4 + elementEnd ("mix:Fixity"));
+     }
+
+
      _writer.print(margn2 + elementEnd ("mix:BasicDigitalObjectInformation") + EOL);
  }
 
