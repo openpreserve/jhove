@@ -41,8 +41,8 @@ public class PdfModule
      ******************************************************************/
 
     private static final String NAME = "PDF-hul";
-    private static final String RELEASE = "1.7";
-    private static final int [] DATE = {2008, 2, 20};
+    private static final String RELEASE = "1.8";
+    private static final int [] DATE = {2009, 5, 22};
     private static final String [] FORMAT = {
         "PDF", "Portable Document Format"
     };
@@ -397,7 +397,7 @@ public class PdfModule
     /**
      * Per-action initialization.  May be called multiple times.
      *
-     * @param param	The module parameter; under command-line Jhove, the -p parameter.
+     * @param param   The module parameter; under command-line Jhove, the -p parameter.
      *        If the parameter contains the indicated characters, then the
      *        specified information is omitted; otherwise, it is included.
      *        (This is the reverse of the behavior prior to beta 3.)
