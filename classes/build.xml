@@ -41,6 +41,7 @@
               ADump.class,
               WDump.class, UserHome.class,
               edu/harvard/hul/ois/jhove/*.class,
+              edu/harvard/hul/ois/jhove/*.xsd,
               edu/harvard/hul/ois/jhove/handler/*.class,
               edu/harvard/hul/ois/jhove/handler/audit/*.class,
               edu/harvard/hul/ois/jhove/module/*.class,
