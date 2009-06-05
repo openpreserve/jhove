@@ -2346,7 +2346,6 @@ public class PdfModule
                 return ostrm.getObject (objIndex);
             }
             catch (Exception e) {
-                e.printStackTrace ();
                 /* Fall through with error */
             }
             throw new PdfMalformedException (nogood);
