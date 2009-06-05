@@ -35,7 +35,7 @@ public class Jhove
     private static final int [] DATE = {2009, 4, 16};
 
     /** Application release number. */
-    private static final String RELEASE = "1.2";
+    private static final String RELEASE = "1.3";
 
     /** Application invocation syntax. */
     private static final String USAGE = "java " + NAME + " [-c config] " +
@@ -45,7 +45,7 @@ public class Jhove
 
     /** Copyright information. */
     private static final String RIGHTS =
-	"Copyright 2004-2008 by the President and Fellows of Harvard College. " +
+	"Copyright 2004-2009 by the President and Fellows of Harvard College. " +
 	"Released under the GNU Lesser General Public License.";
 
     /******************************************************************
