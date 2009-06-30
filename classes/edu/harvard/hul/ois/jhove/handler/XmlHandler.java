@@ -3102,7 +3102,7 @@ public class XmlHandler
      int n = niso.getColorSpace ();
      if (n != NisoImageMetadata.NULL) {
          piBuf.append (margn5 + element ("mix:colorSpace",
-                                            Integer.toString(n)) + EOL);
+                         photometricInterpretationToString (n)) + EOL);
          usePIBuf = true;
      }
      String s = niso.getProfileName ();
@@ -3905,6 +3905,29 @@ public class XmlHandler
      
  }
 
+    /** Convert the color space value (which is based on the TIFF
+     *  PhotometricInterpretation convention) to one of the suggested
+     *  values for MIX 2.0 */
+    private String photometricInterpretationToString (int n) {
+        String s = "Unknown";
+        switch (n) {
+        case 0: s = "WhiteIsZero"; break;
+        case 1: s = "BlackIsZero"; break;
+        case 2: s = "RGB"; break;
+        case 3: s = "PaletteColor"; break;
+        case 4: s = "TransparencyMask"; break;
+        case 5: s = "CMYK"; break;
+        case 6: s = "YCbCr"; break;
+        case 8: s = "CIELab"; break;
+        case 9: s = "ICCLab"; break;
+        case 10: s = "ITULab"; break;
+        case 32803: s = "CFA"; break;         // used by DNG
+        case 34892: s = "LinearRaw"; break;   // used by DNG
+        }
+        return s;
+    }
+    
+    
     /**
      * Display the audio metadata formatted according to
      * the AES schema.
