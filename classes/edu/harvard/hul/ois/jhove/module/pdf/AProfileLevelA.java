@@ -9,7 +9,7 @@ import edu.harvard.hul.ois.jhove.module.PdfModule;
 
 /**
  *  PDF profile checker for PDF/A-1 documents, Level A.
- *  See ISO draft ISO/TC171/SC2, "Document Imaging Applications
+ *  See ISO 19005-1:2005(E), "Document Imaging Applications
  *  Application Issues".
  * 
  *  This profile checker is completely dependent on AProfile.
@@ -32,7 +32,7 @@ public class AProfileLevelA extends PdfProfile {
      */
     public AProfileLevelA(PdfModule module) {
         super (module);
-        _profileText = "ISO PDF/A-1, Level A (Draft Proposal)";
+        _profileText = "ISO PDF/A-1, Level A";
     }
 
     /** 

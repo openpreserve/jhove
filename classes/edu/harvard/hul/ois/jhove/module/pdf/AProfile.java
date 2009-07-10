@@ -15,10 +15,10 @@ import javax.xml.parsers.*;
 
 /**
  *  PDF profile checker for PDF/A-1 documents.
- *  See ISO draft ISO/TC171/SC2, "Document Imaging Applications
+ *  See 19005-1:2005(E), "Document Imaging Applications
  *  Application Issues".
  *
- *  Revised to reflect the November 11, 2004 draft.  With the new
+ *  Revised to reflect the final standard.  With the new
  *  terminology, this profile is specific to PDF/A-1; there may be
  *  additional standards in the PDF/A family later on.  "PDF/A"
  *  means "PDF/A-1" in the documentation of this code.
@@ -58,14 +58,15 @@ public final class AProfile extends PdfProfile
         "Ink", "Popup", "Widget", "Screen",
         "PrinterMark", "TrapNet"
     };
+    
     private String[] excludedActions = {
         "Launch", "Sound", "Movie", "ResetForm",
-        "ImportData", "JavaScript"
+        "ImportData", "JavaScript", "set-state", "no-op"
     };
     
     /* The following filters are not allowed */
     private String[] excludedFilters = {
-        "ASCIIHexDecode", "ASCII85Decode", "LZWDecode" 
+        /*"ASCIIHexDecode", "ASCII85Decode",*/ "LZWDecode" 
     };
 
 
@@ -80,7 +81,7 @@ public final class AProfile extends PdfProfile
     public AProfile (PdfModule module) 
     {
         super (module);
-        _profileText = "ISO PDF/A-1, Level B (Draft Proposal)";
+        _profileText = "ISO PDF/A-1, Level B";
     }
 
     /**
@@ -128,7 +129,8 @@ public final class AProfile extends PdfProfile
                   !trailerDictOK () ||
                   !catalogOK () ||
                   !resourcesOK () ||
-                  !fontsOK ()) {
+                  !fontsOK () ||
+                  !outlinesOK()) {
                 _levelA = false;
                 return false;
             }
@@ -257,9 +259,23 @@ public final class AProfile extends PdfProfile
             // and there are an assortment of exceptions. 
             PdfSimpleObject fType = (PdfSimpleObject) font.get("Subtype");
             String fTypeStr = fType.getStringValue ();
+            PdfDictionary desc = (PdfDictionary) 
+                    _module.resolveIndirectObject (font.get ("FontDescriptor"));
+            PdfSimpleObject flagsObj = (PdfSimpleObject) _module.resolveIndirectObject( desc.get ("Flags"));
+            int flags = 0;
+            if (flagsObj != null) {
+                flags = flagsObj.getIntValue();
+            }
             if ("Type1".equals (fTypeStr)) {
-                // The allowable Type 1 fonts are open ended, so
-                // allow all Type 1 fonts..
+                // A Type 1 font must have a CharSet string in the
+                // font descriptor dictionary.
+                if (desc == null) {
+                    return false;    // The requirement mentioned above implies a FontDescriptor is needed.
+                }
+                if (desc.get ("CharSet") == null) {
+                    return false;
+                }
+                
                 return true;
             }
             if ("Type0".equals (fTypeStr)) {
@@ -282,6 +298,9 @@ public final class AProfile extends PdfProfile
             }
             PdfObject enc = font.get ("Encoding");
             if (enc instanceof PdfSimpleObject) {
+                if ((flags & 0X04) != 0) {    // symbolic font?
+                    return false;             // symbolic font must not have encoding
+                }
                 String encName = ((PdfSimpleObject) enc).getStringValue ();
                 if ("WinAnsiEncoding".equals (encName) ||
                         "MacRomanDecoding".equals (encName) ||
@@ -810,7 +829,8 @@ public final class AProfile extends PdfProfile
             return true;
         }
         try {
-            PdfDictionary item = (PdfDictionary) outlineDict.get ("First");
+            PdfDictionary item = (PdfDictionary) _module.resolveIndirectObject
+                       (outlineDict.get ("First"));
             while (item != null) {
                 if (!checkOutlineItem (item)) {
                     return false;
@@ -831,7 +851,8 @@ public final class AProfile extends PdfProfile
     {
         // Check if there are actions for this item 
         try {
-            PdfDictionary action = (PdfDictionary) item.get ("A");
+            PdfDictionary action = (PdfDictionary) 
+                     _module.resolveIndirectObject (item.get ("A"));
             if (action != null) {
                 if (!actionOK (action)) {
                     return false;
@@ -980,7 +1001,7 @@ public final class AProfile extends PdfProfile
 
 
     /**
-     *  Checks a single XObject for xObjectsOK.  Always returns <code>true</code>.
+     *  Checks a single XObject for xObjectsOK.  
      */
     protected boolean xObjectOK (PdfDictionary xo) 
     {
@@ -1037,6 +1058,14 @@ public final class AProfile extends PdfProfile
                 xo.get ("Alternates") != null) {
                 return false;
             }
+            
+            // Check against LZW filter
+            PdfObject filters =
+                xo.get ("Filter");
+            if (hasFilters (filters, excludedFilters)) {
+                return false;
+            }
+
             
             // Interpolate is allowed only if its value is false.
             PdfSimpleObject interp = (PdfSimpleObject) xo.get ("Interpolate");
@@ -1101,19 +1130,28 @@ public final class AProfile extends PdfProfile
             // continue.
             try {
                 parser.parse (src);
+                if (!handler.isPdfaCompliant ()) {
+                    return false;
+                }
             }
             catch (SAXException se) {
                 String msg = se.getMessage ();
                 if (msg != null && msg.startsWith ("ENC=")) {
-                    String encoding = msg.substring (5);
-                    try {
-                        //Reader rdr = new InputStreamReader (stream, encoding);
-                        src = new PdfXMPSource (metadata, _module.getFile (), encoding);
-                        parser.parse (src);
-                    }
-                    catch (UnsupportedEncodingException uee) {
-                        return false;
-                    }
+                    // encoding change is not allowed with PDF/A, so there's no
+                    // need to re-parse
+                    return false;
+//                    String encoding = msg.substring (5);
+//                    try {
+//                        //Reader rdr = new InputStreamReader (stream, encoding);
+//                        src = new PdfXMPSource (metadata, _module.getFile (), encoding);
+//                        parser.parse (src);
+//                        if (!handler.isPdfaCompliant ()) {
+//                            return false;
+//                        }
+//                    }
+//                    catch (UnsupportedEncodingException uee) {
+//                        return false;
+//                    }
                 }
             }
         }

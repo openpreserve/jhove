@@ -57,6 +57,12 @@ public class PdfDictionary extends PdfObject
     {
 	return (PdfObject) _entries.get (key);
     }
+    
+    /** Return true if it's within the PDF/A implementation limit. */
+    public boolean isPdfACompliant () 
+    {
+        return _entries.size() <= 4095;
+    }
 
     /**
      *  Returns an iterator which will successively return

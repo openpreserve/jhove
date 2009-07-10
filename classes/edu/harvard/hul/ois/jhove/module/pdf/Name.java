@@ -16,4 +16,9 @@ public class Name
     {
         super ();
     }
+    
+    /** Returns true if it's within the PDF/A implementation limit */
+    public boolean isPdfACompliant () {
+        return _value.getBytes().length <= 127; 
+    }
 }

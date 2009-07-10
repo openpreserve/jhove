@@ -90,6 +90,18 @@ public class Numeric
         _intValue = value;
         _real = false;
     }
+    
+    /** Returns true if this is within PDF/A implementation limits. */
+    public boolean isPdfACompliant () {
+        if (_real) {
+            double absRealValue = (_realValue < 0 ? -_realValue : _realValue);
+            return (absRealValue <= 3.404E38);
+        }
+        else {
+            return (_intValue <= 2147483647 && _intValue >= -2147483648);
+        }
+            
+    }
 
 }
 

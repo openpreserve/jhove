@@ -19,6 +19,7 @@ public class PdfStream extends PdfObject
     private Stream _stream;
     private PdfDictionary _dict;
     private Filter[] _filters;
+    private boolean pdfaCompliant;
     
     /** 
      *  Creates a PdfStream
@@ -35,6 +36,7 @@ public class PdfStream extends PdfObject
         super (objNumber, genNumber);
         _stream = stream;
         _dict = dict;
+        pdfaCompliant = true;             // assume compliance to start with
         extractFilters ();
     }
 
@@ -51,6 +53,7 @@ public class PdfStream extends PdfObject
         super ();
         _stream = stream;
         _dict = dict;
+        pdfaCompliant = true;             // assume compliance to start with
         extractFilters ();
     }
     
@@ -84,6 +87,7 @@ public class PdfStream extends PdfObject
             return null;
         }
         try {
+            pdfaCompliant = false;          // not allowed with PDF/A
             FileSpecification fs = new FileSpecification (spec);
             return fs.getSpecString ();
         }
@@ -91,7 +95,13 @@ public class PdfStream extends PdfObject
             return null;
         }
     }
-
+    
+    /** Returns true if no PDF/A compliance problems have been found, false if
+     *  problems have been found */
+    public boolean isPdfaCompliant () {
+        return pdfaCompliant;
+    }
+    
     
     /**
      *  Returns an array (possibly empty but not null) of the filters for
@@ -134,10 +144,14 @@ public class PdfStream extends PdfObject
                 return;
             }
             ff = true;
+            pdfaCompliant = false;
         }
         PdfObject parms;
         if (ff) {
             parms = _dict.get ("FDecodeParms");
+            if (parms != null) {
+                pdfaCompliant = false;
+            }
         }
         else {
             parms = _dict.get ("DecodeParms");

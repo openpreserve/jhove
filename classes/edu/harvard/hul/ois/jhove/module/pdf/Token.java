@@ -31,4 +31,11 @@ public abstract class Token
                 ! (this instanceof DictionaryStart) &&
                 ! (this instanceof DictionaryEnd));
     }
+    
+    /** Returns <code>true</code> if this token is within PDF/A implementation
+     *  limits. Always returns true unless overridden. */
+    public boolean isPdfACompliant () 
+    {
+        return true;
+    }
 }

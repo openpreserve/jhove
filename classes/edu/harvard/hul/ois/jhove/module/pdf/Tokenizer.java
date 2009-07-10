@@ -323,7 +323,9 @@ public abstract class Tokenizer
                         _state = State.WHITESPACE;
                         _wsString += (char) _ch;
                         ((StringValuedToken)token).setValue(buffer.toString());
-
+                        if (!token.isPdfACompliant()) {
+                            _pdfACompliant = false;
+                        }
                         return token;
                     }
                     else {
@@ -346,6 +348,9 @@ public abstract class Tokenizer
                             _lookAhead = true;
                         }
 
+                        if (!token.isPdfACompliant()) {
+                            _pdfACompliant = false;
+                        }
                         return token;
                     }
                     else if (isNumeral (_ch)) {
@@ -413,6 +418,9 @@ public abstract class Tokenizer
                             _wsString = "" + (char) _ch;
                             ((StringValuedToken) token).setValue
                                                           (buffer.toString ());
+                            if (!token.isPdfACompliant()) {
+                                _pdfACompliant = false;
+                            }
                             return token;
                         }
                     }
@@ -467,6 +475,9 @@ public abstract class Tokenizer
                             _wsString = "" + (char) _ch;
                         }
 
+                        if (!token.isPdfACompliant()) {
+                            _pdfACompliant = false;
+                        }
                         return token;
                     }
                     else {
@@ -506,6 +517,9 @@ public abstract class Tokenizer
                             _wsString = "" + (char) _ch;
                         }
 
+                        if (!token.isPdfACompliant()) {
+                            _pdfACompliant = false;
+                        }
                         return token;
                     }
                     else {

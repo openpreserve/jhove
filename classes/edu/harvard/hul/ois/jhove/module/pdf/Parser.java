@@ -125,6 +125,8 @@ public class Parser
         if (!clas.isInstance (tok)) {
             throw new PdfInvalidException (errMsg);
         }
+        if (!tok.isPdfACompliant())
+            _pdfACompliant = false;
         return tok;
     }
 
@@ -245,6 +247,9 @@ public class Parser
                 // Assimilate the dictionary and the stream token into the
                 // object to be returned
                 PdfStream strmObj = new PdfStream ((PdfDictionary) obj, strm);
+                if (!strmObj.isPdfaCompliant()) {
+                    _pdfACompliant = false;
+                }
                 obj = strmObj;
             }
         }
@@ -306,6 +311,9 @@ public class Parser
                 Token tok = e.getToken ();
                 if (tok instanceof ArrayEnd) {
                     collapseObjectVector (arr.getContent ());
+                    if (!arr.isPdfACompliant()) {
+                        _pdfACompliant = false;
+                    }
                     return arr;
                 }
                 else {
@@ -361,6 +369,9 @@ public class Parser
                         catch (Exception f) {
                             throw new PdfMalformedException (invalDict, getOffset ());
                         }
+                    }
+                    if (!dict.isPdfACompliant()) {
+                        _pdfACompliant = false;    // exceeds implementation limit for PDF/A
                     }
                     return dict;
                 }

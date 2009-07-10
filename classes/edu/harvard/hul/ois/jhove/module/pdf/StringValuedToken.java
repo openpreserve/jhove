@@ -30,11 +30,12 @@ public abstract class StringValuedToken
     }
 
     /** 
-     *  Get the value of the token's untranslated bytes.
+     *  Get the value of the token's untranslated bytes. This is unsupported
+     *  and will always return null.
      */
     public Vector getRawBytes ()
     {
-	return _rawBytes;
+        return _rawBytes;
     }
 
     /**

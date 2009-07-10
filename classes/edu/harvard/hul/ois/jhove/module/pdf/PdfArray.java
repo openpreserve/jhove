@@ -52,6 +52,12 @@ public class PdfArray extends PdfObject
     {
         return _content;
     }
+    
+    /** Report if it's within implementation limits defined for PDF/A. */
+    public boolean isPdfACompliant ()
+    {
+        return _content.size() <= 8191;
+    }
 
     /**
      *  Concatenate the elements, if they are PdfSimpleObjects,
