@@ -47,13 +47,22 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
         ALT = 2,
         SEQ = 3;
         
+    private boolean pdfaCompliant;
         
     public XMPHandler ()
     {
         super ();
+        pdfaCompliant = true;            // compliance is presumed till disproven
     }
 
 
+    /** Returns true if no violations of PDF/A compliance have been found,
+     *  false if a problem was detected. */
+    public boolean isPdfaCompliant () {
+        return pdfaCompliant;
+    }
+    
+    
     public void processingInstruction (String target, String data)
                         throws SAXException
     {
@@ -80,9 +89,16 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
                 } 
                 // EF BB B8 signifies UTF-8, but that's the default anyway.
             }
+            // Check the bytes attribute. We don't do anything with it except
+            // note that it isn't allowed with PDF/A.
+            idx = data.indexOf("bytes=");
+            if (idx > 0) {
+                pdfaCompliant = false;
+            }
             // Next find encoding, which is optional.
             idx = data.indexOf ("encoding=");
             if (idx > 0) {
+                pdfaCompliant = false;          // not allowed in PDF/A
                 idx = data.indexOf ('"', idx + 1);
                 int encEnd = data.indexOf ('"', idx + 1 );
                 String encoding = data.substring (idx + 1, encEnd);
