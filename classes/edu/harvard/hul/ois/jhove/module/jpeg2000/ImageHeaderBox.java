@@ -65,6 +65,11 @@ public class ImageHeaderBox extends JP2Box {
         long width = _module.readUnsignedInt (_dstrm);
         niso.setImageWidth (width);
         int nc = _module.readUnsignedShort (_dstrm);
+        if (nc == 0) {
+            _repInfo.setMessage (new ErrorMessage
+                    ("ImageHeader Box haz zero components", _module.getFilePos ()));
+            return false;   
+        }
         niso.setSamplesPerPixel(nc);
         int bpc = ModuleBase.readUnsignedByte(_dstrm, _module);
         if (bpc != 255) {
