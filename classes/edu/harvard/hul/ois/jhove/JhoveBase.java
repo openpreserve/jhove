@@ -437,6 +437,7 @@ public class JhoveBase
     	if (handler == null) {
     	    handler = (OutputHandler) _handlerMap.get ("text");
     	}
+    	handler.reset ();
     	_outputFile = outputFile;
     
     	handler.setApp    (app);
