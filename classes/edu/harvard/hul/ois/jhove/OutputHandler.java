@@ -15,6 +15,12 @@ import java.util.*;
  */
 public interface OutputHandler
 {
+    
+    /**
+     * Reset the handler. This needs to be called before each invocation.
+     */
+    public void reset ();
+
     /**
      * Callback allowing post-parse, pre-show analysis of object
      * representation information.
