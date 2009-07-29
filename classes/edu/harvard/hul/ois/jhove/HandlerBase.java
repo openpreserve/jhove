@@ -25,22 +25,23 @@ public abstract class HandlerBase
      *  A DateFormat for representing a Date in yyyy-MM-dd 
      *  (e.g., 2003-07-31) format.
      */
-    public static SimpleDateFormat date =
-              new SimpleDateFormat ("yyyy-MM-dd");
+    public static SynchronizedDateFormat date =
+              new SynchronizedDateFormat ("yyyy-MM-dd");
     
     /**
      *  A DateFormat for representing a Date in yyyy-MM-dd HH:mm:ss z
      *  (e.g., 2003-07-31 15:31:12 EDT) format.
      */
-    public static SimpleDateFormat dateTime =
-              new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss z");
+    public static SynchronizedDateFormat dateTime =
+              new SynchronizedDateFormat ("yyyy-MM-dd HH:mm:ss z");
 
     /**
      *  A DateFormat for representing a Date in ISO 8601
      *  (e.g., 2003-07-31T15:31:12-0400) format.
+     *  We subclass SimpleDateFormat to make it thread-safe.
      */
-    public static SimpleDateFormat iso8601 =
-              new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ssZ");
+    public static SynchronizedDateFormat iso8601 =
+              new SynchronizedDateFormat ("yyyy-MM-dd'T'HH:mm:ssZ");
 
     /******************************************************************
      * PRIVATE INSTANCE FIELDS.
@@ -129,6 +130,13 @@ public abstract class HandlerBase
      * Initialization methods.
      ******************************************************************/
 
+    /**
+     * Reset the handler. This needs to be called before each invocation.
+     */
+    public void reset () {
+        _level = -1;
+    }
+    
     /**
      * Set a a List of default parameters for the module.
      * 
@@ -772,4 +780,17 @@ public abstract class HandlerBase
 		":" +
 		isoStr.substring (len - 2);
     }
+    
+    /** A DateFormat class to address an issue of thread safety. */
+    protected static class SynchronizedDateFormat extends SimpleDateFormat
+        {
+            public SynchronizedDateFormat(String pattern) {
+                super(pattern);
+            }
+            public synchronized StringBuffer format(Date date,
+                                    StringBuffer toAppendTo, FieldPosition pos) {
+                return super.format(date, toAppendTo, pos);
+            }
+      }
+
 }
