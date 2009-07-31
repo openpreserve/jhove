@@ -3,6 +3,43 @@ Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details)
 
+RELEASE NOTES FOR JHOVE 1.4
+2009-07-30
+
+PDF MODULE
+
+   1. The PDF/A profile has been updated to the final version of 
+      19005-1:2005(E) and made more thorough. Among the changes:
+
+      a. The set-state and no-op actions disqualify a PDF/A candidate.
+
+      b. The ASCIIHexDecode and ASCII85Decode filters no longer 
+         disqualify a candidate.
+
+      c. Checking of outlines has been added.
+
+      d. Additional checking of Type 1 fonts and symbolic fonts.
+
+      e. Bug fix in checking type 2 subfonts.
+
+      f. An LZW filter in an image object disqualifies a candidate.
+
+      g. The xpacket processing instruction is checked for attributes 
+         which disqualify from PDF/A.
+
+      h. Conformity to implementation limits is checked as a condition
+         of PDF/A conformity.
+
+JPEG2000 MODULE
+
+   1. The pathological case of an image with no components is checked so
+      it won't cause a crash.
+
+XML HANDLER
+
+   1. A reset() function has been added so that if the handler is reused,
+      it will return to a valid initial state.
+
 RELEASE NOTES FOR JHOVE 1.3
 2009-06-04
 
