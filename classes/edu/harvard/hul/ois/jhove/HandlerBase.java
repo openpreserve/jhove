@@ -782,7 +782,7 @@ public abstract class HandlerBase
     }
     
     /** A DateFormat class to address an issue of thread safety. */
-    protected static class SynchronizedDateFormat extends SimpleDateFormat
+    public static class SynchronizedDateFormat extends SimpleDateFormat
         {
             public SynchronizedDateFormat(String pattern) {
                 super(pattern);
