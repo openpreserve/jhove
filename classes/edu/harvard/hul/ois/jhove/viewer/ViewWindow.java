@@ -138,6 +138,7 @@ public class ViewWindow extends InfoWindow {
         OutputHandler handler;
         try {
             handler = selectHandler ();
+            handler.reset ();
             handler.setWriter (wtr);
             handler.showHeader ();
             Iterator iter =  _info.iterator ();
