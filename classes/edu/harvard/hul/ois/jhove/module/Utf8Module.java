@@ -335,26 +335,26 @@ public class Utf8Module
 
 	/* Object is well-formed UTF-8. */
 
-	if (ckSummer != null) {
+        if (ckSummer != null) {
             info.setSize (_cstream.getNBytes ());
-	    info.setChecksum (new Checksum (ckSummer.getCRC32 (), 
+            info.setChecksum (new Checksum (ckSummer.getCRC32 (), 
 					    ChecksumType.CRC32));
-	    String value = ckSummer.getMD5 ();
-	    if (value != null) {
-		info.setChecksum (new Checksum (value, ChecksumType.MD5));
+            String value = ckSummer.getMD5 ();
+            if (value != null) {
+                info.setChecksum (new Checksum (value, ChecksumType.MD5));
+            }
+	        if ((value = ckSummer.getSHA1 ()) != null) {
+	            info.setChecksum (new Checksum (value, ChecksumType.SHA1));
+	        }
 	    }
-	    if ((value = ckSummer.getSHA1 ()) != null) {
-		info.setChecksum (new Checksum (value, ChecksumType.SHA1));
-	    }
-	}
 
-	/* Only non-zero-length files are well-formed UTF-8.
-	 */
-	if (_nByte == 0) {
-	    info.setMessage (new ErrorMessage ("Zero-length file"));
-	    info.setWellFormed (RepInfo.FALSE);
-	    return 0;
-	}
+	    /* Only non-zero-length files are well-formed UTF-8.
+	     */
+	    if (_nByte == 0) {
+	        info.setMessage (new ErrorMessage ("Zero-length file"));
+	        info.setWellFormed (RepInfo.FALSE);
+            return 0;
+        }
 
         /* Create a metadata property for the module-specific
          * info. (4-Feb-04) */
@@ -364,43 +364,45 @@ public class Utf8Module
                  PropertyArity.LIST,
                  metadataList));
 
-	Property property = new Property ("Characters", PropertyType.LONG,
+        Property property = new Property ("Characters", PropertyType.LONG,
 					  new Long (nChar));
-	metadataList.add (property);
+        metadataList.add (property);
 
         property = blockMarker.getBlocksUsedProperty("UnicodeBlocks");
-	metadataList.add (property);
+        if (property != null) {
+            metadataList.add (property);
+        }
 
-	/* Set property reporting line ending type */
-	if (_lineEndCR || _lineEndLF || _lineEndCRLF) {
-	    ArrayList propArray = new ArrayList(3);
-	    if (_lineEndCR) {
-		propArray.add("CR");
-	    }
-	    if (_lineEndLF) {
-		propArray.add("LF");
-	    }
-	    if (_lineEndCRLF) {
-		propArray.add("CRLF");
-	    }
-	    property = new Property ("LineEndings", PropertyType.STRING,
-				     PropertyArity.LIST, propArray);
-	    metadataList.add (property);
-	}
-	/* Set property reporting control characters used */
-	if (!_controlCharMap.isEmpty ()) {
-	    LinkedList propList = new LinkedList ();
-	    String mnem;
-	    for (int i = 0; i < 0X20; i++) {
-		mnem = (String) _controlCharMap.get (new Integer (i));
-		if (mnem != null) {
-		    propList.add (mnem);
-		}
-	    }
+        /* Set property reporting line ending type */
+        if (_lineEndCR || _lineEndLF || _lineEndCRLF) {
+            ArrayList propArray = new ArrayList(3);
+            if (_lineEndCR) {
+                propArray.add("CR");
+            }
+            if (_lineEndLF) {
+                propArray.add("LF");
+            }
+            if (_lineEndCRLF) {
+                propArray.add("CRLF");
+            }
+            property = new Property ("LineEndings", PropertyType.STRING,
+                      PropertyArity.LIST, propArray);
+            metadataList.add (property);
+        }
+        /* Set property reporting control characters used */
+        if (!_controlCharMap.isEmpty ()) {
+            LinkedList propList = new LinkedList ();
+            String mnem;
+            for (int i = 0; i < 0X20; i++) {
+                mnem = (String) _controlCharMap.get (new Integer (i));
+                if (mnem != null) {
+                    propList.add (mnem);
+                }
+            }
 	    /* need to check separately for DEL */
 	    mnem = (String) _controlCharMap.get (new Integer (0X7F));
 	    if (mnem != null) {
-		propList.add (mnem);
+            propList.add (mnem);
 	    }
 	    property = new Property ("ControlCharacters", PropertyType.STRING,
 				     PropertyArity.LIST, propList);
