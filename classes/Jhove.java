@@ -32,10 +32,10 @@ public class Jhove
     private static final String NAME = "Jhove";
 
     /** Application build date, YYYY, MM, DD. */
-    private static final int [] DATE = {2009, 7, 30};
+    private static final int [] DATE = {2009, 10, 14};
 
     /** Application release number. */
-    private static final String RELEASE = "1.4";
+    private static final String RELEASE = "1.5";
 
     /** Application invocation syntax. */
     private static final String USAGE = "java " + NAME + " [-c config] " +
