@@ -59,7 +59,7 @@ public class HtmlModule extends ModuleBase {
      ******************************************************************/
 
     private static final String NAME = "HTML-hul";
-    private static final String RELEASE = "1.2";
+    private static final String RELEASE = "1.3";
     private static final int [] DATE = {2006, 9, 5};
     private static final String [] FORMAT = {
         "HTML"
@@ -151,6 +151,11 @@ public class HtmlModule extends ModuleBase {
         "XHTML 1.0",
         "XHTML 1.1"
     };
+    
+    /* Flag to know if the property TextMDMetadata is to be added */
+    protected boolean _withTextMD = false;
+    /* Hold the information needed to generate a textMD metadata fragment */
+    protected TextMDMetadata _textMD;
 
     /******************************************************************
     * CLASS CONSTRUCTOR.
@@ -315,11 +320,25 @@ public class HtmlModule extends ModuleBase {
             /* parseIndex = 0, first call only */
             _doctype = null;
         }
+        // Test if textMD is to be generated
+        if (_defaultParams != null) {
+            Iterator iter = _defaultParams.iterator ();
+            while (iter.hasNext ()) {
+                String param = (String) iter.next ();
+                if (param.toLowerCase ().equals ("withtextmd=true")) {
+                    _withTextMD = true;
+                }
+            }
+        }
+        
         initParse ();
         info.setFormat (_format[0]);
         info.setMimeType (_mimeType[0]);
         info.setModule (this);
 
+        if (_textMD == null) {
+            _textMD = new TextMDMetadata();
+        }
         /* We may have already done the checksums while converting a
            temporary file. */
         Checksummer ckSummer = null;
@@ -337,8 +356,9 @@ public class HtmlModule extends ModuleBase {
 
         ParseHtml parser = null;
         HtmlMetadata metadata = null;
+        HtmlCharStream cstream = null;
         try {
-            CharStream cstream = new HtmlCharStream (_dstream, "ISO-8859-1");
+            cstream = new HtmlCharStream (_dstream, "ISO-8859-1");
             parser = new ParseHtml (cstream);
         }
         catch (UnsupportedEncodingException e) {
@@ -390,6 +410,20 @@ public class HtmlModule extends ModuleBase {
                 info.setWellFormed (false);
                 return 0;
             }
+            
+            // CRLF from HtmlCharStream ...
+            String lineEnd = cstream.getKindOfLineEnd();
+            if (lineEnd == null) {
+                info.setMessage(new InfoMessage("Not able to determine type of end of line"));
+                _textMD.setLinebreak(TextMDMetadata.NILL);
+            } else if (lineEnd.equalsIgnoreCase("CR")) {
+                _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
+            } else if (lineEnd.equalsIgnoreCase("LF")) {
+                _textMD.setLinebreak(TextMDMetadata.LINEBREAK_LF);
+            } else if (lineEnd.equalsIgnoreCase("CRLF")) {
+                _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CRLF);
+            }
+            
             if (type == 0) {
                 /* If we can't find a doctype, it still might be XHTML
                  * if the elements start with an XML declaration and
@@ -418,25 +452,39 @@ public class HtmlModule extends ModuleBase {
                 case HTML_3_2:
                 default:
                     docDesc = new Html3_2DocDesc ();
+                    _textMD.setMarkup_basis("HTML");
+                    _textMD.setMarkup_basis_version("3.2");
                     break;
      
                 case HTML_4_0_FRAMESET:
                    docDesc = new Html4_0FrameDocDesc ();
+                   _textMD.setMarkup_basis("HTML");
+                   _textMD.setMarkup_basis_version("4.0");
                     break;
                 case HTML_4_0_TRANSITIONAL:
                    docDesc = new Html4_0TransDocDesc ();
+                   _textMD.setMarkup_basis("HTML");
+                   _textMD.setMarkup_basis_version("4.0");
                     break;
                 case HTML_4_0_STRICT:
                     docDesc = new Html4_0StrictDocDesc ();
+                    _textMD.setMarkup_basis("HTML");
+                    _textMD.setMarkup_basis_version("4.0");
                     break;
                 case HTML_4_01_FRAMESET:
                     docDesc = new Html4_01FrameDocDesc ();
+                    _textMD.setMarkup_basis("HTML");
+                    _textMD.setMarkup_basis_version("4.01");
                     break;
                 case HTML_4_01_TRANSITIONAL:
                     docDesc = new Html4_01TransDocDesc ();
+                    _textMD.setMarkup_basis("HTML");
+                    _textMD.setMarkup_basis_version("4.01");
                     break;
                 case HTML_4_01_STRICT:
                     docDesc = new Html4_01StrictDocDesc ();
+                    _textMD.setMarkup_basis("HTML");
+                    _textMD.setMarkup_basis_version("4.01");
                     break;
                 case XHTML_1_0_STRICT:
                 case XHTML_1_0_TRANSITIONAL:
@@ -446,6 +494,7 @@ public class HtmlModule extends ModuleBase {
                     // magic code for the first XML call.
                     return 100;
             }
+            _textMD.setMarkup_language(_doctype);
             if (docDesc == null) {
                 info.setMessage (new InfoMessage ("Code for appropriate HTML version not available yet:" +
                     "substituting HTML 3.2"));
@@ -453,6 +502,26 @@ public class HtmlModule extends ModuleBase {
             }
             docDesc.validate (elements, info);
             metadata = docDesc.getMetadata ();
+            
+            // Try to get the charset from the meta Content
+            if (metadata.getCharset() != null) {
+                _textMD.setCharset(metadata.getCharset());
+            } else {
+                _textMD.setCharset(TextMDMetadata.CHARSET_ISO8859_1);
+            }
+            String textMDEncoding = _textMD.getCharset();
+            if (textMDEncoding.indexOf("UTF") != -1) {
+                _textMD.setByte_order(
+                        _bigEndian?TextMDMetadata.BYTE_ORDER_BIG:TextMDMetadata.BYTE_ORDER_LITTLE);
+                    _textMD.setByte_size("8");
+                    _textMD.setCharacter_size("variable");
+            } 
+            else {
+                _textMD.setByte_order(
+                        _bigEndian?TextMDMetadata.BYTE_ORDER_BIG:TextMDMetadata.BYTE_ORDER_LITTLE);
+                    _textMD.setByte_size("8");
+                    _textMD.setCharacter_size("1");
+            }
         }
         catch (ParseException e) {
             Token t = e.currentToken;
@@ -478,7 +547,7 @@ public class HtmlModule extends ModuleBase {
         }
         
         if (metadata != null) {
-	    Property property = metadata.toProperty ();
+	    Property property = metadata.toProperty (_withTextMD?_textMD:null);
 	    if (property != null) {
 		info.setProperty (property);
 	    }

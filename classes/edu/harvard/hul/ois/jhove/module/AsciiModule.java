@@ -36,7 +36,7 @@ public class AsciiModule
      ******************************************************************/
 
     private static final String NAME = "ASCII-hul";
-    private static final String RELEASE = "1.2";
+    private static final String RELEASE = "1.3";
     private static final int [] DATE = {2006, 9, 5};
     private static final String [] FORMAT = {
 	"ASCII", "US-ASCII", "ANSI X3.4", "ISO 646"
@@ -52,8 +52,8 @@ public class AsciiModule
 	"the President and Fellows of Harvard College. " +
 	"Released under the GNU Lesser General Public License.";
 
-    private static final int CR = 0x0d;
-    private static final int LF = 0x0a;
+    private static final int CR = 0x0d; // '\r'
+    private static final int LF = 0x0a; // '\n'
 
     /* Mnemonics for control characters (0-1F) */
     private static final String controlCharMnemonics[] = {
@@ -83,6 +83,11 @@ public class AsciiModule
     protected int _prevChar;
     protected Map _controlCharMap;
 
+    /* Flag to know if the property TextMDMetadata is to be added */
+    protected boolean _withTextMD = false;
+    /* Hold the information needed to generate a textMD metadata fragment */
+    protected TextMDMetadata _textMD;
+    
     /******************************************************************
      * CLASS CONSTRUCTOR.
      ******************************************************************/
@@ -167,16 +172,28 @@ public class AsciiModule
     public final int parse (InputStream stream, RepInfo info, int parseIndex)
 	throws IOException
     {
+        // Test if textMD is to be generated
+        if (_defaultParams != null) {
+            Iterator iter = _defaultParams.iterator ();
+            while (iter.hasNext ()) {
+                String param = (String) iter.next ();
+                if (param.toLowerCase ().equals ("withtextmd=true")) {
+                    _withTextMD = true;
+                }
+            }
+        }
+
         initParse ();
         info.setModule (this);
-
+        
         // No line end types have been discovered.
         _lineEndCR = false;
         _lineEndLF = false;
         _lineEndCRLF = false;
         _prevChar = 0;
         _controlCharMap = new HashMap ();
-
+        _textMD = new TextMDMetadata();
+        
         boolean printableChars = false;
 
 	info.setFormat (_format[0]);
@@ -262,6 +279,13 @@ public class AsciiModule
 	    info.setWellFormed (RepInfo.FALSE);
 	    return 0;
 	}
+
+	/* Add the textMD information */
+	_textMD.setCharset(TextMDMetadata.CHARSET_ASCII);
+    _textMD.setByte_order(
+            _bigEndian?TextMDMetadata.BYTE_ORDER_BIG:TextMDMetadata.BYTE_ORDER_LITTLE);
+	_textMD.setByte_size("8");
+	_textMD.setCharacter_size("1");
     
         /* Create a metadata property for the module-specific
          * info. (4-Feb-04) */
@@ -269,20 +293,22 @@ public class AsciiModule
 
 	/* Set property reporting line ending type */
 	if (_lineEndCR || _lineEndLF || _lineEndCRLF) {
-	    ArrayList propArray = new ArrayList(3);
-	    if (_lineEndCR) {
-		propArray.add("CR");
-	    }
-	    if (_lineEndLF) {
-		propArray.add("LF");
-	    }
-	    if (_lineEndCRLF) {
-		propArray.add("CRLF");
-	    }
-	    Property property = new Property ("LineEndings",
-					      PropertyType.STRING,
-					      PropertyArity.LIST, propArray);
-	    metadataList.add (property);
+		ArrayList propArray = new ArrayList(3);
+		if (_lineEndCR) {
+			propArray.add("CR");
+			_textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
+		}
+		if (_lineEndLF) {
+			propArray.add("LF");
+			_textMD.setLinebreak(TextMDMetadata.LINEBREAK_LF);
+		}
+		if (_lineEndCRLF) {
+			propArray.add("CRLF");
+			_textMD.setLinebreak(TextMDMetadata.LINEBREAK_CRLF);
+		}
+		Property property = new Property("LineEndings",
+				PropertyType.STRING, PropertyArity.LIST, propArray);
+		metadataList.add(property);
 	}
 	/* Set property reporting control characters used */
 	if (!_controlCharMap.isEmpty ()) {
@@ -306,6 +332,12 @@ public class AsciiModule
 	    metadataList.add (property);
 	}
 
+	if (_withTextMD) {
+	    Property property = new Property ("TextMDMetadata",
+                PropertyType.OBJECT, PropertyArity.SCALAR, _textMD);
+            metadataList.add (property);
+	}
+	
 	/* Add the ASCII-specific metadata, if it exists. */
 	if (metadataList.size () > 0) {
 	    info.setProperty (new Property ("ASCIIMetadata",
@@ -385,15 +417,15 @@ public class AsciiModule
        current character, and _prevChar the one before it. */
     protected void checkLineEnd (int ch)
     {
-    	if (ch == 0X0A) {
-            if (_prevChar == 0X0D) {
+    	if (ch == LF) {
+            if (_prevChar == CR) {
                 _lineEndCRLF = true;
             }
             else {
                 _lineEndLF = true;
             }
         }
-        else if (_prevChar == 0X0D) {
+        else if (_prevChar == CR) {
     	    _lineEndCR = true;
     	}
     }

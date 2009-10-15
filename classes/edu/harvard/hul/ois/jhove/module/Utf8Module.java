@@ -36,7 +36,7 @@ public class Utf8Module
      ******************************************************************/
 
     private static final String NAME = "UTF8-hul";
-    private static final String RELEASE = "1.3";
+    private static final String RELEASE = "1.4";
     private static final int [] DATE = {2007, 8, 30};
     private static final String [] FORMAT = {"UTF-8"};
     private static final String COVERAGE = "Unicode 4.0.0";
@@ -54,6 +54,8 @@ public class Utf8Module
 	"Released under the GNU Lesser General Public License.";
 
     private static final String [] POSITION = {"second", "third", "fourth"};
+    private static final int CR = 0x0d;
+    private static final int LF = 0x0a;
 
     /* Mnemonics for control characters (0-1F) */
     private static final String controlCharMnemonics[] = {
@@ -84,6 +86,11 @@ public class Utf8Module
     protected Map _controlCharMap;
     protected int initialBytes[];
     protected Utf8BlockMarker blockMarker;
+
+    /* Flag to know if the property TextMDMetadata is to be added */
+    protected boolean _withTextMD = false;
+    /* Hold the information needed to generate a textMD metadata fragment */
+    protected TextMDMetadata _textMD;
 
     /******************************************************************
      * CLASS CONSTRUCTOR.
@@ -185,6 +192,17 @@ public class Utf8Module
     public final int parse (InputStream stream, RepInfo info, int parseIndex)
 	throws IOException
     {
+        // Test if textMD is to be generated
+        if (_defaultParams != null) {
+            Iterator iter = _defaultParams.iterator ();
+            while (iter.hasNext ()) {
+                String param = (String) iter.next ();
+                if (param.toLowerCase ().equals ("withtextmd=true")) {
+                    _withTextMD = true;
+                }
+            }
+        }
+       
         initParse ();
         info.setFormat (_format[0]);
         info.setMimeType (_mimeType[0]);
@@ -197,6 +215,7 @@ public class Utf8Module
         _lineEndCRLF = false;
         _prevChar = 0;
         _controlCharMap = new HashMap ();
+        _textMD = new TextMDMetadata();
 
         boolean printableChars = false;
     
@@ -330,6 +349,8 @@ public class Utf8Module
 	    }
 	    catch (EOFException e) {
 		eof = true;
+                /* Catch line endings at very end. */
+                checkLineEnd(0);
 	    }
 	}
 
@@ -356,6 +377,13 @@ public class Utf8Module
             return 0;
         }
 
+        /* Add the textMD information */
+        _textMD.setCharset(TextMDMetadata.CHARSET_UTF8);
+        _textMD.setByte_order(
+            _bigEndian?TextMDMetadata.BYTE_ORDER_BIG:TextMDMetadata.BYTE_ORDER_LITTLE);
+        _textMD.setByte_size("8");
+        _textMD.setCharacter_size("variable");
+
         /* Create a metadata property for the module-specific
          * info. (4-Feb-04) */
         List metadataList = new ArrayList (4);
@@ -378,12 +406,15 @@ public class Utf8Module
             ArrayList propArray = new ArrayList(3);
             if (_lineEndCR) {
                 propArray.add("CR");
+                _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
             }
             if (_lineEndLF) {
                 propArray.add("LF");
+                _textMD.setLinebreak(TextMDMetadata.LINEBREAK_LF);
             }
             if (_lineEndCRLF) {
                 propArray.add("CRLF");
+                _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CRLF);
             }
             property = new Property ("LineEndings", PropertyType.STRING,
                       PropertyArity.LIST, propArray);
@@ -408,7 +439,13 @@ public class Utf8Module
 				     PropertyArity.LIST, propList);
 	    metadataList.add (property);
 	}
-
+	
+	if (_withTextMD) {
+            property = new Property ("TextMDMetadata",
+                    PropertyType.OBJECT, PropertyArity.SCALAR, _textMD);
+            metadataList.add (property);
+	}
+	
 	if (!printableChars) {
 	    info.setMessage (new InfoMessage ("No printable characters"));
 	}
@@ -420,10 +457,7 @@ public class Utf8Module
     /**
      *  Check if the digital object conforms to this Module's
      *  internal signature information.
-     *  An ASCII file has no "signature," so in cases like this we just
-     *  check the beginning of the file as a plausible guess. This really
-     *  proves nothing, since a text file could have a single accented
-     *  character dozens of kilobytes into it. But oh well.
+     *  Try to read the BOM if it's present, and check the beginning of the file.
      *
      *   @param file      A File object for the object being parsed
      *   @param stream    An InputStream, positioned at its beginning,
@@ -518,15 +552,15 @@ public class Utf8Module
      */
     protected void checkLineEnd (int ch)
     {
-	if (ch == 0X0A) {
-	    if (_prevChar == 0X0D) {
+	if (ch == LF) {
+	    if (_prevChar == CR) {
 		_lineEndCRLF = true;
 	    }
 	    else {
 		_lineEndLF = true;
 	    }
 	}
-	else if (_prevChar == 0X0D) {
+	else if (_prevChar == CR) {
 	    _lineEndCR = true;
 	}
     }

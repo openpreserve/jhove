@@ -47,7 +47,7 @@ public class XmlModule
      ******************************************************************/
 
     private static final String NAME = "XML-hul";
-    private static final String RELEASE = "1.3";
+    private static final String RELEASE = "1.4";
     private static final int [] DATE = {2007, 1, 8};
     private static final String [] FORMAT = {
         "XML", "XHTML"
@@ -116,6 +116,11 @@ public class XmlModule
      */
     protected boolean _parseFromSig;
 
+    /* Flag to know if the property TextMDMetadata is to be added */
+    protected boolean _withTextMD = false;
+    /* Hold the information needed to generate a textMD metadata fragment */
+    protected TextMDMetadata _textMD;
+    
     /******************************************************************
     * CLASS CONSTRUCTOR.
     ******************************************************************/
@@ -168,6 +173,9 @@ public class XmlModule
    public void setXhtmlDoctype (String doctype)
    {
        _xhtmlDoctype = doctype;
+       if (_textMD != null) {
+           _textMD.setMarkup_language(_xhtmlDoctype);
+       }
    }
 
     /** Reset parameter settings.
@@ -239,13 +247,27 @@ public class XmlModule
     public int parse (InputStream stream, RepInfo info, int parseIndex)
        throws IOException
     {
+        // Test if textMD is to be generated
+        if (_defaultParams != null) {
+            Iterator iter = _defaultParams.iterator ();
+            while (iter.hasNext ()) {
+                String param = (String) iter.next ();
+                if (param.toLowerCase ().equals ("withtextmd=true")) {
+                    _withTextMD = true;
+                }
+            }
+        }
+        
         //boolean foundDTD = false;
         boolean canValidate = true;
         initParse ();
         info.setFormat (_format[0]);
 	info.setMimeType (_mimeType[0]);
         info.setModule (this);
-
+        if (_textMD == null) {
+            _textMD = new TextMDMetadata();
+        }
+        
         /* We may have already done the checksums while converting a
            temporary file. */
         _ckSummer = null;
@@ -461,6 +483,28 @@ public class XmlModule
         // declarations as contributing to validity.)
         String dtdURI = handler.getDTDURI ();
         List schemaList = handler.getSchemas ();
+        
+        // In order to find the "primary" markup language, we try 3 things :
+        // 1/ first, the first NamespaceURI
+        // 3/ then, the first SchemaLocation
+        // 1/ finally, the dtd URI
+        // It should be noted that latter on when we look at the namespace in relation with the Root element
+        // if a URI is defined with it, it will get the preference ...
+        if (!schemaList.isEmpty()) {
+            String[] schItems = (String [])schemaList.get(0);
+            // First NamespaceURI
+            if (isNotEmpty(schItems[0])) {
+                _textMD.setMarkup_language(schItems[0]);
+            // Then SchemaLocation
+            } 
+            else if (isNotEmpty(schItems[1])) {
+                _textMD.setMarkup_language(schItems[1]);
+            }
+        } 
+        else if (isNotEmpty(dtdURI)) {
+            _textMD.setMarkup_language(dtdURI);
+        }
+        
         if (parseIndex == 0) {
             if ((handler.getDTDURI () != null ||
                  !schemaList.isEmpty ()) &&
@@ -481,7 +525,7 @@ public class XmlModule
         // If it's XHTML, add the HTML property.
         HtmlMetadata hMetadata = handler.getHtmlMetadata ();
         if (hMetadata != null) {
-            info.setProperty (hMetadata.toProperty ());
+            info.setProperty (hMetadata.toProperty (_withTextMD?_textMD:null));
         }
 
         // Report the parser in a property.
@@ -493,6 +537,7 @@ public class XmlModule
         String vers = null;
         if (_xhtmlDoctype != null) {
             vers = DTDMapper.getXHTMLVersion(_xhtmlDoctype);
+            _textMD.setMarkup_language_version(vers);
         }
         if (vers != null) {
             info.setVersion (vers);
@@ -503,6 +548,7 @@ public class XmlModule
                 info.setVersion (vers);
             }
         }
+        _textMD.setMarkup_basis_version(vers);
         
         // Add the encoding property.
         String encoding = xds.getEncoding ();
@@ -513,7 +559,34 @@ public class XmlModule
         _propList.add (new Property ("Encoding",
                         PropertyType.STRING,
                         encoding));
-
+        
+        _textMD.setCharset(encoding);
+        String textMDEncoding = _textMD.getCharset();
+        if (textMDEncoding.indexOf("UTF") != -1) {
+            _textMD.setByte_order(
+                    _bigEndian?TextMDMetadata.BYTE_ORDER_BIG:TextMDMetadata.BYTE_ORDER_LITTLE);
+                _textMD.setByte_size("8");
+                _textMD.setCharacter_size("variable");
+        } 
+        else {
+            _textMD.setByte_order(
+                    _bigEndian?TextMDMetadata.BYTE_ORDER_BIG:TextMDMetadata.BYTE_ORDER_LITTLE);
+                _textMD.setByte_size("8");
+                _textMD.setCharacter_size("1");
+        }
+        // CRLF from HtmlCharStream ...
+        String lineEnd = xds.getKindOfLineEnd();
+        if (lineEnd == null) {
+            info.setMessage(new InfoMessage("Not able to determine type of end of line"));
+            _textMD.setLinebreak(TextMDMetadata.NILL);
+        } else if (lineEnd.equalsIgnoreCase("CR")) {
+            _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
+        } else if (lineEnd.equalsIgnoreCase("LF")) {
+            _textMD.setLinebreak(TextMDMetadata.LINEBREAK_LF);
+        } else if (lineEnd.equalsIgnoreCase("CRLF")) {
+            _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CRLF);
+        }
+        
         // Add the standalone property.
         String sa = xds.getStandalone ();
         if (sa != null) {
@@ -562,6 +635,7 @@ public class XmlModule
         
         // Add the root element.
         String root = handler.getRoot ();
+        String rootPrefix = null;
         if (root != null) {
             _propList.add (new Property ("Root",
                         PropertyType.STRING,
@@ -572,6 +646,14 @@ public class XmlModule
                 // Set the version according to the doctype... how?
 
             }
+            // Get the prefix of root
+            int indexOfColon = root.indexOf(':');
+            if (indexOfColon != -1) {
+                rootPrefix = root.substring(0, indexOfColon);
+            }
+        }
+        if (rootPrefix == null) {
+            rootPrefix = "";
         }
         
         // Declare properties we're going to add.  They have
@@ -605,6 +687,11 @@ public class XmlModule
                             PropertyArity.ARRAY,
                             supPropArr);
                 nsList.add (onens); 
+                
+                // Try to find the namespace URI of root
+                if (rootPrefix.equalsIgnoreCase(key) && isNotEmpty(val)) {
+                    _textMD.setMarkup_language(val);
+                }
             }
             namespaceProp = new Property ("Namespaces",
                             PropertyType.PROPERTY,
@@ -880,6 +967,14 @@ public class XmlModule
             info.setMessage ((Message) msgi.next ());
         } 
         
+        if (_withTextMD) {
+            _textMD.setMarkup_basis(info.getFormat());
+            _textMD.setMarkup_basis_version(info.getVersion());
+            Property property = new Property ("TextMDMetadata",
+                    PropertyType.OBJECT, PropertyArity.SCALAR, _textMD);
+            _propList.add(property);
+        }
+        
         if (_ckSummer != null){
             info.setChecksum (new Checksum (_ckSummer.getCRC32 (), 
                         ChecksumType.CRC32));
@@ -893,6 +988,7 @@ public class XmlModule
         }
         if (info.getVersion () == null) {
             info.setVersion ("1.0");
+            _textMD.setMarkup_basis_version("1.0");
         }
         return 0;
     }
@@ -1009,5 +1105,18 @@ public class XmlModule
             }
         }
         return buf.toString ();
+    }
+    
+    /**
+     * Verification that the string contains something usefull.
+     * @param value string to test
+     * @return boolean
+     */
+    protected static boolean isNotEmpty(String value) {
+        return (
+                (value != null) && 
+                (value.length() != 0) && 
+                !("[None]".equals(value))
+         );
     }
 }
