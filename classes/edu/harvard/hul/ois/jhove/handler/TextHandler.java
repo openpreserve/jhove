@@ -35,11 +35,11 @@ public class TextHandler
      ******************************************************************/
 
     private static final String NAME = "TEXT";
-    private static final String RELEASE = "1.4";
-    private static final int [] DATE = {2005, 7, 26};
+    private static final String RELEASE = "1.5";
+    private static final int [] DATE = {2009, 10, 14};
     private static final String NOTE = "This is the default JHOVE output " +
         "handler";
-    private static final String RIGHTS = "Copyright 2003-2005 by JSTOR and " +
+    private static final String RIGHTS = "Copyright 2003-2009 by JSTOR and " +
         "the President and Fellows of Harvard College. " +
         "Released under the terms of the GNU Lesser General Public License.";
 
@@ -601,6 +601,10 @@ public class TextHandler
             showAESAudioMetadata ((AESAudioMetadata) property.getValue (),
                                    margin + " ", _je.getShowRawFlag ());
         }
+        else if (PropertyType.OBJECT.equals(type) && "TextMDMetadata".equals(property.getName())) {
+            showTextMDMetadata((TextMDMetadata) property.getValue(), 
+                    margin + " ", _je.getShowRawFlag ());
+        }
         else {
             _writer.println (property.getValue ().toString ());
         }
@@ -608,10 +612,11 @@ public class TextHandler
 
     private void showListProperty (Property property, String margin)
     {
-        boolean valueIsProperty  = 
-            (PropertyType.PROPERTY.equals (property.getType ()));
-        boolean valueIsNiso  = 
-            (PropertyType.NISOIMAGEMETADATA.equals (property.getType ()));
+        PropertyType type = property.getType ();
+        boolean valueIsProperty  = PropertyType.PROPERTY.equals (type);
+        boolean valueIsNiso  = PropertyType.NISOIMAGEMETADATA.equals (type);
+        boolean valueIsTextMD = PropertyType.OBJECT.equals(type) && "TextMDMetadata".equals(property.getName());
+        
         List list = (List) property.getValue ();
 
         int n = list.size ();
@@ -621,7 +626,7 @@ public class TextHandler
             if (valueIsProperty) {
                 _writer.println ();
             }
-            for (i=0; i<n; i++) {
+            for (i = 0; i < n; i++) {
                 if (valueIsProperty) {
                     Property pval = (Property) list.get (i);
                     showProperty (pval, pval.getName (), margin + " ");
@@ -629,6 +634,10 @@ public class TextHandler
                 else if (valueIsNiso) {
                                         showNisoImageMetadata ((NisoImageMetadata) list.get (i),
                                    margin + " ", _je.getShowRawFlag ());
+                }
+                else if (valueIsTextMD) {
+                    showTextMDMetadata( (TextMDMetadata) list.get (i),
+                                       margin + " ", _je.getShowRawFlag ());
                 }
                 else {
                     Object val = list.get (i);
@@ -650,10 +659,11 @@ public class TextHandler
     {
         /* Map output looks like
            key : mapkey1 / mapval1, mapkey2 / mapval2, ... */
-        boolean valueIsProperty  = 
-            (PropertyType.PROPERTY.equals (property.getType ()));
-        boolean valueIsNiso  = 
-            (PropertyType.NISOIMAGEMETADATA.equals (property.getType ()));
+        PropertyType type = property.getType ();
+        boolean valueIsProperty  = PropertyType.PROPERTY.equals (type);
+        boolean valueIsNiso  = PropertyType.NISOIMAGEMETADATA.equals (type);
+        boolean valueIsTextMD = PropertyType.OBJECT.equals(type) && "TextMDMetadata".equals(property.getName());
+
         Map propmap = (Map) property.getValue ();
         Set keys = propmap.keySet();
         Iterator propiter = keys.iterator();
@@ -672,6 +682,10 @@ public class TextHandler
                 showNisoImageMetadata ((NisoImageMetadata) val,
 				       margin + " ", _je.getShowRawFlag ());
             }
+            else if (valueIsTextMD) {
+                showTextMDMetadata ((TextMDMetadata) val,
+                       margin + " ", _je.getShowRawFlag ());
+            }
             else {
                 _writer.println ("   " + val.toString ());
                 _writer.println ("     Key: " + propkey.toString ());
@@ -681,10 +695,11 @@ public class TextHandler
 
     private void showSetProperty (Property property, 
                                    String margin) {
-        boolean valueIsProperty  = 
-            (PropertyType.PROPERTY.equals (property.getType ()));
-        boolean valueIsNiso  = 
-            (PropertyType.NISOIMAGEMETADATA.equals (property.getType ()));
+        PropertyType type = property.getType ();
+        boolean valueIsProperty  = PropertyType.PROPERTY.equals (type);
+        boolean valueIsNiso  = PropertyType.NISOIMAGEMETADATA.equals (type);
+        boolean valueIsTextMD = PropertyType.OBJECT.equals(type) && "TextMDMetadata".equals(property.getName());
+
         Set propset = (Set) property.getValue ();
         Iterator propiter = propset.iterator ();
         boolean first = true;
@@ -696,6 +711,10 @@ public class TextHandler
             }
             else if (valueIsNiso) {
                 showNisoImageMetadata ((NisoImageMetadata) val,
+                                   margin + " ", _je.getShowRawFlag ());
+            }
+            else if (valueIsTextMD) {
+                showTextMDMetadata ((TextMDMetadata) val,
                                    margin + " ", _je.getShowRawFlag ());
             }
             else {
@@ -726,6 +745,7 @@ public class TextHandler
         String[] stringArray = null;
         Rational[] rationalArray = null;
         NisoImageMetadata[] nisoArray = null;
+        TextMDMetadata[] textMDArray = null;
         int n = 0;
 
         PropertyType propType = property.getType();
@@ -762,8 +782,14 @@ public class TextHandler
             n = longArray.length;
         }
         else if (PropertyType.OBJECT.equals (propType)) {
-            objArray = (Object []) property.getValue ();
-            n = objArray.length;
+            if ("TextMDMetadata".equals(property.getName())) {
+                textMDArray = (TextMDMetadata []) property.getValue ();
+                n = textMDArray.length;
+            }
+            else {
+                objArray = (Object []) property.getValue ();
+                n = objArray.length;
+            }
         }
         else if (PropertyType.SHORT.equals (propType)) {
             shortArray = (short []) property.getValue ();
@@ -813,7 +839,17 @@ public class TextHandler
                 elem = String.valueOf (longArray[i]);
             }
             else if (PropertyType.OBJECT.equals (propType)) {
-                elem = objArray[i].toString();
+                if ("TextMDMetadata".equals(property.getName())) {
+                    if (i == 0) {
+                        _writer.println ();
+                    }
+                    showTextMDMetadata (textMDArray[i],
+                                       margin + " ", _je.getShowRawFlag ());
+                    continue;
+                }
+                else {
+                    elem = objArray[i].toString();
+                }
             }
             else if (PropertyType.SHORT.equals (propType)) {
                 elem = String.valueOf (shortArray[i]);
@@ -855,6 +891,49 @@ public class TextHandler
         }
     }
 
+    /* Output the textMD metadata, which is its own special
+     * kind of property. */
+    private void showTextMDMetadata (TextMDMetadata textMD, String margin,
+                                        boolean rawOutput)
+    {
+        String margn2 = margin + " ";
+        String margn3 = margn2 + " ";
+
+        _writer.println ();
+        _writer.println (margn2 + "Character_info:");
+        String s = textMD.getCharset ();
+        if (s != null) {
+            _writer.println (margn3 + "Charset: " + s);
+        }
+        if ((s = textMD.getByte_orderString ()) != null) {
+            _writer.println (margn3 + "Byte_order: " + s);
+        }
+        if ((s = textMD.getByte_size ()) != null) {
+            _writer.println (margn3 + "Byte_size: " + s);
+        }
+        if ((s = textMD.getCharacter_size ()) != null) {
+            _writer.println (margn3 + "Character_size: " + s);
+        }
+        if ((s = textMD.getLinebreakString ()) != null) {
+            _writer.println (margn3 + "Linebreak: " + s);
+        }
+
+        if ((s = textMD.getLanguage ()) != null) {
+            _writer.println (margn2 + "Language: " + s);
+        }
+        if ((s = textMD.getMarkup_basis ()) != null) {
+            _writer.println (margn2 + "Markup_basis: " + s);
+        }
+        if ((s = textMD.getMarkup_basis_version ()) != null) {
+            _writer.println (margn2 + "Markup_basis_version: " + s);
+        }
+        if ((s = textMD.getMarkup_language ()) != null) {
+            _writer.println (margn2 + "Markup_language: " + s);
+        }
+        if ((s = textMD.getMarkup_language_version ()) != null) {
+            _writer.println (margn2 + "Markup_language_version: " + s);
+        }
+    }
 
     /* Output the AES audio metadata, which is its own special
      * kind of property. */

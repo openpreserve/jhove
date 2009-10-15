@@ -1,6 +1,6 @@
 /**********************************************************************
  * Jhove - JSTOR/Harvard Object Validation Environment
- * Copyright 2003-2007 by JSTOR and the President and Fellows of Harvard College
+ * Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -41,10 +41,10 @@ public class XmlHandler
     private static final String NAME = "XML";
 
     /** Handler release identifier. */
-    private static final String RELEASE = "1.5";
+    private static final String RELEASE = "1.6";
 
     /** Handler release date. */
-    private static final int [] DATE = {2007, 8, 30};
+    private static final int [] DATE = {2009, 10, 14};
 
     /** Handler informative note. */
     private static final String NOTE =
@@ -61,7 +61,7 @@ public class XmlHandler
     private final static String EOL = System.getProperty ("line.separator");
 
     /** Schema version. */
-    private static final String SCHEMA_VERSION = "1.5";
+    private static final String SCHEMA_VERSION = "1.6";
 
     /******************************************************************
      * PRIVATE INSTANCE FIELDS.
@@ -109,7 +109,7 @@ public class XmlHandler
     /******************************************************************
      * PUBLIC INSTANCE METHODS.
      ******************************************************************/
-
+    
     /**
      *  Outputs minimal information about the application
      */
@@ -745,9 +745,10 @@ public class XmlHandler
         if (isPropertyEmpty (property, arity))
             return;
         
-        boolean valueIsProperty = (type.equals (PropertyType.PROPERTY));
-        boolean valueIsNiso = (type.equals (PropertyType.NISOIMAGEMETADATA));
-        boolean valueIsAes = (type.equals (PropertyType.AESAUDIOMETADATA));
+        boolean valueIsProperty = PropertyType.PROPERTY.equals(type);
+        boolean valueIsNiso = PropertyType.NISOIMAGEMETADATA.equals(type);
+        boolean valueIsAes = PropertyType.AESAUDIOMETADATA.equals(type);
+        boolean valueIsTextMD = PropertyType.OBJECT.equals(type) && "TextMDMetadata".equals(property.getName());
 
         String[][] propAttrs = new String[2][];
         propAttrs[0] = new String[] { "arity", arity.toString () };
@@ -771,6 +772,11 @@ public class XmlHandler
                 showAESAudioMetadata ((AESAudioMetadata)property.getValue());
                 _writer.println (margn4 + elementEnd ("value"));
             }
+            else if (valueIsTextMD) {
+                _writer.println (margn4 + elementStart ("value"));
+                showTextMDMetadata ((TextMDMetadata)property.getValue());
+                _writer.println (margn4 + elementEnd ("value"));
+            }
             else {
                 _writer.println (margn4 + element ("value",
                              property.getValue ().toString ()));
@@ -792,6 +798,11 @@ public class XmlHandler
                 else if (valueIsAes) {
                     _writer.println (margn4 + elementStart ("value"));
                     showAESAudioMetadata ((AESAudioMetadata)property.getValue());
+                    _writer.println (margn4 + elementEnd ("value"));
+                }
+                else if (valueIsTextMD) {
+                    _writer.println (margn4 + elementStart ("value"));
+                    showTextMDMetadata ((TextMDMetadata)property.getValue());
                     _writer.println (margn4 + elementEnd ("value"));
                 }
                 else {
@@ -834,6 +845,11 @@ public class XmlHandler
                 else if (valueIsAes) {
                     _writer.println (margn4 + elementStart ("value"));
                     showAESAudioMetadata ((AESAudioMetadata) val);
+                    _writer.println (margn4 + elementEnd ("value"));
+                }
+                else if (valueIsTextMD) {
+                    _writer.println (margn4 + elementStart ("value"));
+                    showTextMDMetadata ((TextMDMetadata) val);
                     _writer.println (margn4 + elementEnd ("value"));
                 }
                 else {
@@ -899,6 +915,7 @@ public class XmlHandler
                 Rational[] rationalArray = null;
                 NisoImageMetadata[] nisoArray = null;
                 AESAudioMetadata[] aesArray = null;
+                TextMDMetadata[] textMDArray = null;
                 int n = 0;
 
                 PropertyType propType = property.getType();
@@ -935,8 +952,14 @@ public class XmlHandler
                     n = longArray.length;
                 }
                 else if (PropertyType.OBJECT.equals (propType)) {
-                    objArray = (Object []) property.getValue ();
-                    n = objArray.length;
+                    if ("TextMDMetadata".equals(property.getName())) {
+                        textMDArray = (TextMDMetadata []) property.getValue ();
+                        n = textMDArray.length;
+                    }
+                    else {
+                        objArray = (Object []) property.getValue ();
+                        n = objArray.length;
+                    }
                 }
                 else if (PropertyType.SHORT.equals (propType)) {
                     shortArray = (short []) property.getValue ();
@@ -993,6 +1016,7 @@ public class XmlHandler
         Rational[] rationalArray = null;
         NisoImageMetadata[] nisoArray = null;
         AESAudioMetadata[] aesArray = null;
+        TextMDMetadata[] textMDArray = null;
         int n = 0;
 
         PropertyType propType = property.getType();
@@ -1029,8 +1053,14 @@ public class XmlHandler
             n = longArray.length;
         }
         else if (PropertyType.OBJECT.equals (propType)) {
-            objArray = (Object []) property.getValue ();
-            n = objArray.length;
+            if ("TextMDMetadata".equals(property.getName())) {
+                textMDArray = (TextMDMetadata []) property.getValue ();
+                n = textMDArray.length;
+            }
+            else {
+                objArray = (Object []) property.getValue ();
+                n = objArray.length;
+            }
         }
         else if (PropertyType.SHORT.equals (propType)) {
             shortArray = (short []) property.getValue ();
@@ -1084,7 +1114,12 @@ public class XmlHandler
                 elem = String.valueOf (longArray[i]);
             }
             else if (PropertyType.OBJECT.equals (propType)) {
-                elem = valueToString (objArray[i]);
+                if ("TextMDMetadata".equals(property.getName())) {
+                    showTextMDMetadata( textMDArray[i]);
+                    continue;
+                } else {
+                    elem = valueToString (objArray[i]);
+                }
             }
             else if (PropertyType.SHORT.equals (propType)) {
                 elem = String.valueOf (shortArray[i]);
@@ -1112,6 +1147,59 @@ public class XmlHandler
         }
     }
 
+    /**
+     * Display the text metadata formatted according to
+     * the textMD schema (see http://www.loc.gov/standards/textMD). 
+     * @param textMD textMD text metadata
+     */
+    protected void showTextMDMetadata (TextMDMetadata textMD) {
+        String margin = getIndent (++_level);
+        String margn2 = margin + " ";
+        String margn3 = margn2 + " ";
+
+        String [][] attrs = {
+                {"xmlns:textmd", TextMDMetadata.NAMESPACE},
+                {"xmlns:xsi",
+                  "http://www.w3.org/2001/XMLSchema-instance"},
+                 {"xsi:schemaLocation",
+                      TextMDMetadata.NAMESPACE + " " + TextMDMetadata.DEFAULT_LOCATION},
+        };
+        _writer.println (margin + elementStart ("textmd:textMD", attrs));
+        _writer.println (margn2 + elementStart("textmd:character_info"));
+        _writer.println (margn3 + element("textmd:charset", textMD.getCharset()));
+        _writer.println (margn3 + element("textmd:byte_order", textMD.getByte_orderString()));
+        _writer.println (margn3 + element("textmd:byte_size", textMD.getByte_size()));
+        if ("variable".equals(textMD.getCharacter_size())) {
+            String [][] attrs1 = {{"encoding", textMD.getCharset() }};
+            _writer.println (margn3 + element("textmd:character_size", attrs1, "variable"));
+        } else {
+            _writer.println (margn3 + element("textmd:character_size", textMD.getCharacter_size()));
+        }
+        _writer.println (margn3 + element("textmd:linebreak", textMD.getLinebreakString()));
+        _writer.println (margn2 + elementEnd("textmd:character_info"));
+        if (textMD.getLanguage() != null && textMD.getLanguage().length() != 0) {
+            _writer.println (margn2 + element("textmd:language", textMD.getLanguage()));
+        }
+        if (textMD.getMarkup_basis() != null && textMD.getMarkup_basis().length() != 0) {
+            if (textMD.getMarkup_basis_version() != null) {
+                String [][] attrs1 = {{"version", textMD.getMarkup_basis_version() }};
+                _writer.println (margn2 + element("textmd:markup_basis", attrs1, textMD.getMarkup_basis()));
+            } else {
+                _writer.println (margn2 + element("textmd:markup_basis", textMD.getMarkup_basis()));
+            }
+        }
+        if (textMD.getMarkup_language() != null && textMD.getMarkup_language().length() != 0) {
+            if (textMD.getMarkup_language_version() != null) {
+                String [][] attrs1 = {{"version", textMD.getMarkup_language_version() }};
+                _writer.println (margn2 + element("textmd:markup_language", attrs1, textMD.getMarkup_language()));
+            } else {
+                _writer.println (margn2 + element("textmd:markup_language", textMD.getMarkup_language()));
+            }
+        }
+        _writer.println (margin + elementEnd ("textmd:textMD"));
+        _level--;
+        
+    }
     /**
      * Display the NISO image metadata formatted according to
      * the MIX schema.  The schema which is used may be 0.2 or 1.0 or 2.0,
