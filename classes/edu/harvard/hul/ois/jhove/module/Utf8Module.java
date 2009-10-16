@@ -442,7 +442,7 @@ public class Utf8Module
 	
 	if (_withTextMD) {
             property = new Property ("TextMDMetadata",
-                    PropertyType.OBJECT, PropertyArity.SCALAR, _textMD);
+                    PropertyType.TEXTMDMETADATA, PropertyArity.SCALAR, _textMD);
             metadataList.add (property);
 	}
 	

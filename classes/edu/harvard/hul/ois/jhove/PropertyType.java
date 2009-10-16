@@ -74,6 +74,11 @@ public final class PropertyType
     public static final PropertyType NISOIMAGEMETADATA =
     new PropertyType ("NISOImageMetadata");
     /**
+     *  Property type for a <code>TextMDMetadata</code>.
+     */
+    public static final PropertyType TEXTMDMETADATA =
+    new PropertyType ("TextMDMetadata");
+    /**
      *  Property type for a <code>Property</code> object.
      */
     public static final PropertyType PROPERTY = new PropertyType ("Property");

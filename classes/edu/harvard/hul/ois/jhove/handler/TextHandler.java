@@ -601,7 +601,7 @@ public class TextHandler
             showAESAudioMetadata ((AESAudioMetadata) property.getValue (),
                                    margin + " ", _je.getShowRawFlag ());
         }
-        else if (PropertyType.OBJECT.equals(type) && "TextMDMetadata".equals(property.getName())) {
+        else if (PropertyType.TEXTMDMETADATA.equals(type)) {
             showTextMDMetadata((TextMDMetadata) property.getValue(), 
                     margin + " ", _je.getShowRawFlag ());
         }
@@ -615,7 +615,7 @@ public class TextHandler
         PropertyType type = property.getType ();
         boolean valueIsProperty  = PropertyType.PROPERTY.equals (type);
         boolean valueIsNiso  = PropertyType.NISOIMAGEMETADATA.equals (type);
-        boolean valueIsTextMD = PropertyType.OBJECT.equals(type) && "TextMDMetadata".equals(property.getName());
+        boolean valueIsTextMD = PropertyType.TEXTMDMETADATA.equals(type);
         
         List list = (List) property.getValue ();
 
@@ -662,7 +662,7 @@ public class TextHandler
         PropertyType type = property.getType ();
         boolean valueIsProperty  = PropertyType.PROPERTY.equals (type);
         boolean valueIsNiso  = PropertyType.NISOIMAGEMETADATA.equals (type);
-        boolean valueIsTextMD = PropertyType.OBJECT.equals(type) && "TextMDMetadata".equals(property.getName());
+        boolean valueIsTextMD = PropertyType.TEXTMDMETADATA.equals(type);
 
         Map propmap = (Map) property.getValue ();
         Set keys = propmap.keySet();
@@ -698,7 +698,7 @@ public class TextHandler
         PropertyType type = property.getType ();
         boolean valueIsProperty  = PropertyType.PROPERTY.equals (type);
         boolean valueIsNiso  = PropertyType.NISOIMAGEMETADATA.equals (type);
-        boolean valueIsTextMD = PropertyType.OBJECT.equals(type) && "TextMDMetadata".equals(property.getName());
+        boolean valueIsTextMD = PropertyType.TEXTMDMETADATA.equals(type);
 
         Set propset = (Set) property.getValue ();
         Iterator propiter = propset.iterator ();
@@ -782,15 +782,9 @@ public class TextHandler
             n = longArray.length;
         }
         else if (PropertyType.OBJECT.equals (propType)) {
-            if ("TextMDMetadata".equals(property.getName())) {
-                textMDArray = (TextMDMetadata []) property.getValue ();
-                n = textMDArray.length;
-            }
-            else {
                 objArray = (Object []) property.getValue ();
                 n = objArray.length;
             }
-        }
         else if (PropertyType.SHORT.equals (propType)) {
             shortArray = (short []) property.getValue ();
             n = shortArray.length;
@@ -810,6 +804,10 @@ public class TextHandler
         else if (PropertyType.NISOIMAGEMETADATA.equals (propType)) {
             nisoArray = (NisoImageMetadata []) property.getValue ();
             n = nisoArray.length;
+        }
+        else if (PropertyType.TEXTMDMETADATA.equals(propType)) {
+            textMDArray = (TextMDMetadata []) property.getValue ();
+            n = textMDArray.length;
         }
 
         for (int i = 0; i < n; i++) {
@@ -839,18 +837,8 @@ public class TextHandler
                 elem = String.valueOf (longArray[i]);
             }
             else if (PropertyType.OBJECT.equals (propType)) {
-                if ("TextMDMetadata".equals(property.getName())) {
-                    if (i == 0) {
-                        _writer.println ();
-                    }
-                    showTextMDMetadata (textMDArray[i],
-                                       margin + " ", _je.getShowRawFlag ());
-                    continue;
-                }
-                else {
                     elem = objArray[i].toString();
                 }
-            }
             else if (PropertyType.SHORT.equals (propType)) {
                 elem = String.valueOf (shortArray[i]);
             }
@@ -866,6 +854,14 @@ public class TextHandler
                 }
                 NisoImageMetadata niso = nisoArray[i];
                 showNisoImageMetadata (niso,
+                                   margin + " ", _je.getShowRawFlag ());
+                continue;
+            }
+            else if (PropertyType.TEXTMDMETADATA.equals (propType)) {
+                if (i == 0) {
+                    _writer.println ();
+                }
+                showTextMDMetadata (textMDArray[i],
                                    margin + " ", _je.getShowRawFlag ());
                 continue;
             }

@@ -574,7 +574,7 @@ public class XmlModule
                 _textMD.setByte_size("8");
                 _textMD.setCharacter_size("1");
         }
-        // CRLF from HtmlCharStream ...
+        // CRLF from XmlDeclStream ...
         String lineEnd = xds.getKindOfLineEnd();
         if (lineEnd == null) {
             info.setMessage(new InfoMessage("Not able to determine type of end of line"));
@@ -971,7 +971,7 @@ public class XmlModule
             _textMD.setMarkup_basis(info.getFormat());
             _textMD.setMarkup_basis_version(info.getVersion());
             Property property = new Property ("TextMDMetadata",
-                    PropertyType.OBJECT, PropertyArity.SCALAR, _textMD);
+                    PropertyType.TEXTMDMETADATA, PropertyArity.SCALAR, _textMD);
             _propList.add(property);
         }
         

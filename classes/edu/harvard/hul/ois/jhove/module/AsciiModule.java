@@ -334,7 +334,7 @@ public class AsciiModule
 
 	if (_withTextMD) {
 	    Property property = new Property ("TextMDMetadata",
-                PropertyType.OBJECT, PropertyArity.SCALAR, _textMD);
+                PropertyType.TEXTMDMETADATA, PropertyArity.SCALAR, _textMD);
             metadataList.add (property);
 	}
 	

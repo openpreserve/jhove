@@ -20,6 +20,9 @@ import java.util.*;
  * @author Gary McGath
  */
 public class XmlDeclStream extends FilterInputStream {
+    private static final int CR = 0x0d; // '\r'
+    private static final int LF = 0x0a; // '\n'
+
     
     private StringBuffer declBuf;
     private StringBuffer refBuf;
@@ -31,12 +34,24 @@ public class XmlDeclStream extends FilterInputStream {
     
     /* List of Integers giving character references */
     private List _charRefs;
+
+    /* To try to determine line ending */
+    protected boolean _lineEndCR;
+    protected boolean _lineEndLF;
+    protected boolean _lineEndCRLF;
+    protected int _prevChar;
     
     public XmlDeclStream (InputStream strm) {
         super (strm);
         declBuf = null;
         seenChars = false;
         _charRefs = new LinkedList ();
+        
+        // No line end types have been discovered.
+        _lineEndCR = false;
+        _lineEndLF = false;
+        _lineEndCRLF = false;
+        _prevChar = 0;
     }
     
     /**
@@ -129,6 +144,10 @@ public class XmlDeclStream extends FilterInputStream {
      */
     private void process (int b) 
     {
+        /* Determine the line ending type(s). */
+        checkLineEnd(b);
+        _prevChar = b;
+        
         if (!seenChars || declBuf != null) {
             if (declBuf == null && b == (int) '<') {
                 declBuf = new StringBuffer ("<");
@@ -216,7 +235,6 @@ public class XmlDeclStream extends FilterInputStream {
         if (isHex) {
             for (int i = 3; i < refBuf1.length (); i++) {
                 char ch = Character.toUpperCase (refBuf1.charAt (i));
-                int charVal;
                 if (ch >= 'A' && ch <= 'F') {
                     val = 16 * val + ((int) ch - 'A' + 10);
                 }
@@ -297,4 +315,37 @@ public class XmlDeclStream extends FilterInputStream {
         }
         return null;        // fell off end without finding a valid string
     }
+    /* Accumulate information about line endings. ch is the
+    current character, and _prevChar the one before it. */
+     protected void checkLineEnd (int ch)
+     {
+        if (ch == LF) {
+             if (_prevChar == CR) {
+                 _lineEndCRLF = true;
+             }
+             else {
+                 _lineEndLF = true;
+             }
+         }
+         else if (_prevChar == CR) {
+            _lineEndCR = true;
+        }
+     }
+
+     public String getKindOfLineEnd() {
+         if (_lineEndCR || _lineEndLF || _lineEndCRLF) {
+             if (_lineEndCRLF) {
+                 return "CRLF";
+             }
+             if (_lineEndCR) {
+                 return "CR";
+             }
+             if (_lineEndLF) {
+                 return "LF";
+             }
+         }
+         return null;
+     }
+     
+    
 }

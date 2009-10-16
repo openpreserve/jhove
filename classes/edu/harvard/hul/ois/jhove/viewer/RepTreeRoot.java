@@ -72,13 +72,24 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 AESAudioMetadata aData = (AESAudioMetadata) pValue;
                 return aesToNode (aData);
             }
+            else if (typ == PropertyType.TEXTMDMETADATA) {
+                // textMD metadata is another world.
+                TextMDMetadata tData = (TextMDMetadata) pValue;
+                return textMDToNode(tData);
+            }
             else if (typ == PropertyType.PROPERTY) {
-                // A scalar property of type Property -- seems 
-                // pointless, but we handle it.
-                DefaultMutableTreeNode val = 
-                        new DefaultMutableTreeNode (pProp.getName ());
-                val.add (propToNode ((Property) pValue));
-                return val;
+                if ("TextMDMetadata".equals(pProp.getName())) {
+                    TextMDMetadata tData = (TextMDMetadata) pValue;
+                    return textMDToNode (tData);
+                }
+                else {
+                    // A scalar property of type Property -- seems 
+                    // pointless, but we handle it.
+                    DefaultMutableTreeNode val = 
+                            new DefaultMutableTreeNode (pProp.getName ());
+                    val.add (propToNode ((Property) pValue));
+                    return val;
+                }
             }
             else {
                 // Simple types: just use name plus string value.
@@ -572,7 +583,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
     }
 
-    /* Function for turning the Niso metadata into a subtree. */
+    /* Function for turning the AES metadata into a subtree. */
     private DefaultMutableTreeNode aesToNode (AESAudioMetadata aes)
     {
 	_sampleRate = aes.getSampleRate ();
@@ -624,9 +635,6 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         String[] use = aes.getUse ();
         if (use != null) {
-            String[][] uattrs = new String [][]
-                { { "useType", use[0] },
-                  { "otherType", use[1] }};
             DefaultMutableTreeNode u = 
                     new DefaultMutableTreeNode ("Use", true);
             val.add (u);
@@ -841,6 +849,73 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
     }
 
+    /* Function for turning the textMD metadata into a subtree. */
+    private DefaultMutableTreeNode textMDToNode (TextMDMetadata textMD)
+    {
+        DefaultMutableTreeNode val =
+                 new DefaultMutableTreeNode ("TextMDMetadata", true);
+        
+        DefaultMutableTreeNode u = 
+            new DefaultMutableTreeNode ("Character_info", true);
+        val.add (u);
+
+        String s = textMD.getCharset ();
+        if (s != null) {
+            u.add (new DefaultMutableTreeNode
+                    ("Charset: " + s, false));
+        }
+        s = textMD.getByte_orderString ();
+        if (s != null) {
+            u.add (new DefaultMutableTreeNode
+                    ("Byte_order: " + s, false));
+        }
+        s = textMD.getByte_size () ;
+        if (s != null) {
+            u.add (new DefaultMutableTreeNode
+                    ("Byte_size: " + s, false));
+        }
+        s = textMD.getCharacter_size ();
+        if (s != null) {
+            u.add (new DefaultMutableTreeNode
+                    ("Character_size: " + s, false));
+        }
+        s = textMD.getLinebreakString ();
+        if (s != null) {
+            u.add (new DefaultMutableTreeNode
+                    ("Linebreak: " + s, false));
+        }
+        s = textMD.getLanguage ();
+        if (s != null) {
+            val.add (new DefaultMutableTreeNode
+                    ("Language: " + s, false));
+        }
+        s = textMD.getMarkup_basis ();
+        if (s != null) {
+            DefaultMutableTreeNode basis = 
+                new DefaultMutableTreeNode
+                        ("Markup_basis: " + s, true);
+            val.add (basis);
+            s = textMD.getMarkup_basis_version ();
+            if (s != null) {
+                basis.add (new DefaultMutableTreeNode
+                        ("Version: " + s, false));
+            }
+        }
+        s = textMD.getMarkup_language ();
+        if (s != null) {
+            DefaultMutableTreeNode language = 
+                new DefaultMutableTreeNode
+                        ("Markup_language: " + s, true);
+            val.add (language);
+            s = textMD.getMarkup_language_version ();
+            if (s != null) {
+                language.add (new DefaultMutableTreeNode
+                        ("Version: " + s, false));
+            }
+        }
+        return val;
+    }
+   
     /* Function for turning the Niso metadata into a subtree. */
     private DefaultMutableTreeNode nisoToNode (NisoImageMetadata niso)
     {

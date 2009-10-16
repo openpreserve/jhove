@@ -21,6 +21,7 @@ public class HtmlMetadata {
     private String _title;
     private String _lang;
     private List _meta;
+    private String _charset;
     private TreeSet _languages;
     private List _links;
     private List _images;
@@ -45,6 +46,7 @@ public class HtmlMetadata {
         _title = null;
         _lang = null;
         _meta = null;
+        _charset = null;
         _links = null;
         _images = null;
         _citations = null;
@@ -99,8 +101,58 @@ public class HtmlMetadata {
             _meta = new LinkedList ();
         }
         _meta.add (prop);
+        
+        // Is it a httpequiv=Content-Type ?
+        String valContentType = extractHttpEquivValue(prop, "Content-Type");
+        if (valContentType != null) {
+            final String toSearch = "charset=";
+            int indexOfCharset = valContentType.indexOf(toSearch);
+            if (indexOfCharset != -1) {
+                setCharset(valContentType.substring(indexOfCharset + toSearch.length()));
+            }
+        }
+        // Is it a httpequiv=Content-Language ?
+        String valContentLanguage = extractHttpEquivValue(prop, "Content-Language");
+        if (valContentLanguage != null) {
+            setLanguage(valContentLanguage);
+        }
     }
 
+    /**
+     * Extract the content value associated with a given httpEquiv.
+     * @param prop List containing the description of the meta tag
+     * @param httpEquivValue the httpEquiv to consider
+     * @return the content value
+     */
+    public String extractHttpEquivValue(Property prop, String httpEquivValue) {
+        if (httpEquivValue == null) return null;
+        String value = null;
+        Property httpEquiv = prop.getByName("Httpequiv");
+        if (httpEquiv != null &&
+            PropertyArity.SCALAR.equals(httpEquiv.getArity()) &&
+            PropertyType.STRING.equals(httpEquiv.getType())
+        ) {
+            String val = (String)httpEquiv.getValue();
+            if (httpEquivValue.equalsIgnoreCase(val)) {
+                // Look for charset in the Content property
+                Property content = prop.getByName("Content");
+                if (content != null &&
+                    PropertyArity.SCALAR.equals(content.getArity()) &&
+                    PropertyType.STRING.equals(content.getType())
+                ) {
+                    value = (String)content.getValue();
+                }
+            }
+        }
+        return value;
+    }
+    
+    /** Stores the charset defined in the HTML element. */
+    public void setCharset (String charset)
+    {
+        _charset = charset;
+    }
+    
     /** Adds a FRAME tag's contents to the Meta property. */
     public void addFrame (Property prop) 
     {
@@ -180,8 +232,12 @@ public class HtmlMetadata {
         return _title;
     }
     
+    public String getCharset() {
+        return _charset;
+    }
+    
     /** Converts the metadata to a Property. */
-    public Property toProperty ()
+    public Property toProperty (TextMDMetadata _textMD)
     {
         List propList = new LinkedList ();
         Property val = new Property ("HTMLMetadata",
@@ -192,6 +248,9 @@ public class HtmlMetadata {
             propList.add (new Property ("PrimaryLanguage",
                     PropertyType.STRING,
                     _lang));
+            if (_textMD != null) {
+                _textMD.setLanguage(_lang);
+            }
         }
         if (_languages != null) {
             propList.add (new Property ("OtherLanguages",
@@ -265,7 +324,12 @@ public class HtmlMetadata {
                 propList.add (p);
             }
         }
-
+        if (_textMD != null) {
+            Property property = new Property ("TextMDMetadata",
+                    PropertyType.OBJECT, PropertyArity.SCALAR, _textMD);
+            propList.add (property);
+        }
+        
 	if (propList.isEmpty ()) {
 	    return null;
 	}

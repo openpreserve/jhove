@@ -748,7 +748,7 @@ public class XmlHandler
         boolean valueIsProperty = PropertyType.PROPERTY.equals(type);
         boolean valueIsNiso = PropertyType.NISOIMAGEMETADATA.equals(type);
         boolean valueIsAes = PropertyType.AESAUDIOMETADATA.equals(type);
-        boolean valueIsTextMD = PropertyType.OBJECT.equals(type) && "TextMDMetadata".equals(property.getName());
+        boolean valueIsTextMD = PropertyType.TEXTMDMETADATA.equals(type);
 
         String[][] propAttrs = new String[2][];
         propAttrs[0] = new String[] { "arity", arity.toString () };
@@ -952,15 +952,9 @@ public class XmlHandler
                     n = longArray.length;
                 }
                 else if (PropertyType.OBJECT.equals (propType)) {
-                    if ("TextMDMetadata".equals(property.getName())) {
-                        textMDArray = (TextMDMetadata []) property.getValue ();
-                        n = textMDArray.length;
-                    }
-                    else {
                         objArray = (Object []) property.getValue ();
                         n = objArray.length;
                     }
-                }
                 else if (PropertyType.SHORT.equals (propType)) {
                     shortArray = (short []) property.getValue ();
                     n = shortArray.length;
@@ -984,6 +978,10 @@ public class XmlHandler
                 else if (PropertyType.AESAUDIOMETADATA.equals (propType)) {
                     aesArray = (AESAudioMetadata []) property.getValue ();
                     n = aesArray.length;
+                }
+                else if (PropertyType.TEXTMDMETADATA.equals (propType)) {
+                    textMDArray = (TextMDMetadata []) property.getValue ();
+                    n = textMDArray.length;
                 }
                 return (n == 0);
             }
@@ -1053,15 +1051,9 @@ public class XmlHandler
             n = longArray.length;
         }
         else if (PropertyType.OBJECT.equals (propType)) {
-            if ("TextMDMetadata".equals(property.getName())) {
-                textMDArray = (TextMDMetadata []) property.getValue ();
-                n = textMDArray.length;
-            }
-            else {
                 objArray = (Object []) property.getValue ();
                 n = objArray.length;
             }
-        }
         else if (PropertyType.SHORT.equals (propType)) {
             shortArray = (short []) property.getValue ();
             n = shortArray.length;
@@ -1085,6 +1077,10 @@ public class XmlHandler
         else if (PropertyType.AESAUDIOMETADATA.equals (propType)) {
             aesArray = (AESAudioMetadata []) property.getValue ();
             n = aesArray.length;
+        }
+        else if (PropertyType.TEXTMDMETADATA.equals (propType)) {
+            textMDArray = (TextMDMetadata []) property.getValue ();
+            n = textMDArray.length;
         }
 
         for (int i = 0; i < n; i++) {
@@ -1114,13 +1110,8 @@ public class XmlHandler
                 elem = String.valueOf (longArray[i]);
             }
             else if (PropertyType.OBJECT.equals (propType)) {
-                if ("TextMDMetadata".equals(property.getName())) {
-                    showTextMDMetadata( textMDArray[i]);
-                    continue;
-                } else {
                     elem = valueToString (objArray[i]);
                 }
-            }
             else if (PropertyType.SHORT.equals (propType)) {
                 elem = String.valueOf (shortArray[i]);
             }
@@ -1140,6 +1131,10 @@ public class XmlHandler
             }
             else if (PropertyType.AESAUDIOMETADATA.equals (propType)) { 
                 showAESAudioMetadata (aesArray[i]);
+                continue;
+            }
+            else if (PropertyType.TEXTMDMETADATA.equals (propType)) { 
+                showTextMDMetadata( textMDArray[i]);
                 continue;
             }
             else elem = "<error>";

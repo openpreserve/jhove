@@ -232,9 +232,10 @@ public class XmlModuleHandler extends DefaultHandler {
                                    String uri)
                             throws SAXException
     {
-        if (!"".equals (prefix)) {
+        //THL we want the root namespace even if it declares no prefix !!!
+        //if (!"".equals (prefix)) {
             _namespaces.put(prefix, uri);
-        }
+        //}
     }
     
     

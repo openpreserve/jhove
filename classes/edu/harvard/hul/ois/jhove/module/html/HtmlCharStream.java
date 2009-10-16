@@ -32,6 +32,11 @@ public class HtmlCharStream implements CharStream
   protected boolean prevCharIsCR = false;
   protected boolean prevCharIsLF = false;
 
+  // Detection of end of line
+  protected boolean _lineEndCR;
+  protected boolean _lineEndLF;
+  protected boolean _lineEndCRLF;
+  
   protected java.io.Reader inputStream;
 
   protected char[] buffer;
@@ -148,11 +153,18 @@ public class HtmlCharStream implements CharStream
 
      if (prevCharIsLF)
      {
+        _lineEndLF = true;
         prevCharIsLF = false;
         line += (column = 1);
      }
      else if (prevCharIsCR)
      {
+        if ( c == '\n') {
+            _lineEndCRLF = true;
+        } else {
+            _lineEndCR = true;
+        }
+        
         prevCharIsCR = false;
         if (c == '\n')
         {
@@ -432,5 +444,24 @@ public class HtmlCharStream implements CharStream
      line = bufline[j];
      column = bufcolumn[j];
   }
+
+  /**
+   * Retrieve the kind of end of line. 
+   * @return
+   */
+  public String getKindOfLineEnd() {
+        if (_lineEndCR || _lineEndLF || _lineEndCRLF) {
+            if (_lineEndCRLF) {
+                return "CRLF";
+            }
+            if (_lineEndCR) {
+                return "CR";
+            }
+            if (_lineEndLF) {
+                return "LF";
+            }
+        }
+        return null;
+    }
 
 }
