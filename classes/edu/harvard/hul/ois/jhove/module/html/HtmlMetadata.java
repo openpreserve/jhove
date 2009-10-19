@@ -325,9 +325,10 @@ public class HtmlMetadata {
             }
         }
         if (_textMD != null) {
-            Property property = new Property ("TextMDMetadata",
-                    PropertyType.OBJECT, PropertyArity.SCALAR, _textMD);
-            propList.add (property);
+             propList.add (new Property ("TextMDMetadata",
+                     PropertyType.TEXTMDMETADATA, 
+                     PropertyArity.SCALAR, 
+                     _textMD));
         }
         
 	if (propList.isEmpty ()) {
