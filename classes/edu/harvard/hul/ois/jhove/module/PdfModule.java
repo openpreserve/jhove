@@ -1147,6 +1147,11 @@ public class PdfModule
                     _xref = new long [no];
                     _xref2 = new int[no] [];
                 }
+                if (sObjNum < 0 || sObjNum >= no) {
+                    throw new PdfMalformedException 
+                          ("Invalid object number in cross-reference stream", 
+                          _parser.getOffset ());
+                }
                 _xref[sObjNum] = _startxref;  // insert the index of the xref stream itself
                 _startxref = xstream.getPrevXref();
                 try {
