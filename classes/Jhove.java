@@ -32,7 +32,7 @@ public class Jhove
     private static final String NAME = "Jhove";
 
     /** Application build date, YYYY, MM, DD. */
-    private static final int [] DATE = {2009, 10, 14};
+    private static final int [] DATE = {2009, 12, 19};
 
     /** Application release number. */
     private static final String RELEASE = "1.5";
