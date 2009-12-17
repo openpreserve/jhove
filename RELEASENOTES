@@ -3,6 +3,33 @@ Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details)
 
+RELEASE NOTES FOR JHOVE 1.5
+2009-12-17
+
+PDF MODULE
+
+1. An ArrayIndexOutOfBoundsException was thrown on a PDF with an invalid 
+   object number in the cross-reference stream. In JHOVE 1.5, this is
+   correctly reported as a violation of well-formedness.
+
+UTF-8 MODULE   
+
+1. With some very simple UTF-8 files, JHOVE handlers would throw an exception
+   processing them, and the GUI would fail silently. This happened with files
+   using no UTF-8 blocks. This has been fixed.
+
+TEXTMD (multiple modules)
+
+1. TextMD metadata can now optionally be reported. To get this, it's
+   necessary to edit jhove.conf. TextMD can be enabled on a per-module
+   basis for HtmlModule, AsciiModule, Utf8Module, and XmlModule.  
+   The <module> element for each chosen module must contain the element
+   <param>withtextmd=true</param> (no spaces).
+   
+2. The TextMD feature was added by Thomas Ledoux.
+
+   
+   
 RELEASE NOTES FOR JHOVE 1.4
 2009-07-30
 
