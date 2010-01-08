@@ -102,6 +102,7 @@ public class ContCodestream {
         _codestream = cs;
         long lengthLeft = _length;
         _tileLeft = 0;
+        boolean socSeen = false;  // flag to note an SOC marker has been seen
         
         // length may be 0, signifying that we go till EOF
         if (lengthLeft == 0) {
@@ -118,6 +119,10 @@ public class ContCodestream {
                     return false;
                 }
                 int marker = ModuleBase.readUnsignedByte (_dstream, _module);
+                if (marker == 0X4F) {
+                    // we got the SOC marker, as expected
+                    socSeen = true;
+                }
                 MarkerSegment ms = MarkerSegment.markerSegmentMaker (marker);
                 ms.setCodestream (cs);
                 ms.setContCodestream (this);
@@ -162,6 +167,11 @@ public class ContCodestream {
         }
         catch (EOFException e) {
             // we're done
+        }
+        if (!socSeen) {
+            info.setMessage (new ErrorMessage (badStream));
+            info.setWellFormed (false);
+            return false;
         }
         _codestream.setTiles (_tiles);
         return true;
