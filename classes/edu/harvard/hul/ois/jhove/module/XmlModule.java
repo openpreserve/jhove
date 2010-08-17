@@ -249,6 +249,7 @@ public class XmlModule
     {
         // Test if textMD is to be generated
         if (_defaultParams != null) {
+            _withTextMD = false;
             Iterator iter = _defaultParams.iterator ();
             while (iter.hasNext ()) {
                 String param = (String) iter.next ();
@@ -262,10 +263,11 @@ public class XmlModule
         boolean canValidate = true;
         initParse ();
         info.setFormat (_format[0]);
-	info.setMimeType (_mimeType[0]);
+        info.setMimeType (_mimeType[0]);
         info.setModule (this);
-        if (_textMD == null) {
+        if (_textMD == null || parseIndex == 0) {
             _textMD = new TextMDMetadata();
+            _xhtmlDoctype = null;
         }
         
         /* We may have already done the checksums while converting a
@@ -1019,6 +1021,7 @@ public class XmlModule
                 RepInfo info) 
         throws IOException
     {
+        _parseFromSig = false;
         info.setFormat (_format[0]);
         info.setMimeType (_mimeType[0]);
         info.setModule (this);

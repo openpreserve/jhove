@@ -302,7 +302,7 @@ public class HtmlModule extends ModuleBase {
                     parseIndex = 0;
                 }
                 xmlMod.setApp  (_app);
-		xmlMod.setBase (_je);
+                xmlMod.setBase (_je);
                 xmlMod.setXhtmlDoctype(_doctype);
                 return xmlMod.parse (stream, info, parseIndex);
             }
@@ -336,7 +336,7 @@ public class HtmlModule extends ModuleBase {
         info.setMimeType (_mimeType[0]);
         info.setModule (this);
 
-        if (_textMD == null) {
+        if (_textMD == null || parseIndex == 0) {
             _textMD = new TextMDMetadata();
         }
         /* We may have already done the checksums while converting a
