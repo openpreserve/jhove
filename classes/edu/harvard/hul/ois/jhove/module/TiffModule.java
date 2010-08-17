@@ -590,7 +590,12 @@ public class TiffModule
     }
 
 
-
+    /** Allow odd offsets in values */
+    public void setByteOffsetValid (boolean v) {
+        _byteOffsetIsValid = v;
+    }
+    
+    
     /** Special-purpose, limited parser for embedded Exif files.
      * 
      * @param raf Open TIFF file
@@ -628,7 +633,7 @@ public class TiffModule
              * as features specific to higher versions are recognized.
              */
             _version = 4;
-            ifds = parseIFDs (4, info, true);
+            ifds = parseIFDs (4, info, true, IFD.EXIF);
       
             //info.setVersion (Integer.toString (_version) + ".0");
 
@@ -1082,7 +1087,7 @@ public class TiffModule
     protected List parseIFDs (long offset, RepInfo info)
         throws TiffException 
     {
-        return parseIFDs (offset, info, false);
+        return parseIFDs (offset, info, false, IFD.TIFF);
     }
     
     
@@ -1091,7 +1096,7 @@ public class TiffModule
      * @param info Representation information
      * @param suppressErrors  If true, use IFD even if it has errors
      */
-    protected List parseIFDs (long offset, RepInfo info, boolean suppressErrors)
+    protected List parseIFDs (long offset, RepInfo info, boolean suppressErrors, int ifdType)
         throws TiffException 
     {
         long next = 0L;
@@ -1113,7 +1118,7 @@ public class TiffModule
                 throw new TiffException ("IFD offset not word-aligned: " +
                                          next);
             }
-            IFD ifd = parseIFDChain (next, info, IFD.TIFF, list, suppressErrors);
+            IFD ifd = parseIFDChain (next, info, ifdType, list, suppressErrors);
             next = ifd.getNext ();
         }
 

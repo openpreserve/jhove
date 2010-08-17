@@ -246,6 +246,15 @@ public class ExifIFD
     private String _subSecTimeOriginal;
     private int [] _userComment;
     private int _whiteBalance;
+    
+    /* data from standard TIFF tags */
+    private String _manufacturer;
+    private String _model;
+    private String _software;
+    private String _artist;
+    private int _orientation;
+
+    private NisoImageMetadata _niso;
 
     /******************************************************************
      * CLASS CONSTRUCTOR.
@@ -264,26 +273,29 @@ public class ExifIFD
 
         _colorSpace = NULL;
         _contrast = 0;
-        _customRendered = 0;
+        _customRendered = NULL;
         _exifVersion = "0220";
         _exposureMode = NULL;
-        _exposureProgram = 0;
-        _fileSource = 3;
+        _exposureProgram = NULL;
+        _fileSource = NULL;
         _flash = NULL;
         _flashpixVersion = "0100";
+        _focalLengthIn35mmFilm = NULL;
         _focalPlaneResolutionUnit = 2;
-	_gainControl = NULL;
-        _lightSource = 0;
-        _meteringMode = 0;
+        _gainControl = NULL;
+        _lightSource = NULL;
+        _meteringMode = NULL;
         _pixelXDimension = NULL;
         _pixelYDimension = NULL;
-        _saturation = 0;
-        _sceneCaptureType = 0;
-        _sceneType = 1;
+        _saturation = NULL;
+        _sceneCaptureType = NULL;
+        _sceneType = NULL;
         _sensingMethod = NULL;
-        _sharpness = 0;
+        _sharpness = NULL;
+        _subjectDistanceRange = NULL;
         _whiteBalance = NULL;
-    }
+        _niso = new NisoImageMetadata ();
+     }
 
     /******************************************************************
      * PUBLIC INSTANCE METHODS.
@@ -536,6 +548,27 @@ public class ExifIFD
                                              rawOutput));
         }
 
+        // properties from standard TIFF tags
+        if (_manufacturer != null) {
+            entries.add (new Property ("Make",
+                    PropertyType.STRING,
+                    _manufacturer));
+        }
+        if (_model != null) {
+            entries.add (new Property ("Model",
+                    PropertyType.STRING,
+                    _model));
+        }
+        if (_software != null) {
+            entries.add (new Property ("Software",
+                    PropertyType.STRING,
+                    _software));
+        }
+        if (_artist != null) {
+            entries.add (new Property ("Artist",
+                    PropertyType.STRING,
+                    _artist));
+        }
         return propertyHeader ("Exif", entries);
     }
     
@@ -546,7 +579,13 @@ public class ExifIFD
         return _exifVersion;
     }
     
-    
+    /** Returns the constructed NisoImageMetadata. */
+    public NisoImageMetadata getNisoImageMetadata ()
+    {
+        return _niso;
+    }
+
+
     /** Returns the Flashpix version string (tag 40960). */
     public String getFlashpixVersion ()
     {
@@ -882,6 +921,41 @@ public class ExifIFD
                 checkType  (tag, type, UNDEFINED);
                 _userComment = readByteArray (type, count, value);
             }
+            
+            // Here we check for non-EXIF tags, because some documents use
+            // standard TIFF tags in an EXIF IFD to provide metadata.
+            else if (tag == TiffIFD.MAKE) {
+                checkType  (tag, type, ASCII);
+                String make = readASCII (count, value);
+                _niso.setScannerManufacturer (make);
+                _manufacturer = make;
+            }
+            else if (tag == TiffIFD.MODEL) {
+                checkType  (tag, type, ASCII);
+                String model = readASCII (count, value);
+                _niso.setScannerModelName (model);
+                _model = model;
+            }
+            else if (tag == TiffIFD.ORIENTATION) {
+                checkType  (tag, type, SHORT);
+                checkCount (tag, count, 1);
+                int orient = readShort (type, count, value);
+                _niso.setOrientation (orient);
+                _orientation = orient;
+            }
+            else if (tag == TiffIFD.XRESOLUTION) {
+                checkType  (tag, type, RATIONAL);
+                checkCount (tag, count, 1);
+                _niso.setXSamplingFrequency (readRational (count,
+                                                           value));
+            }
+            else if (tag == TiffIFD.YRESOLUTION) {
+                checkType  (tag, type, RATIONAL);
+                checkCount (tag, count, 1);
+                _niso.setYSamplingFrequency (readRational (count,
+                                                           value));
+            }
+
         }
         catch (IOException e) {
             throw new TiffException ("Read error for tag " + tag, value);

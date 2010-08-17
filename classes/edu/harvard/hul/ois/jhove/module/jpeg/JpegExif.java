@@ -93,6 +93,7 @@ public final class JpegExif {
             fos.flush ();
             edu.harvard.hul.ois.jhove.module.TiffModule tiffMod = 
                 new edu.harvard.hul.ois.jhove.module.TiffModule ();
+            tiffMod.setByteOffsetValid(true);
             // Now parse the file, using a special parsing method.
             // Close only after we're all done.
             tiffRaf = new RandomAccessFile (tiffFile, "r");
@@ -105,6 +106,7 @@ public final class JpegExif {
             // Interoperability IFD eventually.)
             ListIterator iter = ifds.listIterator();
             boolean first = true;
+            boolean haveNisoMetadata = false;
             while (iter.hasNext()) {
                 Object ifd = iter.next ();
                 if (ifd instanceof TiffIFD) {
@@ -116,6 +118,7 @@ public final class JpegExif {
                         info.setProperty (new Property ("NisoImageMetadata",
                                                PropertyType.NISOIMAGEMETADATA,
                                                niso));
+                        haveNisoMetadata = true;
                         TiffProfileExif exifProfile = new TiffProfileExif ();
                         _exifProfileOK = exifProfile.satisfiesProfile ((TiffIFD) ifd);
                     }
@@ -140,6 +143,14 @@ public final class JpegExif {
                                 PropertyType.PROPERTY,
                                 PropertyArity.LIST,
                                 exifList));
+                    }
+                    // See if we have any interesting NISO metadata. If so, and
+                    // we haven't gotten real NISO metadata, use it.
+                    if (!haveNisoMetadata) {
+                        NisoImageMetadata niso = eifd.getNisoImageMetadata ();
+                        info.setProperty (new Property ("NisoImageMetadata",
+                                PropertyType.NISOIMAGEMETADATA,
+                                niso));
                     }
                 }
                 first = false;
