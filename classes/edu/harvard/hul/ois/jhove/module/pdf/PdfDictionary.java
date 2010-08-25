@@ -23,8 +23,8 @@ public class PdfDictionary extends PdfObject
      */
     public PdfDictionary (int objNumber, int genNumber)
     {
-	super (objNumber, genNumber);
-	_entries = new HashMap ();
+        super (objNumber, genNumber);
+        _entries = new HashMap ();
     }
 
     /** 
@@ -33,8 +33,8 @@ public class PdfDictionary extends PdfObject
      */
     public PdfDictionary ()
     {
-	super ();
-	_entries = new HashMap ();
+        super ();
+        _entries = new HashMap ();
     }
 
     /**
@@ -45,7 +45,7 @@ public class PdfDictionary extends PdfObject
      */
     public void add (String key, PdfObject value) 
     {
-	_entries.put (key, value);
+        _entries.put (key, value);
     }
 
     /** Get the PDFObject whose key has the specified string
@@ -55,7 +55,7 @@ public class PdfDictionary extends PdfObject
      */
     public PdfObject get (String key)
     {
-	return (PdfObject) _entries.get (key);
+        return (PdfObject) _entries.get (key);
     }
     
     /** Return true if it's within the PDF/A implementation limit. */
@@ -70,6 +70,6 @@ public class PdfDictionary extends PdfObject
      */
     public Iterator iterator ()
     {
-	return _entries.values ().iterator ();
+        return _entries.values ().iterator ();
     }
 }

@@ -46,8 +46,9 @@ public class PageTreeNode extends DocNode
     public void buildSubtree (boolean toplevel, int recGuard)
 	throws PdfException
     {
-	buildSubtree (toplevel, recGuard, -1, -1);
+        buildSubtree (toplevel, recGuard, -1, -1);
     }
+    
     /**
      *  Builds the subtree of descendants of this node, using
      *  the Kids entry in the dictionary.
@@ -73,10 +74,10 @@ public class PageTreeNode extends DocNode
 	    /* Note that the Kids dictionary can be an indirect object. */
 	    PdfObject obj = _dict.get("Kids");
 	    if (obj instanceof PdfIndirectObj) {
-		kids = (PdfArray) (((PdfIndirectObj) obj).getObject ());
+	        kids = (PdfArray) (((PdfIndirectObj) obj).getObject ());
 	    }
 	    else {
-		kids = (PdfArray) obj;
+            kids = (PdfArray) obj;
 	    }
             if (toplevel && kids == null) {
                 // The single page node case, maybe.
@@ -116,7 +117,7 @@ public class PageTreeNode extends DocNode
                     String kidtypeStr = kidtype.getStringValue ();
                     if (kidtypeStr.equals("Page")) {
                         PageObject pageObj = new PageObject 
-    				(_module, this, kid);
+                            (_module, this, kid);
                         pageObj.loadContent (_module);
                         _descendants.add(pageObj);
                     }
@@ -124,10 +125,6 @@ public class PageTreeNode extends DocNode
                         PageTreeNode nodeObj = 
                             new PageTreeNode (_module, this, kid);
                         nodeObj.buildSubtree (false, recGuard - 1);
-			/********************************************
-                        nodeObj.buildSubtree (false, recGuard - 1,
-					      kidObjNumber, kidGenNumber);
-			********************************************/
                         _descendants.add(nodeObj);
                     }
                 }
@@ -167,14 +164,14 @@ public class PageTreeNode extends DocNode
         // _currentDescendant == null and _walkFinished == false indicates
         // we're at the start.
         if (_currentDescendant == null) {
-	    if (!_descendantsIter.hasNext ()) {
-		_walkFinished = true;
-		return null;
-	    }
+           if (!_descendantsIter.hasNext ()) {
+                _walkFinished = true;
+                return null;
+           }
 
-            // Get first descendant
-            _currentDescendant = (DocNode) _descendantsIter.next ();
-            _currentDescendant.startWalk ();
+           // Get first descendant
+           _currentDescendant = (DocNode) _descendantsIter.next ();
+           _currentDescendant.startWalk ();
         }
         
         PageObject retval = _currentDescendant.nextPageObject ();
@@ -193,8 +190,8 @@ public class PageTreeNode extends DocNode
             } 
         }
         else {
-	    return retval;
-	}
+            return retval;
+        }
     } 
      
     /**
@@ -213,17 +210,17 @@ public class PageTreeNode extends DocNode
         // _walkFinished == false and _walkFirst == true indicates
         // we need to return "this".
         if (_walkFirst) {
-	    _walkFirst = false;
-	    return this;
+            _walkFirst = false;
+            return this;
         }
         // _currentDescendant == null and _walkFinished == false indicates
         // we're at the start.  This is almost identical to the
         // logic for nextPageObject.
-	if (_currentDescendant == null) {
-	    if (!_descendantsIter.hasNext ()) {
-		_walkFinished = true;
-		return null;
-	    }
+        if (_currentDescendant == null) {
+            if (!_descendantsIter.hasNext ()) {
+                _walkFinished = true;
+                return null;
+            }
 
             // Get first descendant
             _currentDescendant = (DocNode) _descendantsIter.next ();
