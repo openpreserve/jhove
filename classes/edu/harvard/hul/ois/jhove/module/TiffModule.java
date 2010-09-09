@@ -1042,33 +1042,33 @@ public class TiffModule
             if (dateTime.length () != 19) {
                 reportInvalid ("Invalid DateTime length: " +
                                          dateTime, info);
+                return;
             }
-            else {
-				if (dateTime.charAt ( 4) != ':' || dateTime.charAt ( 7) != ':' ||
-					dateTime.charAt (10) != ' ' || dateTime.charAt (13) != ':' ||
-				dateTime.charAt (16) != ':') {
-					reportInvalid ("Invalid DateTime separator: " +
-						dateTime, info);
-				}
-				try {
-					int yyyy = Integer.parseInt (dateTime.substring (0, 4));
-					int mm = Integer.parseInt (dateTime.substring (5, 7));
-					int dd = Integer.parseInt (dateTime.substring (8, 10));
-					int hh = Integer.parseInt (dateTime.substring (11, 13));
-					int mn = Integer.parseInt (dateTime.substring (14, 16));
-					int ss = Integer.parseInt (dateTime.substring (17));
-					if (yyyy < 0 || yyyy > 9999 || mm < 1 || mm > 12 ||
-						dd < 1 || dd > 31 || hh < 0 || hh > 24 ||
-					mn < 0 || mn > 59 || ss < 0 || mn > 59) {
-						reportInvalid ("Invalid DateTime digit: " +
-							dateTime, info);
-					}
-				}
-				catch (Exception e) {
-					reportInvalid ("Invalid DateTime digit: " +
-						dateTime, info);
-				}
-			}
+            if (dateTime.charAt ( 4) != ':' || dateTime.charAt ( 7) != ':' ||
+                dateTime.charAt (10) != ' ' || dateTime.charAt (13) != ':' ||
+                dateTime.charAt (16) != ':') {
+                reportInvalid ("Invalid DateTime separator: " +
+                                         dateTime, info);
+                return;
+            }
+            try {
+                int yyyy = Integer.parseInt (dateTime.substring (0, 4));
+                int mm = Integer.parseInt (dateTime.substring (5, 7));
+                int dd = Integer.parseInt (dateTime.substring (8, 10));
+                int hh = Integer.parseInt (dateTime.substring (11, 13));
+                int mn = Integer.parseInt (dateTime.substring (14, 16));
+                int ss = Integer.parseInt (dateTime.substring (17));
+                if (yyyy < 0 || yyyy > 9999 || mm < 1 || mm > 12 ||
+                    dd < 1 || dd > 31 || hh < 0 || hh > 24 ||
+                    mn < 0 || mn > 59 || ss < 0 || mn > 59) {
+                    reportInvalid ("Invalid DateTime digit: " +
+                                             dateTime, info);
+                }
+            }
+            catch (Exception e) {
+                reportInvalid ("Invalid DateTime digit: " +
+                                         dateTime, info);
+            }
         }
     }
     
