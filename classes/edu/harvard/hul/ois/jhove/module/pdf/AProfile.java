@@ -261,7 +261,11 @@ public final class AProfile extends PdfProfile
             String fTypeStr = fType.getStringValue ();
             PdfDictionary desc = (PdfDictionary) 
                     _module.resolveIndirectObject (font.get ("FontDescriptor"));
-            PdfSimpleObject flagsObj = (PdfSimpleObject) _module.resolveIndirectObject( desc.get ("Flags"));
+            // MODIF THL 2010/10/11 test if desc is null
+            PdfSimpleObject flagsObj = null;
+            if (desc != null) {
+                 flagsObj = (PdfSimpleObject) _module.resolveIndirectObject( desc.get ("Flags"));
+            }
             int flags = 0;
             if (flagsObj != null) {
                 flags = flagsObj.getIntValue();
@@ -424,9 +428,17 @@ public final class AProfile extends PdfProfile
                 }
                 // A type 2 subfont must meet certain restrictions
                 if ("CIDFontType2".equals (subtype.getStringValue())) {
-                    PdfObject cgmap = subfont.get ("CIDToGIDMap");
-                    if (cgmap == null) {
+                    // MODIF THL 2010/10/11 Accept IndirectObject
+                    PdfObject cgmap1 = subfont.get ("CIDToGIDMap");
+                    if (cgmap1 == null) {
                         return false;
+                    }
+                    PdfObject cgmap;
+                    if (cgmap1 instanceof PdfIndirectObj) {
+                        cgmap = 
+                            (PdfObject) _module.resolveIndirectObject (cgmap1);
+                    } else {
+                        cgmap = cgmap1;
                     }
                     if (cgmap instanceof PdfSimpleObject) {
                         if (!"Identity".equals (((PdfSimpleObject)cgmap).getStringValue ())) {
