@@ -113,16 +113,17 @@ public class Utf8Module
 	agent.setEmail("jhove-support@hulmail.harvard.edu");
 	_vendor = agent;
 
-	Document doc = new Document ("The Unicode Standard, Version 4.0",
+	Document doc = new Document ("The Unicode Standard, Version 6.0",
 				     DocumentType.BOOK);
 	agent = new Agent ("The Unicode Consortium", AgentType.NONPROFIT);
-	agent.setWeb ("http://www.unicode.org/versions/Unicode4.0.0/");
+	agent.setWeb ("http://www.unicode.org/versions/Unicode6.0.0/");
+	agent.setAddress ("Mountain View, California");
 	doc.setAuthor (agent);
 	agent = new Agent ("Addison-Wesley", AgentType.COMMERCIAL);
 	agent.setAddress ("Boston, Massachusetts");
 	doc.setPublisher (agent);
-	doc.setDate ("2003");
-	doc.setIdentifier (new Identifier ("0-321-18578-1", 
+	doc.setDate ("2011");
+	doc.setIdentifier (new Identifier ("978-1-936213-01-6", 
 			IdentifierType.ISBN));
 	_specification.add (doc);
 

@@ -17,9 +17,9 @@ public class Utf8Block
      * PRIVATE INSTANCE FIELDS.
      ******************************************************************/
 
-    /** Unicode 4.0.0 blocks, derived from
+    /** Unicode 6.0.0 blocks, derived from
      * &lt;http://www.unicode.org/Public/3.2-Update/Blocks-3.2.0.txt&gt;
-     * and updated to Unicode 4.0.0  */
+     * and updated to Unicode 6.0.0  */
     public static final Utf8Block [] unicodeBlock = {
 	new Utf8Block (0x0000, 0x007F, "Basic Latin"),
 	new Utf8Block (0x0080, 0x00FF, "Latin-1 Supplement"),
@@ -36,6 +36,8 @@ public class Utf8Block
 	new Utf8Block (0x0600, 0x06FF, "Arabic"),
 	new Utf8Block (0x0700, 0x074F, "Syriac"),
 	new Utf8Block (0x0780, 0x07BF, "Thaana"),
+    new Utf8Block (0x07C0, 0x07FF, "NKo"),
+    new Utf8Block (0x0840, 0x085F, "Mandaic"),
 	new Utf8Block (0x0900, 0x097F, "Devanagari"),
 	new Utf8Block (0x0980, 0x09FF, "Bengali"),
 	new Utf8Block (0x0A00, 0x0A7F, "Gurmukhi"),
@@ -68,6 +70,8 @@ public class Utf8Block
 	new Utf8Block (0x1900, 0x194F, "Limbu"),
 	new Utf8Block (0x1950, 0x197F, "Tai Le"),
 	new Utf8Block (0x19E0, 0x19FF, "Khmer Symbols"),
+    new Utf8Block (0x1B00, 0x1B7F, "Balinese"),
+    new Utf8Block (0x1BC0, 0x1BFF, "Batak"),
 	new Utf8Block (0x1D00, 0x1D7F, "Phonetic Extensions"),
 
 	new Utf8Block (0x1E00, 0x1EFF, "Latin Extended Additional"),
@@ -95,6 +99,7 @@ public class Utf8Block
 	new Utf8Block (0x2900, 0x297F, "Supplemental Arrows-B"),
 	new Utf8Block (0x2980, 0x29FF, "Miscellaneous Mathematical Symbols-B"),
 	new Utf8Block (0x2A00, 0x2AFF, "Supplemental Mathematical Operators"),
+    new Utf8Block (0x2C60, 0x2C7F, "Latin Extended-C"),
 	new Utf8Block (0x2E80, 0x2EFF, "CJK Radicals Supplement"),
 	new Utf8Block (0x2F00, 0x2FDF, "Kangxi Radicals"),
 	new Utf8Block (0x2FF0, 0x2FFF, "Ideographic Description Characters"),
@@ -116,6 +121,9 @@ public class Utf8Block
 	new Utf8Block (0x4E00, 0x9FFF, "CJK Unified Ideographs"),
 	new Utf8Block (0xA000, 0xA48F, "Yi Syllables"),
 	new Utf8Block (0xA490, 0xA4CF, "Yi Radicals"),
+    new Utf8Block (0xA720, 0xA7FF, "Latin Extended-D"),
+    new Utf8Block (0xA840, 0xA87F, "Phags-pa"),
+    new Utf8Block (0xAB00, 0xAB2F, "Ethiopic Extended-A"),
 	new Utf8Block (0xAC00, 0xD7AF, "Hangul Syllables"),
 	new Utf8Block (0xD800, 0xDB7F, "High Surrogates"),
 	new Utf8Block (0xDB80, 0xDBFF, "High Private Use Surrogates"),
@@ -132,7 +140,6 @@ public class Utf8Block
 	new Utf8Block (0xFF00, 0xFFEF, "Halfwidth and Fullwidth Forms"),
 	new Utf8Block (0xFFF0, 0xFFFF, "Specials"),
 
-	/* 10000-1013F new for 4.0 */
 	new Utf8Block (0x10000, 0x1007F, "Linear B Syllabary"),
 	new Utf8Block (0x10080, 0x100FF, "Linear B Ideograms"),
 	new Utf8Block (0x10100, 0x1013F, "Aegean Numbers"),
@@ -140,20 +147,30 @@ public class Utf8Block
 	new Utf8Block (0x10300, 0x1032F, "Old Italic"),
 	new Utf8Block (0x10330, 0x1034F, "Gothic"),
 
-	/* 10380-1039F new for 4.0 */
 	new Utf8Block (0x10380, 0x1039F, "Ugaritic"),
 
 	new Utf8Block (0x10400, 0x1044F, "Deseret"),
+    new Utf8Block (0x10900, 0x1091F, "Phoenician"),
 
-	/* 10450-1083F new for 4.0 */
 	new Utf8Block (0x10450, 0x1047F, "Shavian"),
 	new Utf8Block (0x10480, 0x104AF, "Osmanya"),
 	new Utf8Block (0x10800, 0x1083F, "Cypriot Syllabary"),
+    new Utf8Block (0x11000, 0x1107F, "Brahmi"),
+    new Utf8Block (0x12000, 0x120FF, "Cuneiform"),
+    new Utf8Block (0x16800, 0x168BF, "Bamum Supplement"),
+    new Utf8Block (0x1B000, 0x1B0FF, "Kana Supplement"),
 
 	new Utf8Block (0x1D000, 0x1D0FF, "Byzantine Musical Symbols"),
 	new Utf8Block (0x1D100, 0x1D1FF, "Musical Symbols"),
+    new Utf8Block (0x1D360, 0x1D37F, "Counting Rod Numerals"),
 	new Utf8Block (0x1D400, 0x1D7FF, "Mathematical Alphanumeric Symbols"),
+    new Utf8Block (0x1F0A0, 0x1F0FF, "Playing Cards"),
+    new Utf8Block (0x1F300, 0x1F3FF, "Miscellaneous Symbols and Pictographs"),
+    new Utf8Block (0x1F600, 0x1F64F, "Emoticons"),
+    new Utf8Block (0x1F680, 0x1F6FF, "Transport and Map Symbols"),
+    new Utf8Block (0x1F700, 0x1F77F, "Alchemical Symbols"),
 	new Utf8Block (0x20000, 0x2A6DF, "CJK Unified Ideographs Extension B"),
+    new Utf8Block (0x2B740, 0x2B78F, "CJK Unified Ideographs Extension D"),
 	new Utf8Block (0x2F800, 0x2FA1F, "CJK Compatibility Ideographs Supplement"),
 	new Utf8Block (0xE0000, 0xE007F, "Tags"),
 
