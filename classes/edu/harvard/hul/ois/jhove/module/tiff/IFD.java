@@ -545,6 +545,7 @@ public abstract class IFD
 
     /**
      * Reads a string value from the TIFF file.
+     * If there are non-ASCII characters, they're escaped as %XX
      * @param count Length of string
      * @param value Offset of string
      */
@@ -558,10 +559,18 @@ public abstract class IFD
 
         StringBuffer sb = new StringBuffer ();
         for (int i=0; i<count; i++) {
-            if (buffer[i] == 0) {
+            byte c = buffer[i];
+            if (c == 0) {
                 break;
             }
-            sb.append ((char) buffer[i]);
+            // Escape characters that aren't ASCII. There really shouldn't
+            // be any, and if there are, we don't know how they're encoded.
+            if (c < 32 || c > 127) {
+                sb.append (byteToHex (c));
+            }
+            else {
+                sb.append ((char) c);
+            }
         }
         return sb.toString ();
     }
@@ -589,7 +598,14 @@ public abstract class IFD
                 strbuf.setLength (0);
             }
             else {
-                strbuf.append ((char) b);
+                // Escape characters that aren't ASCII. There really shouldn't
+                // be any, and if there are, we don't know how they're encoded.
+                if (b < 32 || b > 127) {
+                    strbuf.append (byteToHex ((byte) b));
+                }
+                else {
+                    strbuf.append ((char) b);
+                }
             }
         }
         /* We can't use ArrayList.toArray because that returns an 
@@ -726,7 +742,7 @@ public abstract class IFD
             u = ModuleBase.readUnsignedShort (_raf, _bigEndian);
             break;
         case LONG:
-	case IFD:
+        case IFD:
             u = ModuleBase.readUnsignedInt (_raf, _bigEndian);
             break;
         }
@@ -977,4 +993,22 @@ public abstract class IFD
      * PRIVATE INSTANCE METHODS.
      ******************************************************************/
 
+    /** Represent a byte value as %XX */
+    private String byteToHex (byte c) {
+        int[] nibbles = new int[2];
+        nibbles[0] = ((int) c & 0XF0) >> 4;
+        nibbles[1] = (int) c & 0X0F;
+        StringBuffer retval = new StringBuffer ("%");
+        for (int i = 0; i <= 1; i++) {
+            int b = nibbles[i];
+            if (b >= 10) {
+                b += (int) 'A' - 10;
+            }
+            else {
+                b += (int) '0';
+            }
+            retval.append ((char) b);
+        }
+        return retval.toString();
+    }
 }
