@@ -36,20 +36,20 @@ public class Utf8Module
      ******************************************************************/
 
     private static final String NAME = "UTF8-hul";
-    private static final String RELEASE = "1.4";
-    private static final int [] DATE = {2007, 8, 30};
+    private static final String RELEASE = "1.5";
+    private static final int [] DATE = {2011, 2, 3};
     private static final String [] FORMAT = {"UTF-8"};
-    private static final String COVERAGE = "Unicode 4.0.0";
+    private static final String COVERAGE = "Unicode 6.0.0";
     private static final String [] MIMETYPE = {"text/plain; charset=UTF-8"};
     private static final String WELLFORMED = "An UTF-8 object is well-formed "+
 	"if each character is correctly encoded as a one-to-four byte " +
 	"sequence, as defined in the specifications";
     private static final String VALIDITY = null;
     private static final String REPINFO = "Additional representation " +
-	"information includes: number of characters and Unicode 4.0.0 code " +
+	"information includes: number of characters and Unicode 6.0.0 code " +
 	"blocks";
     private static final String NOTE = null;
-    private static final String RIGHTS = "Copyright 2003-2007 by JSTOR and " +
+    private static final String RIGHTS = "Copyright 2003-2011 by JSTOR and " +
 	"the President and Fellows of Harvard College. " +
 	"Released under the GNU Lesser General Public License.";
 
