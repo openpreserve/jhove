@@ -37,19 +37,19 @@ public class JhoveView
     private static final String NAME = "JhoveView";
 
     /** Application build date, YYYY, MM, DD. */
-    private static final int [] DATE = {2009, 12, 19};
+    private static final int [] DATE = {2011, 1, 4};
 
     /** Usage string is meaningless here. */
     private static final String USAGE = null;
     
     /** Application release number. */
-    private static final String RELEASE = "1.5";
+    private static final String RELEASE = "1.6";
 
     /** Default character encoding */
     private static final String DEFAULT_ENCODING = "UTF-8";
 
     /** Copyright information. */
-    private static final String RIGHTS = "Copyright 2004-2009 by JSTOR and " +
+    private static final String RIGHTS = "Copyright 2004-2011 by JSTOR and " +
 	"the President and Fellows of Harvard College. " +
 	"Released under the GNU Lesser General Public License.";
 
