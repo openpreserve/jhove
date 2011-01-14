@@ -64,6 +64,14 @@ public final class JpegExif {
 	 */
         try {
             tiffFile = je.tempFile ();
+        }
+        catch (IOException e) {
+            info.setMessage (new ErrorMessage
+                    ("Error creating temporary file. Check your configuration: " +
+                     e.getMessage ()));
+            return info;
+        }
+        try {
             fos = new FileOutputStream (tiffFile);
             int bufSize = je.getBufferSize ();
             int tiffLen = length - 8;
