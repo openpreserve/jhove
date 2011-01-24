@@ -470,6 +470,7 @@ public class JhoveBase
     	}
     
     	handler.showFooter ();                /* Show handler footer info. */
+		handler.close();
     }
 
     /* Returns false if processing should be aborted.
