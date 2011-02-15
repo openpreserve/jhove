@@ -3760,18 +3760,24 @@ public class XmlHandler
      }
      
      iarray = niso.getGrayResponseCurve();
-     if (iarray != null) {
-         for (int ii = 0; ii < iarray.length; ii++) {
-             colorEncBuf.append (margn4 + element ("mix:GrayResponseCurve",
-                                   Integer.toString(iarray[ii])) + EOL);
-         }
-         useColorEncBuf = true;
-     }
-     
      n = niso.getGrayResponseUnit();
-     if (n != NisoImageMetadata.NULL) {
-         colorEncBuf.append (margn4 +
-             element ("mix:grayResponseUnit", Integer.toString (n)) + EOL);
+     
+     if (iarray != null || n != NisoImageMetadata.NULL) {
+         StringBuffer grayRespBuf = 
+             new StringBuffer (margn4 + elementStart ("mix:GrayResponse") + EOL);
+         if (iarray != null) {
+             for (int ii = 0; ii < iarray.length; ii++) {
+                 grayRespBuf.append (margn5 + element ("mix:grayResponseCurve",
+                                       Integer.toString(iarray[ii])) + EOL);
+             }
+         }
+         
+         if (n != NisoImageMetadata.NULL) {
+             grayRespBuf.append (margn5 +
+                 element ("mix:grayResponseUnit", Integer.toString (n)) + EOL);
+         }
+         grayRespBuf.append (margn4 + elementEnd ("mix:GrayResponse") + EOL);
+         colorEncBuf.append (grayRespBuf);
          useColorEncBuf = true;
      }
      
