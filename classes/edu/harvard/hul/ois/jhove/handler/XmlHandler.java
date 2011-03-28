@@ -53,7 +53,7 @@ public class XmlHandler
 
     /** Handler rights statement. */
     private static final String RIGHTS =
-        "Copyright 2003-2007 by JSTOR and the President and Fellows of " +
+        "Copyright 2003-2011 by JSTOR and the President and Fellows of " +
         "Harvard College. " +
         "Released under the GNU Lesser General Public License.";
 
@@ -3772,9 +3772,11 @@ public class XmlHandler
              }
          }
          
-         if (n != NisoImageMetadata.NULL) {
+         if (n != NisoImageMetadata.NULL && n > 0 && n <= 5) {
+             // Convert integer to text value; only values 1-5 are legal
              grayRespBuf.append (margn5 +
-                 element ("mix:grayResponseUnit", Integer.toString (n)) + EOL);
+                 element ("mix:grayResponseUnit", 
+                         NisoImageMetadata.GRAY_RESPONSE_UNIT_20[n - 1]) + EOL);
          }
          grayRespBuf.append (margn4 + elementEnd ("mix:GrayResponse") + EOL);
          colorEncBuf.append (grayRespBuf);
