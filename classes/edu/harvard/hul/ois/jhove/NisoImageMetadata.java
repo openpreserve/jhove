@@ -113,11 +113,21 @@ public class NisoImageMetadata
 	"yes", "no"
     };
 
-    /** 8.2.6 gray response unit value labels. */
-    public static final String [] GRAY_RESPONSE_UNIT = {
+    /** 8.2.6 gray response unit value labels for version 0.2. */
+    public static final String [] GRAY_RESPONSE_UNIT_02 = {
 	"", "tenths of a unit", "hundredths of a unit",
 	"thousandths of a unit", "ten-thousandths of a unit",
 	"hundred-thousandths of a unit"
+    };
+    
+    /** Gray response unit value for version 2.0 of MIX, corresponding
+     *  to NISO values of 1-5 */
+    public static final String [] GRAY_RESPONSE_UNIT_20 = {
+        "Number represents tenths of a unit",
+        "Number represents hundredths of a unit",
+        "Number represents thousandths of a unit",
+        "Number represents ten-thousandths of a unit",
+        "Number represents hundred-thousandths of a unit"
     };
 
     /** 7.7.3.6 metering mode value labels. */
