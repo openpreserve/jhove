@@ -1533,7 +1533,7 @@ public class TextHandler
         }
         if ((n = niso.getGrayResponseUnit ()) != NisoImageMetadata.NULL) {
             _writer.println (margn2 + "GrayResponseUnit: " +
-                     addIntegerValue (n, NisoImageMetadata.GRAY_RESPONSE_UNIT,
+                     addIntegerValue (n, NisoImageMetadata.GRAY_RESPONSE_UNIT_02,
                                       rawOutput));
         }
         r = niso.getWhitePointXValue ();
@@ -1890,7 +1890,7 @@ public class TextHandler
         }
         if ((n = niso.getGrayResponseUnit ()) != NisoImageMetadata.NULL) {
             _writer.println (margn2 + "GrayResponseUnit: " +
-                     addIntegerValue (n, NisoImageMetadata.GRAY_RESPONSE_UNIT,
+                     addIntegerValue (n, NisoImageMetadata.GRAY_RESPONSE_UNIT_02,
                                       rawOutput));
         }
         r = niso.getWhitePointXValue ();
