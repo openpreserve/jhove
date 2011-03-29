@@ -3742,7 +3742,7 @@ public class XmlHandler
              n = iarray[ii];
              if (n >= 0 && n <= 3) {
                  colorEncBuf.append (margn4 + element ("mix:extraSamples",
-                               Integer.toString (n)) +
+                               NisoImageMetadata.EXTRA_SAMPLE_20[n]) +
                      EOL);
                  useColorEncBuf = true;
              }

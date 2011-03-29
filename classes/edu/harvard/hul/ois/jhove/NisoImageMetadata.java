@@ -130,6 +130,15 @@ public class NisoImageMetadata
         "Number represents hundred-thousandths of a unit"
     };
 
+   /** extra sample value for version 2.0 of MIX, corresponding
+    *  to NISO values of 0-3 **/
+    public static final String [] EXTRA_SAMPLE_20 = {
+	    "unspecified data",
+	    "associated alpha data (with pre-multiplied color)",
+	    "unassociated alpha data",
+	    "range or depth data"
+	};
+	
     /** 7.7.3.6 metering mode value labels. */
     public static final String [] METERING_MODE = {
 	"unidentified", "average", "center-weighted average", "spot",
