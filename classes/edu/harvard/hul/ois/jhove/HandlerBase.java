@@ -620,6 +620,12 @@ public abstract class HandlerBase
 		n--;
 	    }
 	}
+	    // [CC], escape & which is disallowed in xml
+        n = 0;
+        while ((n = buffer.indexOf ("&", n)) > -1) {
+            buffer.insert (n+1, "amp;");
+            n +=5;
+        }
 	n = 0;
         while ((n = buffer.indexOf ("\"", n)) > -1) {
             // [LP] fix for invalid escaping, "" quotes were accidentally left in place.
