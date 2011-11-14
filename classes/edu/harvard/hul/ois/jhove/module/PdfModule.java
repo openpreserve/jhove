@@ -609,7 +609,10 @@ public class PdfModule
             _imagesList));
         }
         if (_showFonts || _verbosity == Module.MAXIMUM_VERBOSITY) {
-            addFontsProperty (metadataList);
+			try { addFontsProperty (metadataList); }
+            catch (NullPointerException e) {
+				info.setMessage(new ErrorMessage ("unexpected error in parsing font property", e.toString()));
+			}
         }
         if (_nFonts > maxFonts) {
             info.setMessage(new InfoMessage ("Too many fonts to report; some fonts omitted.", 
