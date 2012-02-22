@@ -196,7 +196,9 @@ public class JhoveBase
 	if (_configFile != null) {
 	    config = new File (_configFile);
 	    if (!config.exists () || !config.isFile ()) {
-                err = "Configuration file not found or " +
+                err = "Configuration file " +
+                      config.getAbsolutePath() +
+                      " not found or " +
                       "not readable; use -c to specify";
                 config = null;
 	    }
