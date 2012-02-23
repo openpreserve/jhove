@@ -7,6 +7,7 @@ package edu.harvard.hul.ois.jhove.module.pdf;
 
 import java.util.*;
 import java.text.*;
+import java.io.EOFException;
 import java.io.IOException;
 
 /**
@@ -157,7 +158,12 @@ public class Literal
 	long offset = 0;
         for (;;) {
             ch = tok.readChar ();
-	    offset++;
+            // If we get -1, then we've hit an EOF without proper termination of
+            // the literal. Throw an exception.
+            if (ch < 0) {
+                throw new EOFException ("Unterminated literal in PDF file");
+            }
+            offset++;
             _rawBytes.add (new Integer (ch));
 
             if (_state == State.LITERAL) {
