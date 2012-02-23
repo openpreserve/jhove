@@ -2824,6 +2824,10 @@ public class PdfModule
                 labelText.append
                         (PageLabelNode.intToBase26 (nominalPage, false));
             }
+            // It screws up the PDF output if we have a blank Label property.
+            if (labelText.length() == 0) {
+                labelText.append("[empty]");
+            }
             return new Property ("Label",
                         PropertyType.STRING,
                         labelText.toString ());
