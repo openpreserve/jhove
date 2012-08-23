@@ -4,6 +4,30 @@ Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details)
 
+Versions 1.7 and beyond of JHOVE are no longer under the control of Harvard.
+
+RELEASE NOTES FOR JHOVE 1.7
+2012-08-12
+
+GENERAL
+
+1. JHOVE 1.7, as well as future releases unless noted otherwise, is 
+   released independently of Harvard under the GNU General Public License.
+
+2. JHOVE now will tell you where it was looking for the config file if it 
+   can't open it. This should help debug configuration problems.
+
+XML HANDLER
+
+1. Changes to XmlHandler.java and NisoImageMetadata.java to correct invalid MIX 
+   2.0 XML output in the value of grayResponseUnit. It was previously writing 
+   integers (as in 1.0) rather than the expected enumerated strings.
+
+PDF MODULE
+
+1. A situation that caused an infinite loop and eventual memory exhaustion 
+   processing in some PDF files with malformed literals has been fixed.
+ 
 RELEASE NOTES FOR JHOVE 1.6
 2011-01-03
 

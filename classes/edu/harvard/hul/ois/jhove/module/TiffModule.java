@@ -36,8 +36,8 @@ public class TiffModule
      ******************************************************************/
 
     private static final String NAME = "TIFF-hul";
-    private static final String RELEASE = "1.5";
-    private static final int [] DATE = {2007, 10, 2};
+    private static final String RELEASE = "1.7";
+    private static final int [] DATE = {2012, 8, 12};
     private static final String [] FORMAT = {
         "TIFF", "Tagged Image File Format"
     };

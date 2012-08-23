@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.2
+Created-By: 1.6.0_33-b03-424-10M3720 (Apple Inc.)
+Built-By: gmcgath
+Built-On: 2012-08-12T11:38:41
+
+Name: JHOVE
+Version: 1.0
+Package: Handlers
+Rights: Copyright 2004 by JSTOR and the President and Fellows of Harva
+ rd College
+

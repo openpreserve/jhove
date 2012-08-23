@@ -38,10 +38,13 @@ public class JhoveBase
 
     private static Date _date;
     private static final String _name = "JhoveBase";
-    private static final String _release = "1.2";
-    private static final int [] DATE = {2007, 5, 10};
+    private static final String _release = "1.7";
+    private static final int [] DATE = {2012, 8, 12};
     private static final String _rights =
-	"Copyright 2005-2007 by the President and Fellows of Harvard College";
+    	"Derived from software Copyright 2004-2011 " +
+        "by the President and Fellows of Harvard College. " +
+    	"Version 1.7 independently released. " +
+    	"Released under the GNU Lesser General Public License.";
 
     /** JHOVE buffer size property. */
     private static final String BUFFER_PROPERTY = "edu.harvard.hul.ois." +

@@ -37,21 +37,23 @@ public class JhoveView
     private static final String NAME = "JhoveView";
 
     /** Application build date, YYYY, MM, DD. */
-    private static final int [] DATE = {2011, 1, 4};
+    private static final int [] DATE = {2012, 8, 12};
 
     /** Usage string is meaningless here. */
     private static final String USAGE = null;
     
     /** Application release number. */
-    private static final String RELEASE = "1.6";
+    private static final String RELEASE = "1.7";
 
     /** Default character encoding */
     private static final String DEFAULT_ENCODING = "UTF-8";
 
     /** Copyright information. */
-    private static final String RIGHTS = "Copyright 2004-2011 by JSTOR and " +
-	"the President and Fellows of Harvard College. " +
-	"Released under the GNU Lesser General Public License.";
+    private static final String RIGHTS = 
+        "Derived from software Copyright 2004-2011 " +
+        "by the President and Fellows of Harvard College. " +
+        "Version 1.7 independently released. " +
+    	"Released under the GNU Lesser General Public License.";
 
     /******************************************************************
      * Configuration constants.
