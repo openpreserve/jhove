@@ -22,6 +22,16 @@ import javax.swing.*;
  */
 public class ConfigWriter {
 
+    public static class ModuleInfo {
+        public String clas;
+        public String init;
+        public String[] params;
+        
+        public ModuleInfo (String className) {
+            clas = className;
+        }
+    }
+    
     private PrintWriter _confOut;
     private File _tempFile;
     private File _confFile;
@@ -37,7 +47,8 @@ public class ConfigWriter {
      * 
      *  @param  file    Location of the configuration file
      * 
-     *  @param  parent  The ConfigWindow which invoked this instance
+     *  @param  parent  The ConfigWindow which invoked this instance.
+     *                  May be null if invoked to write a default config file.
      */
     public ConfigWriter (File file, ConfigWindow parent) throws IOException
     {
@@ -45,6 +56,7 @@ public class ConfigWriter {
         _parent = parent;
         // Set up a temporary file to write to. 
         String path = file.getParent();
+        file.getParentFile().mkdirs();        // Make sure the directory exists
         _tempFile = File.createTempFile ("jho", ".conf", new File (path));
         //_tempFile.createNewFile();   
         FileOutputStream ostrm = new FileOutputStream (_tempFile);
@@ -63,8 +75,8 @@ public class ConfigWriter {
      *   file can't be replaced, a warning dialog is put up and the
      *   configuration file remains unchanged.
      */
-    public void writeFile (List modules,
-            List handlers,
+    public void writeFile (List<ModuleInfo> modules,
+            List<String> handlers,
             File homeDir,
             File tempDir,
             String encoding,
@@ -72,36 +84,22 @@ public class ConfigWriter {
     {
         writeHead ();
         
-        // Write out the modules
-        ListIterator iter = modules.listIterator ();
-        while (iter.hasNext ()) {
-            String[] tuple = (String []) iter.next ();
-            String clas = tuple[0];
-            String init = tuple[1];
-            // The class must be non-null, but init may be null.
-            // If the class is empty, it's a user error (probably
-            // clicked "Add" and then lost track of it).  Don't
-            // write it out.
-            if (!"".equals (clas)) {
-                _confOut.println (" <module>");
-                _confOut.println ("   <class>" + encodeContent (clas) +
-                         "</class>");
-                if (init != null && init.length () > 0) {
-                    _confOut.println ("   <init>" + encodeContent (init) +
-                         "</init>");
-                }
-                _confOut.println (" </module>");
-            }
+        // Write the home and temp directories.  Home must always be valid.
+        _confOut.println (" <jhoveHome>" + 
+                    encodeContent (homeDir.getPath ()) + 
+                    "</jhoveHome>");
+
+        // Write out the encoding
+        if (encoding != null && encoding.length() > 0) {
+            _confOut.println (" <defaultEncoding>" +
+                    encodeContent (encoding) + "</defaultEncoding>");
         }
         
-        // Write out the handlers
-        iter = handlers.listIterator ();
-        while (iter.hasNext ()) {
-            String handler = (String) iter.next ();
-            _confOut.println (" <handler>");
-            _confOut.println ("   <class>" + encodeContent (handler) +
-                     "</class>");
-            _confOut.println (" </handler>");
+
+        if (tempDir != null) {
+            _confOut.println (" <tempDirectory>" + 
+                    encodeContent (tempDir.getPath ()) + 
+                    "</tempDirectory>");
         }
         
         // Write the buffer size if not default
@@ -110,30 +108,52 @@ public class ConfigWriter {
                     "</bufferSize>");
         }
         
-        // Write out the encoding
-        if (encoding != null && encoding.length() > 0) {
-            _confOut.println (" <defaultEncoding>" +
-                    encodeContent (encoding) + "</defaultEncoding>");
+        // Write out the modules
+        ListIterator<ModuleInfo> iter = modules.listIterator ();
+        while (iter.hasNext ()) {
+            ModuleInfo minfo = iter.next ();
+            // The class must be non-null, but init may be null.
+            // If the class is empty, it's a user error (probably
+            // clicked "Add" and then lost track of it).  Don't
+            // write it out.
+            if (!"".equals (minfo.clas)) {
+                _confOut.println (" <module>");
+                _confOut.println ("   <class>" + encodeContent (minfo.clas) +
+                         "</class>");
+                if (minfo.init != null && minfo.init.length () > 0) {
+                    _confOut.println ("   <init>" + encodeContent (minfo.init) +
+                         "</init>");
+                }
+                /** tuple[2] and beyond are parameters */
+                for (int i = 0; i < minfo.params.length; i++) {
+                    _confOut.println ("   <param>" + encodeContent(minfo.params[i]) +
+                         "</param>");
+                }
+                _confOut.println (" </module>");
+            }
         }
         
-        // Write the home and temp directories.  Home must always be valid.
-        _confOut.println (" <jhoveHome>" + 
-                    encodeContent (homeDir.getPath ()) + 
-                    "</jhoveHome>");
-        if (tempDir != null) {
-            _confOut.println (" <tempDirectory>" + 
-                    encodeContent (tempDir.getPath ()) + 
-                    "</tempDirectory>");
+        // Write out the handlers
+        ListIterator<String> hiter = handlers.listIterator ();
+        while (iter.hasNext ()) {
+            String handler = (String) hiter.next ();
+            _confOut.println (" <handler>");
+            _confOut.println ("   <class>" + encodeContent (handler) +
+                     "</class>");
+            _confOut.println (" </handler>");
         }
+
         writeTail ();
         _confOut.close ();
         
         // Replace the old file with the new.
         if (_confFile.exists () && !_confFile.delete ()) {
-            JOptionPane.showMessageDialog(_parent, 
-                    "Can't replace old config file", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
+            if (_parent != null) {
+                JOptionPane.showMessageDialog(_parent, 
+                        "Can't replace old config file", 
+                        "Error", 
+                        JOptionPane.ERROR_MESSAGE);
+            }
             _tempFile.delete ();
         }
         else {
