@@ -31,6 +31,13 @@ import java.util.*;
 public class TiffModule
     extends ModuleBase
 {
+    
+    /** 
+     * Value to write as module params to the default config file. 
+     */
+    public final static String[] defaultConfigParams = 
+        { "byteoffset=true" };
+    
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
@@ -415,15 +422,15 @@ public class TiffModule
     public final void parse (RandomAccessFile raf, RepInfo info) 
         throws IOException
     {
-	if (_defaultParams != null) {
-	    Iterator iter = _defaultParams.iterator ();
-	    while (iter.hasNext ()) {
-		String param = (String) iter.next ();
-		if (param.toLowerCase ().equals ("byteoffset=true")) {
-		    _byteOffsetIsValid = true;
-		}
-	    }
-	}
+    if (_defaultParams != null) {
+        Iterator iter = _defaultParams.iterator ();
+        while (iter.hasNext ()) {
+            String param = (String) iter.next ();
+            if (param.toLowerCase ().equals ("byteoffset=true")) {
+                _byteOffsetIsValid = true;
+            }
+        }
+    }
 
         _raf = raf;
         initParse ();
@@ -470,14 +477,14 @@ public class TiffModule
             info.setVersion (Integer.toString (_version) + ".0");
 
             /* Construct IFDs property. */
-            List ifdsList = new LinkedList ();
+            List<Property> ifdsList = new LinkedList<Property> ();
             Property ifdsProp = new Property ("IFDs", PropertyType.PROPERTY,
                                               PropertyArity.LIST, ifdsList);
             ifdsList.add (new Property ("Number", PropertyType.INTEGER,
                                         new Integer (ifds.size ())));
 
             /* Build the IFD property list, for each of the IFDs. */
-            ListIterator iter = ifds.listIterator ();
+            ListIterator<IFD> iter = ifds.listIterator ();
             while (iter.hasNext ()) {
                 IFD ifd = (IFD) iter.next ();
                 ifdsList.add (ifd.getProperty (_je != null ?
@@ -1096,7 +1103,7 @@ public class TiffModule
      * @param info Representation information
      * @param suppressErrors  If true, use IFD even if it has errors
      */
-    protected List parseIFDs (long offset, RepInfo info, boolean suppressErrors, int ifdType)
+    protected List<IFD> parseIFDs (long offset, RepInfo info, boolean suppressErrors, int ifdType)
         throws TiffException 
     {
         long next = 0L;
@@ -1112,7 +1119,7 @@ public class TiffModule
             throw new TiffException ("No IFD in file", offset);
         }
 
-        List list = new LinkedList ();
+        List<IFD> list = new LinkedList<IFD> ();
         while (next != 0L) {
             if ((next & 1) != 0) {
                 throw new TiffException ("IFD offset not word-aligned: " +
