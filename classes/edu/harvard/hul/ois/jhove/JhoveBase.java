@@ -97,13 +97,13 @@ public class JhoveBase
     /** Associate map of configution extensions. */
     protected Map _extensions;
     /** Ordered list of output handlers. */
-    protected List _handlerList;
+    protected List<OutputHandler> _handlerList;
     /** Map of output handlers (for fast access by name). */
     protected Map _handlerMap;
     /** JHOVE home directory. */
     protected String _jhoveHome;
     /** Ordered list of modules. */
-    protected List _moduleList;
+    protected List<Module> _moduleList;
     /** Map of modules (for fast access by name). */
     protected Map _moduleMap;
     protected String _outputFile;
@@ -188,27 +188,33 @@ public class JhoveBase
     public void init (String configFile, String saxClass)
 	throws JhoveException
     {
-	_configFile = configFile;
+        _configFile = configFile;
         _saxClass = saxClass;
 
-	File        config   = null;
+        File        config   = null;
         String err = null;
         // If we get an error, attempt to get through the best we can,
         // then throw a JhoveException with err as its message.
 
-	if (_configFile != null) {
-	    config = new File (_configFile);
-	    if (!config.exists () || !config.isFile ()) {
-                err = "Configuration file " +
-                      config.getAbsolutePath() +
-                      " not found or " +
-                      "not readable; use -c to specify";
-                config = null;
-	    }
+    	if (_configFile != null) {
+    	    config = new File (_configFile);
+    	    if (!config.exists () || !config.isFile ()) {
+    	        DefaultConfigurationBuilder dcb = new DefaultConfigurationBuilder(config);
+    	        try {
+    	            dcb.writeDefaultConfigFile();
+    	        }
+    	        catch (Exception e) {
+    	            err = "Configuration file " +
+                          config.getAbsolutePath() +
+                          " not found or " +
+                          "not readable and could not create default file; use -c to specify";
+    	            config = null;
+                }
+    	    }
 
             if (config != null) {
                 XMLReader parser = null;
-		try {
+                try {
                     if (saxClass == null) {
                         /* Use Java 1.4 methods to create default parser.
                          */
@@ -241,7 +247,7 @@ public class JhoveBase
 					"http://www.w3.org/2001/XMLSchema");
                 }
                 catch (SAXException e) 
-                {}
+                    {}
 
                 try {
                     String canonicalPath = config.getCanonicalPath ();
@@ -251,132 +257,135 @@ public class JhoveBase
                     }
                     fileURL += canonicalPath;
                     parser.parse (fileURL);
-                        }
+                }
                 catch (IOException e) {
-                          throw new
-                          JhoveException ("Cannot read configuration file: " +
-                            configFile);
+                      throw new
+                      JhoveException ("Cannot read configuration file: " +
+                        configFile);
                 }
                 catch (SAXException s) {
                     throw new
-                    JhoveException ("Error parsing configuration file: " +
-                            s.getMessage ());
-                }
+                JhoveException ("Error parsing configuration file: " +
+                        s.getMessage ());
+            }
 
-                /* Update the application state to reflect the configuration
-                 * file, if necessary.
-                 */
-                _extensions = configHandler.getExtensions ();
-                _jhoveHome  = configHandler.getJhoveHome ();
+            /* Update the application state to reflect the configuration
+             * file, if necessary.
+             */
+            _extensions = configHandler.getExtensions ();
+            _jhoveHome  = configHandler.getJhoveHome ();
 
-                _encoding = configHandler.getEncoding ();
+            _encoding = configHandler.getEncoding ();
+            if (_encoding == null) {
+                _encoding = getFromProperties (ENCODING_PROPERTY);
                 if (_encoding == null) {
-                    _encoding = getFromProperties (ENCODING_PROPERTY);
-                    if (_encoding == null) {
-                    _encoding = DEFAULT_ENCODING;
-                    }
+                _encoding = DEFAULT_ENCODING;
                 }
+            }
 
-                _tempDir = configHandler.getTempDir ();
+            _tempDir = configHandler.getTempDir ();
+            if (_tempDir == null) {
+                _tempDir = getFromProperties (TEMPDIR_PROPERTY);
                 if (_tempDir == null) {
-                    _tempDir = getFromProperties (TEMPDIR_PROPERTY);
-                    if (_tempDir == null) {
-                	_tempDir = DEFAULT_TEMP;
+            	_tempDir = DEFAULT_TEMP;
+                }
+            }
+                
+            // get the MIX version. if not specified, defaults to 2.0. 
+            _mixVsn = configHandler.getMixVsn ();
+            if (_mixVsn == null) {
+                _mixVsn = "2.0";   // default
+            }
+                
+            // Get the maximum number of bytes to examine when doing
+            // pseudo-signature checking
+            _sigBytes = configHandler.getSigBytes ();
+            
+            // If a log level was specified in the config file,
+            // attempt to set it, unless it was already
+            // explicitly set.
+            if (_logLevel == null) {
+                _logLevel = configHandler.getLogLevel ();
+                if (_logLevel != null) {
+                    try {
+                        _logger.setLevel (Level.parse (_logLevel));
                     }
+                    catch (Exception e) {}
                 }
-                
-                // get the MIX version. if not specified, defaults to 2.0. 
-                _mixVsn = configHandler.getMixVsn ();
-                if (_mixVsn == null) {
-                    _mixVsn = "2.0";   // default
-                }
-                
-                // Get the maximum number of bytes to examine when doing
-                // pseudo-signature checking
-                _sigBytes = configHandler.getSigBytes ();
-                
-                // If a log level was specified in the config file,
-                // attempt to set it, unless it was already
-                // explicitly set.
-                if (_logLevel == null) {
-                    _logLevel = configHandler.getLogLevel ();
-                    if (_logLevel != null) {
-                        try {
-                            _logger.setLevel (Level.parse (_logLevel));
-                        }
-                        catch (Exception e) {}
-                    }
-                }
+            }
 
 		_bufferSize = configHandler.getBufferSize ();
 		if (_bufferSize < 0) {
 		    String size = getFromProperties (BUFFER_PROPERTY);
 		    if (size != null) {
-			try {
-			    _bufferSize = Integer.parseInt (size);
-			}
-			catch (Exception e) {}
+                try {
+                   _bufferSize = Integer.parseInt (size);
+                }
+                catch (Exception e) {}
 		    }
 		    if (_bufferSize < 0) {
-			_bufferSize = DEFAULT_BUFFER;
+                _bufferSize = DEFAULT_BUFFER;
 		    }
-                }
+        }
                 
-                /* Retrieve the ordered lists of modules and output handlers */
-                List list = configHandler.getModule ();
-                List params = configHandler.getModuleParams ();
-                int n = list.size ();
-                for (int i=0; i<n; i++) {
-                    String [] tuple = (String []) list.get (i);
-                    List param = (List) params.get (i);
-                try {
-                        Class cl = Class.forName (tuple[0]);
-                        Module module = (Module) cl.newInstance ();
-                        module.init (tuple[1]);
-                        module.setDefaultParams (param);
+        /* Retrieve the ordered lists of modules and output handlers */
+        List list = configHandler.getModule ();
+        List params = configHandler.getModuleParams ();
+        int n = list.size ();
+        for (int i=0; i<n; i++) {
+            String [] tuple = (String []) list.get (i);
+            List param = (List) params.get (i);
+            try {
+               Class cl = Class.forName (tuple[0]);
+               Module module = (Module) cl.newInstance ();
+               module.init (tuple[1]);
+               module.setDefaultParams (param);
                     
-			_moduleList.add (module);
-			_moduleMap.put  (module.getName ().toLowerCase (),
-					 module);
-                        _logger.info ("Initialized " + module.getName ());
-		    }
-		    catch (Exception e) {
-                        if (err == null) {
-                            err = "cannot instantiate module: " +
-		                tuple[0];
-                        }
-		    }
+               _moduleList.add (module);
+               _moduleMap.put  (module.getName ().toLowerCase (),
+                          module);
+               _logger.info ("Initialized " + module.getName ());
+	       }
+           catch (Exception e) {
+           if (err == null) {
+                err = "cannot instantiate module: " +
+		                    tuple[0];
+           }
                 }
+            }
 
-                list = configHandler.getHandler ();
-                params = configHandler.getHandlerParams ();
-                n = list.size ();
-                for (int i=0; i<n; i++) {
+            list = configHandler.getHandler ();
+            params = configHandler.getHandlerParams ();
+            n = list.size ();
+            for (int i=0; i<n; i++) {
 		    String [] tuple = (String []) list.get (i);
-                    List param = (List) params.get (i);
+            List param = (List) params.get (i);
 		    try {
-	                Class cl = Class.forName (tuple[0]);
-	                OutputHandler handler =
-			    (OutputHandler) cl.newInstance ();
-                        handler.init (tuple[1]);
-                        handler.setDefaultParams (param);
-			
-                        _handlerList.add (handler);
-                        _handlerMap.put  (handler.getName ().toLowerCase (),
+                Class cl = Class.forName (tuple[0]);
+                OutputHandler handler =
+                             (OutputHandler) cl.newInstance ();
+                handler.init (tuple[1]);
+                handler.setDefaultParams (param);
+		
+                _handlerList.add (handler);
+                _handlerMap.put  (handler.getName ().toLowerCase (),
                         		  handler);
-		    }
-		    catch (Exception e) {
-                        if (err == null) {
-                            err = "cannot instantiate handler: " + tuple[0];
-                        }
-		    }
+            }
+            catch (Exception e) {
+                if (err == null) {
+                    err = "cannot instantiate handler: " + tuple[0];
                 }
-	    }
+            }
+                }
+        }
             // If we found any error, the caller needs to deal with it.
             if (err != null) {
                 throw new JhoveException (err);
             }
-	}
+    }
+    else {
+        throw new JhoveException ("Initialization exception; location not specified for configuration file.");
+    }
 
 	/****************************************************************
 	 * The Bytestream module and the Text, XML, and Audit output
@@ -384,22 +393,22 @@ public class JhoveBase
 	 ****************************************************************/
 
 	Module module = new BytestreamModule ();
-        module.setDefaultParams (new ArrayList ());
+        module.setDefaultParams (new ArrayList<String> ());
 	_moduleList.add (module);
 	_moduleMap.put  (module.getName ().toLowerCase (), module);
 
     OutputHandler handler = new TextHandler ();
-    handler.setDefaultParams (new ArrayList ());
+    handler.setDefaultParams (new ArrayList<String> ());
     _handlerList.add (handler);
     _handlerMap.put  (handler.getName ().toLowerCase (), handler);
 	
     handler = new XmlHandler ();
-    handler.setDefaultParams (new ArrayList ());
+    handler.setDefaultParams (new ArrayList<String> ());
     _handlerList.add (handler);
     _handlerMap.put  (handler.getName ().toLowerCase (), handler);
 	
     handler = new AuditHandler ();
-    handler.setDefaultParams (new ArrayList ());
+    handler.setDefaultParams (new ArrayList<String> ());
     _handlerList.add (handler);
     _handlerMap.put  (handler.getName ().toLowerCase (), handler);
     }
@@ -1264,30 +1273,30 @@ public class JhoveBase
 	OutputStreamWriter osw = null;
 	if (outputFile != null) {
 	    try {
-		FileOutputStream stream = new FileOutputStream (outputFile);
-		osw = new OutputStreamWriter (stream, encoding);
-		output = new PrintWriter (osw);
+            FileOutputStream stream = new FileOutputStream (outputFile);
+            osw = new OutputStreamWriter (stream, encoding);
+            output = new PrintWriter (osw);
 	    }
 	    catch (UnsupportedEncodingException u) {
-		throw new JhoveException ("unsupported character encoding: " +
+            throw new JhoveException ("unsupported character encoding: " +
 					  encoding);
 	    }
 	    catch (FileNotFoundException e) {
-		throw new JhoveException ("cannot open output file: " +
-					  outputFile);
+            throw new JhoveException ("cannot open output file: " +
+                outputFile);
 	    }
 	}
 	if (output == null) {
 	    try {
-		osw = new OutputStreamWriter (System.out, encoding);
+            osw = new OutputStreamWriter (System.out, encoding);
 	    }
 	    catch (UnsupportedEncodingException u) {
-		throw new JhoveException ("unsupported character encoding: " +
+            throw new JhoveException ("unsupported character encoding: " +
 					  encoding);
+            }
+            output = new PrintWriter (osw);
 	    }
-	    output = new PrintWriter (osw);
-	}
-	return output;
+        return output;
     }
 
 
@@ -1296,9 +1305,9 @@ public class JhoveBase
      *  The file will be deleted when the application exits.
      */
     public File newTempFile ()
-	throws IOException
+        throws IOException
     {
-	return tempFile ();
+        return tempFile ();
     }
     
     

@@ -663,7 +663,7 @@ public class JhoveWindow extends JFrame
                 new File (configFile),
                 configHandler);
         confWin.setLocation (120, 40);
-        confWin.show ();
+        confWin.setVisible (true);
     }
 
 
@@ -677,7 +677,7 @@ public class JhoveWindow extends JFrame
         else {
             _moduleInfoWin.showModule (module);
         }
-        _moduleInfoWin.show ();
+        _moduleInfoWin.setVisible (true);
     }
 
 
