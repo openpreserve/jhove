@@ -79,6 +79,10 @@ public class PdfModule
     /* The maximum number of fonts that will be reported before we just
      * give up and report a stub to avoid running out of memory. */
     protected int DEFAULT_MAX_FONTS = 1000;
+    
+    /* Constants for trailer parsing */
+    private static final int EOFSCANSIZE = 1024;
+    private static final int XREFSCANSIZE = 128; // generous...
 
     protected RandomAccessFile _raf;
     protected Parser _parser;
@@ -98,23 +102,23 @@ public class PdfModule
     protected int[] [] _xref2;   // array of int[2], giving object stream and offset when _xref[i] < 0
     protected boolean _xrefIsStream; // true if xref streams rather than tables are used
     protected boolean _encrypted;    // equivalent to _encryptDictRef != null
-    protected List _docCatalogList;  // Info extracted from doc cat dict
-    protected List _encryptList;     // Info from encryption dict
-    protected List _docInfoList;     // info from doc info dict
-    protected List _extStreamsList;  // List of external streams
-    protected List _imagesList;      // List of image streams
-    protected List _filtersList;     // List of filters
-    protected List _pagesList;       // List of PageObjects
+    protected List<Property> _docCatalogList;  // Info extracted from doc cat dict
+    protected List<Property> _encryptList;     // Info from encryption dict
+    protected List<Property> _docInfoList;     // info from doc info dict
+    protected List<Property> _extStreamsList;  // List of external streams
+    protected List<Property> _imagesList;      // List of image streams
+    protected List<Property> _filtersList;     // List of filters
+    protected List<Property> _pagesList;       // List of PageObjects
 
-    protected Map _type0FontsMap;    // Map of type 0 font dictionaries
-    protected Map _type1FontsMap;    // Map of type 1 font dictionaries
-    protected Map _mmFontsMap;       // Map of multi master font dictionaries
-    protected Map _type3FontsMap;    // Map of type 3 font dictionaries
-    protected Map _trueTypeFontsMap;   // Map of TrueType font dictionaries
-    protected Map _cid0FontsMap;   // Map of CIDFont/Type1 dictionaries
-    protected Map _cid2FontsMap;   // Map of CIDFont/TrueType dictionaries
+    protected Map<Integer, PdfObject> _type0FontsMap;    // Map of type 0 font dictionaries
+    protected Map<Integer, PdfObject> _type1FontsMap;    // Map of type 1 font dictionaries
+    protected Map<Integer, PdfObject> _mmFontsMap;       // Map of multi master font dictionaries
+    protected Map<Integer, PdfObject> _type3FontsMap;    // Map of type 3 font dictionaries
+    protected Map<Integer, PdfObject> _trueTypeFontsMap;   // Map of TrueType font dictionaries
+    protected Map<Integer, PdfObject> _cid0FontsMap;   // Map of CIDFont/Type1 dictionaries
+    protected Map<Integer, PdfObject> _cid2FontsMap;   // Map of CIDFont/TrueType dictionaries
 
-    protected Map _pageSeqMap;     // Map associating page object dicts with sequence numbers
+    protected Map<Integer, Integer> _pageSeqMap;     // Map associating page object dicts with sequence numbers
 
     protected PdfIndirectObj _docCatDictRef;
     protected PdfIndirectObj _encryptDictRef;
@@ -152,7 +156,7 @@ public class PdfModule
     protected boolean _skippedPagesReported;
 
     /** List of profile checkers */
-    protected List _profile;
+    protected List<PdfProfile> _profile;
     
     /** Cached object stream. */
     protected ObjectStream _cachedObjectStream;
@@ -161,7 +165,7 @@ public class PdfModule
     protected int _cachedStreamIndex;
     
     /** Map of visited nodes when walking through an outline. */
-    protected Set _visitedOutlineNodes;
+    protected Set<Integer> _visitedOutlineNodes;
     
     /** maximum number of fonts to report full information on. */
     protected int maxFonts;
@@ -345,7 +349,7 @@ public class PdfModule
         _specification.add (doc);
 
 
-        _profile = new ArrayList (6);
+        _profile = new ArrayList<PdfProfile> (6);
         _profile.add (new LinearizedProfile (this));
         TaggedProfile tpr = new TaggedProfile (this);
         _profile.add (tpr);
@@ -475,7 +479,7 @@ public class PdfModule
         _parser = new Parser (tok);
         _parser.setObjectMap (_objects);
 
-        List metadataList = new ArrayList (11);
+        List<Property> metadataList = new ArrayList<Property> (11);
         /* We construct a big whopping property,
            which contains up to 11 subproperties */
         _metadata = new Property ("PDFMetadata",
@@ -634,7 +638,7 @@ public class PdfModule
         if (!_parser.getPDFACompliant ()) {
             _pdfACompliant = false;
         }
-        ListIterator pter = _profile.listIterator ();
+        ListIterator<PdfProfile> pter = _profile.listIterator ();
         if (info.getWellFormed() == RepInfo.TRUE) {
             // Well-formedness is necessary to satisfy any profile.
             while (pter.hasNext ()) {
@@ -829,6 +833,99 @@ public class PdfModule
         return true;
     }
 
+    
+    private long lastEOFOffset(RandomAccessFile raf) throws IOException {
+
+        long offset = 0;
+        long flen = 0;
+        byte[] buf = null;
+
+        // overkill to restore fileposition, but make this
+        // as side-effect free as possible
+        long savepos = raf.getFilePointer();
+        flen = raf.length();
+        buf = new byte[(int) Math.min(EOFSCANSIZE, flen)];
+        offset = flen - buf.length;
+        raf.seek(offset);
+        raf.read(buf);
+        raf.seek(savepos);
+
+        //OK:
+        // flen is the total length of the file
+        // offset is 1024 bytes from the end of file or 0 if file is shorter than 1024
+        // buf contains all bytes from offset to end of file
+
+        long eofpos = -1;
+        // Note the limits, selected so the index never is out of bounds
+        for (int i = buf.length-4; i >= 1; i--) {
+            if (buf[i] == '%') {
+              if ((buf[i-1] == '%') &&
+                  (buf[i+1] == 'E') &&
+                  (buf[i+2] == 'O') &&
+                  (buf[i+3] == 'F')) {
+                   eofpos = offset+i-1;
+                   break;
+              }
+            }
+        }
+
+//        if (Tracing.T_MODULE) System.out.println(flen - eofpos);
+        return eofpos;
+
+    }
+
+    
+    private long lastStartXrefOffset(RandomAccessFile raf, long eofOffset) throws IOException {
+
+        long offset = 0;
+        long flen = 0;
+        byte[] buf = null;
+
+        // overkill to restore fileposition, but make this
+        // as side-effect free as possible
+        long savepos = raf.getFilePointer();
+        flen = raf.length();
+        if (eofOffset <= 0) {
+            eofOffset = flen;
+        }
+        if (eofOffset >= flen) {
+            eofOffset = flen;
+        }
+        buf = new byte[(int) Math.min(XREFSCANSIZE, eofOffset)];
+        offset = eofOffset - buf.length;
+        raf.seek(offset);
+        raf.read(buf);
+        raf.seek(savepos);
+
+        //OK:
+        // flen is the total length of the file
+        // offset is 128 bytes from the end of file or 0 if file is shorter than 128
+        // buf contains all bytes from offset to end of file
+
+        long xrefpos = -1;
+        // Note the limits, selected so the index never is out of bounds
+        for (int i = buf.length-9; i >= 0; i--) {
+            if (buf[i] == 's') {
+              if ((buf[i+1] == 't') &&
+                  (buf[i+2] == 'a') &&
+                  (buf[i+3] == 'r') &&
+                  (buf[i+4] == 't') &&
+                  (buf[i+5] == 'x') &&
+                  (buf[i+6] == 'r') &&
+                  (buf[i+7] == 'e') &&
+                  (buf[i+8] == 'f')) {
+                   xrefpos = offset+i;
+                   break;
+              }
+            }
+        }
+
+//        if (Tracing.T_MODULE) System.out.println(flen - xrefpos);
+        return xrefpos;
+
+    }
+    
+
     /** Locate the last trailer of the file */
     protected boolean findLastTrailer (RepInfo info) throws IOException
     {
@@ -839,44 +936,9 @@ public class PdfModule
 
         Token  token = null;
         String value = null;
-        long last1024 = _raf.length () - 1024L;
-        if (last1024 < 0) {
-            last1024 = 0;
-        }
-        try {
-            _parser.seek (last1024);
-        }
-        catch (PdfException e) {
-            // Shouldn't ever happen
-        }
-        _parser.resetLoose ();      // Ignore nesting errors in reading garbage
-        _parser.scanMode (true);
-        _eof = -1L;
-        _xrefIsStream = false;
-        while (true) {
-            try {
-                token = _parser.getNext ();
-            }
-            catch (PdfException e) {
-                // We could get an error here, since we're
-                // starting at a random place.  In that case, we
-                // should keep going till we get in sync.  But how do we
-                // distinguish a read-in-the-middle error from
-                // an end-of-file condition?
-                continue;
-            }
-            if (token == null) {
-                break;
-            }
-            if (token instanceof Comment) {
-                value = ((Comment) token).getValue ();
-                if (value.indexOf ("%EOF") == 0) {
-                    _eof = _parser.getOffset () - value.length () - 1L;
-                    /* No break here; we need to look for later EOFs. */
-                }
-            }
-        }
-	_parser.scanMode (false);
+
+        _eof = lastEOFOffset(_raf);
+
         if (_eof < 0L) {
             info.setWellFormed (false);
             info.setMessage (new ErrorMessage ("No PDF trailer",
@@ -885,46 +947,51 @@ public class PdfModule
         }
 
         // For PDF-A compliance, this must be at the very end.
-	/* Fix contributed by FCLA, 2007-05-30, to test for trailing data
-	 * properly.
-	 *
-	 * if (_raf.length () - _eof > 6) {
-	 */
+    /* Fix contributed by FCLA, 2007-05-30, to test for trailing data
+     * properly.
+     *
+     * if (_raf.length () - _eof > 6) {
+     */
         if (_raf.length () - _eof > 7) {
             _pdfACompliant = false;
         }
 
         /* Retrieve the "startxref" keyword. */
 
-        try {
-            _parser.seek (_eof - 23);   // should we allow more slop?
-        }
-        catch (PdfException e) {}
+        long startxrefoffset = lastStartXrefOffset(_raf, _eof);
         _startxref = -1L;
-        while (true) {
+
+        if (startxrefoffset >= 0) {
             try {
-                token = _parser.getNext ();
+                _parser.seek (startxrefoffset); // points to the 'startxref' kw
+                //_parser.seek (_eof - 23);   // should we allow more slop?
             }
-            catch (Exception e) {
-                // we're starting at an arbitrary point, so there
-                // can be parsing errors.  Ignore them till we get
-                // back in sync.
-                continue;
-            }
-            if (token == null) {
-                break;
-            }
-            if (token instanceof Keyword) {
-                value = ((Keyword) token).getValue ();
-                if (value.equals ("startxref")) {
-                    try {
-                        token = _parser.getNext ();
-                    }
-                    catch (Exception e) {
-                        break;  // no excuses here
-                    }
-                    if (token != null && token instanceof Numeric) {
-                        _startxref = ((Numeric) token).getLongValue ();
+            catch (PdfException e) {}
+            while (true) {
+                try {
+                    token = _parser.getNext ();
+                }
+                catch (Exception e) {
+                    // we're starting at an arbitrary point, so there
+                    // can be parsing errors.  Ignore them till we get
+                    // back in sync.
+                    continue;
+                }
+                if (token == null) {
+                    break;
+                }
+                if (token instanceof Keyword) {
+                    value = ((Keyword) token).getValue ();
+                    if (value.equals ("startxref")) {
+                        try {
+                            token = _parser.getNext ();
+                        }
+                        catch (Exception e) {
+                            break;  // no excuses here
+                        }
+                        if (token != null && token instanceof Numeric) {
+                            _startxref = ((Numeric) token).getLongValue ();
+                        }
                     }
                 }
             }
@@ -937,7 +1004,6 @@ public class PdfModule
         }
         return true;
     }
-
     /*  Parse a "trailer" (which is not necessarily the last
         thing in the file, as trailers can be linked.) */
     protected boolean parseTrailer (RepInfo info,
@@ -1075,7 +1141,7 @@ public class PdfModule
                 String [] id = new String[2];
                 try { 
                     PdfArray idArray = (PdfArray) obj;
-                    Vector idVec = idArray.getContent ();
+                    Vector<PdfObject> idVec = idArray.getContent ();
                     if (idVec.size () != 2) {
                         throw new PdfInvalidException (badID);
                     }
@@ -1274,7 +1340,7 @@ public class PdfModule
         final String nocat = "No document catalog dictionary";
         Property p = null;
         _docCatDict = null;
-        _docCatalogList = new ArrayList (2);
+        _docCatalogList = new ArrayList<Property> (2);
         // Get the Root reference which we had before, and
         // resolve it to the dictionary object.
         if (_docCatDictRef == null) {
@@ -1446,7 +1512,7 @@ public class PdfModule
             return true;        // encryption entry is optional
         }
         try {
-            _encryptList = new ArrayList (6);
+            _encryptList = new ArrayList<Property> (6);
             PdfDictionary dict = (PdfDictionary) resolveIndirectObject 
                             (_encryptDictRef);
             _encryptDict = dict;
@@ -1585,7 +1651,7 @@ public class PdfModule
         if (_docInfoDictRef == null) {
             return true;        // Info is optional
         }
-        _docInfoList = new ArrayList (9);
+        _docInfoList = new ArrayList<Property> (9);
         try {
             _docInfoDict = (PdfDictionary) resolveIndirectObject 
                             (_docInfoDictRef);
@@ -1736,7 +1802,7 @@ public class PdfModule
     
     protected void findExternalStreams (RepInfo info) throws IOException 
     {
-        _extStreamsList = new LinkedList ();
+        _extStreamsList = new LinkedList<Property> ();
 		// stop processing if there is no root for the document tree
 		if (_docTreeRoot == null)
 	 		return;
@@ -1749,9 +1815,9 @@ public class PdfModule
                     break;
                 }
                 // Get the streams for the page and walk through them
-                List streams = page.getContentStreams ();
+                List<PdfObject> streams = page.getContentStreams ();
                 if (streams != null) {
-                    ListIterator streamIter = streams.listIterator ();
+                    ListIterator<PdfObject> streamIter = streams.listIterator ();
                     while (streamIter.hasNext ()) {
                         PdfStream stream = (PdfStream) streamIter.next ();
                         String specStr = stream.getFileSpecification ();
@@ -1781,7 +1847,7 @@ public class PdfModule
     protected boolean findFilters (RepInfo info) 
                 throws IOException
     {
-        _filtersList = new LinkedList ();
+        _filtersList = new LinkedList<Property> ();
 		// stop processing if there is no root for the document tree
 		if (_docTreeRoot == null)
 	 		return false;
@@ -1794,9 +1860,9 @@ public class PdfModule
                     break;
                 }
                 // Get the streams for the page and walk through them
-                List streams = page.getContentStreams ();
+                List<PdfObject> streams = page.getContentStreams ();
                 if (streams != null) {
-                    ListIterator streamIter = streams.listIterator ();
+                    ListIterator<PdfObject> streamIter = streams.listIterator ();
                     while (streamIter.hasNext ()) {
                         PdfStream stream = (PdfStream) streamIter.next ();
                         Filter[] filters = stream.getFilters ();
@@ -1849,7 +1915,7 @@ public class PdfModule
         String filterStr = buf.toString ();
         boolean unique = true;
         // Check for uniqueness.
-        Iterator iter = _filtersList.iterator ();
+        Iterator<Property> iter = _filtersList.iterator ();
         while (iter.hasNext ()) {
             Property p = (Property) iter.next ();
             String s = (String) p.getValue ();
@@ -1869,7 +1935,7 @@ public class PdfModule
 
     protected void findImages (RepInfo info) throws IOException
     {
-        _imagesList = new LinkedList ();
+        _imagesList = new LinkedList<Property> ();
         _docTreeRoot.startWalk ();
         try {
             for (;;) {
@@ -1884,7 +1950,7 @@ public class PdfModule
                     PdfDictionary xo = (PdfDictionary)
                         resolveIndirectObject (rsrc.get ("XObject"));
                     if (xo != null) {
-                        Iterator iter = xo.iterator ();
+                        Iterator<PdfObject> iter = xo.iterator ();
                         while (iter.hasNext ()) {
                             // Get an XObject and check if it's an image.
                             PdfDictionary xobdict = null;
@@ -1897,7 +1963,7 @@ public class PdfModule
                                 PdfSimpleObject subtype = (PdfSimpleObject) xobdict.get ("Subtype");
                                 if ("Image".equals (subtype.getStringValue ())) {
                                     // It's an image XObject.  Report stuff.
-                                    List imgList = new ArrayList (10);
+                                    List<Property> imgList = new ArrayList<Property> (10);
                                     Property prop = new Property ("Image",
                                         PropertyType.PROPERTY,
                                         PropertyArity.LIST,
@@ -2019,9 +2085,9 @@ public class PdfModule
 
                                     PdfArray dcd = (PdfArray) xobdict.get ("Decode");
                                     if (dcd != null) {
-                                        Vector dcdvec = dcd.getContent ();
-                                        List dcdlst = new ArrayList (dcdvec.size ());
-                                        Iterator diter = dcdvec.iterator ();
+                                        Vector<PdfObject> dcdvec = dcd.getContent ();
+                                        List<Integer> dcdlst = new ArrayList<Integer> (dcdvec.size ());
+                                        Iterator<PdfObject> diter = dcdvec.iterator ();
                                         while (diter.hasNext ()) {
                                             PdfSimpleObject d = (PdfSimpleObject) diter.next ();
                                             dcdlst.add (new Integer (d.getIntValue ()));
@@ -2096,13 +2162,13 @@ public class PdfModule
     
     protected void findFonts (RepInfo info) throws IOException 
     {
-        _type0FontsMap = new HashMap ();
-        _type1FontsMap = new HashMap ();
-        _trueTypeFontsMap = new HashMap ();
-        _mmFontsMap = new HashMap ();
-        _type3FontsMap = new HashMap ();
-        _cid0FontsMap = new HashMap ();
-        _cid2FontsMap = new HashMap ();
+        _type0FontsMap = new HashMap<Integer, PdfObject> ();
+        _type1FontsMap = new HashMap<Integer, PdfObject> ();
+        _trueTypeFontsMap = new HashMap<Integer, PdfObject> ();
+        _mmFontsMap = new HashMap<Integer, PdfObject> ();
+        _type3FontsMap = new HashMap<Integer, PdfObject> ();
+        _cid0FontsMap = new HashMap<Integer, PdfObject> ();
+        _cid2FontsMap = new HashMap<Integer, PdfObject> ();
             try {
         _docTreeRoot.startWalk ();
             for (;;) {
@@ -2245,7 +2311,7 @@ public class PdfModule
         return buffer.toString ();
     }
 
-    protected static String toHex (Vector v)
+    protected static String toHex (Vector<Integer> v)
     {
         StringBuffer buffer = new StringBuffer ("0x");
 
@@ -2410,7 +2476,7 @@ public class PdfModule
      *   Get a font map.  The map returned is determined by the selector.
      *   Any other value returns null.
      */
-    public Map getFontMap (int selector) 
+    public Map<Integer, PdfObject> getFontMap (int selector) 
     {
         switch (selector) {
             case F_TYPE0:
@@ -2437,9 +2503,9 @@ public class PdfModule
       * all the fonts and subfonts in the document.  Some of the maps
       * may be null.
       */
-    public List getFontMaps ()
+    public List<Map<Integer, PdfObject>> getFontMaps ()
     {
-        List lst = new ArrayList (7);
+        List<Map<Integer, PdfObject>> lst = new ArrayList<Map<Integer, PdfObject>> (7);
         lst.add (_type0FontsMap);
         lst.add (_type1FontsMap);
         lst.add (_mmFontsMap);
@@ -2463,9 +2529,9 @@ public class PdfModule
      * Add the various font lists as a fonts property. Note: only add
      * the "Fonts" property if there are, in fact, fonts defined.
      */
-    protected void addFontsProperty (List metadataList)
+    protected void addFontsProperty (List<Property> metadataList)
     {
-        List fontTypesList = new LinkedList ();
+        List<Property> fontTypesList = new LinkedList<Property> ();
         Property fontp = null;
         if (_type0FontsMap != null && !_type0FontsMap.isEmpty ()) {
             try {
@@ -2537,9 +2603,9 @@ public class PdfModule
     }
 
     /* Build Pages property, with associated subproperties. */
-    protected void addPagesProperty (List metadataList, RepInfo info) 
+    protected void addPagesProperty (List<Property> metadataList, RepInfo info) 
     {
-        _pagesList = new LinkedList ();
+        _pagesList = new LinkedList<Property> ();
         _pageSeqMap = new HashMap (500);
         try {
             _docTreeRoot.startWalk ();
@@ -2910,7 +2976,7 @@ public class PdfModule
     protected Property buildAnnotProperty (PdfDictionary annot, RepInfo info)
 	throws PdfException
     {
-        List propList = new ArrayList (7);
+        List<Property> propList = new ArrayList<Property> (7);
         PdfObject itemObj;
         try {
             // Subtype is required
@@ -3029,10 +3095,10 @@ public class PdfModule
             // Callout Line (CL) (1.6)
             itemObj = annot.get ("CL");
             if (itemObj instanceof PdfArray) {
-                Vector clData = ((PdfArray) itemObj).getContent();
+                Vector<PdfObject> clData = ((PdfArray) itemObj).getContent();
                 // This should be an array of numbers.
-                Iterator iter = clData.iterator ();
-                List clList = new ArrayList (6);
+                Iterator<PdfObject> iter = clData.iterator ();
+                List<Double> clList = new ArrayList<Double> (6);
                 while (iter.hasNext ()) {
                     PdfSimpleObject clItem = (PdfSimpleObject) iter.next ();
                     clList.add (new Double (clItem.getDoubleValue()));
@@ -3059,7 +3125,7 @@ public class PdfModule
      * a representative property to the property list.
      */
     protected void addDestination (PdfObject itemObj, String propName,
-				 List propList, RepInfo info)
+				 List<Property> propList, RepInfo info)
 	throws PdfException
     {
 	try {
@@ -3132,7 +3198,7 @@ public class PdfModule
     /* Build the Property list for a given font */
     protected List oneFontPropList (PdfDictionary dict, int fontType) 
     {
-        List fontPropList = new LinkedList ();
+        List<Property> fontPropList = new LinkedList<Property> ();
         Property prop;
         if (fontType == F_TYPE1 || fontType == F_TYPE3 || fontType == F_MM1 ||
 	    fontType == F_TT) {
@@ -3316,7 +3382,7 @@ public class PdfModule
     protected Property buildCMapDictProperty (PdfStream encoding)
     {
         PdfDictionary dict = encoding.getDict ();
-        List propList = new ArrayList (4);
+        List<Property> propList = new ArrayList<Property> (4);
         Property prop = new Property ("CMapDictionary",
                         PropertyType.PROPERTY,
                         PropertyArity.LIST,
@@ -3328,7 +3394,7 @@ public class PdfModule
         PdfObject cidSysInfo = dict.get  ("CIDSystemInfo");
         // We can use buildCIDInfoProperty here to build the subproperty
         PdfDictionary cidDict;
-        List cidList = new LinkedList ();
+        List<Property> cidList = new LinkedList<Property> ();
         try {
             if (cidSysInfo instanceof PdfDictionary) {
                 // One CIDInfo dictionary
@@ -3338,7 +3404,7 @@ public class PdfModule
             }
             else if (cidSysInfo instanceof PdfArray) {
                 // Many CIDInfo dictionaries
-                Vector v = ((PdfArray) cidSysInfo).getContent ();
+                Vector<PdfObject> v = ((PdfArray) cidSysInfo).getContent ();
                 for (int i = 0; i < v.size (); i++) {
                     cidDict = (PdfDictionary) v.elementAt (i);
                     Property subsubprop = buildCIDInfoProperty (cidDict);
@@ -3681,7 +3747,7 @@ public class PdfModule
             throws PdfException
     {
         _recursionWarned = false;
-        _visitedOutlineNodes = new HashSet ();
+        _visitedOutlineNodes = new HashSet<Integer> ();
         String malformed = "Malformed outline dictionary";
         List itemList = new LinkedList ();
         Property prop = new Property ("Outlines",
