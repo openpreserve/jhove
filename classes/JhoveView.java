@@ -37,13 +37,13 @@ public class JhoveView
     private static final String NAME = "JhoveView";
 
     /** Application build date, YYYY, MM, DD. */
-    private static final int [] DATE = {2012, 8, 12};
+    private static final int [] DATE = {2012, 9, 5};
 
     /** Usage string is meaningless here. */
     private static final String USAGE = null;
     
     /** Application release number. */
-    private static final String RELEASE = "1.7";
+    private static final String RELEASE = "1.8b1";
 
     /** Default character encoding */
     private static final String DEFAULT_ENCODING = "UTF-8";
@@ -87,31 +87,31 @@ public class JhoveView
     private static final int INCOMPATIBLE_VM = -2;
 
     /** File not writable. */
-    private static final int FILE_NOT_WRITABLE = -11;
+    //private static final int FILE_NOT_WRITABLE = -11;
 
     /** No module specified. */
-    private static final int NO_MODULE = -21;
+    //private static final int NO_MODULE = -21;
 
     /** Module not found. */
-    private static final int MODULE_NOT_FOUND = -22;
+    //private static final int MODULE_NOT_FOUND = -22;
 
     /** Output handler not found. */
-    private static final int HANDLER_NOT_FOUND = -31;
+    //private static final int HANDLER_NOT_FOUND = -31;
 
     /** No object specified. */
-    private static final int NO_OBJECT = -41;
+    //private static final int NO_OBJECT = -41;
 
     /** URL not accessible. */
-    private static final int URL_NOT_ACCESSIBLE = -42;
+    //private static final int URL_NOT_ACCESSIBLE = -42;
 
     /** File not found. */
-    private static final int FILE_NOT_FOUND = -43;
+    //private static final int FILE_NOT_FOUND = -43;
 
     /** File not readable. */
-    private static final int FILE_NOT_READABLE = -44;
+    //private static final int FILE_NOT_READABLE = -44;
 
     /** SAX parser not found. */
-    private static final int PARSER_NOT_FOUND = -51;
+    //private static final int PARSER_NOT_FOUND = -51;
     
 
     /******************************************************************
@@ -203,7 +203,7 @@ public class JhoveView
             // Create the main window to select a file.
             
             JhoveWindow jwin = new JhoveWindow (app, je);
-            jwin.show ();
+            jwin.setVisible (true);
 
         }
         catch (Exception e) {
