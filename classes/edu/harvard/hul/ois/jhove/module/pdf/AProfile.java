@@ -230,12 +230,12 @@ public final class AProfile extends PdfProfile
         // For each type of font (just because that's the easiest way
         // to get the fonts from the PdfModule), check that each font
         // has a ToUnicode entry which is a CMap stream.
-        List lst = _module.getFontMaps ();
-        Iterator iter = lst.listIterator ();
+        List<Map<Integer, PdfObject>> lst = _module.getFontMaps ();
+        Iterator<Map<Integer, PdfObject>> iter = lst.listIterator ();
         try {
             while (iter.hasNext ()) {
-                Map fmap = (Map) iter.next ();
-                Iterator iter1 = fmap.values ().iterator ();
+                Map<Integer, PdfObject> fmap = (Map<Integer, PdfObject>) iter.next ();
+                Iterator<PdfObject> iter1 = fmap.values ().iterator ();
                 while (iter1.hasNext ()) {
                     PdfDictionary font = (PdfDictionary) iter1.next ();
                     if (!fontOK (font)) {
@@ -361,7 +361,8 @@ public final class AProfile extends PdfProfile
                     ordering = ob.getStringValue ();
                 }
                 PdfArray descendants = 
-                    (PdfArray) font.get ("DescendantFonts");
+                    (PdfArray) _module.resolveIndirectObject
+                        (font.get ("DescendantFonts"));
                 // PDF 1.4 and previous allow only a single
                 // descendant font, and this must be a CIDFont.
                 // While Adobe warns that this may change in a
@@ -625,7 +626,8 @@ public final class AProfile extends PdfProfile
                             PdfStream stream = (PdfStream) iter.next ();
                             PdfDictionary dict = stream.getDict ();
                             PdfDictionary rs = 
-                                (PdfDictionary) dict.get ("Resources");
+                                (PdfDictionary) 
+                                    _module.resolveIndirectObject(dict.get ("Resources"));
                             if (rs != null) {
                                 PdfDictionary cs = (PdfDictionary)
                                     _module.resolveIndirectObject
@@ -662,10 +664,11 @@ public final class AProfile extends PdfProfile
                     // Movie, Sound, or FileAttachment.
                     PdfArray annots = ((PageObject) docNode).getAnnotations ();
                     if (annots != null) {
-                        Vector annVec = annots.getContent ();
+                        Vector<PdfObject> annVec = annots.getContent ();
                         for (int i = 0; i < annVec.size (); i++) {
                             PdfDictionary annDict = (PdfDictionary)
-                                annVec.elementAt (i);
+                                _module.resolveIndirectObject
+                                (annVec.elementAt (i));
                             PdfSimpleObject subtypeObj = (PdfSimpleObject) annDict.get ("Subtype");
                             String subtypeVal = subtypeObj.getStringValue ();
                             boolean stOK = false;
@@ -677,7 +680,7 @@ public final class AProfile extends PdfProfile
                                     break;
                                 }
                             }
-                            if (stOK) {
+                            if (!stOK) {
                                 return false;
                             }
                             
@@ -688,18 +691,19 @@ public final class AProfile extends PdfProfile
                                 }
                             }
                             // For non-text annotation types, the
-                            // Contents key is required.
-                            for (j = 0; i < nonTextAnnotTypes.length; j++) {
-                                if (nonTextAnnotTypes[i].equals (subtypeVal)) {
-                                    if (annDict.get ("Contents") == null) {
-                                        return false;
-                                    }
-                                    else {
-                                        // Contents found, this dict OK
-                                        break;
-                                    }
-                                }
-                            }
+                            // Contents key is RECOMMENDED, not required.
+                            // Therefore comment this test out GDM 4-Sep-2012
+//                            for (j = 0; i < nonTextAnnotTypes.length; j++) {
+//                                if (nonTextAnnotTypes[i].equals (subtypeVal)) {
+//                                    if (annDict.get ("Contents") == null) {
+//                                        return false;
+//                                    }
+//                                    else {
+//                                        // Contents found, this dict OK
+//                                        break;
+//                                    }
+//                                }
+//                            }
                             
                             // if the CA key is present, it must have a 
                             // value of 1.0.
