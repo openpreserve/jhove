@@ -64,14 +64,14 @@ public abstract class DocNode
     /**
      *   Get the next PageObject which is under this node.  
      */
-    public abstract PageObject nextPageObject ();
+    public abstract PageObject nextPageObject () throws PdfMalformedException;
 
     /**
      *   Get the next DocNode which is under this node.
      *   All PageTreeNodes and PageObjects are eventually returned
      *   by walking through a structure with nextNode.
      */
-    public abstract DocNode nextDocNode ();
+    public abstract DocNode nextDocNode () throws PdfMalformedException;
     
     /**
      *   Returns the parent of this node.
