@@ -57,9 +57,9 @@ public abstract class ModuleBase
     /**  Copyright notice */
     protected String _rights;
     /**  Module Signature list  */
-    protected List _signature;
+    protected List<Signature> _signature;
     /**  Module specification document list */
-    protected List _specification;
+    protected List<Document> _specification;
     /**  Module vendor */
     protected Agent _vendor;
     /**  Well-formedness criteria */
@@ -142,8 +142,8 @@ public abstract class ModuleBase
         _format = format;
         _coverage = coverage;
         _mimeType = mimeType;
-        _signature = new ArrayList ();
-        _specification = new ArrayList ();
+        _signature = new ArrayList<Signature> ();
+        _specification = new ArrayList<Document> ();
         _wellFormedNote = wellFormedNote;
         _repInfoNote = repInfoNote;
         _validityNote = validityNote;
@@ -369,7 +369,7 @@ public abstract class ModuleBase
      *
      *  @see Document
      */
-    public final List getSpecification ()
+    public final List<Document> getSpecification ()
     {
         return _specification;
     }
