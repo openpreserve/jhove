@@ -17,10 +17,11 @@ import java.util.*;
 public class PageTreeNode extends DocNode 
 {
     /* The descendant DocNodes. */
-    private List _descendants;
-    private ListIterator _descendantsIter;
+    private List<DocNode> _descendants;
+    private ListIterator<DocNode> _descendantsIter;
     private DocNode _currentDescendant;
     private boolean _walkFirst;
+    private Set<Integer> _visitedNodes;
 
     /**
      *  Superclass constructor.
@@ -36,7 +37,7 @@ public class PageTreeNode extends DocNode
     {
         super (module, parent, dict);
         _pageObjectFlag = false;
-        _descendants = new ArrayList (1);  // Empty list in case it doesn't get built
+        _descendants = new ArrayList<DocNode> (1);  // Empty list in case it doesn't get built
     }
 
     /**
@@ -86,13 +87,13 @@ public class PageTreeNode extends DocNode
                         "Page".equals (type.getStringValue())) {
                     PageObject pageObj = new PageObject
                         (_module, this, _dict);
-                    _descendants = new ArrayList (1);
+                    _descendants = new ArrayList<DocNode> (1);
                     _descendants.add (pageObj);
                 }
             }
             else {
-                Vector kidsVec = kids.getContent ();
-                _descendants = new ArrayList (kidsVec.size ());
+                Vector<PdfObject> kidsVec = kids.getContent ();
+                _descendants = new ArrayList<DocNode> (kidsVec.size ());
                 for (int i = 0; i < kidsVec.size (); i++) {
                     PdfIndirectObj kidRef = 
                             (PdfIndirectObj) kidsVec.elementAt (i);
@@ -148,6 +149,7 @@ public class PageTreeNode extends DocNode
         _currentDescendant = null;
         _walkFirst = true;
         _walkFinished = false;
+        _visitedNodes = new HashSet<Integer> ();   // Track self-recursion
     }
     
     /**
@@ -156,7 +158,7 @@ public class PageTreeNode extends DocNode
      *   calling nextPageObject() will return all the PageObjects in the tree
      *   under this node, and finally will return null when there are no more.
      */
-    public PageObject nextPageObject ()
+    public PageObject nextPageObject () throws PdfMalformedException
     {
         if (_walkFinished) {
             return null;
@@ -181,17 +183,22 @@ public class PageTreeNode extends DocNode
                 // has at least one page object below it, right?
                 _currentDescendant = (DocNode) _descendantsIter.next ();
                 _currentDescendant.startWalk ();
-                return _currentDescendant.nextPageObject ();
+                retval = _currentDescendant.nextPageObject ();
             }
             else {
                 // We've gone through all our descendants.
                 _walkFinished = true;
-                return null;
+                retval = null;
             } 
         }
-        else {
-            return retval;
+        if (retval != null) {
+            int objnum = retval.getDict().getObjNumber();
+            if (_visitedNodes.contains((Integer) objnum)) {
+                throw new PdfMalformedException("Improperly constructed page tree");
+            }
+            _visitedNodes.add(objnum);
         }
+        return retval;
     } 
      
     /**
@@ -202,7 +209,7 @@ public class PageTreeNode extends DocNode
      *   under this node. It finally will return null when there 
      *   are no more.
      */
-    public DocNode nextDocNode ()
+    public DocNode nextDocNode () throws PdfMalformedException
     {
         if (_walkFinished) {
             return null;
@@ -234,14 +241,21 @@ public class PageTreeNode extends DocNode
                 // has at least one page object below it, right?
                 _currentDescendant = (DocNode) _descendantsIter.next ();
                 _currentDescendant.startWalk ();
-                return _currentDescendant.nextDocNode ();
+                retval = _currentDescendant.nextDocNode ();
             }
             else {
                 // We've gone through all our descendants.
                 _walkFinished = true;
-                return null;
+                retval = null;
             } 
         }
-        else return retval;
+        if (retval != null) {
+            int objnum = retval.getDict().getObjNumber();
+            if (_visitedNodes.contains((Integer) objnum)) {
+                throw new PdfMalformedException("Improperly constructed page tree");
+            }
+            _visitedNodes.add(objnum);
+        }
+        return retval;
     } 
 }
