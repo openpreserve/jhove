@@ -94,7 +94,7 @@ public class TiffModule
      ******************************************************************/
 
     /** List of profile checkers. */
-    protected List _profile;
+    protected List<TiffProfile> _profile;
     
     /* Exif profile checker for the main IFD. */
     TiffProfileExif _exifMainProfile;
@@ -423,9 +423,9 @@ public class TiffModule
         throws IOException
     {
     if (_defaultParams != null) {
-        Iterator iter = _defaultParams.iterator ();
+        Iterator<String> iter = _defaultParams.iterator ();
         while (iter.hasNext ()) {
-            String param = (String) iter.next ();
+            String param =  iter.next ();
             if (param.toLowerCase ().equals ("byteoffset=true")) {
                 _byteOffsetIsValid = true;
             }
@@ -439,7 +439,7 @@ public class TiffModule
         info.setFormat (_format[0]);
 
         Property [] tiffMetadata = new Property[2];
-        List ifds = null;
+        List<IFD> ifds = null;
         boolean inHeader = true;    // Useful for catching empty files
         try {
             /* TIFF header is "II" (little-endian) or "MM" (big-endian),
@@ -494,20 +494,20 @@ public class TiffModule
                  * the property.  If so, the IFD is invalid.
                  */
 
-                List errors = ifd.getErrors ();
+                List<String> errors = ifd.getErrors ();
                 if (!errors.isEmpty ()) {
                     info.setValid (false);
-                    ListIterator eter = errors.listIterator ();
+                    ListIterator<String> eter = errors.listIterator ();
                     while (eter.hasNext ()) {
-                        info.setMessage (new ErrorMessage ((String) eter.next ()));
+                        info.setMessage (new ErrorMessage (eter.next ()));
                     }
                 }
 
                 /* Check each IFD for profile conformance. */
 
-                ListIterator pter = _profile.listIterator ();
+                ListIterator<TiffProfile> pter = _profile.listIterator ();
                 while (pter.hasNext ()) {
-                    TiffProfile prof = (TiffProfile) pter.next ();
+                    TiffProfile prof = pter.next ();
                     if (!prof.isAlreadyOK ()) {
                         if (prof.satisfiesProfile (ifd)) {
                             info.setProfile (prof.getText ());
@@ -608,13 +608,13 @@ public class TiffModule
      * @param raf Open TIFF file
      * @param info Representation informatino
      */
-    public final List exifParse (RandomAccessFile raf, RepInfo info) 
+    public final List<IFD> exifParse (RandomAccessFile raf, RepInfo info) 
         throws IOException
     {
         _raf = raf;
         initParse ();
 
-        List ifds = null;
+        List<IFD> ifds = null;
         boolean inHeader = true;    // flag to aid reporting empty file error
         try {
             /* TIFF header is "II" (little-endian) or "MM" (big-endian),
@@ -705,7 +705,7 @@ public class TiffModule
      */
     protected void buildProfileList ()
     {
-        _profile = new ArrayList (30);
+        _profile = new ArrayList<TiffProfile> (30);
         _profile.add (new TiffProfileClassB ());
         _profile.add (new TiffProfileClassG ());
         _profile.add (new TiffProfileClassP ());
@@ -768,12 +768,12 @@ public class TiffModule
      * and more information is better, so we keep going with all IFDs even
      * if we find problems.
      */
-    protected void checkValidity (List ifds, RepInfo info) 
+    protected void checkValidity (List<IFD> ifds, RepInfo info) 
     {
-        ListIterator iter = ifds.listIterator ();
+        ListIterator<IFD> iter = ifds.listIterator ();
         while (iter.hasNext ()) {
             try {
-                IFD ifd = (IFD) iter.next ();
+                IFD ifd =  iter.next ();
                 if (ifd instanceof TiffIFD) {
                     checkValidity ((TiffIFD) ifd, info);
                 }
@@ -1091,7 +1091,7 @@ public class TiffModule
      * @param offset Starting byte offset
      * @param info Representation information
      */
-    protected List parseIFDs (long offset, RepInfo info)
+    protected List<IFD> parseIFDs (long offset, RepInfo info)
         throws TiffException 
     {
         return parseIFDs (offset, info, false, IFD.TIFF);
@@ -1132,7 +1132,7 @@ public class TiffModule
         return list;
     }
 
-    protected IFD parseIFDChain (long next, RepInfo info, int type, List list,
+    protected IFD parseIFDChain (long next, RepInfo info, int type, List<IFD> list,
                          boolean suppressErrors)
         throws TiffException
     {
@@ -1178,11 +1178,11 @@ public class TiffModule
             long [] subIFDs = tifd.getSubIFDs ();
             if (subIFDs != null) {
                 for (int i=0; i<subIFDs.length; i++) {
-		    next = subIFDs[i];
-		    while (next != 0) {
-			IFD sub = parseIFDChain (next, info, IFD.TIFF, list, suppressErrors);
-			next = sub.getNext ();
-		    }
+                    next = subIFDs[i];
+                    while (next != 0) {
+                       IFD sub = parseIFDChain (next, info, IFD.TIFF, list, suppressErrors);
+                       next = sub.getNext ();
+                    }
                 }
             }
 
@@ -1217,9 +1217,9 @@ public class TiffModule
     protected void initParse ()
     {
         super.initParse ();
-        ListIterator pter = _profile.listIterator ();
+        ListIterator<TiffProfile> pter = _profile.listIterator ();
         while (pter.hasNext ()) {
-            TiffProfile prof = (TiffProfile) pter.next ();
+            TiffProfile prof =  pter.next ();
             prof.setAlreadyOK (false);
         }
         // Initialize flags for the Exif profile.  A thumbnail is not
@@ -1244,9 +1244,9 @@ public class TiffModule
     protected int selectMimeTypeIndex()
     {
         int trial = -1;
-        ListIterator pter = _profile.listIterator ();
+        ListIterator<TiffProfile> pter = _profile.listIterator ();
         while (pter.hasNext ()) {
-            TiffProfile prof = (TiffProfile) pter.next ();
+            TiffProfile prof =  pter.next ();
             if (prof.isAlreadyOK ()) {
                 // Profile was satisfied
                 int idx = prof.getMimeClass ();
