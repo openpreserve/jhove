@@ -90,7 +90,7 @@ public abstract class IFD
     protected boolean _bigEndian;
 
     /** List of errors. */
-    private List _errors;
+    private List<String> _errors;
 
     /** True if this is the first IFD. */
     private boolean _first;
@@ -139,7 +139,7 @@ public abstract class IFD
         _next    = 0L;
         _version = 4;
 
-        _errors = new LinkedList ();
+        _errors = new LinkedList<String> ();
 
         _format = NumberFormat.getInstance ();
         _format.setGroupingUsed (false);
@@ -151,7 +151,7 @@ public abstract class IFD
      ******************************************************************/
 
     /** Get any errors discovered during parsing. */
-    public List getErrors ()
+    public List<String> getErrors ()
     {
         return _errors;
     }
@@ -359,7 +359,7 @@ public abstract class IFD
     {
         Property prop = null;
         if (!rawOutput) {
-            List list = new LinkedList ();
+            List<String> list = new LinkedList<String> ();
             try {
                 for (int i=0; i<labels.length; i++) {
                     if ((value & (1 << i)) != 0) {
@@ -587,7 +587,7 @@ public abstract class IFD
         _raf.seek (value);
 
         int nstrs = 0;
-        List list = new LinkedList ();
+        List<String> list = new LinkedList<String> ();
         byte[] buf = new byte[(int) count];
         _raf.read (buf);
         StringBuffer strbuf = new StringBuffer ();
@@ -611,9 +611,9 @@ public abstract class IFD
         /* We can't use ArrayList.toArray because that returns an 
            Object[], not a String[] ... sigh. */
         String [] strs = new String[nstrs];
-        ListIterator iter = list.listIterator ();
+        ListIterator<String> iter = list.listIterator ();
         for (int i=0; i<nstrs; i++) {
-            strs[i] = (String) iter.next ();
+            strs[i] =  iter.next ();
         }
         return strs;
     }

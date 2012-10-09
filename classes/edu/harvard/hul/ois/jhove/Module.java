@@ -39,7 +39,7 @@ public interface Module
      * @param   params     A List whose elements are Strings.
      *                     May be empty.
      */
-    public void setDefaultParams (List params);
+    public void setDefaultParams (List<String> params);
 
 
     /**
@@ -132,7 +132,7 @@ public interface Module
     /**
      *   Return the List of Signatures recognized by this Module
      */
-    public List getSignature ();
+    public List<Signature> getSignature ();
 
     /**
      *  Returns a list of <code>Document</code> objects (one for each 
@@ -142,7 +142,7 @@ public interface Module
      *
      *  @see Document
      */
-    public List getSpecification ();
+    public List<Document> getSpecification ();
 
     /**
      *   Return the string describing well-formedness criteria
@@ -175,12 +175,12 @@ public interface Module
     /**
      *  Returns the full list of features. 
      */
-    public List getFeatures ();
+    public List<String> getFeatures ();
     
     /**
      *  Returns the list of default parameters. 
      */
-    public List getDefaultParams ();
+    public List<String> getDefaultParams ();
 
 
 

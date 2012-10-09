@@ -39,7 +39,7 @@ public abstract class ModuleBase
     /** Initialization value. */
     protected String _init;
     /** List of default parameters. */
-    protected List _defaultParams;
+    protected List<String> _defaultParams;
     /** JHOVE engine. */
     protected JhoveBase _je;
     /**  MIME types supported by this Module */
@@ -85,7 +85,7 @@ public abstract class ModuleBase
     /**  The dominant "endianness" of the Module. */
     protected boolean _bigEndian;
     /**  The list of supported features. */
-    protected List _features;
+    protected List<String> _features;
     /** Logger for a module class. */
     protected Logger _logger;
 
@@ -170,7 +170,7 @@ public abstract class ModuleBase
      */
     public void initFeatures ()
     {
-        _features = new ArrayList (2);
+        _features = new ArrayList<String> (2);
         _features.add ("edu.harvard.hul.ois.jhove.canValidate");
         _features.add ("edu.harvard.hul.ois.jhove.canCharacterize");
     }
@@ -192,7 +192,7 @@ public abstract class ModuleBase
      * @param   params     A List whose elements are Strings.
      *                     May be empty.
      */
-    public void setDefaultParams (List params)
+    public void setDefaultParams (List<String> params)
     {
         _defaultParams = params;
     }
@@ -205,9 +205,9 @@ public abstract class ModuleBase
         throws Exception
     {
         resetParams ();
-        Iterator iter = _defaultParams.iterator ();
+        Iterator<String> iter = _defaultParams.iterator ();
         while (iter.hasNext ()) {
-            String parm = (String) iter.next ();
+            String parm =  iter.next ();
             param (parm);
         }
     }
@@ -356,7 +356,7 @@ public abstract class ModuleBase
     /**
      *   Return the List of Signatures recognized by this Module
      */
-    public final List getSignature ()
+    public final List<Signature> getSignature ()
     {
         return _signature;
     }
@@ -427,9 +427,9 @@ public abstract class ModuleBase
             // dubious, but check it
             return false;
         }
-        Iterator iter = _features.iterator ();
+        Iterator<String> iter = _features.iterator ();
         while (iter.hasNext ()) {
-            String f = (String) iter.next ();
+            String f =  iter.next ();
             if (f.equals (feature)) {
                 return true;
             }
@@ -440,7 +440,7 @@ public abstract class ModuleBase
     /**
      *  Returns the full list of features.
      */
-    public List getFeatures ()
+    public List<String> getFeatures ()
     {
         return _features;
     }
@@ -448,7 +448,7 @@ public abstract class ModuleBase
     /**
      *  Returns the list of default parameters. 
      */
-    public List getDefaultParams ()
+    public List<String> getDefaultParams ()
     {
         return _defaultParams;
     }
@@ -630,7 +630,7 @@ public abstract class ModuleBase
             byte[] sigBuf = new byte[1024];
             stream.read(sigBuf);
             stream.close();
-            ListIterator iter = _signature.listIterator();
+            ListIterator<Signature> iter = _signature.listIterator();
             while (iter.hasNext ()) {
                 Signature sig = ((Signature) iter.next ());
                 if (sig instanceof InternalSignature) {
@@ -693,7 +693,7 @@ public abstract class ModuleBase
         int sigsChecked = 0;
         /* Get each of the internal sigs defined for the module 
          * and test it. */
-        ListIterator iter = _signature.listIterator();
+        ListIterator<Signature> iter = _signature.listIterator();
         try {
             while (iter.hasNext ()) {
                 Signature sig = ((Signature) iter.next ());
