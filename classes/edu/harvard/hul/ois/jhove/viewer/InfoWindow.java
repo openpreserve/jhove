@@ -259,6 +259,6 @@ public abstract class InfoWindow extends JFrame
      */
     protected void closeFromMenu ()
     {
-        hide ();
+        setVisible (false);
     }
 }
