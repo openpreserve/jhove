@@ -22,6 +22,9 @@ public class DefaultConfigurationBuilder {
     
     private File configFile;
     
+    /************* TODO REMOVE THIS AFTER DEBUGGING **************/
+    private final static boolean TEMP_DEBUG = true;
+    
     /** Constructor. A location for the file may be specified or
      *  left null, */
     public DefaultConfigurationBuilder (File location) {
@@ -37,6 +40,12 @@ public class DefaultConfigurationBuilder {
     
     
     public void writeDefaultConfigFile () throws IOException {
+        if (TEMP_DEBUG) {
+            String configFileName = "null";
+            if (configFile != null) 
+                configFileName = configFile.getAbsolutePath();
+            System.out.println ("writeDefaultConfigFile: path is " + configFileName);
+        }
         ConfigWriter cw = new ConfigWriter (configFile, null);
         List<ConfigWriter.ModuleInfo> modules = getModules();
         // TextHandler, XmlHandler, and AuditHandler are loaded by
@@ -44,10 +53,29 @@ public class DefaultConfigurationBuilder {
         List<String> handlers = new ArrayList<String> ();
         File homeDir = new File (JHOVE_DIR);
         File tempDir = new File (TEMP_DIR);
-        cw.writeFile(modules, handlers, homeDir, tempDir, 
+        try {
+            cw.writeFile(modules, handlers, homeDir, tempDir, 
                 DEFAULT_ENCODING, DEFAULT_BUFFER_SIZE);
+        }
+        catch (IOException e) {
+            if (TEMP_DEBUG)
+                e.printStackTrace();
+            throw e;
+        }
     }
-    
+
+//    public void writeDefaultConfigFile () throws IOException {
+//        ConfigWriter cw = new ConfigWriter (configFile, null);
+//        List<ConfigWriter.ModuleInfo> modules = getModules();
+//        // TextHandler, XmlHandler, and AuditHandler are loaded by
+//        // default, so there are no handlers to put in the config file.
+//        List<String> handlers = new ArrayList<String> ();
+//        File homeDir = new File (JHOVE_DIR);
+//        File tempDir = new File (TEMP_DIR);
+//        cw.writeFile(modules, handlers, homeDir, tempDir, 
+//                DEFAULT_ENCODING, DEFAULT_BUFFER_SIZE);
+//    }
+
     public File getConfigFile () {
         return configFile;
     }
