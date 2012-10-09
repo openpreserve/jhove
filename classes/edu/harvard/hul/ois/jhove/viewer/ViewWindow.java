@@ -1,7 +1,8 @@
 /**********************************************************************
- * JhoveView - JSTOR/Harvard Object Validation Environment
- * Copyright 2003 by JSTOR and the President and Fellows of Harvard College
+ * Jhove - JSTOR/Harvard Object Validation Environment
+ * Copyright 2004-2012 by JSTOR and the President and Fellows of Harvard College
  **********************************************************************/
+
 
 package edu.harvard.hul.ois.jhove.viewer;
 
@@ -31,7 +32,7 @@ import edu.harvard.hul.ois.jhove.*;
  */
 public class ViewWindow extends InfoWindow {
 
-    private java.util.List _info;
+    private java.util.List<RepInfo> _info;
     private JMenuItem _closeAllItem;
     private ActionListener _closeAllListener;
     private DefaultMutableTreeNode _rootNode;
@@ -57,12 +58,11 @@ public class ViewWindow extends InfoWindow {
                 }
             });
 
-        _info = new LinkedList ();        
+        _info = new LinkedList<RepInfo> ();        
         // The root element should no longer be a 
         // RepTreeRoot, but some other flavor of 
         // DefaultMutableTreeNode.  It will have RepTreeRoots
         // (now somewhat misleadingly named) added to it.
-	//RepTreeRoot root = new RepTreeRoot (info, app);
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Documents");
         _rootNode = root;
         TreeModel treeModel = new DefaultTreeModel (root);
@@ -70,15 +70,15 @@ public class ViewWindow extends InfoWindow {
         tree.setModel (treeModel);
         tree.setShowsRootHandles (true);
         //tree.setCellRenderer (new ViewCellRenderer ());
-	TreeCellRenderer rend = tree.getCellRenderer ();
-	if (rend instanceof DefaultTreeCellRenderer) {
-	    // it should be
-	    DefaultTreeCellRenderer trend =
-		(DefaultTreeCellRenderer) rend;
-	    trend.setOpenIcon (null);
-	    trend.setClosedIcon (null);
-	    trend.setLeafIcon (null);
-	}
+        TreeCellRenderer rend = tree.getCellRenderer ();
+        if (rend instanceof DefaultTreeCellRenderer) {
+            // it should be
+            DefaultTreeCellRenderer trend =
+                (DefaultTreeCellRenderer) rend;
+            trend.setOpenIcon (null);
+            trend.setClosedIcon (null);
+            trend.setLeafIcon (null);
+        }
         JScrollPane scrollPane = new JScrollPane (tree);
         getContentPane ().add (scrollPane, "Center");
         
@@ -100,7 +100,7 @@ public class ViewWindow extends InfoWindow {
                     closeFromMenu ();
                 }
             };
-            _closeAllItem.addActionListener (_closeAllListener);
+             _closeAllItem.addActionListener (_closeAllListener);
 
         }
     }
@@ -141,7 +141,7 @@ public class ViewWindow extends InfoWindow {
             handler.reset ();
             handler.setWriter (wtr);
             handler.showHeader ();
-            Iterator iter =  _info.iterator ();
+            Iterator<RepInfo> iter =  _info.iterator ();
             while (iter.hasNext ()) {
                 RepInfo info = (RepInfo) iter.next ();
                 handler.show (info);
