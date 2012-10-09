@@ -6,6 +6,21 @@ see the file LICENSE for details)
 
 Versions 1.7 and beyond of JHOVE are no longer under the control of Harvard.
 
+RELEASE NOTES FOR JHOVE 1.8
+[Not released yet]
+
+GENERAL
+
+1. If JHOVE doesn't find a configuration file, it creates a default one.
+
+PDF MODULE
+
+1. Several errors in checking for PDF-A compliance were corrected. Aside from
+   fixing some outright bugs, the Contents key for non-text Annotations is
+   no longer checked, as its presence is only recommended and not required.
+
+2. Improved code by HŒkan Svenson is now used for finding the trailer. 
+
 RELEASE NOTES FOR JHOVE 1.7
 2012-08-12
 
