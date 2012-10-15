@@ -83,6 +83,10 @@ public class BroadcastExtChunk extends Chunk {
             plist.add (new Property 
                     ("Originator", PropertyType.STRING, originator));
         }
+        if (originatorRef.length () > 0) {
+            plist.add (new Property 
+                    ("Originator Reference", PropertyType.STRING, originatorRef));
+        }
         if (originationDate.length () > 0) {
             plist.add (new Property
                     ("OriginationDate", PropertyType.STRING, originationDate));
