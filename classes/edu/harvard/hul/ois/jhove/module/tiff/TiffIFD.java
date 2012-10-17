@@ -1341,7 +1341,7 @@ public class TiffIFD
     public Property getProperty (boolean rawOutput)
                 throws TiffException
     {
-        List entries = new LinkedList ();
+        List<Property> entries = new LinkedList<Property> ();
         // This function has gotten obscenely large.  Split it up.
         addNisoProperties (entries, rawOutput);
         addMiscProperties (entries, rawOutput);
@@ -1354,14 +1354,14 @@ public class TiffIFD
     }
 
 
-    private void addNisoProperties (List entries, boolean rawOutput)
+    private void addNisoProperties (List<Property> entries, boolean rawOutput)
     {
         entries.add (new Property ("NisoImageMetadata",
                                    PropertyType.NISOIMAGEMETADATA, _niso));
     }
 
         /* Add non-NISO properties. */
-    private void addMiscProperties (List entries, boolean rawOutput)
+    private void addMiscProperties (List<Property> entries, boolean rawOutput)
     {
         if (_imageDescription != null) {
             entries.add (new Property ("ImageDescription", PropertyType.STRING,
@@ -1577,11 +1577,11 @@ public class TiffIFD
         }
     }
     
-    private void addTiffITProperties (List entries, boolean rawOutput)
+    private void addTiffITProperties (List<Property> entries, boolean rawOutput)
     {
         /* Add TIFF/IT properties. */
 
-        List itList = new LinkedList ();
+        List<Property> itList = new LinkedList<Property> ();
         if (_site != null) {
             itList.add (new Property ("Site", PropertyType.STRING, _site));
         }
@@ -1644,9 +1644,9 @@ public class TiffIFD
     
 
         /* Add TIFF/EP properties. */
-    private void addTiffEPProperties (List entries, boolean rawOutput)
+    private void addTiffEPProperties (List<Property> entries, boolean rawOutput)
     {
-        List epList = new LinkedList ();
+        List<Property> epList = new LinkedList<Property> ();
         if (_cfaRepeatPatternDim != null) {
             epList.add (new Property ("CFARepeatPatternDim",
                                       PropertyType.INTEGER,
@@ -1782,12 +1782,12 @@ public class TiffIFD
     }
     
     
-    private void addGeoTiffProperties (List entries, boolean rawOutput)
+    private void addGeoTiffProperties (List<Property> entries, boolean rawOutput)
             throws TiffException
     {
         /* Add GeoTIFF properties. */
 
-        List dirList = new LinkedList ();
+        List<Property> dirList = new LinkedList<Property> ();
         if (_geoKeyDirectoryTag != null) {
             dirList.add (new Property ("Version", PropertyType.INTEGER,
                                        new Integer (_geoKeyDirectoryTag[0])));
@@ -2056,7 +2056,7 @@ public class TiffIFD
                 }
             }
         }
-        List geoList = new LinkedList ();
+        List<Property> geoList = new LinkedList<Property> ();
         if (dirList.size () > 0) {
             geoList.add (new Property ("GeoKeyDirectory",
                                        PropertyType.PROPERTY,
@@ -2088,7 +2088,7 @@ public class TiffIFD
     }
     
     /* Add Tiff/FX properties */
-    private void addTiffFXProperties (List entries, boolean rawOutput)
+    private void addTiffFXProperties (List<Property> entries, boolean rawOutput)
     {
         if (_stripRowCounts != null)  {
             entries.add (new Property ("StripRowCounts",
@@ -2118,10 +2118,10 @@ public class TiffIFD
     }
 
     /* Adds DNG properties. */
-    private void addDNGProperties (List entries, boolean rawOutput)
+    private void addDNGProperties (List<Property> entries, boolean rawOutput)
     {
         setDNGDefaults ();
-        List dngList = new LinkedList ();
+        List<Property> dngList = new LinkedList<Property> ();
         if (_dngVersion != null) {
             dngList.add (new Property ("DNGVersion",
                     PropertyType.INTEGER,
@@ -3569,7 +3569,7 @@ public class TiffIFD
                                                            value));
             }
             else if (tag == XMP) {
-                checkType (tag, type, BYTE);
+                checkType (tag, type, UNDEFINED, BYTE);
                 _xmpProp = readXMP (count, value);
             }
             else if (tag == DNGVERSION) {
