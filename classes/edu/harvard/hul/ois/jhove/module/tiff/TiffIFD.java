@@ -2692,6 +2692,10 @@ public class TiffIFD
                     // Set default t6Options only if compression is 4
                     _t6Options = 0;
                 }
+                if (scheme == 6) {
+                    _info.setMessage(new InfoMessage
+                          ("TIFF compression scheme 6 is deprecated"));
+                }
 
             }
             else if (tag == CONSECUTIVEBADFAXLINES) {
