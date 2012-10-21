@@ -83,7 +83,7 @@ public class TextMDMetadata {
     /**
      * Map from ISO 639/2 T to ISO 639/2 B
      */
-    protected static Map fromISO_639_2_T2B;
+    protected static Map<String, String> fromISO_639_2_T2B;
     
 	public static final String CHARSET_ASCII = "US-ASCII";
 	public static final String CHARSET_UTF8 = "UTF-8";
@@ -98,7 +98,7 @@ public class TextMDMetadata {
         setOfUnknownJavaCharset = new HashSet(Arrays.asList(UNKNOWN_JAVA_CHARSET));
         
         // Map to transform from the terminology code to the bibliographic one 
-        fromISO_639_2_T2B = new HashMap();
+        fromISO_639_2_T2B = new HashMap<String, String>();
         fromISO_639_2_T2B.put("sqi", "alb");
         fromISO_639_2_T2B.put("hye", "arm");
         fromISO_639_2_T2B.put("eus", "baq");
@@ -132,7 +132,8 @@ public class TextMDMetadata {
 
 	/**
  	byte_order
-	    Usage: Byte order, primarily useful for cases where it’s not clear just by specifying an IANA character set. Uses enumerated values of ‘big,’ ‘little,’ and ‘middle' endian.
+	    Usage: Byte order, primarily useful for cases where it's not clear just by specifying an IANA character set. 
+	    Uses enumerated values of big, little, and middle' endian.
 	    Attributes: none.
 	    Contains: none.
 	    Contained by: character_info.
