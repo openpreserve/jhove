@@ -99,13 +99,13 @@ public class JhoveBase
     /** Ordered list of output handlers. */
     protected List<OutputHandler> _handlerList;
     /** Map of output handlers (for fast access by name). */
-    protected Map _handlerMap;
+    protected Map<String, OutputHandler> _handlerMap;
     /** JHOVE home directory. */
     protected String _jhoveHome;
     /** Ordered list of modules. */
     protected List<Module> _moduleList;
     /** Map of modules (for fast access by name). */
-    protected Map _moduleMap;
+    protected Map<String, Module> _moduleMap;
     protected String _outputFile;
     /** SAX parser class. */
     protected String _saxClass;
@@ -139,7 +139,7 @@ public class JhoveBase
 
     /**
      * Instantiate a <tt>JhoveBase</tt> object.
-     * @throws JhoveException If invoked with JVM lower than 1.4
+     * @throws JhoveException If invoked with JVM lower than 1.5
      */
     public JhoveBase ()
 	throws JhoveException
@@ -148,8 +148,8 @@ public class JhoveBase
         _logger.setLevel (Level.SEVERE);
         /* Make sure we have a satisfactory version of Java. */
         String version = System.getProperty ("java.vm.version");
-        if (version.compareTo ("1.4.0") < 0) {
-            String bad = "Java 1.4 or higher is required";
+        if (version.compareTo ("1.5.0") < 0) {
+            String bad = "Java 1.5 or higher is required";
             _logger.severe (bad);
 	    throw new JhoveException (bad);
         }
@@ -163,11 +163,11 @@ public class JhoveBase
         calendar.set (DATE[0], DATE[1]-1, DATE[2]);
         _date = calendar.getTime ();
 
-        _moduleList  = new ArrayList (20);
-        _moduleMap   = new TreeMap ();
+        _moduleList  = new ArrayList<Module> (20);
+        _moduleMap   = new TreeMap<String, Module> ();
 
-        _handlerList = new ArrayList ();
-        _handlerMap  = new TreeMap ();
+        _handlerList = new ArrayList<OutputHandler> ();
+        _handlerMap  = new TreeMap<String, OutputHandler> ();
 
 	_abort       = false;
 	_bufferSize  = -1;
@@ -329,12 +329,12 @@ public class JhoveBase
         }
                 
         /* Retrieve the ordered lists of modules and output handlers */
-        List list = configHandler.getModule ();
-        List params = configHandler.getModuleParams ();
+        List<String[]> list = configHandler.getModule ();
+        List<List<String>> params = configHandler.getModuleParams ();
         int n = list.size ();
         for (int i=0; i<n; i++) {
             String [] tuple = (String []) list.get (i);
-            List param = (List) params.get (i);
+            List<String> param = params.get (i);
             try {
                Class cl = Class.forName (tuple[0]);
                Module module = (Module) cl.newInstance ();
@@ -524,7 +524,7 @@ public class JhoveBase
             _conn = conn;
             if (conn instanceof HttpsURLConnection) {
                 try {
-                        KeyManager[] km = null;
+                        //KeyManager[] km = null;
                         TrustManager[] tm = {new RelaxedX509TrustManager()};
                         SSLContext sslContext = SSLContext.getInstance("SSL");
                         sslContext.init(null, tm, new java.security.SecureRandom());
@@ -619,7 +619,7 @@ public class JhoveBase
             	    /* Invoke all modules until one returns well-formed.
                      * If a module doesn't know how to validate, we don't
                      * want to throw arbitrary files at it, so we'll skip it. */
-            	    Iterator iter = _moduleList.iterator();
+            	    Iterator<Module> iter = _moduleList.iterator();
             	    while (iter.hasNext ()) {
             		Module  mod  = (Module)  iter.next ();
             		RepInfo infc = (RepInfo) info.clone ();
@@ -935,7 +935,7 @@ public class JhoveBase
      */
     public  String getEncoding ()
     {
-	return _encoding;
+        return _encoding;
     }
 
     /**
@@ -943,7 +943,7 @@ public class JhoveBase
      */
     public  Map getExtension ()
     {
-	return _extensions;
+        return _extensions;
     }
 
     /**
@@ -961,7 +961,7 @@ public class JhoveBase
     {
 	OutputHandler handler = null;
 	if (name != null) {
-	    handler = (OutputHandler) _handlerMap.get (name.toLowerCase ());
+	    handler = _handlerMap.get (name.toLowerCase ());
 	}
 	return handler;
     }
@@ -970,7 +970,7 @@ public class JhoveBase
     /** Returns map of handler names to handlers. */
     public  Map getHandlerMap ()
     {
-	return _handlerMap;
+        return _handlerMap;
     }
     
     /** Returns the list of handlers. */
@@ -984,7 +984,7 @@ public class JhoveBase
      */
     public String getJhoveHome ()
     {
-	return _jhoveHome;
+        return _jhoveHome;
     }
 
     /**
@@ -992,17 +992,17 @@ public class JhoveBase
      */
     public  Module getModule (String name)
     {
-	Module module = null;
-	if (name != null) {
-	    module = (Module) _moduleMap.get (name.toLowerCase ());
-	}
-	return module;
+        Module module = null;
+        if (name != null) {
+            module = (Module) _moduleMap.get (name.toLowerCase ());
+        }
+        return module;
     }
 
     /** Returns the Map of module names to modules. */
     public  Map getModuleMap ()
     {
-	return _moduleMap;
+        return _moduleMap;
     }
     
     /** Returns the List of modules. */
@@ -1024,7 +1024,7 @@ public class JhoveBase
      */
     public  String getOuputFile ()
     {
-	return _outputFile;
+        return _outputFile;
     }
 
     /**
@@ -1048,7 +1048,7 @@ public class JhoveBase
      */
     public String getSaxClass ()
     {
-	return _saxClass;
+        return _saxClass;
     }
 
     /**
@@ -1081,7 +1081,7 @@ public class JhoveBase
     /** Returns <code>true</code> if checksumming is requested. */
     public  boolean getChecksumFlag ()
     {
-	return _checksum;
+        return _checksum;
     }
     
     /** Returns <code>true</code> if raw output is requested.
@@ -1091,7 +1091,7 @@ public class JhoveBase
      */
     public  boolean getShowRawFlag ()
     {
-	return _showRaw;
+        return _showRaw;
     }
     
     /** Returns the "check signature only" flag. */
@@ -1212,19 +1212,19 @@ public class JhoveBase
      */
     public static String getConfigFileFromProperties ()
     {
-	String configFile = null;
-	configFile = getFromProperties (CONFIG_PROPERTY);
-	if (configFile == null) {
-	    try {
-		String fs = System.getProperty ("file.separator");
-		configFile = System.getProperty ("user.home") + fs +
-		    JHOVE_DIR + fs + CONFIG_DIR + fs + "jhove.conf";
-	    }
-	    catch (Exception e) {
-	    }
-	}
+        String configFile = null;
+        configFile = getFromProperties (CONFIG_PROPERTY);
+        if (configFile == null) {
+            try {
+                String fs = System.getProperty ("file.separator");
+                configFile = System.getProperty ("user.home") + fs +
+                   JHOVE_DIR + fs + CONFIG_DIR + fs + "jhove.conf";
+            }
+            catch (Exception e) {
+            }
+        }
 
-	return configFile;
+        return configFile;
     }
 
     /** Returns the value of the property 
@@ -1234,31 +1234,31 @@ public class JhoveBase
         has been set up. */
     public static String getSaxClassFromProperties ()
     {
-	String saxClass = getFromProperties (SAX_PROPERTY);
+        String saxClass = getFromProperties (SAX_PROPERTY);
 
-	return saxClass;
+        return saxClass;
     }
 
     /** Returns a named value from the properties file. */
     public static String getFromProperties (String name)
     {
-	String value = null;
+        String value = null;
 
-	try {
-	    String fs = System.getProperty ("file.separator");
-	    Properties props = new Properties ();
-	    String propsFile = System.getProperty ("user.home") + fs +
-		JHOVE_DIR + fs + "jhove.properties";
-	    FileInputStream stream = new FileInputStream (propsFile);
-	    props.load (stream);
-	    stream.close ();
+        try {
+            String fs = System.getProperty ("file.separator");
+            Properties props = new Properties ();
+            String propsFile = System.getProperty ("user.home") + fs +
+                    JHOVE_DIR + fs + "jhove.properties";
+            FileInputStream stream = new FileInputStream (propsFile);
+            props.load (stream);
+            stream.close ();
 
-	    value = props.getProperty (name);
-	}
-	catch (Exception e) {
-	}
+            value = props.getProperty (name);
+        }
+        catch (Exception e) {
+        }
 
-	return value;
+        return value;
     }
 
     /**
@@ -1269,29 +1269,29 @@ public class JhoveBase
     protected static PrintWriter makeWriter (String outputFile, String encoding)
 	throws JhoveException
     {
-	PrintWriter output = null;
-	OutputStreamWriter osw = null;
-	if (outputFile != null) {
-	    try {
-            FileOutputStream stream = new FileOutputStream (outputFile);
-            osw = new OutputStreamWriter (stream, encoding);
-            output = new PrintWriter (osw);
-	    }
-	    catch (UnsupportedEncodingException u) {
-            throw new JhoveException ("unsupported character encoding: " +
+        PrintWriter output = null;
+        OutputStreamWriter osw = null;
+        if (outputFile != null) {
+            try {
+                FileOutputStream stream = new FileOutputStream (outputFile);
+                osw = new OutputStreamWriter (stream, encoding);
+                output = new PrintWriter (osw);
+            }
+            catch (UnsupportedEncodingException u) {
+                throw new JhoveException ("unsupported character encoding: " +
 					  encoding);
-	    }
-	    catch (FileNotFoundException e) {
-            throw new JhoveException ("cannot open output file: " +
-                outputFile);
-	    }
-	}
-	if (output == null) {
-	    try {
-            osw = new OutputStreamWriter (System.out, encoding);
-	    }
-	    catch (UnsupportedEncodingException u) {
-            throw new JhoveException ("unsupported character encoding: " +
+            }
+            catch (FileNotFoundException e) {
+                throw new JhoveException ("cannot open output file: " +
+                        outputFile);
+            }
+        }
+        if (output == null) {
+            try {
+                osw = new OutputStreamWriter (System.out, encoding);
+            }
+            catch (UnsupportedEncodingException u) {
+                throw new JhoveException ("unsupported character encoding: " +
 					  encoding);
             }
             output = new PrintWriter (osw);
