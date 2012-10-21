@@ -26,18 +26,18 @@ import org.xml.sax.Attributes;
 public class XmlModuleHandler extends DefaultHandler {
 
     /* List of entities String[2], { public ID, system ID} */
-    private List _entities;
+    private List<String[]> _entities;
     
     /* Map of namespaces, prefix (String) to URI (String) */
-    private Map _namespaces;
+    private Map<String, String> _namespaces;
     
     /* List of processing instructions.  Each element
      * is an array of two strings, giving the target
      * and data respectively. */
-    private List _processingInsts;
+    private List<String[]> _processingInsts;
     
     /* List of generated Messages. */
-    private List _messages;
+    private List<Message> _messages;
 
     /* Validity flag. */
     private boolean _valid;
@@ -50,23 +50,23 @@ public class XmlModuleHandler extends DefaultHandler {
     
     /* List of schema URI's.  Each element is a String[2],
      * consisting of the namespace URI and the schema location. */
-    private List _schemas;
+    private List<String[]> _schemas;
     
     /* List of unparsed entities. Each is an array String[4];
      * name, public ID, system ID and notation name
      * respectively. */
-    private List _unparsedEntities;
+    private List<String[]> _unparsedEntities;
     
     /* Error counter. */
     private int _nErrors;
     
     /* Notations list. Each is an array String[3]: 
      * name, public ID, and system ID. */
-    private List _notations;
+    private List<String[]> _notations;
     
     /* List of all the attributes.  This is used to
      * check on the use of unparsed entities. */
-    private Set _attributeVals;
+    private Set<String> _attributeVals;
     
     /* Limit on number of errors to report. */
     private static final int MAXERRORS = 2000;
@@ -91,18 +91,18 @@ public class XmlModuleHandler extends DefaultHandler {
     {
         _xhtmlFlag = false;
         _htmlMetadata = null;
-        _entities = new LinkedList ();
-        _namespaces = new HashMap ();
-        _processingInsts = new LinkedList ();
-        _messages = new LinkedList ();
-        _attributeVals = new HashSet ();
+        _entities = new LinkedList<String[]> ();
+        _namespaces = new HashMap<String,String> ();
+        _processingInsts = new LinkedList<String[]> ();
+        _messages = new LinkedList<Message> ();
+        _attributeVals = new HashSet<String> ();
         _dtdURI = null;
         _root = null;
         _valid = true;
         _nErrors = 0;
-        _schemas = new LinkedList ();
-        _unparsedEntities = new LinkedList ();
-        _notations = new LinkedList ();
+        _schemas = new LinkedList<String[]> ();
+        _unparsedEntities = new LinkedList<String[]> ();
+        _notations = new LinkedList<String[]> ();
         _sigFlag = false;
     }
     
@@ -393,7 +393,7 @@ public class XmlModuleHandler extends DefaultHandler {
     /**
      *  Returns the set of attribute values.
      */
-    public Set getAttributeValues ()
+    public Set<String> getAttributeValues ()
     {
         return _attributeVals;
     }
@@ -403,7 +403,7 @@ public class XmlModuleHandler extends DefaultHandler {
      *  Returns the list of schemas.  The elements of the list
      *  are Strings, giving the URI's for the schemas.
      */
-    public List getSchemas ()
+    public List<String[]> getSchemas ()
     {
         return _schemas;
     }
@@ -413,7 +413,7 @@ public class XmlModuleHandler extends DefaultHandler {
      *  list are arrays of four Strings, giving the name, public
      *  ID, system ID and notation name respectively.
      */
-    public List getUnparsedEntities ()
+    public List<String[]> getUnparsedEntities ()
     {
         return _unparsedEntities;
     }
@@ -423,7 +423,7 @@ public class XmlModuleHandler extends DefaultHandler {
      *  Returns the map of prefixes to namespaces.  The keys
      *  and values are Strings.
      */
-    public Map getNamespaces ()
+    public Map<String,String> getNamespaces ()
     {
         return _namespaces;
     }
@@ -443,7 +443,7 @@ public class XmlModuleHandler extends DefaultHandler {
      * is an array of two strings, giving the target
      * and data respectively.
      */
-    public List getProcessingInstructions ()
+    public List<String []> getProcessingInstructions ()
     {
         return _processingInsts;
     }
@@ -453,7 +453,7 @@ public class XmlModuleHandler extends DefaultHandler {
      *  Returns the list of notations. Each is an array String[3]: 
      * name, public ID, and system ID.
      */ 
-    public List getNotations ()
+    public List<String[]> getNotations ()
     {
         return _notations;
     }
@@ -467,7 +467,7 @@ public class XmlModuleHandler extends DefaultHandler {
 
      
     /** Returns the List of messages generated during the parse. */
-    public List getMessages ()
+    public List<Message> getMessages ()
     {
         return _messages;
     }

@@ -33,7 +33,7 @@ public class XmlDeclStream extends FilterInputStream {
     private String _standalone;
     
     /* List of Integers giving character references */
-    private List _charRefs;
+    private List<Integer> _charRefs;
 
     /* To try to determine line ending */
     protected boolean _lineEndCR;
@@ -45,7 +45,7 @@ public class XmlDeclStream extends FilterInputStream {
         super (strm);
         declBuf = null;
         seenChars = false;
-        _charRefs = new LinkedList ();
+        _charRefs = new LinkedList<Integer> ();
         
         // No line end types have been discovered.
         _lineEndCR = false;
@@ -105,7 +105,7 @@ public class XmlDeclStream extends FilterInputStream {
      *  duplicates is done; this is just all the
      *  character references in the order they occurred. 
      */
-    public List getCharacterReferences ()
+    public List<Integer> getCharacterReferences ()
     {
         return _charRefs;
     }  

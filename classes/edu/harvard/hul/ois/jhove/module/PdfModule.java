@@ -2038,7 +2038,7 @@ public class PdfModule
                                             colorName = ((PdfSimpleObject) colorSpc).getStringValue ();
                                         }
                                         else if (colorSpc instanceof PdfArray) {
-                                            Vector vec = ((PdfArray) colorSpc).getContent ();
+                                            Vector<PdfObject> vec = ((PdfArray) colorSpc).getContent ();
                                             // Use the first element, which is the color space family
                                             PdfSimpleObject fam = (PdfSimpleObject) vec.elementAt (0);
                                             colorName = fam.getStringValue ();
@@ -2186,7 +2186,7 @@ public class PdfModule
                     // In order to make sure we have a collection of
                     // unique fonts, we store them in a map keyed by
                     // object number.
-                    Iterator fontIter = fonts.iterator ();
+                    Iterator<PdfObject> fontIter = fonts.iterator ();
                     while (fontIter.hasNext ()) {
                         PdfObject fontRef = (PdfObject) fontIter.next ();
                         PdfDictionary font = (PdfDictionary)
@@ -2245,8 +2245,8 @@ public class PdfModule
                 PdfObject desc0 = font.get ("DescendantFonts");
                 PdfArray descendants = 
                     (PdfArray) resolveIndirectObject (desc0);
-                Vector subfonts = descendants.getContent ();
-                Iterator subfontIter = subfonts.iterator ();
+                Vector<PdfObject> subfonts = descendants.getContent ();
+                Iterator<PdfObject> subfontIter = subfonts.iterator ();
                 while (subfontIter.hasNext ()) {
                     PdfObject subfont = (PdfObject) subfontIter.next ();
                     subfont = resolveIndirectObject (subfont);
@@ -2606,7 +2606,7 @@ public class PdfModule
     protected void addPagesProperty (List<Property> metadataList, RepInfo info) 
     {
         _pagesList = new LinkedList<Property> ();
-        _pageSeqMap = new HashMap (500);
+        _pageSeqMap = new HashMap<Integer, Integer> (500);
         try {
             _docTreeRoot.startWalk ();
             int pageIndex = 0;
@@ -2676,7 +2676,7 @@ public class PdfModule
                         RepInfo info)
                 throws PdfException
     {
-        List pagePropList = new ArrayList (4);
+        List<Property> pagePropList = new ArrayList<Property> (4);
         try {
             // Foo on Java's inability to return values through
             // parameters.  Passing an array is a crock to achieve
@@ -2703,10 +2703,10 @@ public class PdfModule
         }
 
         try {
-            List annotsList = new LinkedList ();
+            List<Property> annotsList = new LinkedList<Property> ();
             PdfArray annots = page.getAnnotations ();
             if (annots != null) {
-                Vector contents = annots.getContent ();
+                Vector<PdfObject> contents = annots.getContent ();
                 for (int i = 0; i < contents.size (); i++) {
                     PdfDictionary annot = 
                         (PdfDictionary) resolveIndirectObject 
@@ -2760,14 +2760,14 @@ public class PdfModule
             // Viewport dictionaries (1.6), not inheritable
             PdfArray vp = (PdfArray) page.get ("VP", false);
             if (vp != null) {
-                Vector vpv = vp.getContent();
-                Iterator iter = vpv.iterator();
-                List vplist = new ArrayList (vpv.size());
+                Vector<PdfObject> vpv = vp.getContent();
+                Iterator<PdfObject> iter = vpv.iterator();
+                List<Property> vplist = new ArrayList<Property> (vpv.size());
                 while (iter.hasNext ()) {
                     PdfDictionary vpd = (PdfDictionary) 
                         resolveIndirectObject((PdfObject) iter.next ());
                     PdfObject vpdbb = vpd.get ("BBox");
-                    List vpPropList = new ArrayList ();
+                    List<Property> vpPropList = new ArrayList<Property> ();
                     vpPropList.add (makeRectProperty 
                         ((PdfArray) resolveIndirectObject (vpdbb),
                          "BBox"));
@@ -2907,7 +2907,7 @@ public class PdfModule
     /* Build a subproperty for a measure dictionary. */
     protected Property buildMeasureProperty (PdfDictionary meas)
     {
-        List plist = new ArrayList ();
+        List<Property> plist = new ArrayList<Property> ();
         PdfObject itemObj = meas.get ("Subtype");
         if (itemObj instanceof PdfSimpleObject) {
             plist.add (new Property ("Subtype",
@@ -2924,7 +2924,7 @@ public class PdfModule
         // X, Y, D and A arrays.
         itemObj = meas.get ("X");
         if (itemObj instanceof PdfArray) {
-            Vector v = ((PdfArray) itemObj).getContent ();
+            Vector<PdfObject> v = ((PdfArray) itemObj).getContent ();
             double[] x = new double[v.size()];
             for (int i = 0; i < v.size (); i++) {
                 PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt (i);
@@ -2935,7 +2935,7 @@ public class PdfModule
         }
         itemObj = meas.get ("Y");
         if (itemObj instanceof PdfArray) {
-            Vector v = ((PdfArray) itemObj).getContent ();
+            Vector<PdfObject> v = ((PdfArray) itemObj).getContent ();
             double[] x = new double[v.size()];
             for (int i = 0; i < v.size (); i++) {
                 PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt (i);
@@ -2946,7 +2946,7 @@ public class PdfModule
         }
         itemObj = meas.get ("D");
         if (itemObj instanceof PdfArray) {
-            Vector v = ((PdfArray) itemObj).getContent ();
+            Vector<PdfObject> v = ((PdfArray) itemObj).getContent ();
             double[] x = new double[v.size()];
             for (int i = 0; i < v.size (); i++) {
                 PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt (i);
@@ -2957,7 +2957,7 @@ public class PdfModule
         }
         itemObj = meas.get ("A");
         if (itemObj instanceof PdfArray) {
-            Vector v = ((PdfArray) itemObj).getContent ();
+            Vector<PdfObject> v = ((PdfArray) itemObj).getContent ();
             double[] x = new double[v.size()];
             for (int i = 0; i < v.size (); i++) {
                 PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt (i);
@@ -3174,15 +3174,15 @@ public class PdfModule
     */
     protected Property buildFontProperty (String name, Map map, int fontType)
     {
-        List fontList = new LinkedList ();  // list of fonts
-        Iterator fontIter = map.values ().iterator ();
+        List<Property> fontList = new LinkedList<Property> ();  // list of fonts
+        Iterator<PdfObject> fontIter = map.values ().iterator ();
         while (fontIter.hasNext ()) {
             // For each font in the map, build a property for it,
             // which consists of a list of scalar properties.  Each kind
             // of font is spec'ed to have a slightly different set of
             // properties, grumble...
             PdfDictionary dict = (PdfDictionary) fontIter.next ();
-            List fontPropList = oneFontPropList (dict, fontType);
+            List<Property> fontPropList = oneFontPropList (dict, fontType);
             Property fProp = new Property ("Font",
                             PropertyType.PROPERTY,
                             PropertyArity.LIST,
@@ -3196,7 +3196,7 @@ public class PdfModule
     }
     
     /* Build the Property list for a given font */
-    protected List oneFontPropList (PdfDictionary dict, int fontType) 
+    protected List<Property> oneFontPropList (PdfDictionary dict, int fontType) 
     {
         List<Property> fontPropList = new LinkedList<Property> ();
         Property prop;
@@ -3433,7 +3433,7 @@ public class PdfModule
      */
     protected Property buildCIDInfoProperty (PdfDictionary dict)
     {
-        List propList = new ArrayList (3);
+        List<Property> propList = new ArrayList<Property> (3);
         Property prop = new Property ("CIDSystemInfo",
                     PropertyType.PROPERTY,
                     PropertyArity.LIST,
@@ -3487,7 +3487,7 @@ public class PdfModule
      */
     protected Property buildEncodingDictProperty (PdfDictionary encodingDict)
     {
-        List propList = new ArrayList (2);
+        List<Property> propList = new ArrayList<Property> (2);
         Property prop = new Property ("EncodingDictionary",
                     PropertyType.PROPERTY,
                     PropertyArity.LIST,
@@ -3519,7 +3519,7 @@ public class PdfModule
     protected Property buildFontDescriptorProperty 
                         (PdfDictionary encodingDict)
     {
-        List propList = new ArrayList (6);
+        List<Property> propList = new ArrayList<Property> (6);
         Property prop = new Property ("FontDescriptor",
                     PropertyType.PROPERTY,
                     PropertyArity.LIST,
@@ -3602,7 +3602,7 @@ public class PdfModule
         PdfObject ob;
         boolean b;
         String s;
-        List propList = new ArrayList (12);
+        List<Property> propList = new ArrayList<Property> (12);
         Property prop = new Property ("ViewerPreferences",
             PropertyType.PROPERTY,
             PropertyArity.LIST,
@@ -3749,7 +3749,7 @@ public class PdfModule
         _recursionWarned = false;
         _visitedOutlineNodes = new HashSet<Integer> ();
         String malformed = "Malformed outline dictionary";
-        List itemList = new LinkedList ();
+        List<Property> itemList = new LinkedList<Property> ();
         Property prop = new Property ("Outlines",
                 PropertyType.PROPERTY,
                 PropertyArity.LIST,
@@ -3809,7 +3809,7 @@ public class PdfModule
 	            throws PdfException
     {
         String invalid = "Invalid outline dictionary item";
-        List itemList = new ArrayList (3);
+        List<Property> itemList = new ArrayList<Property> (3);
         try {
             Property prop = new Property ("Item",
                     PropertyType.PROPERTY,
@@ -3874,7 +3874,7 @@ public class PdfModule
             PdfDictionary child = 
                     (PdfDictionary) resolveIndirectObject (dict.get ("First"));
             if (child != null) {
-                List childList = new LinkedList ();
+                List<Property> childList = new LinkedList<Property> ();
                 Property childProp = new Property ("Children",
                         PropertyType.PROPERTY,
                         PropertyArity.LIST,
@@ -3983,9 +3983,9 @@ public class PdfModule
           if (_destNames != null) {
               Destination dest = new Destination (_destNames.get (key.getRawBytes ()),
                                   this, true);
-              if (dest == null) {
-                  return -1;
-              }
+//              if (dest == null) {
+//                  return -1;
+//              }
               return dest.getPageDestObjNumber ();
           }
           else {
@@ -4004,7 +4004,7 @@ public class PdfModule
     /** Add a string proprerty, based on a dictionary entry
         with a string value, to a specified List. */
     protected void addStringProperty(PdfDictionary dict,
-                        List propList,
+                        List<Property> propList,
                         String key,
                         String propName)
     {
@@ -4029,7 +4029,7 @@ public class PdfModule
     /** Add a date proprerty, based on a dictionary entry
         with a string value, to a specified List. */
     protected void addDateProperty(PdfDictionary dict,
-                        List propList,
+                        List<Property> propList,
                         String key,
                         String propName)
                         throws PdfException
@@ -4068,7 +4068,7 @@ public class PdfModule
                         new Integer (val));
         }
         else {
-           List slist = new LinkedList ();
+           List<String> slist = new LinkedList<String> ();
            try {
                for (int i = 0; i < valueNames.length; i++) {
                    if ((val & (1 << i)) != 0 && 

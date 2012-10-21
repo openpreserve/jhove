@@ -22,12 +22,12 @@ import org.xml.sax.ext.LexicalHandler;
  */
 public class XmlLexicalHandler implements LexicalHandler {
 
-    private List _comments;
-    private Set _entityNames;
+    private List<String> _comments;
+    private Set<String> _entityNames;
     public XmlLexicalHandler ()
     {
-        _comments = new LinkedList ();
-        _entityNames = new HashSet ();
+        _comments = new LinkedList<String> ();
+        _entityNames = new HashSet<String> ();
     }
     
     
@@ -107,7 +107,7 @@ public class XmlLexicalHandler implements LexicalHandler {
      *  Returns the value of the comments list, which is
      *  a List of Strings.
      */
-    public List getComments () 
+    public List<String> getComments () 
     {
         return _comments;
     }
@@ -116,7 +116,7 @@ public class XmlLexicalHandler implements LexicalHandler {
     /**
      *  Returns the Set of entity names.
      */
-    public Set getEntityNames ()
+    public Set<String> getEntityNames ()
     {
         return _entityNames;
     }

@@ -19,13 +19,13 @@ import org.xml.sax.ext.DeclHandler;
  */
 public class XmlDeclHandler implements DeclHandler {
 
-    private List _intEntityDeclarations;
-    private List _extEntityDeclarations;
+    private List<String[]> _intEntityDeclarations;
+    private List<String[]> _extEntityDeclarations;
     
     public XmlDeclHandler ()
     {
-        _intEntityDeclarations = new LinkedList ();
-        _extEntityDeclarations = new LinkedList ();
+        _intEntityDeclarations = new LinkedList<String[]> ();
+        _extEntityDeclarations = new LinkedList<String[]> ();
     }
     
     
@@ -87,7 +87,7 @@ public class XmlDeclHandler implements DeclHandler {
      *  is an array String[2], giving the name and
      *  value respectively.
      */
-    public List getInternalEntityDeclarations ()
+    public List<String[]> getInternalEntityDeclarations ()
     {
         return _intEntityDeclarations;
     }
@@ -98,7 +98,7 @@ public class XmlDeclHandler implements DeclHandler {
      *  is an array String[3], giving the name,
      *  public ID, and system ID respectively.
      */
-    public List getExternalEntityDeclarations ()
+    public List<String[]> getExternalEntityDeclarations ()
     {
         return _extEntityDeclarations;
     }

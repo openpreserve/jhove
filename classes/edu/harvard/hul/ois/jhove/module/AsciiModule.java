@@ -81,7 +81,7 @@ public class AsciiModule
     protected boolean _lineEndLF;
     protected boolean _lineEndCRLF;
     protected int _prevChar;
-    protected Map _controlCharMap;
+    protected Map<Integer, String> _controlCharMap;
 
     /* Flag to know if the property TextMDMetadata is to be added */
     protected boolean _withTextMD = false;
@@ -191,7 +191,7 @@ public class AsciiModule
         _lineEndLF = false;
         _lineEndCRLF = false;
         _prevChar = 0;
-        _controlCharMap = new HashMap ();
+        _controlCharMap = new HashMap<Integer, String> ();
         _textMD = new TextMDMetadata();
         
         boolean printableChars = false;
@@ -289,11 +289,11 @@ public class AsciiModule
     
         /* Create a metadata property for the module-specific
          * info. (4-Feb-04) */
-        List metadataList = new ArrayList (2);
+        List<Property> metadataList = new ArrayList<Property> (2);
 
 	/* Set property reporting line ending type */
 	if (_lineEndCR || _lineEndLF || _lineEndCRLF) {
-		ArrayList propArray = new ArrayList(3);
+		ArrayList<String> propArray = new ArrayList<String>(3);
 		if (_lineEndCR) {
 			propArray.add("CR");
 			_textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
@@ -312,7 +312,7 @@ public class AsciiModule
 	}
 	/* Set property reporting control characters used */
 	if (!_controlCharMap.isEmpty ()) {
-	    LinkedList propList = new LinkedList ();
+	    LinkedList<String> propList = new LinkedList<String> ();
 	    String mnem;
 	    for (int i = 0; i < 0X20; i++) {
 		mnem = (String) _controlCharMap.get (new Integer (i));

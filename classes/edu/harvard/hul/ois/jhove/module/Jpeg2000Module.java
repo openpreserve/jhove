@@ -124,22 +124,22 @@ public class Jpeg2000Module extends ModuleBase {
     protected RAFInputStream _rafStream;
 
     /* Properties which are global to the file */
-    protected List _propList;
+    protected List<Property> _propList;
 
     /* List of codestreams.  An entry can be created by
      * either a codestream or a codestream header, depending
      * on which is seen first.  The elements of the List
      * are Codestream objects. */
-    protected List codestreams;
+    protected List<Codestream> codestreams;
 
     /* List of Binary Filter properties. */
-    protected List binaryFilterProps;
+    protected List<Property> binaryFilterProps;
     
     /* List of Association properties. */
-    protected List associationProps;
+    protected List<Property> associationProps;
     
     /* List of Digital Signature properties. */
-    protected List digitalSigProps;
+    protected List<Property> digitalSigProps;
 
     /* Number of Contiguous Codestreams seen.
      * May be less than or equal to the size of codestreams. */
@@ -149,19 +149,19 @@ public class Jpeg2000Module extends ModuleBase {
     protected int nCodestreamHeaders;
 
     /* List of Color Spec properties */
-    protected List colorSpecs;
+    protected List<Property> colorSpecs;
 
     /* List of UUIDBox properties */
-    protected List uuids;
+    protected List<Property> uuids;
     
     /* List of Compositing Layer properties */
-    protected List composLayers;
+    protected List<Property> composLayers;
     
     /* List of UUID Info properties */
-    protected List uuidInfos;
+    protected List<Property> uuidInfos;
 
     /* List of data (String) extracted from XML boxes */
-    protected List xmlList;
+    protected List<String> xmlList;
 
     /* Flag for JP2 headerbox detection */
     protected boolean jp2HdrSeen;
@@ -383,7 +383,7 @@ public class Jpeg2000Module extends ModuleBase {
         info.setMimeType(_mimeType[0]);
         info.setModule(this);
 
-        _propList = new ArrayList(12);
+        _propList = new ArrayList<Property>(12);
         Property metadata =
             new Property(
                 "JPEG2000Metadata",
@@ -525,8 +525,8 @@ public class Jpeg2000Module extends ModuleBase {
                     uuidInfos));
         }
         if (!codestreams.isEmpty()) {
-            List csProps = new ArrayList(codestreams.size());
-            ListIterator csIter = codestreams.listIterator();
+            List<Property> csProps = new ArrayList<Property>(codestreams.size());
+            ListIterator<Codestream> csIter = codestreams.listIterator();
             while (csIter.hasNext()) {
                 Codestream cs = (Codestream) csIter.next();
                 csProps.add(cs.makeProperty());
@@ -776,16 +776,16 @@ public class Jpeg2000Module extends ModuleBase {
      */
     protected void initParse() {
         super.initParse();
-        colorSpecs = new LinkedList();
-        binaryFilterProps = new LinkedList ();
-        associationProps = new LinkedList ();
-        digitalSigProps = new LinkedList ();
-        uuids = new LinkedList();
-        uuidInfos = new LinkedList();
-        composLayers = new LinkedList ();
-        xmlList = new LinkedList();
+        colorSpecs = new LinkedList<Property>();
+        binaryFilterProps = new LinkedList<Property> ();
+        associationProps = new LinkedList<Property> ();
+        digitalSigProps = new LinkedList<Property> ();
+        uuids = new LinkedList<Property>();
+        uuidInfos = new LinkedList<Property>();
+        composLayers = new LinkedList<Property> ();
+        xmlList = new LinkedList<String>();
         //uuidList = new LinkedList ();
-        codestreams = new LinkedList();
+        codestreams = new LinkedList<Codestream>();
         curCodestream = null;
         nCodestreams = 0;
         nCodestreamHeaders = 0;

@@ -93,7 +93,7 @@ public class XmlModule
     protected DataInputStream _dstream;
 
     /* Top-level property list. */
-    protected List _propList;
+    protected List<Property> _propList;
     
     /* Top-level property. */
     protected Property _metadata;
@@ -279,7 +279,7 @@ public class XmlModule
         }
         _cstream = new ChecksumInputStream (stream, _ckSummer);
 
-        _propList = new LinkedList ();
+        _propList = new LinkedList<Property> ();
         _metadata = new Property ("XMLMetadata",
                 PropertyType.PROPERTY,
                 PropertyArity.LIST,
@@ -484,7 +484,7 @@ public class XmlModule
         // Crimson parser understands only DTD and DOCTYPE
         // declarations as contributing to validity.)
         String dtdURI = handler.getDTDURI ();
-        List schemaList = handler.getSchemas ();
+        List<String[]> schemaList = handler.getSchemas ();
         
         // In order to find the "primary" markup language, we try 3 things :
         // 1/ first, the first NamespaceURI
@@ -607,8 +607,8 @@ public class XmlModule
         if (!schemaList.isEmpty ()) {
             // Build a List of Properties, which will be the value
             // of the Schemas Property.
-            List schemaPropList = new ArrayList (schemaList.size());
-            ListIterator iter = schemaList.listIterator();
+            List<Property> schemaPropList = new ArrayList<Property> (schemaList.size());
+            ListIterator<String[]> iter = schemaList.listIterator();
             // Iterate through all the schemas.
             while (iter.hasNext ()) {
                 String[] schItems = (String []) iter.next ();
@@ -671,11 +671,11 @@ public class XmlModule
         
         Map ns = handler.getNamespaces ();
         if (!ns.isEmpty ()) {
-            Set keys = ns.keySet ();
-            List nsList = new ArrayList (keys.size());
-            Iterator iter = keys.iterator();
+            Set<String> keys = ns.keySet ();
+            List<Property> nsList = new ArrayList<Property> (keys.size());
+            Iterator<String> iter = keys.iterator();
             while (iter.hasNext ()) {
-                String key = (String) iter.next ();
+                String key =  iter.next ();
                 String val = (String) ns.get (key);
                 Property [] supPropArr = new Property[2];
                 supPropArr[0] = new Property ("Prefix",
@@ -705,13 +705,13 @@ public class XmlModule
         // Report as a list of 4-digit hexadecimal strings,
         // e.g., 003C, 04AA, etc.
         // Also build the Unicode blocks here.
-        List refs = xds.getCharacterReferences ();
+        List<Integer> refs = xds.getCharacterReferences ();
         if (!refs.isEmpty ()) {
             Utf8BlockMarker utf8BM = new Utf8BlockMarker ();
-            List refList = new ArrayList (refs.size ());
-            ListIterator iter = refs.listIterator ();
+            List<String> refList = new ArrayList (refs.size ());
+            ListIterator<Integer> iter = refs.listIterator ();
             while (iter.hasNext ()) {
-                Integer refi = (Integer) iter.next ();
+                Integer refi = iter.next ();
                 int refint = refi.intValue ();
                 refList.add (intTo4DigitHex (refint));
                 utf8BM.markBlock(refint);
@@ -727,13 +727,13 @@ public class XmlModule
         
         // Entities property
         // External unparsed entities
-        Set entNames = lexHandler.getEntityNames ();
-        Set attributeVals = handler.getAttributeValues ();
-        List entProps = new LinkedList ();
-        List uent = handler.getUnparsedEntities ();
-        List unparsedNotationNames = new LinkedList ();
+        Set<String> entNames = lexHandler.getEntityNames ();
+        Set<String> attributeVals = handler.getAttributeValues ();
+        List<Property> entProps = new LinkedList<Property> ();
+        List<String[]> uent = handler.getUnparsedEntities ();
+        List<String> unparsedNotationNames = new LinkedList<String> ();
         if (!uent.isEmpty ()) {
-             ListIterator iter = uent.listIterator ();
+             ListIterator<String[]> iter = uent.listIterator ();
             //int i = 0;
             while (iter.hasNext ()) {
                 // We check external parsed entities against
@@ -747,7 +747,7 @@ public class XmlModule
                     // unparsedNotationNames, so we can use it
                     // in determining which notations are used.
                     unparsedNotationNames.add (entarr[3]);
-                    List subPropList = new ArrayList (6);
+                    List<Property> subPropList = new ArrayList<Property> (6);
                     subPropList.add( new Property ("Name",
                             PropertyType.STRING,
                             name));
@@ -773,15 +773,15 @@ public class XmlModule
         }
   
         // Internal entities
-        List declEnts = declHandler.getInternalEntityDeclarations ();
+        List<String[]> declEnts = declHandler.getInternalEntityDeclarations ();
         if (!declEnts.isEmpty ()) {
-            ListIterator iter = declEnts.listIterator ();
+            ListIterator<String[]> iter = declEnts.listIterator ();
             while (iter.hasNext ()) {
-                String[] entarr = (String[]) iter.next ();
+                String[] entarr =  iter.next ();
                 String name = entarr[0];
                 // include only if the entity was actually used
                 if (nameInCollection (name, entNames)) {
-                    List subPropList = new ArrayList (4);
+                    List<Property> subPropList = new ArrayList<Property> (4);
                     subPropList.add (new Property ("Name",
                             PropertyType.STRING,
                             name));
@@ -802,13 +802,13 @@ public class XmlModule
         // External parsed entities
         declEnts = declHandler.getExternalEntityDeclarations ();
         if (!declEnts.isEmpty ()) {
-            ListIterator iter = declEnts.listIterator ();
+            ListIterator<String[]> iter = declEnts.listIterator ();
             while (iter.hasNext ()) {
-                String[] entarr = (String[]) iter.next ();
+                String[] entarr =  iter.next ();
                 String name = entarr[0];
                 // include only if the entity was actually used
                 if (nameInCollection (name, entNames)) {
-                    List subPropList = new ArrayList (4);
+                    List<Property> subPropList = new ArrayList<Property> (4);
                     subPropList.add (new Property ("Name",
                             PropertyType.STRING,
                             name));
@@ -841,21 +841,22 @@ public class XmlModule
                     entProps);
         }
         
-        List pi = handler.getProcessingInstructions ();
-        List piTargets = new LinkedList ();
+        List<String []> pi = handler.getProcessingInstructions ();
+        List<String> piTargets = new LinkedList<String> ();
         if (!pi.isEmpty()) {
             // Build a property, which consists of a list
             // of properties, each of which is an array of
             // two String properties, named Target and
             // Data respectively.
-            List piPropList = new ArrayList (pi.size());
-            ListIterator pii = pi.listIterator ();
+            List<Property> piPropList = new ArrayList<Property> (pi.size());
+            ListIterator<String []> pii = pi.listIterator ();
             while (pii.hasNext ()) {
-                String[] pistr = (String []) pii.next ();
+                String[] pistr =  pii.next ();
                 Property[] subPropArr = new Property[2];
                 // Accumulate targets in a list, so we can tell
                 // which Notations use them.
-                piTargets.add (subPropArr[0]);
+                // Wait a minute -- what we're doing here can't work!! TODO what's supposed to be happening?
+                //piTargets.add (subPropArr[0]);
                 subPropArr[0] = new Property ("Target",
                             PropertyType.STRING,
                             pistr[0]);
@@ -877,15 +878,16 @@ public class XmlModule
         // "actually used," meaning that they designate either
         // the target of a processing instruction or the ndata
         // of an unparsed entry which is itself "actually used."
-        List notations = handler.getNotations ();
+        List<String[]> notations = handler.getNotations ();
         if (!notations.isEmpty ()) {
-            List notProps = new ArrayList (notations.size ());
-            ListIterator iter = notations.listIterator ();
-            List subPropList = new ArrayList (3);
+            List<Property> notProps = new ArrayList<Property> (notations.size ());
+            ListIterator<String[]> iter = notations.listIterator ();
+            List<Property> subPropList = new ArrayList<Property> (3);
             while (iter.hasNext ()) {
-                String[] notArray = (String[]) iter.next();
+                String[] notArray = iter.next();
                 String notName = notArray[0];
                 // Check for use of Notation before including 
+                // TODO this is implemented wrong! Need to reinvestigate
                 if (nameInCollection (notName, piTargets) ||
                     nameInCollection (notName, unparsedNotationNames)) {
                     // notArray has name, public ID, system ID
@@ -1081,9 +1083,9 @@ public class XmlModule
     }
     
     /* Checks if a String is .equals to any member of a Set of strings. */
-    protected static boolean nameInCollection (String name, Collection coll) 
+    protected static boolean nameInCollection (String name, Collection<String> coll) 
     {
-        Iterator iter = coll.iterator ();
+        Iterator<String> iter = coll.iterator ();
         while (iter.hasNext ()) {
             String s = (String) iter.next ();
             if (name.equals (s)) {

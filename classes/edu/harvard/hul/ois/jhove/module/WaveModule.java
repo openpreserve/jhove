@@ -43,19 +43,19 @@ public class WaveModule
     protected Property _metadata;
 
     /* Top-level property list */
-    protected List _propList;
+    protected List<Property> _propList;
     
     /* List of Note properties */
-    protected List _notes;
+    protected List<Property> _notes;
     
     /* List of Label properties */
-    protected List _labels;
+    protected List<Property> _labels;
     
     /* List of Labeled Text properties */
-    protected List _labeledText;
+    protected List<Property> _labeledText;
     
     /* List of Sample properties */
-    protected List _samples;
+    protected List<Property> _samples;
 
     /* AES audio metadata to go into AIFF metadata */
     protected AESAudioMetadata _aesMetadata;
@@ -645,11 +645,11 @@ public class WaveModule
     protected void initParse() 
     {
         super.initParse ();
-       _propList = new LinkedList ();
-       _notes = new LinkedList ();
-       _labels = new LinkedList ();
-       _labeledText = new LinkedList ();
-       _samples = new LinkedList ();
+       _propList = new LinkedList<Property> ();
+       _notes = new LinkedList<Property> ();
+       _labels = new LinkedList<Property> ();
+       _labeledText = new LinkedList<Property> ();
+       _samples = new LinkedList<Property> ();
        firstSampleOffsetMarked = false;
        numSamples = 0;
        
@@ -856,7 +856,7 @@ public class WaveModule
                         new Integer (val));
         }
         else {
-           List slist = new LinkedList ();
+           List<String> slist = new LinkedList<String> ();
            try {
                for (int i = 0; i < oneValueNames.length; i++) {
                    String s = null;
