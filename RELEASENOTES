@@ -13,13 +13,28 @@ GENERAL
 
 1. If JHOVE doesn't find a configuration file, it creates a default one.
 
+2. Generics widely added to clean up the code.
+
 PDF MODULE
 
 1. Several errors in checking for PDF-A compliance were corrected. Aside from
    fixing some outright bugs, the Contents key for non-text Annotations is
    no longer checked, as its presence is only recommended and not required.
 
-2. Improved code by HŒkan Svenson is now used for finding the trailer. 
+2. Improved code by HÃ¶kan Svenson is now used for finding the trailer. 
+
+TIFF MODULE
+
+1. TIFF tag 700 (XMP) now accepts field type 7 (UNDEFINED) as well as 1 
+   (BYTE), on the basis of Adobe's XMP spec, part 3.
+   
+2. If compression scheme 6 is used in a file, an InfoMessage will report
+   that the file uses deprecated compression.
+
+WAVE MODULE
+
+1. The Originator Reference property, found in the Broadcast Wave Extension
+   (BEXT) chunk, is now reported.
 
 RELEASE NOTES FOR JHOVE 1.7
 2012-08-12
