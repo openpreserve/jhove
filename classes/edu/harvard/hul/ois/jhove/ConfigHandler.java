@@ -23,7 +23,7 @@ public class ConfigHandler
 
     private String _class;
     protected StringBuffer _content;
-    private Map _extension;
+    private Map<String, String> _extension;
 
     /** The schema name */
     private final static String configSchemaName =
@@ -32,16 +32,16 @@ public class ConfigHandler
     /** The list of handlers.  Each element in the List is an
      *  array of two Strings representing the class and the initialization
      *  string. */
-    private List _handler;
+    private List<String[]> _handler;
 
     /** The list of handler parameters.  Each element in the List is
      *  a List of Strings (which may be empty but not null) representing 
      *  parameters to be passed to the module.  List elements are in
      *  one-to-one correspondence with _handler.
      */
-    protected List _handlerParams;
+    protected List<List<String>> _handlerParams;
     private String _init;
-    private List _param;
+    private List<String> _param;
     private String _tempDir;
     private String _mixVsn;
     private String _encoding;
@@ -67,14 +67,14 @@ public class ConfigHandler
     /** The list of modules.  Each element in the List is an
      *  array of two Strings representing the class and the initialization
      *  string. */
-    protected List _module;
+    protected List<String[]> _module;
     
     /** The list of module parameters.  Each element in the List is
      *  a List of Strings (which may be empty but not null) representing 
      *  parameters to be passed to the module.  List elements are in
      *  one-to-one correspondence with _module.
      */
-    protected List _modParams;
+    protected List<List<String>> _modParams;
 
     /******************************************************************
      * CLASS CONSTRUCTOR.
@@ -85,10 +85,10 @@ public class ConfigHandler
      */
     public ConfigHandler ()
     {
-        _module  = new ArrayList ();
-        _handler = new ArrayList ();
-        _modParams = new ArrayList ();
-        _handlerParams = new ArrayList ();
+        _module  = new ArrayList<String[]> ();
+        _handler = new ArrayList<String[]> ();
+        _modParams = new ArrayList<List<String>> ();
+        _handlerParams = new ArrayList<List<String>> ();
 
         _isModule  = false;
         _isHandler = false;
@@ -100,7 +100,7 @@ public class ConfigHandler
 
         _bufferSize = -1;
         _encoding   = null;
-        _extension  = new Hashtable ();
+        _extension  = new Hashtable<String, String> ();
         _tempDir    = null;
         _mixVsn     = null;
         _sigBytes   = 1024;
@@ -120,9 +120,9 @@ public class ConfigHandler
      *
      *  @see Module
      */
-    public List getModule ()
+    public List<String[]> getModule ()
     {
-	return _module;
+        return _module;
     }
     
     /**
@@ -132,7 +132,7 @@ public class ConfigHandler
      *  values returned by <code>getModuleParams()</code> are in 
      *  one-to-one correspondence with those return by <code>getModule()</code>.
      */
-    public List getModuleParams ()
+    public List<List<String>> getModuleParams ()
     {
         return _modParams;
     }
@@ -144,7 +144,7 @@ public class ConfigHandler
      *  values returned by <code>getHandlerParams()</code> are in 
      *  one-to-one correspondence with those return by <code>getHandler()</code>.
      */
-    public List getHandlerParams ()
+    public List<List<String>> getHandlerParams ()
     {
         return _handlerParams;
     }
@@ -154,9 +154,9 @@ public class ConfigHandler
      *
      *  @see OutputHandler
      */
-    public List getHandler ()
+    public List<String[]> getHandler ()
     {
-	return _handler;
+        return _handler;
     }
 
     /**
@@ -206,9 +206,9 @@ public class ConfigHandler
     /**
      * Return an associative map of configuration extensions.
      */
-    public Map getExtensions ()
+    public Map<String, String> getExtensions ()
     {
-	return _extension;
+        return _extension;
     }
 
     /**
@@ -217,7 +217,7 @@ public class ConfigHandler
      */
     public String getJhoveHome ()
     {
-	return _jhoveHome;
+        return _jhoveHome;
     }
     
     /**
@@ -247,13 +247,13 @@ public class ConfigHandler
         if (rawName.equals ("module")) {
             _isModule  = true;
             _init = null;
-            _param = new ArrayList (1);
+            _param = new ArrayList<String> (1);
             _class = null;
         }
         else if (rawName.equals ("outputHandler")) {
             _isHandler = true;
             _init = null;
-            _param = new ArrayList (1);
+            _param = new ArrayList<String> (1);
             _class = null;
         }
         else if (rawName.equals ("tempDirectory")) {
