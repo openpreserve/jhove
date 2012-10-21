@@ -27,8 +27,8 @@ public class ContCodestream {
     private long _length;
     private Jpeg2000Module _module;
     private DataInputStream _dstream;
-    private List _tileParts;
-    private List _tiles;
+//    private List _tileParts;
+    private List<Tile> _tiles;
     private long _tileLeft;
     
     /* Tile for which we have most recently seen an unclosed SOT */
@@ -74,8 +74,8 @@ public class ContCodestream {
         _module = module;
         _dstream = dstream;
         _length = length;
-        _tiles = new LinkedList ();
-        _tileParts = new LinkedList ();   // Do I want both lists?
+        _tiles = new LinkedList<Tile> ();
+        //_tileParts = new LinkedList ();   // Do I want both lists?
         ppmSeen = false;
     }
 
@@ -179,7 +179,7 @@ public class ContCodestream {
     
     
     /** Returns the list of tiles.  The elements are Tile objects. */
-    public List getTiles ()
+    public List<Tile> getTiles ()
     {
         return _tiles;
     }

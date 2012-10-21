@@ -76,7 +76,7 @@ public class FileTypeBox extends JP2Box {
             _repInfo.setWellFormed (false);
             return false;
         }
-        List compList = new ArrayList (ncomp);
+        List<String> compList = new ArrayList<String> (ncomp);
         boolean eflag = false;
         StringBuffer hexcitem = new StringBuffer (8);
         for (int i = 0; i < ncomp; i++) {

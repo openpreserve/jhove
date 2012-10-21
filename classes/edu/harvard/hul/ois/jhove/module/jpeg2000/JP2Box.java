@@ -20,7 +20,7 @@ public abstract class JP2Box extends BoxHolder {
 
     protected long startBytesRead;
     protected long _bytesRead;
-    protected List associations;
+    protected List<Property> associations;
     
     protected final static String noJP2Hdr = 
         "Other boxes may not occur before JP2 Header";
@@ -64,7 +64,7 @@ public abstract class JP2Box extends BoxHolder {
             _parentBox = null;
         }
         _bytesRead = 0;
-        associations = new LinkedList ();
+        associations = new LinkedList<Property> ();
     }
 
 

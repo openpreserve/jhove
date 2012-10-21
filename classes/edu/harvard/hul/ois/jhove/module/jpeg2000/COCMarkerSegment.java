@@ -88,7 +88,7 @@ public class COCMarkerSegment extends MarkerSegment {
         // number of components is apparently established only by the SIZ
         // marker segment and never changes for tiles or tile parts.
         MainOrTile cs = getMainOrTile ();
-        List propList = new ArrayList (10);
+        List<Property> propList = new ArrayList<Property> (10);
         propList.add (new Property ("CodingStyle",
                     PropertyType.INTEGER,
                     new Integer (codeStyle)));

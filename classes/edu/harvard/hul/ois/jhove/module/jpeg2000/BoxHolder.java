@@ -16,7 +16,7 @@ import java.util.*;
  * @author Gary McGath
  *
  */
-public class BoxHolder implements Iterator {
+public class BoxHolder implements Iterator<Object> {
 
     protected Jpeg2000Module _module;
     protected JP2Box _parentBox;

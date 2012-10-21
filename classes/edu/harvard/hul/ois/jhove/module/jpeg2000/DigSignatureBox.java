@@ -46,7 +46,7 @@ public class DigSignatureBox extends JP2Box {
         // mean that all superboxes should check it as a possible
         // subbox?
         
-        List propList = new ArrayList (10);
+        List<Property> propList = new ArrayList<Property> (10);
         JhoveBase je = _module.getBase ();
         boolean raw = je.getShowRawFlag ();
         int styp = ModuleBase.readUnsignedByte (_dstrm, _module);

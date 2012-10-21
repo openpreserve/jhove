@@ -41,10 +41,10 @@ public abstract class MainOrTile {
     protected Property _pocProperty;
     
     /** Comments -- list of properties */
-    protected List _comments;
+    protected List<Property> _comments;
     
     /* List of packet lengths */
-    protected List _packetLengthList;
+    protected List<Long> _packetLengthList;
     
     
 
@@ -54,7 +54,7 @@ public abstract class MainOrTile {
         _components = null;
         _qcdProperty = null;
         _codProperty = null;
-        _comments = new LinkedList ();
+        _comments = new LinkedList<Property> ();
     }
 
 
@@ -117,7 +117,7 @@ public abstract class MainOrTile {
     public void addPacketLength (long len)
     {
         if (_packetLengthList == null) {
-            _packetLengthList = new LinkedList ();
+            _packetLengthList = new LinkedList<Long> ();
         }
         _packetLengthList.add (new Long (len));
     }

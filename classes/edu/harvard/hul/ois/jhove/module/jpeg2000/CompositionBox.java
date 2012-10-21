@@ -19,7 +19,7 @@ import java.util.*;
  */
 public class CompositionBox extends JP2Box {
 
-    private List instSets;
+    private List<Property> instSets;
     private long _height;
     private long _width;
     private int _loop;
@@ -51,7 +51,7 @@ public class CompositionBox extends JP2Box {
         }
         initBytesRead ();
         hasBoxes = true;
-        instSets = new LinkedList ();
+        instSets = new LinkedList<Property> ();
 
         // A Composition box is a superbox which contains one
         // Composition Options Box followed by 0 (?) or more
@@ -108,7 +108,7 @@ public class CompositionBox extends JP2Box {
         }
         finalizeBytesRead ();
         
-        List propList = new ArrayList (4);
+        List<Property> propList = new ArrayList<Property> (4);
         propList.add (new Property ("Width",
                 PropertyType.LONG,
                 new Long (_width)));

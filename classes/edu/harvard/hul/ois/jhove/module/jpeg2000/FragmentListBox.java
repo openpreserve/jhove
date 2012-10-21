@@ -19,7 +19,7 @@ import java.util.*;
  */
 public class FragmentListBox extends JP2Box {
 
-    private List _fragmentList;
+    private List<long[]> _fragmentList;
     
 
     /**
@@ -57,7 +57,7 @@ public class FragmentListBox extends JP2Box {
             _repInfo.setWellFormed (false);
             return false;
         }
-        _fragmentList = new ArrayList (nFrags);
+        _fragmentList = new ArrayList<long[]> (nFrags);
         for (int i = 0; i < nFrags; i++) {
             long offset = _module.readSignedLong (_dstrm);
             long fragLen = _module.readUnsignedInt (_dstrm);

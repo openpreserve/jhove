@@ -20,9 +20,9 @@ import java.util.*;
  */
 public class FragmentInputStream extends InputStream {
 
-    private List _fragments;
+    private List<long []> _fragments;
     private RandomAccessFile _raf;
-    private ListIterator fragIterator;
+    private ListIterator<long []> fragIterator;
     private long curFragment[];
     byte[] fragBuffer;
     
@@ -45,7 +45,7 @@ public class FragmentInputStream extends InputStream {
      *            with fragment[0] being the length and
      *            fragment[1] the offset.
      */
-    public FragmentInputStream(List fragments, RandomAccessFile raf) 
+    public FragmentInputStream(List<long []> fragments, RandomAccessFile raf) 
     {
         super();
         _fragments = fragments;
@@ -53,7 +53,7 @@ public class FragmentInputStream extends InputStream {
         init (-1);
     }
     
-    public FragmentInputStream (List fragments, 
+    public FragmentInputStream (List<long []> fragments, 
                 RandomAccessFile raf,
                 int bufSize)
     {
@@ -90,7 +90,7 @@ public class FragmentInputStream extends InputStream {
             if (curFragment == null || fragOffset >= curFragment[1]) {
                 // We need a new fragment.
                 if (fragIterator.hasNext ()) {
-                    curFragment = (long []) fragIterator.next ();
+                    curFragment =  fragIterator.next ();
                     fragOffset = 0;
                 }
                 else {

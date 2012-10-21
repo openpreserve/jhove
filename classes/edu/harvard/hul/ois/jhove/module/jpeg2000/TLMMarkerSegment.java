@@ -65,7 +65,7 @@ public class TLMMarkerSegment extends MarkerSegment {
             return false;      // not permitted in a tile
         }
         for (int i = 0; i < nParts; i++) {
-            List tpList = new ArrayList (2);
+            List<Property> tpList = new ArrayList<Property> (2);
             // The TileIndex property is given only if st != 0
             if (st != 0) {
                 int ttlm;

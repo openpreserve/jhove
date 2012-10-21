@@ -23,7 +23,7 @@ public class ComposLayerHdrBox extends JP2Box {
     private Property opacityProp;
     private Property channelDefProp;
     private Property codestreamRegProp;
-    private List colorSpecs;
+    private List<Property> colorSpecs;
     
 
 
@@ -52,7 +52,7 @@ public class ComposLayerHdrBox extends JP2Box {
         }
         initBytesRead ();
         hasBoxes = true;
-        colorSpecs = new LinkedList ();
+        colorSpecs = new LinkedList<Property> ();
         
         // Unlike some other boxes, compositing layer boxes
         // are numbered by their order in the file, starting
@@ -103,7 +103,7 @@ public class ComposLayerHdrBox extends JP2Box {
         }
         finalizeBytesRead ();
         
-        List propList = new ArrayList (4);
+        List<Property> propList = new ArrayList (4);
         if (label != null) {
             propList.add (label);
         }
