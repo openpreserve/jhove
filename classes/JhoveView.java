@@ -37,7 +37,7 @@ public class JhoveView
     private static final String NAME = "JhoveView";
 
     /** Application build date, YYYY, MM, DD. */
-    private static final int [] DATE = {2012, 9, 5};
+    private static final int [] DATE = {2012, 10, 21};
 
     /** Usage string is meaningless here. */
     private static final String USAGE = null;

@@ -32,7 +32,7 @@ public class Jhove
     private static final String NAME = "Jhove";
 
     /** Application build date, YYYY, MM, DD. */
-    private static final int [] DATE = {2012, 9, 5};
+    private static final int [] DATE = {2012, 10, 21};
 
     /** Application release number. */
     private static final String RELEASE = "1.8b1";
@@ -123,7 +123,7 @@ public class Jhove
             boolean checksum    = false;
             boolean showRaw     = false;
             boolean signature   = false;
-            List list           = new ArrayList ();
+            List<String> list   = new ArrayList<String> ();
     
     	 
                 /**********************************************************
