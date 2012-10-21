@@ -27,20 +27,20 @@ public class TiffProfileDNG extends TiffProfile {
     
     /* Set to true if anything directly contravenes DNG,
      * or a previous profile has reported as DNG */
-    private boolean notDNG;     
+//    private boolean notDNG;     
 
     /* An IFD has been seen with a photometricInterpretation
      * specific to DNG. */
-    private boolean photoInterpOK;
+//    private boolean photoInterpOK;
     
     /* Orientation has been specified. */
-    private boolean orientationSeen;
+//    private boolean orientationSeen;
     
     /* DNGVersion tag has been seen */
-    private boolean dngVersionSeen;
+//    private boolean dngVersionSeen;
     
     /* UniqueCameraModel tag has been seen */
-    private boolean uniqueCameraModelSeen;
+//    private boolean uniqueCameraModelSeen;
     
     /* AsShotNeutral tag has been seen.  This isn't required,
      * but is mutually exclusive with AsShotWhiteXY. */
@@ -56,11 +56,11 @@ public class TiffProfileDNG extends TiffProfile {
     public TiffProfileDNG() {
         super();
         _profileText =  "DNG 1.0.0.0 (September 2004)";
-        notDNG = false;
-        photoInterpOK = false;
-        orientationSeen = false;
-        dngVersionSeen = false;
-        uniqueCameraModelSeen = false;
+        //notDNG = false;
+        //photoInterpOK = false;
+        //orientationSeen = false;
+        //dngVersionSeen = false;
+        //uniqueCameraModelSeen = false;
     }
 
     /**
