@@ -26,8 +26,8 @@ public class PageLabelNode
      *  have been iterated through following a StartWalk. */
     protected boolean _walkFinished;
 
-    private List _descendants;
-    private Iterator _descendantsIter;
+    private List<PageLabelNode> _descendants;
+    private Iterator<PageLabelNode> _descendantsIter;
     private int _currentKey;        // Key most recently obtained in traversing tree
     private PdfObject _currentValue; // Value most recently obtained in traversing tree
     private int _prevKey;        // Key previously obtained in traversing tree
@@ -67,8 +67,8 @@ public class PageLabelNode
         try {
             kids = (PdfArray) _dict.get("Kids");
             if (kids != null) {
-                Vector kidsVec = kids.getContent ();
-                _descendants = new ArrayList (kidsVec.size ());
+                Vector<PdfObject> kidsVec = kids.getContent ();
+                _descendants = new ArrayList<PageLabelNode> (kidsVec.size ());
                 for (int i = 0; i < kidsVec.size (); i++) {
                     PdfDictionary kid = (PdfDictionary)
                             _module.resolveIndirectObject 

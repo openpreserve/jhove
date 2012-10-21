@@ -14,6 +14,7 @@ import edu.harvard.hul.ois.jhove.*;
  * 
  *  @see PdfInvalidException
  */
+@SuppressWarnings("serial")
 public class PdfMalformedException extends PdfException {
 
     /**

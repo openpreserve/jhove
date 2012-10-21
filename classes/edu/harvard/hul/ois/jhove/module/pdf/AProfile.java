@@ -334,13 +334,13 @@ public final class AProfile extends PdfProfile
        CIDFont and CMap dictionaries */
     private boolean type0FontsOK ()
     {
-        Map type0Map = _module.getFontMap (PdfModule.F_TYPE0);
+        Map<Integer, PdfObject> type0Map = _module.getFontMap (PdfModule.F_TYPE0);
         if (type0Map == null) {
             return true;
         }
         try {
             PdfSimpleObject ob;
-            Iterator iter = type0Map.values().iterator ();
+            Iterator<PdfObject> iter = type0Map.values().iterator ();
             while (iter.hasNext ()) {
                 String registry = null;
                 String ordering = null;
@@ -499,7 +499,7 @@ public final class AProfile extends PdfProfile
         // So let's walk through the fields...
         try {
             PdfArray fields = (PdfArray) form.get ("Fields");
-            Vector fieldVec = fields.getContent ();
+            Vector<PdfObject> fieldVec = fields.getContent ();
             for (int i = 0; i < fieldVec.size (); i++) {
                 PdfDictionary field = (PdfDictionary) fieldVec.elementAt (i);
                 if (!fieldOK (field)) {
@@ -547,7 +547,7 @@ public final class AProfile extends PdfProfile
             // a required Type entry.
             // We only case about subfields.
             if (kids != null) {
-                Vector kidVec = kids.getContent ();
+                Vector<PdfObject> kidVec = kids.getContent ();
                 for (int i = 0; i < kidVec.size (); i++) {
                     PdfDictionary kid = (PdfDictionary) kidVec.elementAt (i);
                     // The safest way to check if this is a field seems
@@ -618,12 +618,12 @@ public final class AProfile extends PdfProfile
                 
                 // Check content streams for  resources
                 if (docNode instanceof PageObject) {
-                    List streams = 
+                    List<PdfStream> streams = 
                         ((PageObject) docNode).getContentStreams ();
                     if (streams != null) {
-                        Iterator iter = streams.listIterator ();
+                        Iterator<PdfStream> iter = streams.listIterator ();
                         while (iter.hasNext ()) {
-                            PdfStream stream = (PdfStream) iter.next ();
+                            PdfStream stream = iter.next ();
                             PdfDictionary dict = stream.getDict ();
                             PdfDictionary rs = 
                                 (PdfDictionary) 
@@ -737,11 +737,11 @@ public final class AProfile extends PdfProfile
         }
         // Walk through the color space dictionary,
         // checking device ("uncalibrated") color spaces 
-        Iterator iter = cs.iterator ();
+        Iterator<PdfObject> iter = cs.iterator ();
         while (iter.hasNext ()) {
             PdfObject res = (PdfObject) iter.next ();
             if (res instanceof PdfArray) {
-                Vector resv = ((PdfArray) res).getContent ();
+                Vector<PdfObject> resv = ((PdfArray) res).getContent ();
                 PdfSimpleObject snameobj = (PdfSimpleObject) resv.elementAt (0);
                 String sname = snameobj.getStringValue ();
                 boolean oldHasUncalCS = hasUncalCS;
@@ -784,7 +784,7 @@ public final class AProfile extends PdfProfile
             if (intentsArray == null) {
                 return false;
             }
-            Vector intVec = intentsArray.getContent ();
+            Vector<PdfObject> intVec = intentsArray.getContent ();
             PdfStream theOutProfile = null;
             boolean pdfaProfileSeen = false;
             for (int i = 0; i < intVec.size (); i++) {
@@ -920,7 +920,7 @@ public final class AProfile extends PdfProfile
                 }
             }
             else if (next instanceof PdfArray) {
-                Vector nextVec = ((PdfArray) next).getContent ();
+                Vector<PdfObject> nextVec = ((PdfArray) next).getContent ();
                 for (i = 0; i < nextVec.size (); i++) {
                     PdfDictionary nact = (PdfDictionary) 
                         nextVec.elementAt (i);

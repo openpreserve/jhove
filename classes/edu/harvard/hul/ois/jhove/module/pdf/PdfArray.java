@@ -13,7 +13,7 @@ import java.util.*;
 public class PdfArray extends PdfObject
 {
 
-        private Vector _content;
+        private Vector<PdfObject> _content;
 
     /** 
      *  Creates a PdfArray object.
@@ -24,7 +24,7 @@ public class PdfArray extends PdfObject
     public PdfArray (int objNumber, int genNumber)
     {
         super (objNumber, genNumber);
-        _content = new Vector ();
+        _content = new Vector<PdfObject> ();
     }
 
     /** 
@@ -34,7 +34,7 @@ public class PdfArray extends PdfObject
     public PdfArray ()
     {
         super ();
-        _content = new Vector ();
+        _content = new Vector<PdfObject> ();
     }
 
     /**
@@ -48,7 +48,7 @@ public class PdfArray extends PdfObject
     /**
      *  Return the contents of the array as a Vector.
      */
-    public Vector getContent ()
+    public Vector<PdfObject> getContent ()
     {
         return _content;
     }
