@@ -15,7 +15,7 @@
   </target>
 
   <target name="wave" depends="wave-init" description="Compile the WAVE module">
-    <javac compiler="javac1.4" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
+    <javac compiler="javac1.5" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
   </target>
 
   <target name="wave-clean" description="Delete backup files" >

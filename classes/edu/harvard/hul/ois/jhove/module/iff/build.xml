@@ -15,7 +15,7 @@
   </target>
 
   <target name="iff" depends="iff-init" description="Compile the IFF common code">
-    <javac compiler="javac1.4" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
+    <javac compiler="javac1.5" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
   </target>
 
   <target name="iff-clean" description="Delete backup files" >

@@ -16,7 +16,7 @@
 
   <target name="tiff" depends="tiff-init"
           description="compile the TIFF module">
-    <javac compiler="javac1.4" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
+    <javac compiler="javac1.5" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
   </target>
 
   <target name="tiff-clean" description="Delete backup files" >

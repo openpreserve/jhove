@@ -20,7 +20,7 @@
 
   <target name="handler" depends="handler-init"
           description="Compile the handlers">
-    <javac compiler="javac1.4" srcdir="." debug="${dbg}" classpath="${classpath}"/>
+    <javac compiler="javac1.5" srcdir="." debug="${dbg}" classpath="${classpath}"/>
     <ant dir="audit" target="audit" inheritAll="false">
       <property name="dbg" value="${dbg}"/>
     </ant>
