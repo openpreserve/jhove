@@ -6,13 +6,17 @@ see the file LICENSE for details)
 
 Versions 1.7 and beyond of JHOVE are no longer under the control of Harvard.
 
-RELEASE NOTES FOR JHOVE 1.8b1
+RELEASE NOTES FOR JHOVE 1.8b2
 
 GENERAL
 
 1. If JHOVE doesn't find a configuration file, it creates a default one.
 
 2. Generics widely added to clean up the code.
+
+3. build.xml files fixed to force compilation to Java 1.5.
+
+4. Shell script "jhove" no longer makes you figure out where JAVA_HOME is.
 
 PDF MODULE
 
