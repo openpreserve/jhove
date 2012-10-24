@@ -19,7 +19,7 @@ public class StructureElement
     private StructureTree _tree;
     private PdfDictionary _dict;
     private PdfModule _module;
-    private List children;
+    private List<StructureElement> children;
     private String _structType;
     private boolean _structIsInline;
     private boolean _attrIsBlock;
@@ -96,7 +96,7 @@ public class StructureElement
                     new StructureElement (kdict, _tree);
                 se.buildSubtree ();
                 se.checkAttributes ();
-                children = new ArrayList (1);
+                children = new ArrayList<StructureElement> (1);
                 children.add (se);
             }
             else if (!isMarkedContent (kdict) && !isObjectRef (kdict)) {
@@ -106,7 +106,7 @@ public class StructureElement
         }
         else if (k instanceof PdfArray) {
             Vector kvec = ((PdfArray) k).getContent ();
-            children = new LinkedList ();
+            children = new LinkedList<StructureElement> ();
             for (int i = 0; i < kvec.size (); i++) {
                 PdfObject kelem = (PdfObject) kvec.elementAt (i);
                 try {
@@ -171,12 +171,12 @@ public class StructureElement
             // If we have an array, it may contain elements and
             // revision numbers.  A revision number may follow
             // an element, but there doesn't have to be one.
-            Vector attrVec = ((PdfArray) attr).getContent ();
+            Vector<PdfObject> attrVec = ((PdfArray) attr).getContent ();
             for (int i = 0; i < attrVec.size (); i++) {
                 PdfObject attrElem;
                 try {
                     attrElem = _module.resolveIndirectObject
-                            ((PdfObject) attrVec.elementAt (i));
+                            (attrVec.elementAt (i));
                 }
                 catch (IOException e) {
                     throw new PdfInvalidException (badattr);

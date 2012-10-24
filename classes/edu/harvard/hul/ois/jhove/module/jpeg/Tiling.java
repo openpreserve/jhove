@@ -18,7 +18,7 @@ import edu.harvard.hul.ois.jhove.*;
 public class Tiling {
 
     /* List of individual tile descriptions */
-    private List tileList;
+    private List<long[]> tileList;
     
     private int _tilingType;
     private int _vertScale;
@@ -31,7 +31,7 @@ public class Tiling {
      *  Constructor.
      */
     public Tiling() {
-        tileList = new LinkedList ();
+        tileList = new LinkedList<long[]> ();
     }
     
     /**
@@ -57,10 +57,10 @@ public class Tiling {
      */
     public Property buildTileListProp ()
     {
-        List tpList = new LinkedList ();
-        ListIterator iter = tileList.listIterator ();
+        List<Property> tpList = new LinkedList<Property> ();
+        ListIterator<long[]> iter = tileList.listIterator ();
         while (iter.hasNext ()) {
-            long[] tile = (long []) iter.next ();
+            long[] tile =  iter.next ();
             Property[] tProp = new Property[4];
             tProp[0] = new Property ("VerticalScale",
                         PropertyType.LONG,

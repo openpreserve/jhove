@@ -49,7 +49,7 @@ public class CommentsChunk extends Chunk {
             return true;     // trivial case
         }
         // Create a List of comment properties
-        List comments = new ArrayList (numComments);
+        List<Property> comments = new ArrayList<Property> (numComments);
         for (int i = 0; i < numComments; i++) {
             long timestamp = module.readUnsignedInt (_dstream);
             Date jTimestamp = module.timestampToDate (timestamp);
@@ -59,12 +59,12 @@ public class CommentsChunk extends Chunk {
             byte[] buf = new byte[count];
             ModuleBase.readByteBuf(_dstream, buf, module);
             bytesLeft -= count;
-	    /* Ensure that each byt is a printable ASCII character. */
-	    for (int j=0; j<buf.length; j++) {
-		if (buf[j] < 32 || buf[j] > 127) {
-		    buf[j] = 32;
-		}
-	    }
+            /* Ensure that each byt is a printable ASCII character. */
+            for (int j=0; j<buf.length; j++) {
+                if (buf[j] < 32 || buf[j] > 127) {
+                    buf[j] = 32;
+                }
+            }
             String comment = new String (buf, "ASCII");
             
             // Build the property for one comment
