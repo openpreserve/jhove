@@ -20,7 +20,7 @@
 
   <target name="module" depends="module-init"
           description="Compile the modules">
-    <javac compiler="javac1.5" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
+    <javac compiler="javac1.5" target="1.5" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
     <ant dir="aiff" target="aiff" inheritAll="false">
       <property name="dbg" value="${dbg}"/>
     </ant>

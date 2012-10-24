@@ -19,7 +19,7 @@
   </target>
 
   <target name="api" depends="api-init" description="Compile the API">
-    <javac compiler="javac1.5" srcdir="." debug="${dbg}" classpath="${classpath}"/>
+    <javac compiler="javac1.5" target="1.5" srcdir="." debug="${dbg}" classpath="${classpath}"/>
   </target>
 
   <target name="api-manifest" depends="api">
