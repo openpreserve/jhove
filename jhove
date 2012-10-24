@@ -24,6 +24,10 @@
 #       -s          Format identification based on internal signatures only
 #       dir-file-or-uri Directory, file pathname or URI of formatted content
 #
+# CHANGE for JHOVE 1.8:
+# You no longer have to figure out where JAVA_HOME is; that's the
+# operating system's job. If the OS tells you it can't find Java, 
+# adjust your shell's path or revert to the old way (commented out).
 # Configuration constants:
 
 #JHOVE_HOME=/users/gary/dev/jhove
@@ -49,4 +53,6 @@ done
 
 # Set the CLASSPATH and invoke the Java loader.
 #{JAVA} -classpath $CP Jhove $ARGS -x org.apache.xerces.parsers.SAXParser
-${JAVA} -classpath $CP Jhove $ARGS
+#${JAVA} -classpath $CP Jhove $ARGS
+# New way, doesn't require you to use JAVA_HOME.
+java -classpath $CP Jhove $ARGS
