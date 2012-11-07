@@ -45,13 +45,13 @@ public class ChunkHeader {
         for (int i = 0; i < 4; i++) {
             int ch = ModuleBase.readUnsignedByte (dstrm, _module);
             if (ch < 32) {
-		String hx = Integer.toHexString (ch);
-		if (hx.length () < 2) {
-		    hx = "0" + hx;
-		}
+                String hx = Integer.toHexString (ch);
+                if (hx.length () < 2) {
+                    hx = "0" + hx;
+                }
                 _repInfo.setMessage (new ErrorMessage
-		    ("Invalid character in Chunk ID",
-		     "Character = 0x" + hx,
+                    ("Invalid character in Chunk ID",
+                     "Character = 0x" + hx,
                      _module.getNByte ()));
                 _repInfo.setWellFormed (false);
                 return false;
