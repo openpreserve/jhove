@@ -24,7 +24,7 @@ PDF MODULE
    fixing some outright bugs, the Contents key for non-text Annotations is
    no longer checked, as its presence is only recommended and not required.
 
-2. Improved code by Hökan Svenson is now used for finding the trailer. 
+2. Improved code by Håkan Svenson is now used for finding the trailer. 
 
 TIFF MODULE
 
