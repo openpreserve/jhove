@@ -121,6 +121,9 @@ public class XmlModule
     /* Hold the information needed to generate a textMD metadata fragment */
     protected TextMDMetadata _textMD;
     
+    /* Map from URIs to locally stored schemas */
+    protected Map<String, File> _localSchemas;
+    
     /******************************************************************
     * CLASS CONSTRUCTOR.
     ******************************************************************/
@@ -165,6 +168,7 @@ public class XmlModule
        Signature sig = new ExternalSignature (".xml", SignatureType.EXTENSION,
                                     SignatureUseType.OPTIONAL);
        _signature.add (sig);
+       _localSchemas = new HashMap<String, File> ();
    }
 
    /**  Sets the value of the doctype string, assumed to have been forced
@@ -248,11 +252,12 @@ public class XmlModule
        throws IOException
     {
         // Test if textMD is to be generated
+
         if (_defaultParams != null) {
             _withTextMD = false;
-            Iterator iter = _defaultParams.iterator ();
+            Iterator<String> iter = _defaultParams.iterator ();
             while (iter.hasNext ()) {
-                String param = (String) iter.next ();
+                String param = iter.next ();
                 if (param.toLowerCase ().equals ("withtextmd=true")) {
                     _withTextMD = true;
                 }
@@ -319,6 +324,7 @@ public class XmlModule
             }
             handler = new XmlModuleHandler ();
             handler.setXhtmlFlag (_xhtmlDoctype != null);
+            handler.setLocalSchemas (_localSchemas);
             parser.setContentHandler (handler);
             parser.setErrorHandler (handler);
             parser.setEntityResolver (handler);
@@ -484,7 +490,7 @@ public class XmlModule
         // Crimson parser understands only DTD and DOCTYPE
         // declarations as contributing to validity.)
         String dtdURI = handler.getDTDURI ();
-        List<String[]> schemaList = handler.getSchemas ();
+        List<SchemaInfo> schemaList = handler.getSchemas ();
         
         // In order to find the "primary" markup language, we try 3 things :
         // 1/ first, the first NamespaceURI
@@ -493,14 +499,14 @@ public class XmlModule
         // It should be noted that latter on when we look at the namespace in relation with the Root element
         // if a URI is defined with it, it will get the preference ...
         if (!schemaList.isEmpty()) {
-            String[] schItems = (String [])schemaList.get(0);
+            SchemaInfo schItems = schemaList.get(0);
             // First NamespaceURI
-            if (isNotEmpty(schItems[0])) {
-                _textMD.setMarkup_language(schItems[0]);
+            if (isNotEmpty(schItems.namespaceURI)) {
+                _textMD.setMarkup_language(schItems.namespaceURI);
             // Then SchemaLocation
             } 
-            else if (isNotEmpty(schItems[1])) {
-                _textMD.setMarkup_language(schItems[1]);
+            else if (isNotEmpty(schItems.location)) {
+                _textMD.setMarkup_language(schItems.location);
             }
         } 
         else if (isNotEmpty(dtdURI)) {
@@ -608,19 +614,19 @@ public class XmlModule
             // Build a List of Properties, which will be the value
             // of the Schemas Property.
             List<Property> schemaPropList = new ArrayList<Property> (schemaList.size());
-            ListIterator<String[]> iter = schemaList.listIterator();
+            ListIterator<SchemaInfo> iter = schemaList.listIterator();
             // Iterate through all the schemas.
             while (iter.hasNext ()) {
-                String[] schItems = (String []) iter.next ();
+                SchemaInfo schItems = iter.next ();
                 // Build a Property (Schema) whose value is an array
                 // of two Properties (NamespaceURI and SchemaLocation).
                 Property [] schItemProps = new Property[2];
                 schItemProps[0] = new Property ("NamespaceURI",
                         PropertyType.STRING,
-                        schItems[0]);
+                        schItems.namespaceURI);
                 schItemProps[1] = new Property ("SchemaLocation",
                         PropertyType.STRING,
-                        schItems[1]);
+                        schItems.location);
                 schemaPropList.add (new Property ("Schema",
                         PropertyType.PROPERTY,
                         PropertyArity.ARRAY,
@@ -669,7 +675,7 @@ public class XmlModule
         Property commentProp = null;
         Property unicodeBlocksProp = null;
         
-        Map ns = handler.getNamespaces ();
+        Map<String, String> ns = handler.getNamespaces ();
         if (!ns.isEmpty ()) {
             Set<String> keys = ns.keySet ();
             List<Property> nsList = new ArrayList<Property> (keys.size());
@@ -708,7 +714,7 @@ public class XmlModule
         List<Integer> refs = xds.getCharacterReferences ();
         if (!refs.isEmpty ()) {
             Utf8BlockMarker utf8BM = new Utf8BlockMarker ();
-            List<String> refList = new ArrayList (refs.size ());
+            List<String> refList = new ArrayList<String> (refs.size ());
             ListIterator<Integer> iter = refs.listIterator ();
             while (iter.hasNext ()) {
                 Integer refi = iter.next ();
@@ -841,7 +847,7 @@ public class XmlModule
                     entProps);
         }
         
-        List<String []> pi = handler.getProcessingInstructions ();
+        List<ProcessingInstructionInfo> pi = handler.getProcessingInstructions ();
         List<String> piTargets = new LinkedList<String> ();
         if (!pi.isEmpty()) {
             // Build a property, which consists of a list
@@ -849,9 +855,9 @@ public class XmlModule
             // two String properties, named Target and
             // Data respectively.
             List<Property> piPropList = new ArrayList<Property> (pi.size());
-            ListIterator<String []> pii = pi.listIterator ();
+            ListIterator<ProcessingInstructionInfo> pii = pi.listIterator ();
             while (pii.hasNext ()) {
-                String[] pistr =  pii.next ();
+                ProcessingInstructionInfo pistr =  pii.next ();
                 Property[] subPropArr = new Property[2];
                 // Accumulate targets in a list, so we can tell
                 // which Notations use them.
@@ -859,10 +865,10 @@ public class XmlModule
                 //piTargets.add (subPropArr[0]);
                 subPropArr[0] = new Property ("Target",
                             PropertyType.STRING,
-                            pistr[0]);
+                            pistr.target);
                 subPropArr[1] = new Property ("Data",
                             PropertyType.STRING,
-                            pistr[1]);
+                            pistr.data);
                 piPropList.add(new Property ("ProcessingInstruction",
                             PropertyType.PROPERTY,
                             PropertyArity.ARRAY,
@@ -938,16 +944,16 @@ public class XmlModule
         if (procInstProp != null) {
             _propList.add (procInstProp);
         }
-        if (commentProp != null) {
-            _propList.add (commentProp);
-        }
 
-        List comm = lexHandler.getComments ();
+        List<String> comm = lexHandler.getComments ();
         if (!comm.isEmpty ()) {
             commentProp = new Property ("Comments",
                             PropertyType.STRING,
                             PropertyArity.LIST,
                             comm);
+        }
+        if (commentProp != null) {
+            _propList.add (commentProp);
         }
         
         // Check if parse detected invalid XML
@@ -1080,6 +1086,15 @@ public class XmlModule
     protected void initParse ()
     {
        super.initParse ();
+       if (_defaultParams != null) {
+           Iterator<String> iter = _defaultParams.iterator ();
+           while (iter.hasNext ()) {
+               String param =  iter.next ();
+               if (param.toLowerCase ().startsWith("schema=")) {
+                   addLocalSchema(param);
+               }
+           }
+       }
     }
     
     /* Checks if a String is .equals to any member of a Set of strings. */
@@ -1123,5 +1138,24 @@ public class XmlModule
                 (value.length() != 0) && 
                 !("[None]".equals(value))
          );
+    }
+    
+    /**
+     * Add a mapping from a schema URI to a local file.
+     * The parameter is of the form schema=[URI];[path]
+     */
+    private void addLocalSchema (String param) {
+        int eq = param.indexOf('=');
+        int semi = param.indexOf(';');
+        try {
+            String uri = param.substring(eq+1, semi);
+            String path = param.substring(semi + 1);
+            File f = new File (path);
+            if (!f.exists()) {
+                return;
+            }
+            _localSchemas.put (uri, f);
+        }
+        catch (Exception e) {}
     }
 }

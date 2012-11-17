@@ -9,6 +9,12 @@ package edu.harvard.hul.ois.jhove.module.xml;
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.module.html.HtmlMetadata;
 import edu.harvard.hul.ois.jhove.module.html.DTDMapper;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.InputSource;
@@ -25,8 +31,9 @@ import org.xml.sax.Attributes;
  */
 public class XmlModuleHandler extends DefaultHandler {
 
+
     /* List of entities String[2], { public ID, system ID} */
-    private List<String[]> _entities;
+    private List<EntityInfo> _entities;
     
     /* Map of namespaces, prefix (String) to URI (String) */
     private Map<String, String> _namespaces;
@@ -34,7 +41,7 @@ public class XmlModuleHandler extends DefaultHandler {
     /* List of processing instructions.  Each element
      * is an array of two strings, giving the target
      * and data respectively. */
-    private List<String[]> _processingInsts;
+    private List<ProcessingInstructionInfo> _processingInsts;
     
     /* List of generated Messages. */
     private List<Message> _messages;
@@ -50,7 +57,7 @@ public class XmlModuleHandler extends DefaultHandler {
     
     /* List of schema URI's.  Each element is a String[2],
      * consisting of the namespace URI and the schema location. */
-    private List<String[]> _schemas;
+    private List<SchemaInfo> _schemas;
     
     /* List of unparsed entities. Each is an array String[4];
      * name, public ID, system ID and notation name
@@ -82,6 +89,9 @@ public class XmlModuleHandler extends DefaultHandler {
      * way of checking if the "signature" (the XML declaration)
      * has been seen. */
     private boolean _sigFlag;
+    
+    /* Map from URIs to local schema files */
+    private Map<String, File> _localSchemas;
 
     
     /**
@@ -91,16 +101,16 @@ public class XmlModuleHandler extends DefaultHandler {
     {
         _xhtmlFlag = false;
         _htmlMetadata = null;
-        _entities = new LinkedList<String[]> ();
+        _entities = new LinkedList<EntityInfo> ();
         _namespaces = new HashMap<String,String> ();
-        _processingInsts = new LinkedList<String[]> ();
+        _processingInsts = new LinkedList<ProcessingInstructionInfo> ();
         _messages = new LinkedList<Message> ();
         _attributeVals = new HashSet<String> ();
         _dtdURI = null;
         _root = null;
         _valid = true;
         _nErrors = 0;
-        _schemas = new LinkedList<String[]> ();
+        _schemas = new LinkedList<SchemaInfo> ();
         _unparsedEntities = new LinkedList<String[]> ();
         _notations = new LinkedList<String[]> ();
         _sigFlag = false;
@@ -113,6 +123,14 @@ public class XmlModuleHandler extends DefaultHandler {
     public void setXhtmlFlag (boolean flag)
     {
         _xhtmlFlag = flag;
+    }
+    
+    /** 
+     *  Sets a map of schema URIs to local files. This information 
+     *  comes from jhove.conf parameters.
+     */
+    public void setLocalSchemas (Map<String, File> schemas) {
+        _localSchemas = schemas;
     }
     
     /**
@@ -146,6 +164,14 @@ public class XmlModuleHandler extends DefaultHandler {
                 _root = localName;
             }
         }
+        if (namespaceURI != null) {
+            SchemaInfo schi = new SchemaInfo();
+            schi.namespaceURI = namespaceURI;
+            schi.location = "";
+            if (!hasSchemaURI (schi)) {
+                _schemas.add(schi);
+            }
+        }
         if (atts != null) {
             int natts = atts.getLength ();
             for (int i = 0; i < natts; i++) {
@@ -154,38 +180,41 @@ public class XmlModuleHandler extends DefaultHandler {
                 String val = atts.getValue (i);
                 if ("http://www.w3.org/2001/XMLSchema-instance".equals
                         (namespace)) {
-
-                    String[] schArr = new String[2];
+                    SchemaInfo schInfo = new SchemaInfo();
                     if ("schemaLocation".equals (name)) {
                         /* val should consist of two tokens, giving the
-			 * URI and the location respectively.
-			 */
+                         * URI and the location respectively.
+                         */ 
                         String[] toks = val.split ("\\s", 2);
                         /* Could be a length 0 or 1 array in pathological
-			 * cases, so convert it to a length-2 array.
-			 * Note that while the schemaLocation attribute
-			 * SHOULD have two white-space separated elements,
-			 * this may not be the case, so always check the
-			 * array length before referencing its elements.
-			 */
+                         * cases, so convert it to a length-2 array.
+                         * Note that while the schemaLocation attribute
+                         * SHOULD have two white-space separated elements,
+                         * this may not be the case, so always check the
+                         * array length before referencing its elements.
+                         */
                         if (toks.length > 0 && toks[0] != null) {
-                            schArr[0] = toks[0].trim ();
+                            schInfo.namespaceURI = toks[0].trim ();
                         }
                         else {
-                            schArr[0] = "";
+                            schInfo.namespaceURI = "";
                         }
                         if (toks.length > 1 && toks[1] != null) {
-                            schArr[1] = toks[1].trim ();
+                            schInfo.location = toks[1].trim ();
                         }
                         else {
-                            schArr[1] = "";
+                            schInfo.location = "";
                         }
-                        _schemas.add (schArr);
+                        if (!hasSchemaURI (schInfo)) {
+                            _schemas.add (schInfo);
+                        }
                     }
                     if ("noNamespaceSchemaLocation".equals (name)) {
-                        schArr[0] = "[None]";
-                        schArr[1] = val;
-                        _schemas.add (schArr);
+                        schInfo.location = "[None]";
+                        schInfo.namespaceURI = val;
+                        if (!hasSchemaURI(schInfo)) {
+                            _schemas.add (schInfo);
+                        }
                     }
                 }
                 // Collect all attribute values.
@@ -253,9 +282,9 @@ public class XmlModuleHandler extends DefaultHandler {
         if (data == null) {
             data = "";
         }
-        String[] pi = new String[2];
-        pi[0] = target;
-        pi[1] = data;
+        ProcessingInstructionInfo pi = new ProcessingInstructionInfo();
+        pi.target = target;
+        pi.data = data;
         _processingInsts.add (pi);
     }
     
@@ -290,6 +319,16 @@ public class XmlModuleHandler extends DefaultHandler {
                               throws SAXException
 
     {
+        // Check any custom mapping from the config
+        File fil = _localSchemas.get(systemId);
+        if (fil != null) {
+            try {
+                FileInputStream inStrm = new FileInputStream(fil);
+                return new InputSource (inStrm);
+            }
+            catch (FileNotFoundException e) {}
+        }
+        
         // Do special-case checking for the XHTML DTD's
         if (!_xhtmlFlag) {
             if (DTDMapper.isXHTMLDTD (publicId)) {
@@ -318,17 +357,17 @@ public class XmlModuleHandler extends DefaultHandler {
         }
         
         // Report in entity properties
-        String[] entArr = new String[2];
-        entArr[0] = publicId;
-        entArr[1] = systemId;
+        EntityInfo entArr = new EntityInfo();
+        entArr.publicID = publicId;
+        entArr.systemID = systemId;
         _entities.add (entArr);
         if (systemId.endsWith (".dtd")) {
-	    /* Assume that the first system ID in the file with a .dtd
-	     * extension is the actual DTD
-	     */
-	    if (_dtdURI == null) {
-		_dtdURI = systemId;
-	    }
+            /* Assume that the first system ID in the file with a .dtd
+             * extension is the actual DTD
+             */
+            if (_dtdURI == null) {
+                _dtdURI = systemId;
+            }
         }
         return ent;
     }
@@ -403,7 +442,7 @@ public class XmlModuleHandler extends DefaultHandler {
      *  Returns the list of schemas.  The elements of the list
      *  are Strings, giving the URI's for the schemas.
      */
-    public List<String[]> getSchemas ()
+    public List<SchemaInfo> getSchemas ()
     {
         return _schemas;
     }
@@ -443,7 +482,7 @@ public class XmlModuleHandler extends DefaultHandler {
      * is an array of two strings, giving the target
      * and data respectively.
      */
-    public List<String []> getProcessingInstructions ()
+    public List<ProcessingInstructionInfo> getProcessingInstructions ()
     {
         return _processingInsts;
     }
@@ -488,5 +527,23 @@ public class XmlModuleHandler extends DefaultHandler {
     public boolean getSigFlag ()
     {
         return _sigFlag;
+    }
+    
+    /* Check if we already know about this schema URI. If we do but the new info provides
+     * a location, quietly stuff the old one into a sewer and pretend it was
+     * never there. */
+    public boolean hasSchemaURI(SchemaInfo newinfo) {
+        Iterator<SchemaInfo> schmiter = _schemas.iterator();
+        while (schmiter.hasNext()) {
+            SchemaInfo schmi = schmiter.next();
+            if (newinfo.namespaceURI.equals (schmi.namespaceURI)) {
+                if (schmi.location.isEmpty() && !newinfo.location.isEmpty()) {
+                    _schemas.remove(schmi);
+                    return false;    // we like the new info better
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }
