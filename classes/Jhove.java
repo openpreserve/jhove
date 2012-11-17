@@ -32,10 +32,10 @@ public class Jhove
     private static final String NAME = "Jhove";
 
     /** Application build date, YYYY, MM, DD. */
-    private static final int [] DATE = {2012, 11, 7};
+    private static final int [] DATE = JhoveBase.DATE;
 
     /** Application release number. */
-    private static final String RELEASE = "1.8";
+    private static final String RELEASE = JhoveBase._release;
 
     /** Application invocation syntax. */
     private static final String USAGE = "java " + NAME + " [-c config] " +
@@ -303,5 +303,6 @@ public class Jhove
             System.exit (-1);
         }
     }
+    
 
 }
