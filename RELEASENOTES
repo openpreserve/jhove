@@ -6,6 +6,27 @@ see the file LICENSE for details)
 
 Versions 1.7 and beyond of JHOVE are no longer under the control of Harvard.
 
+NOT YET IN RELEASE, BUT IN JAVA SOURCE ON SOURCEFORGE
+
+GENERAL
+
+1. Jhove.java and JhoveView.java now get their version information from 
+   JhoveBase.java. Before it was redundantly kept in three places, and 
+   sometimes they didn't all get updated for a new release. Like in 1.8.
+   For the moment it says that it's version 1.8.
+   
+TIFF MODULE
+
+1. TIFF files that had strip or tile offsets but no corresponding byte
+   counts were throwing an exception all the way to the top level. Now
+   they're correctly being reported as invalid.
+   
+XML MODULE
+
+1. Cleaned up reporting of schemas, Added some small classes to replace
+   the use of string arrays for information structures.
+   
+   
 RELEASE NOTES FOR JHOVE 1.8
 
 GENERAL
