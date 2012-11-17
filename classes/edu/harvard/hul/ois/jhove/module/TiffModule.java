@@ -1,6 +1,6 @@
 /**********************************************************************
  * Jhove - JSTOR/Harvard Object Validation Environment
- * Copyright 2003-2007 by JSTOR and the President and Fellows of Harvard College
+ * Copyright 2003-2012 by JSTOR and the President and Fellows of Harvard College
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,6 +22,7 @@ package edu.harvard.hul.ois.jhove.module;
 
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.module.tiff.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -647,20 +648,20 @@ public class TiffModule
             /* Construct IFDs property. */
             //List ifdsList = new LinkedList ();
 
-            ListIterator iter = ifds.listIterator ();
+            ListIterator<IFD> iter = ifds.listIterator ();
             while (iter.hasNext ()) {
-                IFD ifd = (IFD) iter.next ();
+                IFD ifd =  iter.next ();
 
                 /* Check if any messages were generated in constructing
                  * the property.  If so, the IFD is invalid.
                  */
 
-                List errors = ifd.getErrors ();
+                List<String> errors = ifd.getErrors ();
                 if (!errors.isEmpty ()) {
                     info.setValid (false);
-                    ListIterator eter = errors.listIterator ();
+                    ListIterator<String> eter = errors.listIterator ();
                     while (eter.hasNext ()) {
-                        info.setMessage (new ErrorMessage ((String) eter.next ()));
+                        info.setMessage (new ErrorMessage ( eter.next ()));
                     }
                 }
 
@@ -826,9 +827,11 @@ public class TiffModule
 
         if (stripsDefined && tilesDefined) {
             reportInvalid ("Strips and tiles defined together", info);
+            throw new TiffException ("Strips and tiles defined together");
         }
         if (!stripsDefined && !tilesDefined) {
             reportInvalid ("Neither strips nor tiles defined", info);
+            throw new TiffException ("Neither strips nor tiles defined");
         }
 
         int planarConfiguration = niso.getPlanarConfiguration ();
@@ -837,9 +840,11 @@ public class TiffModule
         if (stripsDefined) {
             if (stripOffsets == null) {
                 reportInvalid ("StripOffsets not defined", info);
+                throw new TiffException ("StripOffsets not defined");
             }
             if (stripByteCounts == null) {
                 reportInvalid ("StripByteCounts not defined", info);
+                throw new TiffException ("StripByteCounts not defined");
             }
 
             int len = stripOffsets.length;
