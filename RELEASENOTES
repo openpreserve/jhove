@@ -15,6 +15,11 @@ GENERAL
    sometimes they didn't all get updated for a new release. Like in 1.8.
    For the moment it says that it's version 1.8.
    
+2. ConfigWriter was in the package edu.harvard.hul.ois.jhove.viewer, which 
+   caused a NoClassDefFoundError if non-GUI configurations didn't include
+   JhoveViewer.jar in the classpath. It's been moved to
+   edu.harvard.hul.ois.jhove.
+   
 TIFF MODULE
 
 1. TIFF files that had strip or tile offsets but no corresponding byte
