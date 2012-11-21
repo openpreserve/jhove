@@ -4,11 +4,13 @@
  *
  **********************************************************************/
 
-package edu.harvard.hul.ois.jhove.viewer;
+package edu.harvard.hul.ois.jhove;
 
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
+
+import edu.harvard.hul.ois.jhove.viewer.ConfigWindow;
 
 /**
  * 

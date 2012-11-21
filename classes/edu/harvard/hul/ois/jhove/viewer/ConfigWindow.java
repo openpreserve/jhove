@@ -18,6 +18,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 //import javax.swing.border.*;
 import edu.harvard.hul.ois.jhove.ConfigHandler;
+import edu.harvard.hul.ois.jhove.ConfigWriter;
 
 /**
  * Window for high-level editing of the application's

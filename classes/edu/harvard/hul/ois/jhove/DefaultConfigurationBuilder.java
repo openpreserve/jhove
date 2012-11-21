@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.harvard.hul.ois.jhove.module.*;
-import edu.harvard.hul.ois.jhove.viewer.ConfigWriter;
 
 /** This class creates a default configuration if no valid configuration file
  *  is found. */
