@@ -6,7 +6,7 @@ see the file LICENSE for details)
 
 Versions 1.7 and beyond of JHOVE are no longer under the control of Harvard.
 
-NOT YET IN RELEASE, BUT IN JAVA SOURCE ON SOURCEFORGE
+RELEASE NOTES FOR JHOVE 1.9a1
 
 GENERAL
 
@@ -19,6 +19,9 @@ GENERAL
    caused a NoClassDefFoundError if non-GUI configurations didn't include
    JhoveViewer.jar in the classpath. It's been moved to
    edu.harvard.hul.ois.jhove.
+
+3. Added script packagejhove.sh and made md5.pl part of the CVS repository
+   to make packaging for delivery easier.
    
 TIFF MODULE
 
