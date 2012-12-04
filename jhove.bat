@@ -32,10 +32,6 @@ REM EXTRA_JARS Extra jar files to add to CLASSPATH
 REM Change JHOVE_HOME if location of JHOVE is different from the following
 SET JHOVE_HOME="C:\Program Files\jhove"
 
-REM Change JAVA_HOME to your installed Java directory
-SET JAVA_HOME="C:\Program Files\java\j2re1.4.1_02"
-SET JAVA=%JAVA_HOME%\bin\java
-
 SET EXTRA_JARS=
 
 REM NOTE: Nothing below this line should be edited
@@ -59,4 +55,4 @@ IF %1x==x GOTO LOOP
 
 
 REM Set the CLASSPATH and invoke the Java loader
-%JAVA% -classpath %CP% Jhove %ARGS%
+java -classpath %CP% Jhove %ARGS%
