@@ -30,14 +30,14 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
     /* URI strings */
     private final static String xmpBasicSchema = 
         "http://ns.adobe.com/xap/1.0/";
-    private final static String xmpRightsSchema =
-        "http://ns.adobe.com/xap/1.0/rights/";
-    private final static String dublinCoreSchema =
-        "http://purl.org/dc/elements/1.1/";
-    private final static String adobePDFSchema =
-        "http://ns.adobe.com/pdf/1.3/";
-    private final static String photoshopSchema =
-        "http://ns.adobe.com/photoshop/1.0/";
+//    private final static String xmpRightsSchema =
+//        "http://ns.adobe.com/xap/1.0/rights/";
+//    private final static String dublinCoreSchema =
+//        "http://purl.org/dc/elements/1.1/";
+//    private final static String adobePDFSchema =
+//        "http://ns.adobe.com/pdf/1.3/";
+//    private final static String photoshopSchema =
+//        "http://ns.adobe.com/photoshop/1.0/";
 
     private int curStructType;
     /* Values which may be assigned to curStructType */
@@ -118,7 +118,7 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
                     exText += "L,";
                 }
                 exText += encoding;
-                throw new SAXException (encoding);
+                throw new SAXException (exText);
             }
         }
     }
