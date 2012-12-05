@@ -156,10 +156,10 @@ public class TextHandler
         _writer.println (margin + " Release: " + handler.getRelease ());
         _writer.println (margin + " Date: " +
                          HandlerBase.date.format (handler.getDate ()));
-        List list = handler.getSpecification ();
+        List<Document> list = handler.getSpecification ();
         int n = list.size ();
         for (int i=0; i<n; i++) {
-            showDocument ((Document) list.get (i), "Specification");
+            showDocument ( list.get (i), "Specification");
         }
         Agent vendor = handler.getVendor ();
         if (vendor != null) {
@@ -216,11 +216,11 @@ public class TextHandler
         for (int i=0; i<n; i++) {
             showDocument ((Document) list.get (i), "Specification");
         }
-        List ftr = module.getFeatures ();
+        List<String> ftr = module.getFeatures ();
         if (ftr != null) {
-            Iterator iter = ftr.iterator();
+            Iterator<String> iter = ftr.iterator();
             while (iter.hasNext ()) {
-                s = (String) iter.next ();
+                s = iter.next ();
                 _writer.println (margin + "  Feature: " + s);
             }
         }
