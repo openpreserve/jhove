@@ -22,6 +22,8 @@
     <ant dir="${classes}" inheritAll="false">
       <property name="dbg" value="off"/>
     </ant>
+  	<chmod file="jhove" perm="ugo+x"/>
+  	<chmod file="${bin}/JhoveView.jar" perm="ugo+x"/>
   </target>
 
   <target name="debug" description="Create distribution with debug enabled">
