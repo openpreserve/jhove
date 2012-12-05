@@ -58,7 +58,7 @@ public abstract class HandlerBase
     /** Initialization value. */
     protected String _init;
     /** List of default parameters. */
-    protected List _defaultParams;
+    protected List<String> _defaultParams;
     /**  JHOVE engine. */
     protected JhoveBase _je;
     /**  Indentation level */
@@ -74,7 +74,7 @@ public abstract class HandlerBase
     /**  Copyright notice */
     protected String _rights;
     /**  Handler specification document list */
-    protected List _specification;
+    protected List<Document> _specification;
     /**  Handler vendor */
     protected Agent _vendor;
     /**  Writer for doing output */
@@ -119,7 +119,7 @@ public abstract class HandlerBase
 
         _note   = note;
         _rights = rights;
-        _specification = new ArrayList ();
+        _specification = new ArrayList<Document> ();
 
         _level = -1;
     }
@@ -143,7 +143,7 @@ public abstract class HandlerBase
      * @param   params     A List whose elements are Strings.
      *                     May be empty.
      */
-    public void setDefaultParams (List params)
+    public void setDefaultParams (List<String> params)
     {
         _defaultParams = params;
     }
@@ -156,9 +156,9 @@ public abstract class HandlerBase
         throws Exception
     {
         resetParams ();
-        Iterator iter = _defaultParams.iterator ();
+        Iterator<String> iter = _defaultParams.iterator ();
         while (iter.hasNext ()) {
-            String parm = (String) iter.next ();
+            String parm =  iter.next ();
             param (parm);
         }
     }
@@ -247,7 +247,7 @@ public abstract class HandlerBase
      *
      *  @see Document
      */
-    public final List getSpecification ()
+    public final List<Document> getSpecification ()
     {
         return _specification;
     }
