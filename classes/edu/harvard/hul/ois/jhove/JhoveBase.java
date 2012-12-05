@@ -38,8 +38,8 @@ public class JhoveBase
 
     private static Date _date;
     public static final String _name = "JhoveBase";
-    public static final String _release = "1.9a1";
-    public static final int [] DATE = {2012, 11, 21};
+    public static final String _release = "1.9b1";
+    public static final int [] DATE = {2012, 12, 4};
     private static final String _rights =
     	"Derived from software Copyright 2004-2011 " +
         "by the President and Fellows of Harvard College. " +

@@ -54,7 +54,7 @@ public interface OutputHandler
      *
      *  @see Document
      */
-    public List getSpecification ();
+    public List<Document> getSpecification ();
 
     /**
      *  Returns a List of Agent objects giving the vendor(s)
@@ -99,7 +99,7 @@ public interface OutputHandler
      * @param   params     A List whose elements are Strings.
      *                     May be empty.
      */
-    public void setDefaultParams (List params);
+    public void setDefaultParams (List<String> params);
 
 
     /**
