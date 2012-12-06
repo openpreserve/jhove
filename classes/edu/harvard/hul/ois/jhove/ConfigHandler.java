@@ -67,7 +67,7 @@ public class ConfigHandler
     /** The list of modules.  Each element in the List is an
      *  array of two Strings representing the class and the initialization
      *  string. */
-    protected List<String[]> _module;
+    protected List<ModuleInfo> _module;
     
     /** The list of module parameters.  Each element in the List is
      *  a List of Strings (which may be empty but not null) representing 
@@ -85,7 +85,7 @@ public class ConfigHandler
      */
     public ConfigHandler ()
     {
-        _module  = new ArrayList<String[]> ();
+        _module  = new ArrayList<ModuleInfo> ();
         _handler = new ArrayList<String[]> ();
         _modParams = new ArrayList<List<String>> ();
         _handlerParams = new ArrayList<List<String>> ();
@@ -120,7 +120,7 @@ public class ConfigHandler
      *
      *  @see Module
      */
-    public List<String[]> getModule ()
+    public List<ModuleInfo> getModule ()
     {
         return _module;
     }
@@ -306,8 +306,8 @@ public class ConfigHandler
             _param.add (_content.toString ());
         }
 	    else if (rawName.equals ("module")) {
-            String [] tuple = { _class, _init };
-            _module.add (tuple);
+            ModuleInfo modInfo = new ModuleInfo( _class, _init);
+            _module.add (modInfo);
             _modParams.add (_param);
             _isModule = false;
 	    }

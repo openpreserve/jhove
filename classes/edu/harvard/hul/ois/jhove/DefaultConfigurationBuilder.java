@@ -21,8 +21,6 @@ public class DefaultConfigurationBuilder {
     
     private File configFile;
     
-    /************* TODO REMOVE THIS AFTER DEBUGGING **************/
-    private final static boolean TEMP_DEBUG = true;
     
     /** Constructor. A location for the file may be specified or
      *  left null, */
@@ -39,17 +37,17 @@ public class DefaultConfigurationBuilder {
     
     
     public void writeDefaultConfigFile () throws IOException {
-        if (TEMP_DEBUG) {
-            String configFileName = "null";
-            if (configFile != null) 
-                configFileName = configFile.getAbsolutePath();
-            System.out.println ("writeDefaultConfigFile: path is " + configFileName);
-        }
+//        if (TEMP_DEBUG) {
+//            String configFileName = "null";
+//            if (configFile != null) 
+//                configFileName = configFile.getAbsolutePath();
+//            System.out.println ("writeDefaultConfigFile: path is " + configFileName);
+//        }
         ConfigWriter cw = new ConfigWriter (configFile, null);
-        List<ConfigWriter.ModuleInfo> modules = getModules();
+        List<ModuleInfo> modules = getModules();
         // TextHandler, XmlHandler, and AuditHandler are loaded by
         // default, so there are no handlers to put in the config file.
-        List<String> handlers = new ArrayList<String> ();
+        List<String[]> handlers = new ArrayList<String[]> ();
         File homeDir = new File (JHOVE_DIR);
         File tempDir = new File (TEMP_DIR);
         try {
@@ -57,8 +55,8 @@ public class DefaultConfigurationBuilder {
                 DEFAULT_ENCODING, DEFAULT_BUFFER_SIZE);
         }
         catch (IOException e) {
-            if (TEMP_DEBUG)
-                e.printStackTrace();
+//            if (TEMP_DEBUG)
+//                e.printStackTrace();
             throw e;
         }
     }
@@ -80,13 +78,13 @@ public class DefaultConfigurationBuilder {
     }
     
     
-    protected List<ConfigWriter.ModuleInfo> getModules () {
+    protected List<ModuleInfo> getModules () {
         int nModules = builtInModules.length;
-        ArrayList<ConfigWriter.ModuleInfo> mods = new ArrayList<ConfigWriter.ModuleInfo> (nModules);
+        ArrayList<ModuleInfo> mods = new ArrayList<ModuleInfo> (nModules);
         try {
             for (int i = 0; i < nModules; i++) {
                 Class<?> cls = builtInModules[i];
-                ConfigWriter.ModuleInfo minfo = new ConfigWriter.ModuleInfo(cls.getName());
+                ModuleInfo minfo = new ModuleInfo(cls.getName());
                 minfo.init = null;       // Never used at present
                 minfo.params = getDefaultConfigParameters (cls);
                 mods.add(minfo);

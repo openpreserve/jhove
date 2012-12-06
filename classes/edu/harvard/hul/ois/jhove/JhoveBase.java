@@ -95,7 +95,7 @@ public class JhoveBase
     /** Selected encoding. */
     protected String _encoding;
     /** Associate map of configution extensions. */
-    protected Map _extensions;
+    protected Map<String, String> _extensions;
     /** Ordered list of output handlers. */
     protected List<OutputHandler> _handlerList;
     /** Map of output handlers (for fast access by name). */
@@ -314,68 +314,69 @@ public class JhoveBase
                 }
             }
 
-		_bufferSize = configHandler.getBufferSize ();
-		if (_bufferSize < 0) {
-		    String size = getFromProperties (BUFFER_PROPERTY);
-		    if (size != null) {
-                try {
-                   _bufferSize = Integer.parseInt (size);
-                }
-                catch (Exception e) {}
-		    }
-		    if (_bufferSize < 0) {
-                _bufferSize = DEFAULT_BUFFER;
-		    }
-        }
+    	    _bufferSize = configHandler.getBufferSize ();
+            if (_bufferSize < 0) {
+                String size = getFromProperties (BUFFER_PROPERTY);
+                if (size != null) {
+                    try {
+                       _bufferSize = Integer.parseInt (size);
+                    }
+                    catch (Exception e) {}
+    		    }
+    		    if (_bufferSize < 0) {
+                    _bufferSize = DEFAULT_BUFFER;
+    		    }
+            }
                 
-        /* Retrieve the ordered lists of modules and output handlers */
-        List<String[]> list = configHandler.getModule ();
-        List<List<String>> params = configHandler.getModuleParams ();
-        int n = list.size ();
-        for (int i=0; i<n; i++) {
-            String [] tuple = (String []) list.get (i);
-            List<String> param = params.get (i);
-            try {
-               Class cl = Class.forName (tuple[0]);
-               Module module = (Module) cl.newInstance ();
-               module.init (tuple[1]);
-               module.setDefaultParams (param);
-                    
-               _moduleList.add (module);
-               _moduleMap.put  (module.getName ().toLowerCase (),
-                          module);
-               _logger.info ("Initialized " + module.getName ());
-	       }
-           catch (Exception e) {
-           if (err == null) {
-                err = "cannot instantiate module: " +
-		                    tuple[0];
-           }
+            /* Retrieve the ordered lists of modules and output handlers */
+            List<ModuleInfo> modList = configHandler.getModule ();
+            List<String[]> hanList = null;
+            List<List<String>> params = configHandler.getModuleParams ();
+            int n = modList.size ();
+            for (int i=0; i<n; i++) {
+                ModuleInfo modInfo = modList.get (i);
+                List<String> param = params.get (i);
+                try {
+                   Class<?> cl = Class.forName (modInfo.clas);
+                   Module module = (Module) cl.newInstance ();
+                   module.init (modInfo.init);
+                   module.setDefaultParams (param);
+                        
+                   _moduleList.add (module);
+                   _moduleMap.put  (module.getName ().toLowerCase (),
+                              module);
+                   _logger.info ("Initialized " + module.getName ());
+    	        }
+                catch (Exception e) {
+                    if (err == null) {
+                        err = "cannot instantiate module: " +
+        		                    modInfo.clas;
+                    }
                 }
             }
 
-            list = configHandler.getHandler ();
+            hanList = configHandler.getHandler ();
             params = configHandler.getHandlerParams ();
-            n = list.size ();
+            n = hanList.size ();
             for (int i=0; i<n; i++) {
-		    String [] tuple = (String []) list.get (i);
-            List param = (List) params.get (i);
-		    try {
-                Class cl = Class.forName (tuple[0]);
-                OutputHandler handler =
-                             (OutputHandler) cl.newInstance ();
-                handler.init (tuple[1]);
-                handler.setDefaultParams (param);
-		
-                _handlerList.add (handler);
-                _handlerMap.put  (handler.getName ().toLowerCase (),
-                        		  handler);
-            }
-            catch (Exception e) {
-                if (err == null) {
-                    err = "cannot instantiate handler: " + tuple[0];
+    		    String[] tuple =  hanList.get (i);
+                List<String> param = params.get (i);
+    		    try {
+                    Class<?> cl = Class.forName (tuple[0]);
+                    OutputHandler handler =
+                                 (OutputHandler) cl.newInstance ();
+                    //handler.init (modInfo.init);
+                    handler.setDefaultParams (param);
+    		
+                    _handlerList.add (handler);
+                    _handlerMap.put  (handler.getName ().toLowerCase (),
+                            		  handler);
                 }
-            }
+                catch (Exception e) {
+                    if (err == null) {
+                        err = "cannot instantiate handler: " + tuple[0];
+                    }
+                }
                 }
         }
             // If we found any error, the caller needs to deal with it.
@@ -941,7 +942,7 @@ public class JhoveBase
     /**
      * Return the JHOVE configuration extensions.
      */
-    public  Map getExtension ()
+    public  Map<String, String> getExtension ()
     {
         return _extensions;
     }
@@ -951,7 +952,7 @@ public class JhoveBase
      */
     public  String getExtension (String name)
     {
-	return (String) _extensions.get (name);
+        return (String) _extensions.get (name);
     }
 
     /**
@@ -959,22 +960,22 @@ public class JhoveBase
      */
     public  OutputHandler getHandler (String name)
     {
-	OutputHandler handler = null;
-	if (name != null) {
-	    handler = _handlerMap.get (name.toLowerCase ());
-	}
-	return handler;
+        OutputHandler handler = null;
+        if (name != null) {
+            handler = _handlerMap.get (name.toLowerCase ());
+        }
+        return handler;
     }
 
 
     /** Returns map of handler names to handlers. */
-    public  Map getHandlerMap ()
+    public  Map<String, OutputHandler> getHandlerMap ()
     {
         return _handlerMap;
     }
     
     /** Returns the list of handlers. */
-    public  List getHandlerList ()
+    public  List<OutputHandler> getHandlerList ()
     {
         return _handlerList;
     }

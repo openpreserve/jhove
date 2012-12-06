@@ -19,6 +19,7 @@ import javax.swing.table.*;
 //import javax.swing.border.*;
 import edu.harvard.hul.ois.jhove.ConfigHandler;
 import edu.harvard.hul.ois.jhove.ConfigWriter;
+import edu.harvard.hul.ois.jhove.ModuleInfo;
 
 /**
  * Window for high-level editing of the application's
@@ -37,11 +38,11 @@ public class ConfigWindow extends JDialog {
     /* List of modules.  An entry in the list is an
      * array of 2 Strings, which are the fully qualified
      * class and the init string respectively. */
-    private List _modules;
+    private List<ModuleInfo> _modules;
     
     /* List of handlers.  This is just a list of Strings
      * giving the class. */
-    private List _handlers;
+    private List<String[]> _handlers;
         
     private int _bufferSize;
     
@@ -98,8 +99,8 @@ public class ConfigWindow extends JDialog {
         }
         else {
             // Set up defaults
-            _modules = new ArrayList (10);
-            _handlers = new ArrayList (5);
+            _modules = new ArrayList<ModuleInfo> (10);
+            _handlers = new ArrayList<String[]> (5);
             _bufferSize = -1;
             _homeDir = null;
             _tempDir = null;
@@ -160,13 +161,19 @@ public class ConfigWindow extends JDialog {
             }
             public Object getValueAt (int row, int column)
             {
-                String[] tuple = (String []) _modules.get (row);
+                ModuleInfo modInfo  = _modules.get (row);
+                String[] tuple = { modInfo.clas, modInfo.init};
                 return tuple[column];
             }
             public void setValueAt (Object obj, int row, int column)
             {
-                String[] tuple = (String []) _modules.get (row);
-                tuple[column] = (String) obj;                
+                ModuleInfo modInfo = _modules.get(row);
+                if (column == 0 && obj instanceof String) {
+                    modInfo.clas = (String) obj;
+                }
+                if (column == 1 && obj instanceof String) {
+                    modInfo.init = (String) obj;
+                }
             }
         };
         
@@ -246,11 +253,20 @@ public class ConfigWindow extends JDialog {
             }
             public Object getValueAt (int row, int column)
             {
-                return _handlers.get (row);
+                String[] tuple = (String[]) _handlers.get (row);
+                if (tuple != null) {
+                    return tuple[0];
+                }
+                else {
+                    return "";
+                }
             }
             public void setValueAt (Object obj, int row, int column)
             {
-                _handlers.set (row, obj);
+                if (obj instanceof String) {
+                    String[] stuff = new String[] { (String) obj };
+                    _handlers.set (row, stuff);
+                }
             }
         };
         
@@ -458,7 +474,7 @@ public class ConfigWindow extends JDialog {
             catch (ParseException e) {
                 return;  // refuse to save if value is invalid
             }
-            Object bufSizeValue = _bufSizeBox.getValue ();
+            //Object bufSizeValue = _bufSizeBox.getValue ();
             _bufferSize = ((Long) _bufSizeBox.getValue ()).intValue ();
             
             _encoding = _encodingBox.getText ();
@@ -539,10 +555,11 @@ public class ConfigWindow extends JDialog {
         if (selRow < 0) {
             selRow = _modules.size ();
         }
-        String[] tuple = new String[2];
-        tuple[0] = "";        // class
-        tuple[1] = null;      // init
-        _modules.add (selRow, tuple);
+//        String[] tuple = new String[2];
+//        tuple[0] = "";        // class
+//        tuple[1] = null;      // init
+        ModuleInfo modInfo = new ModuleInfo ("", null);
+        _modules.add (selRow, modInfo);
         _modTableModel.fireTableRowsInserted(selRow, selRow);
     }
 
@@ -570,7 +587,8 @@ public class ConfigWindow extends JDialog {
         if (selRow < 0) {
             selRow = _handlers.size ();
         }
-        _handlers.add (selRow, "");
+        String[] tuple = { "" };
+        _handlers.add (selRow, tuple);
         _hanTableModel.fireTableRowsInserted(selRow, selRow);
     }
 
@@ -598,34 +616,34 @@ public class ConfigWindow extends JDialog {
      *                     configFile is non-null, it becomes the
      *                     new default location.
      */
-    private void saveConfig (File configFile)
-    {
-        if (configFile != null) {
-            _configFile = configFile;
-        }
-        
-        // _configFile may be null.  In that case we must put up
-        // a dialog to select the config file here, and exit the function
-        // if the user cancels.
-        try {
-            FileOutputStream ostrm = new FileOutputStream (configFile);
-        }
-        catch (IOException e) {
-                JOptionPane.showMessageDialog (this,
-                    e.getMessage(), "Error saving config", 
-                    JOptionPane.ERROR_MESSAGE); 
-
-        }
-    }
+//    private void saveConfig (File configFile)
+//    {
+//        if (configFile != null) {
+//            _configFile = configFile;
+//        }
+//        
+//        // _configFile may be null.  In that case we must put up
+//        // a dialog to select the config file here, and exit the function
+//        // if the user cancels.
+//        try {
+//            FileOutputStream ostrm = new FileOutputStream (configFile);
+//        }
+//        catch (IOException e) {
+//                JOptionPane.showMessageDialog (this,
+//                    e.getMessage(), "Error saving config", 
+//                    JOptionPane.ERROR_MESSAGE); 
+//
+//        }
+//    }
     
-    private File doConfigFileDialog ()
-    {
-        JFileChooser chooser = new JFileChooser ();
-        chooser.setFileSelectionMode (JFileChooser.DIRECTORIES_ONLY);
-        if (chooser.showOpenDialog (this) == JFileChooser.APPROVE_OPTION) {
-            return chooser.getSelectedFile();
-        }
-        
-        return null;   // placeholder
-    }
+//    private File doConfigFileDialog ()
+//    {
+//        JFileChooser chooser = new JFileChooser ();
+//        chooser.setFileSelectionMode (JFileChooser.DIRECTORIES_ONLY);
+//        if (chooser.showOpenDialog (this) == JFileChooser.APPROVE_OPTION) {
+//            return chooser.getSelectedFile();
+//        }
+//        
+//        return null;   // placeholder
+//    }
 }

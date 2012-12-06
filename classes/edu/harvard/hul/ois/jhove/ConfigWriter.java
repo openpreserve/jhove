@@ -24,15 +24,6 @@ import edu.harvard.hul.ois.jhove.viewer.ConfigWindow;
  */
 public class ConfigWriter {
 
-    public static class ModuleInfo {
-        public String clas;
-        public String init;
-        public String[] params;
-        
-        public ModuleInfo (String className) {
-            clas = className;
-        }
-    }
     
     private PrintWriter _confOut;
     private File _tempFile;
@@ -78,7 +69,7 @@ public class ConfigWriter {
      *   configuration file remains unchanged.
      */
     public void writeFile (List<ModuleInfo> modules,
-            List<String> handlers,
+            List<String[]> handlers,
             File homeDir,
             File tempDir,
             String encoding,
@@ -127,22 +118,26 @@ public class ConfigWriter {
                          "</init>");
                 }
                 /** tuple[2] and beyond are parameters */
-                for (int i = 0; i < minfo.params.length; i++) {
-                    _confOut.println ("   <param>" + encodeContent(minfo.params[i]) +
-                         "</param>");
+                if (minfo.params != null) {
+                    for (int i = 0; i < minfo.params.length; i++) {
+                        _confOut.println ("   <param>" + encodeContent(minfo.params[i]) +
+                             "</param>");
+                    }
                 }
                 _confOut.println (" </module>");
             }
         }
         
         // Write out the handlers
-        ListIterator<String> hiter = handlers.listIterator ();
-        while (iter.hasNext ()) {
-            String handler = (String) hiter.next ();
-            _confOut.println (" <handler>");
-            _confOut.println ("   <class>" + encodeContent (handler) +
-                     "</class>");
-            _confOut.println (" </handler>");
+        ListIterator<String[]> hiter = handlers.listIterator ();
+        while (hiter.hasNext ()) {
+            String handler = hiter.next ()[0];
+            if (handler.length() > 0) {          // Don't write out blank handler names
+                _confOut.println (" <outputHandler>");
+                _confOut.println ("   <class>" + encodeContent (handler) +
+                         "</class>");
+                _confOut.println (" </outputHandler>");
+            }
         }
 
         writeTail ();
