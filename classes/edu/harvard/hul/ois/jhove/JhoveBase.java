@@ -1114,11 +1114,11 @@ public class JhoveBase
      * Sets the buffer size.  A value of -1 signifies that the invoking
      * code will assume the default buffer size.
      * 
-     * Any value less than 1024 will result in a buffer size of 1024.
+     * Any non-negative value less than 1024 will result in a buffer size of 1024.
      */
     public  void setBufferSize (int bufferSize)
     {
-        if (bufferSize < 1024) {
+        if (bufferSize >= 0 && bufferSize < 1024) {
             _bufferSize = 1024;
         }
         else {
