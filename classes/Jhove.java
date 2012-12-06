@@ -221,6 +221,7 @@ public class Jhove
                                 bufferSize = Integer.parseInt (args[++i]);
                             }
                             catch (NumberFormatException e) {
+                                System.err.println ("Invalid buffer size, using default.");
                             }
                         }
         		    }
