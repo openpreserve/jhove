@@ -38,8 +38,8 @@ public class JhoveBase
 
     private static Date _date;
     public static final String _name = "JhoveBase";
-    public static final String _release = "1.9b1";
-    public static final int [] DATE = {2012, 12, 4};
+    public static final String _release = "1.9";
+    public static final int [] DATE = {2012, 12, 6};
     private static final String _rights =
     	"Derived from software Copyright 2004-2011 " +
         "by the President and Fellows of Harvard College. " +
@@ -910,7 +910,7 @@ public class JhoveBase
      */
     public int getBufferSize ()
     {
-	return _bufferSize;
+        return _bufferSize;
     }
 
     /**
@@ -918,7 +918,7 @@ public class JhoveBase
      */
     public  String getConfigFile ()
     {
-	return _configFile;
+        return _configFile;
     }
 
     /**
@@ -1113,10 +1113,17 @@ public class JhoveBase
     /**
      * Sets the buffer size.  A value of -1 signifies that the invoking
      * code will assume the default buffer size.
+     * 
+     * Any value less than 1024 will result in a buffer size of 1024.
      */
     public  void setBufferSize (int bufferSize)
     {
-        _bufferSize = bufferSize;
+        if (bufferSize < 1024) {
+            _bufferSize = 1024;
+        }
+        else {
+            _bufferSize = bufferSize;
+        }
     }
 
 
