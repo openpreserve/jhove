@@ -32,10 +32,10 @@ public class Jhove
     private static final String NAME = "Jhove";
 
     /** Application build date, YYYY, MM, DD. */
-    private static final int [] DATE = JhoveBase.DATE;
+    private static int [] DATE;
 
     /** Application release number. */
-    private static final String RELEASE = JhoveBase._release;
+    private static String RELEASE;
 
     /** Application invocation syntax. */
     private static final String USAGE = "java " + NAME + " [-c config] " +
@@ -56,11 +56,13 @@ public class Jhove
 
     public static void main (String [] args)
     {
+        RELEASE = JhoveBase._release;      // possibly safer than final static init
+        DATE = JhoveBase.DATE;
         /* Make sure we have a satisfactory version of Java. */
         String version = System.getProperty ("java.vm.version");
-        if (version.compareTo ("1.4.0") < 0) {
+        if (version.compareTo ("1.5.0") < 0) {
             //System.err.println (NAME + ": Java 1.4 or higher is required");
-            System.out.println ("Java 1.4 or higher is required");
+            System.out.println ("Java 1.5 or higher is required");
             System.exit (-1);
         }
 
@@ -173,6 +175,7 @@ public class Jhove
         		    else if (args[i].equals ("-p")) {
                         // Obsolete -- but eat the next arg for compatibility
                         if (i <args.length-1) {
+                            @SuppressWarnings("unused")
                             String moduleParam = args[++i];
                         }
                     }
@@ -184,6 +187,7 @@ public class Jhove
         		    else if (args[i].equals ("-P")) {
                         // Obsolete -- but eat the next arg for compatibility
                         if (i <args.length-1) {
+                            @SuppressWarnings("unused")
                             String handlerParam = args[++i];
                         }
         		    }
