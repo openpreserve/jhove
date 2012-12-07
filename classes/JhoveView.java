@@ -37,16 +37,16 @@ public class JhoveView
     private static final String NAME = "JhoveView";
 
     /** Application build date, YYYY, MM, DD. */
-    private static final int [] DATE = JhoveBase.DATE;
+    private static int [] _date;
 
     /** Usage string is meaningless here. */
     private static final String USAGE = null;
     
     /** Application release number. */
-    private static final String RELEASE = JhoveBase._release;
+    private static String _release;
 
     /** Default character encoding */
-    private static final String DEFAULT_ENCODING = "UTF-8";
+    //private static final String DEFAULT_ENCODING = "UTF-8";
 
     /** Copyright information. */
     private static final String RIGHTS = 
@@ -60,17 +60,17 @@ public class JhoveView
      ******************************************************************/
 
     /** Configuration file property. */
-    private static final String CONFIG_PROPERTY = "edu.harvard.hul.ois." +
-                                                  "jhove.config";
+//    private static final String CONFIG_PROPERTY = "edu.harvard.hul.ois." +
+//                                                  "jhove.config";
     /** Jhove directory */
-    private static final String JHOVE_DIR = "jhove";
+//    private static final String JHOVE_DIR = "jhove";
 
     /** Config directory */
-    private static final String CONFIG_DIR = "conf";
+//    private static final String CONFIG_DIR = "conf";
 
     /** SAX parser class property. */
-    private static final String SAX_PROPERTY = "edu.harvard.hul.ois.jhove." +
-                                               "saxClass";
+//    private static final String SAX_PROPERTY = "edu.harvard.hul.ois.jhove." +
+//                                               "saxClass";
 
     /******************************************************************
      * Action constants.
@@ -132,6 +132,8 @@ public class JhoveView
      */
     public static void main (String [] args)
     {
+        _release = JhoveBase._release;     // Seems safer than final init
+        _date = JhoveBase.DATE;
         /* Make sure we have a satisfactory version of Java. */
         String version = System.getProperty ("java.vm.version");
         if (version.compareTo ("1.4.0") < 0) {
@@ -144,7 +146,7 @@ public class JhoveView
         // of the screen where it belongs.
         System.setProperty ("apple.laf.useScreenMenuBar", "true");
 
-        App app = new App (NAME, RELEASE, DATE, USAGE, RIGHTS);
+        App app = new App (NAME, _release, _date, USAGE, RIGHTS);
         try {
 
             /**********************************************************
