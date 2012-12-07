@@ -6,7 +6,7 @@ see the file LICENSE for details)
 
 Versions 1.7 and beyond of JHOVE are no longer under the control of Harvard.
 
-RELEASE NOTES FOR JHOVE 1.9b1
+RELEASE NOTES FOR JHOVE 1.9b2
 
 GENERAL
 
@@ -24,6 +24,16 @@ GENERAL
 
 4. jhove.bat now simply uses the Java command rather than requiring
    the user to set up the Java path.
+
+5. JhoveView.jar and jhove (the top level shell script) are now forced
+   by ant to be executable so there are no mistakes.
+
+6. Warning message given on invalid buffer size string, and minimum 
+   buffer size is 1024.
+
+7. Configuration file code for adding handlers and giving init strings 
+   to modules was an awful mess that never could have worked. 
+   Major repairs done.
    
 TIFF MODULE
 
