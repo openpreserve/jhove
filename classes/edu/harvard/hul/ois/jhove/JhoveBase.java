@@ -38,7 +38,7 @@ public class JhoveBase
 
     private static Date _date;
     public static final String _name = "JhoveBase";
-    public static final String _release = "1.9";
+    public static final String _release = "1.9b2";
     public static final int [] DATE = {2012, 12, 6};
     private static final String _rights =
     	"Derived from software Copyright 2004-2011 " +
@@ -377,7 +377,7 @@ public class JhoveBase
                         err = "cannot instantiate handler: " + tuple[0];
                     }
                 }
-                }
+            }
         }
             // If we found any error, the caller needs to deal with it.
             if (err != null) {
