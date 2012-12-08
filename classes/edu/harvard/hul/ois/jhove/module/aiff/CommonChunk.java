@@ -67,7 +67,7 @@ public class CommonChunk extends Chunk {
             compressionType = module.read4Chars (_dstream);
             // According to David Ackerman, the compression type can
             // change the endianness of the document.
-	    if (compressionType.equals ("sowt")) {
+            if (compressionType.equals ("sowt")) {
                 module.setEndian (false);    // little-endian
             }
             bytesLeft -= 4;
@@ -94,41 +94,41 @@ public class CommonChunk extends Chunk {
 	    if (compressionType.equals ("NONE")) {
 	    }
 	    else if (compressionType.equals ("raw ")) {
-		aes.setAudioDataEncoding ("PCM 8-bit offset-binary");
+            aes.setAudioDataEncoding ("PCM 8-bit offset-binary");
 	    }
 	    else if (compressionType.equals ("twos")) {
-		aes.setAudioDataEncoding ("PCM 16-bit twos-complement big-endian");
+            aes.setAudioDataEncoding ("PCM 16-bit twos-complement big-endian");
 	    }
 	    else if (compressionType.equals ("sowt")) {
-		aes.setAudioDataEncoding ("PCM 16-bit twos-complement little-endian");
+            aes.setAudioDataEncoding ("PCM 16-bit twos-complement little-endian");
 	    }
 	    else if (compressionType.equals ("fl32")) {
-		aes.setAudioDataEncoding ("PCM 32-bit integer");
+            aes.setAudioDataEncoding ("PCM 32-bit integer");
 	    }
 	    else if (compressionType.equals ("fl64")) {
-		aes.setAudioDataEncoding ("PCM 64-bit floating point");
+            aes.setAudioDataEncoding ("PCM 64-bit floating point");
 	    }
 	    else if (compressionType.equals ("in24")) {
-		aes.setAudioDataEncoding ("PCM 24-bit integer");
+            aes.setAudioDataEncoding ("PCM 24-bit integer");
 	    }
 	    else if (compressionType.equals ("in32")) {
-		aes.setAudioDataEncoding ("PCM 32-bit integer");
+            aes.setAudioDataEncoding ("PCM 32-bit integer");
 	    }
 	    else {
-		aes.setAudioDataEncoding (compressionName);
+            aes.setAudioDataEncoding (compressionName);
 
                 // The size of the data after compression isn't available
                 // from the Common chunk, so we mark it as "unknown."
                 // With a bit more sophistication, we could combine the
                 // information from here and the Sound Data chunk to get
                 // the effective byte rate, but we're about to release.
-		String name = compressionName;
-		if (name == null || name.length () == 0) {
-		    name = compressionType;
-		}
-                aes.setBitrateReduction (compressionName, "", "", "",
+           String name = compressionName;
+           if (name == null || name.length () == 0) {
+               name = compressionType;
+	       }
+           aes.setBitrateReduction (compressionName, "", "", "",
 					 "LOSSY", "UNKNOWN", "FIXED");
-            }
+           }
         }
         if (compressionName != null && compressionName.length () > 0) {
             module.addAiffProperty (new Property ("CompressionName",
@@ -141,6 +141,7 @@ public class CommonChunk extends Chunk {
 
     /* Assign channel locationss according to the number of 
      * channels and the standard AIFF assignment. */
+    @SuppressWarnings("fallthrough")
     private void setChannelLocations 
         (AESAudioMetadata aes, int numChannels)
     {
