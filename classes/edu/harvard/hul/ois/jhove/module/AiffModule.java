@@ -90,6 +90,9 @@ public class AiffModule
     
     /* File type */
     protected int fileType;
+    
+    /* Endianness for current file (not necessarily same as _bigEndian) */
+    protected boolean thisFileBigEndian;
 
     /******************************************************************
      * PRIVATE CLASS FIELDS.
@@ -342,7 +345,7 @@ public class AiffModule
             info.setProfile ("AIFF-C");
        }
 
-       _aesMetadata.setByteOrder (_bigEndian ? AESAudioMetadata.BIG_ENDIAN :
+       _aesMetadata.setByteOrder (thisFileBigEndian ? AESAudioMetadata.BIG_ENDIAN :
 				               AESAudioMetadata.LITTLE_ENDIAN);
 
        // Most properties were added by the Chunks.  The Annotations, Saxel
@@ -379,7 +382,7 @@ public class AiffModule
      */
     public void setEndian (boolean bigEndian)
     {
-        _bigEndian = bigEndian;
+        thisFileBigEndian = bigEndian;
     }
 
     /** Adds a Property to the AIFF metadata. */
@@ -416,6 +419,7 @@ public class AiffModule
     {
         super.initParse ();
 
+        thisFileBigEndian = _bigEndian;
        _propList = new LinkedList ();
        _metadata = new Property ("AIFFMetadata",
                PropertyType.PROPERTY,
@@ -467,7 +471,6 @@ public class AiffModule
     public long readUnsignedInt (DataInputStream stream)
 	throws IOException
     {
-//      return readUnsignedInt (stream, _bigEndian, this);
         return readUnsignedInt (stream,  BIGENDIAN, this);
     }
 
@@ -476,7 +479,6 @@ public class AiffModule
     public int readUnsignedShort (DataInputStream stream)
 	throws IOException
     {
-//      return readUnsignedShort (stream, _bigEndian, this);
         return readUnsignedShort (stream,  BIGENDIAN, this);
     }
 
