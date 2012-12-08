@@ -142,25 +142,25 @@ public class JpegModule extends ModuleBase
     protected NisoImageMetadata _niso;
     
     /* Top-level property list */
-    protected List _propList;
+    protected List<Property> _propList;
     
     /* List of image properties. */
-    protected List _imageList;
+    protected List<Property> _imageList;
     
     /* Tiling information, if a DTI has been seen. */
     protected Tiling _tiling;
     
     /* List of quantization tables. */
-    protected List _quantTables;
+    protected List<QuantizationTable> _quantTables;
     
     /* List of arithmetic conditioning entries */
-    protected List _arithCondTables;
+    protected List<ArithConditioning> _arithCondTables;
     
     /* List of SRS entries. */
-    protected List _srsList;
+    protected List<SRS> _srsList;
     
     /* Property list for the primary image. */
-    protected List _primaryImageList;
+    protected List<Property> _primaryImageList;
     
     /* Number of segments read */
     protected int _numSegments;
@@ -200,17 +200,17 @@ public class JpegModule extends ModuleBase
     protected boolean _seenSOF;
     
     /* List of comment text */
-    protected List _commentsList;
+    protected List<String> _commentsList;
     
     /* List of extensions used */
-    protected List _jpegExtsList;
+    protected List<String> _jpegExtsList;
     
     /* List of application segments used */
-    protected List _appSegsList;
+    protected List<String> _appSegsList;
     
     /* List of expand reference components markers.
      * Members are boolean[2] */
-    protected List _expList;
+    protected List<boolean[]> _expList;
     
     /* Set of compression types used. */
     protected Set _compressSet;
@@ -462,7 +462,7 @@ public class JpegModule extends ModuleBase
             _dstream = getBufferedDataStream (stream, _je != null ?
                     _je.getBufferSize () : 0);
         }
-        _propList = new LinkedList ();
+        _propList = new LinkedList<Property> ();
         _metadata = new Property ("JPEGMetadata",
                 PropertyType.PROPERTY,
                 PropertyArity.LIST,
@@ -687,7 +687,7 @@ public class JpegModule extends ModuleBase
         info.setProperty (_metadata);
 
 	if (_units == 0) {
-	    List list = new ArrayList ();
+	    List<Property> list = new ArrayList<Property> ();
 	    list.add (new Property ("PixelAspectRatioX", PropertyType.INTEGER,
 				    new Integer (_xDensity)));
 	    list.add (new Property ("PixelAspectRatioY", PropertyType.INTEGER,
@@ -714,8 +714,8 @@ public class JpegModule extends ModuleBase
                 ("Scans", PropertyType.INTEGER, 
                     new Integer (_numScans)));
         if (!_quantTables.isEmpty()) {
-            List qpl = new LinkedList ();
-            ListIterator iter = _quantTables.listIterator ();
+            List<Property> qpl = new LinkedList<Property> ();
+            ListIterator<QuantizationTable> iter = _quantTables.listIterator ();
             while (iter.hasNext ()) {
                 QuantizationTable qt = (QuantizationTable) iter.next ();
                 qpl.add (qt.makeProperty (_je.getShowRawFlag()));
@@ -728,8 +728,8 @@ public class JpegModule extends ModuleBase
         }
         
         if (!_arithCondTables.isEmpty()) {
-            List qpl = new LinkedList ();
-            ListIterator iter = _arithCondTables.listIterator ();
+            List<Property> qpl = new LinkedList<Property> ();
+            ListIterator<ArithConditioning> iter = _arithCondTables.listIterator ();
             while (iter.hasNext ()) {
                 ArithConditioning qt = (ArithConditioning) iter.next ();
                 qpl.add (qt.makeProperty (_je.getShowRawFlag()));
@@ -741,8 +741,8 @@ public class JpegModule extends ModuleBase
                    qpl));
         }
         if (!_srsList.isEmpty()) {
-            List srsl = new LinkedList ();
-            ListIterator iter = _srsList.listIterator ();
+            List<Property> srsl = new LinkedList<Property> ();
+            ListIterator<SRS> iter = _srsList.listIterator ();
             while (iter.hasNext ()) {
                 SRS s = (SRS) iter.next ();
                 srsl.add (s.makeProperty ());
@@ -808,11 +808,11 @@ public class JpegModule extends ModuleBase
 	/* Create a new property list containing the count of the images and
 	 * the list of image properties.
 	 */
-	List list = new ArrayList ();
+	List<Property> list = new ArrayList<Property> ();
 	list.add (new Property ("Number", PropertyType.INTEGER,
 				PropertyArity.SCALAR,
 				new Integer (_imageList.size ())));
-	Iterator iter = _imageList.iterator ();
+	Iterator<Property> iter = _imageList.iterator ();
 	while (iter.hasNext ()) {
 	    Property prop = (Property) iter.next ();
 	    list.add (prop);
@@ -890,15 +890,15 @@ public class JpegModule extends ModuleBase
         _reportedJFIF = false;
         _numSegments = 0;
         _numScans = 0;
-        _commentsList = new LinkedList ();
-        _jpegExtsList = new LinkedList ();
-        _appSegsList = new LinkedList ();
-        _primaryImageList = new LinkedList ();
-        _quantTables = new LinkedList ();
-        _arithCondTables = new LinkedList ();
-        _srsList = new LinkedList ();
+        _commentsList = new LinkedList<String> ();
+        _jpegExtsList = new LinkedList<String> ();
+        _appSegsList = new LinkedList<String> ();
+        _primaryImageList = new LinkedList<Property> ();
+        _quantTables = new LinkedList<QuantizationTable> ();
+        _arithCondTables = new LinkedList<ArithConditioning> ();
+        _srsList = new LinkedList<SRS> ();
         _compressSet = new HashSet ();
-        _expList = new LinkedList ();
+        _expList = new LinkedList<boolean[]> ();
         _exifProp = null;
         _xmpProp = null;
         _capability0 = -1;
@@ -943,6 +943,7 @@ public class JpegModule extends ModuleBase
     
     /* Reads an APP0 marker segment.
      * We have already read the APP0 marker itself. */
+    @SuppressWarnings("fallthrough")
     protected void readAPP0 (RepInfo info) throws IOException
     {
         // Bytes for JFIF extension APP0
@@ -1014,7 +1015,7 @@ public class JpegModule extends ModuleBase
                 thumbNiso.setCompressionScheme (1);   // uncompressed
                 thumbNiso.setPixelSize(8);
                 
-                List thumbPropList = new LinkedList ();
+                List<Property> thumbPropList = new LinkedList<Property> ();
                 thumbPropList.add (new Property ("NisoImageMetadata",
                     PropertyType.NISOIMAGEMETADATA, thumbNiso));
                 Property thumbProp = new Property ("ThumbImage",
@@ -1050,7 +1051,7 @@ public class JpegModule extends ModuleBase
                 thumbNiso.setColorSpace (extCode == 0X13 ? 2 : 3);
                 thumbNiso.setCompressionScheme (1);   // uncompressed
                 thumbNiso.setPixelSize(8);
-                List thumbPropList = new LinkedList ();
+                List<Property> thumbPropList = new LinkedList<Property> ();
                 thumbPropList.add (new Property ("NisoImageMetadata",
                     PropertyType.NISOIMAGEMETADATA, thumbNiso));
                 Property thumbProp = new Property ("ThumbImage",
@@ -1118,7 +1119,7 @@ public class JpegModule extends ModuleBase
             RepInfo exifInfo = je.readExifData(_dstream, _je, length);
             if (exifInfo != null) {
 		/* Copy any EXIF messages into the JPEG info object. */
-		List list = exifInfo.getMessage ();
+		List<Message> list = exifInfo.getMessage ();
 		int size = list.size ();
 		for (int i=0; i<size; i++) {
 		    info.setMessage ((Message) list.get (i));
@@ -1217,6 +1218,7 @@ public class JpegModule extends ModuleBase
             if (nisoCS >= 0) {
                 _niso.setColorSpace (nisoCS);
             }
+            @SuppressWarnings("unused")
             int bps = readUnsignedByte (_dstream, this);
             int compType = readUnsignedByte (_dstream, this);
             int nisoCT = Spiff.compressionTypeToNiso (compType);
@@ -1229,7 +1231,9 @@ public class JpegModule extends ModuleBase
                 // to NISO values
                 _niso.setSamplingFrequencyUnit(units + 1);
             }
+            @SuppressWarnings("unused")
             long vRes = readUnsignedInt (_dstream);
+            @SuppressWarnings("unused")
             long hRes = readUnsignedInt (_dstream);
             // These are fixed point numbers (does it say where the
             // point is?) unless units == 0, in which case there's
@@ -1271,6 +1275,7 @@ public class JpegModule extends ModuleBase
     /* Read the DTI segment, and begin setting up the tiling property */
     protected void readDTI (RepInfo info) throws IOException
     {
+        @SuppressWarnings("unused")
         int length = readUnsignedShort (_dstream);
         _tiling = new Tiling ();
         _tiling.setTilingType (readUnsignedByte (_dstream, this));
@@ -1285,6 +1290,7 @@ public class JpegModule extends ModuleBase
      * property set up. */
     protected void readDTT (RepInfo info) throws IOException
     {
+        @SuppressWarnings("unused")
         int length = readUnsignedShort (_dstream);
         if (_tiling == null) {
             info.setMessage (new ErrorMessage
@@ -1520,7 +1526,7 @@ public class JpegModule extends ModuleBase
             // properties will be numbers.  If we're doing
             // verbose output, they will be strings.
             Property cap0Prop;
-            List capList = new ArrayList (3);
+            List<Property> capList = new ArrayList<Property> (3);
             if (_je.getShowRawFlag()) {
                 cap0Prop = new Property ("Version0",
                     PropertyType.INTEGER,
@@ -1616,12 +1622,12 @@ public class JpegModule extends ModuleBase
 
     protected Property buildExpandProp (RepInfo info)
     {
-        List plist = new LinkedList ();
+        List<Property> plist = new LinkedList<Property> ();
         Property prop = new Property ("ExpansionSegments",
                 PropertyType.PROPERTY,
                 PropertyArity.LIST,
                 plist);
-        ListIterator iter = _expList.listIterator ();
+        ListIterator<boolean[]> iter = _expList.listIterator ();
         while (iter.hasNext ()) {
             boolean[] lhlv = (boolean []) iter.next ();
             Property[] lhlvProp = new Property[2];
@@ -1643,7 +1649,7 @@ public class JpegModule extends ModuleBase
     protected Property readXMP (byte[] buf)
     {
         Property xmpProp = null;
-        final String badMetadata = "Invalid or ill-formed XMP metadata"; 
+        //final String badMetadata = "Invalid or ill-formed XMP metadata"; 
         try {
             ByteArrayInputStream strm = 
                 new ByteArrayInputStream (buf);
