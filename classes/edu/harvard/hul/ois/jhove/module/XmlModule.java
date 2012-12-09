@@ -197,7 +197,11 @@ public class XmlModule
      * Per-action initialization.
      *
      * @param	param The module parameter; under command-line Jhove, the -p parameter.
-     *        If the first character is 's', then signature checking requires
+     *        If the parameter starts with "schema", then the part to the
+     *        right of the equal sign identifies a URI with a local path
+     *        (URI, then semicolon, then path).
+     *        If the first character is 's' and the parameter isn't "schema", 
+     *        then signature checking requires
      *        a document declaration, and the rest of the URL is considered
      *        as follows.
      *        If the parameter begins with 'b' or 'B', then the remainder of
@@ -208,11 +212,14 @@ public class XmlModule
     {
         if (param != null) {
             param = param.toLowerCase ();
-            if (param.indexOf ('s') == 0) {
+            if (param.toLowerCase ().startsWith("schema=")) {
+                addLocalSchema(param);
+            }
+            else if (param.indexOf ('s') == 0) {
                 _sigWantsDecl = true;
                 param = param.substring(1);
             }
-            if (param.indexOf ('b') == 0) {
+            else if (param.indexOf ('b') == 0) {
                 _baseURL = param.substring (1);
             }
         }
@@ -1086,15 +1093,15 @@ public class XmlModule
     protected void initParse ()
     {
        super.initParse ();
-       if (_defaultParams != null) {
-           Iterator<String> iter = _defaultParams.iterator ();
-           while (iter.hasNext ()) {
-               String param =  iter.next ();
-               if (param.toLowerCase ().startsWith("schema=")) {
-                   addLocalSchema(param);
-               }
-           }
-       }
+//       if (_defaultParams != null) {
+//           Iterator<String> iter = _defaultParams.iterator ();
+//           while (iter.hasNext ()) {
+//               String param =  iter.next ();
+//               if (param.toLowerCase ().startsWith("localschema=")) {
+//                   addLocalSchema(param);
+//               }
+//           }
+//       }
     }
     
     /* Checks if a String is .equals to any member of a Set of strings. */
@@ -1148,13 +1155,12 @@ public class XmlModule
         int eq = param.indexOf('=');
         int semi = param.indexOf(';');
         try {
-            String uri = param.substring(eq+1, semi);
-            String path = param.substring(semi + 1);
+            String uri = param.substring(eq+1, semi).trim();
+            String path = param.substring(semi + 1).trim();
             File f = new File (path);
-            if (!f.exists()) {
-                return;
+            if (f.exists()) {
+                _localSchemas.put (uri, f);
             }
-            _localSchemas.put (uri, f);
         }
         catch (Exception e) {}
     }
