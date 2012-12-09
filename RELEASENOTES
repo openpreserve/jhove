@@ -6,7 +6,7 @@ see the file LICENSE for details)
 
 Versions 1.7 and beyond of JHOVE are no longer under the control of Harvard.
 
-RELEASE NOTES FOR JHOVE 1.9b2
+RELEASE NOTES FOR JHOVE 1.9b3
 
 GENERAL
 
@@ -35,6 +35,12 @@ GENERAL
    to modules was an awful mess that never could have worked. 
    Major repairs done.
    
+AIFF MODULE
+
+1. If an AIFF file was found to be little-endian, the module instance
+   would stay in little-endian mode for all subsequent files. This
+   has been fixed.
+   
 TIFF MODULE
 
 1. TIFF files that had strip or tile offsets but no corresponding byte
@@ -44,9 +50,17 @@ TIFF MODULE
 XML MODULE
 
 1. Cleaned up reporting of schemas, Added some small classes to replace
-   the use of string arrays for information structures.
-   
-   
+   the use of string arrays for information structures. Made URI comparison
+   for local schema parameter case-independent. Resolved conflict between
+   "s" and "schema" parameters.
+
+WAVE MODULE
+
+1.  Some uncaught exceptions caused the module to throw all the way
+    back to JhoveBase and not report any result for certain defective
+    files. These now report the file as not well-formed. 
+
+
 RELEASE NOTES FOR JHOVE 1.8
 
 GENERAL
