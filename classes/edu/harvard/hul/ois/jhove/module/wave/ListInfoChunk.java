@@ -96,8 +96,17 @@ public class ListInfoChunk extends Superchunk {
                 info.setMessage (new InfoMessage
                     ("Chunk type '" + id + "' in List Info Chunk ignored"));
             }
-            else if (!chunk.readChunk (info)) {
-                return false;
+            else {
+                try {
+                    if (!chunk.readChunk (info)) {
+                        return false;
+                    }
+                }
+                catch (JhoveException e) {
+                    info.setMessage(new ErrorMessage (e.getMessage()));
+                    info.setWellFormed (false);
+                    return false;
+                }
             }
             if ((chunkSize & 1) != 0) {
                 // Must come out to an even byte boundary
@@ -147,8 +156,17 @@ public class ListInfoChunk extends Superchunk {
                 info.setMessage (new InfoMessage
                     ("Chunk type '" + id + "' in Associated Data Chunk ignored"));
             }
-            else if (!chunk.readChunk (info)) {
-                return false;
+            else {
+                try {
+                    if (!chunk.readChunk (info)) {
+                        return false;
+                    }
+                }
+                catch (JhoveException e) {
+                    info.setMessage(new ErrorMessage (e.getMessage()));
+                    info.setWellFormed (false);
+                    return false;
+                }
             }
         }        
         return false;
@@ -191,8 +209,17 @@ public class ListInfoChunk extends Superchunk {
                 info.setMessage (new InfoMessage ("Chunk type '" + id +
 				  "' in Associated Data Chunk ignored"));
             }
-            else if (!chunk.readChunk (info)) {
-                return false;
+            else {
+                try {
+                    if (!chunk.readChunk (info)) {
+                        return false;
+                    }
+                }
+                catch (JhoveException e) {
+                    info.setMessage(new ErrorMessage (e.getMessage()));
+                    info.setWellFormed (false);
+                    return false;
+                }
             }
             if ((chunkSize & 1) != 0) {
                 // Must come out to an even byte boundary

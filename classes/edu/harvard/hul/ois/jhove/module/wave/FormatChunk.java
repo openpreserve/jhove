@@ -57,7 +57,7 @@ public class FormatChunk extends Chunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    public boolean readChunk(RepInfo info) throws IOException, JhoveException {
         WaveModule module = (WaveModule) _module;
         int validBitsPerSample = -1;
         byte[] subformat = null;
@@ -142,8 +142,14 @@ public class FormatChunk extends Chunk {
                     WaveStrings.COMPRESSION_FORMAT,
                     WaveStrings.COMPRESSION_INDEX));
         AESAudioMetadata aes = module.getAESMetadata ();
-        String compName = WaveStrings.COMPRESSION_FORMAT
+        String compName;
+        try {
+            compName = WaveStrings.COMPRESSION_FORMAT
                 [WaveStrings.COMPRESSION_INDEX[compressionCode]];
+        }
+        catch (Exception e) {
+            throw new JhoveException ("Error in FormatChunk: " + e.getClass().getName());
+        }
         aes.setAudioDataEncoding(compName);
         aes.setNumChannels(numChannels);
         setChannelLocations (aes, numChannels);

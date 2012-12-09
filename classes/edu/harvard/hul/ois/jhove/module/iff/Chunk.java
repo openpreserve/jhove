@@ -7,6 +7,7 @@
 package edu.harvard.hul.ois.jhove.module.iff;
 
 import edu.harvard.hul.ois.jhove.*;
+
 import java.io.*;
 
 /**
@@ -44,9 +45,10 @@ public abstract class Chunk {
      * 
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
+     * @throws JhoveException 
      * 
      */
-    public abstract boolean readChunk (RepInfo info) throws IOException;
+    public abstract boolean readChunk (RepInfo info) throws IOException, JhoveException;
     
     /** Convert a byte buffer cleanly to an ASCII string.
      *  This is used for fixed-allocation strings in Broadcast
