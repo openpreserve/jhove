@@ -320,7 +320,7 @@ public class XmlModuleHandler extends DefaultHandler {
 
     {
         // Check any custom mapping from the config
-        File fil = _localSchemas.get(systemId);
+        File fil = _localSchemas.get(systemId.toLowerCase());
         if (fil != null) {
             try {
                 FileInputStream inStrm = new FileInputStream(fil);
