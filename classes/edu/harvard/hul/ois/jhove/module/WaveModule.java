@@ -333,6 +333,14 @@ public class WaveModule
                 ("Unexpected end of file", _nByte));
            return 0;
        }
+       catch (Exception e) {    // TODO make this more specific
+           e.printStackTrace();
+           info.setWellFormed (false);
+           info.setMessage (new ErrorMessage 
+                ("Exception reading file: " + e.getClass().getName() + 
+                        ", " + e.getMessage(), _nByte));
+           return 0;
+       }
        
        // Set duration from number of samples and rate.
        if (numSamples > 0) {
@@ -805,7 +813,14 @@ public class WaveModule
        }
        
        if (chunk != null) {
-           if (!chunk.readChunk (info)) {
+           try {
+               if (!chunk.readChunk (info)) {
+                   return false;
+               }
+           }
+           catch (JhoveException e) {
+               info.setMessage(new ErrorMessage (e.getMessage()));
+               info.setWellFormed (false);
                return false;
            }
        }
