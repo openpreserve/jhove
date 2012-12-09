@@ -723,7 +723,14 @@ public class AiffModule
                 ("Chunk type '" + id + "' ignored", _nByte));
         }
         if (chunk != null) {
-            if (!chunk.readChunk (info)) {
+            try {
+                if (!chunk.readChunk (info)) {
+                    return false;
+                }
+            }
+            catch (JhoveException e) {
+                info.setMessage(new ErrorMessage (e.getMessage()));
+                info.setWellFormed (false);
                 return false;
             }
         }
