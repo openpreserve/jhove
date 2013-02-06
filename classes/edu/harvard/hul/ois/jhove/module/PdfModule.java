@@ -1585,7 +1585,7 @@ public class PdfModule
             }
 
             if ("Standard".equals (filterText)) {
-                List stdList = new ArrayList (4);
+                List<Property> stdList = new ArrayList<Property> (4);
                 // Flags have a known meaning only if Standard
                 // security handler was specified
                 PdfObject flagObj = dict.get ("P");
@@ -3128,45 +3128,53 @@ public class PdfModule
 				 List<Property> propList, RepInfo info)
 	throws PdfException
     {
-	try {
-	    Destination dest = new Destination (itemObj, this, false);
-	    if (dest.isIndirect()) {
-		// Encryption messes up name trees
-		if (!_encrypted) {
-		    int pageObjNum = resolveIndirectDest
-			(dest.getIndirectDest ());
-		    if (pageObjNum == -1) {
-			// The scope of the reference is outside this
-			// file, so we just report it as such.
-			propList.add (new Property (propName,
-						    PropertyType.STRING,
-						    "External"));
-		    }
-		    else {
-			propList.add (new Property (propName,
-						    PropertyType.INTEGER,
-						    new Integer (pageObjNum)));
-		    }
-		}
-	    }
-	    else {
-		int pageObjNum = dest.getPageDestObjNumber ();
-		Integer destPg = (Integer) 
-		    _pageSeqMap.get (new Integer (pageObjNum));
-		if (destPg != null) {
-		    propList.add (new Property (propName,
-						PropertyType.INTEGER,
-						destPg));
-		}
-	    }
-	}
-	catch (Exception e) {
-	    propList.add (new Property (propName, PropertyType.STRING,
-					"null"));
-            info.setMessage (new ErrorMessage (e.getMessage (),
-					       _parser.getOffset ()));
-	    info.setValid (false);
-	}
+    	try {
+    	    Destination dest = new Destination (itemObj, this, false);
+    	    if (dest.isIndirect()) {
+                // Encryption messes up name trees
+                if (!_encrypted) {
+                    int pageObjNum = resolveIndirectDest
+                        (dest.getIndirectDest ());
+                    if (pageObjNum == -1) {
+                    // The scope of the reference is outside this
+                    // file, so we just report it as such.
+                    propList.add (new Property (propName,
+                                    PropertyType.STRING,
+                                    "External"));
+                    }
+                    else {
+                        propList.add (new Property (propName,
+                                    PropertyType.INTEGER,
+                                    new Integer (pageObjNum)));
+                    }
+                }
+            }
+    	    else {
+    	        if (dest.getPageDest() == null ) {
+    	            return;      // can't get the page object number
+    	        }
+        		int pageObjNum = dest.getPageDestObjNumber ();
+        		Integer destPg = (Integer) 
+        		    _pageSeqMap.get (new Integer (pageObjNum));
+        		if (destPg != null) {
+        		    propList.add (new Property (propName,
+        						PropertyType.INTEGER,
+        						destPg));
+        		}
+    	    }
+    	}
+    	catch (Exception e) {
+    	    String msg = e.getClass().getName();
+    	    String msg1 = e.getMessage();
+    	    if (msg1 != null) {
+    	        msg = msg + ": " + msg1;
+    	    }
+    	    propList.add (new Property (propName, PropertyType.STRING,
+    					"null"));
+                info.setMessage (new ErrorMessage (msg,
+    					       _parser.getOffset ()));
+    	    info.setValid (false);
+    	}
     }
 
     /*  Build up a property for one of the kinds of fonts
@@ -3837,6 +3845,7 @@ public class PdfModule
             // The entries for Prev, Next, First, and Last must
             // all be indirect references or absent.  Just cast them to
             // throw an exception if they're something else
+            @SuppressWarnings("unused")
             PdfIndirectObj ob = (PdfIndirectObj) dict.get ("Prev");
             ob = (PdfIndirectObj) dict.get ("Next");
             ob = (PdfIndirectObj) dict.get ("First");
