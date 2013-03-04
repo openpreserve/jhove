@@ -2189,9 +2189,18 @@ public class PdfModule
                     Iterator<PdfObject> fontIter = fonts.iterator ();
                     while (fontIter.hasNext ()) {
                         PdfObject fontRef = (PdfObject) fontIter.next ();
-                        PdfDictionary font = (PdfDictionary)
-                                resolveIndirectObject (fontRef);
-                        addFontToMap (font);
+                        PdfObject font = resolveIndirectObject (fontRef);
+                        if (font instanceof PdfDictionary) {
+                            addFontToMap ((PdfDictionary) font);
+                        }
+                        else {
+                            // Expected a dictionary
+                            info.setWellFormed(false);
+                            info.setMessage (new ErrorMessage
+                                    ("Expected dictionary for font entry in page resource", 
+                                            _parser.getOffset()));
+                            return;
+                        }
                         // If we've been directed appropriately,
                         // we accumulate the information, but don't
                         // report it.  In that case, we post a message
