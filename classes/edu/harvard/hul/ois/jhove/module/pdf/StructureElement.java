@@ -8,6 +8,7 @@ package edu.harvard.hul.ois.jhove.module.pdf;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
 import java.io.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  *  Class for element of PDF document structure tree.
@@ -23,6 +24,8 @@ public class StructureElement
     private String _structType;
     private boolean _structIsInline;
     private boolean _attrIsBlock;
+    
+    private Logger _logger;
 
     /* Attributes which should occur only in block level elements */
     private static final String blockLevelAttrs [] = {
@@ -46,7 +49,8 @@ public class StructureElement
         _dict = dict;
         _module = tree.getModule ();
         _structType = null;
-
+        _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.module");
+        
         // If this element has a standard structure type, find it.
         try {
             PdfObject s = _module.resolveIndirectObject (dict.get ("S"));
@@ -116,6 +120,7 @@ public class StructureElement
                 if (kelem instanceof PdfDictionary) {
                     PdfDictionary kdict = (PdfDictionary) kelem;
                     if (isStructElem (kdict)) {
+                                _logger.finest ("Building subtree");
                                 StructureElement se = 
                                     new StructureElement (kdict, _tree);
                                 se.buildSubtree ();
