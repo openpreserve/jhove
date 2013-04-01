@@ -1130,6 +1130,9 @@ public class TiffModule
                 throw new TiffException ("IFD offset not word-aligned: " +
                                          next);
             }
+            if (list.size() > 50) {
+                throw new TiffException ("More than 50 IFDs in chain, probably an infinite loop");
+            }
             IFD ifd = parseIFDChain (next, info, ifdType, list, suppressErrors);
             next = ifd.getNext ();
         }
