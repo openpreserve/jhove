@@ -38,8 +38,8 @@ public class JhoveBase
 
     private static Date _date;
     public static final String _name = "JhoveBase";
-    public static final String _release = "1.9";
-    public static final int [] DATE = {2012, 12, 17};
+    public static final String _release = "1.10";
+    public static final int [] DATE = {2013, 5, 22};
     private static final String _rights =
     	"Derived from software Copyright 2004-2011 " +
         "by the President and Fellows of Harvard College. " +
@@ -457,6 +457,8 @@ public class JhoveBase
     
     	handler.setApp    (app);
     	handler.setBase   (this);
+    	_logger.info ("Handler " + handler.getClass().getName() +
+    	        " preparing to write to " + _outputFile);
     	handler.setWriter (makeWriter (_outputFile, _encoding));
     	//handler.param     (handlerParam);
     
@@ -497,6 +499,7 @@ public class JhoveBase
         if (_abort) {
             return false;
         }
+        _logger.info ("Entering JhoveBase.process, file/uri = " + dirFileOrUri);
         File file = null;
         boolean isTemp = false;
         long lastModified = -1;
@@ -557,6 +560,7 @@ public class JhoveBase
             catch (IOException e) {
                 _conn = null;
                 String msg = "cannot read URL: " + dirFileOrUri;
+                _logger.info (msg);
                 String msg1 = e.getMessage ();
                 if (msg1 != null) {
                     msg += " (" + msg1 + ")";
@@ -591,17 +595,19 @@ public class JhoveBase
         else {
         
             if (!file.exists ()) {
-        	info.setMessage (new ErrorMessage ("file not found"));
-        	info.setWellFormed (RepInfo.FALSE);
-        	info.show (handler);
+                _logger.info ("file not found");
+                info.setMessage (new ErrorMessage ("file not found"));
+                info.setWellFormed (RepInfo.FALSE);
+                info.show (handler);
             }
             else if (!file.isFile () || !file.canRead ()) {
-        	info.setMessage (new ErrorMessage ("file cannot be read"));
-        	info.setWellFormed (RepInfo.FALSE);
-        	info.show (handler);
+                _logger.info ("file cannot be read");
+                info.setMessage (new ErrorMessage ("file cannot be read"));
+                info.setWellFormed (RepInfo.FALSE);
+                info.show (handler);
             }
 	    else if (handler.okToProcess (dirFileOrUri)) {
-		info.setSize (file.length ());
+                info.setSize (file.length ());
             	if (lastModified < 0) {
             	    lastModified = file.lastModified ();
             	}
@@ -610,7 +616,8 @@ public class JhoveBase
             	if (module != null) {
             
             	    /* Invoke the specified module. */
-            
+            	    _logger.info ("Processing " + file.getName() + 
+            	            " with module " + module.getClass().getName());
             	    if (!processFile (app, module, false, file, info)) {
                                 return false;
                     }
@@ -648,6 +655,7 @@ public class JhoveBase
             			 * off its track and throw an exception, so we
             			 * just continue on to the next module.
             			 */
+                                _logger.info ("JHOVE caught exception: " + e.getClass().getName());
                                 continue;
                             }
                         }
