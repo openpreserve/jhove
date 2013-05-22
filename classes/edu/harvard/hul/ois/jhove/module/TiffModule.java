@@ -25,6 +25,8 @@ import edu.harvard.hul.ois.jhove.module.tiff.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.*;
+
 
 /** 
  *  Module for identification and validation of TIFF files.
@@ -42,6 +44,9 @@ public class TiffModule
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
+
+    /** Logger for this class. */
+    protected Logger _logger;
 
     private static final String NAME = "TIFF-hul";
     private static final String RELEASE = "1.7";
@@ -131,12 +136,14 @@ public class TiffModule
      ******************************************************************/
 
     /**
-     * Instantiate a <code.TiffModule</code> object.
+     * Instantiate a <code>TiffModule</code> object.
      */
     public TiffModule ()
     {
         super (NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
                VALIDITY, REPINFO, NOTE, RIGHTS, true);
+
+        _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove");
 
         // Define vendor agent (HUL)
         Agent agent = new Agent ("Harvard University Library",
@@ -423,17 +430,18 @@ public class TiffModule
     public final void parse (RandomAccessFile raf, RepInfo info) 
         throws IOException
     {
-    if (_defaultParams != null) {
-        Iterator<String> iter = _defaultParams.iterator ();
-        while (iter.hasNext ()) {
-            String param =  iter.next ();
-            if (param.toLowerCase ().equals ("byteoffset=true")) {
-                _byteOffsetIsValid = true;
+        if (_defaultParams != null) {
+            Iterator<String> iter = _defaultParams.iterator ();
+            while (iter.hasNext ()) {
+                String param =  iter.next ();
+                if (param.toLowerCase ().equals ("byteoffset=true")) {
+                    _byteOffsetIsValid = true;
+                }
             }
         }
-    }
 
         _raf = raf;
+        _logger.info ("TiffModule parsing file");
         initParse ();
         info.setModule (this);
         info.setMimeType (_mimeType[0]);
@@ -771,6 +779,7 @@ public class TiffModule
      */
     protected void checkValidity (List<IFD> ifds, RepInfo info) 
     {
+        _logger.info ("TiffModule checking validity of IFDs");
         ListIterator<IFD> iter = ifds.listIterator ();
         while (iter.hasNext ()) {
             try {
@@ -1133,6 +1142,7 @@ public class TiffModule
             if (list.size() > 50) {
                 throw new TiffException ("More than 50 IFDs in chain, probably an infinite loop");
             }
+            _logger.info ("Parsing next IFD at offset " + next);
             IFD ifd = parseIFDChain (next, info, ifdType, list, suppressErrors);
             next = ifd.getNext ();
         }
