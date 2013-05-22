@@ -322,7 +322,11 @@ public class XmlHandler
         String margn3 = margn2 + " ";
 
         Module module = info.getModule ();
-	String [][] attrs = { {"uri", cleanURIString (info.getUri ()) } };
+        _logger.info ("Reporting RepInfo");
+        if (_je.getSignatureFlag ()) {
+            _logger.info ("Checking signatures only");
+        }
+        String [][] attrs = { {"uri", cleanURIString (info.getUri ()) } };
         _writer.println (margin + elementStart ("repInfo", attrs));
         if (module != null) {
             String [][] attr2 = { {"release",  module.getRelease ()},
@@ -351,11 +355,11 @@ public class XmlHandler
         if (size > -1) {
             _writer.println (margn2 + element ("size", Long.toString (size)));
         }
-	String s = info.getFormat ();
-	if (s != null) {
-	    _writer.println (margn2 + element ("format", s));
-	}
-	s = info.getVersion ();
+        String s = info.getFormat ();
+        if (s != null) {
+            _writer.println (margn2 + element ("format", s));
+        }
+        s = info.getVersion ();
         if (s != null) {
             _writer.println (margn2 + element ("version", s));
         }
@@ -388,6 +392,7 @@ public class XmlHandler
                     // case UNDETERMINED: add nothing
                 }
             }
+            _logger.info ("Validity/WF status: " + wfStr);
             _writer.println (margn2 + element ("status", wfStr));
         }
         else {
