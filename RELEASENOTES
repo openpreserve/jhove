@@ -6,6 +6,31 @@ see the file LICENSE for details)
 
 Versions 1.7 and beyond of JHOVE are no longer under the control of Harvard.
 
+RELEASE NOTES FOR JHOVE 1.10B1
+
+GENERAL
+
+1. The amount of logging code has been increased, mostly at the
+   DEBUG level.
+   
+2. Further work on generics in Java code.
+
+PDF MODULE
+
+1. Failure to get a page object number wasn't being handled cleanly,
+   resulting in a report of an invalid document without an error message
+   to explain it (SourceForge bug 49). This has been fixed.
+
+2. The PDF module unnecessarily uses huge amounts of memory to build
+   complex structure trees, when it doesn't need to keep the whole 
+   tree in memory to validate it. In the new version, it uses memory
+   more economically. This should result in the successful processing
+   of some PDF files that ran out of memory or took hours to process before.
+   
+3. If an annotation isn't a dictionary object, report that explicitly.
+   This happens with some otherwise good files; I can't find any warrant
+   for it in the PDF spec.
+
 RELEASE NOTES FOR JHOVE 1.9
 
 GENERAL
