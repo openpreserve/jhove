@@ -2717,10 +2717,16 @@ public class PdfModule
             if (annots != null) {
                 Vector<PdfObject> contents = annots.getContent ();
                 for (int i = 0; i < contents.size (); i++) {
-                    PdfDictionary annot = 
-                        (PdfDictionary) resolveIndirectObject 
+                    PdfObject annot = resolveIndirectObject 
                                 ((PdfObject) contents.elementAt (i));
-                    annotsList.add (buildAnnotProperty (annot, info));
+                    if (annot instanceof PdfDictionary) {
+                        annotsList.add (buildAnnotProperty ((PdfDictionary) annot, info));
+                    }
+                    else {
+                        // There are annotations which aren't dictionaries. I've run into this,
+                        // but it violates the spec as far as I can tell. 
+                        throw new PdfInvalidException ("Annotation object is not a dictionary");
+                    }
                 }
                 if (!annotsList.isEmpty ()) {
                     if (_showAnnotations || 
