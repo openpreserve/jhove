@@ -19,13 +19,14 @@ import java.util.*;
 public class StructureTree 
 {
     private PdfModule _module;
-    private RandomAccessFile _raf;
-    private Parser _parser;
+    //private RandomAccessFile _raf;
+    //private Parser _parser;
     private PdfDictionary _rootDict;
     private PdfDictionary _roleMap;
-    private List children;
+    private List<StructureElement> children;
     private boolean _present;
     private boolean _valid;
+    private boolean _transient;
 
     /**
      *  Constructor.  If there is a document structure tree,
@@ -39,12 +40,25 @@ public class StructureTree
      *  @param parser     The Parser being used
      */
     public StructureTree (PdfModule module,
-		RandomAccessFile raf,
-		Parser parser) throws PdfException
-    {
+            RandomAccessFile raf,
+            Parser parser) throws PdfException
+        {
+            this (module, raf, parser, false);
+        }
+    
+    /**
+     *  Constructor with transient flag. Calling this can save a lot of memory
+     *  if the tree is being validated as it's built (which happens to be the
+     *  only case, but I don't want to throw out the more general code).
+     */
+    public StructureTree (PdfModule module,
+            RandomAccessFile raf,
+            Parser parser,
+            boolean tranzhent) throws PdfException  {
         _module = module;
-        _raf = raf;
-        _parser = parser;
+        _transient = tranzhent;
+        //_raf = raf;
+        //_parser = parser;
         try {
             PdfDictionary docCatDict = module.getCatalogDict ();
     	    // There must be an entry in the catalog dictionary
@@ -98,6 +112,9 @@ public class StructureTree
         return _module;
     }
 
+    protected boolean isTransient () {
+        return _transient;
+    }
 
     /**
      *  Dereference a name in the role map.
@@ -161,10 +178,10 @@ public class StructureTree
     /* Build a list of the children of the root. The
        elements of the list are StructureElements.
        Returns null if there are none. */
-    private List getChildren () throws PdfException
+    private List<StructureElement> getChildren () throws PdfException
     {
 	final String invdata = "Invalid data in document structure root";
-	List kidsList = null;
+	List<StructureElement> kidsList = null;
 	PdfObject kids = null;
 	try {
 	    kids = _module.resolveIndirectObject
@@ -177,7 +194,7 @@ public class StructureTree
 
 	if (kids instanceof PdfDictionary) {
 	    // Only one child
-	    kidsList = new ArrayList (1);
+	    kidsList = new ArrayList<StructureElement> (1);
 	    StructureElement se = new StructureElement 
 		((PdfDictionary) kids, this);
 	    se.buildSubtree ();
@@ -187,8 +204,8 @@ public class StructureTree
 	}
 	else if (kids instanceof PdfArray) {
 	    // Multiple children
-	    Vector kidsVec = ((PdfArray) kids).getContent ();
-	    kidsList = new ArrayList (kidsVec.size ());
+	    Vector<PdfObject> kidsVec = ((PdfArray) kids).getContent ();
+	    kidsList = new ArrayList<StructureElement> (kidsVec.size ());
 	    for (int i = 0; i < kidsVec.size (); i++) {
 		PdfObject kid;
 		try {

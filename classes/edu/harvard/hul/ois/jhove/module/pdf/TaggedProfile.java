@@ -55,7 +55,7 @@ public final class TaggedProfile extends PdfProfile
             // So much for MarkInfo.  Now see if there is a
             // valid structure tree.
             StructureTree stree = new StructureTree (_module,
-                        _raf, _parser);
+                        _raf, _parser, true);
             if (!stree.isPresent () || !stree.isValid ()) {
                 return false;
             }

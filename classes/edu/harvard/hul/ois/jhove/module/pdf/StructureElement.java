@@ -109,7 +109,7 @@ public class StructureElement
             }
         }
         else if (k instanceof PdfArray) {
-            Vector kvec = ((PdfArray) k).getContent ();
+            Vector<PdfObject> kvec = ((PdfArray) k).getContent ();
             children = new LinkedList<StructureElement> ();
             for (int i = 0; i < kvec.size (); i++) {
                 PdfObject kelem = (PdfObject) kvec.elementAt (i);
@@ -136,6 +136,12 @@ public class StructureElement
             if (children.isEmpty ()) {
                children = null;
             }
+        }
+        
+        // If this is a transient tree, we don't need the children
+        // after we're done. Clear the tree to save memory.
+        if (_tree.isTransient()) {
+            children = null;
         }
     }
 
@@ -221,8 +227,8 @@ public class StructureElement
     {
         try {
             // Must have an entry named "O", whose value is a name.
-            PdfSimpleObject plugin = (PdfSimpleObject) attr.get ("O");
-            Name tok = (Name) plugin.getToken ();
+            //PdfSimpleObject plugin = (PdfSimpleObject) attr.get ("O");
+            //Name tok = (Name) plugin.getToken ();
 
             // If it has a Placement entry with a value other than
             // "Inline", then we allow block level attributes.
