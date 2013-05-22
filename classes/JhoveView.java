@@ -50,27 +50,11 @@ public class JhoveView
 
     /** Copyright information. */
     private static final String RIGHTS = 
-        "Derived from software Copyright 2004-2011 " +
+        "Derived from software Copyright 2004-2013 " +
         "by the President and Fellows of Harvard College. " +
         "Version 1.7 and higher independently released. " +
     	"Released under the GNU Lesser General Public License.";
 
-    /******************************************************************
-     * Configuration constants.
-     ******************************************************************/
-
-    /** Configuration file property. */
-//    private static final String CONFIG_PROPERTY = "edu.harvard.hul.ois." +
-//                                                  "jhove.config";
-    /** Jhove directory */
-//    private static final String JHOVE_DIR = "jhove";
-
-    /** Config directory */
-//    private static final String CONFIG_DIR = "conf";
-
-    /** SAX parser class property. */
-//    private static final String SAX_PROPERTY = "edu.harvard.hul.ois.jhove." +
-//                                               "saxClass";
 
     /******************************************************************
      * Action constants.
