@@ -101,7 +101,7 @@ public abstract class PdfProfile
 
     /** Returns <code>true</code> if a Filter object contains a filter name which
      *  matches any of the Strings in the second argument.  
-     *  Will return <code>false</code< if a PdfException is thrown due 
+     *  Will return false if a PdfException is thrown due 
      *  to an unexpected data type.
      * 
      *  (Note 24-Feb-04:  This was returning false if any filter matched,
