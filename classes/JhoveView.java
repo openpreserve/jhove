@@ -120,9 +120,9 @@ public class JhoveView
         _date = JhoveBase.DATE;
         /* Make sure we have a satisfactory version of Java. */
         String version = System.getProperty ("java.vm.version");
-        if (version.compareTo ("1.4.0") < 0) {
+        if (version.compareTo ("1.5.0") < 0) {
             //System.err.println (NAME + ": Java 1.4 or higher is required");
-            errorAlert ("Java 1.4 or higher is required");
+            errorAlert ("Java 1.5 or higher is required");
             System.exit (INCOMPATIBLE_VM);
         }
 

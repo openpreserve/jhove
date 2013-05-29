@@ -38,8 +38,8 @@ public class JhoveBase
 
     private static Date _date;
     public static final String _name = "JhoveBase";
-    public static final String _release = "1.10";
-    public static final int [] DATE = {2013, 5, 22};
+    public static final String _release = "1.10b2";
+    public static final int [] DATE = {2013, 5, 28};
     private static final String _rights =
     	"Derived from software Copyright 2004-2011 " +
         "by the President and Fellows of Harvard College. " +
@@ -1009,13 +1009,13 @@ public class JhoveBase
     }
 
     /** Returns the Map of module names to modules. */
-    public  Map getModuleMap ()
+    public  Map<String,Module> getModuleMap ()
     {
         return _moduleMap;
     }
     
     /** Returns the List of modules. */
-    public  List getModuleList ()
+    public  List<Module> getModuleList ()
     {
         return _moduleList;
     }

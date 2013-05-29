@@ -6,7 +6,7 @@ see the file LICENSE for details)
 
 Versions 1.7 and beyond of JHOVE are no longer under the control of Harvard.
 
-RELEASE NOTES FOR JHOVE 1.10B1
+RELEASE NOTES FOR JHOVE 1.10B2
 
 GENERAL
 
@@ -14,6 +14,9 @@ GENERAL
    DEBUG level.
    
 2. Further work on generics in Java code.
+
+3. JhoveView now checks for Java 1.5. Was previously allowing 1.4 even
+   though it wouldn't work.
 
 PDF MODULE
 
@@ -30,6 +33,13 @@ PDF MODULE
 3. If an annotation isn't a dictionary object, report that explicitly.
    This happens with some otherwise good files; I can't find any warrant
    for it in the PDF spec.
+
+4. Some efficiency improvements to PDF parser. Increased buffer size from 4K 
+   to 64K. Made Parser.collapseObjectVector more efficient. Parser now
+   returns pseudo-objects for array and dictionary end instead of throwing
+   an exception.
+
+5. Minor cleanup of error reporting.
 
 RELEASE NOTES FOR JHOVE 1.9
 
