@@ -123,7 +123,7 @@ public class ObjectStream {
             if (off != null) {
                 int offset = off.intValue ();
                 _parser.seek (offset + _firstOffset);
-                return _parser.readObject ();
+                return _parser.readObject (false);
             }
             else {
                 return null;

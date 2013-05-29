@@ -127,7 +127,7 @@ public abstract class Tokenizer
     private boolean _encrypted;
     
     /* Set of language codes used in UTF strings. */
-    private Set _languageCodes;
+    private Set<String> _languageCodes;
     
     /* Level of nesting of parentheses in a literal; zero is the base 
        level. */
@@ -147,7 +147,7 @@ public abstract class Tokenizer
         _lookAhead = false;
         _ch = 0;
         _offset = 0;
-        _languageCodes = new TreeSet ();
+        _languageCodes = new TreeSet<String> ();
         _pdfACompliant = true;
 	_scanMode = false;
     }
@@ -699,7 +699,7 @@ public abstract class Tokenizer
     /**
      *  Return the set of language codes. Members of the set are Strings.
      */
-    public Set getLanguageCodes ()
+    public Set<String> getLanguageCodes ()
     {
         return _languageCodes;
     }

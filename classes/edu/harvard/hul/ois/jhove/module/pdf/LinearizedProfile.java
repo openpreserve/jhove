@@ -101,11 +101,11 @@ public final class LinearizedProfile extends PdfProfile
                     // we find isn't the stream, but an object
                     // definition for the stream (of the form
                     // m n obj). Allow for both possibilities.
-                    PdfObject hintStream = _parser.readObject ();
+                    PdfObject hintStream = _parser.readObject (false);
                     if (hintStream instanceof PdfSimpleObject) {
-                        _parser.readObject ();  // discard version no.
-                        _parser.readObject ();  // discard obj keyword
-                        hintStream = _parser.readObject (); // the real thing
+                        _parser.readObject (false);  // discard version no.
+                        _parser.readObject (false);  // discard obj keyword
+                        hintStream = _parser.readObject (false); // the real thing
                     }
                     // Parser will see a dictionary, not the stream
                     if (!(hintStream instanceof PdfDictionary)) {
@@ -173,7 +173,7 @@ public final class LinearizedProfile extends PdfProfile
                 Token tok = _parser.getNext ();
                 if (tok instanceof Keyword) {
                     if ("obj".equals(((Keyword) tok).getValue ())) {
-                        PdfObject val = _parser.readObject ();
+                        PdfObject val = _parser.readObject (false);
                         // Object must be completely contained in
                         // the first 1024 bytes.
                         if (_parser.getOffset () <= 1024) {

@@ -1831,6 +1831,10 @@ public class PdfModule
                 }
             }
         }
+        catch (PdfMalformedException e) {
+            info.setWellFormed(false);
+            info.setMessage(new ErrorMessage(e.getMessage()));
+        }
         catch (Exception e) {
             info.setWellFormed(false);
             info.setMessage (new ErrorMessage ("Unexpected exception " +

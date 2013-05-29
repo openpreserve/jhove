@@ -13,7 +13,7 @@ import java.util.*;
 public class PdfIndirectObj extends PdfObject
 {
 
-    private Map _objectMap;
+    private Map<Long, PdfObject> _objectMap;
     private PdfObject _cachedObject;
 
     /** 
@@ -23,7 +23,7 @@ public class PdfIndirectObj extends PdfObject
      *  @param genNumber  The PDF generation number
      *  @param objectMap  The object map for the PDF file
      */
-    public PdfIndirectObj (int objNumber, int genNumber, Map objectMap)
+    public PdfIndirectObj (int objNumber, int genNumber, Map<Long, PdfObject> objectMap)
     {
         super (objNumber, genNumber);
         _objectMap = objectMap;
@@ -43,7 +43,7 @@ public class PdfIndirectObj extends PdfObject
         else {
             long key = ((long) _objNumber << 32) +
 			    ((long) _genNumber & 0XFFFFFFFFL);
-            _cachedObject = (PdfObject) _objectMap.get (new Long (key));
+            _cachedObject = _objectMap.get (new Long (key));
             return _cachedObject;
         }
     }

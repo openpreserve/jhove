@@ -23,7 +23,7 @@ public class FileTokenizer extends Tokenizer {
     private byte[] _fileBuffer;
     
     /** Size for file buffer */
-    private static final int FILEBUFSIZE = 4096;
+    private static final int FILEBUFSIZE = 65536;
 
     /** Number of valid bytes in fileBuffer */
     private int _fileBufferBytes;

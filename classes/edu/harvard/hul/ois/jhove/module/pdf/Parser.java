@@ -21,7 +21,7 @@ public class Parser
     private Tokenizer _tokenizer;
     private int _dictDepth;     // number of dictionary starts on stack
     private int _arrayDepth;    // number of array starts on stack
-    private Map _objectMap;     // the object map for the file
+    private Map<Long, PdfObject> _objectMap;     // the object map for the file
     private boolean _encrypted; // true if the document is encrypted
 
     /* PDF/A compliance flag. */
@@ -44,7 +44,7 @@ public class Parser
     /**
      *  Set the object map on which the parser will work.
      */
-    public void setObjectMap (Map objectMap)
+    public void setObjectMap (Map<Long, PdfObject> objectMap)
     {
         _objectMap = objectMap;
     }
@@ -118,7 +118,7 @@ public class Parser
      *  (or a subclass thereof), or a PdfInvalidException with
      *  message errMsg will be thrown.
      */
-    public Token getNext (Class clas, String errMsg)
+    public Token getNext (Class<?> clas, String errMsg)
                 throws IOException, PdfException
     {
         Token tok = getNext ();
@@ -168,7 +168,7 @@ public class Parser
     /** 
      * Returns the language code set from the Tokenizer.
      */
-    public Set getLanguageCodes ()
+    public Set<String> getLanguageCodes ()
     {
         return _tokenizer.getLanguageCodes ();   
     }
@@ -231,7 +231,7 @@ public class Parser
         if (_tokenizer.getWSString ().length () > 1) {
                 _pdfACompliant = false;
         }
-        PdfObject obj = readObject ();
+        PdfObject obj = readObject (false);
         
         // Now a special-case check to read a stream object, which
         // consists of a dictionary followed by a stream token.
@@ -273,7 +273,7 @@ public class Parser
      *  throws a PdfException on which getToken() may be called to retrieve
      *  that token.  
      */
-    public PdfObject readObject () throws IOException, PdfException
+    public PdfObject readObject (boolean allowPseudo) throws IOException, PdfException
     {
         Token tok = getNext ();
         if (tok instanceof ArrayStart) {
@@ -281,6 +281,13 @@ public class Parser
         }
         else if (tok instanceof DictionaryStart) {
             return readDictionary ();
+        }
+        // For the end of a dictionary or array, retu
+        else if (allowPseudo && tok instanceof ArrayEnd) {
+            return new PdfArrayEnd(tok);
+        }
+        else if (allowPseudo && tok instanceof DictionaryEnd) {
+            return new PdfDictionaryEnd(tok);
         }
         else if (tok.isSimpleToken ()) {
             return new PdfSimpleObject (tok);
@@ -300,15 +307,15 @@ public class Parser
         PdfArray arr = new PdfArray ();
         for (;;) {
             PdfObject obj = null;
-            try {
-                obj = readObject ();
+            obj = readObject (true);
+            if (!(obj instanceof PdfPseudoObject)) {
                 arr.add (obj);
             }
-            // We detect the end of an array by a PdfException being thrown
-            // when readObject encounters the close bracket.  When we get
+            else if (obj instanceof PdfArrayEnd) {
+            // We detect the end of an array by returning a PdfArrayEnd.  When we get
             // the end of the array, collapse the vector before returning the object.
-            catch (PdfException e) {
-                Token tok = e.getToken ();
+                PdfArrayEnd eobj = (PdfArrayEnd) obj;
+                Token tok = eobj.getToken();
                 if (tok instanceof ArrayEnd) {
                     collapseObjectVector (arr.getContent ());
                     if (!arr.isPdfACompliant()) {
@@ -317,7 +324,8 @@ public class Parser
                     return arr;
                 }
                 else {
-                    throw e;    // real error
+                    throw new PdfMalformedException
+                        ("Unexpected token in array", getOffset());
                 }
             }
         }
@@ -333,24 +341,24 @@ public class Parser
     {
         PdfDictionary dict = new PdfDictionary ();
         // Create a vector as a temporary holding place for the objects
-        Vector vec = new Vector ();
+        Vector<PdfObject> vec = new Vector<PdfObject> ();
 
         for (;;) {
             PdfObject obj = null;
-            try {
-                obj = readObject ();
-                // Comments within a dictionary need to be ignored.
-                if (obj instanceof PdfSimpleObject &&
-                               ((PdfSimpleObject) obj).getToken() instanceof Comment) {
-                    continue;
-                }
+            obj = readObject (true);
+            // Comments within a dictionary need to be ignored.
+            if (obj instanceof PdfSimpleObject &&
+                           ((PdfSimpleObject) obj).getToken() instanceof Comment) {
+                continue;
+            }
+            if (!(obj instanceof PdfPseudoObject)) {
                 vec.add (obj);
             }
-            // We detect the end of a dictionary by a PdfException being thrown
-            // when readObject encounters the close angle brackets.  When we get
-            // the end of the array, collapse the vector before returning the object.
-            catch (PdfException e) {
-                Token tok = e.getToken ();
+            else if (obj instanceof PdfDictionaryEnd) {
+                //   When we get
+                // the end of the array, collapse the vector before returning the object.
+                PdfDictionaryEnd eobj = (PdfDictionaryEnd) obj;
+                Token tok = eobj.getToken ();
                 if (tok instanceof DictionaryEnd) {
                     collapseObjectVector (vec);
                     String invalDict = "Malformed dictionary";
@@ -363,7 +371,7 @@ public class Parser
                         try {
                             Name key = (Name) ((PdfSimpleObject) 
                                     vec.elementAt (i)).getToken ();
-                            PdfObject value = (PdfObject) vec.elementAt (i + 1);
+                            PdfObject value = vec.elementAt (i + 1);
                             dict.add (key.getValue (), value);
                         }
                         catch (Exception f) {
@@ -376,7 +384,8 @@ public class Parser
                     return dict;
                 }
                 else {
-                    throw e;    // real error
+                    throw new PdfMalformedException
+                    ("Unexpected token in dictionary", getOffset());
                 }
             }
         }
@@ -412,10 +421,11 @@ public class Parser
      *  be collapsed out.  In the case of a dictionary, this has to be done
      *  before the content can be interpreted as key-value pairs.
      */
-    private void collapseObjectVector (Vector v) throws PdfException
+    private void collapseObjectVector (Vector<PdfObject> v) throws PdfException
     {
+        int lowestChanged = -1;
         for (int i = v.size() - 1; i >= 2; i--) {
-            PdfObject obj = (PdfObject) v.elementAt (i);
+            PdfObject obj = v.elementAt (i);
             if (obj instanceof PdfSimpleObject) {
                 Token tok = ((PdfSimpleObject) obj).getToken ();
                 if (tok instanceof Keyword) {
@@ -433,8 +443,12 @@ public class Parser
                             int genNum = ntok.getIntegerValue ();
                             v.set (i - 2, new PdfIndirectObj 
                                 (objNum, genNum, _objectMap));
-                            v.removeElementAt (i);
-                            v.removeElementAt (i - 1);
+                            //v.removeElementAt (i);
+                            //v.removeElementAt (i - 1);
+                            // Put in null as placeholder, to be removed below
+                            v.set(i, null);
+                            v.set(i - 1, null);
+                            lowestChanged = i - 1;
                             i -= 2;
                         }
                         catch (Exception e) {
@@ -444,6 +458,18 @@ public class Parser
                     }
                 }
             }
+        }
+        // Now remove all the positioned that were nulled.
+        if (lowestChanged > 0) {
+            int i;
+            int j;
+            for (i = lowestChanged, j = lowestChanged; i < v.size(); i++) {
+                PdfObject elem = v.elementAt(i);
+                if (elem != null) {
+                    v.set(j++, elem);
+                }
+            }
+            v.setSize(j);
         }
     }
 

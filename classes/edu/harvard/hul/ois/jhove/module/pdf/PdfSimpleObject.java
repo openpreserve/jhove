@@ -70,7 +70,7 @@ public class PdfSimpleObject extends PdfObject
      *  Return the raw bytes of the token, as a Vector of Integer objects.
      *  Returns null if the token is not a StringValuedToken.
      */
-    public Vector getRawBytes ()
+    public Vector<Integer> getRawBytes ()
     {
         if (!(_token instanceof StringValuedToken)) {
             return null;
