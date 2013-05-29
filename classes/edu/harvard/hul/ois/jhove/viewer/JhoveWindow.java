@@ -57,7 +57,7 @@ public class JhoveWindow extends JFrame
     private boolean _doChecksum;
 
     private ProgressWindow _progWind;
-    private ConfigWindow _configWind;
+    //private ConfigWindow _configWind;
     private PrefsWindow _prefsWindow;
 
     private File _lastDir;
@@ -68,13 +68,13 @@ public class JhoveWindow extends JFrame
 
     // Initial position for view windows.  
     // Stagger them by adding an increment each time.
-    private static int viewWinXPos = 24;
-    private static int viewWinYPos = 24;
+    //private static int viewWinXPos = 24;
+    //private static int viewWinYPos = 24;
     // Original positions for cyclying back to.
-    private static final int viewWinOrigXPos = 24;
-    private static final int viewWinOrigYPos = 24;
-    private static final int viewWinXInc = 25;
-    private static final int viewWinYInc = 22;
+    //private static final int viewWinOrigXPos = 24;
+    //private static final int viewWinOrigYPos = 24;
+    //private static final int viewWinXInc = 25;
+    //private static final int viewWinYInc = 22;
     private static final int appInfoWinXPos = 50;
     private static final int appInfoWinYPos = 45;
     private static final int moduleInfoWinXPos = 100;
@@ -107,8 +107,8 @@ public class JhoveWindow extends JFrame
         setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         
         // Define a Comparator function for Modules
-        Comparator modListComparator = new Comparator () {
-            public int compare (Object o1, Object o2) {
+        Comparator<Module> modListComparator = new Comparator<Module> () {
+            public int compare (Module o1, Module o2) {
                 Module m1 = (Module) o1;
                 Module m2 = (Module) o2;
                 String name1 = m1.getName ();
@@ -118,20 +118,20 @@ public class JhoveWindow extends JFrame
         };
 
         // Build combo box of available modules
-        Vector moduleItems = new Vector (10);
-        java.util.List moduleList = base.getModuleList ();
+        Vector<String> moduleItems = new Vector<String> (10);
+        java.util.List<Module> moduleList = base.getModuleList ();
         // Clone the list so we can display it in sorted order
         // without munging the app's preferred order
-        java.util.List menuModuleList = new ArrayList (moduleList.size ());
+        java.util.List<Module> menuModuleList = new ArrayList<Module> (moduleList.size ());
         menuModuleList.addAll(moduleList);
         Collections.sort (menuModuleList, modListComparator);
-        Iterator iter = menuModuleList.iterator ();
+        Iterator<Module> iter = menuModuleList.iterator ();
         moduleItems.add ("(None selected)");
         JRadioButtonMenuItem modItem = null;
         String itemName = null;
         
         while (iter.hasNext ()) {
-            Module mod = (Module) iter.next ();
+            Module mod = iter.next ();
             itemName = mod.getName ();
             modItem = new JRadioButtonMenuItem (itemName);
             modItem.setActionCommand (itemName);
@@ -372,11 +372,11 @@ public class JhoveWindow extends JFrame
         _progWind.setDocName (name, false);
         _progWind.setProgressState (ProgressWindow.PROCESSING, false);
         _progWind.setByteCount (-1, true);
-        _progWind.show ();
+        _progWind.setVisible (true);
 
 //        RepInfo info = new RepInfo (name);
         try {
-            List files = new ArrayList(1);
+            List<File> files = new ArrayList<File>(1);
             files.add (file);
             openAndParse (files, module);
         }
@@ -390,7 +390,7 @@ public class JhoveWindow extends JFrame
     }
     
     /** This is called to analyze a List of files. */
-    public void pickAndAnalyzeFileList1 (List files, Module module)
+    public void pickAndAnalyzeFileList1 (List<File> files, Module module)
     {
         if (files.isEmpty ()) {
             return;
@@ -402,7 +402,7 @@ public class JhoveWindow extends JFrame
         _progWind.setDocName (name, false);
         _progWind.setProgressState (ProgressWindow.PROCESSING, false);
         _progWind.setByteCount (-1, true);
-        _progWind.show ();
+        _progWind.setVisible (true);
 
         try {
             openAndParse (files, module);
@@ -489,7 +489,8 @@ public class JhoveWindow extends JFrame
         _progWind.setProgressState (ProgressWindow.DOWNLOADING, false);
         _progWind.setContentLength (0, false);
         _progWind.setByteCount (0, true);
-        _progWind.show ();
+        //_progWind.show ();
+        _progWind.setVisible(true);
         try {
             _base.dispatch (_app,
                 module,
@@ -501,7 +502,8 @@ public class JhoveWindow extends JFrame
         catch (Exception e) {
             reportError ("Error processing URL", e.getMessage ());
         }
-        _progWind.hide ();
+        //_progWind.hide ();
+        _progWind.setVisible(false);
         _openFileItem.setEnabled (true);
         _openURLItem.setEnabled (true);        
     }
@@ -560,23 +562,23 @@ public class JhoveWindow extends JFrame
         _doChecksum = checksum;
     }
   
-    private void openAndParse (List files, /* RepInfo info,*/ Module module)
+    private void openAndParse (List<File> files, /* RepInfo info,*/ Module module)
     {
-        InputStream stream = null;
-        long lastModified = 0;
+        //InputStream stream = null;
+        //long lastModified = 0;
 
         // Turn a list of files into an array of strings.
         String[] paths = new String[files.size()];
-        Iterator iter = files.iterator ();
+        Iterator<File> iter = files.iterator ();
         for (int i = 0; iter.hasNext (); i++) {
-            File fil = (File) iter.next ();
+            File fil =  iter.next ();
             paths[i] = fil.getAbsolutePath ();
             if (!fil.exists ()) {
-                _progWind.hide ();
+                _progWind.setVisible (false);
                 return;             // shouldn't happen -- we just picked it!
             }
             if (!fil.canRead ()) {
-                _progWind.hide ();
+                _progWind.setVisible (false);
                 reportError ("File not readable", fil.getName ());
                 return;
             }
@@ -614,7 +616,7 @@ public class JhoveWindow extends JFrame
             _logger.warning(e.toString ());
         }
  
-        _progWind.hide ();
+        _progWind.setVisible (false);
     }
 
     /* Open a configuration dialog */
@@ -687,7 +689,7 @@ public class JhoveWindow extends JFrame
             _appInfoWin = new AppInfoWindow (_app, _base);
             _appInfoWin.setLocation (appInfoWinXPos, appInfoWinYPos);
         }
-        _appInfoWin.show ();
+        _appInfoWin.setVisible (true);
     }
 
 
@@ -764,7 +766,7 @@ public class JhoveWindow extends JFrame
             // Now get the file(s) and open it (them)
             Transferable thingy = dtde.getTransferable ();
             try {
-                List fileList = (List) thingy.getTransferData 
+                List<File> fileList = (List<File>) thingy.getTransferData 
                             (DataFlavor.javaFileListFlavor);
                 ParseThread thr = new ParseThread (this);
                 thr.setFileList (fileList);
@@ -810,7 +812,7 @@ public class JhoveWindow extends JFrame
     /*  Called to see if the DropTargetEvent's data flavor is OK */
     private boolean dataFlavorOK (DataFlavor[] flavors)
     {
-        boolean haveFileFlavor = false;
+        //boolean haveFileFlavor = false;
         for (int i = 0; i < flavors.length; i++) {
             if (flavors[i].isFlavorJavaFileListType()) {
                 return true;
@@ -828,7 +830,7 @@ public class JhoveWindow extends JFrame
         private JhoveWindow _win;
         private String _uri;
         private File _file;
-        private List _fileList;
+        private List<File> _fileList;
         private Module _module;
 
 
@@ -864,7 +866,7 @@ public class JhoveWindow extends JFrame
                 _base.setCurrentThread (null);
             }
             catch (ThreadDeath d) {
-                _progWind.hide ();
+                _progWind.setVisible (false);
                 throw d;
             }
         }
@@ -891,7 +893,7 @@ public class JhoveWindow extends JFrame
         /** Designates a list of files to parse sequentially. 
         *  Only one of setURI, setFile, and setFileList should
         *  be called for a given thread. */
-        protected void setFileList (List fileList)
+        protected void setFileList (List<File> fileList)
         {
             _fileList = fileList;
         }
