@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.8.3
 Created-By: 1.6.0_43-b01-447-11M4203 (Apple Inc.)
 Built-By: gmcgath
-Built-On: 2013-05-22T16:08:47
+Built-On: 2013-05-28T21:06:50
 
 Name: JHOVE
-Version: 1.10
+Version: 1.0
 Package: Handlers
 Rights: Copyright 2004 by JSTOR and the President and Fellows of Harva
  rd College
