@@ -24,11 +24,13 @@ import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.module.pdf.*;
 import java.io.*;
 import java.util.*;
-//Importing org.xml.sax.* would make Parser ambiguous
 import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
-//import org.xml.sax.InputSource;
 import javax.xml.parsers.SAXParserFactory;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipException;
 
 /** 
  *  Module for identification and validation of PDF files.
@@ -62,6 +64,9 @@ public class PdfModule
 	"the President and Fellows of Harvard College. " +
 	"Released under the GNU Lesser General Public License.";
     private static final String ENCRYPTED = "<May be encrypted>";
+    
+    /** Logger for this class. */
+    protected Logger _logger;
     
     /** Font type selectors. */
     public final static int F_TYPE0 = 1,
@@ -219,6 +224,8 @@ public class PdfModule
         super (NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
                VALIDITY, REPINFO, NOTE, RIGHTS, true);
 
+        _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.module");
+        
         Agent agent = new Agent ("Harvard University Library",
                                  AgentType.EDUCATIONAL);
         agent.setAddress ("Office for Information Systems, " +
@@ -2433,6 +2440,12 @@ public class PdfModule
                 return ostrm.getObject (objIndex);
             }
             catch (Exception e) {
+                
+                _logger.info(e.getMessage());
+                if (e instanceof ZipException) {
+                    throw new PdfMalformedException 
+                      ("Compression method is invalid or unknown to JHOVE");
+                }
                 /* Fall through with error */
             }
             throw new PdfMalformedException (nogood);

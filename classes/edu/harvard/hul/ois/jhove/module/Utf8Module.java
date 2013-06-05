@@ -83,7 +83,7 @@ public class Utf8Module
     protected boolean _lineEndLF;
     protected boolean _lineEndCRLF;
     protected int _prevChar;
-    protected Map _controlCharMap;
+    protected Map<Integer, String> _controlCharMap;
     protected int initialBytes[];
     protected Utf8BlockMarker blockMarker;
 
@@ -215,7 +215,7 @@ public class Utf8Module
         _lineEndLF = false;
         _lineEndCRLF = false;
         _prevChar = 0;
-        _controlCharMap = new HashMap ();
+        _controlCharMap = new HashMap<Integer, String> ();
         _textMD = new TextMDMetadata();
 
         boolean printableChars = false;
@@ -387,7 +387,7 @@ public class Utf8Module
 
         /* Create a metadata property for the module-specific
          * info. (4-Feb-04) */
-        List metadataList = new ArrayList (4);
+        List<Property> metadataList = new ArrayList<Property> (4);
         info.setProperty (new Property ("UTF8Metadata",
                  PropertyType.PROPERTY,
                  PropertyArity.LIST,
@@ -404,7 +404,7 @@ public class Utf8Module
 
         /* Set property reporting line ending type */
         if (_lineEndCR || _lineEndLF || _lineEndCRLF) {
-            ArrayList propArray = new ArrayList(3);
+            ArrayList<String> propArray = new ArrayList<String>(3);
             if (_lineEndCR) {
                 propArray.add("CR");
                 _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
@@ -423,7 +423,7 @@ public class Utf8Module
         }
         /* Set property reporting control characters used */
         if (!_controlCharMap.isEmpty ()) {
-            LinkedList propList = new LinkedList ();
+            LinkedList<String> propList = new LinkedList<String> ();
             String mnem;
             for (int i = 0; i < 0X20; i++) {
                 mnem = (String) _controlCharMap.get (new Integer (i));
@@ -481,7 +481,7 @@ public class Utf8Module
         blockMarker = new Utf8BlockMarker();
         boolean eof = false;
         _nByte = 0;
-        long nChar = 0;
+        //long nChar = 0;
         DataInputStream dstream = new DataInputStream (stream);
         while (!eof && bytesRead < sigBytes) {
                 boolean isMark = false;
@@ -495,9 +495,9 @@ public class Utf8Module
                         if (info.getWellFormed () == RepInfo.FALSE) {
                             return;
                         }
-                        if (isMark) {
-                            nChar = 0;
-                        }
+//                        if (isMark) {
+//                            nChar = 0;
+//                        }
                     }
                     int nBytes = 1;
                     if (0xc0 <= b[0] && b[0] <= 0xdf) {

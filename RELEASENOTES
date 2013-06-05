@@ -6,7 +6,7 @@ see the file LICENSE for details)
 
 Versions 1.7 and beyond of JHOVE are no longer under the control of Harvard.
 
-RELEASE NOTES FOR JHOVE 1.10B2
+RELEASE NOTES FOR JHOVE 1.10b3
 
 GENERAL
 
@@ -18,6 +18,17 @@ GENERAL
 3. JhoveView now checks for Java 1.5. Was previously allowing 1.4 even
    though it wouldn't work.
 
+HTML MODULE
+
+1. XHTML files are processed by the HTML module, which invokes the XML
+   modules. In this case, the XML module doesn't have the parameters
+   specified in the JHOVE configuration file and so won't use local
+   copies of schemas. Starting with this version, the parameters of
+   the HTML module are passed to the XML module when invoking it.
+   However, this doesn't work properly (in either module) for a DTD
+   that invokes additional DTDs by relative URLs. Such DTDs should
+   be edited to use only absolute URLs.
+   
 PDF MODULE
 
 1. Failure to get a page object number wasn't being handled cleanly,
@@ -40,6 +51,9 @@ PDF MODULE
    an exception.
 
 5. Minor cleanup of error reporting.
+
+6. If an object uses a compression scheme which JHOVE can't deal with, JHOVE
+   will try to give a specific error message.
 
 RELEASE NOTES FOR JHOVE 1.9
 

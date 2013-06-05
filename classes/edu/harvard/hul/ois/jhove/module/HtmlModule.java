@@ -303,6 +303,12 @@ public class HtmlModule extends ModuleBase {
                 }
                 xmlMod.setApp  (_app);
                 xmlMod.setBase (_je);
+                xmlMod.setDefaultParams(_defaultParams);
+                try {
+                    xmlMod.applyDefaultParams();
+                } catch (Exception e) {
+                    // really shouldn't happen
+                }
                 xmlMod.setXhtmlDoctype(_doctype);
                 return xmlMod.parse (stream, info, parseIndex);
             }
