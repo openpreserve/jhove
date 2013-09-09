@@ -3723,7 +3723,7 @@ public class XmlHandler
      if (iarray != null) {
          colorEncBuf.append (margn4 + elementStart ("mix:BitsPerSample") +
              EOL);
-         for (int ii = 1; ii < iarray.length; ii++) {
+         for (int ii = 0; ii < iarray.length; ii++) {
              colorEncBuf.append (margn5 + element ("mix:bitsPerSampleValue",
                        Integer.toString(iarray[ii]) ) + EOL);
          }
