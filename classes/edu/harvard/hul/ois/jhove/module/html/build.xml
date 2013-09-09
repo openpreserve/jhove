@@ -15,7 +15,7 @@
   </target>
 
   <target name="html" depends="html-init" description="Compile the HTML module">
-    <javac compiler="javac1.5" target="1.5" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
+    <javac compiler="javac1.5" source="1.5" target="1.5" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
   </target>
 
   <target name="html-clean" description="Delete backup files" >

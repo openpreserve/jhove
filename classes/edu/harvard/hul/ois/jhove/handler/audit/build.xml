@@ -15,7 +15,7 @@
   </target>
 
   <target name="audit" depends="audit-init" description="Compile the Audit output handler">
-    <javac compiler="javac1.5" target="1.5" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
+    <javac compiler="javac1.5" source="1.5" target="1.5" srcdir="." debug="{$dbg}" classpath="${classpath}"/>
   </target>
 
   <target name="audit-clean" description="Delete backup files" >
