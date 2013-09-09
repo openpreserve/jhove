@@ -447,7 +447,7 @@ public class HtmlCharStream implements CharStream
 
   /**
    * Retrieve the kind of end of line. 
-   * @return
+   * @return "CR" or "LF" or "CRLF"
    */
   public String getKindOfLineEnd() {
         if (_lineEndCR || _lineEndLF || _lineEndCRLF) {
