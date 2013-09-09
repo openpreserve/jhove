@@ -35,11 +35,11 @@ public class JhoveBase
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
-
+   
     private static Date _date;
     public static final String _name = "JhoveBase";
-    public static final String _release = "1.10";
-    public static final int [] DATE = {2013, 6, 10};
+    public static final String _release = "1.11a1";
+    public static final int [] DATE = {2013, 9, 8};
     private static final String _rights =
     	"Derived from software Copyright 2004-2011 " +
         "by the President and Fellows of Harvard College. " +
@@ -145,7 +145,7 @@ public class JhoveBase
 	throws JhoveException
     {
         _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove");
-        _logger.setLevel (Level.SEVERE);
+        _logger.setLevel (Level.SEVERE);    // may be changed by config file
         /* Make sure we have a satisfactory version of Java. */
         String version = System.getProperty ("java.vm.version");
         if (version.compareTo ("1.5.0") < 0) {
@@ -313,6 +313,11 @@ public class JhoveBase
                     catch (Exception e) {}
                 }
             }
+            _logger.severe("Testing SEVERE level");
+            _logger.warning("Testing WARN level");
+            _logger.info("Testing INFO level");
+            _logger.fine("Testing FINE level");
+            _logger.finest("Testing FINEST level");
 
     	    _bufferSize = configHandler.getBufferSize ();
             if (_bufferSize < 0) {
