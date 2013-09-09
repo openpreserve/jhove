@@ -8,6 +8,7 @@ package edu.harvard.hul.ois.jhove.module.pdf;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  *  Class for PDF document structure tree.
@@ -17,7 +18,10 @@ import java.util.*;
  *  @see StructureElement
  */
 public class StructureTree 
-{
+{    
+    /** Logger for this class. */
+    protected Logger _logger;
+
     private PdfModule _module;
     //private RandomAccessFile _raf;
     //private Parser _parser;
@@ -55,6 +59,8 @@ public class StructureTree
             RandomAccessFile raf,
             Parser parser,
             boolean tranzhent) throws PdfException  {
+        _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.module");
+        
         _module = module;
         _transient = tranzhent;
         //_raf = raf;

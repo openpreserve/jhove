@@ -28,7 +28,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.SAXParserFactory;
 
-import java.util.logging.Level;
+//import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipException;
 
@@ -1361,6 +1361,7 @@ public class PdfModule
                             (_docCatDictRef);
         }
         catch (Exception e) {
+            _logger.warning ("Tried to cat non-dictionary to PdfDictionary");
             e.printStackTrace();
         }
         if (_docCatDict == null) {
@@ -1468,9 +1469,11 @@ public class PdfModule
                 }
             }
             catch (ClassCastException ce) {
+                _logger.info ("ClassCastException on names dictionary");
                 throw new PdfInvalidException (badname);
             }
             catch (Exception e) {
+                _logger.info ("Exception on names dictionary: " + e.getClass().getName());
                 throw new PdfMalformedException (badname);
             }
 
@@ -1484,9 +1487,11 @@ public class PdfModule
                         (_docCatDict.get ("Dests"));
             }
             catch (ClassCastException ce) {
+                _logger.info ("ClassCastException on dests dictionary");
                 throw new PdfInvalidException ("Invalid Dests dictionary");
             }
             catch (Exception e) {
+                _logger.info ("Exception on dests dictionary: " + e.getClass().getName());
                 throw new PdfMalformedException ("Invalid Dests dictionary");
             }
         }
@@ -1964,6 +1969,7 @@ public class PdfModule
                         Iterator<PdfObject> iter = xo.iterator ();
                         while (iter.hasNext ()) {
                             // Get an XObject and check if it's an image.
+                            _logger.info("Getting image");
                             PdfDictionary xobdict = null;
                             PdfObject xob = resolveIndirectObject 
                                     ((PdfObject) iter.next ());
@@ -1974,6 +1980,7 @@ public class PdfModule
                                 PdfSimpleObject subtype = (PdfSimpleObject) xobdict.get ("Subtype");
                                 if ("Image".equals (subtype.getStringValue ())) {
                                     // It's an image XObject.  Report stuff.
+                                    _logger.info ("Image XObject");
                                     List<Property> imgList = new ArrayList<Property> (10);
                                     Property prop = new Property ("Image",
                                         PropertyType.PROPERTY,
@@ -2001,40 +2008,40 @@ public class PdfModule
                                             compressionStrings, compressionValues);
                                         if (nisoFilt >= 0) {
                                             /* If it's 2, it's a CCITTFaxDecode
-					     * filter. There may be an optional
-					     * K entry that can change the
-					     * value.
-					     */
+                                             * filter. There may be an optional
+                                             * K entry that can change the
+                                             * value.
+                                             */
                                             PdfObject parms =
-						xobdict.get ("DecodeParms");
+                                                    xobdict.get ("DecodeParms");
                                             if (parms != null) {
-						PdfSimpleObject kobj = null;
-						if (parms instanceof
-						    PdfDictionary) {
-						    kobj = (PdfSimpleObject)
-							((PdfDictionary) parms).get ("K");
-						}
-						/* Note that the DecodeParms
-						 * value may also be an array
-						 * of dictionaries.  We are not
-						 * handling that contingency.
-						 */
-						if (kobj != null) {
-						    int k = kobj.getIntValue();
-						    if (k < 0) {
-							nisoFilt = 4;
-						    }
-						    else if (k > 0) {
-							nisoFilt = 3;
-						    } 
-						}
-					    }
-					    niso.setCompressionScheme(nisoFilt);
-					}
+                                                PdfSimpleObject kobj = null;
+                                                if (parms instanceof
+                                                        PdfDictionary) {
+                                                    kobj = (PdfSimpleObject)
+                                                            ((PdfDictionary) parms).get ("K");
+                                                }
+                                                /* Note that the DecodeParms
+                                                 * value may also be an array
+                                                 * of dictionaries.  We are not
+                                                 * handling that contingency.
+                                                 */
+                                                if (kobj != null) {
+                                                    int k = kobj.getIntValue();
+                                                    if (k < 0) {
+                                                        nisoFilt = 4;
+                                                    }
+                                                    else if (k > 0) {
+                                                        nisoFilt = 3;
+                                                    } 
+                                                }
+                                            }
+                                            niso.setCompressionScheme(nisoFilt);
+                                        }
                                         else {
                                             imgList.add (new Property("Filter",
-						      PropertyType.STRING, 
-						      filt));
+                                                    PropertyType.STRING, 
+                                                    filt));
                                         }
                                     }
                                     else {

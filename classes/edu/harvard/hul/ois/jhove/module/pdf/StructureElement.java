@@ -45,11 +45,11 @@ public class StructureElement
     public StructureElement (PdfDictionary dict, StructureTree tree)
                 throws PdfException
     {
+        _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.module");
         _tree = tree;
         _dict = dict;
         _module = tree.getModule ();
         _structType = null;
-        _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.module");
         
         // If this element has a standard structure type, find it.
         try {
@@ -61,7 +61,9 @@ public class StructureElement
                 _structType = st;
             }
         }
-        catch (IOException e) {}
+        catch (IOException e) {
+            _logger.warning(e.getClass().getName());
+        }
     }
     
     /**
@@ -74,6 +76,7 @@ public class StructureElement
      */
     public void buildSubtree () throws PdfException
     {
+        _logger.info("Building subtree");
         PdfObject k = null;
         try {
             k = _module.resolveIndirectObject (_dict.get ("K"));
@@ -94,8 +97,21 @@ public class StructureElement
                 // - A PDF object reference dictionary
             // - A structure element reference dictionary
             // The only one we check seriously is a structure element.
+            _logger.info ("Type K element is dictionary");
             PdfDictionary kdict = (PdfDictionary) k;
             if (isStructElem (kdict)) {
+                PdfObject kidsObject = (PdfObject)kdict.get("K");
+                if(kidsObject instanceof PdfSimpleObject) {
+                    PdfSimpleObject kids = (PdfSimpleObject)kidsObject;
+                    Token tok = kids.getToken();
+                    if(tok instanceof Numeric) {
+                        //if the kids value is zero then there are no child objects; exit method
+                        if(((Numeric)tok).getValue()==0) {
+                            children = null;
+                            return;
+                        }
+                    }
+                }
                 StructureElement se = 
                     new StructureElement (kdict, _tree);
                 se.buildSubtree ();
@@ -109,6 +125,7 @@ public class StructureElement
             }
         }
         else if (k instanceof PdfArray) {
+            _logger.info ("Type K element is an array");
             Vector<PdfObject> kvec = ((PdfArray) k).getContent ();
             children = new LinkedList<StructureElement> ();
             for (int i = 0; i < kvec.size (); i++) {
@@ -120,8 +137,24 @@ public class StructureElement
                 if (kelem instanceof PdfDictionary) {
                     PdfDictionary kdict = (PdfDictionary) kelem;
                     if (isStructElem (kdict)) {
-                                _logger.finest ("Building subtree");
-                                StructureElement se = 
+                                _logger.info ("Building subtree");
+
+                                //check for non-zero before creating a new StructureElement
+                                //cf. Govdocs file http://digitalcorpora.org/corp/nps/files/govdocs1/000/000153.pdf
+                                //object 717 that has "/K 0" enters infinite(?) loop without this check
+                                PdfObject kidsObject = (PdfObject)kdict.get("K");
+                                if(kidsObject instanceof PdfSimpleObject) {
+                                    PdfSimpleObject kids = (PdfSimpleObject)kidsObject;
+                                    Token tok = kids.getToken();
+                                    if(tok instanceof Numeric) {
+                                        //if the kids value is zero then there are no child objects; exit method
+                                        if(((Numeric)tok).getValue()==0) {
+                                            _logger.info("No child objects, exiting");
+                                            children = null;
+                                            return;
+                                        }
+                                    }
+                                }                                StructureElement se = 
                                     new StructureElement (kdict, _tree);
                                 se.buildSubtree ();
                                 se.checkAttributes ();
@@ -134,7 +167,8 @@ public class StructureElement
             // children to null rather than have to check for an
             // empty vector.
             if (children.isEmpty ()) {
-               children = null;
+                _logger.info ("No children are structure elements");
+                children = null;
             }
         }
         
@@ -190,6 +224,7 @@ public class StructureElement
                             (attrVec.elementAt (i));
                 }
                 catch (IOException e) {
+                    _logger.info ("IOException on attribute");
                     throw new PdfInvalidException (badattr);
                 }
                 if (attrElem instanceof PdfDictionary) {
@@ -201,6 +236,7 @@ public class StructureElement
                             ((PdfSimpleObject)attrElem).getToken ();
                     }
                     catch (Exception e) {
+                        _logger.info("Exception getting revision number: " + e.getClass().getName());
                         throw new PdfInvalidException (badattr);
                     }
                 }

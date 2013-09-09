@@ -2,6 +2,7 @@
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import edu.harvard.hul.ois.jhove.module.*;
+import java.util.logging.*;
 
 /**
  *  PDF profile checker for PDF/X-1a documents.
@@ -17,6 +18,8 @@ public final class X1aProfile extends XProfileBase
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
 
+    private Logger _logger;
+
     private X1Profile _x1Profile;
 
     /** 
@@ -29,6 +32,7 @@ public final class X1aProfile extends XProfileBase
     public X1aProfile (PdfModule module) 
     {
         super (module, XProfileBase.PDFX1A);
+        _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.module");
         _profileText = "ISO PDF/X-1a";
     }
     
@@ -51,6 +55,7 @@ public final class X1aProfile extends XProfileBase
      */
     public boolean satisfiesThisProfile ()
     {
+        _logger.info("Checking X1A profile");
         if (_x1Profile != null) {
             // If there is a linked X1Profile, we save time by checking if
             // it passed or not.

@@ -3,6 +3,7 @@ package edu.harvard.hul.ois.jhove.module.pdf;
 
 import edu.harvard.hul.ois.jhove.module.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  *  PDF profile checker for Linearized documents.
@@ -13,6 +14,8 @@ public final class LinearizedProfile extends PdfProfile
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
 
+    private Logger _logger;
+
     /** 
      *   Creates a PdfProfile object for subsequent testing.
      *
@@ -21,6 +24,7 @@ public final class LinearizedProfile extends PdfProfile
     {
         super (module);
         _profileText = "Linearized PDF";
+        _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.module");
     }
 
     /** 
@@ -29,6 +33,7 @@ public final class LinearizedProfile extends PdfProfile
      */
     public boolean satisfiesThisProfile ()
     {
+        _logger.info("Checking Linearized Profile");
         long fileLength;
         try {
             fileLength = _raf.length ();
@@ -75,6 +80,7 @@ public final class LinearizedProfile extends PdfProfile
             // whose values is an array of 2 or 4 integers.
             PdfArray hintArray = (PdfArray) lindict.get ("H");
             if (hintArray != null) {
+                _logger.info("Checking hint array");
                 Vector hintVec = hintArray.getContent ();
                 int vecSize = hintVec.size ();
                 if (vecSize != 2 && vecSize != 4) {
@@ -206,6 +212,7 @@ public final class LinearizedProfile extends PdfProfile
     private boolean verifyXRef (long xrefOffset)
     {
         try {
+            _logger.info ("Verifying cross-reference table");
             _parser.seek (xrefOffset);
             _parser.getNext (Numeric.class, "");  // Object number
             _parser.getNext (Numeric.class, "");  // Generation number

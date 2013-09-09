@@ -2,6 +2,7 @@
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import edu.harvard.hul.ois.jhove.module.*;
+import java.util.logging.*;
 
 /**
  *  PDF profile checker for Tagged PDF documents.
@@ -14,6 +15,8 @@ public final class TaggedProfile extends PdfProfile
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
 
+    private Logger _logger;
+
     /** 
      *   Constructor.
      *   Creates a TaggedProfile object for subsequent testing.
@@ -24,6 +27,7 @@ public final class TaggedProfile extends PdfProfile
     public TaggedProfile (PdfModule module) 
     {
         super (module);
+        _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.module");
         _profileText = "Tagged PDF";
     }
 
