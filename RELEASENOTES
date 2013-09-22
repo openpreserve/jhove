@@ -18,7 +18,12 @@ GENERAL
    do in the gzip and zip archives you download. I'm not sure how
    SourceForge will treat files that you download individually,
    but hopefully it will have the sense to keep CR-LF when downloading
-   to a Windows system.
+   to a Windows system. 
+
+3. All .bat files now assume JHOVE_HOME is the directory from which they're
+   run. They no longer try to set JAVA_HOME (which was still stuck in
+   Java 1.4 and probably wasn't working for many people), instead assuming
+   that the JAVA command is available on the command line.
 
 3. All javac commands in build.xml files now specify source=1.5 for
    compatibility with more recent compilers.
