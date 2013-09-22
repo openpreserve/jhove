@@ -14,13 +14,10 @@ REM JAVA_HOME  Java JRE directory
 REM JAVA       Java interpreter
 REM EXTRA_JARS Extra jar files to add to CLASSPATH
 
-SET JHOVE_HOME="C:\Program Files\jhove"
-
-SET JAVA_HOME="C:\Program Files\java\j2re1.4.2_07"
-SET JAVA=%JAVA_HOME%\bin\java
+SET JHOVE_HOME="%~dp0"
 
 REM NOTE: Nothing below this line should be edited
 REM #########################################################################
 
 REM Set the CLASSPATH and invoke the Java loader
-%JAVA% -classpath %JHOVE_HOME%\classes UserHome
+JAVA -classpath %JHOVE_HOME%\classes UserHome
