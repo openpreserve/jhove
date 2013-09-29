@@ -16,7 +16,7 @@ REM JAVA_HOME  Java JRE directory
 REM JAVA       Java interpreter
 REM EXTRA_JARS Extra jar files to add to CLASSPATH
 
-SET JHOVE_HOME="%~dp0"
+SET JHOVE_HOME=%~dp0
 
 SET EXTRA_JARS=
 
