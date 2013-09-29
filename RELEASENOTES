@@ -25,8 +25,11 @@ GENERAL
    Java 1.4 and probably wasn't working for many people), instead assuming
    that the JAVA command is available on the command line.
 
-3. All javac commands in build.xml files now specify source=1.5 for
+4. All javac commands in build.xml files now specify source=1.5 for
    compatibility with more recent compilers.
+  
+5. gdumpwin.bat is deleted. It's redundant with gdump.bat and has bugs
+   of its own.
    
 PDF MODULE
 
