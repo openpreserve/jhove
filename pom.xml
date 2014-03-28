@@ -26,6 +26,39 @@
           <target>${java.version}</target>
         </configuration>
       </plugin>
+	  <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-jar-plugin</artifactId>
+		<version>2.4</version>
+		<executions>
+			<execution>
+				<!-- console app - don't change id, will cause build problems -->
+				<id>default-jar</id>
+					<phase>package</phase>
+					<goals><goal>jar</goal></goals>
+					<configuration>
+						<archive>
+							<manifest>
+								<mainClass>Jhove</mainClass>
+							</manifest>
+						</archive>
+					</configuration>
+			</execution>
+			<execution>
+				<id>gui-app-jar</id>
+					<phase>package</phase>
+					<goals><goal>jar</goal></goals>
+					<configuration>
+						<archive>
+							<manifest>
+								<mainClass>JhoveView</mainClass>
+							</manifest>
+						</archive>
+						<finalName>${project.artifactId}-GUI-${project.version}</finalName>
+					</configuration>
+			</execution>
+		</executions>
+	  </plugin>
     </plugins>
 	<pluginManagement>
       <plugins>
