@@ -9,6 +9,13 @@
 
   <name>jhove</name>
 
+  <!--
+  To build the command line and GUI jars:
+  mvn clean install
+  
+  To generate Javadoc:
+  mvn javadoc:javadoc
+  -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
    	<mvn.compiler.version>3.0</mvn.compiler.version>
@@ -84,6 +91,11 @@
           </execution>
         </executions>
 	  </plugin>
+	  <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+      </plugin>
     </plugins>
 	<pluginManagement>
       <plugins>
