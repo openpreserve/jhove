@@ -8,6 +8,8 @@ package edu.harvard.hul.ois.jhove.module;
 
 /**
  *  This class encapsulates a Unicode code block.
+ *  
+ *  Updated to Unicode 7.0.0.
  *
  *  @see Utf8Module 
  */
@@ -70,6 +72,9 @@ public class Utf8Block
 	new Utf8Block (0x1900, 0x194F, "Limbu"),
 	new Utf8Block (0x1950, 0x197F, "Tai Le"),
 	new Utf8Block (0x19E0, 0x19FF, "Khmer Symbols"),
+	
+	new Utf8Block (0x1AB0, 0x1AFF, "Combining Diacritical Marks Extended"),	// 7.0.0
+	
     new Utf8Block (0x1B00, 0x1B7F, "Balinese"),
     new Utf8Block (0x1BC0, 0x1BFF, "Batak"),
 	new Utf8Block (0x1D00, 0x1D7F, "Phonetic Extensions"),
@@ -123,7 +128,9 @@ public class Utf8Block
 	new Utf8Block (0xA490, 0xA4CF, "Yi Radicals"),
     new Utf8Block (0xA720, 0xA7FF, "Latin Extended-D"),
     new Utf8Block (0xA840, 0xA87F, "Phags-pa"),
+    new Utf8Block (0xA9E0, 0xA9FF, "Myanmar Extended-B"),		// 7.0.0
     new Utf8Block (0xAB00, 0xAB2F, "Ethiopic Extended-A"),
+    new Utf8Block (0xAB30, 0xAB6F, "Latin Extended-E"),			// 7.0.0
 	new Utf8Block (0xAC00, 0xD7AF, "Hangul Syllables"),
 	new Utf8Block (0xD800, 0xDB7F, "High Surrogates"),
 	new Utf8Block (0xDB80, 0xDBFF, "High Private Use Surrogates"),
@@ -143,32 +150,61 @@ public class Utf8Block
 	new Utf8Block (0x10000, 0x1007F, "Linear B Syllabary"),
 	new Utf8Block (0x10080, 0x100FF, "Linear B Ideograms"),
 	new Utf8Block (0x10100, 0x1013F, "Aegean Numbers"),
+    new Utf8Block (0x102E0, 0x102FF, "Coptic Epact Numbers"),			// 7.0.0
 
 	new Utf8Block (0x10300, 0x1032F, "Old Italic"),
 	new Utf8Block (0x10330, 0x1034F, "Gothic"),
+    new Utf8Block (0x10350, 0x1037F, "Old Permic"),						// 7.0.0
 
 	new Utf8Block (0x10380, 0x1039F, "Ugaritic"),
 
 	new Utf8Block (0x10400, 0x1044F, "Deseret"),
-    new Utf8Block (0x10900, 0x1091F, "Phoenician"),
 
 	new Utf8Block (0x10450, 0x1047F, "Shavian"),
 	new Utf8Block (0x10480, 0x104AF, "Osmanya"),
+    new Utf8Block (0x10500, 0x1052F, "Elbasan"),						// 7.0.0
+    new Utf8Block (0x10530, 0x1056F, "Caucasian Albanian"),				// 7.0.0
+    new Utf8Block (0x10600, 0x1077F, "Linear A"),						// 7.0.0
 	new Utf8Block (0x10800, 0x1083F, "Cypriot Syllabary"),
+    new Utf8Block (0x10860, 0x1087F, "Palmyrene"),						// 7.0.0
+    new Utf8Block (0x10880, 0x108AF, "Nabataean"),						// 7.0.0
+    new Utf8Block (0x10900, 0x1091F, "Phoenician"),
+    new Utf8Block (0x10A80, 0x10A9F, "Old North Arabian"),				// 7.0.0
+    new Utf8Block (0x10AC0, 0x10AFF, "Manichaean"),						// 7.0.0
+    new Utf8Block (0x10B80, 0x10BAF, "Psalter Pahlavi"),				// 7.0.0
     new Utf8Block (0x11000, 0x1107F, "Brahmi"),
+    new Utf8Block (0x11150, 0x1117F, "Mahajani"),						// 7.0.0
+    new Utf8Block (0x111E0, 0x111FF, "Sinhala Archaic Numbers"),		// 7.0.0
+    new Utf8Block (0x11200, 0x1124F, "Khojki"),							// 7.0.0
+    new Utf8Block (0x112B0, 0x112FF, "Khudawadi"),						// 7.0.0
+    new Utf8Block (0x11300, 0x1137F, "Grantha"),						// 7.0.0
+    new Utf8Block (0x11480, 0x114DF, "Tirhuta"),						// 7.0.0
+    new Utf8Block (0x11580, 0x115FF, "Siddham"),						// 7.0.0
+    new Utf8Block (0x11600, 0x1165F, "Modi"),							// 7.0.0
+    new Utf8Block (0x118A0, 0x118FF, "Warang Citi"),					// 7.0.0
+    new Utf8Block (0x11AC0, 0x11AFF, "Pau Cin Hau"),					// 7.0.0
     new Utf8Block (0x12000, 0x120FF, "Cuneiform"),
     new Utf8Block (0x16800, 0x168BF, "Bamum Supplement"),
+    new Utf8Block (0x16A40, 0x16A6F, "Mro"),							// 7.0.0
+    new Utf8Block (0x16AD0, 0x16AFF, "Bassa Vah"),						// 7.0.0
+    new Utf8Block (0x16B00, 0x16B8F, "Pahawh Hmong"),					// 7.0.0
     new Utf8Block (0x1B000, 0x1B0FF, "Kana Supplement"),
+    new Utf8Block (0x1BC00, 0x1BC9F, "Duployan"),						// 7.0.0
+    new Utf8Block (0x1BCA0, 0x1BCAF, "Shorthand Format Controls"),		// 7.0.0
 
 	new Utf8Block (0x1D000, 0x1D0FF, "Byzantine Musical Symbols"),
 	new Utf8Block (0x1D100, 0x1D1FF, "Musical Symbols"),
     new Utf8Block (0x1D360, 0x1D37F, "Counting Rod Numerals"),
 	new Utf8Block (0x1D400, 0x1D7FF, "Mathematical Alphanumeric Symbols"),
+    new Utf8Block (0x1E800, 0x1E8DF, "Mende Kikakui"),					// 7.0.0
     new Utf8Block (0x1F0A0, 0x1F0FF, "Playing Cards"),
     new Utf8Block (0x1F300, 0x1F3FF, "Miscellaneous Symbols and Pictographs"),
     new Utf8Block (0x1F600, 0x1F64F, "Emoticons"),
+    new Utf8Block (0x1F650, 0x1F67F, "Ornamental Dingbats"),			// 7.0.0
     new Utf8Block (0x1F680, 0x1F6FF, "Transport and Map Symbols"),
     new Utf8Block (0x1F700, 0x1F77F, "Alchemical Symbols"),
+    new Utf8Block (0x1F780, 0x1F7FF, "Geometric Shapes Extended"),		// 7.0.0
+    new Utf8Block (0x1F800, 0x1F8FF, "Supplemental Arrows-C"),			// 7.0.0
 	new Utf8Block (0x20000, 0x2A6DF, "CJK Unified Ideographs Extension B"),
     new Utf8Block (0x2B740, 0x2B78F, "CJK Unified Ideographs Extension D"),
 	new Utf8Block (0x2F800, 0x2FA1F, "CJK Compatibility Ideographs Supplement"),

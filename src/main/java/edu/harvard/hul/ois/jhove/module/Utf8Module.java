@@ -36,17 +36,17 @@ public class Utf8Module
      ******************************************************************/
 
     private static final String NAME = "UTF8-hul";
-    private static final String RELEASE = "1.5";
-    private static final int [] DATE = {2011, 2, 3};
+    private static final String RELEASE = "1.6";
+    private static final int [] DATE = {2014, 7, 18};
     private static final String [] FORMAT = {"UTF-8"};
-    private static final String COVERAGE = "Unicode 6.0.0";
+    private static final String COVERAGE = "Unicode 7.0.0";
     private static final String [] MIMETYPE = {"text/plain; charset=UTF-8"};
     private static final String WELLFORMED = "An UTF-8 object is well-formed "+
 	"if each character is correctly encoded as a one-to-four byte " +
 	"sequence, as defined in the specifications";
     private static final String VALIDITY = null;
     private static final String REPINFO = "Additional representation " +
-	"information includes: number of characters and Unicode 6.0.0 code " +
+	"information includes: number of characters and Unicode 7.0.0 code " +
 	"blocks";
     private static final String NOTE = null;
     private static final String RIGHTS = "Copyright 2003-2011 by JSTOR and " +
@@ -116,7 +116,7 @@ public class Utf8Module
 	Document doc = new Document ("The Unicode Standard, Version 6.0",
 				     DocumentType.BOOK);
 	agent = new Agent ("The Unicode Consortium", AgentType.NONPROFIT);
-	agent.setWeb ("http://www.unicode.org/versions/Unicode6.0.0/");
+	agent.setWeb ("http://www.unicode.org/versions/Unicode7.0.0/");
 	agent.setAddress ("Mountain View, California");
 	doc.setAuthor (agent);
 	agent = new Agent ("Addison-Wesley", AgentType.COMMERCIAL);
@@ -195,7 +195,7 @@ public class Utf8Module
     {
         // Test if textMD is to be generated
         if (_defaultParams != null) {
-            Iterator iter = _defaultParams.iterator ();
+            Iterator<String> iter = _defaultParams.iterator ();
             while (iter.hasNext ()) {
                 String param = (String) iter.next ();
                 if (param.toLowerCase ().equals ("withtextmd=true")) {
