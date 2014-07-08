@@ -13,8 +13,6 @@ import edu.harvard.hul.ois.jhove.module.html.DTDMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.InputSource;
@@ -52,7 +50,7 @@ public class XmlModuleHandler extends DefaultHandler {
     /* Qualified name of the root element. */
     private String _root;
     
-    /* URI for DTD specificiation */
+    /* URI for DTD specification */
     private String _dtdURI;
     
     /* List of schema URI's.  Each element is a String[2],
@@ -164,7 +162,7 @@ public class XmlModuleHandler extends DefaultHandler {
                 _root = localName;
             }
         }
-        if (namespaceURI != null) {
+        if ( (namespaceURI != null) && (namespaceURI.length() != 0) ) {
             SchemaInfo schi = new SchemaInfo();
             schi.namespaceURI = namespaceURI;
             schi.location = "";
