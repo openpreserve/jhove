@@ -760,7 +760,7 @@ public class JpegModule extends ModuleBase
              * left, so it will get checksummed. */
             for (;;) {
                 try {
-                    int n = skipBytes (_dstream, 2048, this);
+                    long n = skipBytes (_dstream, 2048, this);
                     if (n == 0) {
                         break;
                     }

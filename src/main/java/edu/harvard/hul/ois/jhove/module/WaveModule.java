@@ -391,7 +391,7 @@ public class WaveModule
              * left, so it will get checksummed. */
             for (;;) {
                 try {
-                    int n = skipBytes (_dstream, 2048, this);
+					long n = skipBytes(_dstream, 2048, this);
                     if (n == 0) {
                         break;
                     }
@@ -706,7 +706,7 @@ public class WaveModule
        if (!chunkh.readHeader(_dstream)) {
            return false;
        }
-       int chunkSize = (int) chunkh.getSize ();
+		long chunkSize = chunkh.getSize();
        bytesRemaining -= chunkSize + 8;
        
        if (bytesRemaining < 0) {
