@@ -1990,13 +1990,20 @@ public class PdfModule
                                     imgList.add (new Property ("NisoImageMetadata",
                                                PropertyType.NISOIMAGEMETADATA, niso));
                                     niso.setMimeType("application/pdf");
-                                    PdfSimpleObject widObj = (PdfSimpleObject)
-                                        xobdict.get ("Width");
-                                    niso.setImageWidth(widObj.getIntValue ());
-                                    PdfSimpleObject htObj = (PdfSimpleObject)
-                                        xobdict.get ("Height");
-                                    niso.setImageLength(htObj.getIntValue ());
-                                    
+                                    PdfSimpleObject widObj = null;
+                                    PdfSimpleObject htObj = null;
+                                    if (xobdict.get("Width") instanceof PdfIndirectObj) {
+                                        PdfIndirectObj io = (PdfIndirectObj)xobdict.get("Width");
+                                        widObj = (PdfSimpleObject)resolveIndirectObject(io);
+                                        io = (PdfIndirectObj)xobdict.get("Height");
+                                        htObj = (PdfSimpleObject)resolveIndirectObject(io);
+                                    }
+                                    else {
+                                        widObj = (PdfSimpleObject)xobdict.get ("Width");
+                                        htObj = (PdfSimpleObject)xobdict.get ("Height");
+                                    }
+                                    niso.setImageWidth(widObj.getIntValue ());                               
+                                    niso.setImageLength(htObj.getIntValue ());                                    
                                     // Check for filters to add to the filter list
                                     Filter[] filters = ((PdfStream) xob).getFilters ();
                                     String filt = extractFilters (filters, (PdfStream) xob);
