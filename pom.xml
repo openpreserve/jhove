@@ -51,6 +51,24 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputDirectory>target/generated-sources/jaxb</outputDirectory>
+                    <packageName>edu.harvard.hul.ois.jhove.jaxb</packageName>
+                    <schemaDirectory>src/main/resources/jaxb</schemaDirectory>
+                    <schemaFiles>jhove.xsd</schemaFiles>
+                </configuration>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
