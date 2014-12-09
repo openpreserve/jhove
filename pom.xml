@@ -63,7 +63,7 @@
 								<mainClass>JhoveView</mainClass>
 							</manifest>
 						</archive>
-						<finalName>${project.artifactId}-GUI-${project.version}</finalName>
+                        <finalName>${project.artifactId}-${project.version}</finalName>
 					</configuration>
 			</execution>
 		</executions>
@@ -82,7 +82,7 @@
             <configuration>
               <artifacts>
                 <artifact>
-                  <file>${project.build.directory}/${project.artifactId}-GUI-${project.version}.jar</file>
+                  <file>${project.build.directory}/${project.artifactId}-${project.version}-gui.jar</file>
                   <type>jar</type>
                   <classifier>gui</classifier>
                 </artifact>
