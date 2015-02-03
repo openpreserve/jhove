@@ -6,9 +6,8 @@ see the file LICENSE for details)
 
 Rev. 1.12.0A1, 2014-03-16
 
-This is the beginning of an attempt to convert to Maven. Everything has
-moved around. Stick with 1.11 until this works, unless you're helping to
-get it to build.
+JHOVE is now being maintained by the Open Preservation Foundation, as of
+February 3, 2015. This repository should be considered archival.
 
 JHOVE (the JSTOR/Harvard Object Validation Environment, pronounced "jhove")
 is an extensible software framework for performing format identification,
