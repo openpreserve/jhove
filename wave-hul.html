@@ -1,0 +1,443 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html lang="en">
+<head>
+<link rel="Stylesheet" href="style.css" type="text/css">
+<meta NAME="Description" CONTENT="JHOVE WAVE module documentation">
+<title>JHOVE WAVE-hul Module</title>
+</head>
+<body>
+<img src="jhove-logo.gif">
+
+<table class="menu">
+<tr>
+<td class="inactive"><a class="menu" href="index.html">Home</a></td>
+<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
+<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
+<td class="active">WAVE-hul&nbsp;Module</td>
+<td class="inactive"><a class="menu"
+                        href="distribution.html">Distribution</a></td>
+<td class="inactive"><a class="menu" href="links.html">Links</a></td>
+<td class="spacing">&nbsp;</td>
+</tr>
+</table>
+
+<h1>WAVE-hul Module</h1>
+
+<h2>1 Introduction</h2>
+
+<p>
+The WAVE-hul module recognizes and validates the Audio for Windows
+format (WAVE)
+[<a href="references.html#wave">WAVE</a>,<a href="references.html#waveformat">WAVEFORMAT</a>].
+WAVE is a variant of the Microsoft RIFF format
+[<a href="references.html#riff">RIFF</a>], which is itself an 
+implementation of the Electronic Arts IFF 85 format
+[<a href="references.html#iff85">IFF</a>].
+</p><p>
+The module is invoked by the:
+</p>
+<blockquote>
+<pre>
+jhove ... -m WAVE-hul ...
+</pre>
+</blockquote>
+command line option.
+
+<p>
+</p>
+
+<a class="name" name="coverage">
+<h2>2 Coverage</h2></a>
+
+<p>
+The WAVE-hul module recognizes and validates the following public profiles:
+</p>
+<ul>
+<li> PCMWAVEFORMAT
+[<a href="references.html#pcmwaveformat">PCMWAVEFORMAT</a>]
+<li> WAVEFORMATEX
+[<a href="references.html#waveformatex">WAVEFORMATEX</a>]
+<li> WAVEFORMATEXTENSIBLE
+[<a href="references.html#waveformatextensible">WAVEFORMATEXTENSIBLE</a>]
+<li> EBU Technical Specification 3285,
+Broadcast Wave Format (BWF) version 0 and 1
+[<a href="references.html#bwf">BWF</a>,
+<a href="references.html#bwf-1">BWF Supp 1</a>,
+<a href="references.html#bwf-2">BWF Supp 2</a>,
+<a href="references.html#bwf-3">BWF Supp 3</a>,
+<a href="references.html#bwf-4">BWF Supp 4</a>,
+<a href="references.html#bwf-5">BWF Supp 5</a>]
+</ul>
+
+<p>
+</p>
+
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2></a>
+
+<p>
+The following criteria must be met by an WAVE object for JHOVE to
+consider it well-formed:
+</p>
+
+<ul>
+<li> Magic number: "RIFF" at byte offset 0; "WAVE" at offset 8
+<li> All chunk structures are well-formed: a four ASCII character <tt>ID</tt>,
+followed by a 32 signed integer <tt>size</tt>, followed by a <tt>size</tt>
+byte data block (if <tt>size</tt> is odd, then the data block includes a
+final padding byte of value 0x00)
+<li> No data exist before the first byte of the chunk or after the
+last byte of the last chunk
+</ul>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+
+<p>
+The following criteria must be met by a WAVE file for JHOVE to consider it
+valid:
+</p>
+
+<ul>
+<li> The file is well-formed
+</ul>
+
+<p>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+
+<p>
+The MIME type is reported as: audio/x-wave.
+</p>
+
+<p>
+In addition to the standard JHOVE
+<a href="index.html#repinfo">representation information</a>, the following
+WAVE-specific properties are reported:
+</p>
+<ul>
+<li> Property "WAVEMetadata" of type PROPERTY and arity ARRAY
+<ul>
+<li> Properties capturing the technical attributes of the WAVE
+image from all chunks
+<li> ...
+</ul>
+</ul>
+
+<p>
+The WAVE module recognizes the following chunks:
+<ul>
+<li> "fmt " Format chunk (required)
+<li> "fact" Fact chunk (for non-PCM data)
+<li> "data" Data chunk
+<li> "cue " Cue chunk
+<li> "plst" Playlist chunk
+<li> "labl" Label chunk
+<li> "note" Note chunk
+<li> "smpl" Sampler chunk
+<li> "inst" Instrument chunk
+<li> "bext" Broadcast Audio Extension chunk (for BWF)
+[<a href="references.html#bwf">BWF</a>]
+<li> "mext" MPEG Audio Extension chunk
+[<a href="references.html#bwf-1">BWF Supp 1</a>]
+<li> "qlty" Quality chunk
+[<a href="references.html#bwf-2">BWF Supp 2</a>]
+<li> "levl" Peak Envelope chunk
+[<a href="references.html#bwf-3">BWF Supp 3</a>]
+<li> "link" Link chunk
+[<a href="references.html#bwf-4">BWF Supp 4</a>]
+<li> "axml" AXML chunk
+[<a href="references.html#bwf-5">BWF Supp 5</a>]
+</ul>
+</p>
+
+<p>
+The AIFF module reports audio properties
+using the draft AES-X098B, <em>Core audio metadata XML
+definition</em>, currently under development by the
+<a href="http://www.aes.org/">Audio Engineering Society</a> (AES)
+<a href="http://www.aes.org/standards/b_policies/aessc-structure.cfm#SC-03">SC-03-06</a>
+Working Group on Digital Library and Archive Systems.
+</p>
+
+<h3>5.1 Profiles</h3>
+
+<p>WAVE is a format for uncompressed or compressed sampled audio.
+The format is defined informally by references to various Microsoft API
+data structures
+[<a href="references.html#waveformat">WAVEFORMAT</a>,
+<a href="references.html#pcmwaveformat">PCMWAVEFORMAT</a>,
+<a href="references.html#waveformatex">WAVEFORMATEX</a>,
+<a href="references.html#waveformatextensible">WAVEFORMATEXTENSIBLE</a>].
+The baseline "fmt " chunk is defined by the WAVEFORMAT structure with a
+length of 14:
+<blockquote>
+<pre>
+WORD  wFormatTag
+WORD  nChannels
+DWORD nSamplesPerSec
+DWORD nAvgBytesPerSec
+WORD  nBlockAlign
+</pre>
+</blockquote>
+where <tt>WORD</tt> indicates a 16-bit unsigned integer and
+<tt>DWORD</tt> indicates a 32-bit unsigned integer.
+</p>
+<p>
+The specific form of the sampled data is specified by the "fmt " chunk
+<tt>wFormatTag</tt> field
+[<a href="references.html#wave-codec">RFC 2361</a>].
+</p><p>
+Common format tags include, but are not limited to:
+<blockquote>
+<table border="1">
+<tr><th colspan="2">Tag</th><th>Description</th></tr>
+<tr><td>0</td><td>0x0000</td><td>Unknown</td></tr>
+<tr><td>1</td><td>0x0001</td><td>Microsoft PCM</td></tr>
+<tr><td>2</td><td>0x0002</td><td>Microsoft ADPCM</td></tr>
+<tr><td>3</td><td>0x0003</td><td>IEEE Float</td></tr>
+<tr><td>4</td><td>0x0004</td><td>Compaq VSELP</td></tr>
+<tr><td>5</td><td>0x0005</td><td>IBM CVSD</td></tr>
+<tr><td>6</td><td>0x0006</td><td>Microsoft ALAW</td></tr>
+<tr><td>7</td><td>0x0007</td><td>Microsoft MULAW</td></tr>
+<tr><td>16</td><td>0x0010</td><td>OKI ADPCM</td></tr>
+<tr><td>17</td><td>0x0011</td><td>Intel DVI ADPCM</td></tr>
+<tr><td>18</td><td>0x0012</td><td>Videologic MediaSpace ADPCM</td></tr>
+<tr><td>19</td><td>0x0013</td><td>Sierra ADPCM</td></tr>
+<tr><td>20</td><td>0x0014</td><td>Antex Electronics G.723 ADPCM</td></tr>
+<tr><td>21</td><td>0x0015</td><td>DSP Solution DIGISTD</td></tr>
+<tr><td>22</td><td>0x0016</td><td>DSP Solution DIGIFIX</td></tr>
+<tr><td>23</td><td>0x0017</td><td>Dialogic OKI ADPCM</td></tr>
+<tr><td>24</td><td>0x0018</td><td>MediaVision ADPCM</td></tr>
+<tr><td>25</td><td>0x0019</td><td>HP CU</td></tr>
+<tr><td>32</td><td>0x0020</td><td>Yamaha ADPCM</td></tr>
+<tr><td>33</td><td>0x0021</td><td>Speech Compression Sonarc</td></tr>
+<tr><td>34</td><td>0x0022</td><td>DSP Group True Speech</td></tr>
+<tr><td>35</td><td>0x0023</td><td>Echo Speech EchoSC1</td></tr>
+<tr><td>36</td><td>0x0024</td><td>Audiofile AF36</td></tr>
+<tr><td>37</td><td>0x0025</td><td>APTX</td></tr>
+<tr><td>38</td><td>0x0026</td><td>AudioFile AF10</td></tr>
+<tr><td>39</td><td>0x0027</td><td>Prosody 1612</td></tr>
+<tr><td>40</td><td>0x0028</td><td>LRC</td></tr>
+<tr><td>48</td><td>0x0030</td><td>Dolby AC2</td></tr>
+<tr><td>49</td><td>0x0031</td><td>Microsoft GSM610</td></tr>
+<tr><td>50</td><td>0x0032</td><td>Microsoft MSNAudio</td></tr>
+<tr><td>51</td><td>0x0033</td><td>Antex ADPCME</td></tr>
+<tr><td>52</td><td>0x0034</td><td>Control Res VQLPC</td></tr>
+<tr><td>53</td><td>0x0035</td><td>Digireal</td></tr>
+<tr><td>54</td><td>0x0036</td><td>DigiADPCM AC2</td></tr>
+<tr><td>55</td><td>0x0037</td><td>Control Res CR10</td></tr>
+<tr><td>56</td><td>0x0038</td><td>NMS VBXADPCM AC2</td></tr>
+<tr><td>57</td><td>0x0039</td><td>Roland RDAC</td></tr>
+<tr><td>58</td><td>0x003A</td><td>EchoSC3</td></tr>
+<tr><td>59</td><td>0x003B</td><td>Rockwell ADPCM</td></tr>
+<tr><td>60</td><td>0x003C</td><td>Rockwell Digit LK</td></tr>
+<tr><td>61</td><td>0x003D</td><td>Xebec</td></tr>
+<tr><td>64</td><td>0x0040</td><td>Antex Electronics G.721</td></tr>
+<tr><td>65</td><td>0x0041</td><td>Antex Electronics G.728 CELP</td></tr>
+<tr><td>66</td><td>0x0042</td><td>Microsoft MSG723</td></tr>
+<tr><td>80</td><td>0x0050</td><td>MPEG</td></tr>
+<tr><td>82</td><td>0x0052</td><td>Voxware RT24</td></tr>
+<tr><td>83</td><td>0x0053</td><td>InSoft PAC</td></tr>
+<tr><td>85</td><td>0x0055</td><td>MPEG Layer 3</td></tr>
+<tr><td>89</td><td>0x0059</td><td>Lucent G.723</td></tr>
+<tr><td>96</td><td>0x0060</td><td>Cirrus</td></tr>
+<tr><td>97</td><td>0x0061</td><td>ESPCM</td></tr>
+<tr><td>98</td><td>0x0062</td><td>Voxware</td></tr>
+<tr><td>99</td><td>0x0063</td><td>Canopus Atrac</td></tr>
+<tr><td>100</td><td>0x0064</td><td>APICOM G.726 ADPCM</td></tr>
+<tr><td>101</td><td>0x0065</td><td>APICOM G.722 ADPCM</td></tr>
+<tr><td>102</td><td>0x0066</td><td>Microsoft DSAT</td></tr>
+<tr><td>103</td><td>0x0067</td><td>Microsoft DSAT Display</td></tr>
+<tr><td>105</td><td>0x0069</td><td>Voxware Byte Aligned</td></tr>
+<tr><td>112</td><td>0x0070</td><td>Voxware AC8</td></tr>
+<tr><td>113</td><td>0x0071</td><td>Voxware AC10</td></tr>
+<tr><td>114</td><td>0x0072</td><td>Voxware AC16</td></tr>
+<tr><td>115</td><td>0x0073</td><td>Voxware AC20</td></tr>
+<tr><td>116</td><td>0x0074</td><td>Voxware Metavoice</td></tr>
+<tr><td>117</td><td>0x0075</td><td>Voxware Metasound</td></tr>
+<tr><td>118</td><td>0x0076</td><td>Voxware RT29HW</td></tr>
+<tr><td>119</td><td>0x0077</td><td>Voxware VR12</td></tr>
+<tr><td>120</td><td>0x0078</td><td>Voxware VR18</td></tr>
+<tr><td>121</td><td>0x0079</td><td>Voxware TQ40</td></tr>
+<tr><td>128</td><td>0x0080</td><td>Softsound</td></tr>
+<tr><td>129</td><td>0x0081</td><td>Voxware TQ60</td></tr>
+<tr><td>130</td><td>0x0082</td><td>MSRT24</td></tr>
+<tr><td>131</td><td>0x0083</td><td>AT&amp;T G.729A</td></tr>
+<tr><td>132</td><td>0x0084</td><td>Motion Pixels MVI MV12</td></tr>
+<tr><td>133</td><td>0x0085</td><td>DF G.726</td></tr>
+<tr><td>134</td><td>0x0086</td><td>DF GSM610</td></tr>
+<tr><td>136</td><td>0x0088</td><td>ISIAudio</td></tr>
+<tr><td>137</td><td>0x0089</td><td>Onlive</td></tr>
+<tr><td>145</td><td>0x0091</td><td>Siemens SBC24</td></tr>
+<tr><td>146</td><td>0x0092</td><td>Dolby AC3 SPDIF</td></tr>
+<tr><td>151</td><td>0x0097</td><td>ZyXEL ADPCM</td></tr>
+<tr><td>152</td><td>0x0098</td><td>Philips LPCBB</td></tr>
+<tr><td>153</td><td>0x0099</td><td>Packed</td></tr>
+<tr><td>256</td><td>0x0100</td><td>Rhetorex ADPCM</td></tr>
+<tr><td>257</td><td>0x0101</td><td>BeCubed IRAT</td></tr>
+<tr><td>273</td><td>0x0111</td><td>Vivo G.723</td></tr>
+<tr><td>274</td><td>0x0112</td><td>Vivo Siren</td></tr>
+<tr><td>291</td><td>0x0123</td><td>DEC G.723</td></tr>
+<tr><td>512</td><td>0x0200</td><td>Creative ADPCM</td></tr>
+<tr><td>514</td><td>0x0202</td><td>Creative FastSpeech8</td></tr>
+<tr><td>515</td><td>0x0203</td><td>Creative FastSpeech10</td></tr>
+<tr><td>544</td><td>0x0220</td><td>Quarterdeck</td></tr>
+<tr><td>768</td><td>0x0300</td><td>Fujitsu FM Towns Snd</td></tr>
+<tr><td>1024</td><td>0x0400</td><td>BTV Digital</td></tr>
+<tr><td>1664</td><td>0x0680</td><td>AT&amp;T VME VMPCM</td></tr>
+<tr><td>4096</td><td>0x1000</td><td>Olivetti OLIGSM</td></tr>
+<tr><td>4097</td><td>0x1001</td><td>Olivetti OLIADPCM</td></tr>
+<tr><td>4098</td><td>0x1002</td><td>Olivetti OLICELP</td></tr>
+<tr><td>4099</td><td>0x1003</td><td>Olivetti OLISBC</td></tr>
+<tr><td>4100</td><td>0x1004</td><td>Olivetti OLIOPR</td></tr>
+<tr><td>4352</td><td>0x1100</td><td>LH Codec</td></tr>
+<tr><td>5120</td><td>0x1400</td><td>Norris</td></tr>
+<tr><td>5121</td><td>0x1401</td><td>AT&amp;T ISIAudio</td></tr>
+<tr><td>5376</td><td>0x1500</td><td>AT&amp;T Soundspace Music Compression</td></tr>
+<tr><td>8192</td><td>0x2000</td><td>DVM</td></tr>
+<tr><td>65534</td><td>0xFFFE</td><td>WAVE_FORMAT_EXTENSIBLE</td></tr>
+<tr><td>65535</td><td>0xFFFF</td><td>Experimental</td></tr>
+</table>
+</blockquote>
+</p>
+
+<ul>
+<li> <strong>PCMWAVEFORMATEX</strong>
+<p>
+This is an extension to the WAVEFORMAT profile
+in which the
+<tt>fmt</tt> chunk is defined by the PCMWAVEFORMATEX structure with a
+length of 16
+[<a href="references.html#pcmwaveformat">PCMWAVEFORMAT</a>]:
+<blockquote>
+<pre>
+WAVEFORMAT
+WORD  wBitsPerSample
+</pre>
+</blockquote>
+</p><p>
+Profile requirements include:
+</p>
+<ul>
+<li> <tt>wFormatTag</tt> = 1
+</ul>
+<p>
+
+<li> <strong>WAVEFORMATEX</strong>
+<p>
+This is an extension to the PCMWAVEFORMATEX profile supporting both PCM
+and non-PCM audio formats
+[<a href="references.html#waveformatex">WAVEFORMATEX</a>]..
+The <tt>fmt</tt> chunk is defined by the WAVEFORMATEX structure with a
+length &#x2265; 18:
+<blockquote>
+<pre>
+PCMWAVEFORMATEX
+WORD  cbSize
+</pre>
+</blockquote>
+where <tt>UNION</tt> is a C-style union structure and
+<tt>CHAR</tt> is an 8-bit unsigned integer.
+</p><p>
+Profile requirements include:
+</p>
+<ul>
+<li> <tt>wFormatTag</tt> &#x2260; 65534
+<li> If <tt>wFormatTag</tt> = 1 then
+<ul>
+<li> <tt>nAvgBytesPerSec</tt> = <tt>nSamplesPerSec*nBlockAlign</tt>
+(recommended)
+<li> <tt>nBlockAlign</tt> = <tt>nChannels</tt>*<strong>ceiling</strong>(<tt>wBitsPerSample</tt>/8)
+<li> <tt>wBitsPerSample</tt> = 8 or 16
+</ul>
+</ul>
+<p>
+
+<li> <strong>WAVEFORMATEXTENSIBLE</strong>
+<p>
+This is the most recent version of the Microsoft WAVE format for audio
+sample data with greater than 2 channels or 16-bit sampling
+[<a href="references.html#waveformatextensible">WAVEFORMATEXTENSIBLE</a>].
+The
+<tt>fmt</tt> chunk is defined by the WAVEFORMATEXTENSIBLE structure with a
+length &#x2265; 40:
+<blockquote>
+<pre>
+WAVEFORMATEX
+UNION samples   {
+         WORD  wValidBitsPerSample
+         WORD  wSamplesPerBlock
+         WORD  wReserved
+}
+DWORD dwChannelMask
+GUID  subFormat {
+         DWORD f1
+         WORD  f2
+         WORD  f3
+         CHAR  f4[8]
+}
+</pre>
+</blockquote>
+</p><p>
+Profile requirements include:
+</p>
+<ul>
+<li> <tt>wFormatTag</tt> = 65534
+<li> <tt>nBlockAlign</tt> = <tt>nChannels</tt>*<strong>ceiling</strong>(<tt>wBitsPerSample</tt>/8)
+<li> <tt>wBitsPerSample</tt> is multiple of 8
+<li> <tt>cbSize</tt> &gt; 21
+<li> <tt>wValidBitsPerSample</tt> &#x2264; <tt>wBitsPerSample</tt>
+</ul>
+<p>
+
+<li> <strong>Broadcast Wave Format 0 and 1</strong>
+<p>
+Broadcast Wave Format (BWF) is an extension of the WAVEFORMATEX profile
+defined by the European Broadcast Union (EBU) as
+EBU Technical Specification 3285
+[<a href="references.html#bwf">BWF</a>,
+<a href="references.html#bwf-1">BWF Supp 1</a>,
+<a href="references.html#bwf-2">BWF Supp 2</a>,
+<a href="references.html#bwf-3">BWF Supp 3</a>,
+<a href="references.html#bwf-4">BWF Supp 4</a>,
+<a href="references.html#bwf-5">BWF Supp 5</a>].
+</p><p>
+Profile requirements include:
+</p>
+<ul>
+<li> "fmt " chunk <tt>wFormatTag</tt> = 1 or 80
+<li> "bext" chunk <tt>version</tt> = 0 (for version 0) or 1 (for version 1)
+</ul>
+</ul>
+
+<h2>6 Additional Module Properties</h2>
+
+<ul>
+<li> Nominal file extension: .wav
+<li> Nominal file extension: .bwf (for the BWF profile)
+</ul>
+
+<table class="menu">
+<tr>
+<td class="inactive"><a class="menu" href="index.html">Home</a></td>
+<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
+<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
+<td class="active">WAVE-hul&nbsp;Module</td>
+<td class="inactive"><a class="menu"
+                        href="distribution.html">Distribution</a></td>
+<td class="inactive"><a class="menu" href="links.html">Links</a></td>
+<td class="spacing">&nbsp;</td>
+</tr>
+</table>
+
+<address>
+Copyright 2004 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
+Last updated 2004-12-17
+</address>
+</body>
+</html>
+

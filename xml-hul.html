@@ -1,0 +1,236 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html lang="en">
+<head>
+<link rel="Stylesheet" href="style.css" type="text/css">
+<meta NAME="Description" CONTENT="JHOVE XML module documentation">
+<title>JHOVE XML-hul Module</title>
+</head>
+<body>
+<img src="jhove-logo.gif">
+
+<table class="menu">
+<tr>
+<td class="inactive"><a class="menu" href="index.html">Home</a></td>
+<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
+<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
+<td class="active">XML-hul&nbsp;Module</td>
+<td class="inactive"><a class="menu"
+                        href="distribution.html">Distribution</a></td>
+<td class="inactive"><a class="menu" href="links.html">Links</a></td>
+<td class="spacing">&nbsp;</td>
+</tr>
+</table>
+
+<h1>XML-hul Module</h1>
+
+<h2>1 Introduction</h2>
+
+<p>
+The XML-hul module recognizes and validates the XML (Extensible Markup
+Language) format.
+[<a href="references.html#xml">XML</a>].
+</p><p>
+The module is invoked by the:
+</p>
+<blockquote>
+<pre>
+jhove ... -m XML-hul [-x <em>sax-class</em>] ...
+</pre>
+</blockquote>
+command line option.
+
+<p>
+The XML-hul module can use any XML parser that conforms to the
+<a href="http://www.saxproject.org">SAX2</a> interfaces.
+Note that if the SAX2 optional LexicalHandler interface isn't supported by the
+parser, JHOVE will only be able to report a restricted set of
+representation information.
+</p><p>
+The actual parser used is either:
+</p><ol>
+<li> The parser specified by the <tt>-x <em>sax-class</em></tt> command line
+option (whose class file <em>must</em> be found on the CLASSPATH at the
+time of execution);
+<li> The value of the <tt>edu.harvard.hul.ois.jhove.saxClass</tt> property
+in the properties file
+<tt>${<em>user.home</em>}/jhove/jhove.properties</tt> properties file,
+where <tt>${<em>user.home</em>}</tt>
+is the standard Java <tt>user.home</tt> property; or
+<li> The default parser of the
+<a href="http://java.sun.com/j2se/">J2SE</a> 1.4
+Java Runtime Environment (JRE).
+</ol>
+
+<p>
+For example, if you are using Xerces, you will have to specify the parser class as
+<code>org.apache.xerces.parsers.SAXParser</code>.
+<p>
+Note that testing indicates that the default
+<a href="http://xml.apache.org/crimson/">Crimson</a> parser included in
+<a href="http://www.sun.com/">Sun's</a>
+<a href="http://java.sun.com/j2se/">J2SE</a>
+<a href="http://java.sun.com/j2se/desktopjava/jre/">JRE</a>
+does not support validation by <a href="http://www.w3.org/">XML</a>
+<a href="http://www.w3.org/XML/Schema">Schema</a>.
+The <a href="http://www.apache.org/">Apache</a>
+<a href="http://xml.apache.org/xerces2-j/">Xerces</a> parser does validate
+against Schemas;
+other commercial and open source parsers may also validate against Schemas.
+(JSTOR and the Harvard University Library do not endorse or recommend
+the use of any particular XML parser; the previous discussion is provided
+solely for information purposes.)
+</p>
+
+<a class="name" name="coverage">
+<h2>2 Coverage</h2></a>
+
+<p>
+The XML-hul module recognizes and validates the following public profiles:
+</p>
+<ul>
+<li> XML 1.0 [<a href="references.html#xml">XML</a>]
+</ul>
+
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2></a>
+
+<p>
+JHOVE uses the criteria for XML well-formedness defined by
+[<a href="references.html#xml">XML</a>].
+</p>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+
+<p>
+JHOVE uses the criteria for XML validity defined by
+[<a href="references.html#xml">XML</a>].
+</p>
+
+<p>
+Note that the concept of validity applies only to XML files that explicitly
+reference a DTD or XML Schema.
+JHOVE can determine if either of these conditions are met and if so,
+it will invoke automatically the SAX2 parser in a validating mode.
+Otherwise, the parser is invoked in a manner that only checks for
+well-formedness.
+</p>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+
+<p>
+The MIME type is reported as: application/xml
+</p>
+
+<p>
+In addition to the standard JHOVE
+<a href="index.html#repinfo">representation information</a>, the following
+XML-specific properties are reported:
+<ul>
+<li> Property "XMLMetadata" of type PROPERTY and arity LIST
+<ul>
+<li> Property "Version" of type STRING and arity SCALAR
+<li> Property "Encoding" of type STRING and arity SCALAR
+<li> Property "Standalone" of type BOOLEAN and arity SCALAR
+<li> Property "DTD" of type PROPERTY and arity LIST (if a DTD is specified)
+<ul>
+<li> Property "PublicID" of type STRING and arity SCALAR
+<li> Property "SystemID" of type STRING and arity SCALAR
+<li> Property "InternalSubset" of type BOOLEAN and arity SCALAR
+</ul>
+<li> Property "Schemas" of type PROPERTY and arity LIST (if an XML Schema
+is specified)
+<ul>
+<li> Property "Schema" of type PROPERTY and arity ARRAY
+<ul>
+<li> Property "NamespaceURI" of type STRING and arity SCALAR
+<li> Property "SchemaLocation" of type STRING and arity SCALAR
+</ul>
+</ul>
+<li> Property "Root" of type STRING and arity SCALAR
+<li> Property "Namespaces" of type PROPERTY and arity LIST
+<ul>
+<li> Property "Namespace" of type PROPERTY and arity ARRAY
+<ul>
+<li> Property "Prefix" of type STRING and arity SCALAR
+<li> Property "URI" of type STRING and arity SCALAR 
+</ul>
+</ul>
+<li> Property "Notations" of type PROPERTY and arity LIST (if there are any)
+<ul>
+<li> Property "Notation" of type PROPERTY and arity SCALAR
+<ul>
+<li> Property "Name" of type STRING and arity SCALAR
+<li> Property "PublicID" of type STRING and arity SCALAR (if non-null)
+<li> Property "SystemID" of type STRING and arity SCALAR (if non-null)
+</ul>
+</ul>
+<li> Property "CharacterReferences" of type SCALAR and arity LIST
+<li> Property "Entities" of type PROPERTY and arity LIST
+(if there are any)
+<ul>
+<li> Property "Entity" of type PROPERTY and arity SCALAR
+<ul>
+<li> Property "Name" of type STRING and arity SCALAR
+<li> Property "Type" of type STRING and arity SCALAR<br>
+must be: "Internal", "External parsed", or "External unparsed"
+<li> Property "Value" of type STRING and arity SCALAR (if internal)
+<li> Property "PublicID" of type STRING and arity SCALAR (if external
+and non-null)
+<li> Property "SystemID" of type STRING and arity SCALAR (if external
+and non-null)
+<li> Property "Notation" of type STRING and arity SCALAR (if unparsed)
+</ul>
+</ul>
+<li> Property "ProcessingInstructions" of type PROPERTY and arity LIST
+(if there are any)
+<ul>
+<li> Property "ProcessingInstruction" of type PROPERTY and arity SCALAR
+<ul>
+<li> Property "Target" of type STRING and arity SCALAR
+<li> Property "Data" of type STRING and arity SCALAR
+</ul>
+</ul>
+<li> Property "Comments" of type PROPERTY and arity LIST (if there are any)
+<ul>
+<li> Property "Comment" of type STRING and arity SCALAR
+</ul>
+</ul>
+</ul>
+
+<p>
+Note that the notations and entities reported above are only those that appear
+in the XML file, not all of those that are defined in the DTD or XML Schema
+associated with the file.
+</p>
+
+<h2>6 Additional Module Properties</h2>
+
+<p></p>
+<ul>
+<li> Nominal file extension: .xml
+</ul>
+
+<table class="menu">
+<tr>
+<td class="inactive"><a class="menu" href="index.html">Home</a></td>
+<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
+<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
+<td class="active">XML-hul&nbsp;Module</td>
+<td class="inactive"><a class="menu"
+                        href="distribution.html">Distribution</a></td>
+<td class="inactive"><a class="menu" href="links.html">Links</a></td>
+<td class="spacing">&nbsp;</td>
+</tr>
+</table>
+
+<address>
+Copyright 2004-2005 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
+Last updated 2005-05-09
+</address>
+</body>
+</html>
+

@@ -1,0 +1,145 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html lang="en">
+<head>
+<link rel="Stylesheet" href="style.css" type="text/css">
+<title>JHOVE UTF8-hul Module</title>
+</head>
+<body>
+<img src="jhove-logo.gif">
+
+<table class="menu">
+<tr>
+<td class="inactive"><a class="menu" href="index.html">Home</a></td>
+<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
+<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
+<td class="active">UTF8-hul&nbsp;Module</td>
+<td class="inactive"><a class="menu"
+                        href="distribution.html">Distribution</a></td>
+<td class="inactive"><a class="menu" href="links.html">Links</a></td>
+<td class="spacing">&nbsp;</td>
+</tr>
+</table>
+
+<h1>UTF8-hul Module</h1>
+
+<h2>1 Introduction</h2>
+
+<p>
+The UTF8-hul module recognizes and validates content streams encoded with the
+Unicode UTF-8 encoding.
+</p><p>
+The module is invoked by the:
+<blockquote>
+<pre>
+jhove ... -m utf8-hul ...
+</pre>
+</blockquote>
+command line option.
+</p>
+
+<a class="name" name="coverage">
+<h2>2 Coverage</h2>
+
+<p>
+<ul>
+<li> UTF-8 encoded content streams
+[<a href="references.html#unicode">Unicode</a>]
+</ul>
+</p>
+
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2>
+
+<p>
+The following criteria must be met by an UTF8 content streams
+for JHOVE to consider it well-formed:
+<ul>
+<li> The stream consists of an optional three-octet encoded Byte Order Mark
+(BOM) character, <tt>0xEFBBBF</tt>,
+followed by an arbitrary number of the following
+one- to four-octet sequences:
+<blockquote>
+<table border="1">
+<tr><td>Single octet:</td>
+<td><tt>0<em>xxxxxxx</em></tt></td></tr>
+<tr><td>Two octets:</td>
+<td><tt>110<em>yyyyy</em> 10<em>xxxxxx</em></tt></td></tr>
+<tr><td>Three octets:</td>
+<td><tt>1110<em>zzzz</em> 10<em>yyyyyy</em> 10<em>yyyyyy</em></tt><br>
+<tr><td>Four octets:</td>
+<td><tt>11110<em>uuu</em> 10<em>uuzzzz</em> 10<em>yyyyyy</em> 10<em>xxxxxx</em></tt></td></tr>
+</table>
+</blockquote>
+
+<li> The presence of an initial Byte Order Mark (BOM) character in the form of
+any of the following two- or four-octet sequences automatically taints the
+content stream as non-well-formed UTF-8:
+<blockquote>
+<table border="1">
+<tr><td rowspan="2">Two octets:</td><td><tt>0xEF&nbsp;0xFF</tt></td>
+<td>UTF-16 big-endian encoding</td></tr>
+<tr><td><tt>0xFFFE</tt></td>
+<td>UTF-16 little-endian encoding</td></tr>
+<tr><td rowspan="2">Four octets:</td>
+<td><tt>0x0000FEFF</tt></td>
+<td>UCS-4 big-endian encoding</td></tr>
+<tr><td><tt>0xFFFE0000</tt></td>
+<td>UCS-4 little-endian encoding</td></tr>
+</table>
+</blockquote>
+</ul>
+</p>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2>
+
+<p>
+The following criteria must be met by an UTF-8 encoded file for JHOVE to
+consider it valid:
+<ul>
+<li> The UTF-8 encoded file is well-formed
+</ul>
+</p>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2>
+
+<p>
+The MIME type is reported as: text/plain; charset=UTF-8
+</p>
+
+<p>
+In addition to the standard JHOVE
+<a href="index.html#repinfo">representation information</a>, the module
+defines the following properties:
+<ul>
+<li> Line endings: CR, CRLF, or LF
+<li> Additional control characters
+<li> Number of characters
+<li> Unicode 6.0.0 code blocks
+[<a href="references.html#blocks">Unicode Code Blocks</a>]
+</ul>
+</p>
+
+<table class="menu">
+<tr>
+<td class="inactive"><a class="menu" href="index.html">Home</a></td>
+<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
+<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
+<td class="active">UTF8-hul&nbsp;Module</td>
+<td class="inactive"><a class="menu"
+                        href="distribution.html">Distribution</a></td>
+<td class="inactive"><a class="menu" href="links.html">Links</a></td>
+<td class="spacing">&nbsp;</td>
+</tr>
+</table>
+
+<address>
+Copyright 2003-2011 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
+Last updated 2011-01-05
+</address>
+</body>
+</html>
+

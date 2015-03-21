@@ -1,0 +1,111 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html lang="en">
+<head>
+<link rel="Stylesheet" href="style.css" type="text/css">
+<meta NAME="Description" CONTENT="JHOVE ASCII module documentation">
+<title>JHOVE ASCII-hul Module</title>
+</head>
+<body>
+<img src="jhove-logo.gif">
+
+<table class="menu">
+<tr>
+<td class="inactive"><a class="menu" href="index.html">Home</a></td>
+<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
+<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
+<td class="active">ASCII-hul&nbsp;Module</td>
+<td class="inactive"><a class="menu"
+                        href="distribution.html">Distribution</a></td>
+<td class="inactive"><a class="menu" href="links.html">Links</a></td>
+<td class="spacing">&nbsp;</td>
+</tr>
+</table>
+
+<h1>ASCII-hul Module</h1>
+
+<h2>1 Introduction</h2>
+
+<p>
+The ASCII-hul module recognizes and validates ASCII content streams.
+</p><p>
+The module is invoked by the:
+</p>
+<blockquote>
+<pre>
+jhove ... -m ascii-hul ...
+</pre>
+</blockquote>
+command line option.
+
+<a class="name" name="coverage">
+<h2>2 Coverage</h2></a>
+
+<ul>
+<li> ASCII (ANSI X3.4-1986, ECMA-6, ISO 646:1991)
+[<a href="references.html#x3.4">ANSI X3.4</a>,
+<a href="references.html#ecma-6">ECMA-6</a>,
+<a href="references.html#iso646">ISO 646</a>,]
+</ul>
+
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2></a>
+
+<p>
+The following criteria must be met by an ASCII content stream for JHOVE to
+consider it well-formed:
+</p>
+<ul>
+<li> The integer value of every octet in the stream is in the inclusive range
+[0x00, 0x7F].
+</ul>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+
+<p>
+The following criteria must be met by an ASCII content stream for JHOVE to
+consider it valid:
+</p>
+<ul>
+<li> The ASCII content stream is well-formed
+</ul>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+
+<p>
+The MIME type is reported as: text/plain; charset=US-ASCII
+</p>
+
+<p>
+In addition to the standard JHOVE
+<a href="index.html#repinfo">representation information</a>, the module
+defines the following properties:
+</p>
+<ul>
+<li> Line endings: CR, CRLF, or LF
+<li> Additional control characters
+</ul>
+
+<table class="menu">
+<tr>
+<td class="inactive"><a class="menu" href="index.html">Home</a></td>
+<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
+<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
+<td class="active">ASCII-hul&nbsp;Module</td>
+<td class="inactive"><a class="menu"
+                        href="distribution.html">Distribution</a></td>
+<td class="inactive"><a class="menu" href="links.html">Links</a></td>
+<td class="spacing">&nbsp;</td>
+</tr>
+</table>
+
+<address>
+Copyright 2004 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
+Last updated 2004-03-03
+</address>
+</body>
+</html>
+

@@ -1,0 +1,358 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html lang="en">
+<head>
+<link rel="Stylesheet" href="style.css" type="text/css">
+<title>JHOVE PDF-hul Module</title>
+</head>
+<body>
+<img src="jhove-logo.gif">
+
+<table class="menu">
+<tr>
+<td class="inactive"><a class="menu" href="index.html">Home</a></td>
+<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
+<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
+<td class="active">PDF-hul&nbsp;Module</td>
+<td class="inactive"><a class="menu"
+                        href="distribution.html">Distribution</a></td>
+<td class="inactive"><a class="menu" href="links.html">Links</a></td>
+<td class="spacing">&nbsp;</td>
+</tr>
+</table>
+
+<h1>PDF-hul Module</h1>
+
+<h2>1 Introduction</h2>
+
+<p>
+The PDF-hul module recognizes and validates the PDF (Portable Document
+Format) format
+[<a href="references.html#pdf1.4">PDF 1.4</a>,
+<a href="references.html#pdf1.5">PDF 1.5</a>,
+<a href="references.html#pdf1.6">PDF 1.6</a>].
+Documents created as PDF 1.7 will be identified as such, but PDF 1.7 
+is not supported, and documents using features specific to PDF 1.7
+or later may be reported as not well-formed or not valid.
+</p><p>
+The module is invoked by the:
+<blockquote>
+<pre>
+jhove ... -m PDF-hul ...
+</pre>
+</blockquote>
+command line option.
+<p>
+Parameters may be set in the configuration file to control the amount of
+information supplied by the module. (In earlier versions of JHOVE,
+these were set by the -p option of the command line, and added information
+rather than reducing it.)  These parameters are set in the &lt;param&gt;
+element under the &lt;module&gt; element. The parameters may be specified
+as a string of letters, or as separate one-letter parameters, e.g.:
+</p>
+<blockquote>
+<pre>
+&lt;param&gt;apn500&lt;/param&gt;
+</pre>
+</blockquote>
+or
+<blockquote>
+<pre>
+&lt;param&gt;a&lt;/param&gt;
+&lt;param&gt;p&lt;/param&gt;
+&lt;param&gt;n500&lt;/param&gt;
+</pre>
+</blockquote>
+
+The parameters function as flags with the following significance:
+<blockquote>
+<table border="0">
+<tr><td><tt>a</tt></td><td>&nbsp;</td>
+<td>Suppress document annotations</td></tr>
+<tr><td><tt>f</tt></td><td></td><td>Suppress document font information</td></tr>
+<tr><td><tt>o</tt></td><td></td><td>Suppress document outline</td></tr>
+<tr><td><tt>p</tt></td><td></td><td>Suppress document page structure</td></tr>
+<tr><td><tt>n</tt></td><td></td><td> (JHOVE 1.2) Specify maximum number of fonts to report. Must be followed by a number, e.g., <tt>n500</tt></tr>
+</table>
+</blockquote>
+<p>
+By default, document annotations, font information, and outlines are all
+displayed; they may be suppressed to reduce the size of the JHOVE output.
+In earlier versions of JHOVE, they were suppressed by default.
+<p>
+Some PDF files have thousands of fonts, and attempting to report
+them all can make JHOVE run out of memory. By default, a maximum
+of 1000 fonts will be reported. If there are more fonts, an
+informational message will report the total number and state
+that some have been omitted. <b>This parameter will be available
+with the release of Jhove 1.2.</b>
+</p>
+
+<a class="name" name="coverage">
+<h2>2 Coverage</h2></a>
+
+<p>
+The PDF-hul module recognizes and validates the following public profiles:
+<ul>
+<li> PDF version 1.0-1.6
+[<a href="references.html#pdf1.4">PDF 1.4</a>,
+<a href="references.html#pdf1.5">PDF 1.5</a>,
+<a href="references.html#pdf1.6">PDF 1.6]</a>
+<li> PDF/X-1 (ISO 15930-1:2001) [<a href="references.html#pdfx1">PDF/X-1</a>],
+PDF/X-1a (ISO 15930-4:2003) [<a href="references.html#pdfx1a">PDF/X-1a</a>],
+PDF/X-2 (ISO 15930-5:2003) [<a href="references.html#pdfx2">PDF/X-2</a>],
+and PDF/X-3 (ISO 15930-6:2003)
+[<a href="references.html#pdfx3">PDF/X-3</a>]
+<li> Linearized PDF
+[<a href="references.html#pdf1.4">PDF 1.4</a>]
+<li> Tagged PDF
+[<a href="references.html#pdf1.4">PDF 1.4</a>]
+<li> PDF/A (ISO/DIS 19005-1)
+[<a href="references.html#pdfa">PDF/A</a>]
+</ul>
+
+
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2></a>
+
+<p>
+The following criteria must be met by a PDF object for JHOVE to consider it
+well-formed:
+<ul>
+<li> JHOVE uses the criteria for well-formedness defined in
+[<a href="references.html#pdf1.4">PDF</a>,
+<strong>Chapter 3, Syntax</strong>].
+<p>
+In general, a file is well-formed if it has a header:
+</p>
+<blockquote>
+<pre>
+%PDF-<em>m</em>.<em>n</em>
+</pre>
+</blockquote>
+a body consisting of well-formed objects; a cross-reference table;
+and a trailer defining the cross-reference table size, and an indirect
+reference to the document catalog dictionary, and ending with:
+<blockquote>
+<pre>
+%%EOF
+</pre>
+</blockquote>
+</ul>
+
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+<h3>4.1 Validity criteria</h3>
+
+<p>
+The following criteria must be met by a PDF file for JHOVE to consider it
+valid:
+</p>
+<ul>
+<li> The file is well-formed.
+<li> The document structure conforms to the specification. This includes
+(when present) outlines, pages, the page label tree, attributes,
+resources, role maps, name trees...
+<li> Version information in the document catalog dictionary, if
+present, is properly formed.
+<li> Dates are properly formed.
+<li> File specifications are properly formed.
+<li> Any annotations are properly formed.
+<li> Any ArtBox, BleedBox, MediaBox and TrimBox items are PDF Rectangles.
+<li> XMP data, if present, are well-formed.
+</ul>
+
+
+<h3>4.2 Limitations</h3>
+<p>
+The PDF-HUL module does not check certain aspects of a PDF file,
+primarily because thoroughly checking these would require access
+to proprietary compression and encryption algorithms.  
+The following are not checked:
+<ul>
+<li>The data within content streams, and therefore the use 
+of operators and the glyph descriptions of embedded fonts.</li>
+<li>Encrypted data.  Some PDF files are effectively
+null-encrypted; i.e., they are nominally encrypted but the
+encryption is an identity mapping.  JHOVE treats these as
+encrypted files.</li>
+</ul>
+<ul>
+</ul>
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+
+<p>
+The MIME type is reported as: application/pdf
+</p>
+
+<a class="name" name="profiles">
+<h3>5.1 Profiles</h3></a>
+
+<ul>
+<li> <strong>PDF 1.0 - 1.6</strong>
+<p>
+The PDF version is determined by the data specified in the PDF header and the
+<strong>Version</strong> key of the document catalog dictionary.
+In the event that these two values do not match, the <strong>Version</strong>
+key is taken as the authoritative value.
+</p>
+
+<li> <strong>PDF/X-1</strong>
+<p>
+The PDF/X-1 profile is for pre-press data exchange using CMYK data
+[<a href="references.html#pdfx1">PDF/X-1</a>].
+</p>
+
+<ul>
+<li> PDF 1.3
+<li> GTS_PDFXVersion key value of (PDF/X-1:2001) or (CGATS.12/1-1999)
+<li> Font subsets for all characters used in the file are embedded within
+the file
+<li> Objects may be compressed using Flate and RunLength
+compression; for <strong>Image XObjects</strong> JPEG and CCITT (for monochrome
+images) compression are also allowed
+<li> Information dictionary <strong>Trapped</strong> key is defined
+<li> No Actions or JavaScripts
+</ul>
+<p>
+
+<li> <strong>PDF/X-1a</strong>
+<p>
+The PDF/X-1 profile is for pre-press data exchange using CMYK and 
+spot color data
+[<a href="references.html#pdfx1a">PDF/X-1a</a>].
+</p>
+<ul>
+<li> All requirements of PDF/X-1 are met
+<li> GTS_PDFXVersion key value of (PDF/X-1a:2001)
+<li> No encryption dictionary
+<li> If a BleedBox is present and
+     if the ViewerPreferences dictionary contains the
+     ViewClip, PrintArea or PrintClip keys, each of those
+     keys present has the value MediaBox or BleedBox
+<li> SMask keys are absent or have a value of "None"
+<li> No JBIG2 or LZW filters
+<li> No Ref key in Form dictionary
+</ul>
+<p>
+
+<li> <strong>PDF/X-2</strong>
+<p>
+The PDF/X-2 profile is for partial pre-press data exchange
+[<a href="references.html#pdfx2">PDF/X-2</a>].
+</p>
+
+<ul>
+<li> OutputIntents array in Document Catalog Dictionary,
+     with subtype of "GTS_PDFX", with keys
+     OutputConditionIdentifier and AtoB1Tag, and with either
+     RegistryName or DestOutputProfile
+<li> Each page includes or inherits a MediaBox
+<li> Each page has a TrimBox or an ArtBox, but not both.
+<li> The document information dictionary has a Trapped
+     key with a value of either True or False
+<li> If an ExtGState object is present, it
+     does not have TR, TR2, or HTP entries
+<li> SMask keys are absent or have a value of "None"
+<li> No OPI key in Form or Image objects
+</ul>
+<p>
+
+<li> <strong>PDF/X-3</strong>
+<p>
+The PDF/X-3 profile is for pre-press data exchange using color-managed
+workflows
+[<a href="references.html#pdfx3">PDF/X-3</a>].
+</p>
+
+<ul>
+<li> OutputIntents array in Document Catalog Dictionary
+     with subtype of "GTS_PDFX"
+<li> Any Separation and DeviceN resources
+       have an AlternateSpace of DeviceGray or DeviceCMYK 
+<li> No PostScript or OPI objects
+<li> No OPI key in Form or Image objects
+<li> Image Alternates do not have a DefaultForPrinting key
+</ul>
+<p>
+
+<li> <strong>Linearized PDF</strong>
+<p>
+The Linearized PDF profile is for optimized viewing over a network
+[<a href="references.html#pdf1.4">PDF 1.4</a>]
+</p>
+
+<ul>
+<p>
+<li> First object from beginning of file is valid linearization dictionary
+</ul>
+</p>
+
+<li> <strong>Tagged PDF</strong>
+<p>
+The Tagged PDF profile provides access to higher-level structural and
+semantic information contained in PDF files
+[<a href="references.html#pdf1.4">PDF 1.4</a>]
+</p>
+<ul>
+<li> Document catalog dictionary has MarkInfo dictionary
+<li> A valid structure tree is present
+</ul>
+<p>
+
+<li> <strong>PDF/A</strong>
+<p>
+The PDF/A profile is for long-term preservation of electronic documents
+[<a href="references.html#pdfa">PDF/A</a>].
+</p>
+<ul>
+<li> No encryption dictionary
+<li> No Encrypt or Info entries in trailer
+<li> Document catalog dictionary specifies RFC1766 language
+<li> Document catalog dictionary has no AA or OCProperties
+<li> Form fields do not have AA actions
+<li> No Launch, Sound, Movie, ResetForm,
+        ImportData, or JavaScript actions
+<li> Fonts have recognized encoding
+<li> Uncalibrated color spaces have OutputIntent specified
+<li> Page objects do not have Movie, Sound, or FileAttachment
+<li> Non-text annotations have Contents key
+<li> Unfiltered metadata stream
+</ul>
+<p>
+Note that the PDF module does <em>not</em> parse the contents on streams,
+so it <em>cannot</em> determine conformance to PDF/A to the degree required
+by the ISO <a href="references.html#pdfa">standard</a>.
+</p>
+
+</ul>
+
+<h2>6 Additional Module Properties</h2>
+
+<ul>
+<li> Nominal file extension: .pdf
+</ul>
+
+<table class="menu">
+<tr>
+<td class="inactive"><a class="menu" href="index.html">Home</a></td>
+<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
+<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
+<td class="active">PDF-hul&nbsp;Module</td>
+<td class="inactive"><a class="menu"
+                        href="distribution.html">Distribution</a></td>
+<td class="inactive"><a class="menu" href="links.html">Links</a></td>
+<td class="spacing">&nbsp;</td>
+</tr>
+</table>
+
+<address>
+Copyright 2003-2008 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
+Last updated 2008-02-26
+</address>
+</body>
+</html>
+
