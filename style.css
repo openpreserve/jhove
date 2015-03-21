@@ -1,0 +1,40 @@
+A:link,
+A:visited { color: rgb(151,53,0);
+            text-decoration: none; }
+A:hover   { text-decoration: underline; }
+
+A.name:hover { text-decoration: none }
+
+ADDRESS     { font-style: italic; }
+
+BODY,SPAN.note,
+TD          { background: white;
+              font-family: sans-serif;
+              font-size: small;
+              font-weight: normal;
+            }
+
+CODE, PRE,
+TT          { font-family: monospace;
+              font-size: larger;
+            }
+
+PRE         { margin-left: 2em; }
+
+PRE.list    { font-family: sans-serif;
+              font-size: small;
+            }
+
+TABLE.menu  { color: rgb(151,53,0);
+              font-variant: small-caps; }
+TD.active   { border-left:  solid rgb(211,211,211);
+              border-right: solid rgb(211,211,211);
+              border-top:   solid rgb(211,211,211);
+              font-size: small;
+              foreground: rgb(151,53,0);
+              padding: .1em 1em .1em 1em; width: auto; }
+TD.inactive { background: rgb(221,221,221);
+              font-size: small;
+              padding: .1em 1em .1em 1em; }
+TD.spacing  { border-bottom: solid rgb(211,211,211);
+              width: 100%; }
