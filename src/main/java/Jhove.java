@@ -19,7 +19,6 @@
  **********************************************************************/
 
 import edu.harvard.hul.ois.jhove.*;
-//import java.io.*;
 import java.util.*;
 
 public class Jhove
