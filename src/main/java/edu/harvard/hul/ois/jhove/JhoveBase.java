@@ -276,6 +276,7 @@ public class JhoveBase {
 							+ "properties/schemaLanguage",
 							"http://www.w3.org/2001/XMLSchema");
 				} catch (SAXException e) {
+					// TODO: Add exception handling
 				}
 
 				try {
@@ -337,6 +338,7 @@ public class JhoveBase {
 						try {
 							_logger.setLevel(Level.parse(_logLevel));
 						} catch (Exception e) {
+							// TODO : Add exception handling
 						}
 					}
 				}
@@ -353,6 +355,7 @@ public class JhoveBase {
 						try {
 							_bufferSize = Integer.parseInt(size);
 						} catch (Exception e) {
+							// TODO : Add exception handling
 						}
 					}
 					if (_bufferSize < 0) {
@@ -823,6 +826,7 @@ public class JhoveBase {
 		try {
 			Thread.sleep(4000);
 		} catch (InterruptedException e) {
+			// TODO : Add exception handling
 		}
 		if (conn != null) {
 			// This is a non-deprecated way of bringing the connection
