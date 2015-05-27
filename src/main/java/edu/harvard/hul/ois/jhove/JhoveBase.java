@@ -995,7 +995,7 @@ public class JhoveBase {
 	public Module getModule(String name) {
 		Module module = null;
 		if (name != null) {
-			module = (Module) _moduleMap.get(name.toLowerCase());
+			module = _moduleMap.get(name.toLowerCase());
 		}
 		return module;
 	}
@@ -1137,6 +1137,7 @@ public class JhoveBase {
 			try {
 				_logger.setLevel(Level.parse(_logLevel));
 			} catch (Exception e) {
+				// TODO: Implement exception handling
 			}
 		}
 	}
@@ -1200,6 +1201,7 @@ public class JhoveBase {
 				configFile = System.getProperty("user.home") + fs + JHOVE_DIR
 						+ fs + CONFIG_DIR + fs + "jhove.conf";
 			} catch (Exception e) {
+				// TODO: Implement exception handling
 			}
 		}
 
@@ -1233,6 +1235,7 @@ public class JhoveBase {
 
 			value = props.getProperty(name);
 		} catch (Exception e) {
+			// TODO: Implement exception handling
 		}
 
 		return value;
