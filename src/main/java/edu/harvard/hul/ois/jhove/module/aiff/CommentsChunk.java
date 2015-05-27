@@ -39,7 +39,8 @@ public class CommentsChunk extends Chunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info)
+    @Override
+	public boolean readChunk(RepInfo info)
 	throws IOException
     {
         AiffModule module = (AiffModule) _module;
