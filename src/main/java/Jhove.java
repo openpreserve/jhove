@@ -285,7 +285,7 @@ public class Jhove
             if (len > 0) {
         		dirFileOrUri = new String [len];
         		for (int i=0; i<len; i++) {
-        		    dirFileOrUri[i] = (String) list.get (i);
+        		    dirFileOrUri[i] = list.get (i);
         		}
             }
     
