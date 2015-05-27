@@ -5,13 +5,38 @@
 
 package edu.harvard.hul.ois.jhove;
 
-import edu.harvard.hul.ois.jhove.handler.*;
-import edu.harvard.hul.ois.jhove.module.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.logging.*;
-import javax.net.ssl.KeyManager;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -19,9 +44,16 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import javax.xml.parsers.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+
+import edu.harvard.hul.ois.jhove.handler.AuditHandler;
+import edu.harvard.hul.ois.jhove.handler.TextHandler;
+import edu.harvard.hul.ois.jhove.handler.XmlHandler;
+import edu.harvard.hul.ois.jhove.module.BytestreamModule;
 
 /**
  * The JHOVE engine, providing all base services necessary to build an
@@ -455,7 +487,7 @@ public class JhoveBase
         _abort = false;
     	/* If no handler is specified, use the default TEXT handler. */
     	if (handler == null) {
-    	    handler = (OutputHandler) _handlerMap.get ("text");
+    	    handler = _handlerMap.get ("text");
     	}
     	handler.reset ();
     	_outputFile = outputFile;
@@ -634,7 +666,7 @@ public class JhoveBase
                      * want to throw arbitrary files at it, so we'll skip it. */
             	    Iterator<Module> iter = _moduleList.iterator();
             	    while (iter.hasNext ()) {
-            		Module  mod  = (Module)  iter.next ();
+            		Module  mod  = iter.next ();
             		RepInfo infc = (RepInfo) info.clone ();
 
                         if (mod.hasFeature ("edu.harvard.hul.ois.jhove.canValidate")) {
