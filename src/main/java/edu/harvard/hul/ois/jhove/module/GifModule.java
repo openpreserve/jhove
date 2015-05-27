@@ -199,7 +199,8 @@ public class GifModule extends ModuleBase
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
-    public void checkSignatures (File file, 
+    @Override
+	public void checkSignatures (File file, 
                 InputStream stream, 
                 RepInfo info) 
         throws IOException
@@ -254,7 +255,8 @@ public class GifModule extends ModuleBase
      *                    called again with <code>parseIndex</code> 
      *                    equal to that return value.
      */
-    public int parse (InputStream stream, RepInfo info, int parseIndex)
+    @Override
+	public int parse (InputStream stream, RepInfo info, int parseIndex)
         throws IOException
     {
         initParse ();
@@ -356,7 +358,8 @@ public class GifModule extends ModuleBase
     /**
      *   Initializes the state of the module for parsing.
      */
-    protected void initParse ()
+    @Override
+	protected void initParse ()
     {
         super.initParse ();
         _sig = new byte[6];
@@ -920,7 +923,6 @@ public class GifModule extends ModuleBase
         
         // OK.  All that was just to get the XMP into one big byte
         // buffer.  Now process it.
-        final String badMetadata = "Invalid or ill-formed XMP metadata"; 
         try {
             ByteArrayInputStream strm = 
                 new ByteArrayInputStream (bigBuf);

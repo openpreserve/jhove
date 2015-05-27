@@ -395,7 +395,8 @@ public class JpegModule extends ModuleBase
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
-    public void checkSignatures (File file, InputStream stream, RepInfo info) 
+    @Override
+	public void checkSignatures (File file, InputStream stream, RepInfo info) 
         throws IOException
     {
         int i;
@@ -440,7 +441,8 @@ public class JpegModule extends ModuleBase
      *                    called again with <code>parseIndex</code> 
      *                    equal to that return value.
      */
-    public int parse (InputStream stream, RepInfo info, int parseIndex)
+    @Override
+	public int parse (InputStream stream, RepInfo info, int parseIndex)
         throws IOException
     {
         initParse ();
@@ -500,10 +502,8 @@ public class JpegModule extends ModuleBase
                                 dataPlowing = false;
                                 break;
                             }
-                            else {
-                                // FF followed by 0 is discarded
-                                sawFF = false;
-                            }
+							// FF followed by 0 is discarded
+							sawFF = false;
                         }
                     }
                 }
@@ -873,7 +873,8 @@ public class JpegModule extends ModuleBase
     /**
      *   Initializes the state of the module for parsing.
      */
-    protected void initParse ()
+    @Override
+	protected void initParse ()
     {
         super.initParse ();
         _imageList = new LinkedList ();
@@ -1206,8 +1207,8 @@ public class JpegModule extends ModuleBase
             String vsn = Integer.toString(majorVersion) + "."
                     + minorFmt.format(minorVersion);
             info.setVersion (vsn);
-            int profileID = readUnsignedByte (_dstream, this);
-            int numComponents = readUnsignedByte (_dstream, this);
+            readUnsignedByte (_dstream, this);
+            readUnsignedByte (_dstream, this);
             long height = readUnsignedInt (_dstream);
             _niso.setImageLength (height);
             long width = readUnsignedInt (_dstream);
@@ -1310,7 +1311,7 @@ public class JpegModule extends ModuleBase
      * scans and so on. */
     protected void readSRS (RepInfo info) throws IOException
     {
-        int length = readUnsignedShort (_dstream);
+        readUnsignedShort (_dstream);
         int vertOffset = readUnsignedShort (_dstream);
         int horOffset = readUnsignedShort (_dstream);
         int vertSize = readUnsignedShort (_dstream);
@@ -1393,7 +1394,7 @@ public class JpegModule extends ModuleBase
     /* Read an EXP segment. */
     protected void readEXP (RepInfo info) throws IOException
     {
-        int length = readUnsignedShort (_dstream);
+        readUnsignedShort (_dstream);
         int lhlv = readUnsignedByte (_dstream, this);
         boolean arr[] = new boolean[2];
         arr[0] = ((lhlv & 0XF0) != 0);
@@ -1404,7 +1405,7 @@ public class JpegModule extends ModuleBase
     /* Read a DRI (Data Restart Interval) segment. */
     protected void readDRI (RepInfo info) throws IOException
     {
-        int length = readUnsignedShort (_dstream);
+        readUnsignedShort (_dstream);
         _restartInterval = readUnsignedShort (_dstream);
     }
 

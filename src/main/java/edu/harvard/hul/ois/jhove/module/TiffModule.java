@@ -427,7 +427,8 @@ public class TiffModule
      * @param raf Open TIFF file
      * @param info Representation informatino
      */
-    public final void parse (RandomAccessFile raf, RepInfo info) 
+    @Override
+	public final void parse (RandomAccessFile raf, RepInfo info) 
         throws IOException
     {
         if (_defaultParams != null) {
@@ -874,6 +875,7 @@ public class TiffModule
                 }
             }
             catch (IOException e) {
+				// TODO : Add exception handling
             }
         }
 
@@ -1039,7 +1041,7 @@ public class TiffModule
                                          "1 or 3: " + samplesPerPixel + "-" +
                                          len, info);
             }
-            for (int i=0; i<bitsPerSample.length; i++) {
+            for (int i=0; i < bitsPerSample.length; i++) {
                 if (bitsPerSample[i] != 8 && bitsPerSample[i] != 16) {
                     reportInvalid ("BitsPerSample not 8 or 16 for " +
                                              "CIE L*a*b*", info);
@@ -1232,7 +1234,8 @@ public class TiffModule
      *   Initializes the state of the module for parsing.  This overrides
      *   the superclass method to reset all the profile flags.
      */
-    protected void initParse ()
+    @Override
+	protected void initParse ()
     {
         super.initParse ();
         ListIterator<TiffProfile> pter = _profile.listIterator ();
@@ -1286,10 +1289,8 @@ public class TiffModule
             // No profiles at all were satisfied
             return 0;
         }
-        else {
-            // All satisfied profiles returned trial
-            return trial;
-        }
+		// All satisfied profiles returned trial
+		return trial;
     }
      
 }
