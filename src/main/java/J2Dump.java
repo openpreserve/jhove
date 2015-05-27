@@ -65,7 +65,6 @@ public class J2Dump extends Dump {
             DataInputStream stream = new DataInputStream (buffer);
             J2Dump dump = new J2Dump ();   // Just to access contained classes
             long os = 0;
-            boolean bigEndian = true;
             int i;
             for (i = 0; i < 12; i++) {
                 int ch;
@@ -92,9 +91,7 @@ public class J2Dump extends Dump {
                     if (boxtop.bytesLeft > 0) {
                         break;
                     }
-                    else {
-                        boxStack.pop ();
-                    }
+					boxStack.pop ();
                 }
                 
                 // Read the header of a JP2 box
