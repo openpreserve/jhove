@@ -77,7 +77,8 @@ public class ViewHandler extends HandlerBase {
     }
 
     /** Do the initial output.  This needs to set up the window. */
-    public void showHeader ()
+    @Override
+	public void showHeader ()
     {
         _viewWin = new ViewWindow (_app, _base, _jhwin);
         nDocs = 0;
@@ -91,27 +92,36 @@ public class ViewHandler extends HandlerBase {
      *  I need to break out part of the ViewWindow code to here so
      *  it can produce the output for one file.
      */
-    public void show (RepInfo info)
+    @Override
+	public void show (RepInfo info)
     {
         _viewWin.addRepInfo (info, _app, _base);
         ++nDocs;
     }
     
-    public void show ()
+    @Override
+	public void show ()
     {
+    	// Do nothing
     }
     
-    public void show (App app)
+    @Override
+	public void show (App app)
     {
+    	// Do nothing
     }
     
-    public void show (Module module)
+    @Override
+	public void show (Module module)
     {
+    	// Do nothing
     }
 
 
     /** Complete the output.  Does this have to do anything? */
-    public void showFooter ()
+    @SuppressWarnings("deprecation")
+	@Override
+	public void showFooter ()
     {
         // If no files were processed, just discard the window. */
         if (nDocs == 0) {
@@ -146,8 +156,10 @@ public class ViewHandler extends HandlerBase {
      *  Since this never should occur in a normal list of
      *  handlers, it's unnecessary to do anything (I think).
      */
-    public void show (OutputHandler handler)
+    @Override
+	public void show (OutputHandler handler)
     {
+    	// Do nothing
     }
 
 }

@@ -30,7 +30,12 @@ import edu.harvard.hul.ois.jhove.ModuleInfo;
  */
 public class ConfigWindow extends JDialog {
 
-    private final static String tempDirDefault = "<Default>";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7524697222461721511L;
+
+	private final static String tempDirDefault = "<Default>";
     
     /* The location of the config file. */
     private File _configFile;
@@ -147,7 +152,11 @@ public class ConfigWindow extends JDialog {
         _mainBox.add (panel);
         // Use an anonymous class to implement the TableModel
         _modTableModel = new AbstractTableModel () {
-            public int getRowCount () 
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -8010885109268529958L;
+			public int getRowCount () 
             {
                 return _modules.size ();
             }
@@ -155,7 +164,8 @@ public class ConfigWindow extends JDialog {
             {
                 return 2;
             }
-            public boolean isCellEditable(int row, int col)
+            @Override
+			public boolean isCellEditable(int row, int col)
             { 
                 return true;
             }
@@ -165,7 +175,8 @@ public class ConfigWindow extends JDialog {
                 String[] tuple = { modInfo.clas, modInfo.init};
                 return tuple[column];
             }
-            public void setValueAt (Object obj, int row, int column)
+            @Override
+			public void setValueAt (Object obj, int row, int column)
             {
                 ModuleInfo modInfo = _modules.get(row);
                 if (column == 0 && obj instanceof String) {
@@ -239,7 +250,11 @@ public class ConfigWindow extends JDialog {
         _mainBox.add (panel);
         // Use an anonymous class to implement the TableModel
         _hanTableModel = new AbstractTableModel () {
-            public int getRowCount () 
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1865539113212536490L;
+			public int getRowCount () 
             {
                 return _handlers.size ();
             }
@@ -247,7 +262,8 @@ public class ConfigWindow extends JDialog {
             {
                 return 1;
             }
-            public boolean isCellEditable(int row, int col)
+            @Override
+			public boolean isCellEditable(int row, int col)
             { 
                 return true;
             }
@@ -257,11 +273,10 @@ public class ConfigWindow extends JDialog {
                 if (tuple != null) {
                     return tuple[0];
                 }
-                else {
-                    return "";
-                }
+				return "";
             }
-            public void setValueAt (Object obj, int row, int column)
+            @Override
+			public void setValueAt (Object obj, int row, int column)
             {
                 if (obj instanceof String) {
                     String[] stuff = new String[] { (String) obj };

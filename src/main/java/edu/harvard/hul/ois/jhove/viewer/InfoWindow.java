@@ -26,7 +26,11 @@ import edu.harvard.hul.ois.jhove.*;
  */
 public abstract class InfoWindow extends JFrame 
 {
-    protected App _app;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4404229242328018229L;
+	protected App _app;
     private JhoveBase _base;
     private JMenuItem _saveItem;
     private JMenuItem _closeItem;
@@ -212,7 +216,9 @@ public abstract class InfoWindow extends JFrame
                     }
                     file.delete ();
                 }
-                catch (Exception f) {}
+                catch (Exception f) {
+					// TODO : Add exception handling
+                }
                 
                 return null;
             }
