@@ -84,10 +84,10 @@ public class TextHandler
     /**
      *  Outputs minimal information about the application
      */
-    public void show ()
+    @Override
+	public void show ()
     {
-        String margin = getIndent (++_level);
-
+        getIndent (++_level);
         _level--;
     }
 
@@ -96,7 +96,8 @@ public class TextHandler
      *  including configuration, available modules and handlers,
      *  etc.
      */
-    public void show (App app)
+    @Override
+	public void show (App app)
     {
         String margin = getIndent (++_level);
 
@@ -148,7 +149,8 @@ public class TextHandler
      *  Outputs information about the OutputHandler specified
      *  in the parameter 
      */
-    public void show (OutputHandler handler)
+    @Override
+	public void show (OutputHandler handler)
     {
         String margin = getIndent (++_level);
 
@@ -178,7 +180,8 @@ public class TextHandler
     /**
      *  Outputs information about a Module
      */
-    public void show (Module module)
+    @Override
+	public void show (Module module)
     {
         String margin = getIndent (++_level);
 
@@ -203,7 +206,7 @@ public class TextHandler
             _writer.print (margin + " MIMEtype: " + ss[0]);
             for (int i=1; i<ss.length; i++) {
                 _writer.print (", " + ss[i]);
-            };
+            }
             _writer.println ();
         }
         List list = module.getSignature ();
@@ -252,7 +255,8 @@ public class TextHandler
     /**
      *  Outputs the information contained in a RepInfo object
      */
-    public void show (RepInfo info)
+    @Override
+	public void show (RepInfo info)
     {
         String margin = getIndent (++_level);
 
@@ -461,7 +465,8 @@ public class TextHandler
 
     /** Do the final output.  This should be in a suitable format
      *  for including multiple files between the header and the footer. */
-    public void showFooter ()
+    @Override
+	public void showFooter ()
     {
         _level--;
 
@@ -470,7 +475,8 @@ public class TextHandler
 
     /** Do the initial output.  This should be in a suitable format
      *  for including multiple files between the header and the footer. */
-    public void showHeader ()
+    @Override
+	public void showHeader ()
     {
         String margin = getIndent (++_level);
 
