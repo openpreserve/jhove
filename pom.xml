@@ -7,10 +7,20 @@
     <version>1.12.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>jhove</name>
+	<name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
+	<description>JHOVE provides functions to perform format-specific identification, validation, and characterization of digital objects.</description>
+	<licenses>
+		<license>
+			<name>GNU Library or Lesser General Public License (LGPL)</name>
+			<url>http://www.gnu.org/licenses/lgpl.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
-    <!-- To build the command line and GUI jars: mvn clean install To generate 
-        Javadoc: mvn javadoc:javadoc -->
+    <!-- To build the command line and GUI jars:
+            mvn clean install
+         To generate Javadoc:
+            mvn javadoc:javadoc -->
     <scm>
         <connection>scm:git:git@github.com:openpreserve/jhove.git</connection>
         <developerConnection>scm:git:git@github.com:openpreserve/jhove.git</developerConnection>
@@ -35,6 +45,8 @@
         <jdk.source.version>1.5</jdk.source.version>
         <jdk.target.version>1.5</jdk.target.version>
         <junit.version>4.8.1</junit.version>
+        <build.helper.version>1.5</build.helper.version>
+        <maven.javadoc.version>2.9.1</maven.javadoc.version>
     </properties>
 
     <build>
@@ -91,7 +103,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.5</version>
+                <version>${build.helper.version}</version>
                 <executions>
                     <execution>
                         <id>attach-artifacts</id>
@@ -114,7 +126,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>${maven.javadoc.version}</version>
             </plugin>
         </plugins>
         <pluginManagement>
