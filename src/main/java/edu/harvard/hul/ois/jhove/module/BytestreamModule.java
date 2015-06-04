@@ -92,7 +92,8 @@ public final class BytestreamModule
      *   results in RepInfo.
      *   Any arbitrary bytestream is considered well-formed.
      */
-    public final int parse (InputStream stream, RepInfo info, int parseIndex)
+    @Override
+	public final int parse (InputStream stream, RepInfo info, int parseIndex)
 	throws IOException
     {
         initParse ();
@@ -155,7 +156,8 @@ public final class BytestreamModule
      * byte stream is considered a valid Bytestream, return immediately
      * doing nothing.  The RepInfo._consistent flag will remain true.
      */
-    public void checkSignatures (File file, InputStream stream,
+    @Override
+	public void checkSignatures (File file, InputStream stream,
 				 RepInfo info)
         throws IOException
     {

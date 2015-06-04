@@ -17,7 +17,11 @@ import edu.harvard.hul.ois.jhove.*;
  */
 public class RepTreeRoot extends DefaultMutableTreeNode 
 {
-    /******************************************************************
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1913253140140001114L;
+	/******************************************************************
      * PRIVATE INSTANCE FIELDS.
      ******************************************************************/
 
@@ -82,14 +86,12 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                     TextMDMetadata tData = (TextMDMetadata) pValue;
                     return textMDToNode (tData);
                 }
-                else {
-                    // A scalar property of type Property -- seems 
-                    // pointless, but we handle it.
-                    DefaultMutableTreeNode val = 
-                            new DefaultMutableTreeNode (pProp.getName ());
-                    val.add (propToNode ((Property) pValue));
-                    return val;
-                }
+				// A scalar property of type Property -- seems 
+				// pointless, but we handle it.
+				DefaultMutableTreeNode val = 
+				        new DefaultMutableTreeNode (pProp.getName ());
+				val.add (propToNode ((Property) pValue));
+				return val;
             }
             else {
                 // Simple types: just use name plus string value.
@@ -98,25 +100,23 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 return val;
             }
         }
-        else {
-            // Compound properties.  The text of the node is the
-            // property name.
-            DefaultMutableTreeNode val = 
-                new DefaultMutableTreeNode (pProp.getName ());
-            if (arity == PropertyArity.ARRAY) {
-                addArrayMembers (val, pProp);
-            }
-            else if (arity == PropertyArity.LIST) {
-                addListMembers (val, pProp);
-            }
-            else if (arity == PropertyArity.MAP) {
-                addMapMembers (val, pProp);
-            }
-            else if (arity == PropertyArity.SET) {
-                addSetMembers (val, pProp);
-            }
-            return val;
-        }
+		// Compound properties.  The text of the node is the
+		// property name.
+		DefaultMutableTreeNode val = 
+		    new DefaultMutableTreeNode (pProp.getName ());
+		if (arity == PropertyArity.ARRAY) {
+		    addArrayMembers (val, pProp);
+		}
+		else if (arity == PropertyArity.LIST) {
+		    addListMembers (val, pProp);
+		}
+		else if (arity == PropertyArity.MAP) {
+		    addMapMembers (val, pProp);
+		}
+		else if (arity == PropertyArity.SET) {
+		    addSetMembers (val, pProp);
+		}
+		return val;
     }
     
     
@@ -156,62 +156,60 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 }
             }
         }
-        else {
-            // OK, that was the easy one.  Now for that damn array arity.
-            // In the case of non-object types, we can't actually tell which 
-            // position matches the object, so we return 0 and hope it doesn't
-            // mess things up too much.
-            PropertyType propType = pProp.getType ();
-            java.util.Date[] dateArray = null;
-            Property[] propArray = null;
-            Rational[] rationalArray = null;
-            Object[] objArray = null;
-            int n = 0;
-    
-            //if (child instanceof LeafHolder) {
-            //    return ((LeafHolder) child).getPosition ();
-            //}
-            //else 
-            if (PropertyType.DATE == propType) {
-                dateArray = (java.util.Date []) pProp.getValue ();
-                n = dateArray.length;
-            }
-            else if (PropertyType.OBJECT == propType) {
-                objArray = (Object []) pProp.getValue ();
-                n = objArray.length;
-            }
-            else if (PropertyType.RATIONAL == propType) {
-                rationalArray = (Rational []) pProp.getValue ();
-                n = rationalArray.length;
-            }
-            else if (PropertyType.PROPERTY == propType) {
-                propArray = (Property []) pProp.getValue ();
-                n = propArray.length;
-            }
-            else {
-                return 0;               // non-object array type
-            }
-    
-            for (int i = 0; i < n; i++) {
-                Object elem = null;
-                if (PropertyType.DATE == propType) {
-                    elem = dateArray[i];
-                }
-                else if (PropertyType.OBJECT == propType) {
-                    elem = objArray[i];
-                }
-                else if (PropertyType.RATIONAL == propType) {
-                    elem = rationalArray[i];
-                }
-                else if (PropertyType.PROPERTY == propType) {
-                    elem = propArray[i];
-                }
-                if (elem == child) {
-                    return i;
-                }
-            }
-            return 0;                   // somehow fell through
-        }
+		// OK, that was the easy one.  Now for that damn array arity.
+		// In the case of non-object types, we can't actually tell which 
+		// position matches the object, so we return 0 and hope it doesn't
+		// mess things up too much.
+		PropertyType propType = pProp.getType ();
+		java.util.Date[] dateArray = null;
+		Property[] propArray = null;
+		Rational[] rationalArray = null;
+		Object[] objArray = null;
+		int n = 0;
+   
+		//if (child instanceof LeafHolder) {
+		//    return ((LeafHolder) child).getPosition ();
+		//}
+		//else 
+		if (PropertyType.DATE == propType) {
+		    dateArray = (java.util.Date []) pProp.getValue ();
+		    n = dateArray.length;
+		}
+		else if (PropertyType.OBJECT == propType) {
+		    objArray = (Object []) pProp.getValue ();
+		    n = objArray.length;
+		}
+		else if (PropertyType.RATIONAL == propType) {
+		    rationalArray = (Rational []) pProp.getValue ();
+		    n = rationalArray.length;
+		}
+		else if (PropertyType.PROPERTY == propType) {
+		    propArray = (Property []) pProp.getValue ();
+		    n = propArray.length;
+		}
+		else {
+		    return 0;               // non-object array type
+		}
+   
+		for (int i = 0; i < n; i++) {
+		    Object elem = null;
+		    if (PropertyType.DATE == propType) {
+		        elem = dateArray[i];
+		    }
+		    else if (PropertyType.OBJECT == propType) {
+		        elem = objArray[i];
+		    }
+		    else if (PropertyType.RATIONAL == propType) {
+		        elem = rationalArray[i];
+		    }
+		    else if (PropertyType.PROPERTY == propType) {
+		        elem = propArray[i];
+		    }
+		    if (elem == child) {
+		        return i;
+		    }
+		}
+		return 0;                   // somehow fell through
     }
     
     
@@ -1495,7 +1493,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         if (_rawOutput) {
             return Integer.toString (n);
         }
-        else try {
+		try {
             return labels[n];
         }
         catch (Exception e) {
@@ -1510,7 +1508,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         if (_rawOutput) {
             return Integer.toString (n);
         }
-        else try {
+		try {
             int idx = -1;
             for (int i = 0; i < index.length; i++) {
                 if (n == index[i]) {
@@ -1523,6 +1521,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             }
         }
         catch (Exception e) {
+			// TODO : Add exception handling
         }
         // If we don't get a match, or do get an exception
         return Integer.toString (n);

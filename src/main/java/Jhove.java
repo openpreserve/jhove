@@ -19,7 +19,6 @@
  **********************************************************************/
 
 import edu.harvard.hul.ois.jhove.*;
-//import java.io.*;
 import java.util.*;
 
 public class Jhove
@@ -285,7 +284,7 @@ public class Jhove
             if (len > 0) {
         		dirFileOrUri = new String [len];
         		for (int i=0; i<len; i++) {
-        		    dirFileOrUri[i] = (String) list.get (i);
+        		    dirFileOrUri[i] = list.get (i);
         		}
             }
     

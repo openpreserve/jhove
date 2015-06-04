@@ -17,15 +17,17 @@ import java.text.NumberFormat;
  */
 public class NumericField extends JFormattedTextField {
 
-    // Initializer for number format
-    private static NumberFormat numFormat = 
-            NumberFormat.getIntegerInstance ();
-    
-    public NumericField (int init)
-    {
-        super (numFormat);
-        numFormat.setGroupingUsed (false);
-        numFormat.setParseIntegerOnly (true);
-        setValue (new Integer (init));
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1521652007637692090L;
+	// Initializer for number format
+	private static NumberFormat numFormat = NumberFormat.getIntegerInstance();
+
+	public NumericField(int init) {
+		super(numFormat);
+		numFormat.setGroupingUsed(false);
+		numFormat.setParseIntegerOnly(true);
+		setValue(new Integer(init));
+	}
 }

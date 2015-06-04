@@ -17,20 +17,19 @@ import edu.harvard.hul.ois.jhove.module.iff.*;
  */
 public class NameChunk extends TextChunk {
 
-    /**
-     * Constructor.
-     * 
-     * @param module   The AIFFModule under which this was called
-     * @param hdr      The header for this chunk
-     * @param dstrm    The stream from which the AIFF data are being read
-     */
-    public NameChunk(
-        AiffModule module,
-        ChunkHeader hdr,
-        DataInputStream dstrm) 
-    {
-        super(module, hdr, dstrm);
-        propName = "Name";
-    }
+	/**
+	 * Constructor.
+	 * 
+	 * @param module
+	 *            The AIFFModule under which this was called
+	 * @param hdr
+	 *            The header for this chunk
+	 * @param dstrm
+	 *            The stream from which the AIFF data are being read
+	 */
+	public NameChunk(AiffModule module, ChunkHeader hdr, DataInputStream dstrm) {
+		super(module, hdr, dstrm);
+		propName = "Name";
+	}
 
 }

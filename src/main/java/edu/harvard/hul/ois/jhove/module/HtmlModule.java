@@ -286,7 +286,8 @@ public class HtmlModule extends ModuleBase {
      *                    called again with <code>parseIndex</code> 
      *                    equal to that return value.
     */
-    public int parse (InputStream stream, RepInfo info, int parseIndex)
+    @Override
+	public int parse (InputStream stream, RepInfo info, int parseIndex)
        throws IOException
     {
         if (parseIndex != 0) {
@@ -312,20 +313,16 @@ public class HtmlModule extends ModuleBase {
                 xmlMod.setXhtmlDoctype(_doctype);
                 return xmlMod.parse (stream, info, parseIndex);
             }
-            else {
-                // The XML module shouldn't be missing from any installation,
-                // but someone who really wanted to could remove it.  In
-                // that case, you deserve what you get.
-                info.setMessage ( new ErrorMessage
-                    ("XML-HUL module required to validate XHTML documents"));
-                info.setWellFormed (false);  // Treat it as completely wrong
-                return 0;
-            }
+			// The XML module shouldn't be missing from any installation,
+			// but someone who really wanted to could remove it.  In
+			// that case, you deserve what you get.
+			info.setMessage ( new ErrorMessage
+			    ("XML-HUL module required to validate XHTML documents"));
+			info.setWellFormed (false);  // Treat it as completely wrong
+			return 0;
         }
-        else {
-            /* parseIndex = 0, first call only */
-            _doctype = null;
-        }
+		/* parseIndex = 0, first call only */
+		_doctype = null;
         // Test if textMD is to be generated
         if (_defaultParams != null) {
             Iterator iter = _defaultParams.iterator ();
@@ -593,7 +590,8 @@ public class HtmlModule extends ModuleBase {
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
-    public void checkSignatures (File file,
+    @Override
+	public void checkSignatures (File file,
                 InputStream stream, 
                 RepInfo info) 
         throws IOException
@@ -750,9 +748,7 @@ public class HtmlModule extends ModuleBase {
                 str.charAt (len - 1) == '"') {
             return str.substring(1, len - 1);
         }
-        else {
-            return str;
-        }
+		return str;
     }
 
     /* Checks if the XML module is available. 

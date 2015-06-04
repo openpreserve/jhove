@@ -18,7 +18,12 @@ import javax.swing.*;
  */
 public class PrefsWindow extends JDialog 
 {
-    private JhoveWindow jhoveWin;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1371087999798862899L;
+
+	private JhoveWindow jhoveWin;
     
     private JCheckBox rawCheckBox;
     private JCheckBox checksumCheckBox;

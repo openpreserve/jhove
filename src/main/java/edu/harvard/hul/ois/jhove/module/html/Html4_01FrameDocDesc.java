@@ -16,24 +16,24 @@ import java.util.*;
  */
 public class Html4_01FrameDocDesc extends Html4_01TFDocDesc {
 
-    /* Static, private map of supported tags. 
-     * For efficiency, we create a static Map
-     * of supported tags just once, then assign that to stSupportedElements
-     * in the constructor. */
-    private static Map stSupportedElements;
+	/*
+	 * Static, private map of supported tags. For efficiency, we create a static
+	 * Map of supported tags just once, then assign that to stSupportedElements
+	 * in the constructor.
+	 */
+	private static Map stSupportedElements;
 
-    {
-        stSupportedElements = new HashMap (280);
-        Html4_01TFDocDesc.classInit4 
-            (stSupportedElements, HtmlModule.HTML_4_01_FRAMESET);
-    }
+	{
+		stSupportedElements = new HashMap(280);
+		Html4_01TFDocDesc.classInit4(stSupportedElements,
+				HtmlModule.HTML_4_01_FRAMESET);
+	}
 
-    /** Constructor. */
-    public Html4_01FrameDocDesc ()
-    {
-        // publish stSupportedElements to superclass
-        supportedElements = stSupportedElements;
-        init ();
-    }
+	/** Constructor. */
+	public Html4_01FrameDocDesc() {
+		// publish stSupportedElements to superclass
+		supportedElements = stSupportedElements;
+		init();
+	}
 
 }

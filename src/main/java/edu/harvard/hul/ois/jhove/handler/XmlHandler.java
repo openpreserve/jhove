@@ -114,9 +114,10 @@ public class XmlHandler
     /**
      *  Outputs minimal information about the application
      */
-    public void show ()
+    @Override
+	public void show ()
     {
-        String margin = getIndent (++_level);
+        getIndent (++_level);
         _level--;
     }
 
@@ -125,7 +126,8 @@ public class XmlHandler
      *  including configuration, available modules and handlers,
      *  etc.
      */
-    public void show (App app)
+    @Override
+	public void show (App app)
     {
         String margin = getIndent (++_level);
         String margn2 = margin + " ";
@@ -185,7 +187,8 @@ public class XmlHandler
      *  Outputs information about the OutputHandler specified
      *  in the parameter 
      */
-    public void show (OutputHandler handler)
+    @Override
+	public void show (OutputHandler handler)
     {
         String margin = getIndent (++_level);
         String margn2 = margin + " ";
@@ -223,7 +226,8 @@ public class XmlHandler
     /**
      *  Outputs information about a Module
      */
-    public void show (Module module)
+    @Override
+	public void show (Module module)
     {
         String margin = getIndent (++_level);
         String margn2 = margin + " ";
@@ -252,7 +256,7 @@ public class XmlHandler
             _writer.println (margn2 + elementStart ("mimeTypes"));
             for (int i=0; i<ss.length; i++) {
                 _writer.println (margn3 + element ("mimeType", ss[i]));
-            };
+            }
             _writer.println (margn2 + elementEnd ("mimeTypes"));
         }
         List list = module.getSignature ();
@@ -315,7 +319,8 @@ public class XmlHandler
     /**
      *  Outputs the information contained in a RepInfo object
      */
-    public void show (RepInfo info)
+    @Override
+	public void show (RepInfo info)
     {
         String margin = getIndent (++_level);
         String margn2 = margin + " ";
@@ -595,7 +600,8 @@ public class XmlHandler
     /** Do the final output.  This should be in a suitable format
      *  for including multiple files between the header and the footer,
      *  and the XML of the header and footer must balance out. */
-    public void showFooter ()
+    @Override
+	public void showFooter ()
     {
         String margin = getIndent (_level--);
         _writer.println (margin + elementEnd ("jhove"));
@@ -606,7 +612,8 @@ public class XmlHandler
     /** Do the initial output.  This should be in a suitable format
      *  for including multiple files between the header and the footer,
      *  and the XML of the header and footer must balance out. */
-    public void showHeader ()
+    @Override
+	public void showHeader ()
     {
         String margin = getIndent (++_level);
         String margn2 = margin + " ";
@@ -733,7 +740,7 @@ public class XmlHandler
         if (obj instanceof Date) {
             return toDateTime ((Date) obj);
         }
-        else return obj.toString ();
+		return obj.toString ();
     }
 
     protected void showProperty (Property property)
@@ -2720,7 +2727,6 @@ public class XmlHandler
         String margn3 = margn2 + " ";
         String margn4 = margn3 + " ";
         String margn5 = margn4 + " ";
-        String margn6 = margn5 + " ";
         
         _writer.println (margn2 + elementStart ("mix:ImageAssessmentMetadata"));
         StringBuffer metricsBuf = new StringBuffer (margn3 +
@@ -4363,9 +4369,7 @@ public class XmlHandler
         if (change) {
             return sb.toString ();
         }
-        else {
-            return uri;
-        }
+		return uri;
     }
 
     /** Appends a Rational value to a StringBuffer */

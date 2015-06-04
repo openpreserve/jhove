@@ -16,11 +16,10 @@ import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
 /**
  * Implementation of the AIFF Saxel (Sound Accelerator) Chunk.
  * 
- * The Saxel chunk has only a tentative and incomplete status in the
- * AIFF-C draft of 1991, and apparently nothing further was
- * ever done with it.  For purposes of extracting parameters,
- * we treat the description of the SaxelChunk and Saxels as
- * valid, while regarding the SaxelData as opaque.
+ * The Saxel chunk has only a tentative and incomplete status in the AIFF-C
+ * draft of 1991, and apparently nothing further was ever done with it. For
+ * purposes of extracting parameters, we treat the description of the SaxelChunk
+ * and Saxels as valid, while regarding the SaxelData as opaque.
  *
  * @author Gary McGath
  *
@@ -48,7 +47,8 @@ public class SaxelChunk extends Chunk {
      *            invalid, otherwise <code>true</code>
      * 
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
         AiffModule module = (AiffModule) _module;
         int numSaxels = module.readUnsignedShort (_dstream);
         bytesLeft -= 2;

@@ -19,7 +19,11 @@ import java.awt.event.*;
  */
 public class ProgressWindow extends JFrame{
 
-    private long _contentLength;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 554912294400119189L;
+	private long _contentLength;
     private long _byteCount;
     private String _docName;
     private JLabel _progressLabel;

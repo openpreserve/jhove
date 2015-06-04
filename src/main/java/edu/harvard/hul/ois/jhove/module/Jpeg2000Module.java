@@ -372,7 +372,8 @@ public class Jpeg2000Module extends ModuleBase {
      *                    the same RepInfo object should be passed with each
      *                    call.
      */
-    public final void parse(RandomAccessFile raf, RepInfo info)
+    @Override
+	public final void parse(RandomAccessFile raf, RepInfo info)
         throws IOException {
         initParse();
         _rafStream = new RAFInputStream (raf,
@@ -586,9 +587,8 @@ public class Jpeg2000Module extends ModuleBase {
     public NisoImageMetadata getCurrentNiso() {
         if (curCodestream == null) {
             return _defaultNiso;
-        } else {
-            return curCodestream.getNiso();
         }
+		return curCodestream.getNiso();
     }
 
     /** Returns the nth <code>Codestream</code>, creating it if necessary,
@@ -774,7 +774,8 @@ public class Jpeg2000Module extends ModuleBase {
     /**
      *   Initializes the state of the module for parsing.
      */
-    protected void initParse() {
+    @Override
+	protected void initParse() {
         super.initParse();
         colorSpecs = new LinkedList<Property>();
         binaryFilterProps = new LinkedList<Property> ();
@@ -867,7 +868,6 @@ public class Jpeg2000Module extends ModuleBase {
      * been coded. */
     protected boolean skipOverBox(
         BoxHeader hdr,
-        RepInfo info,
         DataInputStream dstrm)
         throws IOException {
         if (hdr.getLength() != 0) {

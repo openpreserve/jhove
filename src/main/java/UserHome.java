@@ -18,7 +18,6 @@
  * USA
  **********************************************************************/
 
-import java.io.*;
 
 /**
  * Determine the default value of the Java user.home property.

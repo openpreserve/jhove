@@ -262,7 +262,8 @@ public class WaveModule
     *                    called again with <code>parseIndex</code> 
     *                    equal to that return value.
     */
-   public int parse (InputStream stream, RepInfo info, int parseIndex)
+   @Override
+public int parse (InputStream stream, RepInfo info, int parseIndex)
        throws IOException
    {
        initParse ();
@@ -650,7 +651,8 @@ public class WaveModule
     /**
      *   Initializes the state of the module for parsing.
      */
-    protected void initParse() 
+    @Override
+	protected void initParse() 
     {
         super.initParse ();
        _propList = new LinkedList<Property> ();
@@ -870,8 +872,7 @@ public class WaveModule
                         PropertyType.INTEGER,
                         new Integer (val));
         }
-        else {
-           List<String> slist = new LinkedList<String> ();
+		List<String> slist = new LinkedList<String> ();
            try {
                for (int i = 0; i < oneValueNames.length; i++) {
                    String s = null;
@@ -891,6 +892,5 @@ public class WaveModule
            }
            return new Property (name, PropertyType.STRING,
                                              PropertyArity.LIST, slist);
-        }
     }
 }

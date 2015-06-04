@@ -169,7 +169,8 @@ public class AsciiModule
      *   Parse the content of a stream digital object and store the
      *   results in RepInfo.
      */
-    public final int parse (InputStream stream, RepInfo info, int parseIndex)
+    @Override
+	public final int parse (InputStream stream, RepInfo info, int parseIndex)
 	throws IOException
     {
         // Test if textMD is to be generated
@@ -368,7 +369,8 @@ public class AsciiModule
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
-    public void checkSignatures (File file,
+    @Override
+	public void checkSignatures (File file,
                 InputStream stream, 
                 RepInfo info) 
         throws IOException

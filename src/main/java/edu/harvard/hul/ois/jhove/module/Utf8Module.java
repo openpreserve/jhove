@@ -190,7 +190,8 @@ public class Utf8Module
      *                    equal to that return value.
      *
      */
-    public final int parse (InputStream stream, RepInfo info, int parseIndex)
+    @Override
+	public final int parse (InputStream stream, RepInfo info, int parseIndex)
 	throws IOException
     {
         // Test if textMD is to be generated
@@ -466,7 +467,8 @@ public class Utf8Module
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
-    public void checkSignatures (File file,
+    @Override
+	public void checkSignatures (File file,
                 InputStream stream, 
                 RepInfo info) 
         throws IOException
@@ -484,14 +486,13 @@ public class Utf8Module
         //long nChar = 0;
         DataInputStream dstream = new DataInputStream (stream);
         while (!eof && bytesRead < sigBytes) {
-                boolean isMark = false;
                 int [] b = new int[4];
                 //int ch = -1;
                 try {
                     b[0] = readUnsignedByte (dstream, this);
                     ++bytesRead;
                     if (_nByte < 4) {
-                        isMark = checkMark (b[0], info);
+                        checkMark (b[0], info);
                         if (info.getWellFormed () == RepInfo.FALSE) {
                             return;
                         }
@@ -517,7 +518,7 @@ public class Utf8Module
                     for (int i=1; i<nBytes; i++) {
                         b[i] = readUnsignedByte (dstream, this);
                                 if (_nByte < 4) {
-                                    isMark = checkMark (b[i], info);
+                                    checkMark (b[i], info);
                                 }
                                 if (info.getWellFormed () == RepInfo.FALSE) {
                                     return;
