@@ -68,7 +68,7 @@ public class DataChunk extends Chunk {
         // This must be called precisely at this point in reading the
         // data stream to produce an accurate result.
         module.markFirstSampleOffset ();
-        module.skipBytes (_dstream, (int) bytesLeft, module);
+		module.skipBytes(_dstream, bytesLeft, module);
         return true;
     }
 
