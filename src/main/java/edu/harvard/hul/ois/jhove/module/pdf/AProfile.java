@@ -498,7 +498,12 @@ public final class AProfile extends PdfProfile
         // Guess what?  It's another hierarchy of dictionaries!
         // So let's walk through the fields...
         try {
-            PdfArray fields = (PdfArray) form.get ("Fields");
+            PdfArray fields = null;
+            if (form.get("Fields") instanceof PdfIndirectObj) {
+                fields = (PdfArray) (_module.resolveIndirectObject(form.get("Fields")));
+            }
+            else
+                fields = (PdfArray) form.get ("Fields");
             Vector<PdfObject> fieldVec = fields.getContent ();
             for (int i = 0; i < fieldVec.size (); i++) {
                 PdfDictionary field = (PdfDictionary) fieldVec.elementAt (i);

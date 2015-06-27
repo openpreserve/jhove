@@ -442,7 +442,10 @@ public abstract class Tokenizer
                         _state = State.HEXADECIMAL;
                         token = new Literal ();
                         buffer = new StringBuffer ();
-                        ((Literal) token).appendHex (_ch);
+                        if (_ch == GREATER_THAN) 
+                            backupChar();
+                        else
+                            ((Literal) token).appendHex (_ch);
                         //h1 = _ch;
                     }
                 }
