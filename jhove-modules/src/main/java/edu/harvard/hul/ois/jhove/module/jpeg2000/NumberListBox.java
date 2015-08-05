@@ -81,10 +81,8 @@ public class NumberListBox extends JP2Box {
                 PropertyArity.ARRAY,
                 propArray);
         }
-        else {
-            // A number list with no numbers isn't explicitly illegal
-            return null;
-        }
+        // A number list with no numbers isn't explicitly illegal
+        return null;
     }
 
 

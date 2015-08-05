@@ -620,13 +620,12 @@ public class JhoveBase {
                                 if (infc.getWellFormed() == RepInfo.TRUE) {
                                     info.copy(infc);
                                     break;
-                                } else {
-                                    // We want to know what modules matched the
-                                    // signature, so we force the sigMatch
-                                    // property
-                                    // to be persistent.
-                                    info.setSigMatch(infc.getSigMatch());
                                 }
+                                // We want to know what modules matched the
+                                // signature, so we force the sigMatch
+                                // property
+                                // to be persistent.
+                                info.setSigMatch(infc.getSigMatch());
                             } catch (Exception e) {
                                 /*
                                  * The assumption is that in trying to analyze

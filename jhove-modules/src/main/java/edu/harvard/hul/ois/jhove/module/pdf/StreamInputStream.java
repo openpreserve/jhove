@@ -46,10 +46,8 @@ public class StreamInputStream extends InputStream {
         if (_curPos - _startPos >= _length) {
             return -1;
         }
-        else {
-            _curPos++;
-            int ch = _file.read ();
-            return ch;
-        }
+        _curPos++;
+        int ch = _file.read ();
+        return ch;
     }
 }

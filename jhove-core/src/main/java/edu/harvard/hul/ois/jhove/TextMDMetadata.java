@@ -389,10 +389,9 @@ public class TextMDMetadata {
         }
         if (textMDCharset != null) {
             return textMDCharset;
-        } else {
-            // Downgrade to default
-            return CHARSET_ISO8859_1;
         }
+        // Downgrade to default
+        return CHARSET_ISO8859_1;
     }
     
     /**

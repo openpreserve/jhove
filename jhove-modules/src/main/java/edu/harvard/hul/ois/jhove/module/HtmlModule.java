@@ -312,20 +312,16 @@ public class HtmlModule extends ModuleBase {
                 xmlMod.setXhtmlDoctype(_doctype);
                 return xmlMod.parse (stream, info, parseIndex);
             }
-            else {
-                // The XML module shouldn't be missing from any installation,
-                // but someone who really wanted to could remove it.  In
-                // that case, you deserve what you get.
-                info.setMessage ( new ErrorMessage
-                    ("XML-HUL module required to validate XHTML documents"));
-                info.setWellFormed (false);  // Treat it as completely wrong
-                return 0;
-            }
+            // The XML module shouldn't be missing from any installation,
+            // but someone who really wanted to could remove it.  In
+            // that case, you deserve what you get.
+            info.setMessage ( new ErrorMessage
+                ("XML-HUL module required to validate XHTML documents"));
+            info.setWellFormed (false);  // Treat it as completely wrong
+            return 0;
         }
-        else {
-            /* parseIndex = 0, first call only */
-            _doctype = null;
-        }
+        /* parseIndex = 0, first call only */
+        _doctype = null;
         // Test if textMD is to be generated
         if (_defaultParams != null) {
             Iterator iter = _defaultParams.iterator ();
@@ -750,9 +746,7 @@ public class HtmlModule extends ModuleBase {
                 str.charAt (len - 1) == '"') {
             return str.substring(1, len - 1);
         }
-        else {
-            return str;
-        }
+        return str;
     }
 
     /* Checks if the XML module is available. 

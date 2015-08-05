@@ -35,13 +35,11 @@ public class CountedInputStream extends FilterInputStream {
         if (bytesLeft <= 0) {
             return -1;
         }
-        else {
-            int ch = super.read ();
-            if (ch != -1) {
-                --bytesLeft;
-            }
-            return ch;
+        int ch = super.read ();
+        if (ch != -1) {
+            --bytesLeft;
         }
+        return ch;
     }
 
 

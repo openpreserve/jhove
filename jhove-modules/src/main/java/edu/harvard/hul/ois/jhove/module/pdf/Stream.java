@@ -215,13 +215,11 @@ public class Stream
         if (offset < _bytesRead) {
             return false;   // can't get there from here
         }
-        else {
-            while (_bytesRead < offset) {
-                if (skipBytes (offset - _bytesRead) <= 0) {
-                    break;
-                }
+        while (_bytesRead < offset) {
+            if (skipBytes (offset - _bytesRead) <= 0) {
+                break;
             }
-            return true;
         }
+        return true;
     }
 }

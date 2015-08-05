@@ -244,10 +244,8 @@ public class Literal
                     if (ch == 0) {
                         continue;  // invalid character, ignore
                     }
-                    else {
-                        // any other char is treated nonspecially
-                        buffer.append (PDFDOCENCODING[ch]);
-                    }
+                    // any other char is treated nonspecially
+                    buffer.append (PDFDOCENCODING[ch]);
                 }
                 else {
                     buffer.append (PDFDOCENCODING[ch]);
@@ -544,35 +542,33 @@ public class Literal
         if (datestate < 2) {
             return null;    // not enough fields
         }
-        else {
-            // First we must construct the time zone string, then use
-            // it to make a TimeZone object.
-            if (timezonechar != '?') {
-                String tzStr = "GMT";
-                if (timezonechar == 'Z') {
-                    tzStr += "+0000";
-                }
-                else {
-                    tzStr += timezonechar;
-                    NumberFormat nfmt = NumberFormat.getInstance ();
-                    nfmt.setMinimumIntegerDigits (2);
-                    nfmt.setMaximumIntegerDigits (2);
-                    tzStr += nfmt.format (timezonehour);
-                    tzStr += nfmt.format (timezoneminute);
-                }
-                TimeZone tz = TimeZone.getTimeZone (tzStr);
-                
-                // Use that TimeZone to create a Calendar with our date.
-                // Note that Java months are 0-based.
-                cal = Calendar.getInstance (tz);
+        // First we must construct the time zone string, then use
+        // it to make a TimeZone object.
+        if (timezonechar != '?') {
+            String tzStr = "GMT";
+            if (timezonechar == 'Z') {
+                tzStr += "+0000";
             }
             else {
-                // time zone is unspecified
-                cal = Calendar.getInstance ();
+                tzStr += timezonechar;
+                NumberFormat nfmt = NumberFormat.getInstance ();
+                nfmt.setMinimumIntegerDigits (2);
+                nfmt.setMaximumIntegerDigits (2);
+                tzStr += nfmt.format (timezonehour);
+                tzStr += nfmt.format (timezoneminute);
             }
-            cal.set (year, month - 1, day, hour, minute, second);
-            return cal.getTime ();
+            TimeZone tz = TimeZone.getTimeZone (tzStr);
+            
+            // Use that TimeZone to create a Calendar with our date.
+            // Note that Java months are 0-based.
+            cal = Calendar.getInstance (tz);
         }
+        else {
+            // time zone is unspecified
+            cal = Calendar.getInstance ();
+        }
+        cal.set (year, month - 1, day, hour, minute, second);
+        return cal.getTime ();
     }
 
 

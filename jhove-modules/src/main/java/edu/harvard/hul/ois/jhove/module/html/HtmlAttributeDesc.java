@@ -89,9 +89,7 @@ public class HtmlAttributeDesc {
                 _permittedValues[0].equals (name)) {
                     return true;
                 }
-            else {
-                return false;
-            }
+            return false;
         }
         else {
             value = value.toLowerCase ();

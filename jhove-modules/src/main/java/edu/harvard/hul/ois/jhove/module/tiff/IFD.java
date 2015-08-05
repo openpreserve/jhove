@@ -226,7 +226,7 @@ public abstract class IFD
                      (new InfoMessage (e.getMessage(), e.getOffset()));
                 return 0;
             }
-            else throw e;
+            throw e;
         }
     }
     

@@ -1286,10 +1286,8 @@ public class TiffModule
             // No profiles at all were satisfied
             return 0;
         }
-        else {
-            // All satisfied profiles returned trial
-            return trial;
-        }
+        // All satisfied profiles returned trial
+        return trial;
     }
      
 }

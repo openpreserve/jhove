@@ -2374,9 +2374,7 @@ public class TiffIFD
             }
             return nUnique;
         }
-        else {
-            return _niso.getSamplesPerPixel();
-        }
+        return _niso.getSamplesPerPixel();
     }
 
     /** Set the default values for any DNG tags that haven't been

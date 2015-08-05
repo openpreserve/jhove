@@ -586,9 +586,8 @@ public class Jpeg2000Module extends ModuleBase {
     public NisoImageMetadata getCurrentNiso() {
         if (curCodestream == null) {
             return _defaultNiso;
-        } else {
-            return curCodestream.getNiso();
         }
+        return curCodestream.getNiso();
     }
 
     /** Returns the nth <code>Codestream</code>, creating it if necessary,

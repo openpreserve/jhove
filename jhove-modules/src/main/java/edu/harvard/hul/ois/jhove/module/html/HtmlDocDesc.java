@@ -359,10 +359,8 @@ public abstract class HtmlDocDesc {
             if ("html".equals (name)) {
                 return true;
             }
-            else {
-                // This shouldn't happen
-                return false;
-            }
+            // This shouldn't happen
+            return false;
         }
         if (elementStack.excludesTag (name)) {
             return false;

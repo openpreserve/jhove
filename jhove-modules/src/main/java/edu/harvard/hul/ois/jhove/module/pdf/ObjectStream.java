@@ -125,9 +125,7 @@ public class ObjectStream {
                 _parser.seek (offset + _firstOffset);
                 return _parser.readObject (false);
             }
-            else {
-                return null;
-            }
+            return null;
         }
         catch (IOException e) {
             throw new PdfMalformedException 

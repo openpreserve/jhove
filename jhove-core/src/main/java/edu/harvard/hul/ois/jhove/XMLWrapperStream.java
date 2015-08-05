@@ -152,9 +152,7 @@ public class XMLWrapperStream extends InputStream
             // We have finished the root element end and the document now.
             return -1;
         }
-        else {
-            return (int) rootEnd.charAt(strIndex++);
-        }
+        return (int) rootEnd.charAt(strIndex++);
         
      }
 

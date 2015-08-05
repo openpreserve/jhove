@@ -40,11 +40,9 @@ public class PdfIndirectObj extends PdfObject
         if (_cachedObject != null) {
 	        return _cachedObject;
         }
-        else {
-            long key = ((long) _objNumber << 32) +
-			    ((long) _genNumber & 0XFFFFFFFFL);
-            _cachedObject = _objectMap.get (new Long (key));
-            return _cachedObject;
-        }
+        long key = ((long) _objNumber << 32) +
+            ((long) _genNumber & 0XFFFFFFFFL);
+        _cachedObject = _objectMap.get (new Long (key));
+        return _cachedObject;
     }
 }

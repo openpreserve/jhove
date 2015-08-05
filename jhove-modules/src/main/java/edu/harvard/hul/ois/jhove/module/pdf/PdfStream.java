@@ -232,9 +232,7 @@ public class PdfStream extends PdfObject
             String subtypeStr = ((PdfSimpleObject) subtype).getStringValue ();
             return ("Image".equals (subtypeStr));
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
 }

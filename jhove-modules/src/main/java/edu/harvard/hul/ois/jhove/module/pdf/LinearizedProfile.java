@@ -185,9 +185,7 @@ public final class LinearizedProfile extends PdfProfile
                         if (_parser.getOffset () <= 1024) {
                             return val;
                         }
-                        else {
-                            return null;
-                        }
+                        return null;
                     }
                 }
                 if (_parser.getOffset () > 1024) {

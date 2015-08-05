@@ -378,7 +378,7 @@ public abstract class JP2Box extends BoxHolder {
         if (associations.isEmpty ()) {
             return null;
         }
-        else return new Property ("Associations",
+        return new Property ("Associations",
             PropertyType.PROPERTY,
             PropertyArity.LIST,
             associations);

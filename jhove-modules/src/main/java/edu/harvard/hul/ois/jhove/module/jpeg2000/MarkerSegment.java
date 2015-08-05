@@ -209,9 +209,7 @@ public abstract class MarkerSegment {
         if (tile != null) {
             return tile;
         }
-        else {
-            return _cs;
-        }
+        return _cs;
     }
 
     /** Process the marker or marker segment.  The DataInputStream

@@ -60,9 +60,7 @@ public class PdfSimpleObject extends PdfObject
         if (!(_token instanceof StringValuedToken)) {
             return null;
         }
-        else {
-            return ((StringValuedToken) _token).getValue ();
-        }
+        return ((StringValuedToken) _token).getValue ();
     }
 
 
@@ -75,9 +73,7 @@ public class PdfSimpleObject extends PdfObject
         if (!(_token instanceof StringValuedToken)) {
             return null;
         }
-        else {
-            return ((StringValuedToken) _token).getRawBytes ();
-        }
+        return ((StringValuedToken) _token).getRawBytes ();
     }
 
 
@@ -108,9 +104,7 @@ public class PdfSimpleObject extends PdfObject
         if (!(_token instanceof Keyword)) {
                 return false;
         }
-        else {
-                return "true".equals (((Keyword) _token).getValue ());
-        }
+        return "true".equals (((Keyword) _token).getValue ());
     }
 
     /**
@@ -122,9 +116,7 @@ public class PdfSimpleObject extends PdfObject
         if (!(_token instanceof Keyword)) {
                 return false;
         }
-        else {
-                return "false".equals (((Keyword) _token).getValue ());
-        }
+        return "false".equals (((Keyword) _token).getValue ());
     }
 
 }

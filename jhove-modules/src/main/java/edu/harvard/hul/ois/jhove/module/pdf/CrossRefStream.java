@@ -223,9 +223,7 @@ public class CrossRefStream {
                 _objNum = _index[0] + _entriesRead - 1;
                 return true;
             }
-            else {
-                ++_freeCount;
-            }
+            ++_freeCount;
         }
     }
     

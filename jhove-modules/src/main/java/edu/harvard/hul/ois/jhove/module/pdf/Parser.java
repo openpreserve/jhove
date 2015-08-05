@@ -323,10 +323,8 @@ public class Parser
                     }
                     return arr;
                 }
-                else {
-                    throw new PdfMalformedException
-                        ("Unexpected token in array", getOffset());
-                }
+                throw new PdfMalformedException
+                    ("Unexpected token in array", getOffset());
             }
         }
     }
@@ -383,10 +381,8 @@ public class Parser
                     }
                     return dict;
                 }
-                else {
-                    throw new PdfMalformedException
-                    ("Unexpected token in dictionary", getOffset());
-                }
+                throw new PdfMalformedException
+                ("Unexpected token in dictionary", getOffset());
             }
         }
     }

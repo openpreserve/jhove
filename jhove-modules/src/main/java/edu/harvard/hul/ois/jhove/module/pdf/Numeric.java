@@ -36,9 +36,7 @@ public class Numeric
         if (_real) {
             return (int) _realValue;
         }
-        else {
-            return (int) _intValue;
-        }
+        return (int) _intValue;
     }
 
     /** Returns the value, converted to a long */
@@ -47,9 +45,7 @@ public class Numeric
         if (_real) {
             return (long) _realValue;
         }
-        else {
-            return _intValue;
-        }
+        return _intValue;
     }
 
     /** Returns the value of this Numeric as a double */
@@ -58,9 +54,7 @@ public class Numeric
         if (_real) {
             return _realValue;
         }
-        else {
-            return (double) _intValue;
-        }
+        return (double) _intValue;
     }
 
     /** 
@@ -97,9 +91,7 @@ public class Numeric
             double absRealValue = (_realValue < 0 ? -_realValue : _realValue);
             return (absRealValue <= 3.404E38);
         }
-        else {
-            return (_intValue <= 2147483647 && _intValue >= -2147483648);
-        }
+        return (_intValue <= 2147483647 && _intValue >= -2147483648);
             
     }
 

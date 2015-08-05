@@ -733,7 +733,7 @@ public class XmlHandler
         if (obj instanceof Date) {
             return toDateTime ((Date) obj);
         }
-        else return obj.toString ();
+        return obj.toString ();
     }
 
     protected void showProperty (Property property)
@@ -4363,9 +4363,7 @@ public class XmlHandler
         if (change) {
             return sb.toString ();
         }
-        else {
-            return uri;
-        }
+        return uri;
     }
 
     /** Appends a Rational value to a StringBuffer */

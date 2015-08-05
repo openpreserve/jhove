@@ -328,9 +328,7 @@ public abstract class Tokenizer
                         }
                         return token;
                     }
-                    else {
-                        buffer.append ((char) _ch);
-                    }
+                    buffer.append ((char) _ch);
                 }
                 else if (_state == (State.FRACTIONAL)) {
 
@@ -371,11 +369,9 @@ public abstract class Tokenizer
                         _wsString = "";
                         return new DictionaryEnd ();
                     }
-                    else {
-                        _state = State.WHITESPACE;
-                        _wsString = "";
-                        throw new PdfMalformedException (tokErr, _offset);
-                    }
+                    _state = State.WHITESPACE;
+                    _wsString = "";
+                    throw new PdfMalformedException (tokErr, _offset);
                 }
                 else if (_state == (State.HEXADECIMAL)) {
                     // We're in a hexadecimal string.  We will
@@ -438,13 +434,11 @@ public abstract class Tokenizer
                         _wsString = "";
                         return new DictionaryStart ();
                     }
-                    else {
-                        _state = State.HEXADECIMAL;
-                        token = new Literal ();
-                        buffer = new StringBuffer ();
-                        ((Literal) token).appendHex (_ch);
-                        //h1 = _ch;
-                    }
+                    _state = State.HEXADECIMAL;
+                    token = new Literal ();
+                    buffer = new StringBuffer ();
+                    ((Literal) token).appendHex (_ch);
+                    //h1 = _ch;
                 }
                 else if (_state == (State.LITERAL)) {
                     backupChar ();
@@ -480,9 +474,7 @@ public abstract class Tokenizer
                         }
                         return token;
                     }
-                    else {
-                        buffer.append ((char) _ch);
-                    }
+                    buffer.append ((char) _ch);
                 }
                 else if (_state == (State.NUMERIC)) {
                     if (_ch == PERIOD) {
@@ -668,9 +660,7 @@ public abstract class Tokenizer
 
                         return token;
                     }
-                    else {
-                        _state = State.STREAM;
-                    }
+                    _state = State.STREAM;
                 }
             }
         }
@@ -775,9 +765,7 @@ public abstract class Tokenizer
             int ch2 = readChar ();
             return (ch1 << 8) | ch2;
         }
-        else {
-            return readChar ();
-        }
+        return readChar ();
     }
     
     /**

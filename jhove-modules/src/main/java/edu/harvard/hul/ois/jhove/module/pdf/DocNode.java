@@ -138,9 +138,7 @@ public abstract class DocNode
                         ("Invalid Font entry in Resources");
             }
         }
-        else {
-            return null;
-        }
+        return null;
     }
     
     /**
@@ -157,10 +155,8 @@ public abstract class DocNode
             if (mbox.toRectangle () != null) {
                 return mbox;
             }
-            else {
-                // There's a MediaBox, but it's not a rectangle
-                throw new PdfInvalidException (badbox);
-            }
+            // There's a MediaBox, but it's not a rectangle
+            throw new PdfInvalidException (badbox);
         }
         catch (Exception e) {
             throw new PdfInvalidException (badbox);
@@ -181,12 +177,8 @@ public abstract class DocNode
 	    if (_parent == null || !inheritable) {
 		return null;
 	    }
-	    else {
-		return _parent.get (key, inheritable);
-	    }
+        return _parent.get (key, inheritable);
 	}
-	else {
-	    return val;
-	}
+    return val;
     }
 }

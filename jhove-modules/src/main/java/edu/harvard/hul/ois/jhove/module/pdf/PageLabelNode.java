@@ -133,11 +133,9 @@ public class PageLabelNode
                 _walkFinished = true;
                 return this;
             }
-            else {
-                // Get first descendant
-                _currentDescendant = (PageLabelNode) _descendantsIter.next ();
-                _currentDescendant.startWalk ();
-            }
+            // Get first descendant
+            _currentDescendant = (PageLabelNode) _descendantsIter.next ();
+            _currentDescendant.startWalk ();
         }
         
         PageLabelNode retval = _currentDescendant.nextLeafObject ();
@@ -147,13 +145,11 @@ public class PageLabelNode
                 _currentDescendant.startWalk ();
                 return _currentDescendant.nextLeafObject ();
             }
-            else {
-                // We've gone through all our descendants.
-                _walkFinished = true;
-                return null;
-            } 
+            // We've gone through all our descendants.
+            _walkFinished = true;
+            return null; 
         }
-        else return retval;
+        return retval;
     } 
 
     /**
@@ -337,9 +333,7 @@ public class PageLabelNode
 	if (upperCase) {
 	    return val;
 	}
-	else {
-	    return val.toLowerCase ();
-	}
+    return val.toLowerCase ();
     }
     /**
      *  A convenience method to turn integers into 

@@ -526,11 +526,9 @@ public class XmlModule
                 canValidate) {
                 return 1;
             }
-            else {
-                info.setValid (RepInfo.UNDETERMINED);
-                // This may get downgraded to false, but won't
-                // be upgraded to true.
-            }
+            info.setValid (RepInfo.UNDETERMINED);
+            // This may get downgraded to false, but won't
+            // be upgraded to true.
         }
         
         // Take a deep breath.  We parsed it.  Now assemble the

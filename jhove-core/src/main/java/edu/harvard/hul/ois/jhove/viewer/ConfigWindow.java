@@ -257,9 +257,7 @@ public class ConfigWindow extends JDialog {
                 if (tuple != null) {
                     return tuple[0];
                 }
-                else {
-                    return "";
-                }
+                return "";
             }
             public void setValueAt (Object obj, int row, int column)
             {

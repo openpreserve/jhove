@@ -113,13 +113,11 @@ public class BoxHolder implements Iterator<Object> {
                 if (binaryFilterBox.hasNext ()) {
                     return binaryFilterBox.next ();
                 }
-                else {
-                    // The "else" is a BinaryFilterBox with no content.
-                    // This seems unlikely, but assume it's legal and
-                    // fall through to the next box.
-                    subhdr.readHeader ();
-                    hType = subhdr.getType ();
-                }
+                // The "else" is a BinaryFilterBox with no content.
+                // This seems unlikely, but assume it's legal and
+                // fall through to the next box.
+                subhdr.readHeader ();
+                hType = subhdr.getType ();
             }
             if ("cref".equals (hType)) {
                 // A Cross Reference Box is replaced by another box,
@@ -136,16 +134,14 @@ public class BoxHolder implements Iterator<Object> {
                         (this instanceof JP2Box) ? (JP2Box) this : null);
                 return nextBox;
             }
-            else {
-                nextBox = JP2Box.boxMaker(hType, this);
+            nextBox = JP2Box.boxMaker(hType, this);
 
-                nextBox.setModule(_module);
-                nextBox.setRepInfo(_repInfo);
-                nextBox.setRandomAccessFile(_raf);
-                nextBox.setDataInputStream(_dstrm);
-                nextBox.setBoxHeader (subhdr);
-                return nextBox;
-            }
+            nextBox.setModule(_module);
+            nextBox.setRepInfo(_repInfo);
+            nextBox.setRandomAccessFile(_raf);
+            nextBox.setDataInputStream(_dstrm);
+            nextBox.setBoxHeader (subhdr);
+            return nextBox;
         }
         catch (IOException e) {
             // Probably I should be reporting an error here

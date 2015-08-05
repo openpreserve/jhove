@@ -83,9 +83,7 @@ public abstract class MainOrTile {
         if (_components == null) {
             return 0;
         }
-        else {
-            return _components.length;
-        }
+        return _components.length;
     }
 
     /** Sets the coding style default property. */

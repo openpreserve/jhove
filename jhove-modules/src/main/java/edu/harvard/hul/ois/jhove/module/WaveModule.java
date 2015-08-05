@@ -870,8 +870,7 @@ public class WaveModule
                         PropertyType.INTEGER,
                         new Integer (val));
         }
-        else {
-           List<String> slist = new LinkedList<String> ();
+        List<String> slist = new LinkedList<String> ();
            try {
                for (int i = 0; i < oneValueNames.length; i++) {
                    String s = null;
@@ -891,6 +890,5 @@ public class WaveModule
            }
            return new Property (name, PropertyType.STRING,
                                              PropertyArity.LIST, slist);
-        }
     }
 }

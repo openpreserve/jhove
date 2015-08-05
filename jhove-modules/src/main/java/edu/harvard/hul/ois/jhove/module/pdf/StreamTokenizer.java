@@ -52,10 +52,8 @@ public class StreamTokenizer extends Tokenizer {
             _backupFlag = false;
             return _lastChar;
         }
-        else {
-            _lastChar = _stream.read ();
-            return _lastChar;
-        }
+        _lastChar = _stream.read ();
+        return _lastChar;
     }
 
     /**

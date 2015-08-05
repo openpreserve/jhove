@@ -83,9 +83,7 @@ public class JDump
 				length -= 2;
 				break;
 			    }
-			    else {
-				ff = false;
-			    }
+                ff = false;
 			}
 		    }
 		    System.out.println (leading (os, 8) + os + ": ECS" +

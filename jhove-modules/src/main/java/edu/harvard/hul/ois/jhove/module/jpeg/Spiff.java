@@ -80,9 +80,7 @@ public class Spiff {
         if (s < 0 || s > nisoColor.length) {
             return -1;
         }
-        else {
-            return nisoColor[s];
-        }
+        return nisoColor[s];
     }
 
 
@@ -95,8 +93,6 @@ public class Spiff {
         if (s < 0 || s > nisoCompScheme.length) {
             return -1;
         }
-        else {
-            return nisoCompScheme[s];
-        }
+        return nisoCompScheme[s];
     }
 }

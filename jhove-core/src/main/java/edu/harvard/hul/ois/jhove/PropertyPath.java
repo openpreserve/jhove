@@ -182,9 +182,7 @@ public class PropertyPath {
                 if (p.getName().equals (name)) {
                     return locateSubProperty (p, cdr, trace);
                 }
-                else {
-                    return null;
-                }
+                return null;
             }
             else if (arity.equals (PropertyArity.ARRAY)) {
                 // We know it's an array of Properties, which saves much

@@ -1194,9 +1194,7 @@ public class PdfModule
         if (_xrefIsStream) {
             return readXRefStreams (info);
         }
-        else {
-            return readXRefTables (info);
-        }
+        return readXRefTables (info);
     }
     
     /* Parses the cross-reference streams.  This is called from
@@ -2387,9 +2385,7 @@ public class PdfModule
              */
             return getObject (objIndex, 30);
         }
-        else {
-            return indObj;
-        }
+        return indObj;
     }
     
     /** Returns an object of a given number.  This may involve 
@@ -2457,12 +2453,10 @@ public class PdfModule
             }
             throw new PdfMalformedException (nogood);
         }
-        else {
-            _parser.seek (offset);
-            PdfObject obj = _parser.readObjectDef ();
-            obj.setObjNumber (objIndex);
-            return obj;
-        }
+        _parser.seek (offset);
+        PdfObject obj = _parser.readObjectDef ();
+        obj.setObjNumber (objIndex);
+        return obj;
     }
 
     /**
@@ -4036,9 +4030,7 @@ public class PdfModule
 //              }
               return dest.getPageDestObjNumber ();
           }
-          else {
-              return -1;   // This is probably an error, actually
-          }
+        return -1;   // This is probably an error, actually
     }
 
 
@@ -4115,8 +4107,7 @@ public class PdfModule
                         PropertyType.INTEGER,
                         new Integer (val));
         }
-        else {
-           List<String> slist = new LinkedList<String> ();
+        List<String> slist = new LinkedList<String> ();
            try {
                for (int i = 0; i < valueNames.length; i++) {
                    if ((val & (1 << i)) != 0 && 
@@ -4135,7 +4126,6 @@ public class PdfModule
            }
            return new Property (name, PropertyType.STRING,
                                              PropertyArity.LIST, slist);
-        }
     }
 
     /* Take a PdfArray which is supposed to conform to the rectangle

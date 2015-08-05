@@ -108,9 +108,7 @@ public class RAFInputStream extends InputStream {
                 eof = true;
                 return -1;
             }
-            else {
-                fileOffset += fileBufBytes;
-            }
+            fileOffset += fileBufBytes;
         }
         return ((int) fileBuf[fileBufPos++] & 0XFF);
     }

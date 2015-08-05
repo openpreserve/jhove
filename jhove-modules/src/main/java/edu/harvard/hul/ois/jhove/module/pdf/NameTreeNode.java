@@ -107,13 +107,11 @@ public class NameTreeNode
         if (_lowerLimit == null) {
             return true;    // root node
         }
-        else {
-            if (compareKey (key, _lowerLimit) < 0 || 
-                compareKey (key, _upperLimit) > 0) {
-                return false;
-            }
-            return true;
+        if (compareKey (key, _lowerLimit) < 0 || 
+            compareKey (key, _upperLimit) > 0) {
+            return false;
         }
+        return true;
     }
     
     

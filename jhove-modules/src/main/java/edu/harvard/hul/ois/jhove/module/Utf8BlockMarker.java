@@ -48,12 +48,10 @@ public class Utf8BlockMarker {
         if (block.isEmpty ()) {
             return null;
         }
-        else {
-            return new Property (name,
-                PropertyType.STRING,
-                PropertyArity.LIST,
-                block);
-        }
+        return new Property (name,
+            PropertyType.STRING,
+            PropertyArity.LIST,
+            block);
     }
 
     /** Clears all marked blocks. */

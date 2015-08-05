@@ -92,9 +92,7 @@ public class J2Dump extends Dump {
                     if (boxtop.bytesLeft > 0) {
                         break;
                     }
-                    else {
-                        boxStack.pop ();
-                    }
+                    boxStack.pop ();
                 }
                 
                 // Read the header of a JP2 box

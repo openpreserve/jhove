@@ -500,10 +500,8 @@ public class JpegModule extends ModuleBase
                                 dataPlowing = false;
                                 break;
                             }
-                            else {
-                                // FF followed by 0 is discarded
-                                sawFF = false;
-                            }
+                            // FF followed by 0 is discarded
+                            sawFF = false;
                         }
                     }
                 }

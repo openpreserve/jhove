@@ -130,9 +130,7 @@ public class ROIBox extends JP2Box {
                 PropertyType.PROPERTY,
                 roiProp);
         }
-        else {
-            return null;
-        }
+        return null;
     }
 
 }
