@@ -43,59 +43,6 @@
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-jar-plugin</artifactId>
 		<version>2.4</version>
-		<executions>
-			<execution>
-				<!-- console app - don't change id, will cause build problems -->
-				<id>default-jar</id>
-					<phase>package</phase>
-					<goals><goal>jar</goal></goals>
-					<configuration>
-						<classifier>cmd</classifier>
-						<archive>
-							<manifest>
-								<mainClass>Jhove</mainClass>
-							</manifest>
-						</archive>
-					</configuration>
-			</execution>
-			<execution>
-				<id>gui-app-jar</id>
-					<phase>package</phase>
-					<goals><goal>jar</goal></goals>
-					<configuration>
-						<classifier>gui</classifier>
-						<archive>
-							<manifest>
-								<mainClass>JhoveView</mainClass>
-							</manifest>
-						</archive>
-						<finalName>${project.artifactId}-GUI-${project.version}</finalName>
-					</configuration>
-			</execution>
-		</executions>
-	  </plugin>
-	  <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.5</version>
-        <executions>
-          <execution>
-            <id>attach-artifacts</id>
-            <phase>package</phase>
-            <goals>
-              <goal>attach-artifact</goal>
-            </goals>
-            <configuration>
-              <artifacts>
-                <artifact>
-                  <file>${project.build.directory}/${project.artifactId}-GUI-${project.version}.jar</file>
-                  <type>jar</type>
-                  <classifier>gui</classifier>
-                </artifact>
-              </artifacts>
-            </configuration>
-          </execution>
-        </executions>
 	  </plugin>
 	  <plugin>
         <groupId>org.apache.maven.plugins</groupId>
