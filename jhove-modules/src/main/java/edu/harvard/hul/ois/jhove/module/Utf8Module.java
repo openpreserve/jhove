@@ -329,11 +329,11 @@ public class Utf8Module
                 }
 
 		/* Track what control characters are used. */
-		if (ch < 0X20 && ch != 0X0D && ch != 0X0A) {
+		if (ch < 0x20 && ch != 0x0D && ch != 0x0A) {
 		    _controlCharMap.put (new Integer (ch), 
 					 controlCharMnemonics [ch]);
 		}
-		else if (ch == 0X7F) {
+		else if (ch == 0x7F) {
 		    _controlCharMap.put (new Integer (ch), "DEL (0x7F)");
 		}
 
@@ -425,14 +425,14 @@ public class Utf8Module
         if (!_controlCharMap.isEmpty ()) {
             LinkedList<String> propList = new LinkedList<String> ();
             String mnem;
-            for (int i = 0; i < 0X20; i++) {
+            for (int i = 0; i < 0x20; i++) {
                 mnem = (String) _controlCharMap.get (new Integer (i));
                 if (mnem != null) {
                     propList.add (mnem);
                 }
             }
 	    /* need to check separately for DEL */
-	    mnem = (String) _controlCharMap.get (new Integer (0X7F));
+	    mnem = (String) _controlCharMap.get (new Integer (0x7F));
 	    if (mnem != null) {
             propList.add (mnem);
 	    }
@@ -572,9 +572,9 @@ public class Utf8Module
         initialBytes[(int) _nByte - 1] = byt;
         if (_nByte == 3) {
             // Check for UTF-8 byte order mark in 1st 3 bytes
-            if (initialBytes[0] == 0XEF &&
-                    initialBytes[1] == 0XBB &&
-                    initialBytes[2] == 0XBF) {
+            if (initialBytes[0] == 0xEF &&
+                    initialBytes[1] == 0xBB &&
+                    initialBytes[2] == 0xBF) {
                 InfoMessage im = new InfoMessage
                     ("UTF-8 Byte Order Mark signature is present", 0);
                 info.setMessage (im);
@@ -584,8 +584,8 @@ public class Utf8Module
                 return true;
             }
 
-            if (initialBytes[0] == 0XFF &&
-                    initialBytes[1] == 0XFE) {
+            if (initialBytes[0] == 0xFF &&
+                    initialBytes[1] == 0xFE) {
                 if (initialBytes[2] == 0 &&
                         initialBytes[3] == 0) {
                     msg = new ErrorMessage
@@ -599,8 +599,8 @@ public class Utf8Module
                 info.setWellFormed (false);
                 return false;
             }
-            else if (initialBytes[0] == 0XFE &&
-                        initialBytes[1] == 0XFF) {
+            else if (initialBytes[0] == 0xFE &&
+                        initialBytes[1] == 0xFF) {
                 msg = new ErrorMessage
                     ("UTF-16 big-endian encoding, not UTF-8");
                 info.setMessage (msg);
