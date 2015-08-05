@@ -232,11 +232,11 @@ public class AsciiModule
                     return 0;
                }
 		/* Track what control characters are used. */
-		if (ch < 0X20 && ch != 0X0D && ch != 0X0A) {
+		if (ch < 0x20 && ch != 0x0D && ch != 0x0A) {
 		    _controlCharMap.put (new Integer (ch), 
 					 controlCharMnemonics [ch]);
 		}
-		else if (ch == 0X7F) {
+		else if (ch == 0x7F) {
 		    _controlCharMap.put (new Integer (ch), "DEL (0x7F)");
 		}
 
@@ -314,14 +314,14 @@ public class AsciiModule
 	if (!_controlCharMap.isEmpty ()) {
 	    LinkedList<String> propList = new LinkedList<String> ();
 	    String mnem;
-	    for (int i = 0; i < 0X20; i++) {
+	    for (int i = 0; i < 0x20; i++) {
 		mnem = (String) _controlCharMap.get (new Integer (i));
 		if (mnem != null) {
 		    propList.add (mnem);
 		}
 	    }
 	    /* need to check separately for DEL */
-	    mnem = (String) _controlCharMap.get (new Integer (0X7F));
+	    mnem = (String) _controlCharMap.get (new Integer (0x7F));
 	    if (mnem != null) {
 		propList.add (mnem);
 	    }
