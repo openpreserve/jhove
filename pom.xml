@@ -13,8 +13,8 @@
   <version>1.12.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>JHOVE</name>
-  <description>JSTOR/Harvard Object Validation Environment</description>
+  <name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
+  <description>JHOVE provides functions to perform format-specific identification, validation, and characterization of digital objects.</description>
   <url>https://github.com/openpreserve/jhove/</url>
   <inceptionYear>2008</inceptionYear>
   <organization>
@@ -63,51 +63,88 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <mvn.compiler.version>3.0</mvn.compiler.version>
+    <mvn.compiler.version>3.3</mvn.compiler.version>
+    <mvn.jar.version>2.6</mvn.jar.version>
+    <mvn.javadoc.version>2.10</mvn.javadoc.version>
     <java.version>1.5</java.version>
   </properties>
 
   <build>
     <pluginManagement>
       <plugins>
-      <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${mvn.compiler.version}</version>
+          <configuration>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${mvn.jar.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>${mvn.javadoc.version}</version>
+        </plugin>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build 
+          itself. -->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
           <version>1.0.0</version>
           <configuration>
             <lifecycleMappingMetadata>
-            <pluginExecutions>
-              <pluginExecution>
-                <pluginExecutionFilter>
-                  <groupId>org.codehaus.mojo</groupId>
-                  <artifactId>properties-maven-plugin</artifactId>
-                  <versionRange>[1.0-alpha-2,)</versionRange>
-                  <goals>
-                    <goal>
-                      set-system-properties
-                    </goal>
-                  </goals>
-                </pluginExecutionFilter>
-                <action>
-                  <ignore></ignore>
-                </action>
-              </pluginExecution>
-            </pluginExecutions>
-          </lifecycleMappingMetadata>
-        </configuration>
-      </plugin>
-    </plugins>
-  </pluginManagement>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>properties-maven-plugin</artifactId>
+                    <versionRange>[1.0-alpha-2,)</versionRange>
+                    <goals>
+                      <goal>
+                        set-system-properties
+                      </goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <versionRange>[1.0.0,)</versionRange>
+                    <goals>
+                      <goal>enforce</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.8.1</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
 </project>
