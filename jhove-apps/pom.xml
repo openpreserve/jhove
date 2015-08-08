@@ -12,7 +12,7 @@
   <packaging>jar</packaging>
 
   <name>JHOVE Applications</name>
-  <description>Packaging and convenience classes for CLI and GUI app.</description>
+  <description>Classes and fat jar packaging for CLI and GUI app.</description>
 
   <build>
     <plugins>
@@ -29,6 +29,7 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <appendAssemblyId>false</appendAssemblyId>
         </configuration>
         <executions>
           <execution>
@@ -42,17 +43,20 @@
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
     <dependency>
       <groupId>edu.harvard.hul.ois</groupId>
       <artifactId>jhove-core</artifactId>
       <version>${project.version}</version>
     </dependency>
+
     <dependency>
       <groupId>edu.harvard.hul.ois</groupId>
       <artifactId>jhove-modules</artifactId>
       <version>${project.version}</version>
     </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
