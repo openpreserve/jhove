@@ -13,7 +13,6 @@ import java.net.*;
 import java.util.*;
 import java.util.logging.*;
 
-import javax.net.ssl.KeyManager;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -43,15 +42,17 @@ public class JhoveBase {
 
     public static final String _name = "JhoveBase";
 
+    private static final String HUL_PROPERTY_PREFIX = "edu.harvard.hul.ois.";
+    private static final String JHOVE_PROPERTY_PREFIX = HUL_PROPERTY_PREFIX + "jhove.";
     /** JHOVE buffer size property. */
-    private static final String BUFFER_PROPERTY = "edu.harvard.hul.ois."
-            + "jhove.bufferSize";
+    private static final String BUFFER_PROPERTY = JHOVE_PROPERTY_PREFIX
+            + "bufferSize";
     /** JHOVE configuration directory */
     private static final String CONFIG_DIR = "conf";
 
     /** JHVOE configuration file property. */
-    private static final String CONFIG_PROPERTY = "edu.harvard.hul.ois."
-            + "jhove.config";
+    private static final String CONFIG_PROPERTY = JHOVE_PROPERTY_PREFIX
+            + "config";
     /** JHOVE default buffer size. */
     private static final int DEFAULT_BUFFER = 131072;
 
@@ -62,21 +63,21 @@ public class JhoveBase {
     private static final String DEFAULT_TEMP = ".";
 
     /** JHOVE encoding property. */
-    private static final String ENCODING_PROPERTY = "edu.harvard.hul.ois."
-            + "jhove.encoding";
+    private static final String ENCODING_PROPERTY = JHOVE_PROPERTY_PREFIX
+            + "encoding";
     /** JHOVE home directory */
     private static final String JHOVE_DIR = "jhove";
 
     /** JHOVE SAX parser class property. */
-    private static final String SAX_PROPERTY = "edu.harvard.hul.ois.jhove."
+    private static final String SAX_PROPERTY = JHOVE_PROPERTY_PREFIX
             + "saxClass";
     /** JHOVE temporary directory property. */
-    private static final String TEMPDIR_PROPERTY = "edu.harvard.hul.ois."
-            + "jhove.tempDirectory";
+    private static final String TEMPDIR_PROPERTY = JHOVE_PROPERTY_PREFIX
+            + "tempDirectory";
 
     /** MIX schema version property. */
-    private static final String MIXVSN_PROPERTY = "edu.harvard.hul.ois."
-            + "jhove.mixvsn";
+    private static final String MIXVSN_PROPERTY = JHOVE_PROPERTY_PREFIX
+            + "mixvsn";
 
     /******************************************************************
      * PRIVATE INSTANCE FIELDS.
@@ -246,7 +247,7 @@ public class JhoveBase {
             String canonicalPath = config.getCanonicalPath();
             String fileURL = "file://";
             if (canonicalPath.charAt(0) != '/') {
-                fileURL += '/';
+                fileURL += Character.toString('/');
             }
             fileURL += canonicalPath;
             parser.parse(fileURL);
@@ -355,7 +356,6 @@ public class JhoveBase {
             try {
                 Class<?> cl = Class.forName(tuple[0]);
                 OutputHandler handler = (OutputHandler) cl.newInstance();
-                // handler.init (modInfo.init);
                 handler.setDefaultParams(param);
 
                 _handlerList.add(handler);
@@ -432,7 +432,7 @@ public class JhoveBase {
         _abort = false;
         /* If no handler is specified, use the default TEXT handler. */
         if (handler == null) {
-            handler = (OutputHandler) _handlerMap.get("text");
+            handler = _handlerMap.get("text");
         }
         handler.reset();
         _outputFile = outputFile;
@@ -442,13 +442,11 @@ public class JhoveBase {
         _logger.info("Handler " + handler.getClass().getName()
                 + " preparing to write to " + _outputFile);
         handler.setWriter(makeWriter(_outputFile, _encoding));
-        // handler.param (handlerParam);
 
         handler.showHeader(); /* Show handler header info. */
 
         if (dirFileOrUri == null) {
             if (module != null) { /* Show info about module. */
-                // module.param (moduleParam);
                 module.applyDefaultParams();
                 module.show(handler);
             } else if (aboutHandler != null) { /* Show info about handler. */
@@ -509,7 +507,6 @@ public class JhoveBase {
             _conn = conn;
             if (conn instanceof HttpsURLConnection) {
                 try {
-                    // KeyManager[] km = null;
                     TrustManager[] tm = { new RelaxedX509TrustManager() };
                     SSLContext sslContext = SSLContext.getInstance("SSL");
                     sslContext.init(null, tm, new java.security.SecureRandom());
@@ -604,7 +601,7 @@ public class JhoveBase {
                      */
                     Iterator<Module> iter = _moduleList.iterator();
                     while (iter.hasNext()) {
-                        Module mod = (Module) iter.next();
+                        Module mod = iter.next();
                         RepInfo infc = (RepInfo) info.clone();
 
                         if (mod.hasFeature("edu.harvard.hul.ois.jhove.canValidate")) {
@@ -907,7 +904,7 @@ public class JhoveBase {
      * Return the JHOVE configuration extension by name.
      */
     public String getExtension(String name) {
-        return (String) _extensions.get(name);
+        return _extensions.get(name);
     }
 
     /**
@@ -944,7 +941,7 @@ public class JhoveBase {
     public Module getModule(String name) {
         Module module = null;
         if (name != null) {
-            module = (Module) _moduleMap.get(name.toLowerCase());
+            module = _moduleMap.get(name.toLowerCase());
         }
         return module;
     }
@@ -1162,9 +1159,7 @@ public class JhoveBase {
      * been set up.
      */
     public static String getSaxClassFromProperties() {
-        String saxClass = getFromProperties(SAX_PROPERTY);
-
-        return saxClass;
+        return getFromProperties(SAX_PROPERTY);
     }
 
     /** Returns a named value from the properties file. */
