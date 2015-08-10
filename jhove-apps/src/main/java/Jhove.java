@@ -31,18 +31,6 @@ public class Jhove
     /** Application name. */
     private static final String NAME = "Jhove";
 
-    /** Application build date, YYYY, MM, DD. */
-    private static int [] DATE;
-
-    /** Application release number. */
-    private static String RELEASE;
-
-    /** Application invocation syntax. */
-    private static final String USAGE = "java " + NAME + " [-c config] " +
-        "[-m module] [-h handler] [-e encoding] [-H handler] [-o output] " +
-	"[-x saxclass] [-t tempdir] [-b bufsize] [-l loglevel] [[-krs] " +
-	"dir-file-or-uri [...]]";
-
     /** Copyright information. */
     private static final String RIGHTS =
 	"Derived from software Copyright 2004-2011 " +
@@ -56,8 +44,6 @@ public class Jhove
 
     public static void main (String [] args)
     {
-        RELEASE = JhoveBase._release;      // possibly safer than final static init
-        DATE = JhoveBase.DATE;
         /* Make sure we have a satisfactory version of Java. */
         String version = System.getProperty ("java.vm.version");
         if (version.compareTo ("1.5.0") < 0) {
@@ -71,7 +57,7 @@ public class Jhove
     	     * Initialize the application state object.
     	     **********************************************************/
     
-    	    App app = new App (NAME, RELEASE, DATE, USAGE, RIGHTS);
+    	    App app = App.newAppWithName(NAME);
     
     	    /**********************************************************
     	     * Retrieve the configuration file.

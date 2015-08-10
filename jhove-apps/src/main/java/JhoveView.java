@@ -36,15 +36,6 @@ public class JhoveView
     /** Application name. */
     private static final String NAME = "JhoveView";
 
-    /** Application build date, YYYY, MM, DD. */
-    private static int [] _date;
-
-    /** Usage string is meaningless here. */
-    private static final String USAGE = null;
-    
-    /** Application release number. */
-    private static String _release;
-
     /** Default character encoding */
     //private static final String DEFAULT_ENCODING = "UTF-8";
 
@@ -116,8 +107,6 @@ public class JhoveView
      */
     public static void main (String [] args)
     {
-        _release = JhoveBase._release;     // Seems safer than final init
-        _date = JhoveBase.DATE;
         /* Make sure we have a satisfactory version of Java. */
         String version = System.getProperty ("java.vm.version");
         if (version.compareTo ("1.5.0") < 0) {
@@ -129,7 +118,7 @@ public class JhoveView
         // of the screen where it belongs.
         System.setProperty ("apple.laf.useScreenMenuBar", "true");
 
-        App app = new App (NAME, _release, _date, USAGE, RIGHTS);
+        App app = App.newAppWithName(NAME);
         try {
 
             /**********************************************************

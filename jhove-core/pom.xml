@@ -17,6 +17,12 @@
   <!-- To build the command line and GUI jars: mvn clean install To generate Javadoc: mvn javadoc:javadoc -->
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -32,4 +38,17 @@
       </plugin>
     </plugins>
   </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>nl.jqno.equalsverifier</groupId>
+      <artifactId>equalsverifier</artifactId>
+      <version>1.5.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
