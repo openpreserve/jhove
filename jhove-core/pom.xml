@@ -8,86 +8,28 @@
     <version>1.12.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>edu.harvard.hul.ois</groupId>
   <artifactId>jhove-core</artifactId>
-  <version>1.12.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>jhove</name>
+  <name>JHOVE Core</name>
+  <description>The JHOVE engine and supporting classes.</description>
 
-  <!--
-  To build the command line and GUI jars:
-  mvn clean install
-  
-  To generate Javadoc:
-  mvn javadoc:javadoc
-  -->
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-   	<mvn.compiler.version>3.0</mvn.compiler.version>
-   	<java.version>1.5</java.version>
-  </properties>
+  <!-- To build the command line and GUI jars: mvn clean install To generate Javadoc: mvn javadoc:javadoc -->
 
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${mvn.compiler.version}</version>
-        <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-        </configuration>
       </plugin>
-	  <plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-jar-plugin</artifactId>
-		<version>2.4</version>
-	  </plugin>
-	  <plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
       </plugin>
     </plugins>
-	<pluginManagement>
-      <plugins>
-      <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-            <pluginExecutions>
-              <pluginExecution>
-                <pluginExecutionFilter>
-                  <groupId>org.codehaus.mojo</groupId>
-                  <artifactId>properties-maven-plugin</artifactId>
-                  <versionRange>[1.0-alpha-2,)</versionRange>
-                  <goals>
-                    <goal>
-                      set-system-properties
-                    </goal>
-                  </goals>
-                </pluginExecutionFilter>
-                <action>
-                  <ignore></ignore>
-                </action>
-              </pluginExecution>
-            </pluginExecutions>
-          </lifecycleMappingMetadata>
-        </configuration>
-      </plugin>
-    </plugins>
-  </pluginManagement>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 </project>

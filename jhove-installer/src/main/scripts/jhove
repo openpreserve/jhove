@@ -2,22 +2,19 @@
 
 ########################################################################
 # JHOVE - JSTOR/Harvard Object Validation Environment
-# Copyright 2003-2004 by JSTOR and the President and Fellows of Harvard College
+# Copyright 2003-2005 by JSTOR and the President and Fellows of Harvard College
 # JHOVE is made available under the GNU General Public License (see the
 # file LICENSE for details)
 #
-# Copy jhove.tmpl to jhove, and replace the value of JHOVE_HOME with
-# the path to your jhove directory.
-#
-# Usage: jhove [-c config] [-m module [-p param]] [-h handler [-P param]]
-#              [-e encoding] [-H handler] [-o output] [-x saxclass]
-#              [-t tempdir] [-b bufsize] [[-krs] dir-file-or-uri [...]]
+# Usage: jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
+#              [-o output] [-x saxclass] [-t tempdir] [-b bufsize]
+#              [-l loglevel] [[-krs] dir-file-or-uri [...]]
 #
 # where -c config   Configuration file pathname
 #       -m module   Module name
-#       -p param    Module-specific parameter
 #       -h handler  Output handler name (defaults to TEXT)
-#       -P param    Handler-specific parameter
+#       -e encoding Character encoding of output handler (defaults to UTF-8)
+#       -H handler  About handler name
 #       -o output   Output file pathname (defaults to standard output)
 #       -x saxclass SAX parser class (defaults to J2SE 1.4 default)
 #       -t tempdir  Temporary directory in which to create temporary files
@@ -27,12 +24,14 @@
 #       -s          Format identification based on internal signatures only
 #       dir-file-or-uri Directory, file pathname or URI of formatted content
 #
+# CHANGE for JHOVE 1.8:
+# You no longer have to figure out where JAVA_HOME is; that's the
+# operating system's job. If the OS tells you it can't find Java, 
+# adjust your shell's path or revert to the old way (commented out).
 # Configuration constants:
 
-JHOVE_HOME=[your directory path]/jhove
-
-JAVA_HOME=/usr/java
-JAVA=/usr/bin/java
+JHOVE_HOME=%INSTALL_PATH
+JHOVE_VERSION=%APP_VER
 
 #XTRA_JARS=/users/stephen/xercesImpl.jar
 EXTRA_JARS=              # Extra .jar files to add to CLASSPATH
@@ -40,7 +39,7 @@ EXTRA_JARS=              # Extra .jar files to add to CLASSPATH
 # NOTE: Nothing below this line should be edited
 ########################################################################
 
-CP=${JHOVE_HOME}/bin/JhoveApp.jar:${EXTRA_JARS}
+CP=${JHOVE_HOME}/bin/jhove-apps-${JHOVE_VERSION}.jar:${EXTRA_JARS}
 
 # Retrieve a copy of all command line arguments to pass to the application.
 
@@ -51,4 +50,6 @@ done
 
 # Set the CLASSPATH and invoke the Java loader.
 #{JAVA} -classpath $CP Jhove $ARGS -x org.apache.xerces.parsers.SAXParser
-${JAVA} -classpath $CP Jhove $ARGS
+#${JAVA} -classpath $CP Jhove $ARGS
+# New way, doesn't require you to use JAVA_HOME.
+java -classpath $CP Jhove $ARGS
