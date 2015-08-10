@@ -220,6 +220,7 @@ public class AiffModule
     *                    called again with <code>parseIndex</code> 
     *                    equal to that return value.
     */
+   @Override
    public int parse (InputStream stream, RepInfo info, int parseIndex)
        throws IOException
    {
@@ -239,7 +240,7 @@ public class AiffModule
           temporary file. */
        _ckSummer = null;
        if (_je != null && _je.getChecksumFlag () &&
-           info.getChecksum ().size () == 0) {
+           info.getChecksum().isEmpty()) {
            _ckSummer = new Checksummer ();
            _cstream = new ChecksumInputStream (stream, _ckSummer);
            _dstream = getBufferedDataStream (_cstream, _je != null ?
@@ -406,6 +407,7 @@ public class AiffModule
     /**
      *   Initializes the state of the module for parsing.
      */
+    @Override
     protected void initParse() 
     {
         super.initParse ();

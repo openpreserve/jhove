@@ -204,7 +204,7 @@ public class Jpeg2000Module extends ModuleBase {
         super(NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
                 VALIDITY, REPINFO, NOTE, RIGHTS, true);
 
-        Agent agent = _vendor = Agent.harvardInstance();
+        _vendor = Agent.harvardInstance();
 
         Document doc = new Document(
                 "Information technology -- "
@@ -231,7 +231,7 @@ public class Jpeg2000Module extends ModuleBase {
         Agent ietfAgent = new Agent.Builder("IETF", AgentType.STANDARD).web(
                 "http://www.ietf.org").build();
         doc.setPublisher(ietfAgent);
-        agent = new Agent.Builder("D. Singer", AgentType.OTHER).build();
+        Agent agent = new Agent.Builder("D. Singer", AgentType.OTHER).build();
         doc.setAuthor(agent);
         agent = new Agent.Builder("R. Clark", AgentType.OTHER).build();
         doc.setAuthor(agent);
@@ -308,6 +308,7 @@ public class Jpeg2000Module extends ModuleBase {
      *            value being returned, the same RepInfo object should be passed
      *            with each call.
      */
+    @Override
     public final void parse(RandomAccessFile raf, RepInfo info)
             throws IOException {
         initParse();
@@ -369,7 +370,7 @@ public class Jpeg2000Module extends ModuleBase {
 
         // Calculate checksums, if necessary.
         if (_je != null && _je.getChecksumFlag()) {
-            if (info.getChecksum().size() == 0) {
+            if (info.getChecksum().isEmpty()) {
                 Checksummer ckSummer = new Checksummer();
                 calcRAChecksum(ckSummer, raf);
                 setChecksums(ckSummer, info);
@@ -393,8 +394,8 @@ public class Jpeg2000Module extends ModuleBase {
             info.setMimeType(mime);
             curCodestream.getNiso().setMimeType(mime);
             // This doesn't deal with a case where some
-            // codestreams are JP2 and others are JPX;
-            // can that happen?
+            // codestreams are JP2 and others are JPX.
+            // Can that happen?
             _defaultNiso.setMimeType(mime);
         }
 
@@ -433,7 +434,7 @@ public class Jpeg2000Module extends ModuleBase {
             List<Property> csProps = new ArrayList<Property>(codestreams.size());
             ListIterator<Codestream> csIter = codestreams.listIterator();
             while (csIter.hasNext()) {
-                Codestream cs = (Codestream) csIter.next();
+                Codestream cs = csIter.next();
                 csProps.add(cs.makeProperty());
             }
             _propList.add(new Property("Codestreams", PropertyType.PROPERTY,
@@ -454,7 +455,6 @@ public class Jpeg2000Module extends ModuleBase {
      * when no seek operations occur in between calls to getFilePos.
      */
     public long getFilePos() {
-        // return _nByte;
         try {
             return _rafStream.getFilePos();
         } catch (IOException e) {
@@ -494,7 +494,7 @@ public class Jpeg2000Module extends ModuleBase {
     public Codestream getCodestream(int n) {
         Codestream cs;
         if (n < codestreams.size()) {
-            cs = (Codestream) codestreams.get(n);
+            cs = codestreams.get(n);
         } else {
             cs = new Codestream();
             cs.setDefaultNiso(_defaultNiso);
@@ -679,6 +679,7 @@ public class Jpeg2000Module extends ModuleBase {
     /**
      * Initializes the state of the module for parsing.
      */
+    @Override
     protected void initParse() {
         super.initParse();
         colorSpecs = new LinkedList<Property>();
@@ -689,14 +690,11 @@ public class Jpeg2000Module extends ModuleBase {
         uuidInfos = new LinkedList<Property>();
         composLayers = new LinkedList<Property>();
         xmlList = new LinkedList<String>();
-        // uuidList = new LinkedList ();
         codestreams = new LinkedList<Codestream>();
         curCodestream = null;
         nCodestreams = 0;
         nCodestreamHeaders = 0;
         jp2HdrSeen = false;
-        // paletteSeen = false;
-        // cmSeen = false;
         rreqSeen = false;
         filterMode = false;
         _defaultNiso = new NisoImageMetadata();

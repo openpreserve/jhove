@@ -248,6 +248,7 @@ public class WaveModule extends ModuleBase {
      *            <code>parse</code> returns a nonzero value, it must be called
      *            again with <code>parseIndex</code> equal to that return value.
      */
+    @Override
     public int parse(InputStream stream, RepInfo info, int parseIndex)
             throws IOException {
         initParse();
@@ -268,7 +269,7 @@ public class WaveModule extends ModuleBase {
          */
         _ckSummer = null;
         if (_je != null && _je.getChecksumFlag()
-                && info.getChecksum().size() == 0) {
+                && info.getChecksum().isEmpty()) {
             _ckSummer = new Checksummer();
             _cstream = new ChecksumInputStream(stream, _ckSummer);
             _dstream = getBufferedDataStream(_cstream,
@@ -326,7 +327,6 @@ public class WaveModule extends ModuleBase {
 
         // Set duration from number of samples and rate.
         if (numSamples > 0) {
-            // _aesMetadata.setDuration((double) numSamples / sampleRate);
             _aesMetadata.setDuration(numSamples);
         }
 
@@ -609,6 +609,7 @@ public class WaveModule extends ModuleBase {
     /**
      * Initializes the state of the module for parsing.
      */
+    @Override
     protected void initParse() {
         super.initParse();
         _propList = new LinkedList<Property>();

@@ -18,8 +18,12 @@
  * USA
  **********************************************************************/
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.viewer.*;
+
 import javax.swing.*;
 
 /**
@@ -27,6 +31,7 @@ import javax.swing.*;
  */
 public class JhoveView
 {
+    private static final Logger LOGGER = Logger.getLogger(JhoveView.class.getCanonicalName());
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      *
@@ -35,17 +40,6 @@ public class JhoveView
 
     /** Application name. */
     private static final String NAME = "JhoveView";
-
-    /** Default character encoding */
-    //private static final String DEFAULT_ENCODING = "UTF-8";
-
-    /** Copyright information. */
-    private static final String RIGHTS = 
-        "Derived from software Copyright 2004-2013 " +
-        "by the President and Fellows of Harvard College. " +
-        "Version 1.7 and higher independently released. " +
-    	"Released under the GNU Lesser General Public License.";
-
 
     /******************************************************************
      * Action constants.
@@ -60,34 +54,6 @@ public class JhoveView
 
     /** Incompatible Java VM. */
     private static final int INCOMPATIBLE_VM = -2;
-
-    /** File not writable. */
-    //private static final int FILE_NOT_WRITABLE = -11;
-
-    /** No module specified. */
-    //private static final int NO_MODULE = -21;
-
-    /** Module not found. */
-    //private static final int MODULE_NOT_FOUND = -22;
-
-    /** Output handler not found. */
-    //private static final int HANDLER_NOT_FOUND = -31;
-
-    /** No object specified. */
-    //private static final int NO_OBJECT = -41;
-
-    /** URL not accessible. */
-    //private static final int URL_NOT_ACCESSIBLE = -42;
-
-    /** File not found. */
-    //private static final int FILE_NOT_FOUND = -43;
-
-    /** File not readable. */
-    //private static final int FILE_NOT_READABLE = -44;
-
-    /** SAX parser not found. */
-    //private static final int PARSER_NOT_FOUND = -51;
-    
 
     /******************************************************************
      * PUBLIC CLASS METHODS.
@@ -110,8 +76,10 @@ public class JhoveView
         /* Make sure we have a satisfactory version of Java. */
         String version = System.getProperty ("java.vm.version");
         if (version.compareTo ("1.5.0") < 0) {
-            errorAlert ("Java 1.5 or higher is required");
-            System.exit (INCOMPATIBLE_VM);
+            final String message = "Java 1.5 or higher is required"; 
+            LOGGER.log(Level.SEVERE, message);
+            errorAlert (message);
+            System.exit(INCOMPATIBLE_VM);
         }
 
         // If we're running on a Macintosh, put the menubar at the top
@@ -144,12 +112,12 @@ public class JhoveView
 		    }
 		}
 		else {
-		    if (args[i].equals ("-c")) {
+		    if ("-c".equals(args[i])) {
 			if (i < args.length-1) {
 			    configFile = args[++i];
 			}
 		    }
-		    else if (args[i].equals ("-x")) {
+		    else if ("-x".equals(args[i])) {
 			if (i <args.length-1) {
 			    saxClass = args[++i];
 			}
@@ -182,6 +150,7 @@ public class JhoveView
         }
         catch (Exception e) {
             e.printStackTrace (System.err);
+            LOGGER.log(Level.SEVERE, e.getMessage());
             System.exit (ERROR);
         }
     }
@@ -192,10 +161,9 @@ public class JhoveView
         JFrame hiddenFrame = new JFrame ();
         // Truncate long messages so the alert isn't wider
         // than the screen
-        if (msg.length() > 80) {
-            msg = msg.substring (0, 79) + "...";
-        }
+        String message = (msg.length() > 80) ? msg.substring (0, 79) + "..." : msg;
+        LOGGER.log(Level.WARNING, msg);
         JOptionPane.showMessageDialog (hiddenFrame, 
-            msg, "Jhove Error", JOptionPane.ERROR_MESSAGE);
+                message, "Jhove Error", JOptionPane.ERROR_MESSAGE);
     }
 }

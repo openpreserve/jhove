@@ -194,12 +194,13 @@ public class GifModule extends ModuleBase
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
+    @Override
     public void checkSignatures (File file, 
                 InputStream stream, 
                 RepInfo info) 
         throws IOException
     {
-        int sigBytes[] = { 'G', 'I', 'F', '8', '*', 'a' };
+        int[] sigBytes = { 'G', 'I', 'F', '8', '*', 'a' };
         int i;
         int ch;
         try {
@@ -249,6 +250,7 @@ public class GifModule extends ModuleBase
      *                    called again with <code>parseIndex</code> 
      *                    equal to that return value.
      */
+    @Override
     public int parse (InputStream stream, RepInfo info, int parseIndex)
         throws IOException
     {
@@ -268,7 +270,7 @@ public class GifModule extends ModuleBase
         // temporary file. 
         _ckSummer = null;
         if (_app != null && _je.getChecksumFlag () &&
-            info.getChecksum ().size () == 0) {
+            info.getChecksum().isEmpty()) {
             _ckSummer = new Checksummer ();
             _cstream = new ChecksumInputStream (stream, _ckSummer);
             _dstream = getBufferedDataStream (_cstream, _app != null ?
@@ -324,7 +326,7 @@ public class GifModule extends ModuleBase
             info.setChecksum (new Checksum (value, ChecksumType.SHA1));
             }
         }
-        Property metaArray[];
+        Property[] metaArray;
         if (_xmpProp != null) {
           // Making this an array rather than a list is a pain, but it's policy
           metaArray = new Property[3];
@@ -351,6 +353,7 @@ public class GifModule extends ModuleBase
     /**
      *   Initializes the state of the module for parsing.
      */
+    @Override
     protected void initParse ()
     {
         super.initParse ();
@@ -365,7 +368,6 @@ public class GifModule extends ModuleBase
     /*   Read the 6-byte signature. */
     protected boolean readSig (RepInfo info) throws IOException
     {
-        boolean eof = false;
         String badHeader = "Invalid GIF header";
         int nbyt = 0;
         while (nbyt < 6) {
@@ -380,7 +382,6 @@ public class GifModule extends ModuleBase
                 //}
             }
             catch (EOFException e) {
-                eof = true;
                 info.setMessage(new ErrorMessage (badHeader, 0));
                 info.setWellFormed (RepInfo.FALSE);
                 return false;
@@ -602,7 +603,7 @@ public class GifModule extends ModuleBase
         _blocksList.add (prop);
         
         // Skip over the LZW minimum code size
-        int minCodeSize = readUnsignedByte (_dstream, this);
+        readUnsignedByte (_dstream, this);
         // Now read sub-blocks till we get one of zero size.
         for (;;) {
             int blockSize = readUnsignedByte (_dstream, this);
@@ -637,7 +638,7 @@ public class GifModule extends ModuleBase
                 PropertyType.STRING,
                 appIdent.toString ()));
         
-        short appAuth[] = new short[3];
+        short[] appAuth = new short[3];
         for (i = 0; i < 3; i++) {
             appAuth[i] = (short) readUnsignedByte (_dstream, this);
         }
@@ -648,9 +649,9 @@ public class GifModule extends ModuleBase
         
         int appDataSize = 0;
         // We are interested in the application extension for XMP.
-        if ((appIdent.toString ().equals ("XMP Data") ||
+        if (("XMP Data".equals(appIdent.toString()) ||
                 (debug_appIdentCaseInsens && 
-                    appIdent.toString().toLowerCase().equals ("xmp data"))) &&
+                    "xmp data".equalsIgnoreCase(appIdent.toString()))) &&
                 appAuth[0] == (short) 'X' &&
                 appAuth[1] == (short) 'M' &&
                 appAuth[2] == (short) 'P') {

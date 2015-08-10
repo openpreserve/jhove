@@ -53,7 +53,7 @@ public class AsciiModule extends ModuleBase {
     private static final int LF = 0x0a; // '\n'
 
     /* Mnemonics for control characters (0-1F) */
-    private static final String controlCharMnemonics[] = { "NUL (0x00)",
+    private static final String[] controlCharMnemonics = { "NUL (0x00)",
             "SOH (0x01)", "STX (0x02)", "ETX (0x03)", "EOT (0x04)",
             "ENQ (0x05)", "ACK (0x06)", "BEL (0x07)", "BS (0x08)",
             "TAB (0x09)", "LF (0x0A)", "VT (0x0B)", "FF (0x0C)", "CR (0x0D)",
@@ -144,6 +144,7 @@ public class AsciiModule extends ModuleBase {
      * Parse the content of a stream digital object and store the results in
      * RepInfo.
      */
+    @Override
     public final int parse(InputStream stream, RepInfo info, int parseIndex)
             throws IOException {
         // Test if textMD is to be generated
@@ -151,7 +152,7 @@ public class AsciiModule extends ModuleBase {
             Iterator iter = _defaultParams.iterator();
             while (iter.hasNext()) {
                 String param = (String) iter.next();
-                if (param.toLowerCase().equals("withtextmd=true")) {
+                if ("withtextmd=true".equalsIgnoreCase(param)) {
                     _withTextMD = true;
                 }
             }
@@ -179,7 +180,7 @@ public class AsciiModule extends ModuleBase {
          */
         Checksummer ckSummer = null;
         if (_je != null && _je.getChecksumFlag()
-                && info.getChecksum().size() == 0) {
+                && info.getChecksum().isEmpty()) {
             ckSummer = new Checksummer();
             _cstream = new ChecksumInputStream(stream, ckSummer);
             _dstream = getBufferedDataStream(_cstream,
@@ -288,13 +289,13 @@ public class AsciiModule extends ModuleBase {
             LinkedList<String> propList = new LinkedList<String>();
             String mnem;
             for (int i = 0; i < 0x20; i++) {
-                mnem = (String) _controlCharMap.get(new Integer(i));
+                mnem = _controlCharMap.get(new Integer(i));
                 if (mnem != null) {
                     propList.add(mnem);
                 }
             }
             /* need to check separately for DEL */
-            mnem = (String) _controlCharMap.get(new Integer(0x7F));
+            mnem = _controlCharMap.get(new Integer(0x7F));
             if (mnem != null) {
                 propList.add(mnem);
             }
@@ -310,7 +311,7 @@ public class AsciiModule extends ModuleBase {
         }
 
         /* Add the ASCII-specific metadata, if it exists. */
-        if (metadataList.size() > 0) {
+        if (!metadataList.isEmpty()) {
             info.setProperty(new Property("ASCIIMetadata",
                     PropertyType.PROPERTY, PropertyArity.LIST, metadataList));
         }
@@ -338,6 +339,7 @@ public class AsciiModule extends ModuleBase {
      *            A fresh RepInfo object which will be modified to reflect the
      *            results of the test
      */
+    @Override
     public void checkSignatures(File file, InputStream stream, RepInfo info)
             throws IOException {
         info.setFormat(_format[0]);

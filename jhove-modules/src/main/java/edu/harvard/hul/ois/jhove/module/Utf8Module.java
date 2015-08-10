@@ -55,7 +55,7 @@ public class Utf8Module extends ModuleBase {
     private static final int LF = 0x0a;
 
     /* Mnemonics for control characters (0-1F) */
-    private static final String controlCharMnemonics[] = { "NUL (0x00)",
+    private static final String[] controlCharMnemonics = { "NUL (0x00)",
             "SOH (0x01)", "STX (0x02)", "ETX (0x03)", "EOT (0x04)",
             "ENQ (0x05)", "ACK (0x06)", "BEL (0x07)", "BS (0x08)",
             "TAB (0x09)", "LF (0x0A)", "VT (0x0B)", "FF (0x0C)", "CR (0x0D)",
@@ -167,14 +167,15 @@ public class Utf8Module extends ModuleBase {
      *            again with <code>parseIndex</code> equal to that return value.
      *
      */
+    @Override
     public final int parse(InputStream stream, RepInfo info, int parseIndex)
             throws IOException {
         // Test if textMD is to be generated
         if (_defaultParams != null) {
             Iterator<String> iter = _defaultParams.iterator();
             while (iter.hasNext()) {
-                String param = (String) iter.next();
-                if (param.toLowerCase().equals("withtextmd=true")) {
+                String param = iter.next();
+                if ("withtextmd=true".equalsIgnoreCase(param)) {
                     _withTextMD = true;
                 }
             }
@@ -206,7 +207,7 @@ public class Utf8Module extends ModuleBase {
          */
         Checksummer ckSummer = null;
         if (_je != null && _je.getChecksumFlag()
-                && info.getChecksum().size() == 0) {
+                && info.getChecksum().isEmpty()) {
             ckSummer = new Checksummer();
             _cstream = new ChecksumInputStream(stream, ckSummer);
             _dstream = getBufferedDataStream(_cstream,
@@ -393,13 +394,13 @@ public class Utf8Module extends ModuleBase {
             LinkedList<String> propList = new LinkedList<String>();
             String mnem;
             for (int i = 0; i < 0x20; i++) {
-                mnem = (String) _controlCharMap.get(new Integer(i));
+                mnem = _controlCharMap.get(new Integer(i));
                 if (mnem != null) {
                     propList.add(mnem);
                 }
             }
             /* need to check separately for DEL */
-            mnem = (String) _controlCharMap.get(new Integer(0x7F));
+            mnem = _controlCharMap.get(new Integer(0x7F));
             if (mnem != null) {
                 propList.add(mnem);
             }
@@ -435,6 +436,7 @@ public class Utf8Module extends ModuleBase {
      *            A fresh RepInfo object which will be modified to reflect the
      *            results of the test
      */
+    @Override
     public void checkSignatures(File file, InputStream stream, RepInfo info)
             throws IOException {
         info.setFormat(_format[0]);
@@ -447,23 +449,17 @@ public class Utf8Module extends ModuleBase {
         blockMarker = new Utf8BlockMarker();
         boolean eof = false;
         _nByte = 0;
-        // long nChar = 0;
         DataInputStream dstream = new DataInputStream(stream);
         while (!eof && bytesRead < sigBytes) {
-            boolean isMark = false;
             int[] b = new int[4];
-            // int ch = -1;
             try {
                 b[0] = readUnsignedByte(dstream, this);
                 ++bytesRead;
                 if (_nByte < 4) {
-                    isMark = checkMark(b[0], info);
+                    checkMark(b[0], info);
                     if (info.getWellFormed() == RepInfo.FALSE) {
                         return;
                     }
-                    // if (isMark) {
-                    // nChar = 0;
-                    // }
                 }
                 int nBytes = 1;
                 if (0xc0 <= b[0] && b[0] <= 0xdf) {
@@ -480,7 +476,7 @@ public class Utf8Module extends ModuleBase {
                 for (int i = 1; i < nBytes; i++) {
                     b[i] = readUnsignedByte(dstream, this);
                     if (_nByte < 4) {
-                        isMark = checkMark(b[i], info);
+                        checkMark(b[i], info);
                     }
                     if (info.getWellFormed() == RepInfo.FALSE) {
                         return;
