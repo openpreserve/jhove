@@ -10,5 +10,5 @@ jdk:
   - openjdk6
 
 after_script:
- - cp ./auto-vagrant-install.xml ./jhove-installer/target/
- - java -jar ./jhove-installer/target/jhove-installer.jar auto-vagrant-install.xml
+ - cp ./auto-travis-install.xml ./jhove-installer/target/
+ - java -jar ./jhove-installer/target/jhove-installer.jar auto-travis-install.xml
