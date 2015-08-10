@@ -60,6 +60,13 @@
     <system>OPF Jenkins</system>
     <url>http://jenkins.opf-labs.org</url>
   </ciManagement>
+  <distributionManagement>
+    <repository>
+      <id>OPF Artefactory</id>
+      <name>OPF Artefactory-releases</name>
+      <url>http://artifactory.opf-labs.org/artifactory/opf-dev-local</url>
+    </repository>
+  </distributionManagement>
 
   <repositories>
     <repository>
