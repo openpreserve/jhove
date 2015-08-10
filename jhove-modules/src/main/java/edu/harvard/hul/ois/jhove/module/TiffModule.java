@@ -34,7 +34,7 @@ public class TiffModule extends ModuleBase {
     /**
      * Value to write as module params to the default config file.
      */
-    private static final String[] defaultConfigParams = { "byteoffset=true" };
+    public static final String[] defaultConfigParams = { "byteoffset=true" };
 
     /******************************************************************
      * PRIVATE CLASS FIELDS.
