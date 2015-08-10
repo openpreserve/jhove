@@ -34,7 +34,7 @@ public class TiffModule extends ModuleBase {
     /**
      * Value to write as module params to the default config file.
      */
-    public final static String[] defaultConfigParams = { "byteoffset=true" };
+    private static final String[] defaultConfigParams = { "byteoffset=true" };
 
     /******************************************************************
      * PRIVATE CLASS FIELDS.
@@ -391,13 +391,14 @@ public class TiffModule extends ModuleBase {
      * @param info
      *            Representation informatino
      */
+    @Override
     public final void parse(RandomAccessFile raf, RepInfo info)
             throws IOException {
         if (_defaultParams != null) {
             Iterator<String> iter = _defaultParams.iterator();
             while (iter.hasNext()) {
                 String param = iter.next();
-                if (param.toLowerCase().equals("byteoffset=true")) {
+                if ("byteoffset=true".equalsIgnoreCase(param)) {
                     _byteOffsetIsValid = true;
                 }
             }
@@ -459,7 +460,7 @@ public class TiffModule extends ModuleBase {
             /* Build the IFD property list, for each of the IFDs. */
             ListIterator<IFD> iter = ifds.listIterator();
             while (iter.hasNext()) {
-                IFD ifd = (IFD) iter.next();
+                IFD ifd = iter.next();
                 ifdsList.add(ifd.getProperty(_je != null ? _je.getShowRawFlag()
                         : false));
 
@@ -556,7 +557,7 @@ public class TiffModule extends ModuleBase {
 
         /* Calculate checksums, if necessary. */
         if (_je != null && _je.getChecksumFlag()) {
-            if (info.getChecksum().size() == 0) {
+            if (info.getChecksum().isEmpty()) {
                 Checksummer ckSummer = new Checksummer();
                 calcRAChecksum(ckSummer, raf);
                 setChecksums(ckSummer, info);
@@ -1118,7 +1119,7 @@ public class TiffModule extends ModuleBase {
             _version = version;
         }
 
-        if (list.size() == 0 && type == IFD.TIFF) {
+        if (list.isEmpty() && type == IFD.TIFF) {
             ifd.setFirst(true);
         } else if (list.size() == 1 && type == IFD.TIFF) {
             // For some profiles, the second IFD is assumed to
@@ -1173,6 +1174,7 @@ public class TiffModule extends ModuleBase {
      * Initializes the state of the module for parsing. This overrides the
      * superclass method to reset all the profile flags.
      */
+    @Override
     protected void initParse() {
         super.initParse();
         ListIterator<TiffProfile> pter = _profile.listIterator();

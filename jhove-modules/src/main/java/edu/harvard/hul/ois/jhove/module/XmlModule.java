@@ -170,6 +170,7 @@ public class XmlModule
     /** Reset parameter settings.
      *  Returns to a default state without any parameters.
      */
+    @Override
     public void resetParams ()
         throws Exception
     {
@@ -193,11 +194,12 @@ public class XmlModule
      *        the parameter is used as a base URL.  Otherwise it is ignored,
      *        and there is no base URL.
      */
+    @Override
     public void param (String param)
     {
         if (param != null) {
             param = param.toLowerCase ();
-            if (param.toLowerCase ().startsWith("schema=")) {
+            if (param.startsWith("schema=")) {
                 addLocalSchema(param);
             }
             else if (param.indexOf ('s') == 0) {
@@ -240,6 +242,7 @@ public class XmlModule
      *                    called again with <code>parseIndex</code> 
      *                    equal to that return value.
     */
+    @Override
     public int parse (InputStream stream, RepInfo info, int parseIndex)
        throws IOException
     {
@@ -250,13 +253,12 @@ public class XmlModule
             Iterator<String> iter = _defaultParams.iterator ();
             while (iter.hasNext ()) {
                 String param = iter.next ();
-                if (param.toLowerCase ().equals ("withtextmd=true")) {
+                if ("withtextmd=true".equalsIgnoreCase(param)) {
                     _withTextMD = true;
                 }
             }
         }
         
-        //boolean foundDTD = false;
         boolean canValidate = true;
         initParse ();
         info.setFormat (_format[0]);
@@ -271,7 +273,7 @@ public class XmlModule
            temporary file. */
         _ckSummer = null;
         if (_je != null && _je.getChecksumFlag () &&
-            info.getChecksum ().size () == 0) {
+            info.getChecksum ().isEmpty()) {
             _ckSummer = new Checksummer ();
         }
         _cstream = new ChecksumInputStream (stream, _ckSummer);
@@ -577,11 +579,11 @@ public class XmlModule
         if (lineEnd == null) {
             info.setMessage(new InfoMessage("Not able to determine type of end of line"));
             _textMD.setLinebreak(TextMDMetadata.NILL);
-        } else if (lineEnd.equalsIgnoreCase("CR")) {
+        } else if ("CR".equalsIgnoreCase(lineEnd)) {
             _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
-        } else if (lineEnd.equalsIgnoreCase("LF")) {
+        } else if ("LF".equalsIgnoreCase(lineEnd)) {
             _textMD.setLinebreak(TextMDMetadata.LINEBREAK_LF);
-        } else if (lineEnd.equalsIgnoreCase("CRLF")) {
+        } else if ("CRLF".equalsIgnoreCase(lineEnd)) {
             _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CRLF);
         }
         
@@ -672,7 +674,7 @@ public class XmlModule
             Iterator<String> iter = keys.iterator();
             while (iter.hasNext ()) {
                 String key =  iter.next ();
-                String val = (String) ns.get (key);
+                String val = ns.get (key);
                 Property [] supPropArr = new Property[2];
                 supPropArr[0] = new Property ("Prefix",
                             PropertyType.STRING,
@@ -730,13 +732,12 @@ public class XmlModule
         List<String> unparsedNotationNames = new LinkedList<String> ();
         if (!uent.isEmpty ()) {
              ListIterator<String[]> iter = uent.listIterator ();
-            //int i = 0;
             while (iter.hasNext ()) {
                 // We check external parsed entities against
                 // the list of attribute values which we've
                 // accumulated.  If a parsed entity name matches an
                 // attribute value, we assume it's used.
-                String[] entarr = (String[]) iter.next ();
+                String[] entarr = iter.next ();
                 String name = entarr[0];
                 if (nameInCollection (name, attributeVals)) {
                     // Add the notation name to the list 
@@ -1014,6 +1015,7 @@ public class XmlModule
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
+    @Override
     public void checkSignatures (File file,
                 InputStream stream, 
                 RepInfo info) 
@@ -1073,6 +1075,7 @@ public class XmlModule
     
     
     
+    @Override
     protected void initParse ()
     {
        super.initParse ();
@@ -1092,7 +1095,7 @@ public class XmlModule
     {
         Iterator<String> iter = coll.iterator ();
         while (iter.hasNext ()) {
-            String s = (String) iter.next ();
+            String s = iter.next ();
             if (name.equals (s)) {
                 return true;
             }
@@ -1108,10 +1111,10 @@ public class XmlModule
         for (int i = 3; i >= 0; i--) {
             int d = (n >> (4 * i)) & 0XF;  // extract a nybble
             if (d < 10) {
-                buf.append ((char) ((int) '0' + d));
+                buf.append ((char) ('0' + d));
             }
             else {
-                buf.append ((char) ((int) 'A' + (d - 10)));
+                buf.append ((char) ('A' + (d - 10)));
             }
         }
         return buf.toString ();

@@ -18,9 +18,15 @@
  * USA
  **********************************************************************/
 
-import edu.harvard.hul.ois.jhove.*;
-//import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import edu.harvard.hul.ois.jhove.App;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.Module;
+import edu.harvard.hul.ois.jhove.OutputHandler;
 
 public class Jhove
 {
@@ -30,14 +36,12 @@ public class Jhove
 
     /** Application name. */
     private static final String NAME = "Jhove";
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger.getLogger(Jhove.class.getCanonicalName());
 
-    /** Copyright information. */
-    private static final String RIGHTS =
-	"Derived from software Copyright 2004-2011 " +
-    "by the President and Fellows of Harvard College. " +
-    "Version 1.7 and higher independently released. " +
-	"Released under the GNU Lesser General Public License.";
-
+    private Jhove() {
+        throw new AssertionError("Should never enter private constructor");
+    }
     /******************************************************************
      * MAIN ENTRY POINT.
      ******************************************************************/
@@ -47,7 +51,7 @@ public class Jhove
         /* Make sure we have a satisfactory version of Java. */
         String version = System.getProperty ("java.vm.version");
         if (version.compareTo ("1.5.0") < 0) {
-            System.out.println ("Java 1.5 or higher is required");
+            LOGGER.log(Level.SEVERE, "Java 1.5 or higher is required");
             System.exit (-1);
         }
 
@@ -78,12 +82,12 @@ public class Jhove
                 }
     		}
     		else {
-    		    if (args[i].equals ("-c")) {
+    		    if ("-c".equals(args[i])) {
                     if (i < args.length-1) {
                         configFile = args[++i];
                     }
                 }
-    		    else if (args[i].equals ("-x")) {
+    		    else if ("-x".equals(args[i])) {
                     if (i <args.length-1) {
                         saxClass = args[++i];
                     }
@@ -149,78 +153,78 @@ public class Jhove
                     }
                 }
                 else {
-        		    if (args[i].equals ("-c")) {
+        		    if ("-c".equals(args[i])) {
                         i++;
         		    }
-        		    else if (args[i].equals ("-m")) {
+        		    else if ("-m".equals(args[i])) {
                         if (i < args.length-1) {
                             moduleName = args[++i];
                         }
         		    }
-        		    else if (args[i].equals ("-p")) {
+        		    else if ("-p".equals(args[i])) {
                         // Obsolete -- but eat the next arg for compatibility
                         if (i <args.length-1) {
                             @SuppressWarnings("unused")
                             String moduleParam = args[++i];
                         }
                     }
-        		    else if (args[i].equals ("-h")) {
+        		    else if ("-h".equals(args[i])) {
                         if (i < args.length-1) {
                             handlerName = args[++i];
                         }
                     }
-        		    else if (args[i].equals ("-P")) {
+        		    else if ("-P".equals(args[i])) {
                         // Obsolete -- but eat the next arg for compatibility
                         if (i <args.length-1) {
                             @SuppressWarnings("unused")
                             String handlerParam = args[++i];
                         }
         		    }
-        		    else if (args[i].equals ("-e")) {
+        		    else if ("-e".equals(args[i])) {
                         if (i < args.length-1) {
                             encoding = args[++i];
                         }
         		    }
-        		    else if (args[i].equals ("-H")) {
+        		    else if ("-H".equals(args[i])) {
                         if (i < args.length-1) {
                             aboutHandler = args[++i];
                         }
                     }
-        		    else if (args[i].equals ("-l")) {
+        		    else if ("-l".equals(args[i])) {
                         if (i < args.length-1) {
                             logLevel = args[++i];
                         }
         		    }
-        		    else if (args[i].equals ("-o")) {
+        		    else if ("-o".equals(args[i])) {
                         if (i < args.length-1) {
                             outputFile = args[++i];
                         }
                     }
-        		    else if (args[i].equals ("-x")) {
+        		    else if ("-x".equals(args[i])) {
                         i++;
         		    }
-        		    else if (args[i].equals ("-t")) {
+        		    else if ("-t".equals(args[i])) {
                         if (i <args.length-1) {
                             tempDir = args[++i];
                         }
                     }
-        		    else if (args[i].equals ("-b")) {
+        		    else if ("-b".equals(args[i])) {
                         if (i <args.length-1) {
                             try {
                                 bufferSize = Integer.parseInt (args[++i]);
                             }
                             catch (NumberFormatException e) {
-                                System.err.println ("Invalid buffer size, using default.");
+                                LOGGER.log(Level.WARNING, "Invalid buffer size, using default.");
                             }
                         }
         		    }
-        		    else if (args[i].equals ("-k")) {
+        		    else if ("-k".equals(args[i])) {
                         checksum = true;
         		    }
-        		    else if (args[i].equals ("-r")) {
+        		    else if ("-r".equals(args[i])) {
                         showRaw = true;
         		    }
-        		    else if (args[i].equals ("-s")) {
+        		    else if ("-s".equals(args[i])) {
                         signature = true;
                     }
         		    else if (args[i].charAt (0) != '-') {
@@ -253,17 +257,17 @@ public class Jhove
             }
             Module module = je.getModule  (moduleName);
             if (module == null && moduleName != null) {
-                System.out.println ("Module '" + moduleName + "' not found");
+                LOGGER.log(Level.SEVERE, "Module '" + moduleName + "' not found");
                 System.exit (-1);
             }
             OutputHandler about   = je.getHandler (aboutHandler);
             if (about == null && aboutHandler != null) {
-                System.out.println ("Handler '" + aboutHandler + "' not found");
+                LOGGER.log(Level.SEVERE, "Handler '" + aboutHandler + "' not found");
                 System.exit (-1);
             }
     	    OutputHandler handler = je.getHandler (handlerName);
             if (handler == null && handlerName != null) {
-                System.out.println ("Handler '" + handlerName + "' not found");
+                LOGGER.log(Level.SEVERE, "Handler '" + handlerName + "' not found");
                 System.exit (-1);
             }
     	    String [] dirFileOrUri = null;
@@ -271,7 +275,7 @@ public class Jhove
             if (len > 0) {
         		dirFileOrUri = new String [len];
         		for (int i=0; i<len; i++) {
-        		    dirFileOrUri[i] = (String) list.get (i);
+        		    dirFileOrUri[i] = list.get (i);
         		}
             }
     
@@ -289,7 +293,8 @@ public class Jhove
     			 dirFileOrUri);
     	}
         catch (Exception e) {
-            e.printStackTrace (System.err);
+            LOGGER.log(Level.SEVERE, e.getMessage());
+            e.printStackTrace(System.err);
             System.exit (-1);
         }
     }

@@ -28,7 +28,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.SAXParserFactory;
 
-//import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipException;
 
@@ -378,6 +377,7 @@ public class PdfModule
     /** Reset parameter settings.
      *  Returns to a default state without any parameters.
      */
+    @Override
     public void resetParams ()
         throws Exception
     {
@@ -406,6 +406,7 @@ public class PdfModule
      *        The parameter is case-independent.  A null parameter is
      *        equivalent to the empty string.
      */
+    @Override
     public void param (String param)
     {
         if (param != null) {
@@ -455,6 +456,7 @@ public class PdfModule
      *  @param  info  A clean RepInfo object, which will be modified to hold
      *                the descriptive information
      */
+    @Override
     public final void parse (RandomAccessFile raf, RepInfo info) 
         throws IOException
     {
@@ -547,7 +549,7 @@ public class PdfModule
            temporary file. */
         Checksummer ckSummer = null;
         if (_je != null && _je.getChecksumFlag () &&
-            info.getChecksum ().size () == 0) {
+            info.getChecksum ().isEmpty()) {
             ckSummer = new Checksummer ();
             calcRAChecksum (ckSummer, raf);
             setChecksums (ckSummer, info);
@@ -632,7 +634,7 @@ public class PdfModule
         if (info.getWellFormed() == RepInfo.TRUE) {
             // Well-formedness is necessary to satisfy any profile.
             while (pter.hasNext ()) {
-                PdfProfile prof = (PdfProfile) pter.next ();
+                PdfProfile prof = pter.next ();
                 if (prof.satisfiesProfile (_raf, _parser)) {
                     info.setProfile (prof.getText ());
                 }
@@ -687,6 +689,7 @@ public class PdfModule
      *   Initialize the module.  This is called at the start
      *   of parse restore the module to its initial state.
      */
+    @Override
     protected final void initParse ()
     {
         super.initParse ();
@@ -808,7 +811,7 @@ public class PdfModule
             char[] cmtArray = cmt.toCharArray ();
             int ctlcnt = 0;
             for (int i = 0; i < 4; i++) {
-                if ((int) cmtArray[i] > 127) {
+                if (cmtArray[i] > 127) {
                     ctlcnt++;
                 }
             }
@@ -972,7 +975,7 @@ public class PdfModule
                 }
                 if (token instanceof Keyword) {
                     value = ((Keyword) token).getValue ();
-                    if (value.equals ("startxref")) {
+                    if ("startxref".equals(value)) {
                         try {
                             token = _parser.getNext ();
                         }
@@ -1043,7 +1046,7 @@ public class PdfModule
         while ((token = _parser.getNext ()) != null) {
             if (token instanceof Keyword) {
                 value = ((Keyword) token).getValue ();
-                if (value.equals ("trailer")) {
+                if ("trailer".equals(value)) {
                     token = _parser.getNext ();
                     if (token instanceof DictionaryStart) {
                         trailer = _parser.getOffset () - 7L;
@@ -1291,12 +1294,12 @@ public class PdfModule
                         // "f" signifies a free object.  If we already
                         // have an entry for this object, don't replace it.
                         String keyval = ((Keyword) token).getValue ();
-                        if (keyval.equals ("n")) {
+                        if ("n".equals (keyval)) {
                             if (_xref[firstObj + i] == 0) {
                                 _xref[firstObj + i] = offset;
                             }
                         }
-                        else if (keyval.equals ("f")) {
+                        else if ("f".equals (keyval)) {
                             _numFreeObjects++;
                         }
                         else {
@@ -1914,7 +1917,7 @@ public class PdfModule
         // Check for uniqueness.
         Iterator<Property> iter = _filtersList.iterator ();
         while (iter.hasNext ()) {
-            Property p = (Property) iter.next ();
+            Property p = iter.next ();
             String s = (String) p.getValue ();
             if (s.equals (filterStr)) {
                 unique = false;
@@ -1953,7 +1956,7 @@ public class PdfModule
                             _logger.info("Getting image");
                             PdfDictionary xobdict = null;
                             PdfObject xob = resolveIndirectObject 
-                                    ((PdfObject) iter.next ());
+                                    (iter.next ());
                             if (xob instanceof PdfStream) {
                                 xobdict = ((PdfStream) xob).getDict ();
                             }
@@ -2187,7 +2190,7 @@ public class PdfModule
                     // object number.
                     Iterator<PdfObject> fontIter = fonts.iterator ();
                     while (fontIter.hasNext ()) {
-                        PdfObject fontRef = (PdfObject) fontIter.next ();
+                        PdfObject fontRef = fontIter.next ();
                         PdfObject font = resolveIndirectObject (fontRef);
                         if (font instanceof PdfDictionary) {
                             addFontToMap ((PdfDictionary) font);
@@ -2256,7 +2259,7 @@ public class PdfModule
                 Vector<PdfObject> subfonts = descendants.getContent ();
                 Iterator<PdfObject> subfontIter = subfonts.iterator ();
                 while (subfontIter.hasNext ()) {
-                    PdfObject subfont = (PdfObject) subfontIter.next ();
+                    PdfObject subfont = subfontIter.next ();
                     subfont = resolveIndirectObject (subfont);
                     addFontToMap ((PdfDictionary) subfont);
                 }
@@ -2325,7 +2328,7 @@ public class PdfModule
 
         int len = v.size ();
         for (int i=0; i<len; i++) {
-            int hdigit = ((Integer) v.elementAt (i)).intValue ();
+            int hdigit = v.elementAt (i).intValue ();
             String h = Integer.toHexString (hdigit);
             if (h.length () < 2) {
                 buffer.append ("0");
@@ -2691,7 +2694,7 @@ public class PdfModule
             // Foo on Java's inability to return values through
             // parameters.  Passing an array is a crock to achieve
             // that effect.
-            int nominalNum[] = new int[1];
+            int[] nominalNum = new int[1];
             Property plProp = buildPageLabelProperty (page, idx, nominalNum);
             if (plProp != null) {
                 pagePropList.add (plProp);
@@ -2719,7 +2722,7 @@ public class PdfModule
                 Vector<PdfObject> contents = annots.getContent ();
                 for (int i = 0; i < contents.size (); i++) {
                     PdfObject annot = resolveIndirectObject 
-                                ((PdfObject) contents.elementAt (i));
+                                (contents.elementAt (i));
                     if (annot instanceof PdfDictionary) {
                         annotsList.add (buildAnnotProperty ((PdfDictionary) annot, info));
                     }
@@ -2781,7 +2784,7 @@ public class PdfModule
                 List<Property> vplist = new ArrayList<Property> (vpv.size());
                 while (iter.hasNext ()) {
                     PdfDictionary vpd = (PdfDictionary) 
-                        resolveIndirectObject((PdfObject) iter.next ());
+                        resolveIndirectObject(iter.next ());
                     PdfObject vpdbb = vpd.get ("BBox");
                     List<Property> vpPropList = new ArrayList<Property> ();
                     vpPropList.add (makeRectProperty 
@@ -2996,14 +2999,14 @@ public class PdfModule
         PdfObject itemObj;
         try {
             // Subtype is required
-            itemObj = (PdfSimpleObject) annot.get ("Subtype");
+            itemObj = annot.get ("Subtype");
             propList.add (new Property ("Subtype",
                         PropertyType.STRING,
                         ((PdfSimpleObject)itemObj).getStringValue ()));
 
             // Contents is optional for some subtypes, required for
             // others.  We consider it optional here.
-            itemObj = (PdfSimpleObject) annot.get ("Contents");
+            itemObj = annot.get ("Contents");
             if (itemObj != null) {
                 propList.add (new Property ("Contents", PropertyType.STRING,
 					    _encrypted ? ENCRYPTED :
@@ -3142,7 +3145,6 @@ public class PdfModule
      */
     protected void addDestination (PdfObject itemObj, String propName,
 				 List<Property> propList, RepInfo info)
-	throws PdfException
     {
     	try {
     	    Destination dest = new Destination (itemObj, this, false);
@@ -3170,8 +3172,7 @@ public class PdfModule
     	            return;      // can't get the page object number
     	        }
         		int pageObjNum = dest.getPageDestObjNumber ();
-        		Integer destPg = (Integer) 
-        		    _pageSeqMap.get (new Integer (pageObjNum));
+        		Integer destPg = _pageSeqMap.get (new Integer (pageObjNum));
         		if (destPg != null) {
         		    propList.add (new Property (propName,
         						PropertyType.INTEGER,
@@ -3886,8 +3887,7 @@ public class PdfModule
                 }
                 else {
                     int pageObjNum = dest.getPageDestObjNumber ();
-                    Integer destPg = (Integer) 
-                        _pageSeqMap.get (new Integer (pageObjNum));
+                    Integer destPg = _pageSeqMap.get (new Integer (pageObjNum));
                     if (destPg != null) {
                         itemList.add (new Property ("Destination",
                             PropertyType.INTEGER,
@@ -3920,7 +3920,7 @@ public class PdfModule
                     }
                     else {
                         _visitedOutlineNodes.add (onum);
-                        Property p = buildOutlineItemProperty ((PdfDictionary) child, info);
+                        Property p = buildOutlineItemProperty (child, info);
                         childList.add (p);
                     }
                     child = (PdfDictionary) 
@@ -3964,7 +3964,7 @@ public class PdfModule
         if (_outlineDict != null) {
             try {
                 Property oprop = buildOutlinesProperty 
-                        ((PdfDictionary) _outlineDict, info);
+                        (_outlineDict, info);
                 if (_showOutlines || _verbosity == Module.MAXIMUM_VERBOSITY) {
                     if (oprop != null){
                         _docCatalogList.add (oprop);
@@ -4115,10 +4115,9 @@ public class PdfModule
        description (i.e., it's an array of 4 numbers) and create 
        a Property which is an array of 4 integers. */
     protected Property makeRectProperty (PdfArray arrObj, String name)
-                throws PdfException
     {
         int [] iarr = new int[4];
-        double[] arr = ((PdfArray) arrObj).toRectangle ();
+        double[] arr = arrObj.toRectangle ();
         // toRectangle is written to return an array of double,
         // which is what the bounding box is in the most general
         // case; but the spec requires an array of integer, so

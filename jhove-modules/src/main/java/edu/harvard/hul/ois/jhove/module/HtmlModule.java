@@ -55,7 +55,13 @@ public class HtmlModule extends ModuleBase {
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
-
+    private static final String TRANSITIONAL = "Transitional";
+    private static final String STRICT = "Strict";
+    private static final String FRAMESET = "Frameset";
+    private static final String HTML_4_0 = "HTML 4.0";
+    private static final String HTML_4_01 = "HTML 4.01";
+    private static final String XHTML_1_0 = "XHTML 1.0";
+    
     private static final String NAME = "HTML-hul";
     private static final String RELEASE = "1.3";
     private static final int[] DATE = { 2006, 9, 5 };
@@ -109,8 +115,8 @@ public class HtmlModule extends ModuleBase {
     /* Profile names, matching the above indices */
     private static final String[] profileNames = { null,
             null, // there are no profiles for HTML 3.2
-            "Strict", "Frameset", "Transitional", "Strict", "Frameset",
-            "Transitional", "Strict", "Frameset", "Transitional", null // there
+            STRICT, FRAMESET, TRANSITIONAL, STRICT, FRAMESET,
+            TRANSITIONAL, STRICT, FRAMESET, TRANSITIONAL, null // there
                                                                        // are no
                                                                        // profiles
                                                                        // for
@@ -120,8 +126,8 @@ public class HtmlModule extends ModuleBase {
 
     /* Version names, matching the above indices */
     private static final String[] versionNames = { null, "HTML 3.2",
-            "HTML 4.0", "HTML 4.0", "HTML 4.0", "HTML 4.01", "HTML 4.01",
-            "HTML 4.01", "XHTML 1.0", "XHTML 1.0", "XHTML 1.0", "XHTML 1.1" };
+        HTML_4_0, HTML_4_0, HTML_4_0, HTML_4_01, HTML_4_01,
+        HTML_4_01, XHTML_1_0, XHTML_1_0, XHTML_1_0, "XHTML 1.1" };
 
     /* Flag to know if the property TextMDMetadata is to be added */
     protected boolean _withTextMD = false;
@@ -248,6 +254,7 @@ public class HtmlModule extends ModuleBase {
      *            <code>parse</code> returns a nonzero value, it must be called
      *            again with <code>parseIndex</code> equal to that return value.
      */
+    @Override
     public int parse(InputStream stream, RepInfo info, int parseIndex)
             throws IOException {
         if (parseIndex != 0) {
@@ -287,7 +294,7 @@ public class HtmlModule extends ModuleBase {
             Iterator iter = _defaultParams.iterator();
             while (iter.hasNext()) {
                 String param = (String) iter.next();
-                if (param.toLowerCase().equals("withtextmd=true")) {
+                if ("withtextmd=true".equalsIgnoreCase(param)) {
                     _withTextMD = true;
                 }
             }
@@ -307,7 +314,7 @@ public class HtmlModule extends ModuleBase {
          */
         Checksummer ckSummer = null;
         if (_je != null && _je.getChecksumFlag()
-                && info.getChecksum().size() == 0) {
+                && info.getChecksum().isEmpty()) {
             ckSummer = new Checksummer();
             _cstream = new ChecksumInputStream(stream, ckSummer);
             _dstream = getBufferedDataStream(_cstream,
@@ -377,11 +384,11 @@ public class HtmlModule extends ModuleBase {
                 info.setMessage(new InfoMessage(
                         "Not able to determine type of end of line"));
                 _textMD.setLinebreak(TextMDMetadata.NILL);
-            } else if (lineEnd.equalsIgnoreCase("CR")) {
+            } else if ("CR".equalsIgnoreCase(lineEnd)) {
                 _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
-            } else if (lineEnd.equalsIgnoreCase("LF")) {
+            } else if ("LF".equalsIgnoreCase(lineEnd)) {
                 _textMD.setLinebreak(TextMDMetadata.LINEBREAK_LF);
-            } else if (lineEnd.equalsIgnoreCase("CRLF")) {
+            } else if ("CRLF".equalsIgnoreCase(lineEnd)) {
                 _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CRLF);
             }
 
@@ -550,6 +557,7 @@ public class HtmlModule extends ModuleBase {
      *            A fresh RepInfo object which will be modified to reflect the
      *            results of the test
      */
+    @Override
     public void checkSignatures(File file, InputStream stream, RepInfo info)
             throws IOException {
         info.setFormat(_format[0]);

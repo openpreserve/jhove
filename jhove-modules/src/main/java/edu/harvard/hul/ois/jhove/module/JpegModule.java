@@ -58,7 +58,7 @@ public class JpegModule extends ModuleBase {
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
-
+    private static final String NISO_IMAGE_MD = "NisoImageMetadata";
     private static final String NAME = "JPEG-hul";
     private static final String RELEASE = "1.2";
     private static final int[] DATE = { 2007, 2, 13 };
@@ -220,7 +220,7 @@ public class JpegModule extends ModuleBase {
     protected int _capability1;
 
     /* Fixed value for first 3 bytes */
-    protected static final int[] sigByte = { 0XFF, 0XD8, 0XFF };
+    private static final int[] sigByte = { 0XFF, 0XD8, 0XFF };
 
     /* Resolution units. */
     protected int _units;
@@ -378,6 +378,7 @@ public class JpegModule extends ModuleBase {
      *            A fresh RepInfo object which will be modified to reflect the
      *            results of the test
      */
+    @Override
     public void checkSignatures(File file, InputStream stream, RepInfo info)
             throws IOException {
         int i;
@@ -421,6 +422,7 @@ public class JpegModule extends ModuleBase {
      *            <code>parse</code> returns a nonzero value, it must be called
      *            again with <code>parseIndex</code> equal to that return value.
      */
+    @Override
     public int parse(InputStream stream, RepInfo info, int parseIndex)
             throws IOException {
         initParse();
@@ -434,7 +436,7 @@ public class JpegModule extends ModuleBase {
          */
         _ckSummer = null;
         if (_je != null && _je.getChecksumFlag()
-                && info.getChecksum().size() == 0) {
+                && info.getChecksum().isEmpty()) {
             _ckSummer = new Checksummer();
             _cstream = new ChecksumInputStream(stream, _ckSummer);
             _dstream = getBufferedDataStream(_cstream,
@@ -450,7 +452,7 @@ public class JpegModule extends ModuleBase {
             return 0;
         }
         _niso = new NisoImageMetadata();
-        Property nisoProp = new Property("NisoImageMetadata",
+        Property nisoProp = new Property(NISO_IMAGE_MD,
                 PropertyType.NISOIMAGEMETADATA, _niso);
         _primaryImageList.add(nisoProp);
         initNiso();
@@ -685,7 +687,7 @@ public class JpegModule extends ModuleBase {
             List<Property> qpl = new LinkedList<Property>();
             ListIterator<QuantizationTable> iter = _quantTables.listIterator();
             while (iter.hasNext()) {
-                QuantizationTable qt = (QuantizationTable) iter.next();
+                QuantizationTable qt = iter.next();
                 qpl.add(qt.makeProperty(_je.getShowRawFlag()));
             }
             _primaryImageList.add(new Property("QuantizationTables",
@@ -697,7 +699,7 @@ public class JpegModule extends ModuleBase {
             ListIterator<ArithConditioning> iter = _arithCondTables
                     .listIterator();
             while (iter.hasNext()) {
-                ArithConditioning qt = (ArithConditioning) iter.next();
+                ArithConditioning qt = iter.next();
                 qpl.add(qt.makeProperty(_je.getShowRawFlag()));
             }
             _primaryImageList.add(new Property("ArithmeticConditioning",
@@ -707,7 +709,7 @@ public class JpegModule extends ModuleBase {
             List<Property> srsl = new LinkedList<Property>();
             ListIterator<SRS> iter = _srsList.listIterator();
             while (iter.hasNext()) {
-                SRS s = (SRS) iter.next();
+                SRS s = iter.next();
                 srsl.add(s.makeProperty());
             }
             _primaryImageList.add(new Property("SelectivelyRefinedScans",
@@ -773,7 +775,7 @@ public class JpegModule extends ModuleBase {
                 PropertyArity.SCALAR, new Integer(_imageList.size())));
         Iterator<Property> iter = _imageList.iterator();
         while (iter.hasNext()) {
-            Property prop = (Property) iter.next();
+            Property prop = iter.next();
             list.add(prop);
         }
         _propList.add(new Property("Images", PropertyType.PROPERTY,
@@ -824,6 +826,7 @@ public class JpegModule extends ModuleBase {
     /**
      * Initializes the state of the module for parsing.
      */
+    @Override
     protected void initParse() {
         super.initParse();
         _imageList = new LinkedList();
@@ -906,7 +909,7 @@ public class JpegModule extends ModuleBase {
         }
         reportAppExt(0XE0, info);
 
-        int ident[] = new int[5];
+        int[] ident = new int[5];
         int length = readUnsignedShort(_dstream);
 
         // It appears that a meaningless JFIF marker can be included
@@ -961,7 +964,7 @@ public class JpegModule extends ModuleBase {
                 thumbNiso.setPixelSize(8);
 
                 List<Property> thumbPropList = new LinkedList<Property>();
-                thumbPropList.add(new Property("NisoImageMetadata",
+                thumbPropList.add(new Property(NISO_IMAGE_MD,
                         PropertyType.NISOIMAGEMETADATA, thumbNiso));
                 Property thumbProp = new Property("ThumbImage",
                         PropertyType.PROPERTY, PropertyArity.LIST,
@@ -995,7 +998,7 @@ public class JpegModule extends ModuleBase {
                 thumbNiso.setCompressionScheme(1); // uncompressed
                 thumbNiso.setPixelSize(8);
                 List<Property> thumbPropList = new LinkedList<Property>();
-                thumbPropList.add(new Property("NisoImageMetadata",
+                thumbPropList.add(new Property(NISO_IMAGE_MD,
                         PropertyType.NISOIMAGEMETADATA, thumbNiso));
                 Property thumbProp = new Property("ThumbImage",
                         PropertyType.PROPERTY, PropertyArity.LIST,
@@ -1018,13 +1021,13 @@ public class JpegModule extends ModuleBase {
      * TIFF file embedded in the segment.
      */
     protected void readAPP1(RepInfo info) throws IOException {
-        final int exifByte[] = { 0X45, 0X78, 0X69, 0X66, 0X00, 0X00 };
+        final int[] exifByte = { 0X45, 0X78, 0X69, 0X66, 0X00, 0X00 };
         // First 6 bytes of xmpStr
-        final int xmpByte[] = { 0X68, 0X74, 0X74, 0X70, 0X3A, 0X2F };
+        final int[] xmpByte = { 0X68, 0X74, 0X74, 0X70, 0X3A, 0X2F };
         final String xmpStr = "http://ns.adobe.com/xap/1.0/";
         reportAppExt(0XE1, info);
 
-        int ident[] = new int[6];
+        int[] ident = new int[6];
         int length = readUnsignedShort(_dstream);
         if (length < 8) {
             // Guard against pathological short packets.
@@ -1060,12 +1063,12 @@ public class JpegModule extends ModuleBase {
                 List<Message> list = exifInfo.getMessage();
                 int size = list.size();
                 for (int i = 0; i < size; i++) {
-                    info.setMessage((Message) list.get(i));
+                    info.setMessage(list.get(i));
                 }
 
                 _exifProp = exifInfo.getProperty("Exif");
                 // We may also have extracted NISO metadata.
-                Property nisoProp = exifInfo.getProperty("NisoImageMetadata");
+                Property nisoProp = exifInfo.getProperty(NISO_IMAGE_MD);
                 if (nisoProp != null) {
                     extractExifNisoData((NisoImageMetadata) nisoProp.getValue());
                 }
@@ -1077,7 +1080,7 @@ public class JpegModule extends ModuleBase {
             for (int i = 6; i < 28; i++) {
                 int ch = readUnsignedByte(_dstream, this);
                 --length;
-                if (ch != (int) xmpStr.charAt(i)) {
+                if (ch != xmpStr.charAt(i)) {
                     match = false;
                     break;
                 }
@@ -1103,7 +1106,7 @@ public class JpegModule extends ModuleBase {
      * directory entry. We have already read the APP8 marker itself.
      */
     protected void readAPP8(RepInfo info) throws IOException {
-        final int spiffByte[] = { 0X53, 0X50, 0X49, 0X46, 0X46, 0X00 };
+        final int[] spiffByte = { 0X53, 0X50, 0X49, 0X46, 0X46, 0X00 };
 
         /* Seeing an APP8 segment counts as seeing a signature. */
         if (!_reportedSigMatch) {
@@ -1113,7 +1116,7 @@ public class JpegModule extends ModuleBase {
         reportAppExt(0XE8, info);
 
         int length = readUnsignedShort(_dstream);
-        int ident[] = new int[6];
+        int[] ident = new int[6];
         if (_spiffDir != null) {
             // we've already started a SPIFF file, so this
             // should be a directory entry.
@@ -1139,8 +1142,8 @@ public class JpegModule extends ModuleBase {
             String vsn = Integer.toString(majorVersion) + "."
                     + minorFmt.format(minorVersion);
             info.setVersion(vsn);
-            int profileID = readUnsignedByte(_dstream, this);
-            int numComponents = readUnsignedByte(_dstream, this);
+            readUnsignedByte(_dstream, this);
+            readUnsignedByte(_dstream, this);
             long height = readUnsignedInt(_dstream);
             _niso.setImageLength(height);
             long width = readUnsignedInt(_dstream);
@@ -1205,8 +1208,7 @@ public class JpegModule extends ModuleBase {
 
     /* Read the DTI segment, and begin setting up the tiling property */
     protected void readDTI(RepInfo info) throws IOException {
-        @SuppressWarnings("unused")
-        int length = readUnsignedShort(_dstream);
+        readUnsignedShort(_dstream);
         _tiling = new Tiling();
         _tiling.setTilingType(readUnsignedByte(_dstream, this));
         _tiling.setVertScale(readUnsignedShort(_dstream));
@@ -1220,8 +1222,7 @@ public class JpegModule extends ModuleBase {
      * Read the DTT segment. There should already be a tiling property set up.
      */
     protected void readDTT(RepInfo info) throws IOException {
-        @SuppressWarnings("unused")
-        int length = readUnsignedShort(_dstream);
+        readUnsignedShort(_dstream);
         if (_tiling == null) {
             info.setMessage(new ErrorMessage(
                     "DTT segment without previous DTI", _nByte));
@@ -1241,7 +1242,7 @@ public class JpegModule extends ModuleBase {
      * and so on.
      */
     protected void readSRS(RepInfo info) throws IOException {
-        int length = readUnsignedShort(_dstream);
+        readUnsignedShort(_dstream);
         int vertOffset = readUnsignedShort(_dstream);
         int horOffset = readUnsignedShort(_dstream);
         int vertSize = readUnsignedShort(_dstream);
@@ -1320,7 +1321,7 @@ public class JpegModule extends ModuleBase {
 
     /* Read an EXP segment. */
     protected void readEXP(RepInfo info) throws IOException {
-        int length = readUnsignedShort(_dstream);
+        readUnsignedShort(_dstream);
         int lhlv = readUnsignedByte(_dstream, this);
         boolean arr[] = new boolean[2];
         arr[0] = ((lhlv & 0XF0) != 0);
@@ -1330,7 +1331,7 @@ public class JpegModule extends ModuleBase {
 
     /* Read a DRI (Data Restart Interval) segment. */
     protected void readDRI(RepInfo info) throws IOException {
-        int length = readUnsignedShort(_dstream);
+        readUnsignedShort(_dstream);
         _restartInterval = readUnsignedShort(_dstream);
     }
 
@@ -1469,7 +1470,7 @@ public class JpegModule extends ModuleBase {
                 } else {
                     // Capability 1 entails 2 strings, one for the
                     // basic capability, and one for tiling.
-                    String cap1Str[] = new String[2];
+                    String[] cap1Str = new String[2];
                     cap1Str[0] = JpegStrings.CAPABILITY_V1[_capability1 & 0X1F];
                     cap1Str[1] = JpegStrings.TILING_CAPABILITY_V1[_capability1 >> 5];
                     Property cap1Prop = new Property("Version1",
@@ -1477,9 +1478,8 @@ public class JpegModule extends ModuleBase {
                     capList.add(cap1Prop);
                 }
             }
-            Property prop = new Property("CapabilityIndicator",
+            return new Property("CapabilityIndicator",
                     PropertyType.PROPERTY, PropertyArity.LIST, capList);
-            return prop;
         } catch (Exception e) {
             // If we get caught on an out-of-bounds value,
             // etc., simply don't return the property.
@@ -1528,7 +1528,7 @@ public class JpegModule extends ModuleBase {
                 PropertyType.PROPERTY, PropertyArity.LIST, plist);
         ListIterator<boolean[]> iter = _expList.listIterator();
         while (iter.hasNext()) {
-            boolean[] lhlv = (boolean[]) iter.next();
+            boolean[] lhlv = iter.next();
             Property[] lhlvProp = new Property[2];
             lhlvProp[0] = new Property("Horizontal", PropertyType.BOOLEAN,
                     new Boolean(lhlv[0]));
