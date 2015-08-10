@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>edu.harvard.hul.ois</groupId>
+    <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
     <version>1.12.0-SNAPSHOT</version>
   </parent>
@@ -46,13 +46,13 @@
 
   <dependencies>
     <dependency>
-      <groupId>edu.harvard.hul.ois</groupId>
+      <groupId>org.openpreservation.jhove</groupId>
       <artifactId>jhove-core</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>edu.harvard.hul.ois</groupId>
+      <groupId>org.openpreservation.jhove</groupId>
       <artifactId>jhove-modules</artifactId>
       <version>${project.version}</version>
     </dependency>
