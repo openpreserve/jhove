@@ -7,10 +7,12 @@ package edu.harvard.hul.ois.jhove;
 
 import edu.harvard.hul.ois.jhove.handler.*;
 import edu.harvard.hul.ois.jhove.module.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.logging.*;
+
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -20,6 +22,8 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.*;
+
+import org.openpreservation.jhove.ReleaseDetails;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
@@ -31,18 +35,13 @@ import org.xml.sax.helpers.*;
  * threads. Any one instance must not be multithreaded.
  */
 public class JhoveBase {
+    private static final ReleaseDetails RELEASE_DETAILS = ReleaseDetails
+            .getInstance();
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
 
-    private static Date _date;
     public static final String _name = "JhoveBase";
-    public static final String _release = "1.11";
-    public static final int[] DATE = { 2013, 9, 29 };
-    private static final String _rights = "Derived from software Copyright 2004-2011 "
-            + "by the President and Fellows of Harvard College. "
-            + "Version 1.7 independently released. "
-            + "Released under the GNU Lesser General Public License.";
 
     /** JHOVE buffer size property. */
     private static final String BUFFER_PROPERTY = "edu.harvard.hul.ois."
@@ -157,11 +156,6 @@ public class JhoveBase {
                 .setDefaultHostnameVerifier(new NaiveHostnameVerifier());
 
         /* Initialize the engine. */
-
-        Calendar calendar = new GregorianCalendar();
-        calendar.set(DATE[0], DATE[1] - 1, DATE[2]);
-        _date = calendar.getTime();
-
         _moduleList = new ArrayList<Module>(20);
         _moduleMap = new TreeMap<String, Module>();
 
@@ -347,7 +341,8 @@ public class JhoveBase {
                 _moduleMap.put(module.getName().toLowerCase(), module);
                 _logger.info("Initialized " + module.getName());
             } catch (Exception e) {
-                throw new JhoveException("Cannot instantiate module: " + modInfo.clas, e);
+                throw new JhoveException("Cannot instantiate module: "
+                        + modInfo.clas, e);
             }
         }
 
@@ -366,7 +361,8 @@ public class JhoveBase {
                 _handlerList.add(handler);
                 _handlerMap.put(handler.getName().toLowerCase(), handler);
             } catch (Exception e) {
-                throw new JhoveException("Cannot instantiate handler: " + tuple[0], e);
+                throw new JhoveException("Cannot instantiate handler: "
+                        + tuple[0], e);
             }
         }
 
@@ -890,7 +886,7 @@ public class JhoveBase {
      * Returns the engine date (the date at which this instance was created).
      */
     public Date getDate() {
-        return _date;
+        return RELEASE_DETAILS.getBuildDate();
     }
 
     /**
@@ -981,14 +977,14 @@ public class JhoveBase {
      * Returns the engine release.
      */
     public String getRelease() {
-        return _release;
+        return RELEASE_DETAILS.getVersion();
     }
 
     /**
      * Return the engine rights statement
      */
     public String getRights() {
-        return _rights;
+        return RELEASE_DETAILS.getRights();
     }
 
     /**
