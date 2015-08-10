@@ -64,14 +64,7 @@ public class ViewHandler extends HandlerBase {
         _app = app;
         _base = base;
         base.setCallback (jhwin);
-        Agent agent = new Agent ("Harvard University Library",
-                                 AgentType.EDUCATIONAL);
-        agent.setAddress ("Office for Information Systems, " +
-                          "90 Mt. Auburn St., " +
-                          "Cambridge, MA 02138");
-        agent.setTelephone ("+1 (617) 495-3724");
-        agent.setEmail("jhove-support@hulmail.harvard.edu");
-        _vendor = agent;
+        _vendor = Agent.harvardInstance();
         _jhwin = jhwin;
 
     }

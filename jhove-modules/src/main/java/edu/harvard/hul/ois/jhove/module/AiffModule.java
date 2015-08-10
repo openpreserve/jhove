@@ -6,6 +6,7 @@
 package edu.harvard.hul.ois.jhove.module;
 
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.Agent.Builder;
 import edu.harvard.hul.ois.jhove.module.aiff.*;
 import edu.harvard.hul.ois.jhove.module.iff.*;
 
@@ -152,25 +153,15 @@ public class AiffModule
    {
        super (NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
               VALIDITY, REPINFO, NOTE, RIGHTS, false);
-       Agent agent = new Agent ("Harvard University Library",
-                                AgentType.EDUCATIONAL);
-       agent.setAddress ("Office for Information Systems, " +
-                         "90 Mt. Auburn St., " +
-                         "Cambridge, MA 02138");
-       agent.setTelephone ("+1 (617) 495-3724");
-       agent.setEmail("jhove-support@hulmail.harvard.edu");
-       _vendor = agent;
-
+       _vendor = Agent.harvardInstance();
 
        Document doc = new Document ("Audio Interchange File Format: " +
 				    "\"AIFF\", A Standard for Sampled Sound " +
 				    "Files, Version 1.3", DocumentType.REPORT);
-       agent = new Agent ("Apple Computer, Inc.", 
-                    AgentType.COMMERCIAL);
-       agent.setAddress ("1 Infinite Loop, Cupertino, CA 95014");
-       agent.setTelephone("(408) 996-1010");
-       agent.setWeb ("http://www.apple.com/");
-       doc.setAuthor (agent);
+       Builder builder = new Agent.Builder ("Apple Computer, Inc.", 
+                    AgentType.COMMERCIAL).address ("1 Infinite Loop, Cupertino, CA 95014").telephone("(408) 996-1010").web("http://www.apple.com/");
+       Agent appleAgent = builder.build();
+       doc.setAuthor (appleAgent);
        doc.setDate ("1989-01-04");
        doc.setIdentifier (new Identifier ("http://developer.apple.com/documentation/QuickTime/INMAC/SOUND/imsoundmgr.30.htm#pgfId=3190",
                                           IdentifierType.URL));
@@ -179,7 +170,7 @@ public class AiffModule
        doc = new Document ("Audio Interchange File Format AIFF-C: " +
                     "A revision to include compressed audio data",
                                     DocumentType.REPORT);
-       doc.setAuthor (agent);
+       doc.setAuthor (appleAgent);
        doc.setDate ("1991-08-26");
        doc.setNote ("*** DRAFT ***");   // Asterisks as in the printed document
        _specification.add (doc);
