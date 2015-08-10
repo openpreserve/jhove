@@ -10,6 +10,7 @@ import static org.junit.Assert.fail;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
@@ -66,8 +67,7 @@ public class ReleaseDetailsTest {
     @Test
     public final void testToString() {
         ReleaseDetails instance = ReleaseDetails.getInstance();
-        System.out.println(instance.toString());
-        assertEquals("ReleaseDetails [version=0.1.2-TESTER, buildDate=Sun Jul 31 00:00:00 BST 2011]", instance.toString());
+        assertEquals("ReleaseDetails [version=0.1.2-TESTER, buildDate=Sun Jul 31 00:00:00 " + TimeZone.getDefault().getDisplayName(true, TimeZone.SHORT) + " 2011]", instance.toString());
     }
 
 }
