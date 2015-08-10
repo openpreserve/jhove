@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>edu.harvard.hul.ois</groupId>
+    <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
     <version>1.12.0-SNAPSHOT</version>
   </parent>
@@ -14,7 +14,8 @@
   <name>JHOVE Core</name>
   <description>The JHOVE engine and supporting classes.</description>
 
-  <!-- To build the command line and GUI jars: mvn clean install To generate Javadoc: mvn javadoc:javadoc -->
+  <!-- To build the command line and GUI jars: mvn clean install To generate 
+    Javadoc: mvn javadoc:javadoc -->
 
   <build>
     <resources>
