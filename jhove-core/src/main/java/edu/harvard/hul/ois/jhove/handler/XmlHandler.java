@@ -81,14 +81,7 @@ public class XmlHandler
     public XmlHandler ()
     {
         super (NAME, RELEASE, DATE, NOTE, RIGHTS);
-        Agent agent = new Agent ("Harvard University Library",
-                                 AgentType.EDUCATIONAL);
-        agent.setAddress ("Office for Information Systems, " +
-                          "90 Mt. Auburn St., " +
-                          "Cambridge, MA 02138");
-        agent.setTelephone ("+1 (617) 495-3724");
-        agent.setEmail("jhove-support@hulmail.harvard.edu");
-        _vendor = agent;
+        _vendor = Agent.harvardInstance();
     }
 
 
@@ -97,14 +90,7 @@ public class XmlHandler
                            String note, String rights)
     {
         super (name, release, date, note, rights);
-        Agent agent = new Agent ("Harvard University Library",
-                                 AgentType.EDUCATIONAL);
-        agent.setAddress ("Office for Information Systems, " +
-                          "90 Mt. Auburn St., " +
-                          "Cambridge, MA 02138");
-        agent.setTelephone ("+1 (617) 495-3724");
-        agent.setEmail("jhove-support@hulmail.harvard.edu");
-        _vendor = agent;
+        _vendor = Agent.harvardInstance();
     }
 
     /******************************************************************
@@ -134,7 +120,7 @@ public class XmlHandler
         _writer.println (margin + elementStart ("app"));
 	    String [][] attrs = { {"date", date.format (_je.getDate ())} };
 	    _writer.println (margn2 + element      ("api", attrs,
-						_je.getRelease ()));
+						app.getRelease ()));
         String configFile = _je.getConfigFile ();
         if (configFile != null) {
             _writer.println (margn2 + element ("configuration", configFile));

@@ -63,14 +63,7 @@ public class TextHandler
     public TextHandler ()
     {
         super (NAME, RELEASE, DATE, NOTE, RIGHTS);
-        Agent agent = new Agent ("Harvard University Library",
-                                 AgentType.EDUCATIONAL);
-        agent.setAddress ("Office for Information Systems, " +
-                          "90 Mt. Auburn St., " +
-                          "Cambridge, MA 02138");
-        agent.setTelephone ("+1 (617) 495-3724");
-        agent.setEmail("jhove-support@hulmail.harvard.edu");
-        _vendor = agent;
+        _vendor = Agent.harvardInstance();
 
         _format = NumberFormat.getInstance ();
         _format.setGroupingUsed (false);
@@ -101,7 +94,7 @@ public class TextHandler
         String margin = getIndent (++_level);
 
 	_writer.println (margin + "App:");
-	_writer.println (margin + " API: " + _je.getRelease () + ", " +
+	_writer.println (margin + " API: " + app.getRelease () + ", " +
 			     HandlerBase.date.format (_je.getDate ()));
 	String configFile = _je.getConfigFile ();
 	if (configFile != null) {

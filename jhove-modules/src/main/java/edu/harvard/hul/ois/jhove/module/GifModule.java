@@ -23,10 +23,14 @@ package edu.harvard.hul.ois.jhove.module;
 
 import java.io.*;
 import java.util.*;
+
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.Agent.Builder;
 import edu.harvard.hul.ois.jhove.module.gif.*;
+
 import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
+
 import javax.xml.parsers.SAXParserFactory;
 
 /**
@@ -132,26 +136,17 @@ public class GifModule extends ModuleBase
        super (NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
               VALIDITY, REPINFO, NOTE, RIGHTS, false);
 
-       Agent agent = new Agent ("Harvard University Library",
-                                AgentType.EDUCATIONAL);
-       agent.setAddress ("Office for Information Systems, " +
-                         "90 Mt. Auburn St., " +
-                         "Cambridge, MA 02138");
-       agent.setTelephone ("+1 (617) 495-3724");
-       agent.setEmail("jhove-support@hulmail.harvard.edu");
-       _vendor = agent;
+       _vendor = Agent.harvardInstance();
 
        Document doc = new Document ("GIF (Graphics Interchange Format): A " +
                                     "standard defining a mechanism for the " +
                                     "storage and transmission of raster-" +
                                     "based graphics information",
                                     DocumentType.REPORT);
-       agent = new Agent ("Compuserve Interactive Services Inc.", 
-                    AgentType.COMMERCIAL);
-       agent.setAddress ("5000 Arlington Centre Blvd., Columbus, OS 43220");
-       agent.setTelephone ("(614) 457-8600");
-       agent.setWeb ("http://www.compuserve.com/");
-       doc.setAuthor (agent);
+       Builder builder = new Agent.Builder("Compuserve Interactive Services Inc.", 
+                    AgentType.COMMERCIAL).address ("5000 Arlington Centre Blvd., Columbus, OS 43220").telephone ("(614) 457-8600").web ("http://www.compuserve.com/");
+       Agent cmpsrvAgent = builder.build();
+       doc.setAuthor (cmpsrvAgent);
        doc.setDate ("1987-06-15");
        doc.setIdentifier (new Identifier ("http://www.w3.org/Graphics/GIF/spec-gif87.txt",
                                           IdentifierType.URL));
@@ -160,7 +155,7 @@ public class GifModule extends ModuleBase
        doc = new Document ("Graphics Interchange Format",
                            DocumentType.REPORT);
        doc.setEdition ("Version 89a");
-       doc.setAuthor (agent);
+       doc.setAuthor (cmpsrvAgent);
        doc.setDate ("1987-06-15");
        doc.setIdentifier (new Identifier ("http://www.w3.org/Graphics/GIF/spec-gif89a.txt",
                                           IdentifierType.URL));

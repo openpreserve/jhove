@@ -226,23 +226,12 @@ public class PdfModule
 
         _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.module");
         
-        Agent agent = new Agent ("Harvard University Library",
-                                 AgentType.EDUCATIONAL);
-        agent.setAddress ("Office for Information Systems, " +
-                          "90 Mt. Auburn St., " +
-                          "Cambridge, MA 02138");
-        agent.setTelephone ("+1 (617) 495-3724");
-        agent.setEmail("jhove-support@hulmail.harvard.edu");
-        _vendor = agent;
+        _vendor = Agent.harvardInstance();
 
         Document doc = new Document ("PDF Reference: Adobe Portable " +
                                      "Document Format, Version 1.4",
                                      DocumentType.BOOK);
-        agent = new Agent ("Adobe Systems, Inc.", AgentType.COMMERCIAL);
-        agent.setAddress ("345 Park Avenue, San Jose, California 95110-2704");
-        agent.setTelephone ("+1 (408) 536-6000");
-        agent.setFax ("+1 (408) 537-6000");
-        agent.setWeb ("http://www.adobe.com/");
+        Agent agent = Agent.newAdobeInstance();
         doc.setPublisher (agent);
         doc.setDate ("2001-12");
         doc.setEdition ("3rd edition");
@@ -282,13 +271,7 @@ public class PdfModule
                 "Part 1: Complete exchange using CMYK data " +
                 "(PDF/X-1 and PDF/X-1a)",
               DocumentType.STANDARD);
-       Agent isoAgent = new Agent ("ISO", AgentType.STANDARD);
-       isoAgent.setAddress ("1, rue de Varembe, Casa postale 56, " +
-                            "CH-1211, Geneva 20, Switzerland");
-       isoAgent.setTelephone ("+41 22 749 01 11");
-       isoAgent.setFax ("+41 22 733 34 30");
-       isoAgent.setEmail ("iso@iso.ch");
-       isoAgent.setWeb ("http://www.iso.org");
+       Agent isoAgent = Agent.newIsoInstance();
        doc.setPublisher (isoAgent);
        doc.setDate ("2001-12-06");
        doc.setIdentifier (new Identifier ("ISO 15930-1:2001",

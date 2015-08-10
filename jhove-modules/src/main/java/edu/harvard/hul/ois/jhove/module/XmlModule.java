@@ -135,26 +135,11 @@ public class XmlModule
        super (NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
               VALIDITY, REPINFO, NOTE, RIGHTS, false);
 
-       Agent agent = new Agent ("Harvard University Library",
-                                AgentType.EDUCATIONAL);
-       agent.setAddress ("Office for Information Systems, " +
-                         "90 Mt. Auburn St., " +
-                         "Cambridge, MA 02138");
-       agent.setTelephone ("+1 (617) 495-3724");
-       agent.setEmail("jhove-support@hulmail.harvard.edu");
-       _vendor = agent;
+       _vendor = Agent.harvardInstance();
 
        Document doc = new Document ("Extensible Markup Language (XML) 1.0 " +
 				    "(Third Edition)", DocumentType.REPORT);
-       agent = new Agent ("Word Wide Web Consortium", AgentType.NONPROFIT);
-       agent.setAddress ("Massachusetts Institute of Technology, " +
-			 "Computer Science and Artificial Intelligence Laboratory, " +
-			 "32 Vassar Street, Room 32-G515, " +
-			 "Cambridge, MA 02139");
-       agent.setTelephone ("(617) 253-2613");
-       agent.setFax ("(617) 258-5999");
-       agent.setWeb ("http://www.w3.org/");
-       doc.setPublisher (agent);
+       doc.setPublisher (Agent.newW3CInstance());
        doc.setDate ("2004-02-04");
        doc.setIdentifier (new Identifier ("http://www.w3.org/TR/REC-xml",
                                           IdentifierType.URL));
