@@ -5,7 +5,7 @@
     <appname>JHOVE</appname>
     <appversion>${project.version}</appversion>
     <appsubpath>jhove</appsubpath>
-    <javaversion>${java.version}</javaversion>
+    <javaversion>${java.target.version}</javaversion>
   </info>
 
   <guiprefs height="400" resizable="no" width="640">
