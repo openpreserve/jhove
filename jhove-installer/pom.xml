@@ -11,7 +11,7 @@
   <description>Maven built izpack installer for JHOVE.</description>
 
   <properties>
-    <installer.output.filename>${project.artifactId}.jar</installer.output.filename>
+    <installer.output.filename>jhove-xplt-installer-${project.version}.jar</installer.output.filename>
     <izpack.version>5.0.0</izpack.version>
     <izpack.staging>${project.build.directory}/staging</izpack.staging>
     <izpack.target>${project.build.directory}</izpack.target>
@@ -21,6 +21,7 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
