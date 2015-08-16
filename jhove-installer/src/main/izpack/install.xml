@@ -5,7 +5,12 @@
     <appname>JHOVE</appname>
     <appversion>${project.version}</appversion>
     <appsubpath>jhove</appsubpath>
+    <url>http://jhove.openpreserve.org</url>
     <javaversion>${java.target.version}</javaversion>
+    <authors>
+      <author name="Carl Wilson" email="carl@openpreserve.org" />
+    </authors>
+    <expiresdate>2015-09-30</expiresdate>
   </info>
 
   <guiprefs height="400" resizable="no" width="640">
@@ -36,8 +41,7 @@
     <variable name="InstallerFrame.logfilePath" value="Default"/>
     <variable name="WELCOME_TEXT" value="JHOVE Installer"/>
     <variable name="VERSION" value="${project.version}"/>
-    <variable name="TargetPanel.dir.windows" value="$USER_HOME/jhove"/>
-    <variable name="TargetPanel.dir.unix" value="$USER_HOME/jhove"/>
+    <variable name="TargetPanel.dir" value="$USER_HOME/jhove-beta"/>
   </variables>
 
   <panels>
