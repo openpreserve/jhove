@@ -43,7 +43,7 @@ CP=${JHOVE_HOME}/bin/jhove-apps-${JHOVE_VERSION}.jar:${EXTRA_JARS}
 
 # Retrieve a copy of all command line arguments to pass to the application.
 
-ARGS="-c conf/jhove.conf"
+ARGS="-c ${JHOVE_HOME}/conf/jhove.conf"
 for ARG do
     ARGS="$ARGS $ARG"
 done
