@@ -38,7 +38,7 @@ REM *************************************************************************
 REM The $INSTALL_PATH variable is substituted by the izpack installer at
 REM install time.
 REM *************************************************************************
-SET JHOVE_HOME="$INSTALL_PATH "
+SET JHOVE_HOME="$INSTALL_PATH"
 SET JHOVE_VERSION="$APP_VER"
 SET EXTRA_JARS=
 

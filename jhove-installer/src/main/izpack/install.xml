@@ -75,7 +75,7 @@
       <file targetdir="$INSTALL_PATH" src="scripts/jhove.bat"/>
       <parsable targetfile="$INSTALL_PATH/jhove.bat" type="plain"/>
       <file targetdir="$INSTALL_PATH" src="scripts/jhove-gui.bat"/>
-      <parsable targetfile="$INSTALL_PATH/jhove.bat" type="plain"/>
+      <parsable targetfile="$INSTALL_PATH/jhove-gui.bat" type="plain"/>
     </pack>
   </packs>
 </izpack:installation>
