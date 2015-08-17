@@ -94,14 +94,10 @@ public class JhoveBase {
     protected String _encoding;
     /** Associate map of configution extensions. */
     protected Map<String, String> _extensions;
-    /** Ordered list of output handlers. */
-    protected List<OutputHandler> _handlerList;
     /** Map of output handlers (for fast access by name). */
     protected Map<String, OutputHandler> _handlerMap;
     /** JHOVE home directory. */
     protected String _jhoveHome;
-    /** Ordered list of modules. */
-    protected List<Module> _moduleList;
     /** Map of modules (for fast access by name). */
     protected Map<String, Module> _moduleMap;
     protected String _outputFile;
@@ -157,10 +153,8 @@ public class JhoveBase {
                 .setDefaultHostnameVerifier(new NaiveHostnameVerifier());
 
         /* Initialize the engine. */
-        _moduleList = new ArrayList<Module>(20);
         _moduleMap = new TreeMap<String, Module>();
 
-        _handlerList = new ArrayList<OutputHandler>();
         _handlerMap = new TreeMap<String, OutputHandler>();
 
         _abort = false;
@@ -338,7 +332,6 @@ public class JhoveBase {
                 module.init(modInfo.init);
                 module.setDefaultParams(param);
 
-                _moduleList.add(module);
                 _moduleMap.put(module.getName().toLowerCase(), module);
                 _logger.info("Initialized " + module.getName());
             } catch (Exception e) {
@@ -358,7 +351,6 @@ public class JhoveBase {
                 OutputHandler handler = (OutputHandler) cl.newInstance();
                 handler.setDefaultParams(param);
 
-                _handlerList.add(handler);
                 _handlerMap.put(handler.getName().toLowerCase(), handler);
             } catch (Exception e) {
                 throw new JhoveException("Cannot instantiate handler: "
@@ -373,22 +365,18 @@ public class JhoveBase {
 
         Module module = new BytestreamModule();
         module.setDefaultParams(new ArrayList<String>());
-        _moduleList.add(module);
         _moduleMap.put(module.getName().toLowerCase(), module);
 
         OutputHandler handler = new TextHandler();
         handler.setDefaultParams(new ArrayList<String>());
-        _handlerList.add(handler);
         _handlerMap.put(handler.getName().toLowerCase(), handler);
 
         handler = new XmlHandler();
         handler.setDefaultParams(new ArrayList<String>());
-        _handlerList.add(handler);
         _handlerMap.put(handler.getName().toLowerCase(), handler);
 
         handler = new AuditHandler();
         handler.setDefaultParams(new ArrayList<String>());
-        _handlerList.add(handler);
         _handlerMap.put(handler.getName().toLowerCase(), handler);
     }
 
@@ -599,7 +587,7 @@ public class JhoveBase {
                      * module doesn't know how to validate, we don't want to
                      * throw arbitrary files at it, so we'll skip it.
                      */
-                    Iterator<Module> iter = _moduleList.iterator();
+                    Iterator<Module> iter = _moduleMap.values().iterator();
                     while (iter.hasNext()) {
                         Module mod = iter.next();
                         RepInfo infc = (RepInfo) info.clone();
@@ -925,7 +913,7 @@ public class JhoveBase {
 
     /** Returns the list of handlers. */
     public List<OutputHandler> getHandlerList() {
-        return _handlerList;
+        return Collections.unmodifiableList(new ArrayList(_handlerMap.values()));
     }
 
     /**
@@ -953,7 +941,7 @@ public class JhoveBase {
 
     /** Returns the List of modules. */
     public List<Module> getModuleList() {
-        return _moduleList;
+        return Collections.unmodifiableList(new ArrayList(_moduleMap.values()));
     }
 
     /**

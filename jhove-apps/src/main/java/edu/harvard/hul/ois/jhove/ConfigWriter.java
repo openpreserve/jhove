@@ -179,7 +179,7 @@ public class ConfigWriter {
     }
     
     
-        /**
+    /**
      *   Encodes a content String in XML-clean form, converting characters
      *   to entities as necessary.  The null string will be
      *   converted to an empty string.
