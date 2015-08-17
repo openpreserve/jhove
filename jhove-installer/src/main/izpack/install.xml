@@ -61,15 +61,20 @@
       <file targetdir="$INSTALL_PATH/conf" src="config/jhove.conf"/>
       <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="plain"/>
     </pack>
-    <pack name="JHOVE Shell Script" required="yes" os="unix" executable="yes">
-      <description>Bash script to execute JHOVE.</description>
+    <pack name="JHOVE Shell Scripts" required="yes" os="unix" executable="yes">
+      <description>Bash execution scripts for command line and GUI apps.</description>
       <file targetdir="$INSTALL_PATH" src="scripts/jhove"/>
       <parsable targetfile="$INSTALL_PATH/jhove" type="shell"/>
       <executable targetfile="$INSTALL_PATH/jhove"/>
+      <file targetdir="$INSTALL_PATH" src="scripts/jhove-gui"/>
+      <parsable targetfile="$INSTALL_PATH/jhove-gui" type="shell"/>
+      <executable targetfile="$INSTALL_PATH/jhove-gui"/>
     </pack>
     <pack name="JHOVE Batch Script" required="yes" os="windows">
-      <description>DOS batch script to execute JHOVE.</description>
+      <description>DOS batch execution scripts for command line and GUI apps.</description>
       <file targetdir="$INSTALL_PATH" src="scripts/jhove.bat"/>
+      <parsable targetfile="$INSTALL_PATH/jhove.bat" type="plain"/>
+      <file targetdir="$INSTALL_PATH" src="scripts/jhove-gui.bat"/>
       <parsable targetfile="$INSTALL_PATH/jhove.bat" type="plain"/>
     </pack>
   </packs>
