@@ -9,6 +9,10 @@ jdk:
   - openjdk7
   - openjdk6
 
+branches:
+  except:
+    - /^v|d\d+\.\d+\.\d+$/
+
 after_script:
  - cp ./auto-travis-install.xml ./jhove-installer/target/
  - MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
