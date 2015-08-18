@@ -53,7 +53,7 @@ IF "%EXTRA_JARS%"=="" GOTO FI
 
 REM Retrieve a copy of all command line arguments to pass to the application
 
-SET ARGS=-c conf\jhove.conf
+SET ARGS=-c %JHOVE_HOME%\conf\jhove.conf
 :WHILE
 IF "%1"=="" GOTO LOOP
   SET ARGS=%ARGS% %1
