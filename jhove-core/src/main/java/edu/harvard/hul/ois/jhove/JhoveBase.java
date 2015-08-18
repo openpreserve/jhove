@@ -42,6 +42,7 @@ public class JhoveBase {
 
     public static final String _name = "JhoveBase";
 
+    private static final String JAVA_TEMP_DIR_PROP_KEY = "java.io.tmpdir";
     private static final String HUL_PROPERTY_PREFIX = "edu.harvard.hul.ois.";
     private static final String JHOVE_PROPERTY_PREFIX = HUL_PROPERTY_PREFIX + "jhove.";
     /** JHOVE buffer size property. */
@@ -60,7 +61,7 @@ public class JhoveBase {
     private static final String DEFAULT_ENCODING = "utf-8";
 
     /** Default temporary directory. */
-    private static final String DEFAULT_TEMP = ".";
+    private static final String DEFAULT_TEMP = System.getProperty(JAVA_TEMP_DIR_PROP_KEY);
 
     /** JHOVE encoding property. */
     private static final String ENCODING_PROPERTY = JHOVE_PROPERTY_PREFIX
