@@ -16,6 +16,51 @@
 
   <build>
     <plugins>
+      <!-- create the tarball layout -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>1.10</version>
+        <configuration>
+          <!-- http://www.mojohaus.org/appassembler/appassembler-maven-plugin/assemble-mojo.html -->
+          <platforms>
+            <platform>unix</platform>
+            <!-- "$BASEDIR/conf" to locate configuration file does not work under Windows -->
+          </platforms>
+          <configurationDirectory>conf</configurationDirectory>
+          <copyConfigurationDirectory>true</copyConfigurationDirectory>
+          <filterConfigurationDirectory>false</filterConfigurationDirectory>
+
+          <repositoryLayout>flat</repositoryLayout>
+          <repositoryName>libs</repositoryName>
+          <!-- for logback -->
+          <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+          <logsDirectory>logs</logsDirectory>
+          <projectArtifactFirstInClassPath>true</projectArtifactFirstInClassPath>
+        </configuration>
+        <!-- needed for some reason -->
+        <executions>
+          <execution>
+            <id>assemble</id>
+            <phase>package</phase>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+            <configuration>
+              <programs>
+                <program>
+                  <mainClass>Jhove</mainClass>
+                  <commandLineArguments>
+                    <commandLineArgument>-c</commandLineArgument>
+                    <commandLineArgument>$BASEDIR/conf/jhove.conf</commandLineArgument>
+                  </commandLineArguments>
+                  <id>jhove</id>
+                </program>
+              </programs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
