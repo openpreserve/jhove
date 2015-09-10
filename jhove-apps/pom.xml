@@ -24,7 +24,7 @@
         <configuration>
           <!-- http://www.mojohaus.org/appassembler/appassembler-maven-plugin/assemble-mojo.html -->
           <platforms>
-            <platform>unix</platform>
+            <platform>all</platform>
             <!-- "$BASEDIR/conf" to locate configuration file does not work under Windows -->
           </platforms>
           <configurationDirectory>conf</configurationDirectory>
@@ -37,6 +37,7 @@
           <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
           <logsDirectory>logs</logsDirectory>
           <projectArtifactFirstInClassPath>true</projectArtifactFirstInClassPath>
+          <extraJvmArguments>-Duser.timezone=UTC</extraJvmArguments>
         </configuration>
         <!-- needed for some reason -->
         <executions>
@@ -50,10 +51,6 @@
               <programs>
                 <program>
                   <mainClass>Jhove</mainClass>
-                  <commandLineArguments>
-                    <commandLineArgument>-c</commandLineArgument>
-                    <commandLineArgument>$BASEDIR/conf/jhove.conf</commandLineArgument>
-                  </commandLineArguments>
                   <id>jhove</id>
                 </program>
               </programs>
