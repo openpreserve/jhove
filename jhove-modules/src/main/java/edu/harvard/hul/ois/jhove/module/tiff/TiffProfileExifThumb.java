@@ -29,7 +29,7 @@ public class TiffProfileExifThumb extends TiffProfile {
     public TiffProfileExifThumb ()
     {
         super ();
-        // This isn't used directly to report a profile, so the
+        // This isn't used directly to dk.statsbiblioteket.dpaviser.report a profile, so the
         // profile text is irrelevant.
         _profileText = null;
     }

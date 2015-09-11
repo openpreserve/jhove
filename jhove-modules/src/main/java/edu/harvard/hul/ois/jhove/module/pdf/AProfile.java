@@ -24,7 +24,7 @@ import javax.xml.parsers.*;
  *  means "PDF/A-1" in the documentation of this code.
  * 
  *  There are two levels of conformance, called Level A and Level B.
- *  We report these as two different profiles.  To accomplish this,
+ *  We dk.statsbiblioteket.dpaviser.report these as two different profiles.  To accomplish this,
  *  we use AProfileLevelA, linked to an instance of this, which
  *  simply checks if this profile established Level A compliance.
  */

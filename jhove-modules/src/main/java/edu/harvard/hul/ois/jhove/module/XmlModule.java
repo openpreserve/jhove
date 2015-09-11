@@ -452,7 +452,7 @@ public class XmlModule
                 info.setSigMatch(_name);
             }
             // Sometimes the message will be null and another message
-            // wrapped inside it.  Try to report that.
+            // wrapped inside it.  Try to dk.statsbiblioteket.dpaviser.report that.
             String msg = e.getMessage ();
             if (msg == null) {
                 Throwable ee = e.getCause();

@@ -26,7 +26,7 @@ import edu.harvard.hul.ois.jhove.*;
  *  encoded inside another BinaryFilterBox.  
  * 
  *  This is untested code, due to lack of sample files;
- *  please report any bugs found to HUL/OIS.
+ *  please dk.statsbiblioteket.dpaviser.report any bugs found to HUL/OIS.
  * 
  * @author Gary McGath
  *
@@ -61,7 +61,7 @@ public class BinaryFilterBox extends JP2Box {
      */
     public boolean readBox() throws IOException {
         // Compare the filter type with the GZIP type.
-        // If it's anything else, just report a property
+        // If it's anything else, just dk.statsbiblioteket.dpaviser.report a property
         // and ignore the contents.
         byte[] uuidbuf = new byte[16];
         ModuleBase.readByteBuf (_dstrm, uuidbuf, _module);
@@ -78,13 +78,13 @@ public class BinaryFilterBox extends JP2Box {
                     PropertyArity.ARRAY,
                     uuidbuf));
         if (isGzip) {
-            // report that we've left information unprocessed
+            // dk.statsbiblioteket.dpaviser.report that we've left information unprocessed
             _repInfo.setMessage(new InfoMessage
                     ("Binary Filter Box of type other than Gzip, contents not processed",
                      _module.getFilePos ()));
         }
         else {
-            // We use a CountedInputStream, which will report an
+            // We use a CountedInputStream, which will dk.statsbiblioteket.dpaviser.report an
             // EOF after streamLimit bytes.
             // The caller is responsible for making sure that
             // the underlying stream doesn't get mixed up with this
@@ -99,7 +99,7 @@ public class BinaryFilterBox extends JP2Box {
                     (new CountedInputStream (_dstrm, streamLimit)));
         }
         
-        // We report _bytesRead as the total number of bytes in the
+        // We dk.statsbiblioteket.dpaviser.report _bytesRead as the total number of bytes in the
         // box, including the stream which hasn't actually been read
         // yet, because that makes things easier for the caller to
         // keep things counted.

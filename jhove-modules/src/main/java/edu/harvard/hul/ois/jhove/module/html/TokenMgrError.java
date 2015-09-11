@@ -107,7 +107,7 @@ public class TokenMgrError extends Error
     * For example, cases like LOOP_DETECTED and INVALID_LEXICAL_STATE are not
     * of end-users concern, so you can return something like : 
     *
-    *     "Internal Error : Please file a bug report .... "
+    *     "Internal Error : Please file a bug dk.statsbiblioteket.dpaviser.report .... "
     *
     * from this method for such cases in the release version of your parser.
     */

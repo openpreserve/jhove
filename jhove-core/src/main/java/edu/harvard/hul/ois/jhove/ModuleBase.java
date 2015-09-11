@@ -78,7 +78,7 @@ public abstract class ModuleBase
     protected MessageDigest _sha1;
         /**  Flag indicating valid checksum information set */
     protected boolean _checksumFinished;
-    /**  Indicator of how much data to report */
+    /**  Indicator of how much data to dk.statsbiblioteket.dpaviser.report */
     protected int _verbosity;
     /**  Flag to indicate read routines should count the stream */
     protected boolean _countStream;

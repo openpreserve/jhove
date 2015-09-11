@@ -75,7 +75,7 @@ public class XmlModuleHandler extends DefaultHandler {
      * check on the use of unparsed entities. */
     private Set<String> _attributeVals;
     
-    /* Limit on number of errors to report. */
+    /* Limit on number of errors to dk.statsbiblioteket.dpaviser.report. */
     private static final int MAXERRORS = 2000;
 
     /* XHTML flag, only for XHTML documents referred

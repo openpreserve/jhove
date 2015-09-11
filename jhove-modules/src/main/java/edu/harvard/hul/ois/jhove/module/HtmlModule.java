@@ -29,7 +29,7 @@ import edu.harvard.hul.ois.jhove.module.html.*;
  * 
  * HTML is different from most of the other documents in that sloppy
  * construction is practically assumed in the specification. This module attempt
- * to report as many errors as possible and recover reasonably from errors. To
+ * to dk.statsbiblioteket.dpaviser.report as many errors as possible and recover reasonably from errors. To
  * do this, there is more heuristic behavior built into this module than into
  * the more straightforward ones.
  * 
@@ -40,7 +40,7 @@ import edu.harvard.hul.ois.jhove.module.html.*;
  * 
  * HTML should be placed ahead of XML in the module order. If the XML module
  * sees an XHTML file first, it will recognize it as XHTML, but won't be able to
- * report the complete properties.
+ * dk.statsbiblioteket.dpaviser.report the complete properties.
  * 
  * The HTML module uses code created with the JavaCC parser generator and
  * lexical analyzer generator. There is apparently a bug in JavaCC which causes

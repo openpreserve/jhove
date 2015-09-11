@@ -40,7 +40,7 @@ public class GTSOBox extends JP2Box {
     public boolean readBox() throws IOException {
         initBytesRead ();
         // Short of pulling out the bytes and somehow
-        // analyzing them, about all we can do is report
+        // analyzing them, about all we can do is dk.statsbiblioteket.dpaviser.report
         // the presence and length of the profile.  
         
         // There can be only one GTSO box within the file,

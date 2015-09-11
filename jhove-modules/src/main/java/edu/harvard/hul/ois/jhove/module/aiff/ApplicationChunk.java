@@ -56,7 +56,7 @@ public class ApplicationChunk extends Chunk {
         // If the application signature is 'pdos' or 'stoc',
         // then the beginning of the data area is a Pascal
         // string naming the application.  Otherwise, we
-        // just report the raw data.  ('pdos' is for Apple II
+        // just dk.statsbiblioteket.dpaviser.report the raw data.  ('pdos' is for Apple II
         // applications, 'stoc' for the entire non-Apple world.)
         if ("stoc".equals (applicationSignature) ||
                 "pdos".equals (applicationSignature)) {

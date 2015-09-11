@@ -81,7 +81,7 @@ public class PdfModule
      ******************************************************************/
     
     /* The maximum number of fonts that will be reported before we just
-     * give up and report a stub to avoid running out of memory. */
+     * give up and dk.statsbiblioteket.dpaviser.report a stub to avoid running out of memory. */
     protected int DEFAULT_MAX_FONTS = 1000;
     
     /* Constants for trailer parsing */
@@ -171,7 +171,7 @@ public class PdfModule
     /** Map of visited nodes when walking through an outline. */
     protected Set<Integer> _visitedOutlineNodes;
     
-    /** maximum number of fonts to report full information on. */
+    /** maximum number of fonts to dk.statsbiblioteket.dpaviser.report full information on. */
     protected int maxFonts;
     
     /** Number of fonts reported so far. */
@@ -611,7 +611,7 @@ public class PdfModule
 			}
         }
         if (_nFonts > maxFonts) {
-            info.setMessage(new InfoMessage ("Too many fonts to report; some fonts omitted.", 
+            info.setMessage(new InfoMessage ("Too many fonts to dk.statsbiblioteket.dpaviser.report; some fonts omitted.",
                           "Total fonts = " + _nFonts));
         }
         if (_xmpProp != null) {
@@ -2205,7 +2205,7 @@ public class PdfModule
                         }
                         // If we've been directed appropriately,
                         // we accumulate the information, but don't
-                        // report it.  In that case, we post a message
+                        // dk.statsbiblioteket.dpaviser.report it.  In that case, we post a message
                         // just once to that effect.
                         if (!_skippedFontsReported && 
                             !_showFonts && 
@@ -2742,8 +2742,8 @@ public class PdfModule
                         pagePropList.add (annotProp);
                     }
                     else {
-                        // We don't report annotations if we got here,
-                        // but we do report that we don't report them.
+                        // We don't dk.statsbiblioteket.dpaviser.report annotations if we got here,
+                        // but we do dk.statsbiblioteket.dpaviser.report that we don't dk.statsbiblioteket.dpaviser.report them.
                         if (!_skippedAnnotationsReported) {
                             info.setMessage (new InfoMessage
                                 (annotationsSkippedString));
@@ -2806,7 +2806,7 @@ public class PdfModule
                         PropertyArity.LIST,
                         vplist));
             }
-            // Thumbnail -- we just report if it's there. It's a 
+            // Thumbnail -- we just dk.statsbiblioteket.dpaviser.report if it's there. It's a
             // non-inheritable property
             PdfObject thumb = page.get ("Thumb", false);
             if (thumb != null) {
@@ -3155,7 +3155,7 @@ public class PdfModule
                         (dest.getIndirectDest ());
                     if (pageObjNum == -1) {
                     // The scope of the reference is outside this
-                    // file, so we just report it as such.
+                    // file, so we just dk.statsbiblioteket.dpaviser.report it as such.
                     propList.add (new Property (propName,
                                     PropertyType.STRING,
                                     "External"));
@@ -3971,7 +3971,7 @@ public class PdfModule
                     }
                 }
                 else if (!_skippedOutlinesReported) {
-                    // We report that we aren't reporting skipped outlines
+                    // We dk.statsbiblioteket.dpaviser.report that we aren't reporting skipped outlines
                     info.setMessage (new InfoMessage
                                 (outlinesSkippedString));
                     _skippedOutlinesReported = true;

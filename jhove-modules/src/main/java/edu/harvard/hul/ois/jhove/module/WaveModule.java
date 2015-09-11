@@ -331,7 +331,7 @@ public class WaveModule extends ModuleBase {
         }
 
         // Add note and label properties, if there's anything
-        // to report.
+        // to dk.statsbiblioteket.dpaviser.report.
         if (!_labels.isEmpty()) {
             _propList.add(new Property("Labels", PropertyType.PROPERTY,
                     PropertyArity.LIST, _labels));

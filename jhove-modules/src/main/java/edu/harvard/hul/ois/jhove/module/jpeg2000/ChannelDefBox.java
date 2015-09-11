@@ -62,7 +62,7 @@ public class ChannelDefBox extends JP2Box {
             len -= 6;
             
             // The interpretation of the assoc field depends
-            // on the color space, so we just report it as
+            // on the color space, so we just dk.statsbiblioteket.dpaviser.report it as
             // an integer.
             cprop[2] = new Property ("ChannelAssociation",
                         PropertyType.INTEGER,

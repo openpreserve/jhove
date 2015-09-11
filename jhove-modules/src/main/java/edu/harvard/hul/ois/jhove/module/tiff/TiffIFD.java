@@ -1377,7 +1377,7 @@ public class TiffIFD
                                              NEWSUBFILETYPE_L, rawOutput));
         }
         else {
-            // if 0, always report as a raw number
+            // if 0, always dk.statsbiblioteket.dpaviser.report as a raw number
             entries.add (new Property ("NewSubfileType", PropertyType.LONG,
                                     new Long (_newSubfileType)));
         }
@@ -1386,7 +1386,7 @@ public class TiffIFD
                                              SUBFILETYPE_L, rawOutput));
         }
         else if (_subfileType != NULL) {
-            // if 0, always report as a raw number
+            // if 0, always dk.statsbiblioteket.dpaviser.report as a raw number
             entries.add (new Property ("SubfileType", PropertyType.LONG,
                                     new Long (_subfileType)));
         }
@@ -3482,7 +3482,7 @@ public class TiffIFD
             }
             else if (tag == TRANSFERFUNCTION) {
                 /* Transfer function arrays potentially can have millions
-                 * of elements, so we just report presence */
+                 * of elements, so we just dk.statsbiblioteket.dpaviser.report presence */
                 checkType  (tag, type, SHORT);
                 _transferFunction = true;
             }
