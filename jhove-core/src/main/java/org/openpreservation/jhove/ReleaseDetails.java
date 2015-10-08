@@ -109,8 +109,8 @@ public final class ReleaseDetails {
 
     private static ReleaseDetails fromPropertyResource(
             final String propertyResourceName) {
-        InputStream is = ClassLoader
-                .getSystemResourceAsStream(propertyResourceName);
+        InputStream is = ReleaseDetails.class.getClassLoader()
+                .getResourceAsStream(propertyResourceName);
         if (is == null) {
             throw new IllegalStateException("No application properties found: "
                     + propertyResourceName);
