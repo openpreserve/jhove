@@ -10,9 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
-import edu.harvard.hul.ois.jhove.Agent;
-import edu.harvard.hul.ois.jhove.App;
-
 /**
  * Immutable class that reads a properties file containing JHOVE release
  * details. The version number, build date and format are kept up to date by the
@@ -44,14 +41,24 @@ public final class ReleaseDetails {
         this.buildDate = new Date(buildDate.getTime());
     }
 
+    /**
+     * @return the JHOVE software version number
+     */
     public String getVersion() {
         return this.version;
     }
 
+    /**
+     * @return the JHOVE software build date
+     */
     public Date getBuildDate() {
         return new Date(this.buildDate.getTime());
     }
 
+    /**
+     * @return the JHOVE software rights statement
+     */
+    @SuppressWarnings("static-method")
     public String getRights() {
         return RIGHTS;
     }
@@ -64,8 +71,8 @@ public final class ReleaseDetails {
         final int prime = 31;
         int result = 1;
         result = prime * result
-                + ((buildDate == null) ? 0 : buildDate.hashCode());
-        result = prime * result + ((version == null) ? 0 : version.hashCode());
+                + ((this.buildDate == null) ? 0 : this.buildDate.hashCode());
+        result = prime * result + ((this.version == null) ? 0 : this.version.hashCode());
         return result;
     }
 
@@ -81,15 +88,15 @@ public final class ReleaseDetails {
         if (getClass() != obj.getClass())
             return false;
         ReleaseDetails other = (ReleaseDetails) obj;
-        if (buildDate == null) {
+        if (this.buildDate == null) {
             if (other.buildDate != null)
                 return false;
-        } else if (!buildDate.equals(other.buildDate))
+        } else if (!this.buildDate.equals(other.buildDate))
             return false;
-        if (version == null) {
+        if (this.version == null) {
             if (other.version != null)
                 return false;
-        } else if (!version.equals(other.version))
+        } else if (!this.version.equals(other.version))
             return false;
         return true;
     }
@@ -99,10 +106,13 @@ public final class ReleaseDetails {
      */
     @Override
     public String toString() {
-        return "ReleaseDetails [version=" + version + ", buildDate="
-                + buildDate + "]";
+        return "ReleaseDetails [version=" + this.version + ", buildDate="
+                + this.buildDate + "]";
     }
 
+    /**
+     * @return the static immutable ReleaseDetails instance
+     */
     public static ReleaseDetails getInstance() {
         return INSTANCE;
     }
@@ -136,13 +146,13 @@ public final class ReleaseDetails {
         String release = props.getProperty("jhove.release.version");
         String dateFormat = props.getProperty("jhove.date.format");
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-        Date date;
+        Date date = new Date();
         try {
             date = formatter.parse(props.getProperty("jhove.release.date"));
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            throw new IllegalStateException("Couldn't parse release date.", e);
+            /**
+             * Safe to ignore this exception as release simply set to new date.
+             */
         }
         return new ReleaseDetails(release, date);
     }
