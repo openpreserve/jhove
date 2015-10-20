@@ -1355,18 +1355,18 @@ public abstract class ModuleBase
     }
 
     /* Skip over some bytes.  */
-    public int skipBytes (DataInputStream stream, int bytesToSkip)
+	public long skipBytes(DataInputStream stream, long bytesToSkip)
             throws IOException
     {
 	return skipBytes (stream, bytesToSkip, null);
     }
 
     /* Skip over some bytes.  */
-    public int skipBytes (DataInputStream stream, int bytesToSkip,
+	public long skipBytes(DataInputStream stream, long bytesToSkip,
 			  ModuleBase counted) 
             throws IOException
     {
-        int n = stream.skipBytes (bytesToSkip);
+		long n = stream.skip(bytesToSkip);
         if (counted != null) {
             counted._nByte += n;
         }
