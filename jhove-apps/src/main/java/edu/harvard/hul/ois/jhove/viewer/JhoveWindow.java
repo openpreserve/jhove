@@ -145,7 +145,7 @@ public class JhoveWindow extends JFrame
         
         // Add the image, which should be in jhove-logo.gif in
         // the viewer directory
-        URL logoURL = JhoveWindow.class.getResource("jhove-logo.gif");
+        URL logoURL = JhoveWindow.class.getResource("jhovelogo.png");
         if (logoURL != null) {
             ImageIcon icn = new ImageIcon (logoURL);
             icn.setDescription ("Jhove logo");
@@ -303,7 +303,7 @@ public class JhoveWindow extends JFrame
     /** Set the normal background color. */
     private void setNormalBackground ()
     {
-        logo.setBackground (new Color (180, 255, 255));
+        logo.setBackground (new Color (255, 255, 255));
     }
     
     /** Set the background color for drag-over. */

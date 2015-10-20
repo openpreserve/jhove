@@ -10,7 +10,7 @@
     <authors>
       <author name="Carl Wilson" email="carl@openpreserve.org" />
     </authors>
-    <expiresdate>2015-09-30</expiresdate>
+    <expiresdate>2016-01-31</expiresdate>
   </info>
 
   <guiprefs height="400" resizable="no" width="640">
@@ -34,13 +34,12 @@
   <resources>
     <res id="HTMLHelloPanel.welcome" src="welcome.html"/>
     <res id="HTMLInfoPanel.welcome" src="welcome.html"/>
-    <res id="OPFLogo" src="opf-logo.png"/>
+    <res id="OPFLogo" src="jhovelogo.png"/>
   </resources>
 
   <variables>
     <variable name="InstallerFrame.logfilePath" value="Default"/>
-    <variable name="WELCOME_TEXT" value="JHOVE Installer"/>
-    <variable name="VERSION" value="${project.version}"/>
+    <variable name="VERSION" value="v ${project.version}"/>
     <variable name="TargetPanel.dir" value="$USER_HOME/jhove-beta"/>
   </variables>
 
