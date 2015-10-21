@@ -1,15 +1,9 @@
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: JSTOR/Harvard Object Validation Environment
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<meta name="Description" CONTENT="Main page for JHOVE, the JSTOR/Harvard Object Validation Environment">
-<meta name="keywords" content="JHOVE, JOVE, JSTOR, Harvard, object, validation,
-environment, Java, extensible, format, AIFF, ASCII, GIF, HTML, JPEG, JPEG2000,
-2000, PDF, TIFF, UTF-8, WAVE, XML, XMP, Adobe, ISO, ANSI, IETF, RFC">
-<link rel="Stylesheet" href="style.css" type="text/css">
-<title>JHOVE - JSTOR/Harvard Object Validation Environment</title>
-</head>
+{% include header.html %}
 <body>
 <img src="jhove-logo.gif">
 
@@ -22,7 +16,7 @@ environment, Java, extensible, format, AIFF, ASCII, GIF, HTML, JPEG, JPEG2000,
 <td class="inactive"><a class="menu" href="distribution.html">Distribution</a></td>
 <td class="inactive"><a class="menu" href="links.html">Links</a></td>
 <td class="inactive"><a class="menu" href="https://lists.sourceforge.net/lists/listinfo/jhove-discuss">Mailing list</a></td>
-<td class="inactive"><a class="menu" href="https://sourceforge.net/projects/jhove/">JHOVE project</a></td>
+<td class="inactive"><a class="menu" href="https://github.com/openpreserve/jhove">JHOVE project</a></td>
 <td class="spacing">&nbsp;</td>
 </tr>
 </table>
@@ -45,7 +39,7 @@ be able to automate these procedures to the fullest extent possible.
 <a href="http://www.jstor.org/">JSTOR</a> and the
 <a href="http://library.harvard.edu/">Harvard University Library</a> are collaborating on a project
 to develop an extensible framework for format validation: JHOVE
-(pronounced "jove"), the 
+(pronounced "jove"), the
 JSTOR/Harvard Object Validation Environment.
 </p>
 
@@ -121,7 +115,7 @@ the draft AES metadata standard for digital audio.
 </ul>
 <p>
 Identification, validation, and characterization actions are frequently
-necessary during routine operation of 
+necessary during routine operation of
 digital repositories and for digital preservation activities.
 These actions are performed by <em>modules</em>.
 The output from JHOVE is controlled by <em>output handlers</em>.
@@ -172,7 +166,7 @@ of <em>F</em>?"
 <p>
 In terms of the OAIS Reference Model
 [<a href="references.html#oais">ISO/IEC 14721</a>],
-JHOVE can be integrated into 
+JHOVE can be integrated into
 repository workflows with respect to Submission Information Package (SIP)
 creation and ingest validation.
 </p><p>
@@ -250,7 +244,7 @@ The following standard modules are available:
 <li> GIF 89a [<a href="references.html#gif89a">GIF89a</a>]
 </ul>
 
-<li> <a href="html-hul.html">HTML-hul</a>: Hypertext 
+<li> <a href="html-hul.html">HTML-hul</a>: Hypertext
 Markup Language (HTML)
 <ul>
 <li>HTML 3.2 [<a href="references.html#html-3.2">HTML 3.2</a>]
@@ -397,22 +391,12 @@ are made available from <a href="http://www.nasa.gov/">NASA</a> by the
 Center</a>.
 </p>
 
-<table class="menu">
-<tr>
-<td class="active">Home</td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu"
-                        href="documentation.html">Documentation</a></td>
-<td class="inactive"><a class="menu" href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
+{% include navbar.html %}
 
 <address>
 Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
-Last updated 2009-02-25
+Last updated 2015-10-20
 </address>
+    {% include footer.html %}
 </body>
 </html>
-
