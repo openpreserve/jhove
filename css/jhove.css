@@ -5,3 +5,7 @@ body {
 .navbar-static-top {
   margin-bottom: 19px;
 }
+
+.navbar-brand img {
+  margin-top: -10px;
+}
