@@ -1,26 +1,13 @@
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: PDF-hul Module
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<link rel="Stylesheet" href="style.css" type="text/css">
-<title>JHOVE PDF-hul Module</title>
-</head>
-<body>
-<img src="jhove-logo.gif">
+{% include header.html %}
+<body role="document">
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">PDF-hul&nbsp;Module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
+{% include navbar.html nav=site.data.navbar %}
 
 <h1>PDF-hul Module</h1>
 
@@ -32,7 +19,7 @@ Format) format
 [<a href="references.html#pdf1.4">PDF 1.4</a>,
 <a href="references.html#pdf1.5">PDF 1.5</a>,
 <a href="references.html#pdf1.6">PDF 1.6</a>].
-Documents created as PDF 1.7 will be identified as such, but PDF 1.7 
+Documents created as PDF 1.7 will be identified as such, but PDF 1.7
 is not supported, and documents using features specific to PDF 1.7
 or later may be reported as not well-formed or not valid.
 </p><p>
@@ -169,10 +156,10 @@ present, is properly formed.
 <p>
 The PDF-HUL module does not check certain aspects of a PDF file,
 primarily because thoroughly checking these would require access
-to proprietary compression and encryption algorithms.  
+to proprietary compression and encryption algorithms.
 The following are not checked:
 <ul>
-<li>The data within content streams, and therefore the use 
+<li>The data within content streams, and therefore the use
 of operators and the glyph descriptions of embedded fonts.</li>
 <li>Encrypted data.  Some PDF files are effectively
 null-encrypted; i.e., they are nominally encrypted but the
@@ -221,7 +208,7 @@ images) compression are also allowed
 
 <li> <strong>PDF/X-1a</strong>
 <p>
-The PDF/X-1 profile is for pre-press data exchange using CMYK and 
+The PDF/X-1 profile is for pre-press data exchange using CMYK and
 spot color data
 [<a href="references.html#pdfx1a">PDF/X-1a</a>].
 </p>
@@ -272,7 +259,7 @@ workflows
 <li> OutputIntents array in Document Catalog Dictionary
      with subtype of "GTS_PDFX"
 <li> Any Separation and DeviceN resources
-       have an AlternateSpace of DeviceGray or DeviceCMYK 
+       have an AlternateSpace of DeviceGray or DeviceCMYK
 <li> No PostScript or OPI objects
 <li> No OPI key in Form or Image objects
 <li> Image Alternates do not have a DefaultForPrinting key
@@ -336,23 +323,6 @@ by the ISO <a href="references.html#pdfa">standard</a>.
 <li> Nominal file extension: .pdf
 </ul>
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">PDF-hul&nbsp;Module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
-<address>
-Copyright 2003-2008 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
-Last updated 2008-02-26
-</address>
+{% include footer.html %}
 </body>
 </html>
-

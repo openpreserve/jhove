@@ -1,27 +1,13 @@
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: XML-hul Module
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<link rel="Stylesheet" href="style.css" type="text/css">
-<meta NAME="Description" CONTENT="JHOVE XML module documentation">
-<title>JHOVE XML-hul Module</title>
-</head>
-<body>
-<img src="jhove-logo.gif">
+{% include header.html %}
+<body role="document">
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">XML-hul&nbsp;Module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
+{% include navbar.html nav=site.data.navbar %}
 
 <h1>XML-hul Module</h1>
 
@@ -156,7 +142,7 @@ is specified)
 <li> Property "Namespace" of type PROPERTY and arity ARRAY
 <ul>
 <li> Property "Prefix" of type STRING and arity SCALAR
-<li> Property "URI" of type STRING and arity SCALAR 
+<li> Property "URI" of type STRING and arity SCALAR
 </ul>
 </ul>
 <li> Property "Notations" of type PROPERTY and arity LIST (if there are any)
@@ -214,23 +200,6 @@ associated with the file.
 <li> Nominal file extension: .xml
 </ul>
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">XML-hul&nbsp;Module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
-<address>
-Copyright 2004-2005 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
-Last updated 2005-05-09
-</address>
+{% include footer.html %}
 </body>
 </html>
-

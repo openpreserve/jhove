@@ -1,27 +1,13 @@
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: JPEG-hul Module
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<link rel="Stylesheet" href="style.css" type="text/css">
-<meta NAME="Description" CONTENT="JHOVE JPEG module documentation">
-<title>JHOVE JPEG-hul Module</title>
-</head>
-<body>
-<img src="jhove-logo.gif">
+{% include header.html %}
+<body role="document">
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">JPEG-hul&nbsp;Module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
+{% include navbar.html nav=site.data.navbar %}
 
 <h1>JPEG-hul Module</h1>
 
@@ -87,7 +73,7 @@ well-formed:
 </p>
 <ul>
 <li>The first three bytes of the file are 0xFF, 0xD8, 0xFF
-<li>The file consists of one or more correctly formatted segments. 
+<li>The file consists of one or more correctly formatted segments.
 Segment markers 0xC0 through 0xFE are recognized.
 <li>Data streams following RSTn and SOS markers are correctly
 terminated.
@@ -96,7 +82,7 @@ terminated.
 JHOVE uses the JPEG-LS algorithm for recognizing the end of a data
 stream, looking for a byte of 0xFF followed by a byte in the range
 0X80 through 0XFE.  The standard JPEG algorithm looks for a byte of
-0XFF followed by any byte which is not 0 or 0xFF.  Since all 
+0XFF followed by any byte which is not 0 or 0xFF.  Since all
 valid markers in existing versions of JPEG are in the range 0X80
 through 0XFE, this algorithm works correctly for both JPEG and
 JPEG-LS.
@@ -120,7 +106,7 @@ segment of the file, not counting comments:
   	  indicating an Exif file.
   <li>APP8 (0xE8) with identifier 0x53, 0x50, 0x49, 0x46, 0x46, 0x00,
       indicating a SPIFF file.
-  <li>JPG7 (0xF7), also known as SOF55, indicating a JPEG-LS file. 
+  <li>JPG7 (0xF7), also known as SOF55, indicating a JPEG-LS file.
   </ul>
 <li> The file does not contain a D8 segment marker except at the
 beginning of the file.
@@ -177,14 +163,14 @@ or INTEGER (if raw output on) and arity SCALAR
  <ul>
  <li> Property "QuantizationTable" of type PROPERTY and arity ARRAY
   <ul>
-  <li> Property "Precision" of type INTEGER (if raw output) 
+  <li> Property "Precision" of type INTEGER (if raw output)
        or STRING (if not raw output) and arity SCALAR
   <li> Property "DestinationIdentifier" of type INTEGER and arity SCALAR
   </ul>
  </ul>
 <li> Property "ArithmeticConditioning" of type PROPERTY and arity LIST
  <ul>
-  <li> Property "TableClass" of type INTEGER (if raw output) 
+  <li> Property "TableClass" of type INTEGER (if raw output)
        or STRING (if not raw output) and arity SCALAR
   <li> Property "DestinationIdentifier" of type INTEGER and arity SCALAR
  </ul>
@@ -213,7 +199,7 @@ or INTEGER (if raw output on) and arity SCALAR
 </ul>
  <li> Property "ThumbImage" of type PROPERTY and arity LIST
   <ul>
-  <li> Property "NisoImageMetadata" of type NISOIMAGEMETADATA and 
+  <li> Property "NisoImageMetadata" of type NISOIMAGEMETADATA and
 arity SCALAR
   </ul>
  </ul>
@@ -327,23 +313,6 @@ compression of images [<a href="references.html#jpeg-ls">JPEG-LS</a>].
 <li> Nominal file extension: .spf (for SPIFF)
 </ul>
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">JPEG-hul&nbsp;Module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
-<address>
-Copyright 2004-2005 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
-Last updated 2005-05-26
-</address>
+{% include footer.html %}
 </body>
 </html>
-

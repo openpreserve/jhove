@@ -1,27 +1,13 @@
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: HTML-hul Module
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<link rel="Stylesheet" href="style.css" type="text/css">
-<meta NAME="Description" CONTENT="JHOVE HTML module documentation">
-<title>JHOVE HTML-hul Module</title>
-</head>
-<body>
-<img src="jhove-logo.gif">
+{% include header.html %}
+<body role="document">
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">HTML-hul&nbsp;Module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
+{% include navbar.html nav=site.data.navbar %}
 
 <h1>HTML-hul Module</h1>
 
@@ -42,9 +28,9 @@ jhove ... -m HTML-hul ...
 command line option.
 
 <p>
-The HTML-hul module recognizes XHTML 1.0 (including transitional, 
-frameset and strict) and 1.1, making use of the XML-hul module.  
-If the XML-hul module is not available, only limited information 
+The HTML-hul module recognizes XHTML 1.0 (including transitional,
+frameset and strict) and 1.1, making use of the XML-hul module.
+If the XML-hul module is not available, only limited information
 will be provided on XHTML documents.
 </p><p>
 
@@ -140,7 +126,7 @@ for the contents of this property).
 <li>Property "Width" of type STRING
 </ul>
 
-<li>Property "Citations" of type STRING and arity LIST 
+<li>Property "Citations" of type STRING and arity LIST
 <li>Property "DefinedTerms" of type STRING and arity LIST
 <li>Property "Abbreviations" of type PROPERTY and arity LIST
 <ul>
@@ -161,25 +147,6 @@ for the contents of this property).
 <li> Nominal file extension: .html, .htm
 <li> Macintosh OS file type: TEXT
 </ul>
-
-
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">HTML-hul&nbsp;Module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
-<address>
-Copyright 2004-2005 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
-Last updated 2005-05-09
-</address>
+{% include footer.html %}
 </body>
 </html>
-

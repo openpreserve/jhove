@@ -1,27 +1,13 @@
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: WAVE-hul Module
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<link rel="Stylesheet" href="style.css" type="text/css">
-<meta NAME="Description" CONTENT="JHOVE WAVE module documentation">
-<title>JHOVE WAVE-hul Module</title>
-</head>
-<body>
-<img src="jhove-logo.gif">
+{% include header.html %}
+<body role="document">
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">WAVE-hul&nbsp;Module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
+{% include navbar.html nav=site.data.navbar %}
 
 <h1>WAVE-hul Module</h1>
 
@@ -32,7 +18,7 @@ The WAVE-hul module recognizes and validates the Audio for Windows
 format (WAVE)
 [<a href="references.html#wave">WAVE</a>,<a href="references.html#waveformat">WAVEFORMAT</a>].
 WAVE is a variant of the Microsoft RIFF format
-[<a href="references.html#riff">RIFF</a>], which is itself an 
+[<a href="references.html#riff">RIFF</a>], which is itself an
 implementation of the Electronic Arts IFF 85 format
 [<a href="references.html#iff85">IFF</a>].
 </p><p>
@@ -421,23 +407,6 @@ Profile requirements include:
 <li> Nominal file extension: .bwf (for the BWF profile)
 </ul>
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">WAVE-hul&nbsp;Module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
-<address>
-Copyright 2004 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
-Last updated 2004-12-17
-</address>
+{% include footer.html %}
 </body>
 </html>
-
