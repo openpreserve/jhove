@@ -6,6 +6,40 @@
 
 - title: "Modules"
   href: "/modules/"
+  subcategories:
+    - subtitle: "AIFF"
+      subhref: "aiff/"
+  subcategories:
+    - subtitle: "ASCII"
+      subhref: "ascii/"
+  subcategories:
+    - subtitle: "GIF"
+      subhref: "gif/"
+  subcategories:
+    - subtitle: "HTML"
+      subhref: "html/"
+  subcategories:
+    - subtitle: "JPEG"
+      subhref: "jpeg/"
+  subcategories:
+    - subtitle: "JPEG2000"
+      subhref: "jpeg2000/"
+  subcategories:
+    - subtitle: "PDF"
+      subhref: "pdf/"
+  subcategories:
+    - subtitle: "UTF-8"
+      subhref: "utf8/"
+  subcategories:
+    - subtitle: "WAVE"
+      subhref: "wave/"
+  subcategories:
+    - subtitle: "XML"
+      subhref: "xml/"
+
+- title: "Documentation"
+  href: "/documentation/"
+
 
 - title: "Resources"
   href: "/resources/"
