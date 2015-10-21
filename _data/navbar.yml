@@ -28,12 +28,11 @@
     - subtitle: "XML"
       subhref: "xml/"
 
-- title: "Documentation"
-  href: "/documentation/"
-
-
 - title: "Resources"
   href: "/resources/"
+
+- title: "Software"
+  href: "/software/"
 
 - title: "OPF"
   href: "http://openpreservation.org"
