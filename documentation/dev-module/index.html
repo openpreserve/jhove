@@ -1,26 +1,13 @@
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: Writing a module
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<link rel="Stylesheet" href="style.css" type="text/css">
-<title>Writing a JHOVE Module</title>
-</head>
-<body>
-<img src="jhove-logo.gif">
+{% include header.html %}
+<body role="document">
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">Writing&nbsp;a&nbsp;module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
 
 <h1>Writing a JHOVE Module (<em>draft</em>, 2005-02-07)</h1
 
@@ -118,7 +105,7 @@ public void setBase (JhoveBase je);
 </pre>
 <blockquote>
 The <tt>setBase()</tt> method passes the application state object to the module.
-The <tt>JhoveBase</tt> object provides the module with state 
+The <tt>JhoveBase</tt> object provides the module with state
 information about the surrounding context from which the module is invoked.
 </blockquote>
 
@@ -250,7 +237,7 @@ The <tt>parse()</tt> methods parse the object (represented by either a
 stream or random access file).
 Representation information about the object is returned through the
 <tt>RepInfo</tt> object.
-The stream version of <tt>parse</tt>may be invoked multiple times, if 
+The stream version of <tt>parse</tt>may be invoked multiple times, if
 it is necessary to do multiple passes on the data.
 On the first invocation of this method <tt>parseIndex</tt> is set to 0.
 If the method returns a non-zero value then it is invoked again, with
@@ -437,13 +424,13 @@ at the time the module class object is instantiated.
 The position of the module's definition in the configuration file
 is significant; modules will
 be applied in the order in which they appear in the configuration
-file.  
+file.
 Since a document will be matched by the first module it
 satisfies, modules for specific format files
 should appear before more general ones.
 For example, if your module verifies XHTML
 documents, the element declaring it should appear before
-the element declaring the XML module, since all valid 
+the element declaring the XML module, since all valid
 XHTML documents are also XML documents.
 </p>
 <p>
@@ -512,7 +499,7 @@ release number: <code><em>major.minor</em></code>, e.g.
 
 <code>private static final int [] DATE</code>
 <blockquote>
-An array of three integers specifying the year, 
+An array of three integers specifying the year,
 month, and day module release, e.g.
 <code>{2004, 4, 12}</code> for a April 12, 2004, release date.
 </blockquote>
@@ -571,89 +558,89 @@ case the method <code>parse(InputStream stream, ...)</code>
 </blockquote>
 
 <p>
-The <code>ModuleBase</code> constructor 
-defines <code>_specification</code> as an initially 
-empty List of <a class="name" name="#document"><code>Document</code></a> objects 
-which give information about 
-the specification of the format as treated by the <code>Module</code>.  
-The module constructor may define <code>Document</code> objects for this 
-purpose and add these objects to <code>_specification</code>.  
+The <code>ModuleBase</code> constructor
+defines <code>_specification</code> as an initially
+empty List of <a class="name" name="#document"><code>Document</code></a> objects
+which give information about
+the specification of the format as treated by the <code>Module</code>.
+The module constructor may define <code>Document</code> objects for this
+purpose and add these objects to <code>_specification</code>.
 </p><p>
-The <code>ModuleBase</code> constructor 
-defines <code>_signature</code> as an initially 
+The <code>ModuleBase</code> constructor
+defines <code>_signature</code> as an initially
 empty List of <a href="#signature"><code>Signature</code></a>
-objects which allow quick identification 
-of documents that claim to conform to the module's format.  
-The module constructor may define <code>Signature</code> objects and add 
+objects which allow quick identification
+of documents that claim to conform to the module's format.
+The module constructor may define <code>Signature</code> objects and add
 these objects to <code>_signature</code>.
 
 </p><p>
-A Jhove module may be either stream-based or random-access. 
-The choice depends on the expectations contained in the 
-file format. A file format which is designed to be read 
-from beginning to end, and which does not contain pointers to 
-specific file offsets, is best handled by a stream module. 
-A file format which contains pointers to file locations, or 
-which otherwise cannot be read in sequence, is best handled by 
+A Jhove module may be either stream-based or random-access.
+The choice depends on the expectations contained in the
+file format. A file format which is designed to be read
+from beginning to end, and which does not contain pointers to
+specific file offsets, is best handled by a stream module.
+A file format which contains pointers to file locations, or
+which otherwise cannot be read in sequence, is best handled by
 a random-access module.
 </p><p>
-One of the first actions of the <code>parse()</code> method should be to 
-call <code>initParse()</code>.  
-The module's <code>initParse</code> method must begin 
+One of the first actions of the <code>parse()</code> method should be to
+call <code>initParse()</code>.
+The module's <code>initParse</code> method must begin
 by calling its superclass constructor:
 </p>
 <ul>
 <li><code>protected void initParse ();</code></li>
 </ul>
 <p>
-The superclass constructor in <code>ModuleBase</code> will initialize 
-checksum calculations and the byte count (<code>_nbyte</code>).  
-The module's <code>initParse</code> method should initialize all 
-variables that must start from a known state when 
+The superclass constructor in <code>ModuleBase</code> will initialize
+checksum calculations and the byte count (<code>_nbyte</code>).
+The module's <code>initParse</code> method should initialize all
+variables that must start from a known state when
 parsing a document.
 </p><p>
-Information obtained during a parse is stored in 
-the variable <code>_info</code>, which is a 
+Information obtained during a parse is stored in
+the variable <code>_info</code>, which is a
 <a href="#repinfo"><code>RepInfo</code></a> object.
 </p><p>
 If the module does validation, the
-<code>parse()</code> method must process the document so as to 
-determine if it is well-formed and valid.  If the document is 
-both well-formed and valid, it is unnecessary to call 
-<code>RepInfo</code>'s setter methods.  If it is not well-formed or 
-not valid, the parser must call 
-<code>_info.setWellFormed(RepInfo.FALSE)</code> or <code>_info.setValid (RepInfo.FALSE)</code>.  
-<code>RepInfo.setWellFormed(RepInfo.FALSE)</code> automatically calls 
-<code>setValid(RepInfo.FALSE)</code>, so it is unnecessary 
+<code>parse()</code> method must process the document so as to
+determine if it is well-formed and valid.  If the document is
+both well-formed and valid, it is unnecessary to call
+<code>RepInfo</code>'s setter methods.  If it is not well-formed or
+not valid, the parser must call
+<code>_info.setWellFormed(RepInfo.FALSE)</code> or <code>_info.setValid (RepInfo.FALSE)</code>.
+<code>RepInfo.setWellFormed(RepInfo.FALSE)</code> automatically calls
+<code>setValid(RepInfo.FALSE)</code>, so it is unnecessary
 to declare a module explicitly ill-formed if it is not valid.
 </p><p>
-If a document is not valid or not well-formed, 
-then one or more error messages should be placed 
+If a document is not valid or not well-formed,
+then one or more error messages should be placed
 in <code>_info</code> explaining the source of the problem,
 using <code>RepInfo.setMessage (Message message)</code>.
 </p><p>
-Although this is a "set" method, it actually adds the 
-message to the message list.  Messages which indicate 
-invalidity or ill-formedness should be of type 
-<code>ErrorMessage</code>, 
+Although this is a "set" method, it actually adds the
+message to the message list.  Messages which indicate
+invalidity or ill-formedness should be of type
+<code>ErrorMessage</code>,
 which is a subclass of <a href="#message"><code>Message</code></a>.
 </p><p>
-A non-validating module must call 
+A non-validating module must call
 <code>RepInfo.setWellFormed(RepInfo.UNDETERMINED)</code>.
-This will automatically call 
+This will automatically call
 <code>setValid(RepInfo.UNDETERMINED)</code> for you.
 </p><p>
-Other information which may be stored in <code>_info</code> 
+Other information which may be stored in <code>_info</code>
 is discussed in the <a href="#repinfo"><code>RepInfo</code></a> section.
 </p>
 
 <h3>3.5 Reading a Stream-based document</h3>
 <p>
-When reading a Stream-based document, buffering and 
-tracking the byte count are supported for the module, 
-provided that the data is read properly.  It is 
-assumed that the <code>parse()</code> function will use the 
-<code>InputStream</code> passed to it to set up a 
+When reading a Stream-based document, buffering and
+tracking the byte count are supported for the module,
+provided that the data is read properly.  It is
+assumed that the <code>parse()</code> function will use the
+<code>InputStream</code> passed to it to set up a
 <code>BufferedDataStream</code>
 through code such as the following:
 <ul>
@@ -661,20 +648,20 @@ through code such as the following:
                     _app.getBufferSize () : 0);</code></li>
 </ul>
 <p>
-A <code>ChecksumInputStream</code> is designed to calculate 
-<a href="#checksum">checksums</a> automatically as the stream is read.  
-The <code>BufferedDataStream</code> is used for the 
-reading of data from the document.  
-<code>getBufferedDataStream</code> is defined by 
-<code>ModuleBase</code>. Only the functions 
-indicated here (defined in <code>ModuleBase</code>) 
-should be used to read the 
-<code>BufferedDataStream</code>; if this is done, then the 
-value of <code>_nByte</code> is kept up to date as the 
-current offset into the file. The 
-<code>ModuleBase</code> argument must be the value of the 
-calling module (normally <code>this</code>), or null if the 
-function is being called in a context where 
+A <code>ChecksumInputStream</code> is designed to calculate
+<a href="#checksum">checksums</a> automatically as the stream is read.
+The <code>BufferedDataStream</code> is used for the
+reading of data from the document.
+<code>getBufferedDataStream</code> is defined by
+<code>ModuleBase</code>. Only the functions
+indicated here (defined in <code>ModuleBase</code>)
+should be used to read the
+<code>BufferedDataStream</code>; if this is done, then the
+value of <code>_nByte</code> is kept up to date as the
+current offset into the file. The
+<code>ModuleBase</code> argument must be the value of the
+calling module (normally <code>this</code>), or null if the
+function is being called in a context where
 <code>_nByte</code> should not be updated.
 </p>
 <ul>
@@ -708,18 +695,18 @@ function is being called in a context where
 <a class="name" name="randomaccess">
 <h3>3.6 Reading a random-access document</h3></a>
 <p>
-There is less built-in support for random-access modules 
+There is less built-in support for random-access modules
 than for stream-based modules, since random access is more
 varied.  If you have a choice for a given file format, it is
-usually simpler to write a stream-based module than a 
+usually simpler to write a stream-based module than a
 random-access module.  However, if a format uses file pointers
 or offsets, it will probably be necessary to use random access.
 </p><p>
 If checksum calculation is requested (<code>_app.getDoChecksum()</code>
 returns <code>true</code>), and
-if the checksum has not already been calculated 
+if the checksum has not already been calculated
 (<code>_info.getChecksum().size()</code> is zero), it is necessary
-to calculate the checksum explicitly.  The function 
+to calculate the checksum explicitly.  The function
 <code>ModuleBase.calcRAChecksum()</code> is provided for
 this purpose.  The following code in your <code>parse</code>
 function will do the job:
@@ -735,15 +722,15 @@ function will do the job:
 <p>
 For your module to be reasonably efficient, it is necessary to read
 data in the largest chunks that are feasible; doing single-byte reads
-everywhere and making frequent calls to 
+everywhere and making frequent calls to
 <code>RandomAccessFile.seek()</code> will slow operations down
 painfully.  A useful trick when reading a structure of known size
 is to read it into a byte array, then create a <code>ByteArrayInputStream</code>
-on it, and a <code>DataInputStream</code> 
+on it, and a <code>DataInputStream</code>
 on the <code>ByteArrayInputStream</code>.  You can
 then use any of the stream-based data reading functions provided
 by <code>ModuleBase</code> (listed above).  Be sure to pass <code>null</code>
-where a <code>ModuleBase</code> parameter is expected, 
+where a <code>ModuleBase</code> parameter is expected,
 since updating <code>_nByte</code> is meaningless and possibly
 harmful in this context.
 </p>
@@ -753,7 +740,7 @@ harmful in this context.
 <p>
 To allow greater flexibility in incorporating third-party
 modules with different degrees of functionality, JHOVE modules
-can be queried for their "features."  
+can be queried for their "features."
 Names for features should follow the same conventions as Java
 packages.  Currently, all HUL modules report the following
 features:
@@ -772,11 +759,11 @@ If a Module supports a different set of features, it must override
 <code>ModuleBase.initFeatures</code>. The features list should
 never be empty or void.
 <p>
-If a Module's features indicate that it cannot validate, 
+If a Module's features indicate that it cannot validate,
 JHOVE will call it only when it is explicitly selected.
 The reason for this is that such a module may act unpredictably
 when given a document of the wrong format. However, even modules
-which do not validate should throw an exception or 
+which do not validate should throw an exception or
 return gracefully when they encounter a document that they
 can't deal with.
 <p>
@@ -787,49 +774,49 @@ complete list.
 <a class="name" name="checksum">
 <h3>3.8 Checksum calculations</h3></a>
 <p>
-One of the tasks of the module's parse() function is to 
-calculate checksums on the module if requested.  
-The module should call <code>_app.getDoChecksum()</code> 
-to determine if it has been requested to 
-calculate checksums.  In addition, it should examine 
-the value of <code>info.getChecksum()</code>; if 
-it is a non-empty list, then the application has already 
-calculated the checksum and no further action is needed. 
-The classes <code>Checksummer</code> and 
-<code>ChecksumInputStream</code> aid in 
+One of the tasks of the module's parse() function is to
+calculate checksums on the module if requested.
+The module should call <code>_app.getDoChecksum()</code>
+to determine if it has been requested to
+calculate checksums.  In addition, it should examine
+the value of <code>info.getChecksum()</code>; if
+it is a non-empty list, then the application has already
+calculated the checksum and no further action is needed.
+The classes <code>Checksummer</code> and
+<code>ChecksumInputStream</code> aid in
 doing the calculations.
 </p><p>
 Calculating the checksums can be a time-consuming operation if the
 document is large, so the module should perform the calculation
 only when it is required.
 </p><p>
-<code>Checksummer</code> provides the capability for calculating 
-CRC32, MD5, and SHA1 checksums or message digests. 
-The availability of the MD5 and SHA1 message 
-digests depends on the version of the Java library 
+<code>Checksummer</code> provides the capability for calculating
+CRC32, MD5, and SHA1 checksums or message digests.
+The availability of the MD5 and SHA1 message
+digests depends on the version of the Java library
 which is available; in most cases, though, they should be available.
 </p>
 <ul>
     <li><code>public Checksummer ();</code></li>
 </ul>
 <p>
-To calculate the checksum, it is simply necessary 
-to call <code>Checksummer.update()</code> with each byte of 
-the document in sequence.  The caller can then 
-call <code>getCRC32()</code>, <code>getMD5()</code>, 
-and <code>getSHA1()</code> to obtain 
+To calculate the checksum, it is simply necessary
+to call <code>Checksummer.update()</code> with each byte of
+the document in sequence.  The caller can then
+call <code>getCRC32()</code>, <code>getMD5()</code>,
+and <code>getSHA1()</code> to obtain
 the calculated values.
 </p><p>
-<code>ChecksumInputStream</code> further automates the generation 
+<code>ChecksumInputStream</code> further automates the generation
 of these values by incorporating them into the reading of the stream.
 <p>
 <ul>
     <li><code>public ChecksumInputStream(InputStream stream, Checksummer cksummer);</code></li>
 </ul>
 <p>
-If the module uses a <code>ChecksumInputStream</code> as the argument 
-to <code>ModuleBase.getBufferedDataStream</code>, then the 
-checksum calculations will be done in the course of 
+If the module uses a <code>ChecksumInputStream</code> as the argument
+to <code>ModuleBase.getBufferedDataStream</code>, then the
+checksum calculations will be done in the course of
 reading the <code>BufferedDataStream</code>.  This technique cannot
 be used with random-access modules.
 </p>
@@ -837,18 +824,18 @@ be used with random-access modules.
 <a class="name" name="document">
 <h3>3.9 The Document object</h3></a>
 <p>
-The <code>Document</code> object is used to define sources of 
-documentation for a module.  <code>Document</code> objects are added to 
+The <code>Document</code> object is used to define sources of
+documentation for a module.  <code>Document</code> objects are added to
 the module's <code>_specification</code> list.
 </p>
 <ul>
 <li><code>public Document (String title, DocumentType type);</code></li>
 </ul>
 <p>
-The <code>Document</code>'s title is any suitable descriptive string; 
-the actual title of the document is recommended. 
-The type must be one of the predefined instances of 
-<code>DocumentType</code>: 
+The <code>Document</code>'s title is any suitable descriptive string;
+the actual title of the document is recommended.
+The type must be one of the predefined instances of
+<code>DocumentType</code>:
 <ul>
 <li><code>DocumentType.ARTICLE </code></li>
 <li><code>DocumentType.BOOK</code></li>
@@ -858,7 +845,7 @@ The type must be one of the predefined instances of
 <li><code>DocumentType.OTHER </code></li>
 </ul>
 <p>
-Other information may be added to a 
+Other information may be added to a
 <code>Document</code> using its setter methods:
 </p>
 <ul>
@@ -872,26 +859,26 @@ Other information may be added to a
     <li><code>public void setPublisher (Agent publisher);</code></li>
 </ul>
 <p>
-The author and publisher of a <code>Document</code> are defined using 
+The author and publisher of a <code>Document</code> are defined using
 <a href="#agent"><code>Agent</code></a> objects.
-The identifier is defined using an 
+The identifier is defined using an
 <a href="#identifier"><code>Identifier</code></a> object.
 </p>
 
 <a class="name" name="signature">
 <h3>3.10 The Signature object</h3></a>
 <p>
-<code>Signature</code> objects are used to specify quick checks for 
-whether a document conforms to a format.  When checking 
-for signatures, the document is not checked in any 
-details, but only examined for characteristic data, 
-such as a header or filename extension. <code>Signature</code> is 
-an abstract class; JHOVE defines subclasses 
-<code>ExternalSignature</code> and 
-<code>InternalSignature</code>. <code>InternalSignature</code> 
-is used for signatures based on the document content; 
-<code>ExternalSignature</code> is used for 
-signatures based on the file name, metadata, or other 
+<code>Signature</code> objects are used to specify quick checks for
+whether a document conforms to a format.  When checking
+for signatures, the document is not checked in any
+details, but only examined for characteristic data,
+such as a header or filename extension. <code>Signature</code> is
+an abstract class; JHOVE defines subclasses
+<code>ExternalSignature</code> and
+<code>InternalSignature</code>. <code>InternalSignature</code>
+is used for signatures based on the document content;
+<code>ExternalSignature</code> is used for
+signatures based on the file name, metadata, or other
 information located other than in the document content.
 </p>
 <ul>
@@ -904,109 +891,109 @@ Used when the signature is represented as an array of bytes.
     <li><code>public InternalSignature (String value, SignatureType type,<br>
 			      SignatureUseType use);</code><br>
 
-Used when the signature is represented as a character 
+Used when the signature is represented as a character
 string and the offset in the file is indeterminate.</li>
     <li><code>public InternalSignature (int[] value, SignatureType type,<br>
 			      SignatureUseType use);</code><br>
-Used when the signature is represented as an array of 
+Used when the signature is represented as an array of
 bytes and the offset in the file is indeterminate.
     <li><code>public InternalSignature (String value, SignatureType type,<br>
 			      SignatureUseType use, int offset);</code><br>
-Used when the signature is represented as a character 
+Used when the signature is represented as a character
 string and must occur at a specific offset in the file.</li>
     <li><code>public InternalSignature (int[] value, SignatureType type,<br>
 			      SignatureUseType use, int offset);</code><br>
-Used when the signature is represented as an 
+Used when the signature is represented as an
 array of bytes and must occur at a specific offset in the file.</li>
 
     <li><code>public InternalSignature (String value, SignatureType type,
 			      SignatureUseType use, String note);</code><br>
-Used when the signature is represented as a character 
-string and the offset in the file is indeterminate, 
+Used when the signature is represented as a character
+string and the offset in the file is indeterminate,
 and a note is specified.</li>
 
     <li><code>public InternalSignature (int[] value, SignatureType type,
 			      SignatureUseType use, String note);<br>
-Used when the signature is represented as an array of 
-bytes and the offset in the file is indeterminate, 
+Used when the signature is represented as an array of
+bytes and the offset in the file is indeterminate,
 and a note is specified.</li>
 
     <li><code>public InternalSignature (String value, SignatureType type,<br>
 			      SignatureUseType use, int offset,
 			      String note);</code><br>
-Used when the signature is represented as a character 
-string and must occur at a specific offset in the file, 
+Used when the signature is represented as a character
+string and must occur at a specific offset in the file,
 and a note is specified.
 
     <li><code>public InternalSignature (int[] value, SignatureType type,<br>
 			      SignatureUseType use, int offset,
 			      String note);</code><br>
-Used when the signature is represented as an array of 
-bytes and must occur at a specific offset in the file, 
+Used when the signature is represented as an array of
+bytes and must occur at a specific offset in the file,
 and a note is specified.</li>
 </ul>
 <p>
-The type parameter must be one of the predefined 
-instances of <code>SignatureType</code>.  For an 
-<code>ExternalSignature</code>, the value may be 
-<code>EXTENSION</code> or <code>FILETYPE</code>.  
-<code>EXTENSION</code> indicates a file extension 
-(more properly, the end of a file name, whether the file system 
-supports extensions or not), such as ".pdf".  
-<code>FILETYPE</code> is applicable only to the Macintosh 
-OS, and indicates a four-character file type stored in the file's 
-metadata, such as "TIFF".  For an <code>InternalSignature</code>, 
-the value must be <code>MAGIC</code>, signifying a "magic number" 
+The type parameter must be one of the predefined
+instances of <code>SignatureType</code>.  For an
+<code>ExternalSignature</code>, the value may be
+<code>EXTENSION</code> or <code>FILETYPE</code>.
+<code>EXTENSION</code> indicates a file extension
+(more properly, the end of a file name, whether the file system
+supports extensions or not), such as ".pdf".
+<code>FILETYPE</code> is applicable only to the Macintosh
+OS, and indicates a four-character file type stored in the file's
+metadata, such as "TIFF".  For an <code>InternalSignature</code>,
+the value must be <code>MAGIC</code>, signifying a "magic number"
 stored in the file.
 </p><p>
-At this time, the code checks only internal signatures. 
-A document which does not satisfy internal signature 
+At this time, the code checks only internal signatures.
+A document which does not satisfy internal signature
 specifications is reported as not consistent.
 </p>
 
 <a class="name" name="repinfo">
 <h3>3.11 The RepInfo object</h3></a>
 <p>
-The module's <code>parse</code> method may place information into the 
-variable <code>_info</code>, which is a 
-<code>RepInfo</code> object. The 
-setting of the <code>valid</code> and 
-<code>wellFormed</code> fields has already 
-been discussed.  In addition, the module may call 
+The module's <code>parse</code> method may place information into the
+variable <code>_info</code>, which is a
+<code>RepInfo</code> object. The
+setting of the <code>valid</code> and
+<code>wellFormed</code> fields has already
+been discussed.  In addition, the module may call
 the following methods to add information to <code>RepInfo</code>:
 </p>
 <ul>
     <li><code>public void setFormat (String format);</code><br>
-Sets a <code>String</code> identifying the format of the document. 
+Sets a <code>String</code> identifying the format of the document.
 This should be an element of the module's <code>FORMAT</code> array.</li>
     <li><code>public void setMessage (Message message);</code><br>
-Adds a <code>Message</code> to the list of informational and error 
-messages.  If a document is not valid, there should be 
+Adds a <code>Message</code> to the list of informational and error
+messages.  If a document is not valid, there should be
 at least one <code>ErrorMessage</code> explaining the problem.</li>
     <li><code>public void setMimeType (String mimeType);</code><br>
 Sets the MIME type which the document satisfies.</li>
     <li><code>public void setProfile (String profile);</code><br>
-Sets the name of a profile which the document satisfies.  
-A profile denotes a set of document characteristics which 
-conform to a recognized subclass of the document format, 
-such as TIFF Class P and Class R.  More than one 
+Sets the name of a profile which the document satisfies.
+A profile denotes a set of document characteristics which
+conform to a recognized subclass of the document format,
+such as TIFF Class P and Class R.  More than one
 profile may be set for a document.</li>
     <li><code>public void setProperty (Property property);</code><br>
-Adds a <a href="#property"><code>Property</code></a> of the document to the list of 
-Properties. Any number of Properties may be set. Each 
-module should have a consistent set of Properties which are 
-reported for documents that are valid under it.  
+Adds a <a href="#property"><code>Property</code></a> of the document to the list of
+Properties. Any number of Properties may be set. Each
+module should have a consistent set of Properties which are
+reported for documents that are valid under it.
 A module which does not do characterization (does not have
 the <code>edu.harvard.hul.ois.jhove.canCharacterize</code>
 feature) should not add any Properties.
 &nbsp;<br>
-In creating Properties, a module should pay attention 
-to the value of <code>_verbosity</code> 
-(inherited from <code>ModuleBase</code>).  
-If _verbosity has a value of <code>MIMIMUM_VERBOSITY</code>, 
-the module should omit information which is voluminous and of 
-relatively little use. If <code>_verbosity</code> has a value of 
-<code>MAXIMUM_VERBOSITY</code>, then the maximum amount of 
+In creating Properties, a module should pay attention
+to the value of <code>_verbosity</code>
+(inherited from <code>ModuleBase</code>).
+If _verbosity has a value of <code>MIMIMUM_VERBOSITY</code>,
+the module should omit information which is voluminous and of
+relatively little use. If <code>_verbosity</code> has a value of
+<code>MAXIMUM_VERBOSITY</code>, then the maximum amount of
 available data should be reported.</li>
     <li><code>public void setSize (long size);</code><br>
 Sets the size of the document in bytes.</li>
@@ -1017,7 +1004,7 @@ Adds a String to a list of module names, indicating that
 the document's signature satisfies the module.  By convention,
 this should be called with <code>_name</code> as its argument.
 If a module recognizes an internal signature or "magic number"
-as an initial step in identifying the file, it should call 
+as an initial step in identifying the file, it should call
 <code>setSigMatch(_name)</code> as soon as the signature
 has been verified.  <code>JhoveBase</code> treats this
 list specially, so that values set by successive modules
@@ -1032,9 +1019,9 @@ this.
 <a class="name" name="app">
 <h3>3.12 The App object</h3></a>
 <p>
-There is a single object of type <code>App</code>, which holds 
-information describing the application state. 
-<code>ModuleBase</code> makes this available as the field 
+There is a single object of type <code>App</code>, which holds
+information describing the application state.
+<code>ModuleBase</code> makes this available as the field
 <code>_app</code>.  With the architectural changes in Beta
 3, there is little or no need to make use of this object.
 References previously made to the <code>App</code> object
@@ -1056,36 +1043,36 @@ are of interest:
 <ul>
     <li><code>public int getBufferSize ();</code><br>
 Returns the user's preferred buffer size, as specified
-in the command line.  This is subject 
-to interpretation, but in general buffers allocated 
-by the application should be that large.  If the value 
-returned is negative, the application has not 
+in the command line.  This is subject
+to interpretation, but in general buffers allocated
+by the application should be that large.  If the value
+returned is negative, the application has not
 specified a buffer size.</li>
     <li><code>public boolean getShowRawFlag ();</code><br>
-Returns the "raw output" flag.  If this function 
-returns <code>true</code>, then properties with numeric values that 
-have specific interpretations should contain only the 
-numeric values; if it returns <code>false</code>, the module may 
+Returns the "raw output" flag.  If this function
+returns <code>true</code>, then properties with numeric values that
+have specific interpretations should contain only the
+numeric values; if it returns <code>false</code>, the module may
 substitute interpretive text strings for the numeric values.</li>
 
     <li><code>public boolean getChecksumFlag ();</code><br>
-Returns <code>true</code> if the application has been asked to do 
+Returns <code>true</code> if the application has been asked to do
 checksum calculations.</li>
 </ul>
 
 <a class="name" name="agent">
 <h3>3.14 The Agent object</h3></a>
 <p>
-The <code>Agent</code> object defines a party that has a role in 
-the creation, publication, or distribution of a <code>Document</code>. 
+The <code>Agent</code> object defines a party that has a role in
+the creation, publication, or distribution of a <code>Document</code>.
 </p>
 <ul>
 <li><code>public Agent (String name, AgentType type);</code></li>
 </ul>
 <p>
-The <code>Agent</code>'s name is any suitable descriptive string. 
-The type must be one of the predefined instances of 
-<code>AgentType</code>: 
+The <code>Agent</code>'s name is any suitable descriptive string.
+The type must be one of the predefined instances of
+<code>AgentType</code>:
 </p>
 <ul>
 <li><code>AgentType.COMMERCIAL</code></li>
@@ -1096,7 +1083,7 @@ The type must be one of the predefined instances of
 <li><code>AgentType.OTHER</code></li>
 </ul>
 <p>
-Other information may be added to an <code>Agent</code> 
+Other information may be added to an <code>Agent</code>
 using its setter methods:
 </p>
 <ul>
@@ -1111,16 +1098,16 @@ using its setter methods:
 <a class="name" name="identifier">
 <h3>3.15 The Identifier object</h3></a>
 <p>
-The <code>Identifier</code> object provides various ways of 
-assigning an identifier to a <code>Document</code>.  
+The <code>Identifier</code> object provides various ways of
+assigning an identifier to a <code>Document</code>.
 </p>
 <ul>
 <li><code>public Identifier (String value, IdentifierType type, String note);</code>
 </ul>
 <p>
-The <code>Identifier</code>'s value should be appropriate 
-to the <code>IdentifierType</code>.  The type must be 
-one of the predefined values of <code>IdentifierType</code>: 
+The <code>Identifier</code>'s value should be appropriate
+to the <code>IdentifierType</code>.  The type must be
+one of the predefined values of <code>IdentifierType</code>:
 <p>
 <ul>
 <li><code>IdentifierType.ANSI</code> (American National Standards Institute)</li>
@@ -1129,18 +1116,18 @@ one of the predefined values of <code>IdentifierType</code>:
 <li><code>IdentifierType.ECMA</code></li>
 <li><code>IdentifierType.HANDLE</code> (CNRI Handle)</li>
 <li><code>IdentifierType.ISO</code> (International Standards Organization)</li>
-<li><code>IdentifierType.ISBN</code> (International Standard Book Number)</li> 
-<li><code>IdentifierType.LC</code> (Library of Congress classification)</li> 
-<li><code>IdentifierType.LCCN</code> (Library of Congress catalogue number)</li> 
-<li><code>IdentifierType.NISO</code> (NISO standard number)</li> 
-<li><code>IdentifierType.PII</code> (Publisher Item Identifier)</li> 
-<li><code>IdentifierType.RFC</code> (IETF Request for Comment)</li> 
-<li><code>IdentifierType.SICI</code> (Serial Item and Contribution Identifier)</li> 
-<li><code>IdentifierType.URI</code> (Uniform Resource Identifier)</li> 
-<li><code>IdentifierType.URL</code> (Uniform Resource Locator)</li> 
-<li><code>IdentifierType.URN</code> (Uniform Resource Name)</li> 
-<li><code>IdentifierType.CCITT</code></li> 
-<li><code>IdentifierType.ITU</code> (International Telecommunication Union)</li> 
+<li><code>IdentifierType.ISBN</code> (International Standard Book Number)</li>
+<li><code>IdentifierType.LC</code> (Library of Congress classification)</li>
+<li><code>IdentifierType.LCCN</code> (Library of Congress catalogue number)</li>
+<li><code>IdentifierType.NISO</code> (NISO standard number)</li>
+<li><code>IdentifierType.PII</code> (Publisher Item Identifier)</li>
+<li><code>IdentifierType.RFC</code> (IETF Request for Comment)</li>
+<li><code>IdentifierType.SICI</code> (Serial Item and Contribution Identifier)</li>
+<li><code>IdentifierType.URI</code> (Uniform Resource Identifier)</li>
+<li><code>IdentifierType.URL</code> (Uniform Resource Locator)</li>
+<li><code>IdentifierType.URN</code> (Uniform Resource Name)</li>
+<li><code>IdentifierType.CCITT</code></li>
+<li><code>IdentifierType.ITU</code> (International Telecommunication Union)</li>
 <li><code>IdentifierType.JEITA</code> (Japan Electronics and Information Technology Industries Association)</li>
 <li><code>IdentifierType.OTHER</code></li>
 </ul>
@@ -1149,14 +1136,14 @@ one of the predefined values of <code>IdentifierType</code>:
 <a class="name" name="property">
 <h3>3.16 The Property object</h3></a>
 <p>
-Properties are used to report information about a document.  
-Output handlers and the viewer application present 
-Properties in an appropriate output format. 
-JHOVE provides a rich set of options for 
-defining properties.  Properties can be single objects 
-or ordered or unordered sets.  The constituent members of 
-a <code>Property</code> can themselves be Properties, allowing a 
-hierarchical structure. All constituent members of 
+Properties are used to report information about a document.
+Output handlers and the viewer application present
+Properties in an appropriate output format.
+JHOVE provides a rich set of options for
+defining properties.  Properties can be single objects
+or ordered or unordered sets.  The constituent members of
+a <code>Property</code> can themselves be Properties, allowing a
+hierarchical structure. All constituent members of
 a given <code>Property</code> must have the same type.
 </p>
 <ul>
@@ -1165,15 +1152,15 @@ a given <code>Property</code> must have the same type.
 		     Object value);</code></li>
 </ul>
 <p>
-The first constructor creates a <code>Property</code> with an arity of 
+The first constructor creates a <code>Property</code> with an arity of
 <code>PropertyArity.SCALAR</code>.
 </p><p>
-The property name should be a valid XML name; 
-in particular, it should not contain white space.  
+The property name should be a valid XML name;
+in particular, it should not contain white space.
 </p><p>
-The arity (type of organization) of the property must be 
-one of the predefined instances of <code>PropertyArity</code>.  
-The type of value must be in agreement with the value of 
+The arity (type of organization) of the property must be
+one of the predefined instances of <code>PropertyArity</code>.
+The type of value must be in agreement with the value of
 <code>arity</code>, as specified by the following table.
 </p>
 <table>
@@ -1189,15 +1176,15 @@ The type of value must be in agreement with the value of
 	</td><td><code>java.util.Set</code></td></tr>
 </table>
 <p>
-The type must be one of the predefined instances of 
-<code>PropertyType</code>.  The type of the constituents 
-of value must be in agreement with the value of 
-<code>type</code>, as specified by the following table.  
-If the arity is <code>SCALAR</code>, the type of value itself 
-must be in agreement with the value of <code>type</code>. 
-With arity <code>ARRAY</code>, members of the array 
-are primitive Java types rather than Objects where 
-applicable, so the type in the last column must be used.  
+The type must be one of the predefined instances of
+<code>PropertyType</code>.  The type of the constituents
+of value must be in agreement with the value of
+<code>type</code>, as specified by the following table.
+If the arity is <code>SCALAR</code>, the type of value itself
+must be in agreement with the value of <code>type</code>.
+With arity <code>ARRAY</code>, members of the array
+are primitive Java types rather than Objects where
+applicable, so the type in the last column must be used.
 The object type must be used with all other arities.
 </p>
 <table>
@@ -1234,16 +1221,16 @@ The object type must be used with all other arities.
 </code></td></tr><tr>
 	<td><code>PropertyType.STRING</code></td><td><code>java.lang.String
 </code></td></table>
- 
+
 <a class="name" name="message">
 <h3>3.17 The Message object</h3></a>
 <p>
-A <code>Message</code> object is used to report information about 
-the document.  <code>Message</code> is an abstract class with 
-two subclasses, <code>InfoMessage</code> and <code>ErrorMessage</code>. 
-The only difference between the classes is the 
-significance of the message; an <code>ErrorMessage</code> should 
-be used for a situation that makes a document invalid or 
+A <code>Message</code> object is used to report information about
+the document.  <code>Message</code> is an abstract class with
+two subclasses, <code>InfoMessage</code> and <code>ErrorMessage</code>.
+The only difference between the classes is the
+significance of the message; an <code>ErrorMessage</code> should
+be used for a situation that makes a document invalid or
 ill-formed, and an <code>InfoMessage</code> for other cases.
 </p>
 <ul>
@@ -1254,36 +1241,36 @@ ill-formed, and an <code>InfoMessage</code> for other cases.
     <li><code>public ErrorMessage (String message);</code>
 </ul>
 <p>
-If the circumstance which gives rise to the message 
-occurs at a known offset into the document, the 
-constructor with an offset should be used; otherwise 
+If the circumstance which gives rise to the message
+occurs at a known offset into the document, the
+constructor with an offset should be used; otherwise
 the single-argument constructor should be used.
 </p>
 <a class="name" name="nisoimagemetadata">
 <h3>3.18 The NisoImageMetadata object</h3></a>
 <p>
-<code>NisoImageMetadata</code> provides a standard way to report 
-many common document properties. The output handlers 
-include dedicated methods for displaying 
-<code>NisoImageMetadata</code> properties. 
+<code>NisoImageMetadata</code> provides a standard way to report
+many common document properties. The output handlers
+include dedicated methods for displaying
+<code>NisoImageMetadata</code> properties.
 </p>
 <ul>
     <li><code>public NisoImageMetadata ();</code></li>
 </ul>
 <p>
-Setter methods are provided for the properties which 
-<code>NisoImageMetadata</code> supports.The source code, 
-the JavaDoc for the class and the NISO documentation should 
-be consulted for detailed information on setter functions 
+Setter methods are provided for the properties which
+<code>NisoImageMetadata</code> supports.The source code,
+the JavaDoc for the class and the NISO documentation should
+be consulted for detailed information on setter functions
 and parameter values.
 </p>
 
 <a class="name" name="rational">
 <h3>3.19 The Rational object</h3></a>
 <p>
-A <code>Rational</code> object provides a way to represent the 
-ratio of two integers. A <code>Rational</code> is stored 
-as its numerator and denominator values. 
+A <code>Rational</code> object provides a way to represent the
+ratio of two integers. A <code>Rational</code> is stored
+as its numerator and denominator values.
 No protection against zero division is provided by the class.
 </p>
 <ul>
@@ -1294,24 +1281,7 @@ No protection against zero division is provided by the class.
 See the <a href="doc">JavaDoc</a> for further details.
 </p>
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">Writing&nbsp;a&nbsp;module</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
-<address>
-Copyright 2004-2005 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
-Last updated 2005-05-26
-</address>
-<p>
+</div>
+    {% include footer.html %}
 </body>
 </html>
-

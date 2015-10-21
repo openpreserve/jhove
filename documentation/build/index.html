@@ -1,47 +1,25 @@
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: Building from Source
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<link rel="Stylesheet" href="style.css" type="text/css">
-<title>Building JHOVE</title>
-</head>
-<body>
-<img src="jhove-logo.gif">
+{% include header.html %}
+<body role="document">
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">Building JHOVE</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
-
-
-
-  
-
-  
-  
-
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
+<h1>Building JHOVE</h1>
 <p>
 Here are the instructions for building JHOVE. Lots of care is required.
 </p>
 <ul>
-<li > Update Jhove.java and JhoveView.java so that DATE and RELEASE reflect the current version. 
+<li > Update Jhove.java and JhoveView.java so that DATE and RELEASE reflect the current version.
 </li>
-<li > Update overview.html to reflect the current version in the JavaDoc. 
+<li > Update overview.html to reflect the current version in the JavaDoc.
 </li>
 <li > Run ant to build the latest jar files, and check all the jars in the bin directory into <acronym title="Concurrent Versions System">CVS</acronym>.
 </li>
-<li > Update RELEASENOTES and README to document the newest version. 
+<li > Update RELEASENOTES and README to document the newest version.
 </li>
 <li > Pick a directory to which you will check out a new copy of JHOVE for building.
 </li>
@@ -61,7 +39,7 @@ Here are the instructions for building JHOVE. Lots of care is required.
 </li>
 <li > <code>cvs commit</code>  (Needed only if ant javadoc has been done)
 </li>
-<li > <code>./packagejhove.sh 1_n </code> 
+<li > <code>./packagejhove.sh 1_n </code>
 </li>
 <li > [1_n is the version number, e.g., 1_8 for JHOVE 1.8]
 </li>
@@ -108,7 +86,7 @@ When it's done, send out appropriate notifications.
 To build the OS X application, do the following:
 <ul>
 <li>Run the application Jar Bundler. Apple keeps changing where you find it.
-If you've installed Apple's developer tools, it may be in 
+If you've installed Apple's developer tools, it may be in
 <code>/usr/share/java/Tools/</code>.
 </li>
 <li>Click the "Choose" button and select <code>bin/JhoveView.jar</code>, then
@@ -120,20 +98,22 @@ to "1.5+."
 </li>
 <li>Go to the "Properties" tab. Set the version to an appropriate
 value, e.g., "1.10". Set Get-Info String to "JHOVE [version]", e.g.,
-"JHOVE 1.10". 
+"JHOVE 1.10".
 </li>
 <li>
-Click "Create Application..." and name the file to JHOVE_[version], replacing 
+Click "Create Application..." and name the file to JHOVE_[version], replacing
 the period with an underscore, e.g., "JHOVE_1_10". The extension ".app"
 will be added automatically.
 </li>
 <li>
 Zip the application. This is essential, since the application is really a folder
-in disguise with a lot of files under it. 
+in disguise with a lot of files under it.
 </li>
 <li>
 Upload the application to the "Files" page on SourceForge.
 </ul>
 </p>
+</div>
+    {% include footer.html %}
 </body>
 </html>
