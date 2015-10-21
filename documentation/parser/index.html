@@ -1,33 +1,19 @@
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: Selecting an XML parser
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<link rel="Stylesheet" href="style.css" type="text/css">
-<title>Selecting an XML parser</title>
-</head>
-<body>
-<img src="jhove-logo.gif">
+{% include header.html %}
+<body role="document">
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">Selecting&nbsp;an&nbsp;XML&nbsp;parser</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
 <h1>Selecting an XML parser (<em>draft</em>, 2007-03-30)</h1>
 
 <p>
 The default XML parser provided with Java 1.4 does not support
 schema validation. For this or other reasons, you may want
-to use a different XML parser with JHOVE. 
+to use a different XML parser with JHOVE.
 <a href="http://xerces.apache.org/xerces2-j/">Xerces2</a> is
 a widely used parser which provides schema validation; any
 parser which conforms to Java's XML API may also be used.
@@ -41,7 +27,7 @@ the parser. In the case of Xerces, this will be
 that will be used when you invoke JHOVE.
 If you are invoking <code>jhove</code> (Unix/Linux) or
 <code>jhove.bat</code> (Windows) from the command line, then add the
-path to the parser jar file to <code>EXTRA_JARS</code>. 
+path to the parser jar file to <code>EXTRA_JARS</code>.
 <p>
 If you have been invoking JhoveViewer.jar by double-clicking
 it, you will need to create a command line file to run it with
@@ -72,7 +58,7 @@ In the JHOVE command line, you would specify this as<br>
 &nbsp;<br>
 &nbsp;&nbsp;<code>-x <i>[sax-class]</i></code>
 <p>
-You can do this permanently by setting the value of <code>$ARGS</code> in 
+You can do this permanently by setting the value of <code>$ARGS</code> in
 the <code>jhove</code> or <code>jhove.bat</code> script file. Ignore
 the warning against not editing below the line.
 <p>
@@ -87,24 +73,7 @@ Since the viewer does not recognize JHOVE command line parameters, you
 must use a property to specify the parser when running the viewer.
 </p>
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu" href="documentation.html">Documentation</a></td>
-<td class="active">Selecting&nbsp;an&nbsp;XML&nbsp;parser</td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
-<address>
-Copyright 2007 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
-Last updated 2007-04-02
-</address>
-<p>
+</div>
+    {% include footer.html %}
 </body>
 </html>
-
