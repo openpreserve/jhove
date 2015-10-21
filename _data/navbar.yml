@@ -1,20 +1,11 @@
-- title: "JHOVE"
-  href: "/"
+- title: "Getting started"
+  href: "/getting-started/"
 
-- title: "Users"
-  href: "/users/"
+- title: "Documentation"
+  href: "/documentation/"
 
-- title: "Developers"
-  href: "/developers/"
-  subcategories:
-    - subtitle: "Java"
-      subhref: "java/"
-  subcategories:
-    - subtitle: "Docs"
-      subhref: "docs/"
-
-- title: "Software"
-  href: "/software/"
+- title: "Modules"
+  href: "/modules/"
 
 - title: "Resources"
   href: "/resources/"
