@@ -40,6 +40,7 @@
   <variables>
     <variable name="InstallerFrame.logfilePath" value="Default"/>
     <variable name="VERSION" value="v ${project.version}"/>
+    <variable name="BUILD_DATE" value="Built ${jhove.timestamp}"/>    
     <variable name="TargetPanel.dir" value="$USER_HOME/jhove-beta"/>
   </variables>
 
