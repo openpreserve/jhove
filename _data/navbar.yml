@@ -27,12 +27,18 @@
       subhref: "wave/"
     - subtitle: "XML"
       subhref: "xml/"
+    - subtitle: "MP3"
+      subhref: "third-party/mp3/"
+    - subtitle: "ZIP"
+      subhref: "third-party/zip/"
 
 - title: "Resources"
   href: "/resources/"
 
-- title: "Software"
-  href: "/software/"
-
-- title: "OPF"
-  href: "http://openpreservation.org"
+- title: "About"
+  href: "/about/"
+  subcategories:
+    - subtitle: "OPF"
+      subhref: "http://openpreservation.org"
+    - subtitle: "Credits"
+      subhref: "credits/"

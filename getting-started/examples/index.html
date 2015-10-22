@@ -1,36 +1,19 @@
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: Examples
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<link rel="Stylesheet" href="style.css" type="text/css">
-<meta NAME="Description" CONTENT="Examples of use of JHOVE in  a command line environment">
-<title>JHOVE Examples</title>
-</head>
-<body>
-<img src="jhove-logo.gif">
-
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="active">Examples</td>
-<td class="inactive"><a class="menu"
-                        href="documentation.html">Documentation</a></td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
+{% include header.html %}
+<body role="document">
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
 <h1>JHOVE Examples</h1>
 
 <a class="name" name="app">
 <h2>1 Application</h2></a>
 
 <p>
-<blockquote>
+
 <pre>
 unix% <strong>jhove -c conf/jhove.conf</strong>
 Jhove (Rel. 1.0, 2005-05-26)
@@ -60,13 +43,13 @@ Jhove (Rel. 1.0, 2005-05-26)
   Usage: java Jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler] [-o output] [-x saxclass] [-t tempdir] [-b bufsize] [-l loglevel] [[-krs] dir-file-or-uri [...]]
   Rights: Copyright 2004-2005 by the President and Fellows of Harvard College. Released under the GNU Lesser General Public License.
 </pre>
-</blockquote>
+
 
 <a class="name" name="module">
 <h2>2 Module</h2></a>
 
 <p>
-<blockquote>
+
 <pre>
 unix% <strong>jhove -c conf/jhove.conf -m bytestream</strong>
 Jhove (Rel. 1.0, 2005-05-26)
@@ -88,13 +71,13 @@ Jhove (Rel. 1.0, 2005-05-26)
   Note: This is the default format
   Rights: Copyright 2003-2005 by JSTOR and the President and Fellows of Harvard College. Released under the GNU Lesser General Public License.
 </pre>
-</blockquote>
+
 
 <a class="name" name="handler">
 <h2>3 Output Handler</h2></a>
 
 <p></p>
-<blockquote>
+
 <pre>
 unix% <strong>jhove -c conf/jhove.conf -H xml</strong>
 Jhove (Rel. 1.0, 2005-05-26)
@@ -110,7 +93,7 @@ Jhove (Rel. 1.0, 2005-05-26)
   Note: This output handler is defined by the XML Schema http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd
   Rights: Copyright 2003-2005 by JSTOR and the President and Fellows of Harvard College. Released under the GNU Lesser General Public License.
 </pre>
-</blockquote>
+
 
 
 <a class="name" name="identification">
@@ -120,7 +103,7 @@ Jhove (Rel. 1.0, 2005-05-26)
 <h3>4.1 ASCII</h3></a>
 
 <p></p>
-<blockquote>
+
 <pre>
 unix% <strong>jhove -c conf/jhove.conf -k examples/ascii/control.txt</strong>
 Jhove (Rel. 1.0, 2005-05-26)
@@ -132,7 +115,7 @@ Jhove (Rel. 1.0, 2005-05-26)
   Format: ASCII
   Status: Well-formed and valid
   MIMEtype: text/plain; charset=US-ASCII
-  ASCIIMetadata: 
+  ASCIIMetadata:
    LineEndings: LF
    ControlCharacters: TAB (0x09), VT (0x0B), FF (0x0C), SUB (0x1A)
   Checksum: bae406b6
@@ -142,13 +125,13 @@ Jhove (Rel. 1.0, 2005-05-26)
   Checksum: 6753be3059ba36fd970ff620a7ebe3fff95c13fe
    Type: SHA-1
 </pre>
-</blockquote>
+
 
 <a class="name" name="utf-8">
 <h3>4.2 UTF-8</h3></a>
 
 <p></p>
-<blockquote>
+
 <pre>
 unix% <strong>jhove -c conf/jhove.conf -k examples/utf-8/sample.txt</strong>
 Jhove (Rel. 1.0, 2005-05-26)
@@ -160,7 +143,7 @@ Jhove (Rel. 1.0, 2005-05-26)
   Format: UTF-8
   Status: Well-formed and valid
   MIMEtype: text/plain; charset=UTF-8
-  UTF8Metadata: 
+  UTF8Metadata:
    Characters: 988
    UnicodeBlocks: Basic Latin, Latin-1 Supplement, Latin Extended-A, IPA Extensions, Greek and Coptic, Cyrillic, Hebrew, Thai, Georgian, Latin Extended Additional, Greek Extended, General Punctuation, Hiragana, Katakana, CJK Unified Ideographs, Hangul Syllables, Arabic Presentation Forms-A, Arabic Presentation Forms-B
    LineEndings: CRLF
@@ -171,13 +154,13 @@ Jhove (Rel. 1.0, 2005-05-26)
   Checksum: e09d2fcb13e4daabe285282e19c7bf93b0c1c2a4
    Type: SHA-1
 </pre>
-</blockquote>
+
 
 <a class="name" name="pdf">
 <h3>4.3 PDF</h3></a>
 
 <p></p>
-<blockquote>
+
 <pre>
 unix% <strong> jhove -c conf/jhove.conf -k examples/pdf/ddap/DDAP_Singlev3.pdf</strong>
 Jhove (Rel. 1.0, 2005-05-26)
@@ -195,14 +178,14 @@ Jhove (Rel. 1.0, 2005-05-26)
    Offset: 18766
   MIMEtype: application/pdf
   Profile: Linearized PDF, ISO PDF/A-1, Level B (Draft Proposal), ISO PDF/X-1, ISO PDF/X-1a
-  PDFMetadata: 
+  PDFMetadata:
    Objects: 45
    FreeObjects: 1
    IncrementalUpdates: 2
-   DocumentCatalog: 
+   DocumentCatalog:
     PageLayout: SinglePage
     PageMode: UseNone
-   Info: 
+   Info:
     Title: DDAP_Single3
     Author: Frank Scott
     Creator: QuarkXPress PassportB* 4.11 [k]: AdobePS 8.7.2 (104)
@@ -210,49 +193,49 @@ Jhove (Rel. 1.0, 2005-05-26)
     CreationDate: Thu Jan 03 08:36:33 EST 2002
     ModDate: Tue Mar 26 08:27:45 EST 2002
    ID: 0x29a07bc8f2b880fced92f193e0e57c81, 0xd9f569fa0fe3a1db44b0cf6fc2f3854c
-   Filters: 
+   Filters:
     FilterPipeline: FlateDecode
-   Fonts: 
-    Type1: 
-     Font: 
+   Fonts:
+    Type1:
+     Font:
       BaseFont: PPJJFN+Futura-ExtraBold
       FontSubset: true
       FirstChar: 32
       LastChar: 181
-      FontDescriptor: 
+      FontDescriptor:
        FontName: PPJJFN+Futura-ExtraBold
        Flags: Nonsymbolic, ForceBold
        FontBBox: -249, -260, 1662, 1009
        FontFile3: true
       Encoding: WinAnsiEncoding
-     Font: 
+     Font:
       BaseFont: PPJIPF+Helvetica
       FontSubset: true
       FirstChar: 32
       LastChar: 181
-      FontDescriptor: 
+      FontDescriptor:
        FontName: PPJIPF+Helvetica
        Flags: Nonsymbolic
        FontBBox: -166, -225, 1000, 931
        FontFile3: true
       Encoding: WinAnsiEncoding
-     Font: 
+     Font:
       BaseFont: PPJIPF+Helvetica
       FontSubset: true
       FirstChar: 32
       LastChar: 240
-      FontDescriptor: 
+      FontDescriptor:
        FontName: PPJIPF+Helvetica
        Flags: Nonsymbolic
        FontBBox: -166, -225, 1000, 931
        FontFile3: true
       Encoding: MacRomanEncoding
-     Font: 
+     Font:
       BaseFont: PPJJCK+Helvetica-Bold
       FontSubset: true
       FirstChar: 32
       LastChar: 240
-      FontDescriptor: 
+      FontDescriptor:
        FontName: PPJJCK+Helvetica-Bold
        Flags: Nonsymbolic, ForceBold
        FontBBox: -170, -228, 1003, 962
@@ -302,8 +285,8 @@ Jhove (Rel. 1.0, 2005-05-26)
  &lt;/rdf:Description&gt;
 
 &lt;/rdf:RDF&gt;
-   Pages: 
-    Page: 
+   Pages:
+    Page:
      Label: 1
   Checksum: 5b07663e
    Type: CRC32
@@ -312,13 +295,13 @@ Jhove (Rel. 1.0, 2005-05-26)
   Checksum: 3294a96298b59e14660b022ecc1f4b7569fa781c
    Type: SHA-1
 </pre>
-</blockquote>
+
 
 <a class="name" name="tiff">
 <h3>4.4 TIFF</h3></a>
 
 <p></p>
-<blockquote>
+
 <pre>
 unix% <strong>jhove -c conf/jhove.conf -k examples/tiff/little-endian.tif</strong>
 Jhove (Rel. 1.0, 2005-05-26)
@@ -334,15 +317,15 @@ Jhove (Rel. 1.0, 2005-05-26)
    TIFF-hul
   MIMEtype: image/tiff
   Profile: TIFF/IT-BP/P2 (ISO 12639:1998)
-  TIFFMetadata: 
+  TIFFMetadata:
    ByteOrder: little-endian
-   IFDs: 
+   IFDs:
     Number: 1
-    IFD: 
+    IFD:
      Offset: 8
      Type: TIFF
-     Entries: 
-      NisoImageMetadata: 
+     Entries:
+      NisoImageMetadata:
        MIMEType: image/tiff
        ByteOrder: little-endian
        CompressionScheme: CCITT Group 4
@@ -366,7 +349,7 @@ Jhove (Rel. 1.0, 2005-05-26)
       MaxSampleValue: 1
       Threshholding: 1
       T6Options: 0
-      TIFFITProperties: 
+      TIFFITProperties:
        BackgroundColorIndicator: background not defined
        ImageColorIndicator: image not defined
        TransparencyIndicator: no transparency
@@ -381,26 +364,8 @@ Jhove (Rel. 1.0, 2005-05-26)
   Checksum: 304ac95579c21f3498dfdff71107d3845220d34f
    Type: SHA-1
 </pre>
-</blockquote>
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="active">Examples</td>
-<td class="inactive"><a class="menu"
-                        href="documentation.html">Documentation</a></td>
-<td class="inactive"><a class="menu"
-                        href="distribution.html">Distribution</a></td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
-<address>
-Copyright 2003-2005 by JSTOR and the President and Fellows of Harvard College. Used by permission.<br>
-Last updated 2005-05-26
-</address>
+</div>
+    {% include footer.html %}
 </body>
 </html>
-

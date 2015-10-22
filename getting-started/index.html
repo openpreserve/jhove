@@ -90,506 +90,219 @@ title: Getting started
         </p>
       </li>
     </ul>
+  </p>
+  <p>
+    Identification, validation, and characterization actions are frequently
+    necessary during routine operation of
+    digital repositories and for digital preservation activities.
+  </p>
+  <p>
+    The output from JHOVE is controlled by <em>output handlers</em>.
+    JHOVE uses an extensible plug-in architecture; it can be configured at the
+    time of its invocation to include whatever specific format modules and
+    output handlers that are desired.
+    The initial release of JHOVE includes modules for
+    <a href="/modules/bytestream/">arbitrary byte streams</a>,
+    <a href="/modules/ascii/">ASCII</a> and
+    <a href="/modules/utf8/">UTF-8</a> encoded text,
+    <a href="/modules/tiff/">TIFF</a>,
+    <a href="/modules/html/">HTML</a>,
+    <a href="/modules/xml/">XML</a>,
+    <a href="/modules/jpeg/">JPEG</a>,
+    <a href="/modules/jpeg2000/">JPEG2000</a>,
+    <a href="/modules/pdf/">PDF</a>,
+    <a href="/modules/aiff/">AIFF</a>,
+    <a href="/modules/wave/">WAVE</a> audio; and
+    <a href="#text">text</a> and <a href="#xml">XML</a> output handlers.
+  </p>
+  <a class="name" name="getting">
+    <h2>Getting JHOVE</h2>
+  </a>
+  <p>
+    JHOVE is written in <a href="http://java.sun.com/j2se/">Java</a>.
+    A J2SE 1.5-compliant Java Runtime Environment (JRE) is required for
+    proper operation of JHOVE. JHOVE should be usable on any Unix, Windows,
+    or OS X platform with the appropriate Java installation.
+  </p>
+  <a class="name" name="download">
+    <h3>Downloading JHOVE</h3>
+  </a>
+  <p>
+    There's now a beta of the new JHOVE installer, the latest version can be
+    <a href="http://downloads.opf-labs.org/dev/jhove-xplt-installer-dev-latest.jar">
+      downloaded
+    </a> from the OPF's Jenkins server.
+  </p>
+  <h3>JHOVE for developers</h3>
+  <p>
+    If you'd like to get JHOVE via Maven or build the project from source please
+    read our <a href="/documentation/build/">build guide</a>.
+  </p>
+  <a class="name" name="install">
+    <h2>Installing JHOVE</h2>
+  </a>
+  <p>
+    Download the
+    <a href="http://downloads.opf-labs.org/dev/jhove-xplt-installer-dev-latest.jar">
+      latest JHOVE installer
+    </a>,
+    this requires Java 1.6 or later to be pre-installed. We'll assume that you've
+    downloaded
+    <pre>
+      <userHome>/Downloads/jhove-xplt-installer-1.12.x.jar
+    </pre>
+    where <pre>x</pre> is the current revision/build number. Installation is OS
+    dependant.
+    <h3>Windows</h3>
     <p>
-      Identification, validation, and characterization actions are frequently
-      necessary during routine operation of
-      digital repositories and for digital preservation activities.
+      <em>Currently only tested on Windows 7</em>
     </p>
     <p>
-      The output from JHOVE is controlled by <em>output handlers</em>.
-      JHOVE uses an extensible plug-in architecture; it can be configured at the
-      time of its invocation to include whatever specific format modules and
-      output handlers that are desired.
-      The initial release of JHOVE includes modules for
-      <a href="/modules/bytestream/">arbitrary byte streams</a>,
-      <a href="/modules/ascii/">ASCII</a> and
-      <a href="/modules/utf8/">UTF-8</a> encoded text,
-      <a href="/modules/tiff/">TIFF</a>,
-      <a href="/modules/html/">HTML</a>,
-      <a href="/modules/xml/">XML</a>,
-      <a href="/modules/jpeg/">JPEG</a>,
-      <a href="/modules/jpeg2000/">JPEG2000</a>,
-      <a href="/modules/pdf/">PDF</a>,
-      <a href="/modules/aiff/">AIFF</a>,
-      <a href="/modules/wave/">WAVE</a> audio; and
-      <a href="#text">text</a> and <a href="#xml">XML</a> output handlers.
+      Simply double click the downloaded installer JAR in Explorer. If Java is installed
+      then the windowed installer will guide you through selection. It's best to stay with
+      the default choices if installing the beta.
     </p>
+    <p>
+      Once the installation is finished you'll be able to double click
+      <pre>
+        C:\Users\yourName\jhove-beta\jhove-gui
+      </pre>
+      to start the JHOVE GUI. Alternatively start a command window,
+      e.g. <pre>winkey</pre> then type <pre>cmd</pre>, then issue these commands:
+      <pre>
+        C:\Users\yourName>cd jhove-beta
+        C:\Users\yourName>jhove
+      </pre>
+      to display the command line usage message.
+    </p>
+    <h3>Mac OS</h3>
+    <p>
+      <em>Currently only tested on Mavericks</em>
+    </p>
+    <p>
+      Simply double click the downloaded installer JAR in Explorer. If Java is installed
+      then the windowed installer will guide you through selection. It's best to stay with
+      the default choices if installing the beta.
+    </p>
+    <p>
+      Once the installation is finished you'll be able to double click
+      <pre>
+        /Users/yourName/jhove-beta/jhove-gui
+      </pre>
+      to start the JHOVE GUI. Alternatively start a command window
+      <pre>Terminal</pre> and then issue these commands:
+      <pre>
+        cd ~/jhove-beta
+        ./jhove
+      </pre>
+      to display the command line usage message.
+    </p>
+    <h3>Linux</h3>
+    <p>
+      <em>Currently only tested on Ubuntu 14.10</em>
+      Once the installer is downloaded start a terminal, e.g. <pre>ctrl+alt+T</pre>,
+      and type the  following, assuming the download is in <pre>~/Downloads</pre>:
+      <pre>
+        java -jar ~/Downloads/java-xplt-installer-1.12.x.jar
+      </pre>
+      Once the installation is finished you'll be able to:
+      <pre>
+        cd ~/jhove-beta
+        ./jhove
+      </pre>
+      to run the command line application and show the usage message.
+      Alternatively:
+      <pre>
+        cd ~/jhove-beta
+        ./jhove-gui
+      </pre>
+      will run the GUI application.
+    </p>
+  <p>
 
-<p>
-The JHOVE project was a collaboration of
-<a href="http://www.jstor.org">JSTOR</a>
-and the <a href="http://hul.harvard.edu/">Harvard University Library</a>.
-</p>
+  <a class="name" name="running">
+    <h2>Running JHOVE</h2>
+  </a>
+  <p>
+    There should be no issues configuring the current JHOVE beta but just in
+    case we've retained the
+    <a href="/getting-started/config/">old configuration guide</a>.
+  </p>
+  <h3>Usage</h3>
+  <p>
+    <pre>
+      java Jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
+                  [-o output] [-x saxclass] [-t tempdir] [-b bufsize]
+                  [-l loglevel] [[-krs] dir-file-or-uri [...]]
 
-<a class="name" name="download">
-  <h2>Getting JHOVE</h2>
-</a>
-
-<a class="name" name="requirements">
-<h3>Requirements</h3></a>
-
-<p>
-JHOVE is written in Java to conform to
-<a href="http://java.sun.com/j2se/">Java 2 Platform, Standard Edition
-(J2SE) 1.5</a>.
-A J2SE 1.5-compliant Java Runtime Environment (JRE) is required for
-proper operation of JHOVE.
-JHOVE should be usable on any Unix, Windows, or OS X platform with the
-appropriate J2SE installation.
-</p>
-
-<p>
-If you would like to recompile the JHOVE source code, then
-<a href="http://www.apache.org/">Apache</a>
-<a href="http://ant.apache.org/">Ant</a> is necessary.
-Note that the JAVA_HOME environment variable must be appropriately
-assigned for Ant to function properly.
-(JHOVE was implemented and tested using
-ANT 1.5.1.)
-</p>
-
-<a class="name" name="distribution">
-<h3>Distribution</h3></a>
-
-<p>
-JHOVE releases is distributed as gzip'ed tar files or ZIP files
-available from the
-<a href="https://sourceforge.net/projects/jhove">JHOVE SourceForge site</a>.
-When uncompressed and disaggregated, these result in the following
-installation directory structure:
-<blockquote>
-<pre>
-jhove/                                 # JHOVE home directory
-       COPYING                         # GNU Lesser General Public License (LGPL)
-       LICENSE                         # JHOVE license information
-       README
-       RELEASENOTES                    # JHOVE release notes
-       bin/
-                 jhove.jar             # JHOVE API package
-                 jhove-handler.jar     # Standard output handler package
-                 jhove-module.jar      # Standard module package
-                 JhoveApp.jar          # JHOVE command-line application
-                 JhoveView.jar         # JHOVE with Swing GUI front-end
-       build.xml                       # Ant configuration file
-       classes/
-                 build.xml             # Ant configuration file
-                 edu/ ...              # JHOVE API packages
-                 Jhove.*               # JHOVE main class
-                 ADump.*               # AIFF dump utility class
-                 GDump.*               # GIF dump utility class
-                 JDump.*               # JPEG dump utility class
-                 J2Dump.*              # JPEG2000 dump utility class
-                 PDump.*               # PDF dump utility class
-                 TDump.*               # TIFF dump utility class
-                 WDump.*               # WAVE dump utility class
-
-       conf/
-                 jhove.conf            # JHOVE configuration file
-       doc/
-                 *.html                # API documentation
-                 ...
-       examples/                       # Sample files
-                 ascii/ ...
-                 pdf/   ...
-                 tiff/  ...
-                 utf-8/ ...
-       adump*                          # AIFF dump Bourne shell driver script
-       adump.bat*                      # AIFF dump Windows shell driver script
-       gdump*                          # GIF dump Bourne shell driver script
-       gdump.bat*                      # GIF dump Windows shell driver script
-       jdump*                          # JPEG dump Bourne shell driver script
-       jdump.bat*                      # JPEG dump Windows shell driver script
-       j2dump*                         # JPEG 2000 dump Bourne shell driver
-       j2dump.bat*                     # JPEG 2000 dump Windows shell driver script
-       pdump*                          # PDF dump Bourne shell driver script
-       pdump.bat*                      # PDF dump Windows shell driver script
-       tdump*                          # TIFF dump Bourne shell driver script
-       tdump.bat*                      # PDF dump Windows shell driver script
-       pdump*                          # WAVE dump Bourne shell driver script
-       pdump.bat*                      # WAVE dump Windows shell driver script
-</pre>
-</blockquote>
-
-
-<p>
-The following jar files are meant to be used for embedding JHOVE functionality
-into new applications or systems:
-<blockquote>
-<table border="0">
-<tr><td><tt>jhove.jar</tt></td>
-<td>Contains the JHOVE API interfaces and classes</td></tr>
-<tr><td><tt>jhove-handler.jar</tt></td>
-<td>Contains the standard JHOVE output handlers</td></tr>
-<tr><td><tt>jhove-module.jar</tt></td>
-<td>Contains the standard JHOVE modules</td></tr>
-</table>
-</blockquote>
-The following jar file is meant to be used with the stand-alone JHOVE
-application using a command-line interface.  It contains the main
-<tt>Jhove</tt> class and the contents of <tt>jhove.jar</tt>,
-<tt>jhove-handler</tt>, and <tt>jhove-module.jar</tt>:
-<blockquote>
-<table border="0">
-<tr><td><tt>JhoveApp.jar</tt></td><td></td></tr>
-</table>
-</blockquote>
-The following jar file is meant to be used with the stand-alone JHOVE
-application using a
-<a href="http://java.sun.com/products/jfc/#swing">Swing</a> GUI interface.
-It contains the main
-<tt>JhoveView</tt> class and the contents of <tt>jhove.jar</tt>,
-<tt>jhove-handler</tt>, and <tt>jhove-module.jar</tt>:
-<blockquote>
-<table border="0">
-<tr><td><tt>JhoveView.jar</tt></td><td></td></tr>
-</table>
-</blockquote>
-
-<a class="name" name="installation">
-<h3>Installation</h3></a>
-
-<p>
-For proper operation, the <tt>&lt;jhoveHome&gt;</tt> element in the
-configuration file, <tt>jhove/conf/jhove.conf</tt>, must be edited to
-point to the absolute pathname of the JHOVE installation, or home,
-directory and the temporary directory (in which temporary files are
-created):
-</p>
-<blockquote>
-<pre>
-&lt;jhoveHome&gt;<em>jhove-home-directory</em>&lt;/jhoveHome&gt;
-&lt;tempDirectory&gt;<em>temporary-directory</em>&lt;/tempDirectory&gt;
-</pre>
-</blockquote>
-
-<p>
-The JHOVE home directory is the top-most directory in the distribution TAR
-or ZIP file.
-On Unix systems, <tt>/var/tmp</tt> is an appropriate temporary directory; on
-Windows, <tt>C:\Temp</tt>.
-For example, if the distribution TAR
-file is disaggregated on a Unix system in the directory "/users/stephen/
-projects", then the configuration file should read:
-</p>
-
-<p>
-<blockquote>
-<pre>
-&lt;jhoveHome&gt;/users/stephen/projects/jhove&lt;/jhoveHome&gt;
-&lt;tempDirectory&gt;/var/tmp&lt;/jhoveHome&gt;
-</pre>
-</blockquote>
-</p>
-
-<p>
-In the JHOVE home directory, copy the JHOVE Bourne shell driver script
-template, "jhove.tmpl", to "jhove" (or the equivalent Windows shell
-script, "jhove_bat.tmpl" to "jhove.bat"), and set the
-JHOVE home directory, Java home directory, and Java interpreter:
-</p>
-<blockquote>
-<pre>
-JHOVE_HOME=<em>jhove-home-directory</em>
-JAVA_HOME=<em>java-home-directory</em>
-JAVA=<em>java-interpreter</em>
-</pre>
-</blockquote>
-where <tt>JHOVE_HOME</tt> is set to specify the absolute pathname of the
-JHOVE home directory;
-<tt>JAVA_HOME</tt> is set to specify the absolute pathname of the
-Java home directory; and
-<tt>JAVA</tt> is set to specify the absolute pathname of the
-Java interpreter.
-For example:
-</p>
-<p>
-<blockquote>
-<pre>
-JHOVE_HOME=/users/[username]/projects/jhove
-JAVA_HOME=/usr/local/java/jdk1.6.0_20-32
-JAVA=$JAVA_HOME/bin/java
-</pre>
-</blockquote>
-</p>
-<p>
-In the Windows shell driver script, "<tt>jhove.bat</tt>", the equivalent three
-variables are:
-<blockquote>
-<pre>
-SET JHOVE_HOME=<em>jhove-home-directory</em>
-SET JAVA_HOME=<em>java-home-directory</em>
-SET JAVA=%JAVA_HOME%\bin\java
-</pre>
-</blockquote>
-</p>
-<p>
-For example:
-</p>
-<blockquote>
-<pre>
-SET JHOVE_HOME="C:\Program Files\jhove"
-SET JAVA_HOME="C:\Program Files\java\jdk1.6.0_20-32"
-SET JAVA=%JAVA_HOME%\bin\java
-</pre>
-</blockquote>
-
-<p>
-The quotation marks are necessary because of the embedded space characters.
-On Windows platforms it may also be necessary to add the Java bin subdirectory
-to the System PATH environment variable:
-</blockquote>
-<pre>
-PATH=C:\Program Files\java\jdk1.6.0_20-32\bin;...
-</pre>
-</blockquote>
-Specific instructions on installing JHOVE in a Windows XP environment
-are <a href="windows/">available</a>.
-For additional information on setting a Windows environment variable,
-consult your local documentation or system administrator.
-<p>
-Starting with version 1.8, it is no longer necessary to specify JAVA_HOME
-or JAVA in the Linux/Unix shell script, and starting with 1.9, it is no
-longer necessary to specify it in the Windows batch file.
-</p>
-
-</p>
-
-<a class="name" name="configuration">
-<h2>Configuring JHOVE</h2></a>
-
-<p>
-At the time of its invocation,
-JHOVE performs dynamic configuration of its modules and output handlers
-based on a XML-formatted configuration file.
-The configuration file is specified by the first valid value defined as:
-</p>
-<ol>
-<li> The <tt>-c <em>config</em></tt>
-<a href="#invocation">command line</a> argument (only for the command-line interface);
-<li> The file <tt>${<em>user.home</em>}/jhove/conf/jhove.conf</tt>,
-where <tt>${<em>user.home</em>}</tt>
-is the standard Java <tt>user.home</tt> property; or
-<li> The <tt>edu.harvard.hul.ois.jhove.config</tt> property in
-the properties file <tt>${<em>user.home</em>}/jhove/jhove.properties</tt>.
-</ol>
-
-<p>
-Here are some typical "user.home" locations for various
-operating systems with the default Java configuration:
-<p>
-<b>Windows XP:</b> C:\Documents and Settings\{username}<br>
-<b>Windows Vista and 7:</b> C:\Users\{username} or perhaps C:\{username}<br>
-<b>Macintosh OS X:</b> /Users/{username}<br>
-<b>Unix:</b> ~/<br>
-<p>
-Note that the GUI interface only searches for the configuration file at
-the second and third locations listed above;
-it does not make use of the <tt>-c <em>config</em></tt> option.
-</p>
-
-<p>
-All format modules and output handlers must be specified in the
-XML-formatted configuration file, validatable against the
-XML Schema
-&lt;<a href="http://hul.harvard.edu/ois/xml/xsd/jhove/jhoveConfig.xsd">http://hul.harvard.edu/ois/xml/xsd/jhove/jhoveConfig.xsd</a>&gt;.
-(In the following display, brackets [ and ] enclose optional configuration
-file elements.)
-<blockquote>
-<pre>
-&lt;?xml version="1.0"?&gt;
-&lt;jhoveConfig version="1.0"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xmlns="http://hul.harvard.edu/ois/xml/ns/jhove/jhoveConfig"
- xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/jhove/jhoveConfig
-                     http://hul.harvard.edu/ois/xml/xsd/jhove/jhoveConfig.xsd"&gt;
-  &lt;jhoveHome&gt;<em>jhove-home-directory</em>&lt;/jhoveHome&gt;
-[ &lt;defaultEncoding&gt;<em>encoding</em>&lt;/defaultEncoding&gt; ]
-[ &lt;tempDirectory&gt;<em>directory</em>&lt;/tempDirectory&gt; ]
-[ &lt;bufferSize&gt;<em>buffer</em>&lt;/bufferSize&gt; ]
-[ &lt;mixVersion&gt;<em>version</em>&lt;/mixVersion&gt; ]
-[ &lt;sigBytes&gt;<em>n</em>&lt;/sigBytes&gt; ]
-  &lt;module&gt;
-    &lt;class&gt;<em>module-class-name</em>&lt;/class&gt;
-  [ &lt;init&gt;<em>optional-module-init-argument</em>&lt;/init&gt; ]
-  [ &lt;param&gt;<em>optional-module-parameter</em>&lt;/param&gt; ]
-    ...
-  &lt;/module&gt;
-  ...
-  &lt;outputHandler&gt;
-    &lt;class&gt;<em>output-handler-class-name</em>&lt;/class&gt;
-  &lt;/outputHandler&gt;
-  ...
-[ &lt;logLevel&gt;<em>logging-level</em>&lt;/logLevel&gt; ]
-&lt;/jhoveConfig&gt;
-</pre>
-</blockquote>
-
-<p>
-The optional <tt>&lt;defaultEncoding&gt;</tt> element specifies the default character
-encoding used by output handlers.
-This option can also be specified by the <tt>-e <em>encoding</em></tt>
-<a href="#invocation">command line</a> argument.
-The default output encoding is <tt>UTF-8</tt>.
-</p>
-
-<p>
-The optional <tt>&lt;tempDirectory&gt;</tt> element specifies the pathname of
-the directory in which temporary files are created.
-This option can also be specified by the <tt>-t <em>directory</em></tt>
-<a href="#invocation">command line</a> argument.
-On most Unix systems, a reasonable temporary directory is "<tt>/var/tmp</tt>";
-on Windows, "<tt>C:\temp</tt>".
-</p>
-
-<p>
-The optional <tt>&lt;bufferSize&gt;</tt> element specifies the buffer size
-use for buffered I/O.
-This option can also be specified by the <tt>-b <em>buffer</em></tt>
-<a href="#invocation">command line</a> argument.
-</p>
-
-<p>
-The optional <tt>&lt;mixVersion&gt;</tt> element specifies the MIX schema
-version conformance for the output produced by the XML output handler.
-By default the handler output conforms to version 2.0 of the schema.
-For version 1.0 conformance, specify:
-<blockquote>
-<pre>
-&lt;mixVersion&gt;1.0&lt;mixVersion&gt;
-</pre>
-</blockquote>
-</p>
-
-<p>
-The optional <tt>&lt;sigBytes&gt;</tt> element specifies the maximum
-number of byte that JHOVE modules will examine looking for an internal
-signature (or magic number). The default value is 1024.
-</p>
-
-<p>
-The optional <tt>&lt;logLevel&gt;</tt> element specifies the
-logging level, used by calls to the logging API.
-This option can also be specified by the <tt>-l <em>log-level</em></tt>
-<a href="#invocation">command line</a> argument. The
-default is <tt>SEVERE</tt>.
-</p>
-<p>
-All class names must be fully qualified with their package name, for example:
-</p>
-<blockquote>
-<pre>
-edu.harvard.hul.ois.jhove.module.AsciiModule
-edu.harvard.hul.ois.jhove.module.PdfModule
-edu.harvard.hul.ois.jhove.module.TiffModule
-edu.harvard.hul.ois.jhove.module.Utf8Module
-</pre>
-</blockquote>
-
-<p>
-The order in which format modules are defined is important; when performing
-a format identification operation, JHOVE will search for a matching module in
-the order in which the modules are defined in the configuration file.
-In general, the modules for more generic formats should come later in the list.
-For example, the standard  module <a href="ascii-hul.html">ASCII</a> should be
-defined before the <a href="utf8-hul.html">UTF-8</a> module, since all ASCII
-objects are, by definition, UTF-8 objects, but not vice versa.
-</p>
-
-<p>
-The optional <tt>&lt;init&gt;</tt> element is used to pass a module-specific
-argument to a module at the time it is first instantiated within JHOVE.
-See the details for the individual modules to see if such an argument
-is defined.  The use of the <tt>&lt;init&gt;</tt> argument is currently not
-defined for any of the standard JHOVE modules.
-</p>
-
-<p>
-The optional and repeatable <tt>&lt;param&gt;</tt> element is used to pass a
-module-specific parameter to a module immediately prior to each invocation of
-the module's <tt>parse()</tt> method.
-See the details for the individual modules to see if such a parameter
-is defined.
-</p>
-
-<p>
-In addition to the modules and output handlers specified in the
-configuration file, JHOVE is also always statically linked with
-the standard Bytestream module and Text and XML output handlers.
-</p>
-
-<a class="name" name="invocation">
-<h2>Invoking JHOVE</h2></a>
-
-<p>
-The JHOVE command-line interface
-is invoked by the Bourne shell script "<tt>jhove</tt>" (under Unix)
-or the Windows shell script "<tt>jhove.bat</tt>" (under Windows) in
-the JHOVE installation directory.
-This script properly sets the Java CLASSPATH and executes the
-Jhove class with the Java interpreter.
-</p><p>
-In the invocation syntax below,
-brackets <tt>[</tt> and <tt>]</tt> enclose optional arguments.
-In addition to the syntax specified in subsequent sections,
-any of the following standard options can also be used:
-<blockquote>
-<pre>
-... [-c <em>config</em>] [-h <em>handler</em>] [-e <em>encoding</em>] [-o <em>output</em>] [-x <em>sax-class</em>] [-t <em>directory</em>] [-b <em>buffer</em>] [-l <em>loglevel</em>]...
-</pre>
-</blockquote>
-where
-<blockquote>
-<table border="0">
-<tr><td valign="top"><tt>-c&nbsp;<em>config</em></tt></td><td>&nbsp;</td>
-<td>specifies the pathname of the <a href="#configuration">configuration
-file</a>;</td></tr>
-
-<tr><td valign="top"><tt>-m&nbsp;<em>module</em></tt></td><td></td>
-<td>specifies the format module (defaults to checking all modules);</td></tr>
-
-<tr><td valign="top"><tt>-h&nbsp;<em>handler</em></tt></td><td></td>
-<td>specifies the output handler (defaults to <tt>TEXT</tt>, the standard
-<a href="#text">Text</a> handler);</td></tr>
-
-<tr><td valign="top"><tt>-e&nbsp;<em>encoding</em></tt></td><td></td>
-<td>specifies the character encoding used by the output handler
-(defaults to <tt>UTF-8</tt>);</td></tr>
-
-<tr><td valign="top"><tt>-o&nbsp;<em>output</em></tt></td><td></td>
-<td>specifies the output file pathname (defaults to standard output);</td></tr>
-
-<tr><td valign="top"><tt>-x&nbsp;<em>sax-class</em></tt></td><td></td>
-<td>specifies the SAX parser class name (defaults to the J2SE
-default);</td></tr>
-
-<tr><td valign="top"><tt>-t&nbsp;<em>directory</em></tt></td><td></td>
-<td>specifies the pathname of the directory in which temporary files are
-created (defaults to the current working directory); and</td></tr>
-
-<tr><td valign="top"><tt>-b&nbsp;<em>buffer</em></tt></td><td></td>
-<td>specifies the buffer size used for buffered I/O (defaults to the J2SE
-default).</td></tr>
-<tr><td valign="top"><tt>-l&nbsp;<em>loglevel</em></tt></td><td></td>
-<td>specifies the logging level (defaults to SEVERE).</td></tr>
-</table>
-</blockquote>
-<p>
-Note that the temporary directory and buffer size and logging
-level can also be specified in
-the <a href="#configuration">configuration file</a>.
-</p>
-
-<a class="name" name="identification">
-<h3>Format Identification</h3></a>
-
+       -c config   Configuration file pathname
+       -m module   Module name
+       -h handler  Output handler name (defaults to TEXT)
+       -e encoding Character encoding used by output handler (defaults to UTF-8)
+       -H handler  About handler name
+       -o output   Output file pathname (defaults to standard output)
+       -x saxclass SAX parser class (defaults to J2SE default)
+       -t tempdir  Temporary directory in which to create temporary files
+       -b bufsize  Buffer size for buffered I/O (defaults to J2SE 1.4 default)
+       -l loglevel Logging level
+       -k          Calculate CRC32, MD5, and SHA-1 checksums
+       -r          Display raw data flags, not textual equivalents
+       -s          Format identification based on internal signatures only
+       dir-file-or-uri Directory or file pathname or URI of formated content
+                       stream
+    </pre>
+    All named modules and output handlers must be found on the Java CLASSPATH at
+    the time of invocation.  The JHOVE driver script, jhove/jhove, automatically
+    sets the CLASSPATH and invokes the Jhove main class:
+    <pre>
+      jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
+            [-o output] [-x saxclass] [-t tempdir] [-b bufsize] [-l loglevel]
+            [[-krs] dir-file-or-uri [...]]
+    </pre>
+    The following additional programs are available, primarily for testing
+    and debugging purposes.  They display a minimally processed, human-readable
+    version of the contents of AIFF, GIF, JPEG, JPEG 2000, PDF, TIFF, and WAVE
+    files:
+    <pre>
+       java ADump  aiff-file
+       java GDump  gif-file
+       java JDump  jpeg-file
+       java J2Dump jpeg2000-file
+       java PDump  pdf-file
+       java TDump  tiff-file
+       java WDump  wave-file
+     </pre>
+     For convenience, the following driver scripts are also available:
+     <pre>
+       adump  aiff-file
+       gdump  gif-file
+       jdump  jpeg-file
+       j2dump jpeg2000-file
+       pdump  pdf-file
+       tdump  tiff-file
+       wdump  wave-file
+    </pre>
+    The JHOVE Swing-based GUI interface can be invoked from a command shell from
+    the jhove/bin sub-directory:
+    <pre>
+      java -jar JhoveView.jar -c <configFile>
+    </pre>
+    where <configFile> is the pathname of the JHOVE configuration file.
+  </p>
+  <p>
+    There are some <a href="/getting-started/examples/">usage examples</a>
+    to help you get started.
+  </p>
+  <a class="name" name="identification">
+  <h3>Format Identification</h3></a>
 <p>
 The following syntax is used to discover, or identify, the format of
 a digital object.
-<blockquote>
+
 <pre>
 jhove ... [-ks] <em>file-or-uri1 .. file-or-uriN</em>
 </pre>
-</blockquote>
+
 <p>
 where the first ellipsis ... is a placeholder for any of the optional standard
 options defined <a href="#invocation">above</a>.
@@ -628,11 +341,11 @@ The following syntax is used to determine the validity of a digital
 object with respect to a particular format, and to display format-specific
 representation information.
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m <em>module</em> [-kr] <em>file-or-uri</em>
 </pre>
-</blockquote>
+
 <p>
 where the ellipsis ... is a placeholder for any of the optional standard
 options defined <a href="#invocation">above</a>.
@@ -675,13 +388,13 @@ The following syntax options display descriptive information about
 various components of JHOVE.
 </p>
 <p>
-<blockquote>
+
 <pre>
 jhove ...
 jhove ... -m <em>module</em>
 jhove ... -H <em>output-handler</em>
 </pre>
-</blockquote>
+
 <p>
 where the ellipsis ... is a placeholder for any of the optional standard
 options defined <a href="#invocation">above</a>.
@@ -710,21 +423,21 @@ output handler names in a case-insensitive manner:
 The JHOVE <a href="http://java.sun.com/products/jfc/#swing">Swing</a>-based
 GUI interface is invoked from a command shell:
 </p>
-<blockquote>
+
 <pre>
 java -jar bin/JhoveView.jar
 </pre>
-</blockquote>
+
 or by the appropriate mouse click behavior defined by the windowing system.
 
 <p></p>
-<blockquote>
-<img src="jhoveview.gif">
-</blockquote>
+
+<img src="/img/jhoveview.gif">
+
 
 <p>
 The menu options are:
-<blockquote>
+
 <table border="0">
 <tr><td><strong>File</strong></td></tr>
 <tr><td></td><td colspan="2"><strong>Open file...</strong></td>
@@ -777,7 +490,7 @@ The menu options are:
 <td>Display JHOVE descriptive information
 (<tt>jhove</tt>)</td></tr>
 </table>
-</blockquote>
+
 
 <a class="name" name="modules">
 <h2>Standard Modules</h2></a>
@@ -803,7 +516,7 @@ The initial JHOVE distribution includes the following standard modules.
 <h3>AIFF-hul Module</h3></a>
 
 <p>
-The <a href="aiff-hul.html">AIFF-hul</a> module recognizes and validates the
+The <a href="/modules/aiff/">AIFF-hul</a> module recognizes and validates the
 following public profiles:
 </p>
 <ul>
@@ -812,14 +525,14 @@ following public profiles:
 </ul>
 
 <p>
-The <a href="aiff-hul.html">AIFF-hul</a> module is invoked by the following
+The <a href="/modules/aiff/">AIFF-hul</a> module is invoked by the following
 command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m aiff-hul ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 </p>
@@ -845,17 +558,17 @@ Only digital objects consisting entirely of properly ASCII-encoded text
 <a href="/references#x3.4">ANSI X3.4</a>,
 <a href="/references#ecma-6">ECMA-6</a>])
 are well-formed and valid with respect to the
-<a href="ascii-hul">ASCII-hul</a> module.
+<a href="/modules/ascii/">ASCII-hul</a> module.
 </p>
 
 <p>
 The module is invoked by the following command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m ascii-hul ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 </p>
@@ -870,17 +583,17 @@ includes the line endings used in the digital object: CR, LF, or CRLF.
 
 <p>
 By definition, all digital objects are always well-formed and valid with
-respect to the <a href="bytestream.html">BYTESTREAM</a> module.
+respect to the <a href="/modules/bytestream/">BYTESTREAM</a> module.
 </p>
 
 <p>
 The module is invoked by the following command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m bytestream ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 </p>
@@ -894,7 +607,7 @@ JHOVE always statically loads the BYTESTREAM module.
 <h3>GIF-hul Module</h3></a>
 
 <p>
-The <a href="gif-hul.html">GIF-hul</a> module recognizes and validates the following public profiles:
+The <a href="/modules/gif/">GIF-hul</a> module recognizes and validates the following public profiles:
 </p>
 <ul>
 <li> GIF 87a [<a href="/references#gif87a">GIF 87a</a>]
@@ -902,14 +615,14 @@ The <a href="gif-hul.html">GIF-hul</a> module recognizes and validates the follo
 </ul>
 
 <p>
-The <a href="gif-hul.html">GIF-hul</a> module is invoked by the following
+The <a href="/modules/gif/">GIF-hul</a> module is invoked by the following
 command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m gif-hul ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 </p>
@@ -924,7 +637,7 @@ consistent with the NISO image metadata
 <h3>JPEG-hul Module</h3></a>
 
 <p>
-The <a href="jpeg-hul.html">JPEG-hul</a> module recognizes the following
+The <a href="/modules/jpeg/">JPEG-hul</a> module recognizes the following
 public profiles:
 </p>
 <ul>
@@ -943,14 +656,14 @@ public profiles:
 </ul>
 
 <p>
-The <a href="jpeg-hul.html">JPEG-hul</a> module is invoked by the following
+The <a href="/modules/jpeg/">JPEG-hul</a> module is invoked by the following
 command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m jpeg-hul ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 </p>
@@ -965,7 +678,7 @@ consistent with the NISO image metadata
 <h3>JPEG2000-hul Module</h3></a>
 
 <p>
-The <a href="jpeg2000-hul.html">JPEG2000-hul</a> module recognizes the
+The <a href="/modules/jpeg2000/">JPEG2000-hul</a> module recognizes the
 following public profiles:
 </p>
 <ul>
@@ -977,14 +690,14 @@ following public profiles:
 </ul>
 
 <p>
-The <a href="jpeg2000-hul.html">JPEG2000-hul</a> module is invoked by the
+The <a href="/modules/jpeg2000/">JPEG2000-hul</a> module is invoked by the
 following command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m jpeg2000-hul ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 </p>
@@ -1001,7 +714,7 @@ of all boxes.
 <h3>PDF-hul Module</h3></a>
 
 <p>
-The <a href="pdf-hul.html">PDF-hul</a> module recognizes and validates the
+The <a href="/modules/pdf/">PDF-hul</a> module recognizes and validates the
 following public profiles:
 </p>
 <ul>
@@ -1019,23 +732,23 @@ PDF/X-2 (ISO 15930-5:2003), and PDF/X-3 (ISO 15930-6:2003)
 [<a href="/references#pdf1.4">PDF 1.4</a>]
 <li> PDF/A (ISO/CD 19005-1)
 [<a href="/references#pdfa">PDF/A</a>]
-<blockquote>
+
 <strong>Note</strong>:
 The PDF module does <em>not</em> parse the contents on streams,
 so it <em>cannot</em> determine conformance to PDF/A to the degree required
 by the <a href="/references#pdfa">Draft ISO standard</a>.
-</blockquote>
+
 </ul>
 
 <p>
-The <a href="pdf-hul.html">PDF-hul</a> module is invoked by the following
+The <a href="/modules/pdf/">PDF-hul</a> module is invoked by the following
 command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m pdf-hul ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 </p><p>
@@ -1043,14 +756,14 @@ An optional parameter can be passed to the module via the
 <tt>&lt;param&gt;</tt> element in the <a href="#configuration">configuration</a>
 file.
 The parameter specifies a series of individual character flags:
-<blockquote>
+
 <table border="0">
 <tr><td><tt>a</tt></td><td>&nbsp;</td><td>Display document annotations</td></tr>
 <tr><td><tt>f</tt></td><td></td><td>Display document font information</td></tr>
 <tr><td><tt>o</tt></td><td></td><td>Display document outline</td></tr>
 <tr><td><tt>p</tt></td><td></td><td>Display document page structure</td></tr>
 </table>
-</blockquote>
+
 <p>By default, document annotations, font information, and outlines are not
 displayed to reduce the size of the JHOVE output.
 </p>
@@ -1059,7 +772,7 @@ displayed to reduce the size of the JHOVE output.
 <h3>TIFF-hul Module</h3></a>
 
 <p>
-The <a href="tiff-hul.html">TIFF-hul</a> module recognizes and validates the
+The <a href="/modules/tiff/">TIFF-hul</a> module recognizes and validates the
 following public profiles:
 <ul>
 <li> TIFF version 4.0, 5.0, and 6.0
@@ -1113,14 +826,14 @@ Serials
 </ul>
 
 <p>
-The <a href="tiff-hul.html">TIFF-hul</a> module is invoked by the following
+The <a href="/modules/tiff/">TIFF-hul</a> module is invoked by the following
 command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m tiff-hul ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 </p>
@@ -1130,7 +843,7 @@ TIFF representation information is formatted by the
 consistent with the NISO image metadata
 [<a href="/references#z39.87">NISO Z39.87</a>].
 Additional representation information includes all
-TIFF <a href="tiff-tags.html">tags</a>.
+TIFF <a href="/modules/tiff/tags/">tags</a>.
 </p>
 
 <a class="name" name="utf8-hul">
@@ -1140,17 +853,17 @@ TIFF <a href="tiff-tags.html">tags</a>.
 Only digital objects consisting entirely of properly UTF-8-encoded text
 [<a href="/references#unicode">Unicode</a>]
 are well-formed and valid with respect to the
-<a href="utf8-hul.html">UTF8-hul</a> module.
+<a href="/modules/utf8/">UTF8-hul</a> module.
 </p>
 
 <p>
 The module is invoked by the following command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m utf8-hul ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 </p>
@@ -1166,7 +879,7 @@ and the line endings used in the digital object.
 <h3>WAVE-hul Module</h3></a>
 
 <p>
-The <a href="wave-hul.html">WAVE-hul</a> module recognizes and validates the
+The <a href="/modules/wave/">WAVE-hul</a> module recognizes and validates the
 following public profiles:
 </p>
 <ul>
@@ -1182,14 +895,14 @@ following public profiles:
 </ul>
 
 <p>
-The <a href="wave-hul.html">WAVE-hul</a> module is invoked by the following
+The <a href="/modules/wave/">WAVE-hul</a> module is invoked by the following
 command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m wave-hul ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 </p>
@@ -1208,14 +921,14 @@ of all chunks.
 <a class="name" name="xml-hul">
 <h3>XML-hul Module</h3></a>
 <p>
-The <a href="xml-hul.html">XML-hul</a> module is invoked by the following
+The <a href="/modules/xml/">XML-hul</a> module is invoked by the following
 command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m xml-hul [-x <em>sax-class</em>] ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 </p>
@@ -1241,14 +954,14 @@ Java Runtime Environment (JRE).
 <a class="name" name="html-hul">
 <h3>HTML-hul Module</h3></a>
 <p>
-The <a href="html-hul.html">HTML-hul</a> module is invoked by
+The <a href="/modules/html/">HTML-hul</a> module is invoked by
 the following command line option:
 </p>
-<blockquote>
+
 <pre>
 jhove ... -m hml-hul ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE module names can be specified in a case-insensitive manner.)
 <p>
@@ -1272,12 +985,12 @@ The Text handler is the default output handler; if no other handler is
 explicitly specified, the Text handler is used.
 </p>
 
-<blockquote>
+
 <pre>
 jhove ...
 jhove ... -h text ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE output handlers can be specified in a case-insensitive
 manner.)
@@ -1295,11 +1008,11 @@ JHOVE always statically loads the Text output handler.
 The XML handler output is defined by the JHOVE schema
 &lt;<a href="http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd">http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd</a>&gt;.
 </p>
-<blockquote>
+
 <pre>
 jhove ... -h xml ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE output handlers can be specified in a case-insensitive
 manner.)
@@ -1308,13 +1021,13 @@ The XML handler formats raster still image representation information
 according to the MIX schema [<a href="/references#mix">MIX</a>]
 for the NISO image metadata [<a href="/references#z39.87">NISO Z39.87</a>].
 
-<blockquote>
+
 <strong>Note</strong>: Contrary to the NISO image metadata data dictionary,
 JHOVE defines <tt>XSamplingFrequency</tt> and
 <tt>YSamplingFrequency</tt> as rational values, not positive integers.
 This is necessary for images whose image length or width
 is not an integral ratio of the image source X or Y dimension.
-</blockquote>
+
 <p>
 Audio representation information is formatted according to
 the proposed AES-X098B, <em>Core audio metadata XML
@@ -1325,7 +1038,7 @@ Working Group on Digital Library and Archive Systems.
 </p>
 
 <p>
-Regardless of the <a href="#configuration">configuration</a> options,
+Regardless of the <a href="/getting-started/config/">configuration</a> options,
 JHOVE always statically loads the XML output handler.
 </p>
 
@@ -1337,7 +1050,7 @@ The Audit handler should be invoked against a directory (or directories)
 without specifying a module.
 The handler produces an XML-formatted summary of all of the files in the
 directory, e.g.:
-<blockquote>
+
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;jhove xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -1370,15 +1083,15 @@ Total: 9 (7,2) + 0,0
 --&gt;
 &lt;!-- Elapsed time: 0:00:05 --&gt;
 </pre>
-</blockquote>
+
 It is intended that the Audit handler will form the basis for other, more
 interesting handlers.
 </p>
-<blockquote>
+
 <pre>
 jhove ... -h audit ...
 </pre>
-</blockquote>
+
 <p>
 (Recall that JHOVE output handlers can be specified in a case-insensitive
 manner.)
