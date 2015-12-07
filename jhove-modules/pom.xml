@@ -10,6 +10,10 @@
   <name>JHOVE Validation Modules</name>
   <description>The JHOVE HUL validation modules.</description>
 
+  <properties>
+    <jwat.version>1.0.3</jwat.version>
+  </properties>
+  
   <dependencies>
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>
@@ -19,6 +23,27 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+    </dependency>
+    <!-- JWAT for WARC, ARC and GZIP -->
+    <dependency>
+      <groupId>org.jwat</groupId>
+      <artifactId>jwat-common</artifactId>
+      <version>${jwat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jwat</groupId>
+      <artifactId>jwat-gzip</artifactId>
+      <version>${jwat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jwat</groupId>
+      <artifactId>jwat-arc</artifactId>
+      <version>${jwat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jwat</groupId>
+      <artifactId>jwat-warc</artifactId>
+      <version>${jwat.version}</version>
     </dependency>
   </dependencies>
 </project>
