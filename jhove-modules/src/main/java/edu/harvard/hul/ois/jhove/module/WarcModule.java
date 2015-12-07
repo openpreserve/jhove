@@ -87,7 +87,7 @@ public class WarcModule extends ModuleBase {
     private boolean bStrictTargetUriValidation;
     private boolean bStrictUriValidation;
 
-    private Map<String, Integer> versions = new HashMap<String, Integer>();
+    private Map<String, Integer> versions;
 
     /**
      * Constructor.
@@ -115,7 +115,12 @@ public class WarcModule extends ModuleBase {
         _specification.add(doc);
     }
 
+    /**
+     * Initialises the variables.
+     */
     private void initialiseVariables() {
+        versions = new HashMap<String, Integer>();
+
         bComputeBlockDigest = DEFAULT_COMPUTE_BLOCK_DIGEST;
         blockDigestAlgorithm = DEFAULT_BLOCK_DIGEST_ALGORITHM;
         blockDigestEncoding = DEFAULT_BLOCK_DIGEST_ENCODING;
@@ -152,7 +157,7 @@ public class WarcModule extends ModuleBase {
 
     @Override
     public int parse(InputStream stream, RepInfo info, int parseIndex) throws IOException {
-        WarcReader reader = WarcReaderFactory.getReaderUncompressed(new InputStreamNoSkip(stream), 8192);
+        WarcReader reader = WarcReaderFactory.getReader(new InputStreamNoSkip(stream), 8192);
         try {
             setReaderOptions(reader);
             parseRecords(reader);
