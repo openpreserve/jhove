@@ -84,6 +84,7 @@ public class GzipModule extends ModuleBase {
         super(NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
                 VALIDITY, REPINFO, NOTE, RIGHTS, false);
         setVendorAndSpecification();
+        initialiseVariables();
     }
     
     /**

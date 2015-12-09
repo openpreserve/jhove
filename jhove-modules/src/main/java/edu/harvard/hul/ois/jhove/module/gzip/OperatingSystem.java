@@ -36,7 +36,7 @@
 
 package edu.harvard.hul.ois.jhove.module.gzip;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -44,7 +44,7 @@ import java.util.Map;
  */
 public final class OperatingSystem {
     /** The list of valid values. */
-    private static Map<Integer,OperatingSystem> values = Collections.emptyMap();
+    private static Map<Integer,OperatingSystem> values = new HashMap<Integer, OperatingSystem>();
 
     /** The FAT filesystem (MS-DOS, OS/2, NT/Win32). */
     public static final OperatingSystem FAT_FILESYSTEM = new OperatingSystem(0, "FAT filesystem (MS-DOS, OS/2, NT/Win32)", true);

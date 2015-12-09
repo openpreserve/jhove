@@ -36,7 +36,7 @@
 
 package edu.harvard.hul.ois.jhove.module.gzip;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -45,7 +45,7 @@ import java.util.Map;
 */
 public class CompressionType {
     /** The list of valid values. */
-    private static Map<Integer, CompressionType> values = Collections.emptyMap();
+    private static Map<Integer, CompressionType> values = new HashMap<Integer, CompressionType>();
 
     /** GZip extra flag value for maximum compression. */
     public final static CompressionType MAXIMUM_COMPRESSION = new CompressionType(2, "Maximum compression", true);

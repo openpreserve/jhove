@@ -36,7 +36,7 @@
 
 package edu.harvard.hul.ois.jhove.module.gzip;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -46,7 +46,7 @@ import java.util.Map;
  */
 public class CompressionMethod {
     /** The list of valid values. */
-    private static Map<Integer,CompressionMethod> values = Collections.emptyMap();
+    private static Map<Integer,CompressionMethod> values = new HashMap<Integer, CompressionMethod>();
 
     /** The deflate compression method.*/
     public static final CompressionMethod DEFLATE = new CompressionMethod(8, "Deflate", true);
