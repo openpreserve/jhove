@@ -18,7 +18,7 @@ import org.jwat.warc.WarcRecord;
 public class WarcRecordProperties {
     /** The WARC record data.*/
     private final WarcRecordData data;
-    /** The map for the properties of the record.*/
+    /** The map for the properties of the WARC record.*/
     private Map<String, String> properties;
     
     /**
