@@ -11,6 +11,11 @@ JHOVE is made available under the
 
 Rev. 1.12.1, 2015-08-13
 
+JHOVE Homepage
+--------
+
+<http://jhove.openpreservation.org/>
+
 Overview
 --------
 JHOVE (the JSTOR/Harvard Object Validation Environment, pronounced "jhove")
