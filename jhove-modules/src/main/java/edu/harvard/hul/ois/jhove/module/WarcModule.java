@@ -4,7 +4,9 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -28,7 +30,11 @@ import edu.harvard.hul.ois.jhove.IdentifierType;
 import edu.harvard.hul.ois.jhove.InfoMessage;
 import edu.harvard.hul.ois.jhove.JhoveException;
 import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.module.warc.WarcRecordProperties;
 
 /**
  * JHOVE module for identifying, validating and characterizing WARC files.
@@ -87,7 +93,16 @@ public class WarcModule extends ModuleBase {
     private boolean bStrictTargetUriValidation;
     private boolean bStrictUriValidation;
 
+    /** 
+     * Map of the WARC record versions and their count. 
+     * Used for reporting the most seen version, as the version for the WARC file.
+     */
     private Map<String, Integer> versions;
+    /** 
+     * List of Property elements for the records of the WARC-file. 
+     * Each Property contains a map of all properties for a given record.
+     */
+    private List<Property> recordProperties;
 
     /**
      * Constructor.
@@ -120,6 +135,7 @@ public class WarcModule extends ModuleBase {
      */
     private void initialiseVariables() {
         versions = new HashMap<String, Integer>();
+        recordProperties = new ArrayList<Property>();
 
         bComputeBlockDigest = DEFAULT_COMPUTE_BLOCK_DIGEST;
         blockDigestAlgorithm = DEFAULT_BLOCK_DIGEST_ALGORITHM;
@@ -230,13 +246,8 @@ public class WarcModule extends ModuleBase {
     }
 
     /**
-     * Process a WARC record. Adds a <code>WarcRecordSource</code> child
-     * to the supplied input source. Relevant reportable properties are added
-     * to the <code>WarcRecordSource</code>. If there is a payload present in
-     * the record, steps are taken to characterize it. The content-type of the
-     * payload is established from the record itself or a leading
-     * http response. The content-type is added as a presumptive format on the
-     * embedded source.
+     * Process a WARC record. 
+     * Does not characterize the record payload.
      * @param record WARC record from WARC reader
      * @throws EOFException if EOF occurs prematurely
      * @throws IOException if an IO error occurs while processing
@@ -252,9 +263,21 @@ public class WarcModule extends ModuleBase {
             versions.put(record.header.versionStr, count);
         }
 
+        WarcRecordProperties properties = new WarcRecordProperties(record);
+        Property p = new Property("Record", PropertyType.STRING, PropertyArity.MAP, properties.getProperties());
+        
+        recordProperties.add(p);
+
         record.close();
     }
 
+    /**
+     * Report the results of the characterization.
+     * @param reader The warc reader, which has read the warc-file. 
+     * @param repInfo The representation info, where to report the results.
+     * @throws JhoveException
+     * @throws IOException
+     */
     private void reportResults(WarcReader reader, RepInfo repInfo) throws JhoveException, IOException {
         Diagnostics<Diagnosis> diagnostics = reader.diagnostics;
         if (diagnostics.hasErrors()) {
@@ -280,6 +303,7 @@ public class WarcModule extends ModuleBase {
             _features.add(e.getValue() + " warc records of version " + e.getKey());
         }
 
+        repInfo.setProperty(new Property("Records", PropertyType.PROPERTY, PropertyArity.LIST, recordProperties));
         repInfo.setSize(reader.getConsumed());
     }
 

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -82,7 +83,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -99,7 +100,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -116,7 +117,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -133,7 +134,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -150,7 +151,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -170,7 +171,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -189,7 +190,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -208,7 +209,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -225,7 +226,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -244,7 +245,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -261,7 +262,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -278,7 +279,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -295,7 +296,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -312,7 +313,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -329,7 +330,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -348,7 +349,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -365,7 +366,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -384,7 +385,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -405,7 +406,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -424,7 +425,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -442,7 +443,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -462,7 +463,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -483,7 +484,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -501,7 +502,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -519,7 +520,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -538,7 +539,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -557,7 +558,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -576,7 +577,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -594,7 +595,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -612,7 +613,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -630,7 +631,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -648,7 +649,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -667,7 +668,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -685,7 +686,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -703,7 +704,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -722,7 +723,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -741,7 +742,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -759,7 +760,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -778,7 +779,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -797,7 +798,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -816,7 +817,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -835,7 +836,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -854,7 +855,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -873,7 +874,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -892,7 +893,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -911,7 +912,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -930,7 +931,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -948,7 +949,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -966,7 +967,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -984,7 +985,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1002,7 +1003,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1020,7 +1021,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1038,7 +1039,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1056,7 +1057,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1074,7 +1075,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1093,7 +1094,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1112,7 +1113,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1130,7 +1131,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1148,7 +1149,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1169,7 +1170,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1186,7 +1187,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1205,7 +1206,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1222,7 +1223,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1239,7 +1240,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
@@ -1256,7 +1257,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
@@ -1269,7 +1270,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
@@ -1282,7 +1283,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
@@ -1295,7 +1296,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
@@ -1308,7 +1309,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
@@ -1321,7 +1322,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
@@ -1334,7 +1335,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
@@ -1347,7 +1348,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
@@ -1360,7 +1361,7 @@ public class WarcModuleTest {
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        wm.parse(new RandomAccessFile(warcFile, "r"), info);
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
