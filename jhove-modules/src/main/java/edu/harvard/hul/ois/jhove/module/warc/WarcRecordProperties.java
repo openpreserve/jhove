@@ -1,6 +1,6 @@
 package edu.harvard.hul.ois.jhove.module.warc;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +36,7 @@ public class WarcRecordProperties {
      * @return A map of the properties of the WARC record.
      */
     public Map<String, String> getProperties() {
-        properties = new HashMap<String, String>();
+        properties = new LinkedHashMap<String, String>();
         
         setBaseProperties();
         
