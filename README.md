@@ -11,6 +11,11 @@ JHOVE is made available under the
 
 Rev. 1.12.1, 2015-08-13
 
+JHOVE Homepage
+--------
+
+<http://jhove.openpreservation.org/>
+
 Overview
 --------
 JHOVE (the JSTOR/Harvard Object Validation Environment, pronounced "jhove")
@@ -214,7 +219,7 @@ This also produces an installer that will work on 1.5 JREs.
 Usage
 -----
 
-    java Jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
+    jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
                [-o output] [-x saxclass] [-t tempdir] [-b bufsize]
                [-l loglevel] [[-krs] dir-file-or-uri [...]]
 
@@ -268,7 +273,7 @@ For convenience, the following driver scripts are also available:
 The JHOVE Swing-based GUI interface can be invoked from a command shell from
 the jhove/bin sub-directory:
 
-    java -jar JhoveView.jar -c <configFile>
+    jhove-gui -c <configFile>
 
 where <configFile> is the pathname of the JHOVE configuration file.
 
