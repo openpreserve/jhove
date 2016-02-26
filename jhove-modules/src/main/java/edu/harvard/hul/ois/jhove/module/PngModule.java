@@ -8,7 +8,7 @@ import edu.harvard.hul.ois.jhove.module.png.*;
 
 import edu.harvard.hul.ois.jhove.*;
 
-public class PNGModule extends ModuleBase {
+public class PngModule extends ModuleBase {
 
 	/**
 	 * What would constitute a well-formed but invalid PNG? 
@@ -39,12 +39,10 @@ public class PNGModule extends ModuleBase {
 	private static final String NOTE = null;
 	private static final String RIGHTS = "Copyright 2016 by Gary McGath. " +
 			"Released under the GNU Lesser General Public License.";
+    private static final String NISO_IMAGE_MD = "NisoImageMetadata";
 
     /* Checksummer object */
     protected Checksummer _ckSummer;
-    
-    /* NISO image metadata */
-    protected NisoImageMetadata _niso;
     
     /* Top-level property list */
     protected List<Property> _propList;
@@ -57,6 +55,9 @@ public class PNGModule extends ModuleBase {
     
     /* Top-level metadata property */
     protected Property _metadata;
+    
+    /* NISO metadata for the image */
+    NisoImageMetadata _nisoData;
     
 
     /* Critical chunk flags. */
@@ -73,9 +74,9 @@ public class PNGModule extends ModuleBase {
     * CLASS CONSTRUCTOR.
     ******************************************************************/
     /**
-     *  Instantiate a <tt>PNGModule</tt> object.
+     *  Instantiate a <tt>PngModule</tt> object.
      */
-    public PNGModule() {
+    public PngModule() {
         super (NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
                 VALIDITY, REPINFO, NOTE, RIGHTS, false);
         Signature sig =
@@ -173,7 +174,13 @@ public class PNGModule extends ModuleBase {
              PropertyType.PROPERTY,
              PropertyArity.LIST,
              _propList);
+        _nisoData = new NisoImageMetadata();
+        Property nisoProp = new Property(NISO_IMAGE_MD,
+                PropertyType.NISOIMAGEMETADATA, _nisoData);
+        _propList.add(nisoProp);
         ErrorMessage msg;
+        
+        // Check that the file header matching the PNG magic numbers
         for (int i = 0; i < _sigBytes.length; i++) {
         	int byt = readUnsignedByte (_dstream);
         	if (byt != _sigBytes[i]) {
@@ -183,6 +190,8 @@ public class PNGModule extends ModuleBase {
         		return 0;
         	}
         }
+        
+        // Loop through the chunks
         try {
         	for (;;) {
         		PNGChunk chunk = readChunk(_dstream);
@@ -195,28 +204,21 @@ public class PNGModule extends ModuleBase {
         			info.setWellFormed (false);
         			return 0;
         		}
-        		switch (chunk.getChunkType()) {
-        		case IHDR:
-        			processIHDR (chunk);
-        			break;
-        		case IDAT:
-        			processIDAT (chunk);
-        			break;
-        		case PLTE:
-        			processPLTE (chunk);
-        			break;
-        		case IEND:
-        			processIEND (chunk);
-        			break;
-        		case UNKNOWN:
-        			processUnknownChunk (chunk);
-        			break;
-        		}
+        		chunk.setModule(this);
+        		chunk.setNisoMetadata(_nisoData);
+        		chunk.processChunk(info);
         	}
         }
         catch (EOFException e) {
         	msg = new ErrorMessage ("Unexpected end of file",
         			_nByte);
+        	info.setMessage (msg);
+        	info.setWellFormed (false);
+        	return 0;
+        }
+        catch (Exception e) {
+        	e.printStackTrace();		// *** DEBUG *****
+        	msg = new ErrorMessage ("Exception " + e.getClass().getName());
         	info.setMessage (msg);
         	info.setWellFormed (false);
         	return 0;
@@ -245,7 +247,14 @@ public class PNGModule extends ModuleBase {
         }
             
         info.setProperty (_metadata);
-        return 0;		// **** TODO STUB
+        return 0;
+    }
+    
+    /** This lets the module skip over the remainder of a chunk, not
+     *  including the name and length. */
+    public void eatChunk(PNGChunk chnk) throws IOException {
+    	// TODO check the CRC instead of eating it.
+    	skipBytes (_dstream, chnk.getLength() + 4);
     }
     
     /**
@@ -262,10 +271,12 @@ public class PNGModule extends ModuleBase {
         // TODO more?
     }
     
+    /* readChunkHead reads the type and length of a chunk and
+     * leaves the rest to the specific chunk processing. */
     private PNGChunk readChunk(DataInputStream dstrm) throws IOException {
     	long chunkLength;
     	String typeStr;
-    	char[] chunkData;
+    	
     	char[] crc;
     	try {
     		chunkLength = readUnsignedInt(dstrm, true);
@@ -282,37 +293,37 @@ public class PNGModule extends ModuleBase {
     		chktype.append ((char) dbyt);
     	}
     	typeStr = chktype.toString();
-    	chunkData = new char[(int) chunkLength];		// TODO could be a problem with huge chunks
-    	for (int i = 0; i < chunkLength; i++) {
-    		chunkData[i] = (char) readUnsignedByte(dstrm);
-    	}
-    	crc = new char[4];
-    	for (int i = 0; i < 4; i++) {
-    		crc[i] = (char) readUnsignedByte(dstrm);
-    	}
-    	return new PNGChunk(chunkLength, typeStr, chunkData, crc);
+
+    	return PNGChunk.makePNGChunk(chunkLength,  typeStr);
     }
+
     
     /**********************************************************************
      * Chunk-specific functions.
      **********************************************************************/
-    private void processIHDR (PNGChunk chunk) {
+
+    /** Note that an IHDR chunk has been seen */
+    public void setIhdrSeen (boolean b) {
+    	ihdrSeen = b;
+    }
+    
+    /** Note that an IDAT chunk has been seen */
+    public void setIdatSeen (boolean b) {
+    	idatSeen = b;
+    }
+    
+    /** Note that an IEND chunk has been seen */
+    public void setIendSeen (boolean b) {
+    	iendSeen = b;
+    }
+    
+    private void processIHDR (PNGChunk chunk, RepInfo info) {
+    	if (ihdrSeen) {
+    		ErrorMessage msg = new ErrorMessage("More than one IHDR chunk in file");
+    		info.setMessage(msg);
+    		info.setWellFormed(false);
+    	}
     	ihdrSeen = true;
     }
     
-    private void processIDAT (PNGChunk chunk) {
-    	idatSeen = true;
-    }
-    
-    private void processPLTE (PNGChunk chunk) {
-    	plteSeen = true;
-    }
-    
-    private void processIEND (PNGChunk chunk) {
-    	iendSeen = true;
-    }
-    
-    private void processUnknownChunk (PNGChunk chunk) {
-    	ErrorMessage msg = new ErrorMessage ("Unknown chunk type " + chunk.getChunkType().getValue());
-    }
 }
