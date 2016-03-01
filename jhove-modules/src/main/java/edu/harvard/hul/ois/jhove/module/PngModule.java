@@ -8,6 +8,17 @@ import edu.harvard.hul.ois.jhove.module.png.*;
 
 import edu.harvard.hul.ois.jhove.*;
 
+/**
+ *   Module for validation and metadata extraction on PNG files.
+ *   
+ *   @author Gary McGath
+ *   
+ *   An earlier PNG module was submitted by Gian Uberto Lauri.
+ *   A few bits of code are copied from it.
+ *   It validates files but doesn't do much metadata
+ *   extraction. I noticed it only after making a significant
+ *   start on my own version. -- GDM
+ */
 public class PngModule extends ModuleBase {
 
 	/**
@@ -194,7 +205,7 @@ public class PngModule extends ModuleBase {
         // Loop through the chunks
         try {
         	for (;;) {
-        		PNGChunk chunk = readChunk(_dstream);
+        		PNGChunk chunk = readChunkHead(_dstream);
         		if (chunk == null) {
         			break;
         		}
@@ -205,8 +216,18 @@ public class PngModule extends ModuleBase {
         			return 0;
         		}
         		chunk.setModule(this);
+        		chunk.setInputStream(_dstream);
         		chunk.setNisoMetadata(_nisoData);
         		chunk.processChunk(info);
+        		long storedCRC = chunk.readCRC();
+        		long calculatedCRC = chunk.getCRC();
+        		System.out.println ("storedCRC = " + storedCRC + "   calculatedCRC = " + calculatedCRC);
+        		if (storedCRC != calculatedCRC) {
+        			msg = new ErrorMessage("Incorrect CRC in chunk " + chunk.chunkTypeString());
+        			info.setMessage(msg);
+        			info.setWellFormed(false);
+        			return 0;
+        		}
         	}
         }
         catch (EOFException e) {
@@ -251,10 +272,9 @@ public class PngModule extends ModuleBase {
     }
     
     /** This lets the module skip over the remainder of a chunk, not
-     *  including the name and length. */
+     *  including the name, length,and CRC. It updates the CRC. */
     public void eatChunk(PNGChunk chnk) throws IOException {
-    	// TODO check the CRC instead of eating it.
-    	skipBytes (_dstream, chnk.getLength() + 4);
+    	chnk.skipBytes ((int) chnk.getLength());
     }
     
     /**
@@ -273,11 +293,10 @@ public class PngModule extends ModuleBase {
     
     /* readChunkHead reads the type and length of a chunk and
      * leaves the rest to the specific chunk processing. */
-    private PNGChunk readChunk(DataInputStream dstrm) throws IOException {
+    private PNGChunk readChunkHead(DataInputStream dstrm) throws IOException {
     	long chunkLength;
-    	String typeStr;
+    	//String typeStr;
     	
-    	char[] crc;
     	try {
     		chunkLength = readUnsignedInt(dstrm, true);
     		System.out.println("chunk length = " + chunkLength);
@@ -286,15 +305,9 @@ public class PngModule extends ModuleBase {
     		// If we get an EOF here, we're done reading chunks.
     		return null;
     	}
-    	int dbyt = 0;
-    	StringBuilder chktype = new StringBuilder();
-    	for (int i = 0; i < 4; i++) {
-    		dbyt = readUnsignedByte(dstrm, this);
-    		chktype.append ((char) dbyt);
-    	}
-    	typeStr = chktype.toString();
-
-    	return PNGChunk.makePNGChunk(chunkLength,  typeStr);
+    	int sig = (int) readUnsignedInt(dstrm, true);
+    	
+    	return PNGChunk.makePNGChunk(chunkLength, sig);
     }
 
     

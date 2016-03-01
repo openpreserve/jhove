@@ -6,14 +6,15 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 public class IendChunk extends PNGChunk {
 
 	/** Constructor */
-	public IendChunk(long leng) {
+	public IendChunk(int sig, long leng) {
+		chunkType = sig;
 		length = leng;
-		chunkType = ChunkType.IEND;
 	}
 	
 	public void processChunk(RepInfo info) throws Exception {
+		processChunkCommon();
 		_module.setIendSeen(true);
-		System.out.println("Chunk Type " + chunkType.getValue() + " length " + length);
+		System.out.println("Chunk Type " + chunkTypeString() + " length " + length);
 		_module.eatChunk(this);	// TODO temporary
 	}
 

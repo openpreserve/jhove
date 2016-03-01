@@ -6,9 +6,11 @@ import edu.harvard.hul.ois.jhove.RepInfo;
  *  or extensions.
  */
 public class UnknownChunk extends PNGChunk {
-	public UnknownChunk(long leng) {
+	
+	/** Constructor */
+	public UnknownChunk(int sig, long leng) {
+		chunkType = sig;
 		length = leng;
-		chunkType = ChunkType.UNKNOWN;
 	}
 	
 
