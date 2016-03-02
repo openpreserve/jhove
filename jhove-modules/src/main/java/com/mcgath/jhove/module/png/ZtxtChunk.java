@@ -15,7 +15,7 @@ public class ZtxtChunk extends GeneralTextChunk {
 	}
 	
 	public void processChunk(RepInfo info) throws Exception {
-		final String badchunk = "Bad tEXt chunk";
+		final String badchunk = "Bad zTXt chunk";
 		processChunkCommon();
 		
 		// The tEXt chunk consists of a keyword, a null, and a value.
@@ -31,7 +31,7 @@ public class ZtxtChunk extends GeneralTextChunk {
 			if (c == 0) {
 				if (keyword != null) {
 					// We already had a null. This shouldn't be here.
-					msg = new ErrorMessage ("Unexpected null in tEXt chunk");
+					msg = new ErrorMessage ("Unexpected null in zTXt chunk");
 					info.setMessage (msg);
 					info.setWellFormed(false);
 					throw new PNGException (badchunk);

@@ -234,7 +234,6 @@ public class PngModule extends ModuleBase {
         		chunk.processChunk(info);
         		long storedCRC = chunk.readCRC();
         		long calculatedCRC = chunk.getCRC();
-        		System.out.println ("storedCRC = " + storedCRC + "   calculatedCRC = " + calculatedCRC);
         		if (storedCRC != calculatedCRC) {
         			msg = new ErrorMessage("Incorrect CRC in chunk " + chunk.chunkTypeString());
         			info.setMessage(msg);
@@ -304,11 +303,11 @@ public class PngModule extends ModuleBase {
 	 *  and optionally Language.
 	 */
 	public void addKeyword(String keywd, String val) {
-		addKeyword (keywd, val,null);
+		addKeyword (keywd, null, val, null);
 	}
 
 	/** Add a keyword, value, and language. */
-	public void addKeyword(String keywd, String val, String language) {
+	public void addKeyword(String keywd, String translatedKeywd, String val, String language) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		Property prop = new Property ("Keyword",
 				PropertyType.STRING,
@@ -318,6 +317,9 @@ public class PngModule extends ModuleBase {
 		map.put ("Value", val);
 		if (language != null) {
 			map.put ("language", language);
+		}
+		if (translatedKeywd != null) {
+			map.put ("translated keyword", translatedKeywd);
 		}
 		_keywordPropList.add(prop);
 	}
@@ -344,7 +346,6 @@ public class PngModule extends ModuleBase {
     	
     	try {
     		chunkLength = readUnsignedInt(dstrm, true);
-    		System.out.println("chunk length = " + chunkLength);
     	}
     	catch (EOFException e) {
     		// If we get an EOF here, we're done reading chunks.

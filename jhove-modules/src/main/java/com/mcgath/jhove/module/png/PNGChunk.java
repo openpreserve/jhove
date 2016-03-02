@@ -85,8 +85,14 @@ public abstract class PNGChunk {
 			return new GamaChunk (sig, length);
 		case iCCP_HEAD_SIG:
 			return new IccpChunk (sig, length);
+		case iTXt_HEAD_SIG:
+			return new ItxtChunk (sig, length);
+		case sBIT_HEAD_SIG:
+			return new SbitChunk (sig,length);
 		case tEXt_HEAD_SIG:
 			return new TextChunk (sig, length);
+		case tIME_HEAD_SIG:
+			return new TimeChunk (sig, length);
 		case zTXt_HEAD_SIG:
 			return new ZtxtChunk (sig, length);
 		default:
@@ -160,6 +166,17 @@ public abstract class PNGChunk {
 	public long readUnsignedInt() throws IOException {
 		long val = 0;
 		for (int i = 0; i < 4; i++) {
+			int b = _dstream.readUnsignedByte();
+			val = (val << 8) | b;
+			crc.update((int) b);
+		}
+		return val;
+	}
+	
+	/** Read a 2-byte unsigned integer and update the CRC */
+	public int readUnsignedShort() throws IOException {
+		int val = 0;
+		for (int i = 0; i < 2; i++) {
 			int b = _dstream.readUnsignedByte();
 			val = (val << 8) | b;
 			crc.update((int) b);

@@ -1,6 +1,6 @@
 package com.mcgath.jhove.module.png;
 
-import edu.harvard.hul.ois.jhove.RepInfo;
+//import edu.harvard.hul.ois.jhove.RepInfo;
 
 /** Class for chunks of unknown type. These might be errors
  *  or extensions.
