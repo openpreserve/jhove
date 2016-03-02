@@ -1,4 +1,4 @@
-package edu.harvard.hul.ois.jhove.module.png;
+package com.mcgath.jhove.module.png;
 
 import edu.harvard.hul.ois.jhove.RepInfo;
 

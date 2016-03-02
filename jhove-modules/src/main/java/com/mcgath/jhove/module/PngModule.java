@@ -1,9 +1,14 @@
-package edu.harvard.hul.ois.jhove.module;
+package com.mcgath.jhove.module;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import edu.harvard.hul.ois.jhove.module.png.*;
+
+import com.mcgath.jhove.module.png.IdatChunk;
+import com.mcgath.jhove.module.png.PNGChunk;
+
+import com.mcgath.jhove.module.png.*;
 //import java.util.Vector;
 
 import edu.harvard.hul.ois.jhove.*;
@@ -57,6 +62,9 @@ public class PngModule extends ModuleBase {
     
     /* Top-level property list */
     protected List<Property> _propList;
+    
+    /* List of keyword properties. */
+    protected List<Property> _keywordPropList;
 
     /* Input stream wrapper which handles checksums */
     protected ChecksumInputStream _cstream;
@@ -189,6 +197,7 @@ public class PngModule extends ModuleBase {
         Property nisoProp = new Property(NISO_IMAGE_MD,
                 PropertyType.NISOIMAGEMETADATA, _nisoData);
         _propList.add(nisoProp);
+        _keywordPropList = new LinkedList<Property> ();
         ErrorMessage msg;
         
         // Check that the file header matching the PNG magic numbers
@@ -215,9 +224,13 @@ public class PngModule extends ModuleBase {
         			info.setWellFormed (false);
         			return 0;
         		}
+        		if (idatSeen && !(chunk instanceof IdatChunk)) {
+        			idatFinished = true;
+        		}
         		chunk.setModule(this);
         		chunk.setInputStream(_dstream);
         		chunk.setNisoMetadata(_nisoData);
+        		chunk.setPropertyList(_propList);
         		chunk.processChunk(info);
         		long storedCRC = chunk.readCRC();
         		long calculatedCRC = chunk.getCRC();
@@ -265,8 +278,16 @@ public class PngModule extends ModuleBase {
         if (criticalMissing) {
         	info.setWellFormed (false);
         	return 0;
+		}
+
+        // Add the keyword property list if it isn't empty.
+        if (!_keywordPropList.isEmpty()) {
+        	_propList.add(new Property ("Keywords",
+        			PropertyType.PROPERTY,
+        			PropertyArity.LIST,
+        			_keywordPropList));
+        			
         }
-            
         info.setProperty (_metadata);
         return 0;
     }
@@ -274,8 +295,33 @@ public class PngModule extends ModuleBase {
     /** This lets the module skip over the remainder of a chunk, not
      *  including the name, length,and CRC. It updates the CRC. */
     public void eatChunk(PNGChunk chnk) throws IOException {
-    	chnk.skipBytes ((int) chnk.getLength());
+    	chnk.skipBytes ((int) chnk.getLength());	
     }
+
+	/** Add a keyword and value. Creating arbitrary properties
+	 *  on the fly doesn't go well with JHOVE's approach, so
+	 *  we make each property a Map, with keys Keyword, Value,
+	 *  and optionally Language.
+	 */
+	public void addKeyword(String keywd, String val) {
+		addKeyword (keywd, val,null);
+	}
+
+	/** Add a keyword, value, and language. */
+	public void addKeyword(String keywd, String val, String language) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		Property prop = new Property ("Keyword",
+				PropertyType.STRING,
+				PropertyArity.MAP,
+				map);
+		map.put ("Keyword", keywd);
+		map.put ("Value", val);
+		if (language != null) {
+			map.put ("language", language);
+		}
+		_keywordPropList.add(prop);
+	}
+    
     
     /**
      *   Initializes the state of the module for parsing.
@@ -288,7 +334,6 @@ public class PngModule extends ModuleBase {
         idatSeen = false;
         idatFinished = false;
         iendSeen = false;
-        // TODO more?
     }
     
     /* readChunkHead reads the type and length of a chunk and
@@ -325,18 +370,38 @@ public class PngModule extends ModuleBase {
     	idatSeen = b;
     }
     
+    /** Note that a PLTE chunk has been seen */
+    public void setPlteSeen (boolean b) {
+    	plteSeen = b;
+    }
+    
     /** Note that an IEND chunk has been seen */
     public void setIendSeen (boolean b) {
     	iendSeen = b;
     }
     
-    private void processIHDR (PNGChunk chunk, RepInfo info) {
-    	if (ihdrSeen) {
-    		ErrorMessage msg = new ErrorMessage("More than one IHDR chunk in file");
-    		info.setMessage(msg);
-    		info.setWellFormed(false);
-    	}
-    	ihdrSeen = true;
+    /** Return true if IDAT chunk has been seen */
+    public boolean isIdatSeen () {
+    	return idatSeen;
     }
+    
+    /** Return true if a non-IDAT chunk has been seen after an IDAT chunk */
+    public boolean isIdatFinished () {
+    	return idatFinished;
+    }
+    
+    /** Return true if PLTE chunk has been seen */
+    public boolean isPlteSeen () {
+    	return plteSeen;
+    }
+    
+//    private void processIHDR (PNGChunk chunk, RepInfo info) {
+//    	if (ihdrSeen) {
+//    		ErrorMessage msg = new ErrorMessage("More than one IHDR chunk in file");
+//    		info.setMessage(msg);
+//    		info.setWellFormed(false);
+//    	}
+//    	ihdrSeen = true;
+//    }
     
 }

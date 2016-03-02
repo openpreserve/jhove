@@ -1,13 +1,16 @@
-package edu.harvard.hul.ois.jhove.module.png;
+package com.mcgath.jhove.module.png;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.zip.CRC32;
+
+import com.mcgath.jhove.module.PngModule;
 
 import edu.harvard.hul.ois.jhove.ModuleBase;
 import edu.harvard.hul.ois.jhove.NisoImageMetadata;
+import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.RepInfo;
-import edu.harvard.hul.ois.jhove.module.PngModule;
 
 public abstract class PNGChunk {
 	protected long length;		// length of the data portion
@@ -23,52 +26,7 @@ public abstract class PNGChunk {
 	/** The invoking module's input stream */
 	protected DataInputStream _dstream;
 	
-//	public enum ChunkType {
-//		IHDR (IHDR_HEAD_SIG, "IHDR"),
-//		PLTE (PLTE_HEAD_SIG, "PLTE"),
-//		IDAT (IDAT_HEAD_SIG, "IDAT"),
-//		IEND (IEND_HEAD_SIG, "IEND"),
-//		CHRM (cHRM_HEAD_SIG, "cHRN"),
-//		GAMA (gAMA_HEAD_SIG, "gAMA"),
-//		ICCP (iCCP_HEAD_SIG, "iCCP"),
-//		SBIT (sBIT_HEAD_SIG, "sBIT"),
-//		SRGB (sRGB_HEAD_SIG, "sRGB"),
-//		TEXT (tEXt_HEAD_SIG, "tEXt"),
-//		ZTXT (zTXt_HEAD_SIG, "zTXt"),
-//		BKGD (bKGD_HEAD_SIG, "bKGD"),
-//		HIST (hIST_HEAD_SIG, "hIST"),
-//		PHYS (pHYs_HEAD_SIG, "pHYs"),
-//		SPLT (sPLT_HEAD_SIG, "sPLT"),
-//		TIME (tIME_HEAD_SIG, "tIME"),
-//		TRNS (tRNS_HEAD_SIG, "tRNS"),
-//		UNKNOWN (0, "");
-//		
-//		/* The chunk signature, i.e., its four-byte name
-//		 * treated as a number, as recommended in the spec */
-//		private final int sig;
-//		
-//		/* The chunk signature as a string for human readability */
-//		private final String strValue;
-//			
-//		private ChunkType(int intSig, String strVal) {
-//			this.sig = intSig;
-//			this.strValue = strVal;
-//		}
-//		
-//		public String getStrValue() {
-//			return strValue;
-//		}
-//		
-//		/** Return the chunkType as an array of 4 bytes */
-//		public int[] getByteValues () {
-//			int b[] = new int[4];
-//			b[0] = (sig >> 24) & 0XFF;
-//			b[1] = (sig >> 16) & 0XFF;
-//			b[2] = (sig >> 8) & 0XFF;
-//			b[3] = sig & 0XFF;
-//			return b;
-//		}
-//	}
+	protected List<Property> _propList;
 	
     /*
      * Chunk signatures.
@@ -121,6 +79,16 @@ public abstract class PNGChunk {
 			return new IdatChunk (sig, length);
 		case IEND_HEAD_SIG:
 			return new IendChunk (sig, length);
+		case PLTE_HEAD_SIG:
+			return new PlteChunk (sig, length);
+		case gAMA_HEAD_SIG:
+			return new GamaChunk (sig, length);
+		case iCCP_HEAD_SIG:
+			return new IccpChunk (sig, length);
+		case tEXt_HEAD_SIG:
+			return new TextChunk (sig, length);
+		case zTXt_HEAD_SIG:
+			return new ZtxtChunk (sig, length);
 		default:
 			return new UnknownChunk (sig, length);
 		}
@@ -130,6 +98,11 @@ public abstract class PNGChunk {
 	 *  put information into it. */
 	public void setNisoMetadata (NisoImageMetadata nmd) {
 		_nisoMetadata = nmd;
+	}
+	
+	/** Hand the main property list to the chunk */
+	public void setPropertyList (List<Property> lst) {
+		_propList = lst;
 	}
 	
 	/** Give the chunk a reference to the PNG module. */
@@ -217,19 +190,7 @@ public abstract class PNGChunk {
 		return c;
 	}
 
-	/* Create a ChunkType from a signature. I'd have liked to use a
-	 * Switch, but even though JHOVE 1.12 is expected to build
-	 * to Java 7, the Maven settings haven't been changed yet
-	 * and I don't feel like messing with them. -- GDM */
-//	private static ChunkType toChunkType(int sig) {
-//		for (ChunkType ctyp : ChunkType.values()) {
-//			if (sig == ctyp.sig) {
-//				return ctyp;
-//			}
-//		}
-//		// No match to any known chunk type
-//		return ChunkType.UNKNOWN;
-//	}
+
 	
 	/* Convert chunk type to string value. */
 	public String chunkTypeString() {

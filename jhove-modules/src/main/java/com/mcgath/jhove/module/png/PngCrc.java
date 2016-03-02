@@ -1,4 +1,4 @@
-package edu.harvard.hul.ois.jhove.module.png;
+package com.mcgath.jhove.module.png;
 
 /** Accumulator for the CRC of a chunk. The CRC is calculated on
  *  the type and content of a chunk, but the length field is
