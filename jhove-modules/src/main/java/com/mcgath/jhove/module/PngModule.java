@@ -1,6 +1,7 @@
 package com.mcgath.jhove.module;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,6 +78,9 @@ public class PngModule extends ModuleBase {
     
     /* NISO metadata for the image */
     NisoImageMetadata _nisoData;
+    
+    /* Color type. Some chunks need to know this. */
+    protected int _colorType;
     
 
     /* Critical chunk flags. */
@@ -242,6 +246,11 @@ public class PngModule extends ModuleBase {
         		}
         	}
         }
+        catch (PNGException e) {
+        	// We've already reported a problem, so we just clean up here.
+        	e.printStackTrace();
+        	return 0;
+        }
         catch (EOFException e) {
         	msg = new ErrorMessage ("Unexpected end of file",
         			_nByte);
@@ -257,7 +266,7 @@ public class PngModule extends ModuleBase {
         	return 0;
         }
         
-        /* A minimal set of requirements for the first pass. */
+        /* Check for required chunks. */
         boolean criticalMissing = false;
         if (!ihdrSeen) {
         	msg = new ErrorMessage("No IHDR chunk");
@@ -278,6 +287,21 @@ public class PngModule extends ModuleBase {
         	info.setWellFormed (false);
         	return 0;
 		}
+        
+        /** PLTE is required with color type 3 and forbidden with types 0 and 4 */
+        if (_colorType == 3 && !plteSeen) {
+        	msg = new ErrorMessage ("No PLTE chunk, required with color type 3");
+			info.setMessage (msg);
+        	info.setWellFormed (false);
+			return 0;
+        }
+        
+        if ((_colorType == 0 || _colorType == 4) && plteSeen) {
+			msg = new ErrorMessage ("PLTE chunk found, not allowed with color types 0 and 4");
+			info.setMessage (msg);
+        	info.setWellFormed (false);
+			return 0;
+        }
 
         // Add the keyword property list if it isn't empty.
         if (!_keywordPropList.isEmpty()) {
@@ -309,17 +333,27 @@ public class PngModule extends ModuleBase {
 	/** Add a keyword, value, and language. */
 	public void addKeyword(String keywd, String translatedKeywd, String val, String language) {
 		HashMap<String, String> map = new HashMap<String, String>();
+		List<Property> props = new ArrayList<Property>();
 		Property prop = new Property ("Keyword",
+				PropertyType.PROPERTY,
+				PropertyArity.LIST,
+				props);
+		props.add (new Property ("Key",
 				PropertyType.STRING,
-				PropertyArity.MAP,
-				map);
-		map.put ("Keyword", keywd);
-		map.put ("Value", val);
+				keywd));
+		props.add (new Property ("Value",
+				PropertyType.STRING,
+				val));
 		if (language != null) {
+			props.add (new Property ("Language",
+					PropertyType.STRING,
+					language));
 			map.put ("language", language);
 		}
 		if (translatedKeywd != null) {
-			map.put ("translated keyword", translatedKeywd);
+			props.add (new Property ("Translated key",
+					PropertyType.STRING,
+					translatedKeywd));
 		}
 		_keywordPropList.add(prop);
 	}
@@ -372,37 +406,40 @@ public class PngModule extends ModuleBase {
     }
     
     /** Note that a PLTE chunk has been seen */
-    public void setPlteSeen (boolean b) {
-    	plteSeen = b;
+	public void setPlteSeen (boolean b) {
+		plteSeen = b;
+	}
+    
+	/** Note that an IEND chunk has been seen */
+	public void setIendSeen (boolean b) {
+		iendSeen = b;
+	}
+    
+	/** Return true if IDAT chunk has been seen */
+	public boolean isIdatSeen () {
+		return idatSeen;
+	}
+    
+	/** Return true if a non-IDAT chunk has been seen after an IDAT chunk */
+	public boolean isIdatFinished () {
+		return idatFinished;
+	}
+    
+	/** Return true if PLTE chunk has been seen */
+	public boolean isPlteSeen () {
+		return plteSeen;
+	}
+    
+	/** Set the color type. The IHDR processing will set this for
+	 *  the benefit of chunks that need it.
+	 */
+	public void setColorType (int ct) {
+		_colorType = ct;
+	}
+    
+	/** Get the color type that was recorded from the IHDR chunk. */
+	public int getColorType () {
+		return _colorType;
     }
-    
-    /** Note that an IEND chunk has been seen */
-    public void setIendSeen (boolean b) {
-    	iendSeen = b;
-    }
-    
-    /** Return true if IDAT chunk has been seen */
-    public boolean isIdatSeen () {
-    	return idatSeen;
-    }
-    
-    /** Return true if a non-IDAT chunk has been seen after an IDAT chunk */
-    public boolean isIdatFinished () {
-    	return idatFinished;
-    }
-    
-    /** Return true if PLTE chunk has been seen */
-    public boolean isPlteSeen () {
-    	return plteSeen;
-    }
-    
-//    private void processIHDR (PNGChunk chunk, RepInfo info) {
-//    	if (ihdrSeen) {
-//    		ErrorMessage msg = new ErrorMessage("More than one IHDR chunk in file");
-//    		info.setMessage(msg);
-//    		info.setWellFormed(false);
-//    	}
-//    	ihdrSeen = true;
-//    }
-    
+        
 }

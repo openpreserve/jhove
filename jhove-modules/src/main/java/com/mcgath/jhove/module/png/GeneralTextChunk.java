@@ -4,10 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
-import edu.harvard.hul.ois.jhove.ErrorMessage;
-import edu.harvard.hul.ois.jhove.Property;
-import edu.harvard.hul.ois.jhove.PropertyType;
-import edu.harvard.hul.ois.jhove.RepInfo;
+
 
 /** A superclass for TextChunk, ZtxtChunk, and ItxtChunk */
 public abstract class GeneralTextChunk extends PNGChunk {
@@ -27,44 +24,44 @@ public abstract class GeneralTextChunk extends PNGChunk {
 	/** Add a property for the keyword and value. If it isn't one
 	 *  of the standard properties, what should we do?
 	 */
-	protected void addTextProperty (String keyword, String value, RepInfo info)
-			throws PNGException {
-		boolean badChunk = false;
-		ErrorMessage msg;
-		if (keyword == null) {
-			msg = new ErrorMessage ("No keyword terminator in " + chunkTypeString() + " chunk");
-			info.setMessage(msg);
-			badChunk = true;
-		}
-		else {
-			if (keyword.length() == 0) {
-				msg = new ErrorMessage ("Keyword in " + chunkTypeString() + " chunk is empty");
-				info.setMessage(msg);
-				badChunk = true;
-			}
-			if (value.length() == 0) {
-				msg = new ErrorMessage ("Value in " + chunkTypeString() + " chunk is empty");
-				info.setMessage(msg);
-				badChunk = true;
-			}
-		}
-		if (badChunk) {
-			info.setWellFormed(false);
-			throw new PNGException ("Error in " + chunkTypeString() + "chunk");
-		}
-		for (String kwd : standardKeywords) {
-			if (kwd.equals(keyword)) {
-				_propList.add (new Property (keyword,
-						PropertyType.STRING,
-						value));
-				break;
-			}
-		}
-	}
+//	protected void addTextProperty (String keyword, String value, RepInfo info)
+//			throws PNGException {
+//		boolean badChunk = false;
+//		ErrorMessage msg;
+//		if (keyword == null) {
+//			msg = new ErrorMessage ("No keyword terminator in " + chunkTypeString() + " chunk");
+//			info.setMessage(msg);
+//			badChunk = true;
+//		}
+//		else {
+//			if (keyword.length() == 0) {
+//				msg = new ErrorMessage ("Keyword in " + chunkTypeString() + " chunk is empty");
+//				info.setMessage(msg);
+//				badChunk = true;
+//			}
+//			if (value.length() == 0) {
+//				msg = new ErrorMessage ("Value in " + chunkTypeString() + " chunk is empty");
+//				info.setMessage(msg);
+//				badChunk = true;
+//			}
+//		}
+//		if (badChunk) {
+//			info.setWellFormed(false);
+//			throw new PNGException ("Error in " + chunkTypeString() + "chunk");
+//		}
+//		for (String kwd : standardKeywords) {
+//			if (kwd.equals(keyword)) {
+//				_propList.add (new Property (keyword,
+//						PropertyType.STRING,
+//						value));
+//				break;
+//			}
+//		}
+//	}
 	
 	/** Expand a byte array using the DEFLATE method. */
 	protected String inflateToText (byte[] b) throws DataFormatException {
-		StringBuilder res = new StringBuilder();;
+		StringBuilder res = new StringBuilder();
 		final int bufSize = 128;
 		byte[] deflateBuf = new byte[bufSize];
 		// We use the ZIP inflater provided by Java

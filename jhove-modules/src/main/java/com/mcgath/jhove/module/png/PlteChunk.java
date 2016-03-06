@@ -14,15 +14,29 @@ public class PlteChunk extends PNGChunk {
 	}
 	
 	public void processChunk(RepInfo info) throws Exception {
+		ErrorMessage msg = null;
 		processChunkCommon();
+		if (_module.isPlteSeen()) {
+			msg = new ErrorMessage ("Multiple PLTE chunks");
+		}
 		_module.setPlteSeen(true);
+
 		if (_module.isIdatSeen()) {
-			ErrorMessage msg = new ErrorMessage("PLTE chunk comes after first IDAT chunk");
+			msg = new ErrorMessage("PLTE chunk comes after first IDAT chunk");
+		}
+		if ((length % 3) != 0) {
+			// must be a multiple of 3 bytes
+			msg = new ErrorMessage("Invalid PLTE chunk length " + length);
+		}
+		if (msg != null) {
 			info.setMessage(msg);
 			info.setWellFormed(false);
-			throw new PNGException ("Misplaced PLTE chunk");
+			throw new PNGException ("PLTE chunk error");
 		}
-		_module.eatChunk(this);	// TODO temporary
+		for (int i = 0; i <length; i++) {
+			// We don't care about the contents
+			readUnsignedByte();
+		}
 	}
 
 }

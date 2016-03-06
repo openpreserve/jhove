@@ -93,11 +93,12 @@ public class IhdrChunk extends PNGChunk {
 		}
 		
 		
-		_nisoMetadata.setImageWidth(width);
-		_nisoMetadata.setImageLength(height);
+		_nisoMetadata.setImageWidth (width);
+		_nisoMetadata.setImageLength (height);
 		int[] bits = { bitDepth };
-		_nisoMetadata.setBitsPerSample(bits);
-		_nisoMetadata.setColorSpace(colorTypeToNiso(colorType));
+		_nisoMetadata.setBitsPerSample (bits);
+		_nisoMetadata.setColorSpace(colorTypeToNiso (colorType));
+		_module.setColorType (colorType);
 		if (colorType == 1 || colorType == 5 || colorType > 6) {
 			ErrorMessage msg = 
 					new ErrorMessage("Invalid color type " + colorType);

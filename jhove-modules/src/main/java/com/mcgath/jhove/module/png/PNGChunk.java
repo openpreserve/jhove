@@ -81,18 +81,29 @@ public abstract class PNGChunk {
 			return new IendChunk (sig, length);
 		case PLTE_HEAD_SIG:
 			return new PlteChunk (sig, length);
+
+		case bKGD_HEAD_SIG:
+			return new BkgdChunk (sig, length);
+		case cHRM_HEAD_SIG:
+			return new ChrmChunk (sig, length);
 		case gAMA_HEAD_SIG:
 			return new GamaChunk (sig, length);
+		case hIST_HEAD_SIG:
+			return new HistChunk (sig, length);
 		case iCCP_HEAD_SIG:
 			return new IccpChunk (sig, length);
 		case iTXt_HEAD_SIG:
 			return new ItxtChunk (sig, length);
 		case sBIT_HEAD_SIG:
-			return new SbitChunk (sig,length);
+			return new SbitChunk (sig, length);
+		case sRGB_HEAD_SIG:
+			return new SrgbChunk (sig, length);
 		case tEXt_HEAD_SIG:
 			return new TextChunk (sig, length);
 		case tIME_HEAD_SIG:
 			return new TimeChunk (sig, length);
+		case tRNS_HEAD_SIG:
+			return new TrnsChunk (sig, length);
 		case zTXt_HEAD_SIG:
 			return new ZtxtChunk (sig, length);
 		default:

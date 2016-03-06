@@ -25,6 +25,7 @@ public class TimeChunk extends PNGChunk {
 		if (length < 7) {
 			ErrorMessage msg = new ErrorMessage("tIME chunk is too short");
 			info.setMessage (msg);
+			info.setWellFormed (false);
 			throw new PNGException ("Bad tIME chunk");
 		} else {
 			int year = readUnsignedShort();
