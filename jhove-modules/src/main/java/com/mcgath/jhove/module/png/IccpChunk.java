@@ -12,10 +12,30 @@ public class IccpChunk extends PNGChunk {
 	public IccpChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = true;
+		duplicateAllowed = false;
 	}
 	
 	public void processChunk(RepInfo info) throws Exception {
-		processChunkCommon();
+		final String badChunk = "Bad iCCP chunk";
+		processChunkCommon(info);
+		
+		ErrorMessage msg = null;
+		if (_module.isPlteSeen()) {
+			msg = new ErrorMessage ("iCCP chunk is not allowed after PLTE chunk");
+		}
+		else if (_module.isIdatSeen()) {
+			msg = new ErrorMessage ("iCCP chunk is not allowed after IDAT chunk");
+		}
+		else if (_module.isChunkSeen(PNGChunk.sRGB_HEAD_SIG)) {
+			msg = new ErrorMessage ("iCCP and sRGB chunks are not allowed in the same file");
+		}
+		if (msg != null) {
+			info.setMessage (msg);
+			info.setWellFormed (false);
+			throw new PNGException (badChunk);
+		}
+
 		// The iCCP chunk consists of a name, a null, 
 		// a compression type (1 byte), and the profile.
 		
@@ -48,10 +68,10 @@ public class IccpChunk extends PNGChunk {
 		}
 		if (state != 2) {
 			// If we didn't reach state 2, something's wrong with the chunk structure
-			ErrorMessage msg = new ErrorMessage ("Malformed iCCP chunk");
+			msg = new ErrorMessage ("Malformed iCCP chunk");
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException ("Bad iCCP chunk");
+			throw new PNGException (badChunk);
 		}
 		Property profile = new Property ("ICC Profile name",
 				PropertyType.STRING,

@@ -12,11 +12,13 @@ public class ZtxtChunk extends GeneralTextChunk {
 	public ZtxtChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = true;
+		duplicateAllowed = true;
 	}
 	
 	public void processChunk(RepInfo info) throws Exception {
 		final String badchunk = "Bad zTXt chunk";
-		processChunkCommon();
+		processChunkCommon(info);
 		
 		// The tEXt chunk consists of a keyword, a null, a compression type,
 		// and a value.

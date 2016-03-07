@@ -7,6 +7,7 @@ import java.util.zip.CRC32;
 
 import com.mcgath.jhove.module.PngModule;
 
+import edu.harvard.hul.ois.jhove.ErrorMessage;
 import edu.harvard.hul.ois.jhove.ModuleBase;
 import edu.harvard.hul.ois.jhove.NisoImageMetadata;
 import edu.harvard.hul.ois.jhove.Property;
@@ -17,6 +18,8 @@ public abstract class PNGChunk {
 	protected int chunkType;	// chunk type as 32-bit value
 	protected char chunkData[];	// data portion, can be any length including 0
 	protected CRC32 crc;			// 4-byte CRC
+	protected boolean ancillary;	// if true, an ancillary chunk
+	protected boolean duplicateAllowed;	// ancillary chunks only -- if false, no duplicates of this type allowed
 	
 	protected NisoImageMetadata _nisoMetadata;
 	
@@ -42,24 +45,24 @@ public abstract class PNGChunk {
      * constants, but I prefer to keep the PNG chunk name cases, since
      * they are meaningful for the properties of each chunk.
      */
-    private final static int IHDR_HEAD_SIG = 0x49484452;
-    private final static int PLTE_HEAD_SIG = 0x504c5445;
-    private final static int IDAT_HEAD_SIG = 0x49444154;
-    private final static int IEND_HEAD_SIG = 0x49454e44;
-    private final static int cHRM_HEAD_SIG = 0x6348524d;
-    private final static int gAMA_HEAD_SIG = 0x67414d41;
-    private final static int iCCP_HEAD_SIG = 0x69434350;
-    private final static int sBIT_HEAD_SIG = 0x73424954;
-    private final static int sRGB_HEAD_SIG = 0x73524742;
-    private final static int tEXt_HEAD_SIG = 0x74455874;
-    private final static int zTXt_HEAD_SIG = 0x7a545874;
-    private final static int iTXt_HEAD_SIG = 0x69545874;
-    private final static int bKGD_HEAD_SIG = 0x624b4744;
-    private final static int hIST_HEAD_SIG = 0x68495354;
-    private final static int pHYs_HEAD_SIG = 0x70485973;
-    private final static int sPLT_HEAD_SIG = 0x73504c54;
-    private final static int tIME_HEAD_SIG = 0x74494d45;
-    private final static int tRNS_HEAD_SIG = 0x74524e53;
+    protected final static int IHDR_HEAD_SIG = 0x49484452;
+    protected final static int PLTE_HEAD_SIG = 0x504c5445;
+    protected final static int IDAT_HEAD_SIG = 0x49444154;
+    protected final static int IEND_HEAD_SIG = 0x49454e44;
+    protected final static int cHRM_HEAD_SIG = 0x6348524d;
+    protected final static int gAMA_HEAD_SIG = 0x67414d41;
+    protected final static int iCCP_HEAD_SIG = 0x69434350;
+    protected final static int sBIT_HEAD_SIG = 0x73424954;
+    protected final static int sRGB_HEAD_SIG = 0x73524742;
+    protected final static int tEXt_HEAD_SIG = 0x74455874;
+    protected final static int zTXt_HEAD_SIG = 0x7a545874;
+    protected final static int iTXt_HEAD_SIG = 0x69545874;
+    protected final static int bKGD_HEAD_SIG = 0x624b4744;
+    protected final static int hIST_HEAD_SIG = 0x68495354;
+    protected final static int pHYs_HEAD_SIG = 0x70485973;
+    protected final static int sPLT_HEAD_SIG = 0x73504c54;
+    protected final static int tIME_HEAD_SIG = 0x74494d45;
+    protected final static int tRNS_HEAD_SIG = 0x74524e53;
 	
     public PNGChunk() {
 		length = 0;
@@ -94,8 +97,12 @@ public abstract class PNGChunk {
 			return new IccpChunk (sig, length);
 		case iTXt_HEAD_SIG:
 			return new ItxtChunk (sig, length);
+		case pHYs_HEAD_SIG:
+			return new PhysChunk (sig, length);
 		case sBIT_HEAD_SIG:
 			return new SbitChunk (sig, length);
+		case sPLT_HEAD_SIG:
+			return new SpltChunk (sig, length);
 		case sRGB_HEAD_SIG:
 			return new SrgbChunk (sig, length);
 		case tEXt_HEAD_SIG:
@@ -156,13 +163,23 @@ public abstract class PNGChunk {
 	 *  be the behavior only for UnknownChunk when we're done.
 	 */
 	public void processChunk(RepInfo info) throws Exception {
-		processChunkCommon();
+		processChunkCommon(info);
 		_module.eatChunk(this);	// TODO temporary
 	}	
 
 	/** Common code to call at the start of every processChunk method. 
 	 */
-	public void processChunkCommon () {
+	public void processChunkCommon (RepInfo info) throws PNGException {
+		if (ancillary && !duplicateAllowed) {
+			if (_module.isChunkSeen(chunkType)) {
+				ErrorMessage msg = new ErrorMessage 
+						("Multiple " + chunkTypeString() + " chunks are not allowed");
+				info.setMessage (msg);
+				info.setWellFormed (false);
+				throw new PNGException ("Duplicate chunk");
+			}
+			_module.setChunkSeen (chunkType);
+		}
 		int[] chunkTypeVal = chunkTypeBytes();
 		for (int i = 0; i < 4; i++) {
 			crc.update(chunkTypeVal[i]);

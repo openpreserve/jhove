@@ -15,13 +15,15 @@ public class TimeChunk extends PNGChunk {
 	public TimeChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = true;
+		duplicateAllowed = false;
 	}
 	
 	/** The tIME chunk has the following: 2 bytes year (short),
 	 *  1 byte month, 1 byte day, 1 byte hour, 1 byte minute,
 	 *  1 byte second. It's supposed to be the UTC time. */
 	public void processChunk(RepInfo info) throws Exception {
-		processChunkCommon();
+		processChunkCommon(info);
 		if (length < 7) {
 			ErrorMessage msg = new ErrorMessage("tIME chunk is too short");
 			info.setMessage (msg);

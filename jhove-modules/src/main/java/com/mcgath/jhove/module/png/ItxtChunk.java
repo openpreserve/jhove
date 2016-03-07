@@ -10,12 +10,14 @@ public class ItxtChunk extends GeneralTextChunk {
 	public ItxtChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = true;
+		duplicateAllowed = true;
 	}
 	
 	/** Process the data portion of the chunk. */
 	public void processChunk(RepInfo info) throws Exception {
 		final String badchunk = "Bad iTXt chunk";
-		processChunkCommon();
+		processChunkCommon(info);
 		
 		//iTXt chunks may have either compressed or uncompressed values.
 		

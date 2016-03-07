@@ -3,8 +3,10 @@ package com.mcgath.jhove.module;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.mcgath.jhove.module.png.IdatChunk;
 import com.mcgath.jhove.module.png.PNGChunk;
@@ -66,6 +68,9 @@ public class PngModule extends ModuleBase {
     
     /* List of keyword properties. */
     protected List<Property> _keywordPropList;
+    
+    /* List of suggested palette properties. */
+    protected List<Property> _spltList;
 
     /* Input stream wrapper which handles checksums */
     protected ChecksumInputStream _cstream;
@@ -81,6 +86,11 @@ public class PngModule extends ModuleBase {
     
     /* Color type. Some chunks need to know this. */
     protected int _colorType;
+    
+    /* Set of ancillary chunks which aren't allowed to be duplicated
+     * and have been encountered.
+     */
+    private Set<Integer> _ancillaryChunks;
     
 
     /* Critical chunk flags. */
@@ -202,6 +212,7 @@ public class PngModule extends ModuleBase {
                 PropertyType.NISOIMAGEMETADATA, _nisoData);
         _propList.add(nisoProp);
         _keywordPropList = new LinkedList<Property> ();
+        _spltList = new LinkedList<Property> ();
         ErrorMessage msg;
         
         // Check that the file header matching the PNG magic numbers
@@ -248,7 +259,6 @@ public class PngModule extends ModuleBase {
         }
         catch (PNGException e) {
         	// We've already reported a problem, so we just clean up here.
-        	e.printStackTrace();
         	return 0;
         }
         catch (EOFException e) {
@@ -259,7 +269,9 @@ public class PngModule extends ModuleBase {
         	return 0;
         }
         catch (Exception e) {
-        	e.printStackTrace();		// *** DEBUG *****
+        	// Miscellaneous exceptions really shouldn't come here.
+        	// But it's better to catch them than let them fall through.
+        	// Treat them as bugs.
         	msg = new ErrorMessage ("Exception " + e.getClass().getName());
         	info.setMessage (msg);
         	info.setWellFormed (false);
@@ -311,6 +323,14 @@ public class PngModule extends ModuleBase {
         			_keywordPropList));
         			
         }
+        
+        // Add the splat property list if it isn't empty.
+        if (!_spltList.isEmpty()) {
+        	_propList.add(new Property ("Suggested palettes",
+        			PropertyType.PROPERTY,
+        			PropertyArity.LIST,
+        			_spltList));
+        }
         info.setProperty (_metadata);
         return 0;
     }
@@ -332,7 +352,7 @@ public class PngModule extends ModuleBase {
 
 	/** Add a keyword, value, and language. */
 	public void addKeyword(String keywd, String translatedKeywd, String val, String language) {
-		HashMap<String, String> map = new HashMap<String, String>();
+		//HashMap<String, String> map = new HashMap<String, String>();
 		List<Property> props = new ArrayList<Property>();
 		Property prop = new Property ("Keyword",
 				PropertyType.PROPERTY,
@@ -348,7 +368,6 @@ public class PngModule extends ModuleBase {
 			props.add (new Property ("Language",
 					PropertyType.STRING,
 					language));
-			map.put ("language", language);
 		}
 		if (translatedKeywd != null) {
 			props.add (new Property ("Translated key",
@@ -358,7 +377,26 @@ public class PngModule extends ModuleBase {
 		_keywordPropList.add(prop);
 	}
     
-    
+    /** Add a suggested palette */
+	public void addSplt (String name, int sampleDepth, int numSamples) {
+		List<Property> props = new ArrayList<Property>();
+		Property prop = new Property ("Suggested palette",
+				PropertyType.PROPERTY,
+				PropertyArity.LIST,
+				props);
+		props.add (new Property ("Name",
+				PropertyType.STRING,
+				name));
+		props.add (new Property ("Sample depth",
+				PropertyType.INTEGER,
+				sampleDepth));
+		props.add (new Property ("Number of samples",
+				PropertyType.INTEGER,
+				numSamples));
+		_spltList.add (prop);
+	}
+	
+	
     /**
      *   Initializes the state of the module for parsing.
      */
@@ -370,6 +408,7 @@ public class PngModule extends ModuleBase {
         idatSeen = false;
         idatFinished = false;
         iendSeen = false;
+        _ancillaryChunks = new HashSet<Integer>();
     }
     
     /* readChunkHead reads the type and length of a chunk and
@@ -400,6 +439,11 @@ public class PngModule extends ModuleBase {
     	ihdrSeen = b;
     }
     
+    /** Returns true if IHDR chunk has been seen */
+    public boolean isIhdrSeen () {
+    	return ihdrSeen;
+    }
+    
     /** Note that an IDAT chunk has been seen */
     public void setIdatSeen (boolean b) {
     	idatSeen = b;
@@ -428,6 +472,18 @@ public class PngModule extends ModuleBase {
 	/** Return true if PLTE chunk has been seen */
 	public boolean isPlteSeen () {
 		return plteSeen;
+	}
+	
+	/* Record that an ancillary chunk has been seen. This is used
+	 * only for chunks whose names start with a lower-case letter. */
+	public void setChunkSeen (int chunkType) {
+		_ancillaryChunks.add (chunkType);
+	}
+	
+	/* Return true if setChunkSeen has been called for the specified
+	 * chunk type. */
+	public boolean isChunkSeen (int chunkType) {
+		return _ancillaryChunks.contains(chunkType);
 	}
     
 	/** Set the color type. The IHDR processing will set this for

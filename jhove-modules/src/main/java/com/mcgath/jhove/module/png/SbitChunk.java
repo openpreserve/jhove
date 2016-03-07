@@ -13,6 +13,8 @@ public class SbitChunk extends PNGChunk {
 	public SbitChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = true;
+		duplicateAllowed = false;
 	}
 	
 	/** The SBIT chunk contains 1 to 4 bytes of information giving the
@@ -20,9 +22,9 @@ public class SbitChunk extends PNGChunk {
 	 *  this against the color model. */
 	public void processChunk(RepInfo info) throws Exception {
 		final String badChunk = "Bad sBIT chunk";
-		processChunkCommon();
+		processChunkCommon(info);
 		if (_module.isPlteSeen() || _module.isIdatSeen()) {
-			ErrorMessage msg = new ErrorMessage ("sBIT chunk occurs after PLTE or IDAT");
+			ErrorMessage msg = new ErrorMessage ("sBIT chunk is not allowed after PLTE or IDAT");
 			info.setMessage (msg);
 			info.setWellFormed (false);
 			throw new PNGException (badChunk);

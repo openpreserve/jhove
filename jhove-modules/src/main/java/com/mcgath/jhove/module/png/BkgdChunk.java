@@ -12,6 +12,8 @@ public class BkgdChunk extends PNGChunk {
 	public BkgdChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = true;
+		duplicateAllowed = false;
 	}
 	
 	/** Process the data in the chunk. All we do is note the
@@ -23,7 +25,7 @@ public class BkgdChunk extends PNGChunk {
 	 */
 	public void processChunk(RepInfo info) throws Exception {
 		final String badChunk = "Bad bKGD chunk";
-		processChunkCommon();
+		processChunkCommon(info);
 		ErrorMessage msg = null;
 		int colorType = _module.getColorType();
 		// Make sure there are enough bytes 
@@ -42,7 +44,7 @@ public class BkgdChunk extends PNGChunk {
 			break;
 		}
 		if (_module.isIdatSeen()) {
-			msg = new ErrorMessage ("tRNS chunk not allowed after IDAT chunk");
+			msg = new ErrorMessage ("bKGD chunk is not allowed after IDAT chunk");
 		}
 		else if (length < minLength) {
 			msg = new ErrorMessage ("bKGD chunk is too short");

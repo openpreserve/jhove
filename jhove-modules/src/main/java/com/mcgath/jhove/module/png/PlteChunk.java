@@ -11,18 +11,19 @@ public class PlteChunk extends PNGChunk {
 	public PlteChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = false;
 	}
 	
 	public void processChunk(RepInfo info) throws Exception {
 		ErrorMessage msg = null;
-		processChunkCommon();
+		processChunkCommon(info);
 		if (_module.isPlteSeen()) {
-			msg = new ErrorMessage ("Multiple PLTE chunks");
+			msg = new ErrorMessage ("Multiple PLTE chunks are not allowed");
 		}
 		_module.setPlteSeen(true);
 
 		if (_module.isIdatSeen()) {
-			msg = new ErrorMessage("PLTE chunk comes after first IDAT chunk");
+			msg = new ErrorMessage("PLTE chunk is not allowed after first IDAT chunk");
 		}
 		if ((length % 3) != 0) {
 			// must be a multiple of 3 bytes

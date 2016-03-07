@@ -6,8 +6,7 @@ import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.Rational;
 import edu.harvard.hul.ois.jhove.RepInfo;
 
-/**
- * Chunk holding the gamma value.
+/** The gAMA chunk, holding the gamma value.
  * (And I can't think why!)
  * 
  * @author Gary McGath
@@ -18,11 +17,19 @@ public class GamaChunk extends PNGChunk {
 	public GamaChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = true;
+		duplicateAllowed = false;
 	}
 	
 	public void processChunk(RepInfo info) throws Exception {
-		processChunkCommon();
-		final String badChunk = "Bad gAMA chunk, aborting";
+		processChunkCommon(info);
+		final String badChunk = "Bad gAMA chunk";
+		if (_module.isPlteSeen() || _module.isIdatSeen()) {
+			ErrorMessage msg = new ErrorMessage ("gAMA chunk is not allowed after PLTE or IDAT");
+			info.setMessage (msg);
+			info.setWellFormed (false);
+			throw new PNGException (badChunk);
+		}
 		if (length != 4) {
 			ErrorMessage msg = new ErrorMessage ("gAMA chunk should have length = 4, length is " + length);
 			info.setMessage(msg);

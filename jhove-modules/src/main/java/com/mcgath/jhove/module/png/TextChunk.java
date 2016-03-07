@@ -14,10 +14,12 @@ public class TextChunk extends GeneralTextChunk {
 	public TextChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = true;
+		duplicateAllowed = true;
 	}
 	
 	public void processChunk(RepInfo info) throws Exception {
-		processChunkCommon();
+		processChunkCommon(info);
 		
 		// The tEXt chunk consists of a keyword, a null, and a value.
 		// There needs to be exactly one null in the data.

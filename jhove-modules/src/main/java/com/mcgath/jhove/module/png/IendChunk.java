@@ -10,10 +10,11 @@ public class IendChunk extends PNGChunk {
 	public IendChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = false;
 	}
 	
 	public void processChunk(RepInfo info) throws Exception {
-		processChunkCommon();
+		processChunkCommon(info);
 		_module.setIendSeen(true);
 		// This chunk is supposed to have a length of 0.
 		// If it's bigger, eat the extra bytes and declare the

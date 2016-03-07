@@ -23,13 +23,22 @@ public class ChrmChunk extends PNGChunk {
 	public ChrmChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = true;
+		duplicateAllowed = false;
 	}
 	
 	/** The IHDR chunk contains image information in a fixed format.
 	 *  I don't think the spec says it can't have extra bytes
 	 *  which would just be padding. */
 	public void processChunk(RepInfo info) throws Exception {
-		processChunkCommon();
+		String badChunk = "Bad cHRM chunk";
+		processChunkCommon(info);
+		if (_module.isPlteSeen() || _module.isIdatSeen()) {
+			ErrorMessage msg = new ErrorMessage ("cHRM chunk is not allowed after PLTE or IDAT");
+			info.setMessage (msg);
+			info.setWellFormed (false);
+			throw new PNGException (badChunk);
+		}
 		if (length < 32) {
 			ErrorMessage msg = new ErrorMessage("cHRM chunk is too short");
 			info.setMessage(msg);

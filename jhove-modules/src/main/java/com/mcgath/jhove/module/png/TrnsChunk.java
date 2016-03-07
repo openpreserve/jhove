@@ -27,12 +27,14 @@ public class TrnsChunk extends PNGChunk {
 	public TrnsChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = true;
+		duplicateAllowed = false;
 	}
 	
 	/** Process the data in the chunk.  */
 	public void processChunk(RepInfo info) throws Exception {
 		final String badChunk = "Bad tRNS chunk";
-		processChunkCommon();
+		processChunkCommon(info);
 		ErrorMessage msg = null;
 		if (_module.isIdatSeen()) {
 			msg = new ErrorMessage ("tRNS chunk not allowed after IDAT chunk");

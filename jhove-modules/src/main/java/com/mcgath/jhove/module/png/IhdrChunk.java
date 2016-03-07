@@ -64,6 +64,7 @@ public class IhdrChunk extends PNGChunk {
 	public IhdrChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
+		ancillary = false;
 	}
 	
 	/** The IHDR chunk contains image information in a fixed format.
@@ -71,7 +72,13 @@ public class IhdrChunk extends PNGChunk {
 	 *  which would just be padding. */
 	public void processChunk(RepInfo info) throws Exception {
 		boolean badChunk = false;
-		processChunkCommon();
+		processChunkCommon(info);
+		if (_module.isIhdrSeen ()) {
+			ErrorMessage msg = new ErrorMessage("Multiple IHDR chunks are not allowed");
+			info.setMessage (msg);
+			info.setWellFormed (false);
+			throw new PNGException ("Duplicate IHDR chunk");
+		}
 		_module.setIhdrSeen(true);
 		System.out.println("Chunk Type " + chunkTypeString() + " length " + length);
 		if (length < 13) {
