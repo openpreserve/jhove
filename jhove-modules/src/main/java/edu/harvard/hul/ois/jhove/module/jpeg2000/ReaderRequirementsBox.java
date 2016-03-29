@@ -39,8 +39,8 @@ public class ReaderRequirementsBox extends JP2Box {
         final String badRR = "Invalid data in Reader Requirements box";
         if (_parentBox != null) {
             wrongBoxContext();
-System.out.println ("READBOX parentBox != null");
-System.out.flush ();
+            // System.out.println ("READBOX parentBox != null");
+            // System.out.flush ();
             return false;
         }
         initBytesRead ();
@@ -75,8 +75,8 @@ System.out.flush ();
             default:
             _repInfo.setMessage (new ErrorMessage (badRR, _module.getFilePos ()));
             _repInfo.setWellFormed (false);
-System.out.println ("READBOX default");
-System.out.flush ();
+            // System.out.println ("READBOX default");
+            // System.out.flush ();
             return false;
         }
         
@@ -93,8 +93,8 @@ System.out.flush ();
                 (int) (len - (_module.getFilePos () - startBytesRead)), _module);
         finalizeBytesRead ();
         _module.setRReqSeen (true);
-System.out.println ("READBOX seen=true");
-System.out.flush ();
+        // System.out.println ("READBOX seen=true");
+        // System.out.flush ();
         return true;
     }
 
