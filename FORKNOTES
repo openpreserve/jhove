@@ -1,0 +1,16 @@
+Notes on fork by Gary McGath
+March 2, 2016
+
+This fork contains a new module for PNG. At the moment it's a work
+in progress but handles most files correctly. It doesn't cover all
+chunks yet.
+
+There was an unfinished PNG module in the project from a decade ago.
+It's not bad code, but I discovered it only after making a start
+and elected to continue with my own version. The old module 
+validates files but extracts very little metadata. The whole
+module is in one file; I prefer a more factored approach.
+
+Keeping in mind that this hasn't been heavily tested yet, feel free
+to play with it and submit bug reports. I'll submit a pull request
+when I think it's approaching stability.
