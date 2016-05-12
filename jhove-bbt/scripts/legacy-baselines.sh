@@ -29,12 +29,14 @@ glbCleanedBackRet=""
 . "$SCRIPT_DIR/inc/bb-utils.sh"
 
 # Globals to hold the checked param vals
-paramTestRoot=""
+paramTestRoot="./test-root"
+paramMinorVersion="11"
+
 # Check the passed params to avoid disapointment
 checkParams () {
 	OPTIND=1	# Reset in case getopts previously used
 
-	while getopts "h?d:" opt; do	# Grab the options
+	while getopts "h?d:v:" opt; do	# Grab the options
 		case "$opt" in
 		h|\?)
 			showHelp
@@ -42,14 +44,10 @@ checkParams () {
 			;;
     d)	paramTestRoot=$OPTARG
 			;;
+		v)	paramMinorVersion=$OPTARG
+			;;
 		esac
 	done
-
-	if [ -z "$paramTestRoot" ]
-	then
-		showHelp
-		exit 0
-	fi
 
   # Check dest dir exists
 	if  [[ ! -d "$paramTestRoot" ]]
@@ -65,11 +63,14 @@ checkParams () {
 
 # Show usage message
 showHelp() {
-	echo "usage: install-baselines [-d <testRoot] [-h|?]"
+	echo "usage: install-baselines [-d <testRoot] [-v <minorVersion>]  [-h|?]"
 	echo ""
-  echo "  destDir   : The full path to a root folder for test data structure."
+	echo "  destDir      : The full path to a root folder for test data structure."
+	echo "                 default ./test-root"
+	echo "  minorVersion : The minor version of JHOVE to baseline [9|10|11]."
+	echo "                 default 11"
 	echo ""
-	echo "  -h|?      : This message."
+	echo "  -h|?         : This message."
 }
 
 baselineLegacyJhove() {
@@ -96,6 +97,4 @@ baselineLegacyJhove() {
 
 # Check and setup parameters
 checkParams "$@";
-baselineLegacyJhove "9"
-baselineLegacyJhove "10"
-baselineLegacyJhove "11"
+baselineLegacyJhove "${paramMinorVersion}"

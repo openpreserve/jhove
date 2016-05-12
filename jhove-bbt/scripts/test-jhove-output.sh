@@ -53,6 +53,7 @@ checkParams () {
 		i)	paramIgnoreRelease=true
 			;;
 		v)	paramVerbose=true
+				export paramVerbose
 			;;
 		esac
 	done
@@ -103,4 +104,4 @@ then
 else
 	java -jar /vagrant/jhove-bbt/jhove-bbt.jar -b "${paramBaseline}" -c "${paramCandidate}" -k "${paramKey}"
 fi
-echo "${?}"
+exit "${?}";

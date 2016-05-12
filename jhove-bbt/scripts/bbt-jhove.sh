@@ -59,6 +59,7 @@ checkParams () {
 		i)	paramIgnoreRelease=true
 			;;
 		v)	paramVerbose=true
+		    export $paramVerbose
 			;;
 		esac
 	done
@@ -126,15 +127,14 @@ showHelp() {
 # Check and setup parameters
 checkParams "$@";
 candidate="${paramOutputLoc:?}/${paramKey}"
-#cd "${paramJhoveLoc:?}"
 #sed -i "s%^    <expiresdate>.*%%" "${paramJhoveLoc:?}/jhove-installer/src/main/izpack/install.xml"
 #mvn clean package
 #git checkout "${paramJhoveLoc:?}/jhove-installer/src/main/izpack/install.xml"
 tempInstallLoc="/tmp/to-test";
-#if [[ -d "${tempInstallLoc}" ]]; then
-#	rm -rf "${tempInstallLoc}"
-#fi
-#installJhoveFromFile "${paramJhoveLoc:?}/jhove-installer/target/jhove-xplt-installer-1.12.0-SNAPSHOT.jar" "${tempInstallLoc}"
+if [[ -d "${tempInstallLoc}" ]]; then
+	rm -rf "${tempInstallLoc}"
+fi
+installJhoveFromFile "${paramJhoveLoc:?}/jhove-installer/target/jhove-xplt-installer-1.12.0-SNAPSHOT.jar" "${tempInstallLoc}"
 bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${paramCorpusLoc}" -o "${candidate}"
 
 if [ "$paramIgnoreRelease" =  true ] ;
@@ -143,4 +143,4 @@ then
 else
 	java -jar "${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar" -b "${paramBaseline}" -c "${candidate}" -k "${paramKey}"
 fi
-echo "${?}"
+exit "${?}";
