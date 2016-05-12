@@ -13,7 +13,7 @@
   <properties>
     <jwat.version>1.0.3</jwat.version>
   </properties>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>

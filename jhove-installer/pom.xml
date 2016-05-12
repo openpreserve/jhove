@@ -34,7 +34,7 @@
             <configuration>
               <outputDirectory>${izpack.staging}</outputDirectory>
 
-              <!-- recursive copy of all resource under src/main/izpack. 
+              <!-- recursive copy of all resource under src/main/izpack.
                 this is the stuff to install as well as install.xml and panel data and such -->
               <resources>
                 <resource>
@@ -64,7 +64,7 @@
             <configuration>
               <outputDirectory>${izpack.staging}</outputDirectory>
 
-              <!-- recursive copy of all resource under src/main/izpack. 
+              <!-- recursive copy of all resource under src/main/izpack.
                 this is the stuff to install as well as install.xml and panel data and such -->
               <resources>
                 <resource>
@@ -85,7 +85,7 @@
         <executions>
 
           <execution>
-            <!-- copy izpack custom (custom panels, etc.) jars to izpack 
+            <!-- copy izpack custom (custom panels, etc.) jars to izpack
               staging custom -->
             <id>copy-izpack-dependencies</id>
             <phase>prepare-package</phase>
@@ -104,8 +104,8 @@
         </executions>
       </plugin>
 
-      <!-- We need to tell the izpack-maven-plugin what to use as the base 
-        directory (this is our staging area), and also tell it the install file to 
+      <!-- We need to tell the izpack-maven-plugin what to use as the base
+        directory (this is our staging area), and also tell it the install file to
         use: -->
       <plugin>
         <groupId>org.codehaus.izpack</groupId>
@@ -128,8 +128,8 @@
             </configuration>
           </execution>
         </executions>
-        <!-- must have a dependency here on any code used in the installer, 
-          otherwise the classloader will not find it. So in this case we need our panels 
+        <!-- must have a dependency here on any code used in the installer,
+          otherwise the classloader will not find it. So in this case we need our panels
           and then the package that contains the base classes for the panels -->
         <dependencies>
           <dependency>
