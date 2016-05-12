@@ -31,7 +31,7 @@ find test-root/targets/1.14/release -type f -name "audit-UTF8-hul.jhove.xml" -ex
 
 find test-root/targets/1.14/release -type f -name "*.jhove.xml" -exec sed -i 's/2011-02-03/2014-07-18/' {} \;
 
-find test-root/targets/1.14/release -type f -name "audit.jhove.xml" -exec sed -i 's/<rights>.*<\/rights>/<rights>Derived from software Copyright 2004-2011 by the President and Fellows of Harvard College. Version 1.7 to 1.11 independently released. Version 1.14 onwards released by Open Preservation Foundation. Released under the GNU Lesser General Public License.<\/rights>/' {} \;
+find test-root/targets/1.14/release -type f -name "audit.jhove.xml" -exec sed -i 's/<rights>.*<\/rights>/<rights>Derived from software Copyright 2004-2011 by the President and Fellows of Harvard College. Version 1.7 to 1.11 independently released. Version 1.12 onwards released by Open Preservation Foundation. Released under the GNU Lesser General Public License.<\/rights>/' {} \;
 
 find test-root/targets/1.14/release -type f -name "*.jhove.xml" -exec sed -i 's%Unicode 6\.0\.0%Unicode 7\.0\.0%g' {} \;
 
