@@ -1,16 +1,42 @@
 RELEASENOTES
+============
 JHOVE - JSTOR/Harvard Object Validation Environment
 Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details)
 
-Versions 1.7 and beyond of JHOVE are no longer under the control of Harvard.
+Versions 1.7 to 1.11 of JHOVE released idependently.
+Versions 1.12 onwards of JHOVE released by the Open Preservation Foundation.
+
+RELEASE NOTES FOR JHOVE 1.14
+----------------------------
+Version 1.12 was never made an official relase so to avoid confusion the
+1.12 changes are included with the 1.14 notes below:
+### General
+ - Ant build replaced with Maven
+ - modularised project structure with "fat jar" packaging
+ - Java 5 support
+ - cross platform installer
+ - Travis CI build
+ - Maven distribution through OPF Artefactory server
+ - Updated JHOVE site pages
+
+### New Format Modules
+ - GZIP Module
+   Ported from JHOVE 2, via JWATT by KB
+ - WARC Module
+   Ported from JHOVE 2, via JWATT by KB
+ - PNG Module
+   Developed by Gary McGath
+
+### UTF-8 Module updated to v1.6
+ - support for Unicode 7.0.0
 
 RELEASE NOTES FOR JHOVE 1.11
-
+----------------------------
 GENERAL
 
-1. I've added lots of logging code. Calls at the FINE level and lower 
+1. I've added lots of logging code. Calls at the FINE level and lower
    don't show up no matter what I do, so I've put them at the INFO level.
    The level is set in JhoveBase.java.
 
@@ -18,7 +44,7 @@ GENERAL
    do in the gzip and zip archives you download. I'm not sure how
    SourceForge will treat files that you download individually,
    but hopefully it will have the sense to keep CR-LF when downloading
-   to a Windows system. 
+   to a Windows system.
 
 3. All .bat files now assume JHOVE_HOME is the directory from which they're
    run. They no longer try to set JAVA_HOME (which was still stuck in
@@ -27,22 +53,22 @@ GENERAL
 
 4. All javac commands in build.xml files now specify source=1.5 for
    compatibility with more recent compilers.
-  
+
 5. gdumpwin.bat is deleted. It's redundant with gdump.bat and has bugs
    of its own.
-   
+
 PDF MODULE
 
-1. Fix to PDF module, submitted by willp-bl, may reduce tendency 
+1. Fix to PDF module, submitted by willp-bl, may reduce tendency
    to run out of heap space on some files.
 
 RELEASE NOTES FOR JHOVE 1.10
-
+----------------------------
 GENERAL
 
 1. The amount of logging code has been increased, mostly at the
    DEBUG level.
-   
+
 2. Further work on generics in Java code.
 
 3. JhoveView now checks for Java 1.5. Was previously allowing 1.4 even
@@ -58,7 +84,7 @@ HTML MODULE
    However, this doesn't work properly (in either module) for a DTD
    that invokes additional DTDs by relative URLs. Such DTDs should
    be edited to use only absolute URLs.
-   
+
 PDF MODULE
 
 1. Failure to get a page object number wasn't being handled cleanly,
@@ -66,16 +92,16 @@ PDF MODULE
    to explain it (SourceForge bug 49). This has been fixed.
 
 2. The PDF module unnecessarily uses huge amounts of memory to build
-   complex structure trees, when it doesn't need to keep the whole 
+   complex structure trees, when it doesn't need to keep the whole
    tree in memory to validate it. In the new version, it uses memory
    more economically. This should result in the successful processing
    of some PDF files that ran out of memory or took hours to process before.
-   
+
 3. If an annotation isn't a dictionary object, report that explicitly.
    This happens with some otherwise good files; I can't find any warrant
    for it in the PDF spec.
 
-4. Some efficiency improvements to PDF parser. Increased buffer size from 4K 
+4. Some efficiency improvements to PDF parser. Increased buffer size from 4K
    to 64K. Made Parser.collapseObjectVector more efficient. Parser now
    returns pseudo-objects for array and dictionary end instead of throwing
    an exception.
@@ -86,14 +112,14 @@ PDF MODULE
    will try to give a specific error message.
 
 RELEASE NOTES FOR JHOVE 1.9
-
+----------------------------
 GENERAL
 
-1. Jhove.java and JhoveView.java now get their version information from 
-   JhoveBase.java. Before it was redundantly kept in three places, and 
+1. Jhove.java and JhoveView.java now get their version information from
+   JhoveBase.java. Before it was redundantly kept in three places, and
    sometimes they didn't all get updated for a new release. Like in 1.8.
-   
-2. ConfigWriter was in the package edu.harvard.hul.ois.jhove.viewer, which 
+
+2. ConfigWriter was in the package edu.harvard.hul.ois.jhove.viewer, which
    caused a NoClassDefFoundError if non-GUI configurations didn't include
    JhoveViewer.jar in the classpath. It's been moved to
    edu.harvard.hul.ois.jhove.
@@ -107,25 +133,25 @@ GENERAL
 5. JhoveView.jar and jhove (the top level shell script) are now forced
    by ant to be executable so there are no mistakes.
 
-6. Warning message given on invalid buffer size string, and minimum 
+6. Warning message given on invalid buffer size string, and minimum
    buffer size is 1024.
 
-7. Configuration file code for adding handlers and giving init strings 
-   to modules was an awful mess that never could have worked. 
+7. Configuration file code for adding handlers and giving init strings
+   to modules was an awful mess that never could have worked.
    Major repairs done.
-   
+
 AIFF MODULE
 
 1. If an AIFF file was found to be little-endian, the module instance
    would stay in little-endian mode for all subsequent files. This
    has been fixed.
-   
+
 TIFF MODULE
 
 1. TIFF files that had strip or tile offsets but no corresponding byte
    counts were throwing an exception all the way to the top level. Now
    they're correctly being reported as invalid.
-   
+
 XML MODULE
 
 1. Cleaned up reporting of schemas, Added some small classes to replace
@@ -137,11 +163,11 @@ WAVE MODULE
 
 1.  Some uncaught exceptions caused the module to throw all the way
     back to JhoveBase and not report any result for certain defective
-    files. These now report the file as not well-formed. 
+    files. These now report the file as not well-formed.
 
 
 RELEASE NOTES FOR JHOVE 1.8
-
+----------------------------
 GENERAL
 
 1. If JHOVE doesn't find a configuration file, it creates a default one.
@@ -158,13 +184,13 @@ PDF MODULE
    fixing some outright bugs, the Contents key for non-text Annotations is
    no longer checked, as its presence is only recommended and not required.
 
-2. Improved code by Håkan Svenson is now used for finding the trailer. 
+2. Improved code by Håkan Svenson is now used for finding the trailer.
 
 TIFF MODULE
 
-1. TIFF tag 700 (XMP) now accepts field type 7 (UNDEFINED) as well as 1 
+1. TIFF tag 700 (XMP) now accepts field type 7 (UNDEFINED) as well as 1
    (BYTE), on the basis of Adobe's XMP spec, part 3.
-   
+
 2. If compression scheme 6 is used in a file, an InfoMessage will report
    that the file uses deprecated compression.
 
@@ -174,28 +200,30 @@ WAVE MODULE
    (BEXT) chunk, is now reported.
 
 RELEASE NOTES FOR JHOVE 1.7
+----------------------------
 2012-08-12
 
 GENERAL
 
-1. JHOVE 1.7, as well as future releases unless noted otherwise, is 
+1. JHOVE 1.7, as well as future releases unless noted otherwise, is
    released independently of Harvard under the GNU General Public License.
 
-2. JHOVE now will tell you where it was looking for the config file if it 
+2. JHOVE now will tell you where it was looking for the config file if it
    can't open it. This should help debug configuration problems.
 
 XML HANDLER
 
-1. Changes to XmlHandler.java and NisoImageMetadata.java to correct invalid MIX 
-   2.0 XML output in the value of grayResponseUnit. It was previously writing 
+1. Changes to XmlHandler.java and NisoImageMetadata.java to correct invalid MIX
+   2.0 XML output in the value of grayResponseUnit. It was previously writing
    integers (as in 1.0) rather than the expected enumerated strings.
 
 PDF MODULE
 
-1. A situation that caused an infinite loop and eventual memory exhaustion 
+1. A situation that caused an infinite loop and eventual memory exhaustion
    processing in some PDF files with malformed literals has been fixed.
- 
+
 RELEASE NOTES FOR JHOVE 1.6
+----------------------------
 2011-01-03
 
 XML HANDLER AND TEXT HANDLER
@@ -204,14 +232,14 @@ XML HANDLER AND TEXT HANDLER
    However, MIX 2.0 still isn't supported in the text handler, so it will
    produce 1.0 output by default. The XML handler will produce MIX 2.0
    output.
-   
+
 TIFF MODULE
 
-1. JHOVE returned a \"String index out of range: 4\" exceptions during 
-   TIFF validation for a tiff contains an empty (not NULL) date/time 
+1. JHOVE returned a \"String index out of range: 4\" exceptions during
+   TIFF validation for a tiff contains an empty (not NULL) date/time
    field. This has been corrected so that a date/time field with
    the wrong length won't be parsed but will report an error instead.
-   
+
 2. If text tags contain characters which aren't printable ASCII, these
    are now output as escape sequences so that invalid XML isn't
    output.
@@ -221,15 +249,16 @@ UTF-8 MODULE
 1.  Updated to Unicode 6.0.0.
 
 RELEASE NOTES FOR JHOVE 1.5
+----------------------------
 2009-12-17
 
 PDF MODULE
 
-1. An ArrayIndexOutOfBoundsException was thrown on a PDF with an invalid 
+1. An ArrayIndexOutOfBoundsException was thrown on a PDF with an invalid
    object number in the cross-reference stream. In JHOVE 1.5, this is
    correctly reported as a violation of well-formedness.
 
-UTF-8 MODULE   
+UTF-8 MODULE
 
 1. With some very simple UTF-8 files, JHOVE handlers would throw an exception
    processing them, and the GUI would fail silently. This happened with files
@@ -239,25 +268,26 @@ TEXTMD (multiple modules)
 
 1. TextMD metadata can now optionally be reported. To get this, it's
    necessary to edit jhove.conf. TextMD can be enabled on a per-module
-   basis for HtmlModule, AsciiModule, Utf8Module, and XmlModule.  
+   basis for HtmlModule, AsciiModule, Utf8Module, and XmlModule.
    The <module> element for each chosen module must contain the element
    <param>withtextmd=true</param> (no spaces).
-   
+
 2. The TextMD feature was added by Thomas Ledoux.
 
-   
-   
+
+
 RELEASE NOTES FOR JHOVE 1.4
+----------------------------
 2009-07-30
 
 PDF MODULE
 
-   1. The PDF/A profile has been updated to the final version of 
+   1. The PDF/A profile has been updated to the final version of
       19005-1:2005(E) and made more thorough. Among the changes:
 
       a. The set-state and no-op actions disqualify a PDF/A candidate.
 
-      b. The ASCIIHexDecode and ASCII85Decode filters no longer 
+      b. The ASCIIHexDecode and ASCII85Decode filters no longer
          disqualify a candidate.
 
       c. Checking of outlines has been added.
@@ -268,7 +298,7 @@ PDF MODULE
 
       f. An LZW filter in an image object disqualifies a candidate.
 
-      g. The xpacket processing instruction is checked for attributes 
+      g. The xpacket processing instruction is checked for attributes
          which disqualify from PDF/A.
 
       h. Conformity to implementation limits is checked as a condition
@@ -285,44 +315,46 @@ XML HANDLER
       it will return to a valid initial state.
 
 RELEASE NOTES FOR JHOVE 1.3
+----------------------------
 2009-06-04
 
 GENERAL
 
-   1. The build.xml files now force compilation to Java 1.4, preventing 
+   1. The build.xml files now force compilation to Java 1.4, preventing
       accidental distributions that aren't 1.4-compatible.
-   2. Spaces are allowed in file paths on Windows, if the path is 
+   2. Spaces are allowed in file paths on Windows, if the path is
       enclosed in quotes. This fix had been in version 1.1i, and had been
       lost since then.
-      
+
 PDF MODULE
 
-   1. According to the PDF 1.6 specification, table 3.4, parameters for a 
-      stream filter can be either a dictionary or the null object. The null 
+   1. According to the PDF 1.6 specification, table 3.4, parameters for a
+      stream filter can be either a dictionary or the null object. The null
       object was treated as an error; it is now allowed.
    2. Object stream handling was seriously buggy, causing rejection of
       well-formed and valid files; it's better now.
-   3. In PDF 1.4, an outline dictionary unconditionally must have a "First" 
+   3. In PDF 1.4, an outline dictionary unconditionally must have a "First"
       and a "Last" entry. JHOVE follows this requirement, declaring a file
       invalid if it isn't met. However, PDF 1.6 relaxes the requirement,
-      applying it only "if there are any open or closed outline entries." 
-      Thus, an empty outline dictionary with no "First" or "Last" entry 
+      applying it only "if there are any open or closed outline entries."
+      Thus, an empty outline dictionary with no "First" or "Last" entry
       is valid. It is now accepted (for all PDF versions).
-   4. If a page number tree in a PDF file is missing an expected "Nums" 
+   4. If a page number tree in a PDF file is missing an expected "Nums"
       entry, this was being reported as an invalid date. A more appropriate
-      error message is now given. 
+      error message is now given.
 
 TIFF MODULE
 
    1. TIFF tag 33723 (IPTC-NAA) was considered valid only if the data
       type is ASCII or LONG. But according to Aware Systems, the valid
-      types are UNDEFINED and BYTE. All four types are now accepted. 
+      types are UNDEFINED and BYTE. All four types are now accepted.
 
 XML HANDLER
 
    1. Omissions in MIX 1.0 and 2.0 output have been fixed.
-   
+
 RELEASE NOTES FOR JHOVE 1.2
+----------------------------
 2009-02-10
 
 GENERAL
@@ -333,32 +365,32 @@ GENERAL
 HTML MODULE
 
    1. An incompatibility with Java 1.6 has been fixed.
-   
+
 PDF MODULE
 
    1. A null pointer exception would be thrown for PDF documents without a
       document root tree. This has been fixed.
    2. A source of possible false positives in PDF profiles has been fixed.
-   3. Certain checks weren't being done to Type 2 fonts, and some PDF/A 
+   3. Certain checks weren't being done to Type 2 fonts, and some PDF/A
       profile violations might have been missed as a result. This has
       been fixed.
-   
+
 WAVE MODULE
 
    1. Sub-chunks of the 'adtl' chunk are now constrained to even byte
       boundaries.
-      
+
 XML HANDLER
 
    1. MIX 2.0 is now supported.
    2. The URL for the MIX 0.2 schema has changed to reflect the change
       on the LOC MIX site.
-   3. The handler was sometimes incorrectly reporting whether the 
+   3. The handler was sometimes incorrectly reporting whether the
       AESAudioMetadata property had an empty value or not. This has
       been fixed.
 
 
-RELEASE NOTES FOR JHOVE 1.1 
+RELEASE NOTES FOR JHOVE 1.1
 Rev. 2008-02-22
 
 COMMAND-LINE INTERFACE
@@ -453,7 +485,7 @@ PDF MODULE
       destinations are reported as "well-formed, but not valid".
    3. No attempt is made to display encrypted outline item title strings are
       not displayed.
-   4. Catch error if the Info key of the trailer dictionary is not an 
+   4. Catch error if the Info key of the trailer dictionary is not an
       indirect reference.
    5. Read entire page tree structure, regardless of its internal
       organization.  This error may have caused the under reporting of
@@ -583,7 +615,7 @@ TDUMP UTILITY
    1. New format that sorts all tag definitions by their byte offset and
       also displays the byte ranges for image data.
    2. Command line flags permit the suppression of BYTE data display (-b) and
-      and subIFD parsing (-s). 
+      and subIFD parsing (-s).
 
 USERHOME UTILITY
 
@@ -595,6 +627,7 @@ USERHOME UTILITY
 ************************************************************************
 
 RELEASE NOTES FOR JHOVE 1.0
+----------------------------
 Rev. 2005-05-26
 
 GENERAL
@@ -658,6 +691,7 @@ AUDIT HANDLER
 ************************************************************************
 
 RELEASE NOTES FOR JHOVE 1.0 (beta 3)
+----------------------------
 Rev. 2005-02-04
 
 1 GENERAL
@@ -801,12 +835,12 @@ Rev. 2005-02-04
    8. PDF/A profile updated to latest draft proposal, ISO/CD 19005-1
       (2004-09-20).
 
-   9. Parameters that would have been specified by the -p argument 
-      of the command line are now specified by the <param> element 
-      in the configuration file. The sense of these parameters 
+   9. Parameters that would have been specified by the -p argument
+      of the command line are now specified by the <param> element
+      in the configuration file. The sense of these parameters
       has been reversed; by default, the PDF module presents
       the maximum amount of information unless suppressed by
-      including the characters a, p, f, or o in the parameter value(s). 
+      including the characters a, p, f, or o in the parameter value(s).
 
 9 TIFF MODULE
 
@@ -837,8 +871,8 @@ Rev. 2005-02-04
 
    2. Reported MIME type changed to 'text/xml' from 'application/xml'.
 
-   3. A base URL for DTD's may now be specified using the 
-      <param> element. The URL must be preceded by the letter b 
+   3. A base URL for DTD's may now be specified using the
+      <param> element. The URL must be preceded by the letter b
       to distinguish it from potential future parameters, e.g.,
 
         <module>
@@ -863,11 +897,11 @@ Rev. 2005-02-04
 
 13 GDUMP UTILITY
 
-   1. New utility to dump GIF files in human-readable form. 
+   1. New utility to dump GIF files in human-readable form.
 
 14 JDUMP UTILITY
 
-   1. New utility to dump JPEG files in human-readable form. 
+   1. New utility to dump JPEG files in human-readable form.
 
 15 TDUMP UTILITY
 
@@ -883,6 +917,7 @@ Rev. 2005-02-04
 ************************************************************************
 
 RELEASE NOTES FOR JHOVE 1.0 (beta 2)
+----------------------------
 Rev. 2004-07-19
 
 1. GENERAL
@@ -994,11 +1029,11 @@ RELEASE NOTES FOR JHOVE 1.5
 
 PDF MODULE
 
-1. An ArrayIndexOutOfBoundsException was thrown on a PDF with an invalid 
+1. An ArrayIndexOutOfBoundsException was thrown on a PDF with an invalid
    object number in the cross-reference stream. In JHOVE 1.5, this is
    correctly reported as a violation of well-formedness.
 
-UTF-8 MODULE   
+UTF-8 MODULE
 
 1. With some very simple UTF-8 files, JHOVE handlers would throw an exception
    processing them, and the GUI would fail silently. This happened with files
@@ -1008,25 +1043,25 @@ TEXTMD (multiple modules)
 
 1. TextMD metadata can now optionally be reported. To get this, it's
    necessary to edit jhove.conf. TextMD can be enabled on a per-module
-   basis for HtmlModule, AsciiModule, Utf8Module, and XmlModule.  
+   basis for HtmlModule, AsciiModule, Utf8Module, and XmlModule.
    The <module> element for each chosen module must contain the element
    <param>withtextmd=true</param> (no spaces).
-   
+
 2. The TextMD feature was added by Thomas Ledoux.
 
-   
-   
+
+
 RELEASE NOTES FOR JHOVE 1.4
 2009-07-30
 
 PDF MODULE
 
-   1. The PDF/A profile has been updated to the final version of 
+   1. The PDF/A profile has been updated to the final version of
       19005-1:2005(E) and made more thorough. Among the changes:
 
       a. The set-state and no-op actions disqualify a PDF/A candidate.
 
-      b. The ASCIIHexDecode and ASCII85Decode filters no longer 
+      b. The ASCIIHexDecode and ASCII85Decode filters no longer
          disqualify a candidate.
 
       c. Checking of outlines has been added.
@@ -1037,7 +1072,7 @@ PDF MODULE
 
       f. An LZW filter in an image object disqualifies a candidate.
 
-      g. The xpacket processing instruction is checked for attributes 
+      g. The xpacket processing instruction is checked for attributes
          which disqualify from PDF/A.
 
       h. Conformity to implementation limits is checked as a condition
@@ -1054,44 +1089,46 @@ XML HANDLER
       it will return to a valid initial state.
 
 RELEASE NOTES FOR JHOVE 1.3
+----------------------------
 2009-06-04
 
 GENERAL
 
-   1. The build.xml files now force compilation to Java 1.4, preventing 
+   1. The build.xml files now force compilation to Java 1.4, preventing
       accidental distributions that aren't 1.4-compatible.
-   2. Spaces are allowed in file paths on Windows, if the path is 
+   2. Spaces are allowed in file paths on Windows, if the path is
       enclosed in quotes. This fix had been in version 1.1i, and had been
       lost since then.
-      
+
 PDF MODULE
 
-   1. According to the PDF 1.6 specification, table 3.4, parameters for a 
-      stream filter can be either a dictionary or the null object. The null 
+   1. According to the PDF 1.6 specification, table 3.4, parameters for a
+      stream filter can be either a dictionary or the null object. The null
       object was treated as an error; it is now allowed.
    2. Object stream handling was seriously buggy, causing rejection of
       well-formed and valid files; it's better now.
-   3. In PDF 1.4, an outline dictionary unconditionally must have a "First" 
+   3. In PDF 1.4, an outline dictionary unconditionally must have a "First"
       and a "Last" entry. JHOVE follows this requirement, declaring a file
       invalid if it isn't met. However, PDF 1.6 relaxes the requirement,
-      applying it only "if there are any open or closed outline entries." 
-      Thus, an empty outline dictionary with no "First" or "Last" entry 
+      applying it only "if there are any open or closed outline entries."
+      Thus, an empty outline dictionary with no "First" or "Last" entry
       is valid. It is now accepted (for all PDF versions).
-   4. If a page number tree in a PDF file is missing an expected "Nums" 
+   4. If a page number tree in a PDF file is missing an expected "Nums"
       entry, this was being reported as an invalid date. A more appropriate
-      error message is now given. 
+      error message is now given.
 
 TIFF MODULE
 
    1. TIFF tag 33723 (IPTC-NAA) was considered valid only if the data
       type is ASCII or LONG. But according to Aware Systems, the valid
-      types are UNDEFINED and BYTE. All four types are now accepted. 
+      types are UNDEFINED and BYTE. All four types are now accepted.
 
 XML HANDLER
 
    1. Omissions in MIX 1.0 and 2.0 output have been fixed.
-   
+
 RELEASE NOTES FOR JHOVE 1.2
+----------------------------
 2009-02-10
 
 GENERAL
@@ -1102,32 +1139,32 @@ GENERAL
 HTML MODULE
 
    1. An incompatibility with Java 1.6 has been fixed.
-   
+
 PDF MODULE
 
    1. A null pointer exception would be thrown for PDF documents without a
       document root tree. This has been fixed.
    2. A source of possible false positives in PDF profiles has been fixed.
-   3. Certain checks weren't being done to Type 2 fonts, and some PDF/A 
+   3. Certain checks weren't being done to Type 2 fonts, and some PDF/A
       profile violations might have been missed as a result. This has
       been fixed.
-   
+
 WAVE MODULE
 
    1. Sub-chunks of the 'adtl' chunk are now constrained to even byte
       boundaries.
-      
+
 XML HANDLER
 
    1. MIX 2.0 is now supported.
    2. The URL for the MIX 0.2 schema has changed to reflect the change
       on the LOC MIX site.
-   3. The handler was sometimes incorrectly reporting whether the 
+   3. The handler was sometimes incorrectly reporting whether the
       AESAudioMetadata property had an empty value or not. This has
       been fixed.
 
 
-RELEASE NOTES FOR JHOVE 1.1 
+RELEASE NOTES FOR JHOVE 1.1
 Rev. 2008-02-22
 
 COMMAND-LINE INTERFACE
@@ -1222,7 +1259,7 @@ PDF MODULE
       destinations are reported as "well-formed, but not valid".
    3. No attempt is made to display encrypted outline item title strings are
       not displayed.
-   4. Catch error if the Info key of the trailer dictionary is not an 
+   4. Catch error if the Info key of the trailer dictionary is not an
       indirect reference.
    5. Read entire page tree structure, regardless of its internal
       organization.  This error may have caused the under reporting of
@@ -1352,7 +1389,7 @@ TDUMP UTILITY
    1. New format that sorts all tag definitions by their byte offset and
       also displays the byte ranges for image data.
    2. Command line flags permit the suppression of BYTE data display (-b) and
-      and subIFD parsing (-s). 
+      and subIFD parsing (-s).
 
 USERHOME UTILITY
 
@@ -1364,6 +1401,7 @@ USERHOME UTILITY
 ************************************************************************
 
 RELEASE NOTES FOR JHOVE 1.0
+----------------------------
 Rev. 2005-05-26
 
 GENERAL
@@ -1570,12 +1608,12 @@ Rev. 2005-02-04
    8. PDF/A profile updated to latest draft proposal, ISO/CD 19005-1
       (2004-09-20).
 
-   9. Parameters that would have been specified by the -p argument 
-      of the command line are now specified by the <param> element 
-      in the configuration file. The sense of these parameters 
+   9. Parameters that would have been specified by the -p argument
+      of the command line are now specified by the <param> element
+      in the configuration file. The sense of these parameters
       has been reversed; by default, the PDF module presents
       the maximum amount of information unless suppressed by
-      including the characters a, p, f, or o in the parameter value(s). 
+      including the characters a, p, f, or o in the parameter value(s).
 
 9 TIFF MODULE
 
@@ -1606,8 +1644,8 @@ Rev. 2005-02-04
 
    2. Reported MIME type changed to 'text/xml' from 'application/xml'.
 
-   3. A base URL for DTD's may now be specified using the 
-      <param> element. The URL must be preceded by the letter b 
+   3. A base URL for DTD's may now be specified using the
+      <param> element. The URL must be preceded by the letter b
       to distinguish it from potential future parameters, e.g.,
 
         <module>
@@ -1632,11 +1670,11 @@ Rev. 2005-02-04
 
 13 GDUMP UTILITY
 
-   1. New utility to dump GIF files in human-readable form. 
+   1. New utility to dump GIF files in human-readable form.
 
 14 JDUMP UTILITY
 
-   1. New utility to dump JPEG files in human-readable form. 
+   1. New utility to dump JPEG files in human-readable form.
 
 15 TDUMP UTILITY
 
@@ -1652,6 +1690,7 @@ Rev. 2005-02-04
 ************************************************************************
 
 RELEASE NOTES FOR JHOVE 1.0 (beta 2)
+----------------------------
 Rev. 2004-07-19
 
 1. GENERAL
@@ -1752,4 +1791,3 @@ Rev. 2004-07-19
 
   9.3 The "subMessage" attribute is now properly defined in the jhove.xsd
       schema.
-

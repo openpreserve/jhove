@@ -5,6 +5,7 @@ jdk:
 branches:
   except:
   - "/^v|d\\d+\\.\\d+\\.\\d+$/"
+  - "/^jenkins-jhove-v|d\\d+\\.\\d+\\.\\d+$/"
 before_install:
 - sudo apt-get install -y realpath
 script:
