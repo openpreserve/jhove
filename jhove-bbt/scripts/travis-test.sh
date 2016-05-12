@@ -40,4 +40,4 @@ mkdir -p test-root/targets/1.12
 mv test-root/baselines/1.11 test-root/targets/1.12/release
 bash "$SCRIPT_DIR/create-1-12-target.sh"
 bash "$SCRIPT_DIR/bbt-jhove.sh" -b test-root/targets/1.12/release -c ./test-root/corpora -j ./ -o test-root/candidates -k dev-test -i
-echo "${?}";
+exit $?
