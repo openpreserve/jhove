@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
-    <version>1.12.0-SNAPSHOT</version>
+    <version>1.14.0</version>
   </parent>
   <artifactId>jhove-installer</artifactId>
   <name>JHOVE installer</name>
