@@ -1,23 +1,16 @@
 language: java
-
 jdk:
-  - oraclejdk7
-  - openjdk7
-  - openjdk6
-
+- oraclejdk7
+- oraclejdk8
 branches:
   except:
-    - /^v|d\d+\.\d+\.\d+$/
-
+  - "/^v|d\\d+\\.\\d+\\.\\d+$/"
 before_install:
-  - sudo apt-get install -y realpath
-
+- sudo apt-get install -y realpath
 script:
-  - cp ./auto-travis-install.xml ./jhove-installer/target/
-  - MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
-  - java -jar ./jhove-installer/target/jhove-xplt-installer-$MVN_VERSION.jar auto-travis-install.xml
-  - ~/jhove/jhove
-  - ./jhove-bbt/scripts/travis-test.sh
-
+- "./jhove-bbt/scripts/travis-test.sh"
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- bash <(curl -s https://codecov.io/bash)
+notifications:
+  slack:
+    secure: 2tPcqxi5BQkomyLYTDk90JrI5iqm9TL5Hc9SklPVemtEUQdDqeEejNjBGIOxQeXxe6Vza/cVEVp8emmb0GQ25k36DeI82kvxWu/dtaXC2B73dr0zFw3IV6VpG9nUcmgNiHrTYDlK5C3QYlkYKDSrAlrBRLA16qiSIe2JpPSClI4=
