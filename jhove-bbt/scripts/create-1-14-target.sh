@@ -39,8 +39,12 @@ find test-root/targets/1.14/release -type f -name "*.jhove.xml" -exec sed -i 's%
 
 find test-root/targets/1.14/release -type f -name "*.jhove.xml" -exec sed -i 's%<reportingModule release="1.5"%<reportingModule release="1.6"%' {} \;
 
+if [[ -f test-root/candidates/1.14/examples/modules/audit-GZIP-kb.jhove.xml ]]; then
 cp test-root/candidates/1.14/examples/modules/audit-GZIP-kb.jhove.xml test-root/targets/1.14/release/examples/modules/
+fi;
+if [[ -f test-root/candidates/1.14/examples/modules/audit-WARC-kb.jhove.xml ]]; then
 cp test-root/candidates/1.14/examples/modules/audit-WARC-kb.jhove.xml test-root/targets/1.14/release/examples/modules/
-#if [[ -f test-root/candidates/1.14/examples/modules/audit-PNG-gdm.jhove.xml ]]; then
-#  cp test-root/candidates/1.14/examples/modules/audit-PNG-gdm.jhove.xml test-root/targets/1.14/release/examples/modules/
-#fi;
+fi;
+if [[ -f test-root/candidates/1.14/examples/modules/audit-PNG-gdm.jhove.xml ]]; then
+  cp test-root/candidates/1.14/examples/modules/audit-PNG-gdm.jhove.xml test-root/targets/1.14/release/examples/modules/
+fi;
