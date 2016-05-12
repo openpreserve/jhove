@@ -103,7 +103,9 @@ processModuleDir() {
 	moduleDir=$1
 	while IFS= read -r -d '' FILE; do
 		fileName=$( basename $FILE )
-		bash "$SCRIPT_DIR/exec-with-to.sh" -t 300 "$paramJhoveLoc/jhove" -c "$paramJhoveLoc/conf/jhove.conf" -m "${moduleName}" -h xml -o "$paramOutputRootDir/$moduleName/$fileName.jhove.xml" "$FILE"
+		if [[ ! $fileName == .gitignore.* ]]; then
+			bash "$SCRIPT_DIR/exec-with-to.sh" -t 300 "$paramJhoveLoc/jhove" -c "$paramJhoveLoc/conf/jhove.conf" -m "${moduleName}" -h xml -o "$paramOutputRootDir/$moduleName/$fileName.jhove.xml" "$FILE"
+		fi
 	done <    <(find "$moduleDir" -type f -print0)
 }
 
