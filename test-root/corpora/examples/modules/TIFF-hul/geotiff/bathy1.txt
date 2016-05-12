@@ -1,0 +1,23 @@
+PROREP  Georeference Segment Report             V6.2 EASI/PACE  07:15 15-Jan-99
+ 
+bathy1.tif                              [S    1BIC    4063P    4617L] 13-Jan-99
+
+    1:GEOref  Type:150 [Georeferencing        ]   Last Update: 12:14 13-Jan-99
+      Contents: Master Georeferencing Segment for File                          
+
+ Output Georeferenced Units     :    UTM    17   D000
+ Projection                     :    Universal Transverse Mercator Zone 17   
+ Earth Ellipsoid                :                          
+ Upper Left  Corner             :          328616.778 E         3030122.018 N  
+ Upper Right Corner             :          344870.094 E         3030122.018 N  
+ Image Centre                   :          336743.436 E         3020780.581 N  
+ Lower Left  Corner             :          328616.778 E         3011439.143 N  
+ Lower Right Corner             :          344870.094 E         3011439.143 N  
+ Pixel Size                     :               4.000 E               4.047 N  
+
+ Upper Left  Corner             :     82d43'59.36" W  Lon   27d23'01.15" N  Lat
+ Upper Right Corner             :     82d34'07.84" W  Lon   27d23'08.15" N  Lat
+ Image Centre                   :     82d38'59.11" W  Lon   27d18'01.26" N  Lat
+ Lower Left  Corner             :     82d43'49.94" W  Lon   27d12'54.21" N  Lat
+ Lower Right Corner             :     82d33'59.31" W  Lon   27d13'01.16" N  Lat
+
