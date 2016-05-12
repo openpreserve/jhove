@@ -28,8 +28,8 @@ tempInstallLoc="/tmp/to-test";
 if [[ -d "${tempInstallLoc}" ]]; then
 	rm -rf "${tempInstallLoc}"
 fi
-
-installJhoveFromFile "./jhove-installer/target/jhove-xplt-installer-1.12.0-SNAPSHOT.jar" "${tempInstallLoc}"
+MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
+installJhoveFromFile "./jhove-installer/target/jhove-xplt-installer-${MVN_VERSION}.jar" "${tempInstallLoc}"
 bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c test-root/corpora -o test-root/candidates/1.12
 
 if [ -d test-root/targets ]; then

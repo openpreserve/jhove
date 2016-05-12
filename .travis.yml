@@ -9,6 +9,9 @@ branches:
   except:
     - /^v|d\d+\.\d+\.\d+$/
 
+before_install:
+  - sudo apt-get install -y realpath
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
