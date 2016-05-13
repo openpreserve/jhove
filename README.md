@@ -5,11 +5,11 @@ JHOVE
 Licensing
 ---------
 Copyright 2003-2012 by JSTOR and the President and Fellows of Harvard College,
-20015 - by the [Open Preservation Foundation](http://openpreservation.org).
+2015 - by the [Open Preservation Foundation](http://openpreservation.org).
 JHOVE is made available under the
 [GNU Lesser General Public License (LGPL)](http://www.gnu.org/licenses/lgpl.html).
 
-Rev. 1.12.1, 2015-08-13
+Rev. 1.14.6, 2016-05-12
 
 JHOVE Homepage
 --------
@@ -56,31 +56,14 @@ CD Status
 
 - [![Build Status](http://jenkins.opf-labs.org/buildStatus/icon?job=jhove-integration)](http://jenkins.opf-labs.org/job/jhove-integration/ "OPF Jenkins integration build") OPF Jenkins: `mvn verify integration`
 
-- [![Build Status](http://jenkins.opf-labs.org/buildStatus/icon?job=jhove-mvn)](http://jenkins.opf-labs.org/job/jhove-mvn/ "OPF Jenkins maven deploy build") OPF Jenkins: `mvn deploy integration`
-
-Version 1.12
---------------
-The OPF is preparing to release a JHOVE 1.12.x-beta in September.
-
-### What's changed?
- - Support for Java 1.6 onwards only.
- - Maven build and packaging.
- - Simple cross platform installer.
- - Automated build, test, QA and deployment.
- - Automated test harness.
-
-### What's not changed?
-The code, well as little as necessary. A small change was required to enable the
-Maven build to update the version and date details automatically. I've (@carlwilson) made a
-few "non-destructive" changes to the code, mainly using compiler/IDE guidance:
-removing unnecessary else's; and eliminating some obvious repetition.
+- [![Build Status](http://jenkins.opf-labs.org/buildStatus/icon?job=jhove-v1.14)](http://jenkins.opf-labs.org/job/jhove-v1.14/ "OPF Jenkins maven deploy build") OPF Jenkins: `mvn deploy integration`
 
 Pre-requisites
 --------------
 
  1. Java JRE 1.6
     (JHOVE was originally implemented using the Sun J2SE SDK 1.4.1 and has
-    been tested to work with 1.5). Version 1.12 of JHOVE is built and
+    been tested to work with 1.5). Version 1.14 of JHOVE is built and
     tested against Oracle JDK 7, and OpenJDK 6 & 7 on Travis. Relesases are
     built using Oracle JDK 7 from the [OPF's Jenkins server](http://jenkins.opf-labs.org/view/D-JHOVE/).
 
@@ -91,11 +74,11 @@ Getting JHOVE
 -------------
 
 ### For Users: JHOVE Cross Platform Installer
-Download instructions coming in September 2015.
+You can download the [latest version of JHOVE here](http://software.openpreservation.org/rel/jhove-latest.jar).
 
 ### For Developers: JHOVE JARs via Maven
 JHOVE is available through Maven, currently we're distributing through the
-[OPF's Maven repository](http://artifactory.opf-labs.org/artifactory/simple/opf-dev-local/org/openpreservation/jhove/jhove/) during development. The final 1.12 release artifacts
+[OPF's Maven repository](http://artifactory.opf-labs.org/artifactory/simple/opf-dev-local/org/openpreservation/jhove/jhove/) during development. The 1.14 release artifacts
 will be published to Maven central. If you'd like to try the latest Maven modules then
 add:
 
@@ -116,7 +99,7 @@ to your project's POM file then use this dependency for the core classes (e.g.
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>
       <artifactId>jhove-core</artifactId>
-      <version>[1.12.0,1.13.0)</version>
+      <version>1.14.6</version>
     </dependency>
 
 and this for the JHOVE core module implementations:
@@ -124,7 +107,7 @@ and this for the JHOVE core module implementations:
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>
       <artifactId>jhove-modules</artifactId>
-      <version>[1.12.0,1.13.0)</version>
+      <version>1.14.6</version>
     </dependency>
 
 ### For Developers: Building JHOVE from source
@@ -143,7 +126,7 @@ Installation
 ### Application Installation
 
 Download the JHOVE installer, this requires Java 1.6 or later to be pre-installed.
-We'll assume that you've downloaded `<userHome>/Downloads/jhove-xplt-installer-1.12.x.jar`,
+We'll assume that you've downloaded `<userHome>/Downloads/jhove-xplt-installer-1.14.x.jar`,
 where `x` is the current revision/build number. Installation is OS dependant.
 
 #### Windows
@@ -156,7 +139,7 @@ Once the installation is finished you'll be able to double click
 `C:\Users\yourName\jhove-beta\jhove-gui` to start the JHOVE GUI. Alternatively start
 a command window, e.g. `winkey` then type `cmd`, then issue these commands:
 
-    C:\Users\yourName>cd jhove-beta
+    C:\Users\yourName>cd jhove
     C:\Users\yourName>jhove
 
 to display the command line usage message.
@@ -171,7 +154,7 @@ Once the installation is finished you'll be able to double click
 `/Users/yourName/jhove-beta/jhove-gui` to start the JHOVE GUI. Alternatively start
 a command window `Terminal` and then issue these commands:
 
-    cd ~/jhove-beta
+    cd ~/jhove
     ./jhove
 
     to display the command line usage message.
@@ -181,7 +164,7 @@ a command window `Terminal` and then issue these commands:
 Once the installer is downloaded start a terminal, e.g. `ctrl+alt+T`, and type the
 following, assuming the download is in `~/Downloads`:
 
-    java -jar ~/Downloads/java-xplt-installer-1.12.x.jar
+    java -jar ~/Downloads/java-xplt-installer-1.14.x.jar
 
 Once the installation is finished you'll be able to:
 
@@ -290,7 +273,7 @@ into 3 Maven modules with an additional installer module added.
 
 All Maven artifacts are are produced in versioned form,
 i.e. `${artifactId}-${project.version}.jar`, where `${project.version}` defaults
-to `1.12.0-SNAPSHOT` unless you explicitly set the version number.
+to `1.14.0-SNAPSHOT` unless you explicitly set the version number.
 
 ### jhove
 The `jhove` project root, acts as a Maven parent and reactor for the submodules.
