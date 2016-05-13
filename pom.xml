@@ -2,139 +2,296 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>edu.harvard.hul.ois</groupId>
+  <parent>
+    <artifactId>oss-parent</artifactId>
+    <groupId>org.sonatype.oss</groupId>
+    <version>7</version>
+  </parent>
+
+  <groupId>org.openpreservation.jhove</groupId>
   <artifactId>jhove</artifactId>
-  <version>1.12.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <version>1.14.0</version>
+  <packaging>pom</packaging>
 
-  <name>jhove</name>
+  <name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
+  <description>JHOVE provides functions to perform format-specific identification, validation, and characterization of digital objects.</description>
+  <url>https://github.com/openpreserve/jhove/</url>
+  <inceptionYear>2008</inceptionYear>
+  <organization>
+    <name>The Open Preservation Foundation</name>
+    <url>http://www.openpreserve.org/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License, version 2.1 (LGPL-2.1)</name>
+      <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
-  <!--
-  To build the command line and GUI jars:
-  mvn clean install
-  
-  To generate Javadoc:
-  mvn javadoc:javadoc
-  -->
+  <developers>
+    <developer>
+      <email>carl@openpreservation.org</email>
+      <name>Carl Wilson</name>
+      <url>https://github.com/carlwilson</url>
+      <organization>Open Preservation Foundation</organization>
+      <organizationUrl>http://openpreservation.org</organizationUrl>
+      <id>carlwilson</id>
+    </developer>
+  </developers>
+
+  <modules>
+    <module>jhove-core</module>
+    <module>jhove-modules</module>
+    <module>jhove-apps</module>
+    <module>jhove-installer</module>
+  </modules>
+
+  <scm>
+    <url>https://github.com/openpreserve/jhove/</url>
+    <connection>scm:git:https://github.com/openpreserve/jhove.git</connection>
+    <developerConnection>scm:git:git@github.com:openpreserve/jhove.git</developerConnection>
+  </scm>
+  <issueManagement>
+    <url>https://github.com/openpreserve/jhove/issues/</url>
+    <system>GitHub Issues</system>
+  </issueManagement>
+  <ciManagement>
+    <system>OPF Jenkins</system>
+    <url>http://jenkins.opf-labs.org</url>
+  </ciManagement>
+  <distributionManagement>
+    <repository>
+      <id>OPF Artefactory</id>
+      <name>OPF Artefactory-releases</name>
+      <url>http://artifactory.opf-labs.org/artifactory/opf-dev-local</url>
+    </repository>
+  </distributionManagement>
+
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>opf-dev</id>
+      <name>OPF development</name>
+      <url>http://artifactory.opf-labs.org/artifactory/opf-dev</url>
+    </repository>
+  </repositories>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-   	<mvn.compiler.version>3.0</mvn.compiler.version>
-   	<java.version>1.5</java.version>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <mvn.compiler.version>3.3</mvn.compiler.version>
+    <mvn.resources.version>2.6</mvn.resources.version>
+    <mvn.jar.version>2.6</mvn.jar.version>
+    <mvn.javadoc.version>2.10</mvn.javadoc.version>
+    <mvn.source.version>2.4</mvn.source.version>
+    <java.source.version>1.5</java.source.version>
+    <java.target.version>1.6</java.target.version>
+    <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
   </properties>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${mvn.compiler.version}</version>
-        <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-        </configuration>
-      </plugin>
-	  <plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-jar-plugin</artifactId>
-		<version>2.4</version>
-		<executions>
-			<execution>
-				<!-- console app - don't change id, will cause build problems -->
-				<id>default-jar</id>
-					<phase>package</phase>
-					<goals><goal>jar</goal></goals>
-					<configuration>
-						<classifier>cmd</classifier>
-						<archive>
-							<manifest>
-								<mainClass>Jhove</mainClass>
-							</manifest>
-						</archive>
-					</configuration>
-			</execution>
-			<execution>
-				<id>gui-app-jar</id>
-					<phase>package</phase>
-					<goals><goal>jar</goal></goals>
-					<configuration>
-						<classifier>gui</classifier>
-						<archive>
-							<manifest>
-								<mainClass>JhoveView</mainClass>
-							</manifest>
-						</archive>
-						<finalName>${project.artifactId}-GUI-${project.version}</finalName>
-					</configuration>
-			</execution>
-		</executions>
-	  </plugin>
-	  <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.5</version>
-        <executions>
-          <execution>
-            <id>attach-artifacts</id>
-            <phase>package</phase>
-            <goals>
-              <goal>attach-artifact</goal>
-            </goals>
-            <configuration>
-              <artifacts>
-                <artifact>
-                  <file>${project.build.directory}/${project.artifactId}-GUI-${project.version}.jar</file>
-                  <type>jar</type>
-                  <classifier>gui</classifier>
-                </artifact>
-              </artifacts>
-            </configuration>
-          </execution>
-        </executions>
-	  </plugin>
-	  <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
-      </plugin>
-    </plugins>
-	<pluginManagement>
+    <pluginManagement>
       <plugins>
-      <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${mvn.compiler.version}</version>
+          <configuration>
+            <source>${java.source.version}</source>
+            <target>${java.target.version}</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${mvn.jar.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${mvn.resources.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>${mvn.source.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>${mvn.javadoc.version}</version>
+        </plugin>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build
+          itself. -->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
           <version>1.0.0</version>
           <configuration>
             <lifecycleMappingMetadata>
-            <pluginExecutions>
-              <pluginExecution>
-                <pluginExecutionFilter>
-                  <groupId>org.codehaus.mojo</groupId>
-                  <artifactId>properties-maven-plugin</artifactId>
-                  <versionRange>[1.0-alpha-2,)</versionRange>
-                  <goals>
-                    <goal>
-                      set-system-properties
-                    </goal>
-                  </goals>
-                </pluginExecutionFilter>
-                <action>
-                  <ignore></ignore>
-                </action>
-              </pluginExecution>
-            </pluginExecutions>
-          </lifecycleMappingMetadata>
-        </configuration>
-      </plugin>
-    </plugins>
-  </pluginManagement>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>properties-maven-plugin</artifactId>
+                    <versionRange>[1.0-alpha-2,)</versionRange>
+                    <goals>
+                      <goal>
+                        set-system-properties
+                      </goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <versionRange>[1.0.0,)</versionRange>
+                    <goals>
+                      <goal>enforce</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <versionRange>[1.3,)</versionRange>
+                    <goals>
+                      <goal>run</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.8.1</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <profiles>
+    <profile>
+      <id>sonar-coverage-per-test</id>
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+
+              <properties>
+                <property>
+                  <name>listener</name>
+                  <value>org.sonar.java.jacoco.JUnitListener</value>
+                </property>
+              </properties>
+
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+
+        <dependency>
+          <groupId>org.codehaus.sonar-plugins.java</groupId>
+          <artifactId>sonar-jacoco-listeners</artifactId>
+          <version>1.2</version>
+          <scope>test</scope>
+        </dependency>
+
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>sonar</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <sonar.host.url>
+          http://sonar.opf-labs.org
+        </sonar.host.url>
+      </properties>
+    </profile>
+  </profiles>
+
 </project>

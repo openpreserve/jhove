@@ -1,0 +1,80 @@
+<izpack:installation version="5.0" xmlns:izpack="http://izpack.org/schema/installation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
+
+  <info>
+    <appname>JHOVE</appname>
+    <appversion>${project.version}</appversion>
+    <appsubpath>jhove</appsubpath>
+    <url>http://jhove.openpreservation.org</url>
+    <javaversion>${java.target.version}</javaversion>
+    <authors>
+      <author name="Carl Wilson" email="carl@openpreserve.org" />
+    </authors>
+  </info>
+
+  <guiprefs height="400" resizable="no" width="640">
+    <modifier key="useButtonIcons" value="yes"/>
+    <modifier key="useLabelIcons" value="no"/>
+    <modifier key="labelGap" value="2"/>
+    <modifier key="layoutAnchor" value="NORTHWEST"/>
+    <modifier key="useHeadingPanel" value="no"/>
+    <modifier key="headingImageOnLeft" value="yes"/>
+    <modifier key="headingLineCount" value="1"/>
+    <modifier key="headingFontSize" value="1.5"/>
+    <modifier key="headingBackgroundColor" value="0x00ffffff"/>
+    <modifier key="headingPanelCounter" value="progressbar"/>
+    <modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
+  </guiprefs>
+
+  <locale>
+    <langpack iso3="eng" />
+  </locale>
+
+  <resources>
+    <res id="HTMLHelloPanel.welcome" src="welcome.html"/>
+    <res id="HTMLInfoPanel.welcome" src="welcome.html"/>
+    <res id="OPFLogo" src="jhovelogo.png"/>
+  </resources>
+
+  <variables>
+    <variable name="InstallerFrame.logfilePath" value="Default"/>
+    <variable name="VERSION" value="v ${project.version}"/>
+    <variable name="BUILD_DATE" value="Built ${jhove.timestamp}"/>
+    <variable name="TargetPanel.dir" value="$USER_HOME/jhove"/>
+  </variables>
+
+  <panels>
+    <!-- FIXME why doesn't HTMLHelloPanel work any more?  it is nice not to have the "Please read the following information" text ... -->
+    <panel classname="HTMLInfoPanel" id="welcome"/>
+    <panel classname="TargetPanel" id="install_dir"/>
+    <panel classname="PacksPanel" id="sdk_pack_select"/>
+    <panel classname="InstallPanel" id="install"/>
+    <panel classname="FinishPanel" id="finish"/>
+  </panels>
+
+  <packs>
+    <pack name="JHOVE Application" required="yes">
+      <description>JHOVE application JARs and configuration files.</description>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/jhove-apps-${project.version}.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/jhove-apps-${project.version}.jar"/>
+      <file targetdir="$INSTALL_PATH/conf" src="config/jhove.conf"/>
+      <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="plain"/>
+    </pack>
+    <pack name="JHOVE Shell Scripts" required="yes" os="unix" executable="yes">
+      <description>Bash execution scripts for command line and GUI apps.</description>
+      <file targetdir="$INSTALL_PATH" src="scripts/jhove"/>
+      <parsable targetfile="$INSTALL_PATH/jhove" type="shell"/>
+      <executable targetfile="$INSTALL_PATH/jhove"/>
+      <file targetdir="$INSTALL_PATH" src="scripts/jhove-gui"/>
+      <parsable targetfile="$INSTALL_PATH/jhove-gui" type="shell"/>
+      <executable targetfile="$INSTALL_PATH/jhove-gui"/>
+    </pack>
+    <pack name="JHOVE Batch Script" required="yes" os="windows">
+      <description>DOS batch execution scripts for command line and GUI apps.</description>
+      <file targetdir="$INSTALL_PATH" src="scripts/jhove.bat"/>
+      <parsable targetfile="$INSTALL_PATH/jhove.bat" type="plain"/>
+      <file targetdir="$INSTALL_PATH" src="scripts/jhove-gui.bat"/>
+      <parsable targetfile="$INSTALL_PATH/jhove-gui.bat" type="plain"/>
+    </pack>
+  </packs>
+</izpack:installation>
