@@ -10,7 +10,7 @@
 
   <groupId>org.openpreservation.jhove</groupId>
   <artifactId>jhove</artifactId>
-  <version>1.12.0p-SNAPSHOT</version>
+  <version>1.15.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
@@ -125,7 +125,7 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${mvn.javadoc.version}</version>
         </plugin>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build 
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build
           itself. -->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>

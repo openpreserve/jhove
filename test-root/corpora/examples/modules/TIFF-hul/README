@@ -1,0 +1,15 @@
+Jhove - JSTOR/Harvard Object Validation Environment
+Copyright 2003 by JSTOR and the President and Fellows of Harvard College
+
+Rev. 2003-09-29
+
+File                         Feature
+============================ ==================================================
+badfiles/                    Invalid files
+ddap/                        Test images from DDAP
+exif/                        Exif
+geotiff/                     GeoTIFF
+libtiff_v3/                  Test images from libtiff version 3
+little-endian.tif            Little-endian byte order
+pagemaker.tif                Created in PageMaker 6.0
+

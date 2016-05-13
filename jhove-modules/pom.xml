@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
-    <version>1.12.0p-SNAPSHOT</version>
+    <version>1.15.0-SNAPSHOT</version>
   </parent>
   <artifactId>jhove-modules</artifactId>
   <name>JHOVE Validation Modules</name>
@@ -13,7 +13,7 @@
   <properties>
     <jwat.version>1.0.3</jwat.version>
   </properties>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>

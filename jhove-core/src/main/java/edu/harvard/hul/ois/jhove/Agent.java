@@ -235,14 +235,14 @@ public final class Agent {
 
     @SuppressWarnings("hiding")
     public static class Builder {
-        private String name = "";
+        private String name;
         private AgentType type = AgentType.EDUCATIONAL;
-        private String address = "";
-        private String telephone = "";
-        private String fax = "";
-        private String email = "";
-        private String web = "";
-        private String note = "";
+        private String address;
+        private String telephone;
+        private String fax;
+        private String email;
+        private String web;
+        private String note;
 
         public Builder(final String name, final AgentType type) {
             this.name = name;
