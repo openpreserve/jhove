@@ -87,11 +87,12 @@
     <mvn.jar.version>2.6</mvn.jar.version>
     <mvn.javadoc.version>2.10</mvn.javadoc.version>
     <mvn.source.version>2.4</mvn.source.version>
+    <jacoco.version>0.7.6.201602180812</jacoco.version>
     <java.source.version>1.5</java.source.version>
     <java.target.version>1.6</java.target.version>
     <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
-  </properties>
+    </properties>
 
   <build>
     <pluginManagement>
@@ -128,7 +129,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.7.6.201602180812</version>
+          <version>${jacoco.version}</version>
         </plugin>        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build
           itself. -->
         <plugin>
