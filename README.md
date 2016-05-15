@@ -160,7 +160,7 @@ a command window `Terminal` and then issue these commands:
     to display the command line usage message.
 
 ### Linux
-**Currently only tested on Ubuntu 14.10**
+**Currently tested on Ubuntu 16.10 and Debain Jessie**
 Once the installer is downloaded start a terminal, e.g. `ctrl+alt+T`, and type the
 following, assuming the download is in `~/Downloads`:
 
@@ -173,7 +173,7 @@ Once the installation is finished you'll be able to:
 
 to run the command line application and show the usage message. Alternatively:
 
-    cd ~/jhove-beta
+    cd ~/jhove
     ./jhove-gui
 
 will run the GUI application.
