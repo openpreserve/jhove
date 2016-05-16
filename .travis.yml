@@ -30,9 +30,8 @@ addons:
 before_install:
 - sudo apt-get install -y realpath
 
-install:
-- mvn clean install
 script:
+- mvn clean install
 - "./jhove-bbt/scripts/travis-test.sh"
 
 after_success:
