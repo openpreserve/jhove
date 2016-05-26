@@ -145,7 +145,7 @@ public class AsciiModule extends ModuleBase {
      * RepInfo.
      */
     @Override
-    public final int parse(InputStream stream, RepInfo info, int parseIndex)
+    public int parse(InputStream stream, RepInfo info, int parseIndex)
             throws IOException {
         // Test if textMD is to be generated
         if (_defaultParams != null) {

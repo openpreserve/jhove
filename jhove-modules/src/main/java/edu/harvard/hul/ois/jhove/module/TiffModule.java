@@ -392,7 +392,7 @@ public class TiffModule extends ModuleBase {
      *            Representation informatino
      */
     @Override
-    public final void parse(RandomAccessFile raf, RepInfo info)
+    public void parse(RandomAccessFile raf, RepInfo info)
             throws IOException {
         if (_defaultParams != null) {
             Iterator<String> iter = _defaultParams.iterator();

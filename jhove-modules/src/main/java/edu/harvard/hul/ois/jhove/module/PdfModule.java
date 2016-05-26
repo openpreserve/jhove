@@ -457,7 +457,7 @@ public class PdfModule
      *                the descriptive information
      */
     @Override
-    public final void parse (RandomAccessFile raf, RepInfo info) 
+    public void parse (RandomAccessFile raf, RepInfo info) 
         throws IOException
     {
         initParse ();
