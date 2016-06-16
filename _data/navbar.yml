@@ -21,6 +21,8 @@
       subhref: "jpeg2000/"
     - subtitle: "PDF"
       subhref: "pdf/"
+    - subtitle: "TIFF"
+      subhref: "tiff/"
     - subtitle: "UTF-8"
       subhref: "utf8/"
     - subtitle: "WAVE"
