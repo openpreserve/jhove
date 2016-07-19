@@ -26,14 +26,23 @@ import java.util.*;
  */
 public class CrossRefStream {
     
+	private class index_range {
+		public int start;
+		public int len;
+	};
+
     private PdfStream _xstrm;   // The underlying Stream object.
     private PdfDictionary _dict;
     private int _size;
-    private int[] _index;
+	private int _index_size;
+    private index_range[] _index;
     private int[] _fieldSizes;
     private int _freeCount;
     private Filter[] _filters;
     private int _entriesRead;
+	private int _read_range;
+	private int _read_index;
+
     private int _bytesPerEntry;
     private long _prevXref;    // byte offset to previous xref stream, if any
 
@@ -84,17 +93,32 @@ public class CrossRefStream {
             // format if it's present.
             PdfObject indexobj = _dict.get ("Index");
             if (indexobj instanceof PdfArray) {
+				// Content is an array of values 
+				// - starting object, number of objects
                 Vector vec = ((PdfArray) indexobj).getContent();
-                // This is supposed to have a size of 2.
-                _index = new int[2];
-                PdfSimpleObject idx = (PdfSimpleObject) vec.get (0);
-                _index[0] = idx.getIntValue ();
-                idx = (PdfSimpleObject) vec.get (1);
-                _index[1] = idx.getIntValue ();
+				int vecSize = vec.size();
+
+				// Must be an even length array
+				if (vecSize % 2 != 0) {
+					return false;
+				}
+				_index_size = vecSize / 2;
+				_index = new index_range[_index_size];
+				int i = 0;
+				ListIterator<PdfSimpleObject> iter = (ListIterator<PdfSimpleObject>) vec.listIterator();
+				while(iter.hasNext()) {
+					PdfSimpleObject idx = iter.next();
+					_index[i].start = idx.getIntValue();
+					idx = iter.next();
+					_index[i++].len = idx.getIntValue();
+				}
             }
             else {
                 // Set up default index.
-                _index = new int[] { 0, _size };
+				_index_size = 1;
+                _index = new index_range[1];
+				_index[0].start = 0;
+				_index[0].len = _size;
             }
             
             // Get the field sizes.
@@ -142,6 +166,8 @@ public class CrossRefStream {
         strm.setFilters (_xstrm.getFilters ());
         strm.initRead (raf);
         _entriesRead = 0;
+		_read_range = 0;
+		_read_index = 0;
         
         /* Calculate the total bytes per entry.  This may have
          * some utility. */
@@ -180,8 +206,12 @@ public class CrossRefStream {
             /* Loop till we find an actual object; we just count
              * type 0's, which are free entries. */
             wid  = _fieldSizes[0];
-            if (_entriesRead++ >= _index[1]) {
-                return false;       // Read full complement
+			_entriesRead += 1;
+			if (_read_index++ >= _index[_read_range].len) {
+				_read_index = 1;
+				if (_read_range++ >= _index_size) {
+					return false;       // Read full complement
+				}
             }
             if (wid != 0) {
                 /* "Fields requiring more than one byte are stored 
@@ -220,7 +250,7 @@ public class CrossRefStream {
             }
             
             if (_objType != 0) {
-                _objNum = _index[0] + _entriesRead - 1;
+                _objNum = _index[_read_range].start + _read_index - 1;
                 return true;
             }
             ++_freeCount;
@@ -262,8 +292,16 @@ public class CrossRefStream {
     /** Returns the total object count. */
     public int getNumObjects ()
     {
-        return _index[0] + _index[1];
+        return _index[_index_size - 1].start + _index[_index_size - 1].len;
     }
+
+	public boolean isValidObject(int objNum) {
+		for (int i = 0; i < _index_size; i++) {
+			if (objNum >= _index[i].start && objNum < _index[i].start + _index[i].len) return true;
+		}
+
+		return false;
+	}
     
     /** Returns the offset of the last object object read.  
      *  This is meaningful only if the last object read
