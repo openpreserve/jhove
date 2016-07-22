@@ -25,12 +25,6 @@ import java.util.*;
  *
  */
 public class CrossRefStream {
-    
-	private class index_range {
-		public int start;
-		public int len;
-	};
-
     private PdfStream _xstrm;   // The underlying Stream object.
     private PdfDictionary _dict;
     private int _size;
@@ -51,7 +45,15 @@ public class CrossRefStream {
     private int _objNum;
     private int _objField1;
     private int _objField2;
-    
+
+	/** Range elements of the _index array:  
+		Starting object and number of objects.
+	*/
+	private class index_range {
+		public int start;
+		public int len;
+	};
+
     /**
      * Constructor.
      * 
