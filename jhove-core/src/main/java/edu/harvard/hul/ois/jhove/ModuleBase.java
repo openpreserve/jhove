@@ -1362,15 +1362,20 @@ public abstract class ModuleBase
     }
 
     /* Skip over some bytes.  */
-	public long skipBytes(DataInputStream stream, long bytesToSkip,
-			  ModuleBase counted) 
-            throws IOException
-    {
-		long n = stream.skip(bytesToSkip);
-        if (counted != null) {
-            counted._nByte += n;
+    public long skipBytes(DataInputStream stream, long bytesToSkip, ModuleBase counted) throws IOException {
+        long retVal = 0;
+        while (bytesToSkip > 0) {
+            long n = stream.skip(bytesToSkip); // skip() don't throw an exception if we skip past the end of the file.
+            bytesToSkip -= n;
+            retVal += n;
+            if (counted != null) {
+                counted._nByte += n;
+            }
+            if (stream.available() == 0) { // Need this in case we are past the end of the file.
+                break;
+            }
         }
-        return n;
+        return retVal;
     }
 
     /**
