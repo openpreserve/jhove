@@ -85,7 +85,7 @@ public class PageLabelNode
 	    throw pe;
 	}
         catch (Exception e) {
-            throw new PdfInvalidException ("Invalid page label node");
+            throw new PdfInvalidException (MessageConstants.ERR_PAGE_LABEL_NODE_INVALID);
         }
            
     }
@@ -175,7 +175,7 @@ public class PageLabelNode
                 PdfArray pairArray = (PdfArray) 
                     _module.resolveIndirectObject (_currentLeaf._dict.get ("Nums"));
                 if (pairArray == null) {
-                    throw new PdfInvalidException ("Missing expected element in page number dictionary");
+                    throw new PdfInvalidException(MessageConstants.ERR_PAGE_NUMBER_DICT_ELEMENT_MISSING);
                 }
                 _currentNumsVec = pairArray.getContent ();
                 _currentNumsLength = _currentNumsVec.size ();
@@ -201,7 +201,7 @@ public class PageLabelNode
         }
         catch (Exception e) {
             e.printStackTrace();
-            throw new PdfInvalidException ("Invalid date in page number tree");
+            throw new PdfInvalidException (MessageConstants.ERR_PAGE_NUMBER_TREE_DATE_INVALID);
         }
     }
     

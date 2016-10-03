@@ -199,7 +199,7 @@ public class Stream
             }
             else if (!Character.isWhitespace(c)) {
                 throw new PdfMalformedException 
-                    ("Malformed ASCII number in stream");
+                    (MessageConstants.ERR_STREAM_CONTAINS_MALFORMED_ASCII_NUMBER);
             }
         }
         return val;

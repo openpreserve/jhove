@@ -97,7 +97,7 @@ public class Parser
         else if (tok instanceof DictionaryEnd) {
             --_dictDepth;
             if (_dictDepth < 0) {
-                throw new PdfMalformedException ("Improperly nested dictionary delimiters");
+                throw new PdfMalformedException (MessageConstants.ERR_DICT_DELIMETERS_IMPROPERLY_NESTED);
             }
         }
         if (tok instanceof ArrayStart) {
@@ -106,7 +106,7 @@ public class Parser
         else if (tok instanceof ArrayEnd) {
             --_arrayDepth;
             if (_arrayDepth < 0) {
-                throw new PdfMalformedException ("Improperly nested array delimiters");
+                throw new PdfMalformedException (MessageConstants.ERR_ARRAY_IMPROPERLY_NESTED);
             }
         }
         return tok;
@@ -206,7 +206,7 @@ public class Parser
     public PdfObject readObjectDef () throws IOException, PdfException
     {
         Numeric objNumTok = (Numeric) getNext 
-            (Numeric.class, "Invalid object definition");
+            (Numeric.class, MessageConstants.ERR_OBJ_DEF_INVALID);
         return readObjectDef (objNumTok);
     }
     
@@ -219,14 +219,13 @@ public class Parser
     public PdfObject readObjectDef (Numeric objNumTok) 
                     throws IOException, PdfException
     {
-        String invDef = "Invalid object definition";
         reset ();
         // The start of an object must be <num> <num> obj
         //Numeric objNumTok = (Numeric) getNext (Numeric.class, invDef);
-        Numeric genNumTok = (Numeric) getNext (Numeric.class, invDef);
-        Keyword objKey = (Keyword) getNext (Keyword.class, invDef);
+        Numeric genNumTok = (Numeric) getNext (Numeric.class, MessageConstants.ERR_OBJ_DEF_INVALID);
+        Keyword objKey = (Keyword) getNext (Keyword.class, MessageConstants.ERR_OBJ_DEF_INVALID);
         if (!"obj".equals (objKey.getValue ())) {
-            throw new PdfMalformedException (invDef);
+            throw new PdfMalformedException (MessageConstants.ERR_OBJ_DEF_INVALID);
         }
         if (_tokenizer.getWSString ().length () > 1) {
                 _pdfACompliant = false;
@@ -294,7 +293,7 @@ public class Parser
         }
         else {
             throw new PdfMalformedException 
-              ("Cannot parse object", getOffset(), tok);
+              (MessageConstants.ERR_OBJ_NOT_PARSABLE, getOffset(), tok);
         }
     }
     
@@ -324,7 +323,7 @@ public class Parser
                     return arr;
                 }
                 throw new PdfMalformedException
-                    ("Unexpected token in array", getOffset());
+                    (MessageConstants.ERR_ARRAY_CONTAINS_UMEXPECTED_TOKEN, getOffset());
             }
         }
     }
@@ -359,11 +358,10 @@ public class Parser
                 Token tok = eobj.getToken ();
                 if (tok instanceof DictionaryEnd) {
                     collapseObjectVector (vec);
-                    String invalDict = "Malformed dictionary";
                     // The collapsed vector must contain an even number of objects
                     int vecSize = vec.size ();
                     if ((vecSize % 2) != 0) {
-                        throw new PdfMalformedException (invalDict + ": Vector must contain an even number of objects, but has " + vecSize, getOffset ());
+                        throw new PdfMalformedException (MessageConstants.ERR_VECTOR_OBJ_COUNT_NOT_EVEN + vecSize, getOffset ());
                     }
                     for (int i = 0; i < vecSize; i += 2) {
                         try {
@@ -373,7 +371,7 @@ public class Parser
                             dict.add (key.getValue (), value);
                         }
                         catch (Exception f) {
-                            throw new PdfMalformedException (invalDict, getOffset ());
+                            throw new PdfMalformedException (MessageConstants.ERR_DICT_MALFORMED, getOffset ());
                         }
                     }
                     if (!dict.isPdfACompliant()) {
@@ -382,7 +380,7 @@ public class Parser
                     return dict;
                 }
                 throw new PdfMalformedException
-                ("Unexpected token in dictionary", getOffset());
+                (MessageConstants.ERR_DICT_CONTAINS_UNEXPECTED_TOKEN, getOffset());
             }
         }
     }
@@ -449,7 +447,7 @@ public class Parser
                         }
                         catch (Exception e) {
                             throw new PdfMalformedException 
-                                ("Malformed indirect object reference");
+                                (MessageConstants.ERR_INDIRECT_OBJ_REF_MALFORMED);
                         }
                     }
                 }

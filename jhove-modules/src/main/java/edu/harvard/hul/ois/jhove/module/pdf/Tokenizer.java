@@ -176,7 +176,6 @@ public abstract class Tokenizer
     public Token getNext (long max)
         throws IOException, PdfException
     {
-        String tokErr = "Lexical error";
         Token token = null;
         StringBuffer buffer = null;
         //StringBuffer bkslBuffer = null;
@@ -232,7 +231,7 @@ public abstract class Tokenizer
                     _ch = readChar ();
                     if (_ch < 0) {
                         _state = State.WHITESPACE;
-                        throw new PdfMalformedException("Unexpected EOF",
+                        throw new PdfMalformedException(MessageConstants.ERR_EOF_UNEXPECTED,
 							_offset);
                     }
                     _offset++;
@@ -359,7 +358,7 @@ public abstract class Tokenizer
                         // invalid character in a number
                         _state = State.WHITESPACE;
                         _wsString = "";
-                        throw new PdfMalformedException (tokErr, _offset);
+                        throw new PdfMalformedException (MessageConstants.ERR_TOKEN_LEXICAL, _offset);
 		    }
                 }
                 else if (_state == (State.GREATER_THAN)) {
@@ -371,7 +370,7 @@ public abstract class Tokenizer
                     }
                     _state = State.WHITESPACE;
                     _wsString = "";
-                    throw new PdfMalformedException (tokErr, _offset);
+                    throw new PdfMalformedException (MessageConstants.ERR_TOKEN_LEXICAL, _offset);
                 }
                 else if (_state == (State.HEXADECIMAL)) {
                     // We're in a hexadecimal string.  We will

@@ -15,7 +15,6 @@ import java.util.*;
 public class PageObject extends DocNode 
 {
     private List _contentStreams;  // contents of the page; may be null
-    private static final String badPageStr = "Invalid dictionary data for page";
 
     /**
      *  Superclass constructor.
@@ -71,18 +70,18 @@ public class PageObject extends DocNode
                     }
                 }
                 else {
-                    throw new PdfInvalidException (badPageStr, 0);
+                    throw new PdfInvalidException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0);
                 }
             }
         }
         catch (NullPointerException e) {
-            throw new PdfInvalidException (badPageStr, 0);
+            throw new PdfInvalidException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0);
         }
         catch (ClassCastException e) {
-            throw new PdfInvalidException (badPageStr, 0);
+            throw new PdfInvalidException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0);
         }
         catch (IOException e) {
-            throw new PdfMalformedException (badPageStr, 0);
+            throw new PdfMalformedException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0);
         }
     }
     
@@ -100,15 +99,14 @@ public class PageObject extends DocNode
      */
     public PdfArray getAnnotations () throws PdfException
     {
-        String badAnnot = "Invalid Annotations";
         try {
             return (PdfArray) _module.resolveIndirectObject (_dict.get ("Annots"));
         }
         catch (ClassCastException e) {
-            throw new PdfInvalidException (badAnnot);
+            throw new PdfInvalidException (MessageConstants.ERR_ANNOT_INVALID);
         }
         catch (IOException e) {
-            throw new PdfMalformedException (badAnnot);
+            throw new PdfMalformedException (MessageConstants.ERR_ANNOT_INVALID);
         }
     }
 
@@ -151,7 +149,6 @@ public class PageObject extends DocNode
      */
     public PdfArray getArtBox () throws PdfException
     {
-        final String badbox = "Malformed ArtBox in page tree";
         try {
             PdfArray mbox = (PdfArray) _dict.get ("ArtBox");
             if (mbox == null) {
@@ -162,11 +159,11 @@ public class PageObject extends DocNode
             }
             else {
                 // There's an ArtBox, but it's not a rectangle
-                throw new PdfInvalidException (badbox);
+                throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_ARTBOX_MALFORMED);
             }
         }
         catch (Exception e) {
-            throw new PdfMalformedException (badbox);
+            throw new PdfMalformedException (MessageConstants.ERR_PAGE_TREE_ARTBOX_MALFORMED);
         }
     }
 
@@ -176,7 +173,6 @@ public class PageObject extends DocNode
      */
     public PdfArray getTrimBox () throws PdfException
     {
-        final String badbox = "Malformed TrimBox in page tree";
         try {
             PdfArray mbox = (PdfArray) _dict.get ("TrimBox");
             if (mbox == null) {
@@ -187,11 +183,11 @@ public class PageObject extends DocNode
             }
             else {
                 // There's an TrimBox, but it's not a rectangle
-                throw new PdfInvalidException (badbox);
+                throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_TRIMBOX_MALFORMED);
             }
         }
         catch (Exception e) {
-            throw new PdfMalformedException (badbox);
+            throw new PdfMalformedException (MessageConstants.ERR_PAGE_TREE_TRIMBOX_MALFORMED);
         }
     }
 
@@ -201,7 +197,6 @@ public class PageObject extends DocNode
      */
     public PdfArray getBleedBox () throws PdfException
     {
-        final String badbox = "Malformed BleedBox in page tree";
         try {
             PdfArray mbox = (PdfArray) _dict.get ("BleedBox");
             if (mbox == null) {
@@ -212,11 +207,11 @@ public class PageObject extends DocNode
             }
             else {
                 // There's an BleedBox, but it's not a rectangle
-                throw new PdfInvalidException (badbox);
+                throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_BLEEDBOX_MALFORMED);
             }
         }
         catch (Exception e) {
-            throw new PdfMalformedException (badbox);
+            throw new PdfMalformedException (MessageConstants.ERR_PAGE_TREE_BLEEDBOX_MALFORMED);
         }
     }
 }

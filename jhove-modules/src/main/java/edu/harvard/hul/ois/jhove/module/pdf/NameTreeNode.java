@@ -44,7 +44,6 @@ public class NameTreeNode
                 NameTreeNode parent, 
                 PdfDictionary dict) throws PdfException
     {
-	final String inval = "Invalid name tree";
         _module = module;
         _parent = parent;
         _dict = dict;
@@ -88,13 +87,13 @@ public class NameTreeNode
             }
         }
         catch (ClassCastException ce) {
-            throw new PdfInvalidException (inval);
+            throw new PdfInvalidException (MessageConstants.ERR_NAME_TREE_INVALID);
         }
         catch (NullPointerException ce) {
-            throw new PdfInvalidException (inval);
+            throw new PdfInvalidException (MessageConstants.ERR_NAME_TREE_INVALID);
         }
         catch (Exception e) {
-            throw new PdfMalformedException (inval);
+            throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID);
         }
     }
     
@@ -120,7 +119,6 @@ public class NameTreeNode
      */
     public PdfObject get (Vector key) throws PdfException
     {
-        final String invtree = "Invalid name tree";
         try {
             if (!inBounds (key)) {
                 return null;
@@ -157,13 +155,13 @@ public class NameTreeNode
                 }
                 return null;    // Not in any subnode
             }
-            else throw new PdfMalformedException (invtree);
+            else throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID);
         }
         catch (PdfException e1) {
             throw e1;
         }
         catch (Exception e) {
-            throw new PdfMalformedException (invtree);
+            throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID);
         }
     }
 
