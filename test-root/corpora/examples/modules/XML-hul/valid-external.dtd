@@ -1,0 +1,12 @@
+<!ELEMENT ns1:a (#PCDATA | b | d)*>
+<!ATTLIST ns1:a xmlns:ns1 CDATA #IMPLIED>
+<!ELEMENT b (#PCDATA | ns2:c)*>
+<!ATTLIST b c CDATA #IMPLIED>
+<!ELEMENT ns2:c (#PCDATA)>
+<!ATTLIST ns2:c xmlns:ns2 CDATA #IMPLIED>
+<!ELEMENT d EMPTY>
+<!ATTLIST d e ENTITY #REQUIRED>
+<!ENTITY very "V-E-R-Y">
+<!ENTITY ee SYSTEM "external-parsed-entity.ent">
+<!NOTATION txt SYSTEM "text/plain">
+<!ENTITY ue SYSTEM "external-unparsed-entity.ent" NDATA txt>
