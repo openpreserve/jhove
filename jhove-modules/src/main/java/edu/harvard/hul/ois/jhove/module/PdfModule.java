@@ -4085,7 +4085,8 @@ public class PdfModule
             if (destObj == null) {
                 // Treat this condition as invalid:
                 throw new PdfInvalidException(
-                        "Invalid indirect destination - referenced object cannot be found");
+                        "Invalid indirect destination - referenced object '"
+                                + key.getStringValue() + "' cannot be found");
                 // OR if this is not considered invalid
                 // return -1;
             } else {
