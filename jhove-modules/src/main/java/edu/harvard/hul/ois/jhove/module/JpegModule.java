@@ -487,7 +487,7 @@ public class JpegModule extends ModuleBase {
                     dbyt = readUnsignedByte(_dstream, this);
                     if (dbyt != 0XFF) {
                         info.setMessage(new ErrorMessage(
-                                "Expected marker byte 255, got " + dbyt, _nByte));
+                                MessageConstants.ERR_MARKER_MISSING + dbyt, _nByte));
                         info.setWellFormed(false);
                         return 0;
                     }
@@ -501,7 +501,7 @@ public class JpegModule extends ModuleBase {
                 if (!_seenJFIF && !_seenSPIFF && !_seenExif && !_seenJPEGL
                         && _numSegments >= 2 && !_reportedJFIF) {
                     info.setMessage(new ErrorMessage(
-                            "File does not begin with SPIFF, Exif or JFIF segment",
+                            MessageConstants.ERR_START_SEGMENT_MISSING,
                             _nByte));
                     info.setValid(false);
                     _reportedJFIF = true;
@@ -642,7 +642,7 @@ public class JpegModule extends ModuleBase {
 
                     default:
                         // Other values don't belong at the top level.
-                        msg = new ErrorMessage("Marker not valid in context",
+                        msg = new ErrorMessage(MessageConstants.ERR_MARKER_INVALID,
                                 _nByte);
                         info.setMessage(msg);
                         info.setValid(false);
@@ -651,7 +651,7 @@ public class JpegModule extends ModuleBase {
             }
 
         } catch (EOFException e) {
-            msg = new ErrorMessage("Unexpected end of file", _nByte);
+            msg = new ErrorMessage(MessageConstants.ERR_EOF_UNEXPECTED, _nByte);
             info.setMessage(msg);
             info.setWellFormed(false);
             return 0;
@@ -884,7 +884,7 @@ public class JpegModule extends ModuleBase {
             valid = false;
         }
         if (!valid) {
-            info.setMessage(new ErrorMessage("Invalid JPEG header", 0));
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_HEADER_INVALID, 0));
             info.setWellFormed(false);
             return false;
         }
@@ -926,7 +926,7 @@ public class JpegModule extends ModuleBase {
             if (_numSegments > 1) {
                 // Apparently this is OK in a spiff file
                 info.setMessage(new ErrorMessage(
-                        "JFIF APP0 marker not at beginning of file", _nByte));
+                        MessageConstants.ERR_JFIF_APP_MARKER_MISSING, _nByte));
                 info.setValid(false);
                 skipBytes(_dstream, length - 7, this);
             }
@@ -1052,7 +1052,7 @@ public class JpegModule extends ModuleBase {
             _seenExif = true;
             if (!JpegExif.isTiffAvailable()) {
                 info.setMessage(new InfoMessage(
-                        "TIFF-HUL module required to report Exif data", _nByte));
+                        MessageConstants.INF_XIF_REPORT_REQUIRES_TIFF, _nByte));
                 skipBytes(_dstream, length - 8, this);
                 return;
             }
@@ -1129,7 +1129,7 @@ public class JpegModule extends ModuleBase {
         if (equalArray(ident, spiffByte)) {
             if (_numSegments > 1) {
                 info.setMessage(new ErrorMessage(
-                        "SPIFF marker not at beginning of file", _nByte));
+                        MessageConstants.ERR_SPIF_MARKER_MISSING, _nByte));
                 info.setValid(false);
             }
             // This is a SPIFF marker. It may come only
@@ -1225,7 +1225,7 @@ public class JpegModule extends ModuleBase {
         readUnsignedShort(_dstream);
         if (_tiling == null) {
             info.setMessage(new ErrorMessage(
-                    "DTT segment without previous DTI", _nByte));
+                    MessageConstants.ERR_DTT_SEG_MISSING_PREV_DTI, _nByte));
             info.setValid(false);
             return;
         }
@@ -1516,7 +1516,7 @@ public class JpegModule extends ModuleBase {
         } catch (Exception e) {
             // Out of bounds value -- punt.
             // Should add an error message here.
-            info.setMessage(new ErrorMessage("Unrecognized tiling data"));
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_TILING_DATA_UNRECOGNISED));
             info.setValid(false);
             return null;
         }
