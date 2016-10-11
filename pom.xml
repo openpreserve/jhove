@@ -64,7 +64,7 @@
     <repository>
       <id>OPF Artefactory</id>
       <name>OPF Artefactory-releases</name>
-      <url>http://artifactory.opf-labs.org/artifactory/opf-dev-local</url>
+      <url>http://artifactory.openpreservation.org/artifactory/opf-dev-local/</url>
     </repository>
   </distributionManagement>
 
@@ -75,7 +75,7 @@
       </snapshots>
       <id>opf-dev</id>
       <name>OPF development</name>
-      <url>http://artifactory.opf-labs.org/artifactory/opf-dev</url>
+      <url>http://artifactory.openpreservation.org/artifactory/opf-dev/</url>
     </repository>
   </repositories>
 
@@ -92,7 +92,7 @@
     <java.target.version>1.6</java.target.version>
     <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
-    </properties>
+  </properties>
 
   <build>
     <pluginManagement>
@@ -130,9 +130,12 @@
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>${jacoco.version}</version>
-        </plugin>        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build
-          itself. -->
+        </plugin>
         <plugin>
+          <!--
+          This plugin's configuration is used to store Eclipse m2e settings
+          only. It has no influence on the Maven build itself.
+          -->
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
           <version>1.0.0</version>

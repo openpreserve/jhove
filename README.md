@@ -5,20 +5,19 @@ JHOVE
 Licensing
 ---------
 Copyright 2003-2012 by JSTOR and the President and Fellows of Harvard College,
-2015 - by the [Open Preservation Foundation](http://openpreservation.org).
+2015-2016 by the [Open Preservation Foundation](http://openpreservation.org).
 JHOVE is made available under the
 [GNU Lesser General Public License (LGPL)](http://www.gnu.org/licenses/lgpl.html).
 
 Rev. 1.14.6, 2016-05-12
 
 JHOVE Homepage
---------
-
+--------------
 <http://jhove.openpreservation.org/>
 
 Overview
 --------
-JHOVE (the JSTOR/Harvard Object Validation Environment, pronounced "jhove")
+JHOVE (the JSTOR/Harvard Object Validation Environment, pronounced "jove")
 is an extensible software framework for performing format identification,
 validation, and characterization of digital objects.
 
@@ -27,7 +26,7 @@ validation, and characterization of digital objects.
  * Format validation is the process of determining the level of compliance of a
    digital object to the specification for its purported format: "I have an
    object purportedly of format F; is it?"
- * Format characterization is the process of determing the format-specific
+ * Format characterization is the process of determining the format-specific
    significant properties of an object of a given format: "I have an object of
    format F; what are its salient properties?"
 
@@ -49,23 +48,19 @@ License (LGPL; see the file LICENSE for details).
 JHOVE is currently being maintained by the
 [Open Preservation Foundation](http://openpreservation.org).
 
-CD Status
----------
-
-- [![Build Status](https://travis-ci.org/openpreserve/jhove.svg?branch=integration)](https://travis-ci.org/openpreserve/jhove "JHOVE Travis-CI integration build") Travis-CI: `mvn install integration`
-
-- [![Build Status](http://jenkins.opf-labs.org/buildStatus/icon?job=jhove-integration)](http://jenkins.opf-labs.org/job/jhove-integration/ "OPF Jenkins integration build") OPF Jenkins: `mvn verify integration`
-
-- [![Build Status](http://jenkins.opf-labs.org/buildStatus/icon?job=jhove-v1.14)](http://jenkins.opf-labs.org/job/jhove-v1.14/ "OPF Jenkins maven deploy build") OPF Jenkins: `mvn deploy integration`
+Build Status
+------------
+ * [![Build Status](https://travis-ci.org/openpreserve/jhove.svg?branch=integration)](https://travis-ci.org/openpreserve/jhove "JHOVE Travis-CI integration build") Travis-CI: `mvn install integration`
+ * [![Build Status](http://jenkins.openpreservation.org/buildStatus/icon?job=jhove-integration)](http://jenkins.openpreservation.org/job/jhove-integration/ "OPF Jenkins integration build") OPF Jenkins: `mvn verify integration`
+ * [![Build Status](http://jenkins.openpreservation.org/buildStatus/icon?job=jhove-v1.14)](http://jenkins.openpreservation.org/job/jhove-v1.14/ "OPF Jenkins Maven deploy build") OPF Jenkins: `mvn deploy integration`
 
 Pre-requisites
 --------------
-
- 1. Java JRE 1.6
+ 1. Java JRE 1.6  
     (JHOVE was originally implemented using the Sun J2SE SDK 1.4.1 and has
     been tested to work with 1.5). Version 1.14 of JHOVE is built and
-    tested against Oracle JDK 7, and OpenJDK 6 & 7 on Travis. Relesases are
-    built using Oracle JDK 7 from the [OPF's Jenkins server](http://jenkins.opf-labs.org/view/D-JHOVE/).
+    tested against Oracle JDK 7, and OpenJDK 6 & 7 on Travis. Releases are
+    built using Oracle JDK 7 from the [OPF's Jenkins server](http://jenkins.openpreservation.org/).
 
  2. If you would like to build JHOVE from source, then life will be easiest if
     you use [Apache Maven](https://maven.apache.org/).
@@ -78,100 +73,110 @@ You can download the [latest version of JHOVE here](http://software.openpreserva
 
 ### For Developers: JHOVE JARs via Maven
 JHOVE is available through Maven, currently we're distributing through the
-[OPF's Maven repository](http://artifactory.opf-labs.org/artifactory/simple/opf-dev-local/org/openpreservation/jhove/jhove/) during development. The 1.14 release artifacts
-will be published to Maven central. If you'd like to try the latest Maven modules then
+[OPF's Maven repository](http://artifactory.openpreservation.org/artifactory/simple/opf-dev-local/org/openpreservation/jhove/jhove/) during development. The 1.14 release artifacts
+will be published to Maven Central. If you'd like to try the latest Maven modules then
 add:
 
-    <repositories>
-      <repository>
-        <snapshots>
-          <enabled>false</enabled>
-        </snapshots>
-        <id>opf-dev-mvn</id>
-        <name>opf-dev</name>
-        <url>http://artifactory.opf-labs.org/artifactory/opf-dev</url>
-      </repository>
-    </repositories>
+```xml
+<repositories>
+  <repository>
+    <snapshots>
+      <enabled>false</enabled>
+    </snapshots>
+    <id>opf-dev-mvn</id>
+    <name>opf-dev</name>
+    <url>http://artifactory.openpreservation.org/artifactory/opf-dev/</url>
+  </repository>
+</repositories>
+```
 
-to your project's POM file then use this dependency for the core classes (e.g.
+to your project's POM file, then use this dependency for the core classes (e.g.
 `JhoveBase`, `Module`, `ModuleBase`, etc.):
 
-    <dependency>
-      <groupId>org.openpreservation.jhove</groupId>
-      <artifactId>jhove-core</artifactId>
-      <version>1.14.6</version>
-    </dependency>
+```xml
+<dependency>
+  <groupId>org.openpreservation.jhove</groupId>
+  <artifactId>jhove-core</artifactId>
+  <version>1.14.6</version>
+</dependency>
+```
 
 and this for the JHOVE core module implementations:
 
-    <dependency>
-      <groupId>org.openpreservation.jhove</groupId>
-      <artifactId>jhove-modules</artifactId>
-      <version>1.14.6</version>
-    </dependency>
+```xml
+<dependency>
+  <groupId>org.openpreservation.jhove</groupId>
+  <artifactId>jhove-modules</artifactId>
+  <version>1.14.6</version>
+</dependency>
+```
 
-### For Developers: Building JHOVE from source
-Clone this project, checkout the integration branch and use Maven: e.g.:
+### For Developers: Building JHOVE from Source
+Clone this project, checkout the integration branch, and use Maven, e.g.:
 
     git clone git@github.com:openpreserve/jhove.git
     cd jhove
     git checkout integration
     mvn clean install
 
-Currently see the [Project Structure](#project-structure) section for a guide to
+See the [Project Structure](#project-structure) section for a guide to
 the Maven artifacts produced by the build.
 
 Installation
 ------------
-### Application Installation
 
+### Application Installation
 Download the JHOVE installer, this requires Java 1.6 or later to be pre-installed.
 We'll assume that you've downloaded `<userHome>/Downloads/jhove-xplt-installer-1.14.x.jar`,
 where `x` is the current revision/build number. Installation is OS dependant.
 
 #### Windows
-**Currently only tested on Windows 7**
-Simply double click the downloaded installer JAR in Explorer. If Java is installed
-then the windowed installer will guide you through selection. It's best to stay with
+*Currently only tested on Windows 7.*
+
+Simply double-click the downloaded installer JAR. If Java is installed then the
+windowed installer will guide you through selection. It's best to stay with
 the default choices if installing the beta.
 
-Once the installation is finished you'll be able to double click
-`C:\Users\yourName\jhove-beta\jhove-gui` to start the JHOVE GUI. Alternatively start
-a command window, e.g. `winkey` then type `cmd`, then issue these commands:
+Once the installation has finished you'll be able to double-click
+`C:\Users\yourName\jhove\jhove-gui` to start the JHOVE GUI. Alternatively,
+open a Command window, e.g. press the `Windows` key and type `cmd`, then issue
+these commands:
 
     C:\Users\yourName>cd jhove
-    C:\Users\yourName>jhove
+    C:\Users\yourName\jhove>jhove
 
-to display the command line usage message.
+to display the command-line usage message.
 
 ### Mac OS
-**Currently only tested on Mavericks**
-Simply double click the downloaded installer JAR in Explorer. If Java is installed
-then the windowed installer will guide you through selection. It's best to stay with
+*Currently only tested on OS X Mavericks.*
+
+Simply double-click the downloaded installer JAR. If Java is installed then the
+windowed installer will guide you through selection. It's best to stay with
 the default choices if installing the beta.
 
-Once the installation is finished you'll be able to double click
-`/Users/yourName/jhove-beta/jhove-gui` to start the JHOVE GUI. Alternatively start
-a command window `Terminal` and then issue these commands:
+Once the installation has finished you'll be able to double-click
+`/Users/yourName/jhove/jhove-gui` to start the JHOVE GUI. Alternatively,
+open a Terminal command window and then issue these commands:
 
     cd ~/jhove
     ./jhove
 
-    to display the command line usage message.
+to display the command-line usage message.
 
 ### Linux
-**Currently tested on Ubuntu 16.10 and Debain Jessie**
-Once the installer is downloaded start a terminal, e.g. `ctrl+alt+T`, and type the
-following, assuming the download is in `~/Downloads`:
+*Currently tested on Ubuntu 16.10 and Debian Jessie.*
+
+Once the installer has downloaded, start a terminal, e.g. `Ctrl+Alt+T`,
+and type the following, assuming the download is in `~/Downloads`:
 
     java -jar ~/Downloads/java-xplt-installer-1.14.x.jar
 
 Once the installation is finished you'll be able to:
 
-    cd ~/jhove-beta
+    cd ~/jhove
     ./jhove
 
-to run the command line application and show the usage message. Alternatively:
+to run the command-line application and show the usage message. Alternatively:
 
     cd ~/jhove
     ./jhove-gui
@@ -180,19 +185,19 @@ will run the GUI application.
 
 Distribution
 ------------
-We'ved moved to Maven and we've taken the opportunity to update the distribution.
+We've moved to Maven and have taken the opportunity to update the distribution.
 For now we're producing:
- - a Maven package for developers wishing to incorporate JHOVE in their
+ * a Maven package, for developers wishing to incorporate JHOVE into their
    own software;
- - a "fat" (1MB) jar that contains the old CLI and desktop GUI, for anyone who doesn't
-   want to use the new installer;
- - a simple cross platform installer that installs the application jar, support
+ * a "fat" (1MB) JAR that contains the old CLI and desktop GUI, for anyone
+   who doesn't want to use the new installer; and
+ * a simple cross-platform installer that installs the application JAR, support
    scripts, etc.
 
-Currently all options, including the installer require Java 1.6 or more recent
-to be pre-installed. Supporting 1.5 is no longer realistic, Oracle end of lived it's
-own **1.6** distribution in 2012. We've kept to 1.6 as a transition towards moving
-to 1.7, if you really need a 1.5 compatible build then you can override the target
+Currently all options, including the installer, require Java 1.6 or above to be
+pre-installed. Supporting 1.5 is no longer realistic, Oracle ceased support for
+its own 1.6 distribution in 2012. We've kept to 1.6 as a transition towards moving
+to 1.7. If you really need a 1.5-compatible build then you can override the target
 version for the Maven build, e.g.:
 
     mvn clean install -Djava.target.version=1.5
@@ -258,12 +263,12 @@ the jhove/bin sub-directory:
 
     jhove-gui -c <configFile>
 
-where <configFile> is the pathname of the JHOVE configuration file.
+where `<configFile>` is the pathname of the JHOVE configuration file.
 
 Project Structure
 -----------------
 A quick introduction to the restructured Maven project. The project's been broken
-into 3 Maven modules with an additional installer module added.
+into three Maven modules with an additional installer module added.
 
     jhove/
       |-jhove-apps/
@@ -271,12 +276,12 @@ into 3 Maven modules with an additional installer module added.
       |-jhove-installer/
       |-jhove-modules/
 
-All Maven artifacts are are produced in versioned form,
+All Maven artifacts are produced in versioned form,
 i.e. `${artifactId}-${project.version}.jar`, where `${project.version}` defaults
 to `1.14.0-SNAPSHOT` unless you explicitly set the version number.
 
 ### jhove
-The `jhove` project root, acts as a Maven parent and reactor for the submodules.
+The `jhove` project root acts as a Maven parent and reactor for the sub-modules.
 This simply builds sub-modules and doesn't produce any artifacts, but decides
 which sub-modules are built.
 
@@ -290,49 +295,49 @@ output handlers. This module produces a single JAR:
     ./jhove/jhove-core/target/jhove-core-${project.version}.jar
 
 The `jhove-core` JAR contains a single module implementation, the default
-`BytestreamModule`. To the format specific modules you'll need the `jhove-modules`
-JAR.
+`BytestreamModule`. For the format-specific modules you'll need 
+the `jhove-modules` JAR.
 
 ### jhove-modules
-The `jhove-modules` contains all of JHOVE's core format specific module implementations
-specifically:
+The `jhove-modules` contain all of JHOVE's core format specific module 
+implementations, specifically:
 
-    AIFF
-    GIF
-    HTML
-    IFF
-    JPEG
-    JPEG-2000
-    PDF
-    TIFF
-    WAVE
-    XML
+ * AIFF
+ * GIF
+ * HTML
+ * IFF
+ * JPEG
+ * JPEG 2000
+ * PDF
+ * TIFF
+ * WAVE
+ * XML
 
-These are all packaged in a single modules jar:
+These are all packaged in a single modules JAR:
 
     ./jhove/jhove-modules/target/jhove-modules-${project.version}.jar
 
 ### jhove-apps
-`jhove-apps` contains the command line and GUI application code and builds a fat jar
-containing the entire Java application. This JAR can be used to execute the command
-line app:
+The `jhove-apps` module contains the command-line and GUI application code and 
+builds a fat JAR containing the entire Java application. This JAR can be used
+to execute the command-line app:
 
-
+    ./jhove/jhove-apps/target/jhove-apps-${project.version}.jar
 
 ### jhove-installer
-Finally the `jhove-installer` module takes the fat jar and creates a Java based
+Finally, the `jhove-installer` module takes the fat JAR and creates a Java-based
 installer for JHOVE. The installer bundles up invocation scripts and the like,
-installs them under `<userHome>/jhove-beta/` (default, can be changed) while looking
-after:
+installs them under `<userHome>/jhove/` (default, can be changed) while also
+looking after:
 
- - variable substitution to ensure that JHOVE_HOME and the like are set to
-   reflect a users install location;
- - making sure that Windows users get batch scripts, while Mac and linux users
+ * variable substitution to ensure that JHOVE_HOME and the like are set to
+   reflect a user's install location;
+ * making sure that Windows users get batch scripts, while Mac and Linux users
    get bash scripts; and
- - optionally generate unattended install and uninstall files.
+ * optionally generating unattended install and uninstall files.
 
 The module produces two JARs, one called `jhove-installer-${project.version}`, which
-contains the jars for the installer, and an executable JAR to install JHOVE:
+contains the JARs for the installer, and an executable JAR to install JHOVE:
 
     ./jhove/jhove-installer/target/jhove-xplt-installer-${project.version}.jar
 
