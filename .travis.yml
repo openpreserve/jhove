@@ -36,3 +36,6 @@ script:
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
+
+after_failure:
+- cat /tmp/bbt-logs/log.txt | grep Expected
