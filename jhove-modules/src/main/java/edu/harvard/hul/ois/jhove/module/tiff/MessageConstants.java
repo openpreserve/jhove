@@ -34,135 +34,119 @@ package edu.harvard.hul.ois.jhove.module.tiff;
 public enum MessageConstants {
 	INSTANCE;
 
-	/**
-	 * Warning messages
-	 */
-	
-  /* examples from PDF
-  *public static final String WRN_CAT_NON_DICT_TO_DICT = "Tried to cat non-dictionary to PdfDictionary";
-	*public static final String WRN_FIND_FONTS = "PdfModule.findFonts: ";
-	*public static final String WRN_HYBRID_XREF_NOT_IMPLEMENTED = "Hybrid cross-reference not yet implemented";
-  */
-  
-	/**
-	 * Information messages
-	 */
-   
-  /* examples from PDF
-	*public static final String INF_ATT_IO_EXCEPT = "IOException on attribute";
-	*public static final String INF_FONT_REPORT_LIMIT = "Too many fonts to report; some fonts omitted.";
-	*public static final String INF_FONT_REPORT_LIMIT_SUB = "Total fonts = ";
-	*public static final String INF_HEADER_CAT_VER_MISMATCH_1 = "File header gives version as ";
-	*public static final String INF_HEADER_CAT_VER_MISMATCH_2 = ", but catalog dictionary gives version as ";
-	*public static final String INF_HINT_ARRY_CHK = "Checking hint array";
-	*public static final String INF_IMAGE_XOBJ = "Image XObject";
-	*public static final String INF_IMAGE_GET = "Getting image";
-	*public static final String INF_K_ELEM_IS_ARRY = "Type K element is an array";
-	*public static final String INF_K_ELEM_IS_DICT = "Type K element is dictionary";
-	*public static final String INF_LIN_PROF_CHK = "Checking Linearized Profile";
-	*public static final String INF_NAMES_DICT_CLASS_CAST = "ClassCastException on names dictionary";
-	*public static final String INF_NAMES_DICT_EXCEP = "Exception on names dictionary: ";
-	*public static final String INF_NO_CHILD_STRUCT_ELEM = "No children are structure elements";
-	*public static final String INF_NO_CHILD_OBJS = "No child objects, exiting";
-	*public static final String INF_REVISION_NUM_RETRIEVAL_EXCEP = "Exception getting revision number: ";
-	*public static final String INF_SUBTREE_BUILDING = "Building subtree";
-	*public static final String INF_XREF_TABLE_VERIFYING = "Verifying cross-reference table";
-	*/
-  
-	/**
-	 * Error messages
-	 */
-   
-  /* examples from PDF
-	*public static final String ERR_ANNOT_DICT_TYPES_MISSING = "Annotation dictionary missing required type (S) entry";
-	*public static final String ERR_ANNOT_INVALID = "Invalid Annotations";
-	*public static final String ERR_ANNOT_LIST_INVALID = "Invalid Annotation list";
-	*public static final String ERR_ANNOT_OBJ_NOT_DICT = "Annotation object is not a dictionary";
-	*public static final String ERR_ANNOT_PROP_INVALID = "Invalid Annotation property";
-	*public static final String ERR_ARRAY_CONTAINS_UMEXPECTED_TOKEN = "Unexpected token in array";
-	*public static final String ERR_ARRAY_IMPROPERLY_NESTED = "Improperly nested array delimiters";
-	*public static final String ERR_COMPRESSION_INVALID_OR_UNKNOWN = "Compression method is invalid or unknown to JHOVE";
-	*public static final String ERR_DATE_MALFORMEED = "Improperly formed date";
-	*public static final String ERR_DEST_OBJ_INVALID = "Invalid destination object";
-	*public static final String ERR_DESTS_DICT_INVALID = "Invalid Dests dictionary";
-	*public static final String ERR_DICT_CONTAINS_UNEXPECTED_TOKEN = "Unexpected token in dictionary";
-	*public static final String ERR_DICT_DELIMETERS_IMPROPERLY_NESTED = "Improperly nested dictionary delimiters";
-	*public static final String ERR_DICT_MALFORMED = "Malformed dictionary";
-	*public static final String ERR_DOC_CAT_DICT_MISSING = "No document catalog dictionary";
-	*public static final String ERR_DOC_CAT_VERSION_INVALID = "Invalid Version in document catalog";
-	*public static final String ERR_DOC_NODE_DICT_MISSING = "Missing dictionary in document node";
-	*public static final String ERR_DOC_STRUCT_ATT_INVALID = "Invalid attribute in document structure";
-	*public static final String ERR_DOC_STRUCT_ROOT_CONTAINS_INVALID_DATA = "Invalid data in document structure root";
-	*public static final String ERR_DOC_STRUCT_ROOT_INVALID = "Invalid document structure root";
-	*public static final String ERR_DOC_STRUCT_TREE_DATA_INVALID = "Invalid data in document structure tree";
-	*public static final String ERR_ENCRYPT_DICT_ALG_INVALID = "Invalid algorithm value in encryption dictionary";
-	*public static final String ERR_EOF_UNEXPECTED = "Unexpected EOF";
-	*public static final String ERR_FILE_SPEC_INVALID = "Invalid file specification";
-	*public static final String ERR_FILE_TRAILER_MISSING = "No file trailer";
-	*public static final String ERR_FILTER_MALFORMED = "Malformed filter";
-	*public static final String ERR_FIND_FONTS_ERR = "Unexpected error in findFonts";
-	*public static final String ERR_FONT_PROP_PARSING = "unexpected error in parsing font property";
-	*public static final String ERR_HEX_STRING_CHAR_INVALID = "Invalid character in hex string";
-	*public static final String ERR_INDIRECT_OBJ_REF_MALFORMED = "Malformed indirect object reference";
-	*public static final String ERR_INLINE_STRUCT_ELE_CONTAINS_BLOCK_ATTS = "Block-level attributes in inline structure element";
-	*public static final String ERR_LITERAL_UNTERMINATED = "Unterminated literal in PDF file";
-	*public static final String ERR_NAME_TREE_INVALID = "Invalid name tree";
-	*public static final String ERR_NAMES_DICT_INVALID = "Invalid Names dictionary";
-	*public static final String ERR_OBJ_DEF_INVALID = "Invalid object definition";
-	*public static final String ERR_OBJ_NOT_PARSABLE = "Cannot parse object";
-	*public static final String ERR_OBJ_STREAM_IMPROPER_NESTING = "Improper nesting of object streams";
-	*public static final String ERR_OBJ_STREAM_OFFSET_OUT_OF_BOUNDS = "Offset out of bounds in object stream";
-	*public static final String ERR_OBJ_STREAM_OR_NUMBER_INVALID = "Invalid object number or object stream";
-	*public static final String ERR_OUTLINE_DICT_ITEM_INVALID = "Invalid outline dictionary item";
-	*public static final String ERR_OUTLINE_DICT_MALFORMED = "Malformed outline dictionary";
-	*public static final String ERR_PAGE_DICT_DATA_INVALID = "Invalid dictionary data for page";
-	*public static final String ERR_PAGE_DICT_INVALID = "Invalid page dictionary";
-	*public static final String ERR_PAGE_DICT_OBJ_INVALID = "Invalid page dictionary object";
-	*public static final String ERR_PAGE_FONT_DICT_MISSING = "Expected dictionary for font entry in page resource";
-	*public static final String ERR_PAGE_LABEL_INFO_INVALID = "Invalid page label info";
-	*public static final String ERR_PAGE_LABEL_NODE_INVALID = "Invalid page label node";
-	*public static final String ERR_PAGE_LABEL_SEQ_INVALID = "Invalid page label sequence";
-	*public static final String ERR_PAGE_LABEL_STRUCT_PROBLEM = "Problem with page label structure";
-	*public static final String ERR_PAGE_LABELS_BAD = "Bad page labels";
-	*public static final String ERR_PAGE_NUMBER_DICT_ELEMENT_MISSING = "Missing expected element in page number dictionary";
-	*public static final String ERR_PAGE_NUMBER_TREE_DATE_INVALID = "Invalid date in page number tree";
-	*public static final String ERR_PAGE_TREE_ARTBOX_MALFORMED = "Malformed ArtBox in page tree";
-	*public static final String ERR_PAGE_TREE_BLEEDBOX_MALFORMED = "Malformed BleedBox in page tree";
-	*public static final String ERR_PAGE_TREE_DEPTH_EXCEEDED = "Excessive depth or infinite recursion in page tree structure";
-	*public static final String ERR_PAGE_TREE_IMPROPERLY_CONSTRUCTED = "Improperly constructed page tree";
-	*public static final String ERR_PAGE_TREE_MEDIA_BOX_MALFORMED = "Malformed MediaBox in page tree";
-	*public static final String ERR_PAGE_TREE_MISSING = "Document page tree not found";
-	*public static final String ERR_PAGE_TREE_NODE_INVALID = "Invalid page tree node";
-	*public static final String ERR_PAGE_TREE_TRIMBOX_MALFORMED = "Malformed TrimBox in page tree";
-	*public static final String ERR_PDF_HEADER_MISSING = "No PDF header";
-	*public static final String ERR_PDF_TRAILER_MISSING = "No PDF trailer";
-	*public static final String ERR_PREV_OFFSET_TRAILER_DICT_INVALID = "Invalid Prev offset in trailer dictionary";
-	*public static final String ERR_RESOURCES_ENTRY_INVALID = "Invalid Resources Entry in document";
-	*public static final String ERR_RESOURCES_FONT_ENTRY_INVALID = "Invalid Font entry in Resources";
-	*public static final String ERR_SIZE_ENTRY_TRAILER_DICT_INVALID = "Invalid Size entry in trailer dictionary";
-	*public static final String ERR_SIZE_ENTRY_TRAILER_DICT_MISSING = "Size entry missing in trailer dictionary";
-	*public static final String ERR_STARTXREF_MISSING = "Missing startxref keyword or value";
-	*public static final String ERR_STREAM_CONTAINS_MALFORMED_ASCII_NUMBER = "Malformed ASCII number in stream";
-	*public static final String ERR_STREAM_EMBEDDED_IN_OBJ_STREAM = "Streams may not be embedded in object streams";
-	*public static final String ERR_STRUCT_ATT_INVALID = "Invalid structure attribute";
-	*public static final String ERR_STRUCT_ATT_REF_INVALID = "Invalid structure attribute reference";
-	*public static final String ERR_STRUCT_ATT_TYPE_ILLEGAL = "Structure attribute has illegal type";
-	*public static final String ERR_STRUCT_TREE_ELEMENT_UNKNOWN = "Unknown element in structure tree";
-	*public static final String ERR_STRUCT_TYPE_NAME_NON_STANDARD = "Non-standard structure type name";
-	*public static final String ERR_TOKEN_LEXICAL = "Lexical error";
-	*public static final String ERR_TRAILER_DICT_INFO_KEY_NOT_DIRECT = "Trailer dictionary Info key is not an indirect reference";
-	*public static final String ERR_TRAILER_DICT_ROOT_MISSING = "Root entry missing in trailer dictionary";
-	*public static final String ERR_TRAILER_ID_INVALID = "Invalid ID in trailer";
-	*public static final String ERR_UNEXPECTED_EXCEPTION = "Unexpected exception ";
-	*public static final String ERR_VECTOR_OBJ_COUNT_NOT_EVEN = MessageConstants.ERR_DICT_MALFORMED
-	*		+ ": Vector must contain an even number of objects, but has ";
-	*public static final String ERR_XMP_INVALID = "Invalid or ill-formed XMP metadata";
-	*public static final String ERR_XREF_STRM_DICT_ROOT_MISSING = "Root entry missing in cross-ref stream dictionary";
-	*public static final String ERR_XREF_STRM_OBJ_NUM_INVALID = "Invalid object number in cross-reference stream";
-	*public static final String ERR_XREF_STRM_MALFORMED = "Malformed cross reference stream";
-	*public static final String ERR_XREF_TABLE_INVALID = "Invalid cross-reference table";
-	*public static final String ERR_XREF_TABLE_MALFORMED = "Malformed cross-reference table";
-	*public static final String ERR_XREF_TABLE_OPERATOR_ILLEGAL = "Illegal operator in xref table";
-	*public static final String ERR_XREF_TABLES_BROKEN = "Cross reference tables are broken";
-  */
-}
+
+/**
+ * Information messages
+ */
+public static final String TIFF_PREM_EOF_OFFSET = offset
+public static final String TIFF_PREM_EOF_STRING = "Premature EOF" + TIFF_PREM_EOF_OFFSET
+public static final String ERR_TAG_OUT_OF_SEQ_TAG = tag // not sure how to pass the original var to this var... its defined IFD.java#L276
+public static final String ERR_TAG_OUT_OF_SEQ_OFFSET = offset
+public static final String ERR_TAG_OUT_OF_SEQ_STRING = "Tag " + ERR_TAG_OUT_OF_SEQ_TAG + " out of sequence " + ERR_TAG_OUT_OF_SEQ_OFFSET
+public static final String ERR_UNK_DATA_TYPE_TYPE = type
+public static final String ERR_UNK_DATA_TYPE_TAG = tag
+public static final String ERR_UNK_DATA_TYPE_OFFSET = offset
+public static final String ERR_UNK_DATA_TYPE_STRING = "Unknown data type Type = " + ERR_UNK_DATA_TYPE_TYPE + ", Tag = "+ ERR_UNK_DATA_TYPE_TAG + ", " + ERR_UNK_DATA_TYPE_OFFSET 
+public static final String INF_VAL_NOT_WORD_ALI_OFFSET = offset
+public static final String INF_VAL_NOT_WORD_ALI_STRING = "Value offset not word aligned: " + INF_VAL_NOT_WORD_ALI_OFFSET
+public static final String IO_READ_ERR_OFFSET = offset
+public static final String IO_READ_ERR_STRING = "Read error" + IO_READ_ERR_OFFSET
+public static final String TIFF_TYPE_MIS_TAG = tag
+public static final String TIFF_TYPE_MIS_MINCOUNT = minCount
+public static final String TIFF_TYPE_MIS_COUNT = count
+public static final String TIFF_TYPE_MIS_STRING = "Count mismatch for tag " + TIFF_TYPE_MIS_TAG + "; expecting " + TIFF_TYPE_MIS_MINCOUNT +", saw " + TIFF_TYPE_MIS_COUNT
+public static final String TIFF_TYPE_MIS_SINGLE_TAG = tag
+public static final String TIFF_TYPE_MIS_SINGLE_EXP = expected
+public static final String TIFF_TYPE_MIS_SINGLE_TYPE = type
+public static final String TIFF_TYPE_MIS_SINGLE_STRING = "Type mismatch for tag " + TIFF_TYPE_MIS_SINGLE_TAG + "; expecting " + TIFF_TYPE_MIS_SINGLE_EXP + ", saw " + TIFF_TYPE_MIS_SINGLE_TYPE 
+public static final String TIFF_TYPE_MIS_DOUBLE_TAG = tag
+public static final String TIFF_TYPE_MIS_DOUBLE_TYPE1 = type1
+public static final String TIFF_TYPE_MIS_DOUBLE_TYPE2 = type2
+public static final String TIFF_TYPE_MIS_DOUBLE_TYPE = type
+public static final String TIFF_TYPE_MIS_DOUBLE_STRING = "Type mismatch for tag " + TIFF_TYPE_MIS_DOUBLE_TAG + "; expecting " + TIFF_TYPE_MIS_DOUBLE_TYPE1 + "or ," + TIFF_TYPE_MIS_DOUBLE_TYPE2 + ", saw " + TIFF_TYPE_MIS_DOUBLE_TYPE
+public static final String TIFF_INV_GEO_KEY_DICT_TAG = "Invalid GeoKeyDirectory tag"
+public static final String TIFF_GEO_KEY_OUT_SEQ_KEY = key
+public static final String TIFF_GEO_KEY_OUT_SEQ_STRING = "GeoKey " + TIFF_GEO_KEY_OUT_SEQ_KEY + "out of sequence"
+public static final String INF_UNDOC_TAG_SHADOW = "Undocumented TIFF tag ShadowScale (50739)"
+public static final String INF_UNK_IFD_TAG_TAG = tag
+public static final String INF_UNK_IFD_TAG_VALUE = value
+public static final String INF_UNK_IFD_TAG_STRING = "Unknown TIFF IFD tag: " + INF_UNK_IFD_TAG_TAG + INF_UNK_IFD_TAG_VALUE 
+public static final String IO_READ_ERR_TAG_TAG = tag
+public static final String IO_READ_ERR_TAG_VALUE = value
+public static final String IO_READ_ERR_TAG_STRING = "Read error for tag " + IO_READ_ERR_TAG_TAG  + IO_READ_ERR_TAG_VALUE 
+public static final String TIFF_INV_XMP = "Invalid or ill-formed XMP metadata"
+public static final String ERR_UNK_EXIF_INTER_IFD_TAG = tag
+public static final String ERR_UNK_EXIF_INTER_IFD_VALUE = value
+public static final String ERR_UNK_EXIF_INTER_IFD_STRING = "Unknown Exif Interoperability IFD tag Tag = " + ERR_UNK_EXIF_INTER_IFD_TAG + ERR_UNK_EXIF_INTER_IFD_VALUE //might contain newlines... :S
+public static final String ERR_UNK_GPS_IFD_TAG = tag
+public static final String ERR_UNK_GPS_IFD_VALUE = value
+public static final String ERR_UNK_GPS_IFD_STRING = "Unknown GPSInfo IFD tag Tag = " + ERR_UNK_GPS_IFD_TAG + ERR_UNK_GPS_IFD_VALUE//might contain newlines... :S
+public static final String TIFF_NO_HEAD_CH1 = char0
+public static final String TIFF_NO_HEAD_CH2 = char1
+public static final String TIFF_NO_HEAD_STRING = "No TIFF header:" + TIFF_NO_HEAD_CH1 + TIFF_NO_HEAD_CH2
+public static final String TIFF_NO_MAGIC_NUM_MAGIC = magic
+public static final String TIFF_NO_MAGIC_NUM_STRING = "No TIFF magic number: " + TIFF_NO_MAGIC_NUM_MAGIC
+public static final String INF_STR_AND_TILE = "Strips and tiles defined together"
+public static final String INF_NO_STR_OR_TILE = "Neither strips nor tiles defined"
+public static final String INF_NO_STR_OFF = "StripOffsets not defined"
+public static final String INF_STR_COUNT_NOT_DEF = "StripByteCounts not defined"
+public static final String INF_INV_STR_OFF = "Invalid strip offset"
+public static final String INF_INCON_STR_OFF_LEN = len
+public static final String INF_INCON_STR_OFF_COUNT = stripByteCounts.length
+public static final String INF_INCON_STR_OFF_STRING = "StripOffsets inconsistent with StripByteCounts: " + INF_INCON_STR_OFF_LEN + "!= " + INF_INCON_STR_OFF_COUNT
+public static final String INF_NO_TILE_WID = "TileWidth not defined"
+public static final String INF_TIL_LEN_NO_DEF = "TileLength not defined"
+public static final String INF_TIL_OFF_NO_DEF = "TileOffsets not defined"
+public static final String INF_TIL_COUNT_NO_DEF = "TileByteCounts not defined"
+public static final String INF_TIL_WID_NOT_DIV_16_TILW = tileWidth
+public static final String INF_TIL_WID_NOT_DIV_16_STRING = "TileWidth not a multiple of 16: " + INF_TIL_WID_NOT_DIV_16_TILW
+public static final String INF_TIL_LEN_NOT_DIV_16_TILL = tileLength
+public static final String INF_TIL_LEN_NOT_DIV_16_STRING = "TileWidth not a multiple of 16: " + INF_TIL_LEN_NOT_DIV_16_TILL
+public static final String INF_INS_VAL_TIL_OFF_TIL_OFF = tileOffsets.length
+public static final String INF_INS_VAL_TIL_OFF_SPP = spp_tpi
+public static final String INF_INS_VAL_TIL_OFF_STRING = "Insufficient values for TileOffsets: " + INF_INS_VAL_TIL_OFF_TIL_OFF + " < " + INF_INS_VAL_TIL_OFF_SPP
+public static final String INF_INS_VAL_TIL_COUNT_TIL_OFF = tileByteCounts.length
+public static final String INF_INS_VAL_TIL_COUNT_SPP = spp_tpi
+public static final String INF_INS_VAL_TIL_COUNT_STRING = "Insufficient values for TileByteCountts: " + INF_INS_VAL_TIL_COUNT_TIL_OFF + " < " + INF_INS_VAL_TIL_COUNT_SPP
+public static final String INF_INS_VAL_TIL_OFF_TIL_OFF = tileOffsets.length
+public static final String INF_INS_VAL_TIL_OFF_TPI = tilesPerImage
+public static final String INF_INS_VAL_TIL_OFF_TPI_STRING = "Insufficient values for TileOffsets: " + INF_INS_VAL_TIL_OFF_TIL_OFF + " < " + INF_INS_VAL_TIL_OFF_TPI
+public static final String INF_INS_VAL_TIL_COUNT_TIL_OFF = tileByteCounts.length
+public static final String INF_INS_VAL_TIL_COUNT_TPI = tilesPerImage
+public static final String INF_INS_VAL_TIL_COUNT_TPI_STRING = "Insufficient values for TileByteCountts: " + INF_INS_VAL_TIL_COUNT_TIL_OFF + " < " + INF_INS_VAL_TIL_COUNT_TPI
+public static final String INF_PHO_AND_NEW_SUB_TYPE_TRANS_MASK = "PhotometricInterpretation and NewSubfileType must agree on transparency mask"
+public static final String INF_TRANS_MASK_BPS = "For transparency mask BitsPerSample must be 1"
+public static final String INF_PHO_SPP1_SSP = samplesPerPixel
+public static final String INF_PHO_SPP1_STRING = "For PhotometricInterpretation, SamplesPerPixel must be >= 1, equals " + INF_PHO_SPP1_SSP 
+public static final String INF_PHO_SPP3_SSP = samplesPerPixel
+public static final String INF_PHO_SPP3_STRING = "For PhotometricInterpretation, SamplesPerPixel must be >= 1, equals " + INF_PHO_SPP3_SSP
+public static final String INF_COL_MAP_NOT_DEF = "ColorMap not defined for palette-color"
+public static final String INF_PAL_COL_SPP_SPP = samplesPerPixel
+public static final String INF_PAL_COL_SPP_STRING = "For palette-color SamplesPerPixel must be 1: " + <>
+public static final String INF_INS_COL_MAP_VALS_BIT_VAL = colormapBitCodeValue.length
+public static final String INF_INS_COL_MAP_VALS_LEN = len
+public static final String INF_INS_COL_MAP_VALS_STRING = "Insufficient ColorMap values for palette-color: " + INF_INS_COL_MAP_VALS_BIT_VAL + " < " + INF_INS_COL_MAP_VALS_LEN
+public static final String INF_CELL_LEN_THRESH = "CellLength tag not permitted when Threshholding not 2"
+public static final String INF_DOT_RANGE_BPS = "DotRange out of range specified by BitsPerSample"
+public static final String INF_NO_JPEGPROC = "JPEGProc not defined for JPEG compression"
+public static final String INF_SPP_EXTRA_SAMPLES = samplesPerPixel
+public static final String INF_SPP_EXTRA_LEN = len
+public static final String INF_SPP_EXTRA_STRING = "SamplesPerPixel-ExtraSamples not 1 or 3:" + INF_SPP_EXTRA_SAMPLES + " - " + INF_SPP_EXTRA_LEN
+public static final String INF_BPS_NOT_8_OR_16 = "BitsPerSample not 8 or 16 for CIE L*a*b*"
+public static final String INF_XCLIP_PATH_NO_DEF = "XClipPathUnits not defined for ClipPath"
+public static final String INF_INV_DATE_TIME_LEN_DATE = dateTime
+public static final String INF_INV_DATE_TIME_LEN_STRING = "Invalid DateTime length: " + INF_INV_DATE_TIME_LEN_DATE
+public static final String INF_INV_DATE_TIME_SEP_DATE = dateTime
+public static final String INF_INV_DATE_TIME_SEP_STRING = "Invalid DateTime length: " + INF_INV_DATE_TIME_SEP_DATE
+public static final String INF_INV_DATE_TIME_DIG_DATE = dateTime
+public static final String INF_INV_DATE_TIME_DIG_STRING = "Invalid DateTime digit: " + INF_INV_DATE_TIME_SEP_DATE
+public static final String TIFF_NO_IFD_OFFSET = offset
+public static final String TIFF_NO_IFD_STRING = "No IFD in file " + TIFF_NO_IFD_OFFSET 
+public static final String TIFF_IFD_NOT_WORD_ALI_NEXT = next
+public static final String TIFF_IFD_NOT_WORD_ALI_STRING = "IFD offset not word-aligned:  " + TIFF_IFD_NOT_WORD_ALI_NEXT
+public static final String TIFF_INF_LOOP = "More than 50 IFDs in chain, probably an infinite loop"
+public static final String INF_IM_WID_NO_DEF = "ImageWidth not defined"
+public static final String INF_COMP_SCH_6_DEPR = "TIFF compression scheme 6 is deprecated"
+public static final String INF_PHO_NO_DEF = "PhotometricInterpretation not defined"
+public static final String INF_IM_LEN_NO_DEF = "ImageLength not defined"
+public static final String INF_UNDOC_TAG = "Undocumented TIFF tag"
