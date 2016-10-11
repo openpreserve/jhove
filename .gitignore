@@ -5,6 +5,7 @@
 
 # Ignore IntelliJ files
 .idea
+*.iml
 **/*.iml
 
 # Ignore Maven artefacts
