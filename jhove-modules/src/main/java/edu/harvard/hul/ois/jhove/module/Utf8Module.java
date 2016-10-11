@@ -22,6 +22,7 @@ package edu.harvard.hul.ois.jhove.module;
 import edu.harvard.hul.ois.jhove.*;
 
 import java.io.*;
+import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -252,8 +253,7 @@ public class Utf8Module extends ModuleBase {
                     nBytes = 4;
                 } else if ((0x80 <= b[0] && b[0] <= 0xbf)
                         || (0xf8 <= b[0] && b[0] <= 0xff)) {
-                    ErrorMessage error = new ErrorMessage(
-                            "Not valid first byte of UTF-8 " + "encoding",
+                    ErrorMessage error = new ErrorMessage(Utf8MessageConstants.ERR_INVALID_FIRST_BYTE_ENCODING,
                             "Value = " + ((char) b[0]) + " (0x"
                                     + Integer.toHexString(b[0]) + ")", _nByte);
                     info.setMessage(error);
@@ -271,8 +271,8 @@ public class Utf8Module extends ModuleBase {
                     }
 
                     if (0x80 > b[i] || b[i] > 0xbf) {
-                        ErrorMessage error = new ErrorMessage("Not valid "
-                                + POSITION[i - 1] + " byte of UTF-8 endcoding",
+                        ErrorMessage error = new ErrorMessage(
+                                MessageFormat.format(Utf8MessageConstants.ERR_INVALID_BYTE_ENCODING, POSITION[i - 1]),
                                 "Value = " + ((char) b[i]) + " (0x"
                                         + Integer.toHexString(b[i]) + ")",
                                 _nByte);
@@ -342,7 +342,7 @@ public class Utf8Module extends ModuleBase {
          * Only non-zero-length files are well-formed UTF-8.
          */
         if (_nByte == 0) {
-            info.setMessage(new ErrorMessage("Zero-length file"));
+            info.setMessage(new ErrorMessage(Utf8MessageConstants.ERR_ZERO_LENGTH_FILE));
             info.setWellFormed(RepInfo.FALSE);
             return 0;
         }
@@ -530,8 +530,7 @@ public class Utf8Module extends ModuleBase {
             // Check for UTF-8 byte order mark in 1st 3 bytes
             if (initialBytes[0] == 0xEF && initialBytes[1] == 0xBB
                     && initialBytes[2] == 0xBF) {
-                InfoMessage im = new InfoMessage(
-                        "UTF-8 Byte Order Mark signature is present", 0);
+                InfoMessage im = new InfoMessage(Utf8MessageConstants.INF_BOM_MARK_PRESENT, 0);
                 info.setMessage(im);
                 // If we've found a non-character header, clear
                 // all usage blocks
@@ -541,17 +540,15 @@ public class Utf8Module extends ModuleBase {
 
             if (initialBytes[0] == 0xFF && initialBytes[1] == 0xFE) {
                 if (initialBytes[2] == 0 && initialBytes[3] == 0) {
-                    msg = new ErrorMessage(
-                            "UCS-4 little-endian encoding, not UTF-8");
+                    msg = new ErrorMessage(Utf8MessageConstants.ERR_UCS4_NOT_UTF8);
                 } else {
-                    msg = new ErrorMessage(
-                            "UTF-16 little-endian encoding, not UTF-8");
+                    msg = new ErrorMessage(Utf8MessageConstants.ERR_UTF16LE_NOT_UTF8);
                 }
                 info.setMessage(msg);
                 info.setWellFormed(false);
                 return false;
             } else if (initialBytes[0] == 0xFE && initialBytes[1] == 0xFF) {
-                msg = new ErrorMessage("UTF-16 big-endian encoding, not UTF-8");
+                msg = new ErrorMessage(Utf8MessageConstants.ERR_UTF16BE_NOT_UTF8);
                 info.setMessage(msg);
                 info.setWellFormed(false);
                 return false;
