@@ -22,7 +22,6 @@ package edu.harvard.hul.ois.jhove.module;
 import edu.harvard.hul.ois.jhove.*;
 
 import java.io.*;
-import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -51,7 +50,6 @@ public class Utf8Module extends ModuleBase {
             + "the President and Fellows of Harvard College. "
             + "Released under the GNU Lesser General Public License.";
 
-    private static final String[] POSITION = { "second", "third", "fourth" };
     private static final int CR = 0x0d;
     private static final int LF = 0x0a;
 
@@ -271,11 +269,14 @@ public class Utf8Module extends ModuleBase {
                     }
 
                     if (0x80 > b[i] || b[i] > 0xbf) {
-                        ErrorMessage error = new ErrorMessage(
-                                MessageFormat.format(Utf8MessageConstants.ERR_INVALID_BYTE_ENCODING, POSITION[i - 1]),
-                                "Value = " + ((char) b[i]) + " (0x"
-                                        + Integer.toHexString(b[i]) + ")",
-                                _nByte);
+                        String subMessage = "Value = " + ((char) b[i]) + " (0x" + Integer.toHexString(b[i]) + ")";
+                        String errMessage = "";
+                        switch (i) { // max(nBytes) is 4
+                            case 1: errMessage = Utf8MessageConstants.ERR_INVALID_SECOND_BYTE_ENCODING; break;
+                            case 2: errMessage = Utf8MessageConstants.ERR_INVALID_THIRD_BYTE_ENCODING; break;
+                            case 3: errMessage = Utf8MessageConstants.ERR_INVALID_FOURTH_BYTE_ENCODING; break;
+                        }
+                        ErrorMessage error = new ErrorMessage(errMessage, subMessage , _nByte);
                         info.setMessage(error);
                         info.setWellFormed(false);
                         return 0;

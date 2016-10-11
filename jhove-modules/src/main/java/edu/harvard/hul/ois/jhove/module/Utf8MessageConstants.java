@@ -35,7 +35,9 @@ public enum Utf8MessageConstants {
     public static final String INF_BOM_MARK_PRESENT = "UTF-8 Byte Order Mark signature is present";
 
     public static final String ERR_INVALID_FIRST_BYTE_ENCODING = "Not valid first byte of UTF-8 encoding";
-    public static final String ERR_INVALID_BYTE_ENCODING = "Not valid {0} byte of UTF-8 endcoding";
+    public static final String ERR_INVALID_SECOND_BYTE_ENCODING = "Not valid second byte of UTF-8 encoding";
+    public static final String ERR_INVALID_THIRD_BYTE_ENCODING = "Not valid third byte of UTF-8 encoding";
+    public static final String ERR_INVALID_FOURTH_BYTE_ENCODING = "Not valid fourth byte of UTF-8 encoding";
     public static final String ERR_ZERO_LENGTH_FILE = "Zero-length file";
     public static final String ERR_UCS4_NOT_UTF8 = "UCS-4 little-endian encoding, not UTF-8";
     public static final String ERR_UTF16LE_NOT_UTF8 = "UTF-16 little-endian encoding, not UTF-8";
