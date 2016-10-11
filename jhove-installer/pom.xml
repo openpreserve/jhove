@@ -1,14 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
     <version>1.15.0-SNAPSHOT</version>
   </parent>
+
   <artifactId>jhove-installer</artifactId>
   <name>JHOVE installer</name>
-  <description>Maven built izpack installer for JHOVE.</description>
+  <description>Maven-built IzPack installer for JHOVE.</description>
 
   <properties>
     <installer.output.filename>jhove-xplt-installer-${project.version}.jar</installer.output.filename>
@@ -26,7 +28,7 @@
         <executions>
           <execution>
             <id>izpack-staging</id>
-            <!-- here the phase you need -->
+            <!-- Here the phase you need -->
             <phase>validate</phase>
             <goals>
               <goal>copy-resources</goal>
@@ -34,8 +36,11 @@
             <configuration>
               <outputDirectory>${izpack.staging}</outputDirectory>
 
-              <!-- recursive copy of all resource under src/main/izpack.
-                this is the stuff to install as well as install.xml and panel data and such -->
+              <!--
+              Recursive copy of all resource under src/main/izpack.
+              This is the stuff to install, as well as install.xml
+              and panel data and such.
+              -->
               <resources>
                 <resource>
                   <directory>src/main/izpack</directory>
@@ -56,7 +61,7 @@
           </execution>
           <execution>
             <id>jhove-resources</id>
-            <!-- here the phase you need -->
+            <!-- Here the phase you need -->
             <phase>validate</phase>
             <goals>
               <goal>copy-resources</goal>
@@ -64,8 +69,11 @@
             <configuration>
               <outputDirectory>${izpack.staging}</outputDirectory>
 
-              <!-- recursive copy of all resource under src/main/izpack.
-                this is the stuff to install as well as install.xml and panel data and such -->
+              <!--
+              Recursive copy of all resource under src/main/izpack.
+              This is the stuff to install, as well as install.xml
+              and panel data and such.
+              -->
               <resources>
                 <resource>
                   <directory>src/main/</directory>
@@ -83,10 +91,8 @@
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
-
           <execution>
-            <!-- copy izpack custom (custom panels, etc.) jars to izpack
-              staging custom -->
+            <!-- Copy IzPack custom JARS (custom panels, etc.) to IzPack staging custom -->
             <id>copy-izpack-dependencies</id>
             <phase>prepare-package</phase>
             <goals>
@@ -104,9 +110,11 @@
         </executions>
       </plugin>
 
-      <!-- We need to tell the izpack-maven-plugin what to use as the base
-        directory (this is our staging area), and also tell it the install file to
-        use: -->
+      <!--
+      We need to tell the izpack-maven-plugin what to use as the base
+      directory (this is our staging area), and also tell it the install
+      file to use:
+      -->
       <plugin>
         <groupId>org.codehaus.izpack</groupId>
         <artifactId>izpack-maven-plugin</artifactId>
@@ -121,16 +129,18 @@
               <goal>izpack</goal>
             </goals>
             <configuration>
-              <!-- base for relative paths in izpack descriptor -->
+              <!-- Base for relative paths in IzPack descriptor -->
               <baseDir>${izpack.staging}</baseDir>
               <installFile>${izpack.staging}/install.xml</installFile>
               <output>${project.build.directory}/${installer.output.filename}</output>
             </configuration>
           </execution>
         </executions>
-        <!-- must have a dependency here on any code used in the installer,
-          otherwise the classloader will not find it. So in this case we need our panels
-          and then the package that contains the base classes for the panels -->
+        <!--
+        Must have a dependency here on any code used in the installer,
+        otherwise the classloader will not find it. So in this case we need our panels
+        and then the package that contains the base classes for the panels.
+        -->
         <dependencies>
           <dependency>
             <groupId>org.codehaus.izpack</groupId>
