@@ -122,7 +122,7 @@ public static final String INF_PHO_SPP3_SSP = samplesPerPixel
 public static final String INF_PHO_SPP3_STRING = "For PhotometricInterpretation, SamplesPerPixel must be >= 1, equals " + INF_PHO_SPP3_SSP
 public static final String INF_COL_MAP_NOT_DEF = "ColorMap not defined for palette-color"
 public static final String INF_PAL_COL_SPP_SPP = samplesPerPixel
-public static final String INF_PAL_COL_SPP_STRING = "For palette-color SamplesPerPixel must be 1: " + <>
+public static final String INF_PAL_COL_SPP_STRING = "For palette-color SamplesPerPixel must be 1: " + INF_PAL_COL_SPP_SPP
 public static final String INF_INS_COL_MAP_VALS_BIT_VAL = colormapBitCodeValue.length
 public static final String INF_INS_COL_MAP_VALS_LEN = len
 public static final String INF_INS_COL_MAP_VALS_STRING = "Insufficient ColorMap values for palette-color: " + INF_INS_COL_MAP_VALS_BIT_VAL + " < " + INF_INS_COL_MAP_VALS_LEN
