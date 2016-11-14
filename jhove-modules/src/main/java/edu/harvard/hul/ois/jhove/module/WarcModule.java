@@ -231,7 +231,7 @@ public class WarcModule extends ModuleBase {
      * @param reader WARC reader used to parse records
      * @throws EOFException if EOF occurs prematurely
      * @throws IOException if an IO error occurs while processing
-     * @throws JHOVE2Exception if a serious problem needs to be reported
+     * @throws JhoveException if a serious problem needs to be reported
      */
     protected void parseRecords(WarcReader reader) throws EOFException, IOException, JhoveException {
         if (reader != null) {
@@ -241,7 +241,7 @@ public class WarcModule extends ModuleBase {
                 reader.diagnostics.addAll(record.diagnostics);
             }
         } else {
-            throw new JhoveException("WarcReader is has not been properly instantiated.");
+            throw new JhoveException("WarcReader has not been properly instantiated.");
         }
     }
 
@@ -273,7 +273,7 @@ public class WarcModule extends ModuleBase {
 
     /**
      * Report the results of the characterization.
-     * @param reader The warc reader, which has read the warc-file. 
+     * @param reader The WARC reader, which has read the WARC-file.
      * @param repInfo The representation info, where to report the results.
      * @throws JhoveException
      * @throws IOException
@@ -300,7 +300,7 @@ public class WarcModule extends ModuleBase {
                 repInfo.setVersion(e.getKey());
             }
 
-            _features.add(e.getValue() + " warc records of version " + e.getKey());
+            _features.add(e.getValue() + " WARC records of version " + e.getKey());
         }
 
         repInfo.setProperty(new Property("Records", PropertyType.PROPERTY, PropertyArity.LIST, recordProperties));

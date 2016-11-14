@@ -22,7 +22,7 @@ public abstract class Token
     /**
      *  Returns <code>true</code> if the token is one which the Parser
      *  treats as a unitary object.  Everything but arrays and dictionaries
-     *  is considered a "simple" token for our purposes. 
+     *  are considered "simple" tokens for our purposes. 
      */
     public boolean isSimpleToken ()
     {

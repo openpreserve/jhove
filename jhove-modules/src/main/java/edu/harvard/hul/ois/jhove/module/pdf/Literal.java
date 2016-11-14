@@ -25,7 +25,7 @@ public class Literal
     /** Used for accumulating a hex string */
     private StringBuffer rawHex;
     
-    /** Used for accomodating the literal */
+    /** Used for accommodating the literal */
     private StringBuffer buffer;
 
     /** Indicates if a character for the first half of a hex byte
