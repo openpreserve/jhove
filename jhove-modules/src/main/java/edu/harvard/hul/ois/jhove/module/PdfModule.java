@@ -3866,7 +3866,7 @@ public class PdfModule
             PdfIndirectObj ob = (PdfIndirectObj) dict.get ("Prev");
             ob = (PdfIndirectObj) dict.get ("Next");
             ob = (PdfIndirectObj) dict.get ("First");
-            ob = (PdfIndirectObj) dict.get ("First");
+            ob = (PdfIndirectObj) dict.get ("Last");
             
             // Check if there are Actions in the outline.  This saves going
             // through the outlines all over again if a Profile checker
