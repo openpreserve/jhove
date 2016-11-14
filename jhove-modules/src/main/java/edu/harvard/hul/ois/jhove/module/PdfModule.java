@@ -630,9 +630,9 @@ public class PdfModule
         if (!_parser.getPDFACompliant ()) {
             _pdfACompliant = false;
         }
-        ListIterator<PdfProfile> pter = _profile.listIterator ();
         if (info.getWellFormed() == RepInfo.TRUE) {
             // Well-formedness is necessary to satisfy any profile.
+            ListIterator<PdfProfile> pter = _profile.listIterator ();
             while (pter.hasNext ()) {
                 PdfProfile prof = pter.next ();
                 if (prof.satisfiesProfile (_raf, _parser)) {
@@ -1070,7 +1070,7 @@ public class PdfModule
         _prevxref = -1;
         obj = _trailerDict.get ("Prev");
         if (obj != null) {
-            if (obj != null && obj instanceof PdfSimpleObject) {
+            if (obj instanceof PdfSimpleObject) {
                 token = ((PdfSimpleObject) obj ).getToken ();
                 if (token instanceof Numeric)
                     _prevxref = ((Numeric) token).getLongValue ();
@@ -1090,7 +1090,7 @@ public class PdfModule
         obj = _trailerDict.get ("Size");
         if (obj != null) {
             _numObjects = -1;
-            if (obj != null && obj instanceof PdfSimpleObject) {
+            if (obj instanceof PdfSimpleObject) {
                 token = ((PdfSimpleObject) obj ).getToken ();
                 if (token instanceof Numeric)
                     _numObjects = ((Numeric) token).getIntegerValue ();

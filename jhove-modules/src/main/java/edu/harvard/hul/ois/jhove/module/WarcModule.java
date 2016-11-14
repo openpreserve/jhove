@@ -233,7 +233,7 @@ public class WarcModule extends ModuleBase {
      * @throws IOException if an IO error occurs while processing
      * @throws JhoveException if a serious problem needs to be reported
      */
-    protected void parseRecords(WarcReader reader) throws EOFException, IOException, JhoveException {
+    protected void parseRecords(WarcReader reader) throws IOException, JhoveException {
         if (reader != null) {
             WarcRecord record;
             while ((record = reader.getNextRecord()) != null) {
@@ -253,7 +253,7 @@ public class WarcModule extends ModuleBase {
      * @throws IOException if an IO error occurs while processing
      * @throws JhoveException if a serious problem needs to be reported
      */
-    protected void processRecord(WarcRecord record) throws EOFException, IOException, JhoveException {
+    protected void processRecord(WarcRecord record) throws IOException, JhoveException {
         if (record.header.bValidVersionFormat) {
             Integer count = versions.get(record.header.versionStr);
             if (count == null) {

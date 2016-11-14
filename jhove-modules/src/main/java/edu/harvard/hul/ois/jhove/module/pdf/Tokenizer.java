@@ -270,7 +270,7 @@ public abstract class Tokenizer
                     else if (_ch == PLUS || _ch == MINUS) {
                         _state = State.NUMERIC;
                         intValue = 0;
-                        negative = ((_ch == MINUS) ? true : false);
+                        negative = (_ch == MINUS);
                         token = new Numeric ();
                     }
                     else if (_ch == PERIOD) {

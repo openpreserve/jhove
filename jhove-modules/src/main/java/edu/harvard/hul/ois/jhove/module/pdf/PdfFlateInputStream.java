@@ -289,7 +289,7 @@ public class PdfFlateInputStream extends FilterInputStream {
         if (iisEof) {
             return -1;
         }
-        return (int) (iisBuf[iisBufOff++] & 0XFF);
+        return iisBuf[iisBufOff++] & 0xFF;
     }
     
     /** Get a bufferload of bytes. */
