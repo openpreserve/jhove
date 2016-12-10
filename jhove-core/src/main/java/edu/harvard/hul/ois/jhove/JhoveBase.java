@@ -305,11 +305,6 @@ public class JhoveBase {
                 }
             }
         }
-        _logger.severe("Testing SEVERE level");
-        _logger.warning("Testing WARN level");
-        _logger.info("Testing INFO level");
-        _logger.fine("Testing FINE level");
-        _logger.finest("Testing FINEST level");
 
         _bufferSize = configHandler.getBufferSize();
         if (_bufferSize < 0) {

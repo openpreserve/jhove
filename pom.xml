@@ -10,7 +10,7 @@
 
   <groupId>org.openpreservation.jhove</groupId>
   <artifactId>jhove</artifactId>
-  <version>1.12.0p-SNAPSHOT</version>
+  <version>1.15.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
@@ -64,7 +64,7 @@
     <repository>
       <id>OPF Artefactory</id>
       <name>OPF Artefactory-releases</name>
-      <url>http://artifactory.opf-labs.org/artifactory/opf-dev-local</url>
+      <url>http://artifactory.openpreservation.org/artifactory/opf-dev-local/</url>
     </repository>
   </distributionManagement>
 
@@ -75,7 +75,7 @@
       </snapshots>
       <id>opf-dev</id>
       <name>OPF development</name>
-      <url>http://artifactory.opf-labs.org/artifactory/opf-dev</url>
+      <url>http://artifactory.openpreservation.org/artifactory/opf-dev/</url>
     </repository>
   </repositories>
 
@@ -87,6 +87,7 @@
     <mvn.jar.version>2.6</mvn.jar.version>
     <mvn.javadoc.version>2.10</mvn.javadoc.version>
     <mvn.source.version>2.4</mvn.source.version>
+    <jacoco.version>0.7.6.201602180812</jacoco.version>
     <java.source.version>1.5</java.source.version>
     <java.target.version>1.6</java.target.version>
     <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
@@ -125,9 +126,16 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${mvn.javadoc.version}</version>
         </plugin>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build 
-          itself. -->
         <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco.version}</version>
+        </plugin>
+        <plugin>
+          <!--
+          This plugin's configuration is used to store Eclipse m2e settings
+          only. It has no influence on the Maven build itself.
+          -->
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
           <version>1.0.0</version>
@@ -181,6 +189,38 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
   <dependencyManagement>
