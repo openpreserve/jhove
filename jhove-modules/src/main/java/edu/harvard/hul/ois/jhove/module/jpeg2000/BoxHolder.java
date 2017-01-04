@@ -50,7 +50,7 @@ public class BoxHolder implements Iterator<Object> {
      * In practice, this means returning the beginning of the Box. */
     protected long getFilePos () 
     {
-        // ghaaaaaa ... Maybe the best I can do is report
+        // ghaaaaaa ... Maybe the best I can do is dk.statsbiblioteket.dpaviser.report
         // the start of the box in the file.  the module's
         // file position is useless.  Of course, for a Binary
         // Filter box, even getting the start of the box in

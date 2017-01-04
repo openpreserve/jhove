@@ -83,9 +83,9 @@ public class FileTypeBox extends JP2Box {
             String citem = _module.read4Chars (_dstrm);
             
             // Some files have a count of entries, which isn't supposed
-            // to be there.  If we see any nulls, report an ill-formed condition.
+            // to be there.  If we see any nulls, dk.statsbiblioteket.dpaviser.report an ill-formed condition.
             // For each entry, we build a hex string in hexcitem just in case
-            // it's necessary to report the string in hex.
+            // it's necessary to dk.statsbiblioteket.dpaviser.report the string in hex.
             char[] cbytes = citem.toCharArray();
             boolean binflag = false;
             for (int j = 0; j < cbytes.length; j++) {
@@ -94,7 +94,7 @@ public class FileTypeBox extends JP2Box {
                 if (ch == 0 || ch >= 0X7F) {
                     binflag = true;
                     if (!eflag) {
-                        eflag = true;   // Avoid multiple report of same error
+                        eflag = true;   // Avoid multiple dk.statsbiblioteket.dpaviser.report of same error
                         _repInfo.setValid (false);
                         _repInfo.setMessage (new ErrorMessage
                             ("Non-ASCII characters in compatibility item of File Type Box",

@@ -80,7 +80,7 @@ public abstract class HtmlDocDesc {
         // HtmlTagDesc object for the tag that we find, with the closing tag indicated
         // as optional.
         // For each open tag, we push the HtmlTagDesc object onto the stack.  We check
-        // if it's in the allowed content of the enclosing element.  If not, we report it
+        // if it's in the allowed content of the enclosing element.  If not, we dk.statsbiblioteket.dpaviser.report it
         // as an error but continue with it anyway.  
         //
         // We special-case HTML, HEAD and BODY, which can be implied.
@@ -282,7 +282,7 @@ public abstract class HtmlDocDesc {
     {
         String name = tag.getName ();
         // Dig down into the stack till we find an element which
-        // matches this.  If there's none, report the document
+        // matches this.  If there's none, dk.statsbiblioteket.dpaviser.report the document
         // as not well formed.  Also allow for the special case
         // of an empty body.  (An empty head is illegal.)
         int idx = elementStack.search (name);
@@ -423,7 +423,7 @@ public abstract class HtmlDocDesc {
         
         // Pop elements till we find a valid context.  If
         // the enclosing element doesn't have an optional close
-        // tag, report an error but pop it anyway.  But first
+        // tag, dk.statsbiblioteket.dpaviser.report an error but pop it anyway.  But first
         // check if there even is a context to which we can pop things.
         boolean complained = false;
         boolean searchStack = false;

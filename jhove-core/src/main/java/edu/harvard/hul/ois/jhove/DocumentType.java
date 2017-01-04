@@ -27,7 +27,7 @@ public final class DocumentType
      */
     public static final DocumentType BOOK = new DocumentType ("Book");
     /**
-     *  Document type for a report.
+     *  Document type for a dk.statsbiblioteket.dpaviser.report.
      */
     public static final DocumentType REPORT = new DocumentType ("Report");
     /**

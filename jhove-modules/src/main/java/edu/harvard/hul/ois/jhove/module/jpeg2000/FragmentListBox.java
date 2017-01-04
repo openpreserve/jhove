@@ -64,7 +64,7 @@ public class FragmentListBox extends JP2Box {
             int dataRef = _module.readUnsignedShort (_dstrm);
 
             // If dataRef is nonzero, the stream is outside the file,
-            // and all we can do is report the reference.  In fact,
+            // and all we can do is dk.statsbiblioteket.dpaviser.report the reference.  In fact,
             // if any of the fragments are outside the file, we 
             // have to punt.  So we should collect all the
             // fragments and then read the stream.

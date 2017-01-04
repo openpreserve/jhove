@@ -399,7 +399,7 @@ public class AESAudioMetadata
 			
 	    // BWF allows for a negative timestamp but tcf does not, so adjust
 	    // time accordingly
-	    // this might be a good place to report a warning during validation
+	    // this might be a good place to dk.statsbiblioteket.dpaviser.report a warning during validation
 	    if (_sample_count < 0) {
 		_sample_count += sample_in_1_day;
 		_sample_count = (_sample_count % sample_in_1_day);

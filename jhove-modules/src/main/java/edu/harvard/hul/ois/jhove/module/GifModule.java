@@ -436,7 +436,7 @@ public class GifModule extends ModuleBase
                 new Integer (bgColorIndex)));
         int pixAspectRatio = readUnsignedByte (_dstream, this);
         // The pixel aspect ratio is turned into a real aspect
-        // ratio by a formula, but we just report the raw number.
+        // ratio by a formula, but we just dk.statsbiblioteket.dpaviser.report the raw number.
         propVec.add (new Property ("PixelAspectRatio",
                 PropertyType.SHORT,
                 new Short ((short) pixAspectRatio)));

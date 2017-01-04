@@ -103,7 +103,7 @@ public class DigSignatureBox extends JP2Box {
             }
             catch (NoSuchAlgorithmException e) { 
                 // In the unlikely event the algorithms aren't
-                // available, just don't report validity.  
+                // available, just don't dk.statsbiblioteket.dpaviser.report validity.
             }
             catch (IOException f) {}
         }

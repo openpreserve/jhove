@@ -21,7 +21,7 @@ public class TiffProfileExifIFD extends TiffProfile {
     public TiffProfileExifIFD ()
     {        
         super ();
-        // This isn't used directly to report a profile, so the
+        // This isn't used directly to dk.statsbiblioteket.dpaviser.report a profile, so the
         // profile text is irrelevant.
         _profileText = null;
         _majVersion = -1;

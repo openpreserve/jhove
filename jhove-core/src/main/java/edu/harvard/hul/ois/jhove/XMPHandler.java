@@ -165,7 +165,7 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
     }
     
     /** Catch a fatal error.  This is put here because the default
-     *  behavior is to report a "fatal error" to standard output,
+     *  behavior is to dk.statsbiblioteket.dpaviser.report a "fatal error" to standard output,
      *  which is harmless but scary.  
      */
     public void fatalError(SAXParseException exception)

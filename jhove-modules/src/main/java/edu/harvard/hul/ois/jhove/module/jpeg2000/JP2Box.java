@@ -327,7 +327,7 @@ public abstract class JP2Box extends BoxHolder {
     }
 
     /* Adds an Association property.  Most superboxes can
-     * contain Association boxes; these report themselves
+     * contain Association boxes; these dk.statsbiblioteket.dpaviser.report themselves
      * as Association properties. 
      */
     protected void addAssociation (Property p)

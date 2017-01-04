@@ -343,7 +343,7 @@ public class AiffModule
        // Most properties were added by the Chunks.  The Annotations, Saxel
        // and MIDIData properties could have come from multiple chunks,
        // and these were added to lists which we now make into Properties
-       // if there's anything to report.
+       // if there's anything to dk.statsbiblioteket.dpaviser.report.
        if (!_annotationList.isEmpty ()) {
            _propList.add (new Property ("Annotations",
                 PropertyType.PROPERTY,

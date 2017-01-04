@@ -178,7 +178,7 @@ public class JpegModule extends ModuleBase {
      */
     protected boolean _seenJPEGL;
 
-    /* Flag to make sure we report signature matching only once. */
+    /* Flag to make sure we dk.statsbiblioteket.dpaviser.report signature matching only once. */
     protected boolean _reportedSigMatch;
 
     /* SPIFF directory information. */
@@ -609,7 +609,7 @@ public class JpegModule extends ModuleBase {
                     case 0XEE:
                     case 0XEF:
                         // Appn extensions which we don't handle specially,
-                        // but do report the existence thereof
+                        // but do dk.statsbiblioteket.dpaviser.report the existence thereof
                         reportAppExt(dbyt, info);
                         skipSegment(info);
                         break;
@@ -1052,7 +1052,7 @@ public class JpegModule extends ModuleBase {
             _seenExif = true;
             if (!JpegExif.isTiffAvailable()) {
                 info.setMessage(new InfoMessage(
-                        "TIFF-HUL module required to report Exif data", _nByte));
+                        "TIFF-HUL module required to dk.statsbiblioteket.dpaviser.report Exif data", _nByte));
                 skipBytes(_dstream, length - 8, this);
                 return;
             }
@@ -1252,9 +1252,9 @@ public class JpegModule extends ModuleBase {
 
     /*
      * Accumulate reports of APPn segments into a property. It's tempting to
-     * report information about the segment, since many APPn segments have ASCII
+     * dk.statsbiblioteket.dpaviser.report information about the segment, since many APPn segments have ASCII
      * identifiers, but there's no guarantee of any content beyond the length
-     * field, so we just report the existence of all APPn segments. No attempt
+     * field, so we just dk.statsbiblioteket.dpaviser.report the existence of all APPn segments. No attempt
      * is made to weed out duplicates, since multiple instances of the same
      * segment number are legitimate and informative.
      */
