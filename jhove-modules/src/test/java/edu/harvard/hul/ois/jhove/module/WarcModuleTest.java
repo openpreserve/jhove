@@ -221,8 +221,8 @@ public class WarcModuleTest {
 	}
 
 	@Test
-    public void parseInvalidWarcFileLonelyMonkeys() throws Exception {
-		File warcFile = new File("src/test/resources/warc/invalid-warcfile-lonely-monkeys.warc");
+    public void parseInvalidWarcFileLonelyMonkeysLfLineEndings() throws Exception {
+		File warcFile = new File("src/test/resources/warc/invalid-warcfile-lonely-monkeys-lf-line-endings.warc");
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
