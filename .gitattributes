@@ -1,0 +1,2 @@
+# Prevent interpretation as text and end-of-line conversions.
+*.warc binary
