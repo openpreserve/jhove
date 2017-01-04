@@ -17,3 +17,6 @@ release.properties
 
 # Ignore GH Pages Gemfile
 Gemfile.lock
+
+# Ignore Test Root
+test-root
