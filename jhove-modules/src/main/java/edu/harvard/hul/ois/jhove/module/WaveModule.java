@@ -654,7 +654,6 @@ public class WaveModule extends ModuleBase {
 
     /**
      * Reads a WAVE Chunk.
-     * 
      */
     protected boolean readChunk(RepInfo info) throws IOException {
         Chunk chunk = null;
@@ -662,7 +661,7 @@ public class WaveModule extends ModuleBase {
         if (!chunkh.readHeader(_dstream)) {
             return false;
         }
-        int chunkSize = (int) chunkh.getSize();
+        long chunkSize = chunkh.getSize();
         bytesRemaining -= chunkSize + 8;
 
         if (bytesRemaining < 0) {
