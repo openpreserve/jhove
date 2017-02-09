@@ -309,7 +309,7 @@ public class Jpeg2000Module extends ModuleBase {
      *            with each call.
      */
     @Override
-    public final void parse(RandomAccessFile raf, RepInfo info)
+    public void parse(RandomAccessFile raf, RepInfo info)
             throws IOException {
         initParse();
         _rafStream = new RAFInputStream(raf, _je != null ? _je.getBufferSize()
