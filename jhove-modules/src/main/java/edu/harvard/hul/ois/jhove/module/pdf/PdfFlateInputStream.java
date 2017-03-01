@@ -321,7 +321,7 @@ public class PdfFlateInputStream extends FilterInputStream {
             return -1;
         }
         if (iisBufLen - iisBufOff < n) {
-            n = iisBufLen + iisBufOff;
+            n = iisBufLen - iisBufOff;
         }
         iisBufOff += n;
         return n;

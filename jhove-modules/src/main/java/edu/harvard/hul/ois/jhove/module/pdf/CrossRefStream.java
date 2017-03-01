@@ -29,11 +29,12 @@ public class CrossRefStream {
     private PdfStream _xstrm;   // The underlying Stream object.
     private PdfDictionary _dict;
     private int _size;
-    private int[] _index;
+    private IndexRange[] _index;
     private int[] _fieldSizes;
     private int _freeCount;
     private Filter[] _filters;
-    private int _entriesRead;
+    private int _readRange;
+    private int _readIndex;
     private int _bytesPerEntry;
     private long _prevXref;    // byte offset to previous xref stream, if any
 
@@ -85,16 +86,23 @@ public class CrossRefStream {
             PdfObject indexobj = _dict.get ("Index");
             if (indexobj instanceof PdfArray) {
                 Vector vec = ((PdfArray) indexobj).getContent();
-                // This is supposed to have a size of 2.
-                _index = new int[2];
-                PdfSimpleObject idx = (PdfSimpleObject) vec.get (0);
-                _index[0] = idx.getIntValue ();
-                idx = (PdfSimpleObject) vec.get (1);
-                _index[1] = idx.getIntValue ();
+                int vecSize = vec.size();
+                // Must be an even length array
+                if (vecSize % 2 != 0) {
+                    return false;
+                }
+                _index = new IndexRange[vecSize / 2];
+                int j = 0;
+                for (int i = 0; i < vecSize; i+=2) {
+                    _index[j] = new IndexRange(
+                            ((PdfSimpleObject) vec.get(i)).getIntValue(),
+                            ((PdfSimpleObject) vec.get(i+1)).getIntValue());
+                }
             }
             else {
                 // Set up default index.
-                _index = new int[] { 0, _size };
+                _index = new IndexRange[1];
+                _index[0] = new IndexRange(0, _size);
             }
             
             // Get the field sizes.
@@ -141,7 +149,8 @@ public class CrossRefStream {
         Stream strm = _xstrm.getStream ();
         strm.setFilters (_xstrm.getFilters ());
         strm.initRead (raf);
-        _entriesRead = 0;
+        _readRange = 0;
+        _readIndex = 0;
         
         /* Calculate the total bytes per entry.  This may have
          * some utility. */
@@ -180,8 +189,11 @@ public class CrossRefStream {
             /* Loop till we find an actual object; we just count
              * type 0's, which are free entries. */
             wid  = _fieldSizes[0];
-            if (_entriesRead++ >= _index[1]) {
-                return false;       // Read full complement
+            if (_readIndex++ >= _index[_readRange].getLen()) {
+                _readIndex = 1;
+                if (_readRange++ >= _index.length) {
+                    return false;       // Read full complement
+                }
             }
             if (wid != 0) {
                 /* "Fields requiring more than one byte are stored 
@@ -220,7 +232,7 @@ public class CrossRefStream {
             }
             
             if (_objType != 0) {
-                _objNum = _index[0] + _entriesRead - 1;
+                _objNum = _index[_readRange].getStart() + _readIndex - 1;
                 return true;
             }
             ++_freeCount;
@@ -262,7 +274,8 @@ public class CrossRefStream {
     /** Returns the total object count. */
     public int getNumObjects ()
     {
-        return _index[0] + _index[1];
+        IndexRange lastRange = _index[_index.length - 1];
+        return lastRange.getStart() + lastRange.getLen();
     }
     
     /** Returns the offset of the last object object read.  
@@ -299,5 +312,38 @@ public class CrossRefStream {
     public int getContentStreamIndex ()
     {
         return _objField2;
+    }
+
+	/**
+     * Return true if objNum argument contained in some range
+     */
+    public boolean isValidObject(int objNum) {
+        for (IndexRange a_index : _index) {
+            if (objNum >= a_index.start && objNum < a_index.start + a_index.len) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Range elements of the _index array:
+        Starting object and number of objects.
+     */
+    private class IndexRange {
+        private int start;
+        private int len;
+
+        public IndexRange(int start, int len) {
+            this.start = start;
+            this.len = len;
+        }
+
+        public int getStart() {
+            return start;
+        }
+
+        public int getLen() {
+            return len;
+        }
     }
 }

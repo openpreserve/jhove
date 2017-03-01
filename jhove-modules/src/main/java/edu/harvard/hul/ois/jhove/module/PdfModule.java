@@ -1207,7 +1207,7 @@ public class PdfModule
                     _xref = new long [no];
                     _xref2 = new int[no] [];
                 }
-                if (sObjNum < 0 || sObjNum >= no) {
+                if (!xstream.isValidObject(sObjNum)) {
                     throw new PdfMalformedException 
                           ("Invalid object number in cross-reference stream", 
                           _parser.getOffset ());
@@ -1974,12 +1974,12 @@ public class PdfModule
                                     imgList.add (new Property ("NisoImageMetadata",
                                                PropertyType.NISOIMAGEMETADATA, niso));
                                     niso.setMimeType("application/pdf");
-                                    PdfSimpleObject widObj = (PdfSimpleObject)
-                                        xobdict.get ("Width");
-                                    niso.setImageWidth(widObj.getIntValue ());
-                                    PdfSimpleObject htObj = (PdfSimpleObject)
-                                        xobdict.get ("Height");
-                                    niso.setImageLength(htObj.getIntValue ());
+                                    PdfObject widthBase = xobdict.get ("Width");
+                                    PdfSimpleObject widObj = (PdfSimpleObject) resolveIndirectObject(widthBase);
+                                    niso.setImageWidth(widObj.getIntValue());
+                                    PdfObject heightBase = xobdict.get ("Height");
+                                    PdfSimpleObject htObj = (PdfSimpleObject) resolveIndirectObject(heightBase);
+                                    niso.setImageLength(htObj.getIntValue());
                                     
                                     // Check for filters to add to the filter list
                                     Filter[] filters = ((PdfStream) xob).getFilters ();

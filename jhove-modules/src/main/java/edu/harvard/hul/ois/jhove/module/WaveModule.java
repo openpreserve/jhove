@@ -662,7 +662,7 @@ public class WaveModule extends ModuleBase {
         if (!chunkh.readHeader(_dstream)) {
             return false;
         }
-        int chunkSize = (int) chunkh.getSize();
+        long chunkSize = chunkh.getSize();
         bytesRemaining -= chunkSize + 8;
 
         if (bytesRemaining < 0) {
