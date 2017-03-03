@@ -1202,15 +1202,15 @@ public class PdfModule
                     return false;
                 }
                 xstream.initRead (_raf);
-                int no = xstream.getNumObjects (); 
+                int xrefSize = xstream.getCrossRefTableSize();
                 if (_xref == null) {
-                    _xref = new long [no];
-                    _xref2 = new int[no] [];
+                    _xref = new long[xrefSize];
+                    _xref2 = new int[xrefSize][];
                 }
-                if (!xstream.isValidObject(sObjNum)) {
-                    throw new PdfMalformedException 
-                          ("Invalid object number in cross-reference stream", 
-                          _parser.getOffset ());
+                if (sObjNum < 0 || sObjNum >= xrefSize) {
+                    throw new PdfMalformedException
+                            ("Invalid object number in cross-reference stream",
+                                    _parser.getOffset ());
                 }
                 _xref[sObjNum] = _startxref;  // insert the index of the xref stream itself
                 _startxref = xstream.getPrevXref();
