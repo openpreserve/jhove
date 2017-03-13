@@ -876,12 +876,18 @@ public final class AProfile extends PdfProfile
             }
             PdfDictionary child = (PdfDictionary)
                      _module.resolveIndirectObject (item.get ("First"));
+            PdfDictionary next;
             while (child != null) {
                 if (!checkOutlineItem (child)) {
                     return false;
                 }
-                child = (PdfDictionary)
+                next = (PdfDictionary)
                     _module.resolveIndirectObject (child.get ("Next"));
+                if (next.getObjNumber() != child.getObjNumber()) {
+                    child = next;
+                } else {
+                    child = null;
+                }
             }
         }
         catch (Exception e) {
