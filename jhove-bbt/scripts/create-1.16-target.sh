@@ -66,7 +66,6 @@ find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module
 
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.7">PDF-hul<\/module>$/   <module release="1.8">PDF-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <release>1.7<\/release>$/  <release>1.8<\/release>/' {} \;
-find "${targetRoot}" -type f -name "READMEq.jhove.xml" -exec sed -i 's/^  <release>1.7<\/release>$/  <release>1.8<\/release>/' {} \;
 
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.3">WAVE-hul<\/module>$/   <module release="1.4">WAVE-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit-WAVE-hul.jhove.xml" -exec sed -i 's/^  <release>1.3<\/release>$/  <release>1.4<\/release>/' {} \;
@@ -77,10 +76,11 @@ find "${targetRoot}" -type f -name "audit-UTF8-hul.jhove.xml" -exec sed -i 's/^ 
 
 find "${targetRoot}" -type f -name "*.jhove.xml" -exec sed -i 's/2011-02-03/2014-07-18/' {} \;
 
-find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's/2012-08-12/2017-03-14/' {} \;
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <date>2012-08-12<\/date>$/  <date>2017-03-14<\/date>/' {} \;
+find "${targetRoot}" -type f -name "audit-WAVE-hul.jhove.xml" -exec sed -i 's/^  <date>2007-12-14<\/date>$/  <date>2017-03-14<\/date>/' {} \;
 
-find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.7"%<reportingModule release="1.8"%' {} \;
+find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">PDF%<reportingModule release="1.8" date="2017-03-14">PDF%' {} \;
+find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">PDF%<reportingModule release="1.8" date="2017-03-14">PDF%' {} \;
 
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/<rights>.*<\/rights>/<rights>Derived from software Copyright 2004-2011 by the President and Fellows of Harvard College. Version 1.7 to 1.11 independently released. Version 1.12 onwards released by Open Preservation Foundation. Released under the GNU Lesser General Public License.<\/rights>/' {} \;
 
