@@ -37,7 +37,21 @@ fi
 # Grab the Major and Minor versions from the full Maven project version string
 MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
 MAJOR_MINOR_VER="${MVN_VERSION%.*}"
+MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
+JHOVE_INSTALLER="./jhove-installer/target/jhove-xplt-installer-${MVN_VERSION}.jar"
 
-bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "1.${BASELINE_VERSION}" -c "${MAJOR_MINOR_VER}"
+
+if [[ ! -d "${TEST_ROOT}/candidates/${MAJOR_MINOR_VER}" ]]
+then
+	if [[ ! -e "${JHOVE_INSTALLER}" ]]
+	then
+		mvn clean package
+	fi
+	installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
+	mkdir -p "${TEST_ROOT}/candidates/${MAJOR_MINOR_VER}"
+	bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${TEST_ROOT}/corpora" -o "${TEST_ROOT}/candidates/${MAJOR_MINOR_VER}"
+	bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "1.${BASELINE_VERSION}" -c "${MAJOR_MINOR_VER}"
+fi
+
 bash "${SCRIPT_DIR}/bbt-jhove.sh" -b "${TEST_ROOT}/targets/${MAJOR_MINOR_VER}" -c "${TEST_ROOT}/corpora" -j . -o "${TEST_ROOT}/candidates" -k "dev-${MAJOR_MINOR_VER}" -i
 exit $?
