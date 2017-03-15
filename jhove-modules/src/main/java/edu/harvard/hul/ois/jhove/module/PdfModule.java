@@ -449,7 +449,7 @@ public class PdfModule
     }
 
     /**
-     *  Parse a file and stores descriptive information.  A RandomAccessFile
+     *  Parses a file and stores descriptive information.  A RandomAccessFile
      *  must be used to represent the object.
      *
      *  @param  raf   A PDF file
@@ -630,9 +630,9 @@ public class PdfModule
         if (!_parser.getPDFACompliant ()) {
             _pdfACompliant = false;
         }
-        ListIterator<PdfProfile> pter = _profile.listIterator ();
         if (info.getWellFormed() == RepInfo.TRUE) {
             // Well-formedness is necessary to satisfy any profile.
+            ListIterator<PdfProfile> pter = _profile.listIterator ();
             while (pter.hasNext ()) {
                 PdfProfile prof = pter.next ();
                 if (prof.satisfiesProfile (_raf, _parser)) {
@@ -1070,7 +1070,7 @@ public class PdfModule
         _prevxref = -1;
         obj = _trailerDict.get ("Prev");
         if (obj != null) {
-            if (obj != null && obj instanceof PdfSimpleObject) {
+            if (obj instanceof PdfSimpleObject) {
                 token = ((PdfSimpleObject) obj ).getToken ();
                 if (token instanceof Numeric)
                     _prevxref = ((Numeric) token).getLongValue ();
@@ -1090,7 +1090,7 @@ public class PdfModule
         obj = _trailerDict.get ("Size");
         if (obj != null) {
             _numObjects = -1;
-            if (obj != null && obj instanceof PdfSimpleObject) {
+            if (obj instanceof PdfSimpleObject) {
                 token = ((PdfSimpleObject) obj ).getToken ();
                 if (token instanceof Numeric)
                     _numObjects = ((Numeric) token).getIntegerValue ();
@@ -1345,7 +1345,7 @@ public class PdfModule
                             (_docCatDictRef);
         }
         catch (Exception e) {
-            _logger.warning ("Tried to cat non-dictionary to PdfDictionary");
+            _logger.warning ("Tried to cast non-dictionary to PdfDictionary");
             e.printStackTrace();
         }
         if (_docCatDict == null) {
@@ -2345,8 +2345,13 @@ public class PdfModule
     // sufficient?
     /* protected void addObject (int objectNum, int genNum, Object obj)
     {
+<<<<<<< HEAD
         long key = ((long) objectNum << 32) +
                    ((long) genNum & 0XFFFFFFFF);
+=======
+        long key = ((long) objectNum << 32) +
+                   ((long) genNum & 0xFFFFFFFF);
+>>>>>>> 57aea666c1ab8167c5ab71fcd40a0a132c4db9a7
         _objects.put (new Long (key), obj);
     } */
 
@@ -2356,11 +2361,11 @@ public class PdfModule
      *  the object itself.  In particular, calling with null will
      *  return null.
      */
-    public PdfObject resolveIndirectObject(PdfObject indObj)
+    public PdfObject resolveIndirectObject(PdfObject obj)
                         throws PdfException, IOException
     {
-        if (indObj instanceof PdfIndirectObj) {
-            int objIndex = ((PdfIndirectObj) indObj).getObjNumber ();
+        if (obj instanceof PdfIndirectObj) {
+            int objIndex = ((PdfIndirectObj) obj).getObjNumber ();
             /* Here we need to allow for the possibility that the
              *  object is compressed in an object stream.  That means
              *  creating a new structure (call it _xref2) that contains
@@ -2371,7 +2376,7 @@ public class PdfModule
              */
             return getObject (objIndex, 30);
         }
-        return indObj;
+        return obj;
     }
 
     /** Returns an object of a given number.  This may involve
@@ -2400,10 +2405,10 @@ public class PdfModule
              * Be cautious dealing with _cachedStreamIndex and _cachedObjectStream;
              * these can be modified by a recursive call to getObject. */
             try {
-                int streamObjIndex = _xref2[objIndex][0];
+                int objStreamIndex = _xref2[objIndex][0];
                 PdfObject streamObj;
                 ObjectStream ostrm = null;
-                if (streamObjIndex ==_cachedStreamIndex) {
+                if (objStreamIndex == _cachedStreamIndex) {
                     ostrm = _cachedObjectStream;
                     // Reset it
                     if (ostrm.isValid ()) {
@@ -2412,13 +2417,13 @@ public class PdfModule
                 }
                 else {
                     streamObj =
-                        resolveIndirectObject (getObject (streamObjIndex, recGuard - 1));
+                        resolveIndirectObject (getObject (objStreamIndex, recGuard - 1));
                     if (streamObj instanceof PdfStream) {
                         ostrm = new ObjectStream ((PdfStream) streamObj, _raf);
                         if (ostrm.isValid ()) {
                             ostrm.readIndex ();
                             _cachedObjectStream = ostrm;
-                            _cachedStreamIndex = streamObjIndex;
+                            _cachedStreamIndex = objStreamIndex;
                         }
                         else {
                             throw new PdfMalformedException (nogood);
@@ -3071,13 +3076,13 @@ public class PdfModule
                 // Actions are as common as Destinations for
                 // connecting to destination pages.  If the Action
                 // is of type GoTo, note its destination.
-                PdfSimpleObject annType = (PdfSimpleObject)
+                PdfSimpleObject actionSubtype = (PdfSimpleObject)
                          ((PdfDictionary) itemObj).get ("S");
-                if (annType == null) {
+                if (actionSubtype == null) {
                     throw new PdfMalformedException ("Annotation dictionary " +
 				     "missing required type (S) entry");
                 }
-                if ("GoTo".equals (annType.getStringValue ())) {
+                if ("GoTo".equals (actionSubtype.getStringValue ())) {
                     PdfObject destObj =
                         ((PdfDictionary) itemObj).get ("D");
                     if (destObj != null) {
@@ -3866,7 +3871,7 @@ public class PdfModule
             PdfIndirectObj ob = (PdfIndirectObj) dict.get ("Prev");
             ob = (PdfIndirectObj) dict.get ("Next");
             ob = (PdfIndirectObj) dict.get ("First");
-            ob = (PdfIndirectObj) dict.get ("First");
+            ob = (PdfIndirectObj) dict.get ("Last");
 
             // Check if there are Actions in the outline.  This saves going
             // through the outlines all over again if a Profile checker
@@ -4024,7 +4029,7 @@ public class PdfModule
 				     "No permissions");
     }
 
-    /** Add a string proprerty, based on a dictionary entry
+    /** Add a string property, based on a dictionary entry
         with a string value, to a specified List. */
     protected void addStringProperty(PdfDictionary dict,
                         List<Property> propList,
@@ -4049,7 +4054,7 @@ public class PdfModule
         }
     }
 
-    /** Add a date proprerty, based on a dictionary entry
+    /** Add a date property, based on a dictionary entry
         with a string value, to a specified List. */
     protected void addDateProperty(PdfDictionary dict,
                         List<Property> propList,
@@ -4121,7 +4126,7 @@ public class PdfModule
         // toRectangle is written to return an array of double,
         // which is what the bounding box is in the most general
         // case; but the spec requires an array of integer, so
-        // we convert is.  This may seem like an excess of work,
+        // we convert it.  This may seem like an excess of work,
         // but I'd rather have toRectangle do the right thing
         // rather than losing generality.
         for (int i = 0; i < 4; i++) {

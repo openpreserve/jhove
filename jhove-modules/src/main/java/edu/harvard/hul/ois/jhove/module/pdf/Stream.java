@@ -122,7 +122,7 @@ public class Stream
         for (int i = 0; i < _filters.length; i++) {
             Filter filt = (Filter) _filters[i];
             String filtName = filt.getFilterName ();
-            FilterInputStream fis = null;
+
             /* ASCIIHex-, ASCII85- and RunLengthDecode are currently
              * just stubs.  If we ever really need them, we should
              * consider grabbing the implementations in PDFBox on
