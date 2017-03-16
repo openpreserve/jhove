@@ -50,7 +50,8 @@ then
 	installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
 	mkdir -p "${TEST_ROOT}/candidates/${MAJOR_MINOR_VER}"
 	bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${TEST_ROOT}/corpora" -o "${TEST_ROOT}/candidates/${MAJOR_MINOR_VER}"
-	bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "1.${BASELINE_VERSION}" -c "${MAJOR_MINOR_VER}"
+	cp -R "${TEST_ROOT}/candidates/${MAJOR_MINOR_VER}" "${TEST_ROOT}/targets/"
+#	bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "1.${BASELINE_VERSION}" -c "${MAJOR_MINOR_VER}"
 fi
 
 bash "${SCRIPT_DIR}/bbt-jhove.sh" -b "${TEST_ROOT}/targets/${MAJOR_MINOR_VER}" -c "${TEST_ROOT}/corpora" -j . -o "${TEST_ROOT}/candidates" -k "dev-${MAJOR_MINOR_VER}" -i
