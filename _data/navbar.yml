@@ -34,16 +34,11 @@
     - subtitle: "ZIP"
       subhref: "third-party/zip/"
 
-- title: "Support"
-  href: "/support/"
-
 - title: "Resources"
   href: "/resources/"
 
+- title: "Support"
+  href: "/support/"
+
 - title: "About"
   href: "/about/"
-  subcategories:
-    - subtitle: "OPF"
-      subhref: "http://openpreservation.org"
-    - subtitle: "Credits"
-      subhref: "credits/"

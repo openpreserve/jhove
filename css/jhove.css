@@ -9,3 +9,11 @@ body {
 .navbar-brand img {
   margin-top: -10px;
 }
+
+.vertical-center {
+  text-align: center;
+}
+
+header a.btn {
+  margin-top: 20px;
+}
