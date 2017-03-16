@@ -137,6 +137,7 @@ then
 fi
 
 installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
+sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.6.201602180812\/org\.jacoco.agent-0\.7\.6\.201602180812-runtime\.jar=destfile=jacoco\.exec -classpath $CP Jhove $ARGS/g' "${tempInstallLoc}/jhove"
 bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${paramCorpusLoc}" -o "${candidate}"
 
 if [ "$paramIgnoreRelease" =  true ] ;
