@@ -136,7 +136,7 @@ public class PdfFlateInputStream extends FilterInputStream {
                 return -1;
             }
         }
-        return rowBuf[rowBufOff++] & 0XFF;
+        return rowBuf[rowBufOff++] & 0xFF;
     }
     
     /** Reads the specified number of bytes into a buffer.
@@ -217,7 +217,7 @@ public class PdfFlateInputStream extends FilterInputStream {
                 off += n;
             }
             else { 
-                eof =true; 
+                eof = true;
                 return; 
             }
         }
@@ -230,7 +230,7 @@ public class PdfFlateInputStream extends FilterInputStream {
             case 11:
                 // Sub -- left
                 for (int i = colBytes; i < rowLen; i++) {
-                    rowBuf[i] += rowBuf[i-colBytes];
+                    rowBuf[i] += rowBuf[i - colBytes];
                 }
                 break;
             case 12:    
@@ -247,10 +247,10 @@ public class PdfFlateInputStream extends FilterInputStream {
                 }
                 break;
             case 14:    // Paeth -- closest of left, above, upper-left
-                for (int i=0+colBytes; i < rowLen; i++) {
-                    int a = rowBuf[i - colBytes] & 0XFF;
-                    int b = rowBuf2[i] & 0XFF;
-                    int c = rowBuf2[i - colBytes] & 0XFF;
+                for (int i = colBytes; i < rowLen; i++) {
+                    int a = rowBuf[i - colBytes] & 0xFF;
+                    int b = rowBuf2[i] & 0xFF;
+                    int c = rowBuf2[i - colBytes] & 0xFF;
                     int p = a + b - c;
                     int pa = Math.abs(p - a);
                     int pb = Math.abs(p - b);
@@ -289,7 +289,7 @@ public class PdfFlateInputStream extends FilterInputStream {
         if (iisEof) {
             return -1;
         }
-        return (int) (iisBuf[iisBufOff++] & 0XFF);
+        return iisBuf[iisBufOff++] & 0xFF;
     }
     
     /** Get a bufferload of bytes. */
@@ -321,7 +321,7 @@ public class PdfFlateInputStream extends FilterInputStream {
             return -1;
         }
         if (iisBufLen - iisBufOff < n) {
-            n = iisBufLen + iisBufOff;
+            n = iisBufLen - iisBufOff;
         }
         iisBufOff += n;
         return n;

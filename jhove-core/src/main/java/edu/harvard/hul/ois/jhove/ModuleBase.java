@@ -1366,11 +1366,20 @@ public abstract class ModuleBase
 			  ModuleBase counted) 
             throws IOException
     {
-		long n = stream.skip(bytesToSkip);
-        if (counted != null) {
-            counted._nByte += n;
+        long retVal = 0;
+        long bytesLeft = bytesToSkip;
+        while (bytesLeft > 0) {
+            long n = stream.skip(bytesToSkip);
+            bytesLeft -= n;
+            retVal += n;
+            if (counted != null) {
+                counted._nByte += n;
+            }
+            if (stream.available() == 0) {
+                break;
+            }
         }
-        return n;
+        return retVal;
     }
 
     /**

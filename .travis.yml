@@ -1,17 +1,41 @@
 language: java
+
 jdk:
 - oraclejdk7
 - oraclejdk8
+
 branches:
   except:
   - "/^v|d\\d+\\.\\d+\\.\\d+$/"
   - "/^jenkins-jhove-v|d\\d+\\.\\d+\\.\\d+$/"
-before_install:
-- sudo apt-get install -y realpath
-script:
-- "./jhove-bbt/scripts/travis-test.sh"
-after_success:
-- bash <(curl -s https://codecov.io/bash)
+
 notifications:
   slack:
     secure: 2tPcqxi5BQkomyLYTDk90JrI5iqm9TL5Hc9SklPVemtEUQdDqeEejNjBGIOxQeXxe6Vza/cVEVp8emmb0GQ25k36DeI82kvxWu/dtaXC2B73dr0zFw3IV6VpG9nUcmgNiHrTYDlK5C3QYlkYKDSrAlrBRLA16qiSIe2JpPSClI4=
+
+env:
+  global:
+    secure: P3baCsYCRF45nZExdjc3QzAt8PKqK9i+0M04N87I7UJgv8ibqPb2kVah/YXcRdAUxAN3vE095LALf4NszXKa3fx/QnsoyfQqnVpwmVbNM0cCScT3Du304j2XnwoSghvNT8bDlvT+qmhLr9N8xE3E6sodChMpYLNPqfJWSG1nOJY=
+
+addons:
+  coverity_scan:
+    project:
+      name: "openpreserve/jhove"
+      description: "File validation and characterisation"
+    notification_email: carl@openpreservation.org
+    build_command_prepend: "mvn clean"
+    build_command:   "mvn -DskipTests=true compile"
+    branch_pattern: integration
+
+before_install:
+- sudo apt-get install -y realpath
+
+script:
+- mvn clean install
+- "./jhove-bbt/scripts/travis-test.sh"
+
+after_success:
+- bash <(curl -s https://codecov.io/bash)
+
+after_failure:
+- cat /tmp/bbt-logs/log.txt | grep --group-separator"===== Unexpected output =====" -n -B 1 -A 2 Expected
