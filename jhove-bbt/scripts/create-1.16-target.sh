@@ -81,6 +81,7 @@ find "${targetRoot}" -type f -name "audit-WAVE-hul.jhove.xml" -exec sed -i 's/^ 
 
 find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">PDF%<reportingModule release="1.8" date="2017-03-14">PDF%' {} \;
 find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">PDF%<reportingModule release="1.8" date="2017-03-14">PDF%' {} \;
+find "${targetRoot}" -type f -name "*.wav.jhove.xml" -exec sed -i 's%<reportingModule release="1.3" date="2007-12-14">WAVE%<reportingModule release="1.4" date="2017-03-14">WAVE%' {} \;
 
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/<rights>.*<\/rights>/<rights>Derived from software Copyright 2004-2011 by the President and Fellows of Harvard College. Version 1.7 to 1.11 independently released. Version 1.12 onwards released by Open Preservation Foundation. Released under the GNU Lesser General Public License.<\/rights>/' {} \;
 
