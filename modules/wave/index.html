@@ -15,11 +15,11 @@ title: WAVE-hul Module
 <p>
 The WAVE-hul module recognizes and validates the Audio for Windows
 format (WAVE)
-[<a href="references.html#wave">WAVE</a>,<a href="references.html#waveformat">WAVEFORMAT</a>].
+[<a href="/references#wave">WAVE</a>,<a href="/references#waveformat">WAVEFORMAT</a>].
 WAVE is a variant of the Microsoft RIFF format
-[<a href="references.html#riff">RIFF</a>], which is itself an
+[<a href="/references#riff">RIFF</a>], which is itself an
 implementation of the Electronic Arts IFF 85 format
-[<a href="references.html#iff85">IFF</a>].
+[<a href="/references#iff85">IFF</a>].
 </p><p>
 The module is invoked by the:
 </p>
@@ -41,19 +41,19 @@ The WAVE-hul module recognizes and validates the following public profiles:
 </p>
 <ul>
 <li> PCMWAVEFORMAT
-[<a href="references.html#pcmwaveformat">PCMWAVEFORMAT</a>]
+[<a href="/references#pcmwaveformat">PCMWAVEFORMAT</a>]
 <li> WAVEFORMATEX
-[<a href="references.html#waveformatex">WAVEFORMATEX</a>]
+[<a href="/references#waveformatex">WAVEFORMATEX</a>]
 <li> WAVEFORMATEXTENSIBLE
-[<a href="references.html#waveformatextensible">WAVEFORMATEXTENSIBLE</a>]
+[<a href="/references#waveformatextensible">WAVEFORMATEXTENSIBLE</a>]
 <li> EBU Technical Specification 3285,
 Broadcast Wave Format (BWF) version 0 and 1
-[<a href="references.html#bwf">BWF</a>,
-<a href="references.html#bwf-1">BWF Supp 1</a>,
-<a href="references.html#bwf-2">BWF Supp 2</a>,
-<a href="references.html#bwf-3">BWF Supp 3</a>,
-<a href="references.html#bwf-4">BWF Supp 4</a>,
-<a href="references.html#bwf-5">BWF Supp 5</a>]
+[<a href="/references#bwf">BWF</a>,
+<a href="/references#bwf-1">BWF Supp 1</a>,
+<a href="/references#bwf-2">BWF Supp 2</a>,
+<a href="/references#bwf-3">BWF Supp 3</a>,
+<a href="/references#bwf-4">BWF Supp 4</a>,
+<a href="/references#bwf-5">BWF Supp 5</a>]
 </ul>
 
 <p>
@@ -113,70 +113,71 @@ image from all chunks
 </ul>
 
 <p>
-The WAVE module recognizes the following chunks:
-<ul>
-<li> "fmt " Format chunk (required)
-<li> "fact" Fact chunk (for non-PCM data)
-<li> "data" Data chunk
-<li> "cue " Cue chunk
-<li> "plst" Playlist chunk
-<li> "labl" Label chunk
-<li> "note" Note chunk
-<li> "smpl" Sampler chunk
-<li> "inst" Instrument chunk
-<li> "bext" Broadcast Audio Extension chunk (for BWF)
-[<a href="references.html#bwf">BWF</a>]
-<li> "mext" MPEG Audio Extension chunk
-[<a href="references.html#bwf-1">BWF Supp 1</a>]
-<li> "qlty" Quality chunk
-[<a href="references.html#bwf-2">BWF Supp 2</a>]
-<li> "levl" Peak Envelope chunk
-[<a href="references.html#bwf-3">BWF Supp 3</a>]
-<li> "link" Link chunk
-[<a href="references.html#bwf-4">BWF Supp 4</a>]
-<li> "axml" AXML chunk
-[<a href="references.html#bwf-5">BWF Supp 5</a>]
-</ul>
+  The WAVE module recognizes the following chunks:
 </p>
-
+<ul>
+  <li>"fmt " Format chunk (required)</li>
+  <li>"fact" Fact chunk (for non-PCM data)</li>
+  <li>"data" Data chunk</li>
+  <li>"cue " Cue chunk</li>
+  <li>"plst" Playlist chunk</li>
+  <li>"labl" Label chunk</li>
+  <li>"note" Note chunk</li>
+  <li>"smpl" Sampler chunk</li>
+  <li>"inst" Instrument chunk</li>
+  <li>"bext" Broadcast Audio Extension chunk (for BWF) : <a href="/references#bwf">BWF</a></li>
+  <li>"mext" MPEG Audio Extension chunk : <a href="/references#bwf-1">BWF Supp 1</a></li>
+  <li>"qlty" Quality chunk : <a href="/references#bwf-2">BWF Supp 2</a></li>
+  <li>"levl" Peak Envelope chunk : <a href="/references#bwf-3">BWF Supp 3</a></li>
+  <li>"link" Link chunk : <a href="/references#bwf-4">BWF Supp 4</a></li>
+  <li>"axml" AXML chunk : <a href="/references#bwf-5">BWF Supp 5</a></li>
+</ul>
 <p>
-The AIFF module reports audio properties
-using the draft AES-X098B, <em>Core audio metadata XML
-definition</em>, currently under development by the
-<a href="http://www.aes.org/">Audio Engineering Society</a> (AES)
-<a href="http://www.aes.org/standards/b_policies/aessc-structure.cfm#SC-03">SC-03-06</a>
-Working Group on Digital Library and Archive Systems.
+  The AIFF module reports audio properties
+  using the draft AES-X098B, <em>Core audio metadata XML
+  definition</em>, currently under development by the
+  <a href="http://www.aes.org/">Audio Engineering Society</a> (AES)
+  <a href="http://www.aes.org/standards/b_policies/aessc-structure.cfm#SC-03">SC-03-06</a>
+  Working Group on Digital Library and Archive Systems.
 </p>
 
 <h3>5.1 Profiles</h3>
 
 <p>WAVE is a format for uncompressed or compressed sampled audio.
 The format is defined informally by references to various Microsoft API
-data structures
-[<a href="references.html#waveformat">WAVEFORMAT</a>,
-<a href="references.html#pcmwaveformat">PCMWAVEFORMAT</a>,
-<a href="references.html#waveformatex">WAVEFORMATEX</a>,
-<a href="references.html#waveformatextensible">WAVEFORMATEXTENSIBLE</a>].
+data structures:
+</p>
+<ul>
+  <li><a href="/references#waveformat">WAVEFORMAT</a></li>
+  <li><a href="/references#pcmwaveformat">PCMWAVEFORMAT</a></li>
+  <li><a href="/references#waveformatex">WAVEFORMATEX</a></li>
+  <li><a href="/references#waveformatextensible">WAVEFORMATEXTENSIBLE</a></li>
+</ul>
+<p>
 The baseline "fmt " chunk is defined by the WAVEFORMAT structure with a
 length of 14:
+</p>
 <blockquote>
-<pre>
-WORD  wFormatTag
-WORD  nChannels
-DWORD nSamplesPerSec
-DWORD nAvgBytesPerSec
-WORD  nBlockAlign
-</pre>
+  <pre>
+  WORD  wFormatTag
+  WORD  nChannels
+  DWORD nSamplesPerSec
+  DWORD nAvgBytesPerSec
+  WORD  nBlockAlign
+  </pre>
 </blockquote>
+<p>
 where <tt>WORD</tt> indicates a 16-bit unsigned integer and
 <tt>DWORD</tt> indicates a 32-bit unsigned integer.
 </p>
 <p>
 The specific form of the sampled data is specified by the "fmt " chunk
 <tt>wFormatTag</tt> field
-[<a href="references.html#wave-codec">RFC 2361</a>].
-</p><p>
+[<a href="/references#wave-codec">RFC 2361</a>].
+</p>
+<p>
 Common format tags include, but are not limited to:
+</p>
 <blockquote>
 <table border="1">
 <tr><th colspan="2">Tag</th><th>Description</th></tr>
@@ -288,122 +289,120 @@ Common format tags include, but are not limited to:
 <tr><td>65535</td><td>0xFFFF</td><td>Experimental</td></tr>
 </table>
 </blockquote>
-</p>
-
 <ul>
-<li> <strong>PCMWAVEFORMATEX</strong>
-<p>
-This is an extension to the WAVEFORMAT profile
-in which the
-<tt>fmt</tt> chunk is defined by the PCMWAVEFORMATEX structure with a
-length of 16
-[<a href="references.html#pcmwaveformat">PCMWAVEFORMAT</a>]:
-<blockquote>
-<pre>
-WAVEFORMAT
-WORD  wBitsPerSample
-</pre>
-</blockquote>
-</p><p>
-Profile requirements include:
-</p>
-<ul>
-<li> <tt>wFormatTag</tt> = 1
-</ul>
-<p>
-
-<li> <strong>WAVEFORMATEX</strong>
-<p>
-This is an extension to the PCMWAVEFORMATEX profile supporting both PCM
-and non-PCM audio formats
-[<a href="references.html#waveformatex">WAVEFORMATEX</a>]..
-The <tt>fmt</tt> chunk is defined by the WAVEFORMATEX structure with a
-length &#x2265; 18:
-<blockquote>
-<pre>
-PCMWAVEFORMATEX
-WORD  cbSize
-</pre>
-</blockquote>
-where <tt>UNION</tt> is a C-style union structure and
-<tt>CHAR</tt> is an 8-bit unsigned integer.
-</p><p>
-Profile requirements include:
-</p>
-<ul>
-<li> <tt>wFormatTag</tt> &#x2260; 65534
-<li> If <tt>wFormatTag</tt> = 1 then
-<ul>
-<li> <tt>nAvgBytesPerSec</tt> = <tt>nSamplesPerSec*nBlockAlign</tt>
-(recommended)
-<li> <tt>nBlockAlign</tt> = <tt>nChannels</tt>*<strong>ceiling</strong>(<tt>wBitsPerSample</tt>/8)
-<li> <tt>wBitsPerSample</tt> = 8 or 16
-</ul>
-</ul>
-<p>
-
-<li> <strong>WAVEFORMATEXTENSIBLE</strong>
-<p>
-This is the most recent version of the Microsoft WAVE format for audio
-sample data with greater than 2 channels or 16-bit sampling
-[<a href="references.html#waveformatextensible">WAVEFORMATEXTENSIBLE</a>].
-The
-<tt>fmt</tt> chunk is defined by the WAVEFORMATEXTENSIBLE structure with a
-length &#x2265; 40:
-<blockquote>
-<pre>
-WAVEFORMATEX
-UNION samples   {
-         WORD  wValidBitsPerSample
-         WORD  wSamplesPerBlock
-         WORD  wReserved
-}
-DWORD dwChannelMask
-GUID  subFormat {
-         DWORD f1
-         WORD  f2
-         WORD  f3
-         CHAR  f4[8]
-}
-</pre>
-</blockquote>
-</p><p>
-Profile requirements include:
-</p>
-<ul>
-<li> <tt>wFormatTag</tt> = 65534
-<li> <tt>nBlockAlign</tt> = <tt>nChannels</tt>*<strong>ceiling</strong>(<tt>wBitsPerSample</tt>/8)
-<li> <tt>wBitsPerSample</tt> is multiple of 8
-<li> <tt>cbSize</tt> &gt; 21
-<li> <tt>wValidBitsPerSample</tt> &#x2264; <tt>wBitsPerSample</tt>
-</ul>
-<p>
-
-<li> <strong>Broadcast Wave Format 0 and 1</strong>
-<p>
-Broadcast Wave Format (BWF) is an extension of the WAVEFORMATEX profile
-defined by the European Broadcast Union (EBU) as
-EBU Technical Specification 3285
-[<a href="references.html#bwf">BWF</a>,
-<a href="references.html#bwf-1">BWF Supp 1</a>,
-<a href="references.html#bwf-2">BWF Supp 2</a>,
-<a href="references.html#bwf-3">BWF Supp 3</a>,
-<a href="references.html#bwf-4">BWF Supp 4</a>,
-<a href="references.html#bwf-5">BWF Supp 5</a>].
-</p><p>
-Profile requirements include:
-</p>
-<ul>
-<li> "fmt " chunk <tt>wFormatTag</tt> = 1 or 80
-<li> "bext" chunk <tt>version</tt> = 0 (for version 0) or 1 (for version 1)
-</ul>
+  <li> <strong>PCMWAVEFORMATEX</strong>
+    <p>
+    This is an extension to the WAVEFORMAT profile in which the <tt>fmt</tt> chunk
+    is defined by the PCMWAVEFORMATEX structure with a length of 16 [<a href="/references#pcmwaveformat">PCMWAVEFORMAT</a>]:
+    </p>
+    <blockquote>
+    <pre>
+      WAVEFORMAT
+      WORD  wBitsPerSample
+    </pre>
+    </blockquote>
+    <p>
+    Profile requirements include:
+    </p>
+      <ul>
+        <li><tt>wFormatTag</tt> = 1</li>
+      </ul>
+  </li>
+  <li> <strong>WAVEFORMATEX</strong>
+    <p>
+    This is an extension to the PCMWAVEFORMATEX profile supporting both PCM
+    and non-PCM audio formats [<a href="/references#waveformatex">WAVEFORMATEX</a>].
+    The <tt>fmt</tt> chunk is defined by the WAVEFORMATEX structure with a
+    length &#x2265; 18:
+    </p>
+    <blockquote>
+      <pre>
+      PCMWAVEFORMATEX
+      WORD  cbSize
+      </pre>
+    </blockquote>
+    <p>
+    where <tt>UNION</tt> is a C-style union structure and
+    <tt>CHAR</tt> is an 8-bit unsigned integer.
+    </p>
+    <p>
+    Profile requirements include:
+    </p>
+    <ul>
+      <li><tt>wFormatTag</tt> &#x2260; 65534</li>
+      <li>If <tt>wFormatTag</tt> = 1 then:
+        <ul>
+          <li><tt>nAvgBytesPerSec</tt> = <tt>nSamplesPerSec*nBlockAlign</tt> (recommended)</li>
+          <li><tt>nBlockAlign</tt> = <tt>nChannels</tt>*<strong>ceiling</strong>(<tt>wBitsPerSample</tt>/8)</li>
+          <li><tt>wBitsPerSample</tt> = 8 or 16</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li> <strong>WAVEFORMATEXTENSIBLE</strong>
+    <p>
+    This is the most recent version of the Microsoft WAVE format for audio
+    sample data with greater than 2 channels or 16-bit sampling
+    [<a href="/references#waveformatextensible">WAVEFORMATEXTENSIBLE</a>].
+    The <tt>fmt</tt> chunk is defined by the WAVEFORMATEXTENSIBLE structure with a
+    length &#x2265; 40:
+    </p>
+    <blockquote>
+      <pre>
+        WAVEFORMATEX
+        UNION samples   {
+                 WORD  wValidBitsPerSample
+                 WORD  wSamplesPerBlock
+                 WORD  wReserved
+        }
+        DWORD dwChannelMask
+        GUID  subFormat {
+                 DWORD f1
+                 WORD  f2
+                 WORD  f3
+                 CHAR  f4[8]
+        }
+      </pre>
+    </blockquote>
+    <p>
+      Profile requirements include:
+    </p>
+    <ul>
+      <li><tt>wFormatTag</tt> = 65534</li>
+      <li><tt>nBlockAlign</tt> = <tt>nChannels</tt>*<strong>ceiling</strong>(<tt>wBitsPerSample</tt>/8)</li>
+      <li><tt>wBitsPerSample</tt> is multiple of 8</li>
+      <li><tt>cbSize</tt> &gt; 21</li>
+      <li><tt>wValidBitsPerSample</tt> &#x2264; <tt>wBitsPerSample</tt></li>
+    </ul>
+    <p>
+  </li>
+  <li><strong>Broadcast Wave Format 0 and 1</strong>
+    <p>
+      Broadcast Wave Format (BWF) is an extension of the WAVEFORMATEX profile
+      defined by the European Broadcast Union (EBU) as
+      EBU Technical Specification 3285
+      [<a href="/references#bwf">BWF</a>,
+      <a href="/references#bwf-1">BWF Supp 1</a>,
+      <a href="/references#bwf-2">BWF Supp 2</a>,
+      <a href="/references#bwf-3">BWF Supp 3</a>,
+      <a href="/references#bwf-4">BWF Supp 4</a>,
+      <a href="/references#bwf-5">BWF Supp 5</a>].
+    </p>
+    <p>
+      Profile requirements include:
+    </p>
+    <ul>
+      <li>"fmt " chunk <tt>wFormatTag</tt> = 1 or 80</li>
+      <li>"bext" chunk <tt>version</tt> = 0 (for version 0) or 1 (for version 1)</li>
+    </ul>
+  </li>
 </ul>
 
 <h2>6 Additional Module Properties</h2>
 
 <ul>
-<li> Nominal file extension: .wav
-<li> Nominal file extension: .bwf (for the BWF profile)
+<li>Nominal file extension: .wav</li>
+<li> Nominal file extension: .bwf (for the BWF profile)</li>
 </ul>
 </div>
 {% include footer.html %}

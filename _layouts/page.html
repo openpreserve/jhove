@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+{% include navbar.html nav=site.data.navbar %}
+  <div class="container theme-showcase" role="main">
+    {{ content }}
+  </div>
+  {% include footer.html %}
+</body>
+</html>

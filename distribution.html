@@ -1,27 +1,13 @@
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: Distribution
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<link rel="Stylesheet" href="style.css" type="text/css">
-<meta NAME="Description" CONTENT="How the JHOVE source and object code is distributed, and system requirements">
-<title>JHOVE Distribution</title>
-</head>
-<body>
-<img src="jhove-logo.gif">
+{% include header.html %}
+<body role="document">
 
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu"
-                        href="documentation.html">Documentation</a></td>
-<td class="active">Distribution</td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
 <h1>JHOVE Distribution</h1>
 
 <p>The latest version of JHOVE can be <a href="https://github.com/openpreserve/jhove/releases/latest/">downloaded
@@ -29,22 +15,23 @@ from GitHub here</a>. A full history of JHOVE releases is also available from th
 <a href="https://github.com/openpreserve/jhove/releases/">GitHub downloads page</a>.</p>
 
 <h2>1 Requirements</h2>
-
-<p>
 <ol>
-<li> <a href="http://java.sun.com/">Java</a>
-<a href="http://java.sun.com/j2se">J2SE</a>
-<a href="http://java.sun.com/j2se/1.4">1.4</a><br>
-(JHOVE was originally implemented using the SUN J2SE SDK 1.4.1, but has
-also been tested to run properly under
-<a href="http://www.sun.com/">Sun</a>
-<a href="http://java.sun.com/javase/downloads/index_jdk5.jsp">J2SE SDK 5</a>.)
-<li> If you would like to recompile the JHOVE source code, then
-<a href="http://www.apache.org/">Apache</a>
-<a href="http://ant.apache.org/">Ant</a> is required<br>
-Note that the JAVA_HOME environment variable must be appropriately
-assigned for Ant to function properly.<br>
-(JHOVE was implemented and tested using ANT 1.5.1.)
+  <li>
+    <a href="http://java.sun.com/">Java</a>
+    <a href="http://java.sun.com/j2se">J2SE</a>
+    <a href="http://java.sun.com/j2se/1.4">1.4</a><br>
+    (JHOVE was originally implemented using the SUN J2SE SDK 1.4.1, but has
+    also been tested to run properly under  <a href="http://www.sun.com/">Sun</a>
+    <a href="http://java.sun.com/javase/downloads/index_jdk5.jsp">J2SE SDK 5</a>.)
+  </li>
+  <li>
+    If you would like to recompile the JHOVE source code, then
+    <a href="http://www.apache.org/">Apache</a>
+    <a href="http://ant.apache.org/">Ant</a> is required<br>
+    Note that the JAVA_HOME environment variable must be appropriately
+    assigned for Ant to function properly.<br>
+    (JHOVE was implemented and tested using ANT 1.5.1.)
+  </li>
 </ol>
 
 <p>
@@ -61,19 +48,11 @@ JHOVE is distributed as a GZIP'ed TAR and ZIP files under the terms of the
 <a href="http://www.gnu.org/licenses/licenses.html#LGPL">Lesser General Public
 License</a> (LGPL).
 </p>
-</table>
-</blockquote>
-</p><p>
-<blockquote>
-<table border="1" cellpadding="5" cellspacing="5">
-</table>
-</blockquote>
-</p>
 
 <h2>3 Third-party modules</h2>
 <p>Modules for additional file formats have been written by
 authors outside of the Harvard University Library (HUL).
-These are <a href="thirdpartymodules.html">available for downloading</a>.
+These are <a href="/modules/third-party/">available for downloading</a>.
 Please note that these modules are <em>not</em> supported by HUL.
 </p>
 
@@ -81,26 +60,27 @@ Please note that these modules are <em>not</em> supported by HUL.
 <h2>4 Installation</h2></a>
 
 <p>
-The files of the standard HUL-supported distribution packages can be 
+The files of the standard HUL-supported distribution packages can be
 unpacked by:
-</p><blockquote>
-<pre>
-gunzip  jhove-1_1.tar.gz
-tar xvf jhove-1_1.tar
+</p>
+<blockquote>
+  <pre>
+    gunzip  jhove-1_1.tar.gz
+    tar xvf jhove-1_1.tar
 
-gunzip  jhove-examples.tar.gz
-tar xvf jhove-examples.tar
-</pre>
+    gunzip  jhove-examples.tar.gz
+    tar xvf jhove-examples.tar
+  </pre>
 </blockquote>
 or
 <blockquote>
-<pre>
-unzip jhove-1_1.zip
-unzip jhove-example.zip
-</pre>
+  <pre>
+    unzip jhove-1_1.zip
+    unzip jhove-example.zip
+  </pre>
 </blockquote>
 <p>
-which will produce the following directory structure:
+  which will produce the following directory structure:
 </p>
 
 <h3>4.1 Directory Structure</h3>
@@ -158,9 +138,9 @@ jhove/
                                                       xhtml-lat1.ent
                                                       xhtml-special.ent
                                                       xhtml-symbol.ent
-                                                      xhtml1-frameset.dtd 
+                                                      xhtml1-frameset.dtd
                                                       xhtml1-strict.dtd
-                                                      xhtml1-transitional.dtd 
+                                                      xhtml1-transitional.dtd
                                                       xhtml11-flat.dtd
                                                  iff/
                                                       build.xml
@@ -243,43 +223,40 @@ and set the <tt>&lt;jhoveHome&gt;</tt> element to the absolute
 pathname of the JHOVE installation, or home, directory and the
 temporary directory (in which temporary files are created):
 </p>
-<p>
 <blockquote>
-<pre>
-&lt;jhoveHome&gt;<em>jhove-installation-directory</em>&lt;/jhoveHome&gt;
-&lt;tempDirectory&gt;<em>temporary-directory</em>&lt;/tempDirectory&gt;
-</pre>
+  <pre>
+    &lt;jhoveHome&gt;<em>jhove-installation-directory</em>&lt;/jhoveHome&gt;
+    &lt;tempDirectory&gt;<em>temporary-directory</em>&lt;/tempDirectory&gt;
+  </pre>
 </blockquote>
-The JHOVE home directory is the top-most directory in the distribution TAR
-or ZIP file.
-On Unix systems, <tt>/var/tmp</tt> is an appropriate temporary directory; on
-Windows, <tt>C:\Temp</tt>.
-For example, if the distribution TAR
-file is disaggregated on a Unix system in the directory "/users/sampleuser/projects", 
-then the configuration file should read:
-</p>
-
 <p>
-<blockquote>
-<pre>
-&lt;jhoveHome&gt;/users/sampleuser/projects/jhove&lt;/jhoveHome&gt;
-&lt;tempDirectory&gt;/var/tmp&lt;/jhoveHome&gt;
-</pre>
-</blockquote>
+  The JHOVE home directory is the top-most directory in the distribution TAR
+  or ZIP file.
+  On Unix systems, <tt>/var/tmp</tt> is an appropriate temporary directory; on
+  Windows, <tt>C:\Temp</tt>.
+  For example, if the distribution TAR
+  file is disaggregated on a Unix system in the directory "/users/sampleuser/projects",
+  then the configuration file should read:
 </p>
-
+<blockquote>
+  <pre>
+    &lt;jhoveHome&gt;/users/sampleuser/projects/jhove&lt;/jhoveHome&gt;
+    &lt;tempDirectory&gt;/var/tmp&lt;/jhoveHome&gt;
+  </pre>
+</blockquote>
 <p>
 In the JHOVE home directory, edit the JHOVE Bourne shell driver script,
 <tt>jhove</tt>, and set the JHOVE home directory, Java home directory,
 and Java interpreter:
 </p>
 <blockquote>
-<pre>
-JHOVE_HOME=<em>jhove-home-directory</em>
-JAVA_HOME=<em>java-home-directory</em>
-JAVA=<em>java-interpreter</em>
-</pre>
+  <pre>
+    JHOVE_HOME=<em>jhove-home-directory</em>
+    JAVA_HOME=<em>java-home-directory</em>
+    JAVA=<em>java-interpreter</em>
+  </pre>
 </blockquote>
+<p>
 where <tt>JHOVE_HOME</tt> is set to specify the absolute pathname of the
 JHOVE home directory;
 <tt>JAVA_HOME</tt> is set to specify the absolute pathname of the
@@ -288,51 +265,45 @@ Java home directory; and
 Java interpreter.
 For example:
 </p>
-<p>
 <blockquote>
-<pre>
-JHOVE_HOME=/users/sampleuser/projects/jhove
-JAVA_HOME=/usr/local/j2re1.4.1_02
-JAVA=$JAVA_HOME/bin/java
-</pre>
+  <pre>
+    JHOVE_HOME=/users/sampleuser/projects/jhove
+    JAVA_HOME=/usr/local/j2re1.4.1_02
+    JAVA=$JAVA_HOME/bin/java
+  </pre>
 </blockquote>
-</p>
-
-
 <p>
 For Unix systems which support Perl, a Perl script is provided
 to facilitate the setting of the appropriate values without
 a lot of manual editing.  From the
 JHOVE home directory, type
 </p>
-<p>
 <blockquote>
-<pre>
-configure.pl <em>jhove-home-directory java-home-directory java-interpreter</em>
-</pre>
+  <pre>
+    configure.pl <em>jhove-home-directory java-home-directory java-interpreter</em>
+  </pre>
 </blockquote>
+<p>
+  This will configure the <code>jhove</code> script,
+  the various dump utilities, and
+  <code>conf/jhove.conf</code> with the values you select.
+  This will not work on Windows systems.
 </p>
 <p>
-This will configure the <code>jhove</code> script,
-the various dump utilities, and
-<code>conf/jhove.conf</code> with the values you select.
-This will not work on Windows systems.
+  For Window systems, the DOS shell driver script, <tt>jhove.bat</tt>, should
+  be edited to supply the correct values for the JHOVE home directory,
+  Java home directory, and Java interpreter:
 </p>
-
-<p>
-For Window systems, the DOS shell driver script, <tt>jhove.bat</tt>, should 
-be edited to supply the correct values for the JHOVE home directory,
-Java home directory, and Java interpreter:
 <blockquote>
-<pre>
-SET JHOVE_HOME=<em>jhove-home-directory</em>
-SET JAVA_HOME=<em>java-home-directory</em>
-SET JAVA=%JAVA_HOME%\bin\java
-</pre>
+  <pre>
+    SET JHOVE_HOME=<em>jhove-home-directory</em>
+    SET JAVA_HOME=<em>java-home-directory</em>
+    SET JAVA=%JAVA_HOME%\bin\java
+  </pre>
 </blockquote>
-</p>
 <p>
 For example:
+</p>
 <blockquote>
 <pre>
 SET JHOVE_HOME="C:\Program Files\jhove"
@@ -340,24 +311,24 @@ SET JAVA_HOME="C:\Program Files\java\j2re1.4.1_02"
 SET JAVA=%JAVA_HOME%\bin\java
 </pre>
 </blockquote>
-</p>
-
 <p>
 The quotation marks are necessary because of the embedded space characters.
 On Windows platforms it may also be necessary to add the Java bin subdirectory
 to the System PATH environment variable:
-</blockquote>
+</p>
+<blockquote>
 <pre>
 PATH=C:\Program Files\java\j2re1.4.1_02\bin;...
 </pre>
 </blockquote>
+<p>
 Specific instructions on installing JHOVE in a Windows XP environment
-are <a href="windows_xp.html">available</a>.
+are <a href="/getting-started/windows/">available</a>.
 For additional information on setting a Windows environment variable,
 consult your local documentation or system administrator.
 </p>
 
-<h3>4.3 Configuring JHOVE</h3></a>
+<h3>4.3 Configuring JHOVE</h3>
 
 <p>
 At the time of its invocation, JHOVE
@@ -367,12 +338,12 @@ The configuration file is specified by the first valid value defined as:
 </p>
 <ol>
 <li> The <tt>-c <em>config</em></tt>
-<a href="#invocation">command line</a> argument (only for the command-line interface);
+<a href="/getting-started#invocation">command line</a> argument (only for the command-line interface);</li>
 <li> The file <tt>${<em>user.home</em>}/jhove/conf/jhove.conf</tt>,
 where <tt>${<em>user.home</em>}</tt>
-is the standard Java <tt>user.home</tt> property; or
+is the standard Java <tt>user.home</tt> property; or</li>
 <li> The <tt>edu.harvard.hul.ois.jhove.config</tt> property in
-the properties file <tt>${<em>user.home</em>}/jhove/jhove.properties</tt>.
+the properties file <tt>${<em>user.home</em>}/jhove/jhove.properties</tt>.</li>
 </ol>
 
 <p>
@@ -388,6 +359,7 @@ XML Schema
 &lt;<a href="http://hul.harvard.edu/ois/xml/xsd/jhove/jhoveConfig.xsd">http://hul.harvard.edu/ois/xml/xsd/jhove/jhoveConfig.xsd</a>&gt;.
 (In the following display, brackets [ and ] enclose optional configuration
 file elements.)
+</p>
 <blockquote>
 <pre>
 &lt;?xml version="1.0"?&gt;
@@ -417,12 +389,11 @@ file elements.)
 &lt;/jhoveConfig&gt;
 </pre>
 </blockquote>
-
 <p>
 The optional <tt>&lt;defaultEncoding&gt;</tt> element specifies the default character
 encoding used by output handlers.
 This option can also be specified by the <tt>-e <em>encoding</em></tt>
-<a href="#invocation">command line</a> argument.
+<a href="/getting-started#invocation">command line</a> argument.
 The default output encoding is <tt>UTF-8</tt>.
 </p>
 
@@ -430,7 +401,7 @@ The default output encoding is <tt>UTF-8</tt>.
 The optional <tt>&lt;tempDirectory&gt;</tt> element specifies the pathname of
 the directory in which temporary files are created.
 This option can also be specified by the <tt>-t <em>directory</em></tt>
-<a href="#invocation">command line</a> argument.
+<a href="/getting-started#invocation">command line</a> argument.
 On most Unix systems, a reasonable temporary directory is "<tt>/var/tmp</tt>";
 on Windows, "<tt>C:\temp</tt>".
 </p>
@@ -439,7 +410,7 @@ on Windows, "<tt>C:\temp</tt>".
 The optional <tt>&lt;bufferSize&gt;</tt> element specifies the buffer size
 use for buffered I/O.
 This option can also be specified by the <tt>-b <em>buffer</em></tt>
-<a href="#invocation">command line</a> argument.
+<a href="/getting-started#invocation">command line</a> argument.
 </p>
 
 <p>
@@ -447,24 +418,22 @@ The optional <tt>&lt;mixVersion&gt;</tt> element specifies the MIX schema
 version conformance for the output produced by the XML output handler.
 By default the handler output conforms to version 0.2 of the schema.
 For version 1.0 conformance, specify:
+</p>
 <blockquote>
 <pre>
 &lt;mixVersion&gt;1.0&lt;mixVersion&gt;
 </pre>
 </blockquote>
-</p>
-
 <p>
 The optional <tt>&lt;sigBytes&gt;</tt> element specifies the maximum
 number of byte that JHOVE modules will examine looking for an internal
 signature (or magic number). The default value is 1024.
 </p>
-
 <p>
 The optional <tt>&lt;logLevel&gt;</tt> element specifies the
-logging level, used by calls to the logging API. 
+logging level, used by calls to the logging API.
 This option can also be specified by the <tt>-l <em>log-level</em></tt>
-<a href="#invocation">command line</a> argument. The
+<a href="/getting-started#invocation">command line</a> argument. The
 default is <tt>SEVERE</tt>.
 </p>
 <p>
@@ -478,17 +447,15 @@ edu.harvard.hul.ois.jhove.module.TiffModule
 edu.harvard.hul.ois.jhove.module.Utf8Module
 </pre>
 </blockquote>
-
 <p>
 The order in which format modules are defined is important; when performing
 a format identification operation, JHOVE will search for a matching module in
 the order in which the modules are defined in the configuration file.
 In general, the modules for more generic formats should come later in the list.
-For example, the standard  module <a href="ascii-hul.html">ASCII</a> should be
-defined before the <a href="utf8-hul.html">UTF-8</a> module, since all ASCII
+For example, the standard  module <a href="/modules/ascii/">ASCII</a> should be
+defined before the <a href="/modules/utf8/">UTF-8</a> module, since all ASCII
 objects are, by definition, UTF-8 objects, but not vice versa.
 </p>
-
 <p>
 The optional <tt>&lt;init&gt;</tt> element is used to pass a module-specific
 argument to a module at the time it is first instantiated within JHOVE.
@@ -496,7 +463,6 @@ See the details for the individual modules to see if such an argument
 is defined.  The use of the <tt>&lt;init&gt;</tt> argument is currently not
 defined for any of the standard JHOVE modules.
 </p>
-
 <p>
 The optional and repeatable <tt>&lt;param&gt;</tt> element is used to pass a
 module-specific parameter to a module immediately prior to each invocation of
@@ -504,23 +470,24 @@ the module's <tt>parse()</tt> method.
 See the details for the individual modules to see if such a parameter
 is defined.
 </p>
-
 <p>
 In addition to the modules and output handlers specified in the
 configuration file, JHOVE is also always statically linked with
 the standard Bytestream module and Text and XML output handlers.
 </p>
-
 <h3>4.4 Testing</h3>
 
 <p>
 Invoking JHOVE on the example file <tt>control.txt</tt>:
+</p>
 <blockquote>
 <pre>
 jhove -c conf/jhove.conf -k examples/ascii/control.txt
 </pre>
 </blockquote>
+<p>
 should generate the following output:
+</p>
 <blockquote>
 <pre>
 Jhove (Rel. 1.0, 2005-05-26)
@@ -532,7 +499,7 @@ Jhove (Rel. 1.0, 2005-05-26)
   Format: ASCII
   Status: Well-formed and valid
   MIMEtype: text/plain; charset=US-ASCII
-  ASCIIMetadata: 
+  ASCIIMetadata:
    LineEndings: LF
    ControlCharacters: TAB (0x09), VT (0x0B), FF (0x0C), SUB (0x1A)
   Checksum: bae406b6
@@ -548,46 +515,14 @@ with the appropriate date and time values.
 </p>
 <p>
 The JHOVE Swing-based GUI interface can be invoked from a command shell:
+</p>
 <blockquote>
 <code>
 java -jar bin/JhoveView.jar
 </code>
 </blockquote>
-</p>
 
-<h2>5 Tutorial</h2>
-
-<p>
-A tutorial on how to use JHOVE is <a href="using.html">available</a>.
-</p>
-
-<h2>Acknowledgements</h2>
-
-<p>
-Development of JHOVE is funded in part by the
-<a href="http://www.mellon.org">Andrew W. Mellon Foundation</a>
-through a grant to <a href="http://www.jstor.org">JSTOR</a>
-for the recently launched
-<a href="http://www.ithaka.org/e-archive/">Electronic-Archiving Initiative</a>.
-</p>
-
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="inactive"><a class="menu"
-                        href="documentation.html">Documentation</a></td>
-<td class="active">Distribution</td>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
-<address>
-Copyright 2003-2011 by JSTOR and the President and Fellows of Harvard
-College. Used by permission.<br>
-Last updated 2011-01-04
-</address>
+</div>
+    {% include footer.html %}
 </body>
 </html>
-
