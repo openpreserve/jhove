@@ -11,6 +11,8 @@
       subhref: "aiff/"
     - subtitle: "ASCII"
       subhref: "ascii/"
+    - subtitle: "Bytestream"
+      subhref: "bytestream/"
     - subtitle: "GIF"
       subhref: "gif/"
     - subtitle: "HTML"

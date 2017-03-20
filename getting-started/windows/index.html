@@ -1,29 +1,12 @@
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-        "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+---
+title: Getting started
+---
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<link rel="Stylesheet" href="style.css" type="text/css">
-<meta NAME="Description" CONTENT="Usage instructions for JHOVE on Windows XP"/>
-<title>JHOVE Installation and Use (Windows XP)</title>
-</head>
-
-<body>
-<img src="jhove-logo.gif"">
-
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="active">Windows&nbsp;XP</td>
-<td class="inactive"><a class="menu"
-                        href="documentation.html">Documentation</a></td>
-<td class="inactive"><a class="menu"
-                        href="distribution".html">Distribution</a></atd>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
+{% include header.html %}
+<body role="document">
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
 
 <h1>JHOVE  Installation Guide for Windows XP<br>
 <span class="note">[Contributed 2006-08-22 by Michael Stuart, UCSD]</span></h1>
@@ -31,116 +14,124 @@
 <h2>1 Download and install a J2SE 6 Java Runtime Environment (JRE)</h2>
 
 <ol type="a">
-<li><p>The Sun J2SE 6 SDK (including a JRE and all code packages
-necessary for re-compilation) is available
-<a href="http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html">here</a>.
-
-</p>
-
-<li><p>Exectute the downloaded file, installing the SDK in the folder
-<pre>C:\Program Files\Java</pre>
-
-</p>
+  <li>
+    <p>
+      The Sun J2SE 6 SDK (including a JRE and all code packages
+      necessary for re-compilation) is available
+      <a href="http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html">here</a>.
+    </p>
+  </li>
+  <li>
+    <p>Exectute the downloaded file, installing the SDK in the folder</p>
+    <pre>C:\Program Files\Java</pre>
+  </li>
 </ol>
 
 <h2>2 Download and install JHOVE</h2>
 
 <ol type="a">
-<li><p>JHOVE is available <a href="http://www.sourceforge.net/projects/jhove">here</a>.</p>
-
-<li type="a"><p>The current downloadable ZIP file is
-<pre>jhove-1_6.zip</pre>
-</p>
-
-<li><p>Extract the ZIP file to a new folder named
-<pre>C:\Documents and Settings\<em>USERNAME</em>\jhove</pre>
-where <em>USERNAME</em> is the user name of your Windows XP account on the
-installation machine. Note the name of the installation directory. In this
-example, we use C:\Program Files\java\/jre1.6.0_10.
-</p>
-
-<li"><p>Edit the JHOVE configuration file
-<pre>C:\Documents and Settings\<em>USERNAME</em>\jhove\conf\jhove.conf</pre>
-and
-</p>
-<ol type="i">
-<li><p>Change the value of the <code>&lt;jhoveHome&gt;</code> tag
-so that it reads as follows:
-<pre>&lt;jhoveHome&gt;&quot;C:\Documents and Settings\<em>USERNAME</em>\jhove&quot;&lt;/jhoveHome&gt;</pre>
-Make sure to include the quotation marks at the beginning and end of the tag
-value.
-</p>
-
-<li><p>Change the value of the <code>&lt;tempDirectory&gt;</code> tag
-so that it reads  as follows:
-<pre>&lt;tempDirectory&gt;C:\temp&lt;/tempDirectory&gt;</pre>
-</p>
-</ol>
-<p>
-where <em>USERNAME</em> is the user name of your Windows XP account on the
-installation machine.
-</p>
-
-<li><p>Edit the JHOVE batch file
-<pre>C:\Documents and Settings\<em>USERNAME</em>\jhove\jhove.bat</pre>
-and change the following parameters to these values
-(making sure to include the quotation marks, and adjusting JAVA_HOME to match
-your downloaded JRE):
-<pre>JHOVE_HOME=&quot;C:\Documents and Settings\<em>USERNAME</em>\jhove&quot;
-JAVA_HOME=&quot;C:\Program Files\java\/jre1.6.0_10&quot;
-JAVA=%JAVA_HOME%\bin\java
-</pre>
-where <em>USERNAME</em> is the user name of your Windows XP account on the
-installation machine.
-</p>
+  <li><p>JHOVE is available <a href="https://github.com/openpreserve/jhove">here</a>.</p></li>
+  <li>
+    <p>Extract the ZIP file to a new folder named</p>
+    <pre>
+      C:\Documents and Settings\<em>USERNAME</em>\jhove</pre>
+    <p>
+      where <em>USERNAME</em> is the user name of your Windows XP account on the
+      installation machine. Note the name of the installation directory. In this
+      example, we use C:\Program Files\java\/jre1.6.0_10.
+    </p>
+  </li>
+  <li>
+    <p>Edit the JHOVE configuration file</p>
+    <pre>C:\Documents and Settings\<em>USERNAME</em>\jhove\conf\jhove.conf</pre>
+    <p>and</p>
+    <ol type="i">
+      <li>
+        <p>
+          Change the value of the <code>&lt;jhoveHome&gt;</code> tag
+          so that it reads as follows:
+        </p>
+        <pre>
+          &lt;jhoveHome&gt;&quot;C:\Documents and Settings\<em>USERNAME</em>\jhove&quot;&lt;/jhoveHome&gt;
+        </pre>
+        <p>
+          Make sure to include the quotation marks at the beginning and end of the tag
+          value.
+        </p>
+      </li>
+      <li>
+        <p>
+          Change the value of the <code>&lt;tempDirectory&gt;</code> tag
+          so that it reads  as follows:
+        </p>
+        <pre>&lt;tempDirectory&gt;C:\temp&lt;/tempDirectory&gt;</pre>
+      </li>
+    </ol>
+    <p>
+      where <em>USERNAME</em> is the user name of your Windows XP account on the
+      installation machine.
+    </p>
+  </li>
+  <li>
+    <p>Edit the JHOVE batch file</p>
+    <pre>C:\Documents and Settings\<em>USERNAME</em>\jhove\jhove.bat</pre>
+    <p>
+      and change the following parameters to these values
+      (making sure to include the quotation marks, and adjusting JAVA_HOME to match
+      your downloaded JRE):
+    </p>
+    <pre>
+      JHOVE_HOME=&quot;C:\Documents and Settings\<em>USERNAME</em>\jhove&quot;
+      JAVA_HOME=&quot;C:\Program Files\java\/jre1.6.0_10&quot;
+      JAVA=%JAVA_HOME%\bin\java
+    </pre>
+    <p>
+      where <em>USERNAME</em> is the user name of your Windows XP account on the
+      installation machine.
+    </p>
+  </li>
 </ol>
 
 <h2>3 Using the JHOVE GUI Interface</h2>
 
 <ol type="a">
-<li><p>There are two ways to launch the JHOVE GUI interface:</p>
-
-<ol type="i">
-<li><p>From a DOS command line navigate to the JHOVE folder
-<pre>C:\Documents and Settings\<em>USERNAME</em>\jhove</pre>
-and issue the following command:
-<pre>java &ndash;jar bin/JhoveView.jar</pre>
-where <em>USERNAME</em> is the user name of your Windows XP account on the
-installation machine.
-</p>
-
-<li><p>Double-click the &ldquo;My computer&rdquo; icon on the desktop,
-then type the folder name
-<pre>C:\Documents and Settings\<em>USERNAME</em>\jhove\bin</pre>
-in the Address box,
-then double-Click on <code>JhoveView.jar</code> icon to launch JHOVE.</p>
-</ol>
+  <li>
+    <p>There are two ways to launch the JHOVE GUI interface:</p>
+    <ol type="i">
+      <li>
+        <p>
+          From a DOS command line navigate to the JHOVE folder
+        </p>
+        <pre>C:\Documents and Settings\<em>USERNAME</em>\jhove</pre>
+        <p>
+          and issue the following command:
+        </p>
+        <pre>java &ndash;jar bin/JhoveView.jar</pre>
+        <p>
+          where <em>USERNAME</em> is the user name of your Windows XP account on the
+          installation machine.
+        </p>
+      </li>
+      <li>
+        <p>
+          Double-click the &ldquo;My computer&rdquo; icon on the desktop,
+          then type the folder name
+        </p>
+        <pre>C:\Documents and Settings\<em>USERNAME</em>\jhove\bin</pre>
+        <p>
+          in the Address box,then double-Click on <code>JhoveView.jar</code> icon to launch JHOVE.
+        </p>
+      </li>
+    </ol>
+  </li>
 </ol>
 
 <p>
 Please refer to the
-<a href="http://hul.harvard.edu/jhove/using.html">documentation</a>
+<a href="/documentation/">documentation</a>
 for further information on using JHOVE.
 </p>
-
-<table class="menu">
-<tr>
-<td class="inactive"><a class="menu" href="index.html">Home</a></td>
-<td class="inactive"><a class="menu" href="using.html">Tutorial</a></td>
-<td class="active">Windows&nbsp;XP</td>
-<td class="inactive"><a class="menu"
-                        href="documentation.html">Documentation</a></td>
-<td class="inactive"><a class="menu"
-                        href="distribution".html">Distribution</a></atd>
-<td class="inactive"><a class="menu" href="links.html">Links</a></td>
-<td class="spacing">&nbsp;</td>
-</tr>
-</table>
-
-<address>
-Copyright 2003-2009 by the President and Fellows of Harvard College. Used by permission.<br>
-Last updated 2009-06-06
-</address>
+</div>
+    {% include footer.html %}
 </body>
 </html>
-

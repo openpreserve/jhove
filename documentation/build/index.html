@@ -16,46 +16,51 @@ title: Building from Source
       OPF's Maven repository
     </a> during development. The final 1.12 release artifacts will be published
     to Maven central. If you'd like to try the latest Maven modules then add:
-    <pre>
-      <repositories>
-        <repository>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <id>opf-dev-mvn</id>
-          <name>opf-dev</name>
-          <url>http://artifactory.opf-labs.org/artifactory/opf-dev</url>
-        </repository>
-      </repositories>
-    </pre>
+  </p>
+  <pre>
+    <repositories>
+      <repository>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>
+        <id>opf-dev-mvn</id>
+        <name>opf-dev</name>
+        <url>http://artifactory.opf-labs.org/artifactory/opf-dev</url>
+      </repository>
+    </repositories>
+  </pre>
+  <p>
     to your project's POM file then use this dependency for the core classes (e.g.
     `JhoveBase`, `Module`, `ModuleBase`, etc.):
-    <pre>
-      <dependency>
-        <groupId>org.openpreservation.jhove</groupId>
-        <artifactId>jhove-core</artifactId>
-        <version>[1.12.0,1.13.0)</version>
-      </dependency>
-    </pre>
-    and this for the JHOVE core module implementations:
-    <pre>
-      <dependency>
-        <groupId>org.openpreservation.jhove</groupId>
-        <artifactId>jhove-modules</artifactId>
-        <version>[1.12.0,1.13.0)</version>
-      </dependency>
-    </pre>
   </p>
+  <pre>
+    <dependency>
+      <groupId>org.openpreservation.jhove</groupId>
+      <artifactId>jhove-core</artifactId>
+      <version>[1.12.0,1.13.0)</version>
+    </dependency>
+  </pre>
+  <p>
+    and this for the JHOVE core module implementations:
+  </p>
+  <pre>
+    <dependency>
+      <groupId>org.openpreservation.jhove</groupId>
+      <artifactId>jhove-modules</artifactId>
+      <version>[1.12.0,1.13.0)</version>
+    </dependency>
+  </pre>
+
   <h2>GitHub</h2>
   <p>
     Clone this project, checkout the integration branch and use Maven: e.g.:
-    <pre>
-      git clone git@github.com:openpreserve/jhove.git
-      cd jhove
-      git checkout integration
-      mvn clean install
-    </pre>
   </p>
+  <pre>
+    git clone git@github.com:openpreserve/jhove.git
+    cd jhove
+    git checkout integration
+    mvn clean install
+  </pre>
 </div>
     {% include footer.html %}
 </body>
