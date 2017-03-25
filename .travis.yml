@@ -35,7 +35,8 @@ before_install:
 
 script:
 - mvn clean install -DjacocoAgg
-# - "./jhove-bbt/scripts/travis-test.sh"
+- "./jhove-bbt/scripts/travis-test.sh"
+- mvn verify -DjacocoAgg
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
