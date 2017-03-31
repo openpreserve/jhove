@@ -1,5 +1,7 @@
 @ECHO OFF
+
 REM JHOVE - JSTOR/Harvard Object Validation Environment
+REM
 REM Copyright 2003-2005 by JSTOR and the President and Fellows of Harvard College
 REM JHOVE is made available under the GNU General Public License (see the
 REM file LICENSE for details)
@@ -8,10 +10,7 @@ REM Usage: jhove [-c config] [-m module] [-h handler] [-e encoding]
 REM              [-H handler] [-o output] [-x saxclass] [-t tempdir]
 REM              [-b bufsize] [-l loglevel] [[-krs] dir-file-or-uri [...]]
 REM
-REM For Windows systems, copy jhove_bat.tmpl to jhove.bat and change
-REM the value of JHOVE_HOME to the path to your jhove directory.
-REM
-REM where -c config   Configuration file pathname
+REM Where -c config   Configuration file pathname
 REM       -m module   Module name
 REM       -h handler  Output handler name (defaults to TEXT)
 REM       -e encoding Character encoding of output handler (defaults to UTF-8)
@@ -25,32 +24,30 @@ REM       -k          Calculate CRC32, MD5, and SHA-1 checksums
 REM       -r          Display raw data flags, not textual equivalents
 REM       -s          Format identification based on internal signatures only
 REM       dir-file-or-uri Directory, file pathname, or URI of formatted content
-REM
-REM Configuration constants:
-REM JHOVE_HOME Jhove installation directory
-REM JAVA_HOME  Java JRE directory
-REM JAVA       Java interpreter
-REM EXTRA_JARS Extra jar files to add to CLASSPATH
-
-REM SET JHOVE_HOME="C:\Program Files\jhove\"
 
 REM *************************************************************************
-REM %~dp0 is the location of this file.
+REM Configuration options:
+REM EXTRA_JARS  Extra JAR files to add to the Java class path
 REM *************************************************************************
-SET JHOVE_HOME=%~dp0
-SET JHOVE_VERSION="$APP_VER"
-SET EXTRA_JARS=
+SET "EXTRA_JARS="
 
 REM NOTE: Nothing below this line should be edited
 REM #########################################################################
 
-SET CP="%JHOVE_HOME%bin\jhove-apps-%JHOVE_VERSION%.jar"
+REM The $APP_VER variable will be replaced at install time
+SET "JHOVE_VERSION=$APP_VER"
+
+REM Infer JHOVE_HOME from script location
+SET "JHOVE_HOME=%~dp0"
+
+REM Create Java class path
+SET "CP=%JHOVE_HOME%bin\jhove-apps-%JHOVE_VERSION%.jar"
 IF "%EXTRA_JARS%" NEQ "" (
-  SET CP=%CP%:%EXTRA_JARS
+  SET "CP=%CP%;%EXTRA_JARS%"
 )
 
-REM %* is a copy of all command line arguments
-SET ARGS=-c "%JHOVE_HOME%conf\jhove.conf" %*
+REM Set default configuration location
+SET "CONFIG=%JHOVE_HOME%conf\jhove.conf"
 
-REM Set the CLASSPATH and invoke the Java loader
-JAVA -classpath %CP% Jhove %ARGS%
+REM Set class path and invoke Java
+java -classpath "%CP%" Jhove -c "%CONFIG%" %*
