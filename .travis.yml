@@ -1,13 +1,13 @@
 language: java
 
 jdk:
-- oraclejdk7
-- oraclejdk8
+  - oraclejdk7
+  - oraclejdk8
 
 branches:
   except:
-  - "/^v|d\\d+\\.\\d+\\.\\d+$/"
-  - "/^jenkins-jhove-v|d\\d+\\.\\d+\\.\\d+$/"
+    - "/^v|d\\d+\\.\\d+\\.\\d+$/"
+    - "/^jenkins-jhove-v|d\\d+\\.\\d+\\.\\d+$/"
 
 notifications:
   slack:
@@ -28,19 +28,18 @@ addons:
     branch_pattern: integration
 
 before_install:
-- sudo apt-get install -y realpath
-- curl -sL https://github.com/jpm4j/jpm4j.installers/raw/master/dist/biz.aQute.jpm.run.jar >jpm4j.jar
-- java -jar jpm4j.jar -u init
-- ~/jpm/bin/jpm install com.codacy:codacy-coverage-reporter:assembly
+  - sudo apt-get install -y realpath
+  - sudo apt-get install jq
+  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
 
 script:
-- mvn clean install -DjacocoAgg
-- "./jhove-bbt/scripts/travis-test.sh"
-- mvn verify -DjacocoAgg
+  - mvn clean install -DjacocoAgg
+  - "./jhove-bbt/scripts/travis-test.sh"
+  - mvn verify -DjacocoAgg
 
 after_success:
-- bash <(curl -s https://codecov.io/bash)
-- ~/jpm/bin/codacy-coverage-reporter -l Java -r jhove-apps/target/site/jacoco-aggregate/jacoco.xml
+  - bash <(curl -s https://codecov.io/bash)
+  - java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter -l Java -r jhove-apps/target/site/jacoco-aggregate/jacoco.xml
 
 after_failure:
-- cat /tmp/bbt-logs/log.txt | grep --group-separator"===== Unexpected output =====" -n -B 1 -A 2 Expected
+  - cat /tmp/bbt-logs/log.txt | grep --group-separator"===== Unexpected output =====" -n -B 1 -A 2 Expected
