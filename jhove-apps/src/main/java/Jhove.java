@@ -117,24 +117,24 @@ public class Jhove
             List<String> list   = new ArrayList<String> ();
     
     	 
-                /**********************************************************
-                 * Parse command line arguments:
-                 *  -m module    Module name
-                 *  -h handler   Output handler
+            /**********************************************************
+             * Parse command line arguments:
+             *  -m module    Module name
+             *  -h handler   Output handler
     	     *  -e encoding  Output encoding
-                 *  -H handler   About handler
-                 *  -o output    Output file pathname
-                 *  -t tempdir   Directory for temp files
-                 *  -b bufsize   Buffer size for buffered I/O
-                 *  -k           Calculate checksums
-                 *  -r           Display raw numeric flags 
-                 *  -s           Check internal signatures only
-                 *  dirFileOrUri Directories, file pathnames, or URIs
+             *  -H handler   About handler
+             *  -o output    Output file pathname
+             *  -t tempdir   Directory for temp files
+             *  -b bufsize   Buffer size for buffered I/O
+             *  -k           Calculate checksums
+             *  -r           Display raw numeric flags 
+             *  -s           Check internal signatures only
+             *  dirFileOrUri Directories, file pathnames, or URIs
     	     *
     	     * The following arguments were defined in previous
     	     * versions, but are now obsolete
-                 *  -p param     OBSOLETE
-                 *  -P param     OBSOLETE
+             *  -p param     OBSOLETE
+             *  -P param     OBSOLETE
     	     **********************************************************/
     
     	    quoted = false;
