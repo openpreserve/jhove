@@ -1,0 +1,11 @@
+<textmd:textMD xmlns:textmd="info:lc/xmlns/textMD-v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:lc/xmlns/textMD-v3 http://www.loc.gov/standards/textMD/textMD-v3.01a.xsd">
+  <textmd:character_info>
+    <textmd:charset>UTF-8</textmd:charset>
+    <textmd:byte_order>little</textmd:byte_order>
+    <textmd:byte_size>8</textmd:byte_size>
+    <textmd:character_size encoding="UTF-8">variable</textmd:character_size>
+    <textmd:linebreak>LF</textmd:linebreak>
+  </textmd:character_info>
+  <textmd:markup_basis version="1.0">XML</textmd:markup_basis>
+  <textmd:markup_language version="3.1">http://www.web3d.org/specifications/x3d-3.1.xsd</textmd:markup_language>
+</textmd:textMD>
