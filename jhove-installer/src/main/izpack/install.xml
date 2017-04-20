@@ -60,7 +60,8 @@
       <file targetdir="$INSTALL_PATH/conf" src="config/jhove.conf"/>
       <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="plain"/>
     </pack>
-    <pack name="JHOVE Shell Scripts" required="yes" os="unix" executable="yes">
+    <pack name="JHOVE Shell Scripts" required="yes">
+      <os family="unix"/>
       <description>Bash execution scripts for command line and GUI apps.</description>
       <file targetdir="$INSTALL_PATH" src="scripts/jhove"/>
       <parsable targetfile="$INSTALL_PATH/jhove" type="shell"/>
@@ -69,12 +70,15 @@
       <parsable targetfile="$INSTALL_PATH/jhove-gui" type="shell"/>
       <executable targetfile="$INSTALL_PATH/jhove-gui"/>
     </pack>
-    <pack name="JHOVE Batch Script" required="yes" os="windows">
+    <pack name="JHOVE Batch Script" required="yes">
+      <os family="windows"/>
       <description>DOS batch execution scripts for command line and GUI apps.</description>
       <file targetdir="$INSTALL_PATH" src="scripts/jhove.bat"/>
       <parsable targetfile="$INSTALL_PATH/jhove.bat" type="plain"/>
+      <executable targetfile="$INSTALL_PATH/jhove.bat"/>
       <file targetdir="$INSTALL_PATH" src="scripts/jhove-gui.bat"/>
       <parsable targetfile="$INSTALL_PATH/jhove-gui.bat" type="plain"/>
+      <executable targetfile="$INSTALL_PATH/jhove-gui.bat"/>
     </pack>
   </packs>
 </izpack:installation>
