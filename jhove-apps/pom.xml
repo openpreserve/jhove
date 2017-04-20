@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
-    <version>1.16.0</version>
+    <version>1.17.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>jhove-apps</artifactId>
@@ -30,7 +30,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.5.5</version>
         <configuration>
           <archive>
             <manifest>
@@ -51,67 +50,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.6</version>
-        <inherited>false</inherited>
-        <executions>
-          <execution>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-              <!-- Execute an ant task within maven -->
-                <echo message="Generating JaCoCo Reports" />
-                <taskdef name="report" classname="org.jacoco.ant.ReportTask">
-                  <classpath path="${basedir}/target/jacoco-jars/org.jacoco.ant.jar" />
-                </taskdef>
-                <mkdir dir="${basedir}/../target/coverage-report" />
-                <report>
-                  <executiondata>
-                    <fileset dir="${build.directory.core}">
-                      <include name="jacoco.exec" />
-                    </fileset>
-                    <fileset dir="${build.directory.modules}">
-                      <include name="jacoco.exec" />
-                    </fileset>
-                    <fileset dir="${build.directory.apps}">
-                      <include name="jacoco.exec" />
-                    </fileset>
-                  </executiondata>
-                  <structure name="jacoco-multi Coverage Project">
-                    <group name="jacoco-multi">
-                      <classfiles>
-                        <fileset dir="${classes.directory.core}" />
-                        <fileset dir="${classes.directory.modules}" />
-                        <fileset dir="${classes.directory.apps}" />
-                      </classfiles>
-                      <sourcefiles encoding="UTF-8">
-                        <fileset dir="${sources.directory.core}" />
-                        <fileset dir="${sources.directory.modules}" />
-                        <fileset dir="${sources.directory.apps}" />
-                      </sourcefiles>
-                    </group>
-                  </structure>
-                  <html destdir="${basedir}/../target/coverage-report/html" />
-                  <xml destfile="${basedir}/../target/jacoco.xml" />
-                  <csv destfile="${basedir}/../target/jacoco.csv" />
-                </report>
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>org.jacoco.ant</artifactId>
-            <version>${jacoco.version}</version>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>
@@ -134,5 +72,34 @@
       <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>jacoco-aggregate</id>
+      <activation>
+        <property>
+          <name>jacocoAgg</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>report</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>report-aggregate</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+    </build>
+    </profile>
+  </profiles>
 
 </project>
