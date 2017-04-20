@@ -26,6 +26,7 @@ public class XmlHandlerTest {
 	private static final Logger LOGGER = Logger.getLogger(XmlHandlerTest.class
 			.getName());
 
+	/* Values needed to generate the expected output */
 	private static final int EXPECTED_IMAGE_WIDTH = 8192;
 	private static final int EXPECTED_IMAGE_RESOLUTION = 564;
 	private static final int EXPECTED_LAST_BYTE = 255;
@@ -40,12 +41,12 @@ public class XmlHandlerTest {
 	private static final long EXPECTED_BLUEX_NUMENATOR = 644245120L;
 	private static final long EXPECTED_BLUEY_NUMENATOR = 257698032L;
 
-	private File outputFile;
-	private PrintWriter writer;
-	private XmlHandler handler;
-
+	/* Test instances to be serialized */
 	protected static NisoImageMetadata TEST_NISO_IMAGE_MD;
 	protected static TextMDMetadata TEST_TEXTMD;
+
+	private File outputFile;
+	private XmlHandler handler;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws IOException {
@@ -72,10 +73,10 @@ public class XmlHandlerTest {
 		TEST_NISO_IMAGE_MD.setBitsPerSample(new int[] { EXPECTED_BYTE_SIZE,
 				EXPECTED_BYTE_SIZE, EXPECTED_BYTE_SIZE });
 		TEST_NISO_IMAGE_MD.setSamplesPerPixel(EXPECTED_NUMBER_OF_BYTES);
-		TEST_NISO_IMAGE_MD.setWhitePointXValue(new Rational(EXPECTED_WP_NUMENATOR,
-				EXPECTED_DENOMINATOR));
-		TEST_NISO_IMAGE_MD.setWhitePointYValue(new Rational(EXPECTED_WP_NUMENATOR,
-				EXPECTED_DENOMINATOR));
+		TEST_NISO_IMAGE_MD.setWhitePointXValue(new Rational(
+				EXPECTED_WP_NUMENATOR, EXPECTED_DENOMINATOR));
+		TEST_NISO_IMAGE_MD.setWhitePointYValue(new Rational(
+				EXPECTED_WP_NUMENATOR, EXPECTED_DENOMINATOR));
 		TEST_NISO_IMAGE_MD.setPrimaryChromaticitiesRedX(new Rational(
 				EXPECTED_REDX_NUMENATOR, EXPECTED_DENOMINATOR));
 		TEST_NISO_IMAGE_MD.setPrimaryChromaticitiesRedY(new Rational(
@@ -106,16 +107,16 @@ public class XmlHandlerTest {
 	@Before
 	public void setUp() throws IOException {
 		// Prepare for a new test
-		outputFile = File.createTempFile("jhove_", ".xml");
-		writer = new PrintWriter(outputFile);
-		handler = new XmlHandler();
-		handler.setWriter(writer);
+		this.outputFile = File.createTempFile("jhove_", ".xml");
+		PrintWriter writer = new PrintWriter(outputFile);
+		this.handler = new XmlHandler();
+		this.handler.setWriter(writer);
 	}
 
 	@After
 	public void tearDown() {
-		if (outputFile != null && outputFile.exists()) {
-			outputFile.delete();
+		if (this.outputFile != null && this.outputFile.exists()) {
+			this.outputFile.delete();
 		}
 	}
 
@@ -127,8 +128,8 @@ public class XmlHandlerTest {
 		assertTrue(mix02File.isFile());
 		String expectedMix02 = readXmlFile(mix02File);
 
-		handler.showNisoImageMetadata02(TEST_NISO_IMAGE_MD);
-		handler.close();
+		this.handler.showNisoImageMetadata02(TEST_NISO_IMAGE_MD);
+		this.handler.close();
 
 		String generatedMix = readXmlFile(outputFile);
 		assertEquals("Mix v0.2 generated not conformant", expectedMix02,
@@ -143,8 +144,8 @@ public class XmlHandlerTest {
 		assertTrue(mix10File.isFile());
 		String expectedMix10 = readXmlFile(mix10File);
 
-		handler.showNisoImageMetadata10(TEST_NISO_IMAGE_MD);
-		handler.close();
+		this.handler.showNisoImageMetadata10(TEST_NISO_IMAGE_MD);
+		this.handler.close();
 
 		String generatedMix = readXmlFile(outputFile);
 		assertEquals("Mix v1.0 generated not conformant", expectedMix10,
@@ -159,8 +160,8 @@ public class XmlHandlerTest {
 		assertTrue(mix20File.isFile());
 		String expectedMix20 = readXmlFile(mix20File);
 
-		handler.showNisoImageMetadata20(TEST_NISO_IMAGE_MD);
-		handler.close();
+		this.handler.showNisoImageMetadata20(TEST_NISO_IMAGE_MD);
+		this.handler.close();
 
 		String generatedMix = readXmlFile(outputFile);
 		assertEquals("Mix v2.0 generated not conformant", expectedMix20,
@@ -175,15 +176,22 @@ public class XmlHandlerTest {
 		assertTrue(textMD30File.isFile());
 		String expectedText30 = readXmlFile(textMD30File);
 
-		handler.showTextMDMetadata(TEST_TEXTMD);
-		handler.close();
+		this.handler.showTextMDMetadata(TEST_TEXTMD);
+		this.handler.close();
 
 		String generatedTextMD = readXmlFile(outputFile);
 		assertEquals("TextMD v3.0 generated not conformant", expectedText30,
 				generatedTextMD);
 	}
 
-	private String readXmlFile(File f) throws IOException {
+	
+	/**
+	 * Reads an XML file into an one line string and eliminates the multiple spaces.  
+	 * @param f the xml file
+	 * @return one line with the content
+	 * @throws IOException
+	 */
+	private static String readXmlFile(File f) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		try {
