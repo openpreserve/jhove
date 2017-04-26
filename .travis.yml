@@ -1,5 +1,4 @@
 language: java
-
 jdk:
   - oraclejdk7
   - oraclejdk8
@@ -11,7 +10,7 @@ branches:
 
 notifications:
   slack:
-    secure: 2tPcqxi5BQkomyLYTDk90JrI5iqm9TL5Hc9SklPVemtEUQdDqeEejNjBGIOxQeXxe6Vza/cVEVp8emmb0GQ25k36DeI82kvxWu/dtaXC2B73dr0zFw3IV6VpG9nUcmgNiHrTYDlK5C3QYlkYKDSrAlrBRLA16qiSIe2JpPSClI4=
+    secure: qAKVtBCrucCt8GB1SVjjCckwWqC6zAvXN7UdT+aFLH2u7vILT4jzLibTRAaTqqcBBnxFYE87qii4uaIbIltMRZYBQUyiz/mTabkQq5RHJKzzZq54qcKjrI7BSCJHoJErBYrNO4yECUgR6wkhF2/e0+OxEtuSxFovTGXN9ycMT0c=
 
 env:
   global:
@@ -20,17 +19,18 @@ env:
 addons:
   coverity_scan:
     project:
-      name: "openpreserve/jhove"
-      description: "File validation and characterisation"
+      name: openpreserve/jhove
+      description: File validation and characterisation
     notification_email: carl@openpreservation.org
-    build_command_prepend: "mvn clean"
-    build_command:   "mvn -DskipTests=true compile"
+    build_command_prepend: mvn clean
+    build_command: mvn -DskipTests=true compile
     branch_pattern: integration
 
 before_install:
   - sudo apt-get install -y realpath
   - sudo apt-get install jq
-  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
+  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest
+    | jq -r .assets[0].browser_download_url)
 
 script:
   - mvn clean install -DjacocoAgg
@@ -39,7 +39,9 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter -l Java -r jhove-apps/target/site/jacoco-aggregate/jacoco.xml
+  - java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter
+    -l Java -r jhove-apps/target/site/jacoco-aggregate/jacoco.xml
 
 after_failure:
-  - cat /tmp/bbt-logs/log.txt | grep --group-separator"===== Unexpected output =====" -n -B 1 -A 2 Expected
+  - cat /tmp/bbt-logs/log.txt | grep --group-separator"===== Unexpected output ====="
+    -n -B 1 -A 2 Expected
