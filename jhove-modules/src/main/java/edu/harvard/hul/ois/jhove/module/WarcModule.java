@@ -34,6 +34,7 @@ import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyArity;
 import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.module.warc.MessageConstants;
 import edu.harvard.hul.ois.jhove.module.warc.WarcRecordProperties;
 
 /**
@@ -207,10 +208,10 @@ public class WarcModule extends ModuleBase {
         reader.setBlockDigestEnabled(bComputeBlockDigest);
         reader.setPayloadDigestEnabled(bComputePayloadDigest);
         if (!reader.setBlockDigestAlgorithm(blockDigestAlgorithm)) {
-            throw new JhoveException("Invalid block digest algorithm: " + blockDigestAlgorithm);
+            throw new JhoveException(MessageConstants.ERR_BLOCK_DIGEST_INVALID + blockDigestAlgorithm);
         }
         if (!reader.setPayloadDigestAlgorithm(payloadDigestAlgorithm)) {
-            throw new JhoveException("Invalid payload digest algorithm: " + payloadDigestAlgorithm);
+            throw new JhoveException(MessageConstants.ERR_PAYLOAD_DIGEST_INVALID + payloadDigestAlgorithm);
         }
         reader.setBlockDigestEncoding(blockDigestEncoding);
         reader.setPayloadDigestEncoding(payloadDigestEncoding);
@@ -241,7 +242,7 @@ public class WarcModule extends ModuleBase {
                 reader.diagnostics.addAll(record.diagnostics);
             }
         } else {
-            throw new JhoveException("WarcReader has not been properly instantiated.");
+            throw new JhoveException(MessageConstants.ERR_RECORD_NULL);
         }
     }
 
