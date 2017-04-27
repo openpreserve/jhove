@@ -660,8 +660,12 @@ public abstract class ModuleBase
             int parseIndex = parse (stream, info, 0);
             while (parseIndex != 0) {
                 stream.close ();
-                stream = new FileInputStream (file);
-                parseIndex = parse (stream, info, parseIndex);
+                if (file != null) {
+	                stream = new FileInputStream (file);
+	                parseIndex = parse (stream, info, parseIndex);
+                } else {
+                	parseIndex = 0;
+                }
             }
         }
         else if (info.getWellFormed() == RepInfo.TRUE) {
