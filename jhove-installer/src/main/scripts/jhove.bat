@@ -32,34 +32,25 @@ REM JAVA_HOME  Java JRE directory
 REM JAVA       Java interpreter
 REM EXTRA_JARS Extra jar files to add to CLASSPATH
 
-REM SET JHOVE_HOME="C:\Program Files\jhove"
+REM SET JHOVE_HOME="C:\Program Files\jhove\"
 
 REM *************************************************************************
-REM The $INSTALL_PATH variable is substituted by the izpack installer at
-REM install time.
+REM %~dp0 is the location of this file.
 REM *************************************************************************
-SET JHOVE_HOME="$INSTALL_PATH"
+SET JHOVE_HOME=%~dp0
 SET JHOVE_VERSION="$APP_VER"
 SET EXTRA_JARS=
 
 REM NOTE: Nothing below this line should be edited
 REM #########################################################################
 
-
-SET CP=%JHOVE_HOME%\bin\jhove-apps-%JHOVE_VERSION%.jar
-IF "%EXTRA_JARS%"=="" GOTO FI
+SET CP="%JHOVE_HOME%bin\jhove-apps-%JHOVE_VERSION%.jar"
+IF "%EXTRA_JARS%" NEQ "" (
   SET CP=%CP%:%EXTRA_JARS
-:FI
+)
 
-REM Retrieve a copy of all command line arguments to pass to the application
-
-SET ARGS=-c %JHOVE_HOME%\conf\jhove.conf
-:WHILE
-IF "%1"=="" GOTO LOOP
-  SET ARGS=%ARGS% %1
-  SHIFT
-  GOTO WHILE
-:LOOP
+REM %* is a copy of all command line arguments
+SET ARGS=-c "%JHOVE_HOME%conf\jhove.conf" %*
 
 REM Set the CLASSPATH and invoke the Java loader
 JAVA -classpath %CP% Jhove %ARGS%
