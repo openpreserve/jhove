@@ -109,7 +109,7 @@ public class Jhove
             String moduleName   = null;
             String handlerName  = null;
             String aboutHandler = null;
-            String logLevel     = "SEVERE";
+            String logLevel     = null;
             String outputFile   = null;
             boolean checksum    = false;
             boolean showRaw     = false;
@@ -244,7 +244,10 @@ public class Jhove
     	    }
     
             JhoveBase je = new JhoveBase ();
-            je.setLogLevel (logLevel);
+            // Only set the log level if a param value was assigned
+            if (logLevel != null) {
+                je.setLogLevel (logLevel);
+            }
             je.init (configFile, saxClass);
             if (encoding == null) {
                 encoding = je.getEncoding ();

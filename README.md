@@ -2,6 +2,13 @@ JHOVE
 =====
 *JSTOR/Harvard Object Validation Environment*
 
+[![Build Status](https://travis-ci.org/openpreserve/jhove.svg?branch=integration)](https://travis-ci.org/openpreserve/jhove "JHOVE Travis-CI integration build")
+[![Build Status](http://jenkins.openpreservation.org/buildStatus/icon?job=jhove-dev)](http://jenkins.openpreservation.org/job/jhove-dev/ "OPF Jenkins development build")
+[![Build Status](http://jenkins.openpreservation.org/buildStatus/icon?job=jhove)](http://jenkins.openpreservation.org/job/jhove/ "OPF Jenkins release build")
+[![Maven Central](https://img.shields.io/maven-central/v/org.openpreservation.jhove/jhove.svg)](http://repo1.maven.org/maven2/org/openpreservation/jhove/ "JHOVE on Maven central")
+[![CodeCov Coverage](https://img.shields.io/codecov/c/github/openpreserve/jhove.svg)](https://codecov.io/gh/openpreserve/jhove/ "CodeCov test coverage figure")
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9561b9ee71624cc5a69bd78ebc86e3af)](https://www.codacy.com/app/openpreserve/jhove?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=openpreserve/jhove&amp;utm_campaign=Badge_Grade)
+
 Licensing
 ---------
 Copyright 2003-2012 by JSTOR and the President and Fellows of Harvard College,
@@ -47,12 +54,6 @@ License (LGPL; see the file LICENSE for details).
 
 JHOVE is currently being maintained by the
 [Open Preservation Foundation](http://openpreservation.org).
-
-Build Status
-------------
- * [![Build Status](https://travis-ci.org/openpreserve/jhove.svg?branch=integration)](https://travis-ci.org/openpreserve/jhove "JHOVE Travis-CI integration build") Travis-CI: `mvn install integration`
- * [![Build Status](http://jenkins.openpreservation.org/buildStatus/icon?job=jhove-d1.17)](http://jenkins.openpreservation.org/job/jhove-d1.17/ "OPF Jenkins integration build") OPF Jenkins: `mvn verify integration`
- * [![Build Status](http://jenkins.openpreservation.org/buildStatus/icon?job=jhove-v1.16)](http://jenkins.openpreservation.org/job/jhove-v1.16/ "OPF Jenkins Maven deploy build") OPF Jenkins: `mvn deploy integration`
 
 Pre-requisites
 --------------
