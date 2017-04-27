@@ -31,12 +31,13 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(wm.getName()), info.getSigMatch());
         
         assertEquals(0, info.getMessage().size());
     }
 
 	@Test
-    public void checkSignaturValidUTF8File() throws Exception {
+    public void checkSignatureValidUTF8File() throws Exception {
 	    File warcFile = new File("src/test/resources/warc/valid-warcfile-utf8.warc");
 
 		WarcModule wm = new WarcModule();
@@ -58,6 +59,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
         
         assertEquals(1, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -66,7 +68,7 @@ public class WarcModuleTest {
 	}
 
 	@Test
-    public void checkSignaturInvalidEmptyFile() throws Exception {
+    public void checkSignatureInvalidEmptyFile() throws Exception {
 		File warcFile = new File("src/test/resources/warc/invalid-empty.warc");
 
 		WarcModule wm = new WarcModule();
@@ -75,8 +77,36 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(WarcModule.class, info.getModule().getClass());
+        assertTrue(info.getSigMatch().isEmpty());
 	}
 	
+	@Test
+    public void checkSignatureCompressWarc() throws Exception {
+		File warcFile = new File("src/test/resources/warc/valid-warcfile-upper-lower-case.warc.gz");
+
+		WarcModule wm = new WarcModule();
+        RepInfo info = new RepInfo(warcFile.getAbsolutePath());
+        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        
+        assertEquals(RepInfo.TRUE, info.getWellFormed());
+        assertEquals(WarcModule.class, info.getModule().getClass());
+        assertEquals(Arrays.asList(wm.getName()), info.getSigMatch());
+	}
+	
+	@Test
+    public void checkSignatureWavNotWarc() throws Exception {
+		File warcFile = new File("src/test/resources/warc/sample3.wav");
+
+		WarcModule wm = new WarcModule();
+        RepInfo info = new RepInfo(warcFile.getAbsolutePath());
+        wm.checkSignatures(null, new FileInputStream(warcFile), info);
+        
+        // The WARC module MUST find WAV files as not well-formed WARC files
+        assertEquals(RepInfo.FALSE, info.getWellFormed());
+        assertEquals(WarcModule.class, info.getModule().getClass());
+        assertTrue(info.getSigMatch().isEmpty());
+	}
+
 	@Test
     public void parseInvalidWarcFileContentTypeRecommended() throws Exception {
 		File warcFile = new File("src/test/resources/warc/invalid-warcfile-contenttype-recommended.warc");
@@ -87,6 +117,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
         
         assertEquals(7, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -104,6 +135,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
         
         assertEquals(1, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -121,7 +153,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+     
         assertEquals(8, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
@@ -138,6 +171,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
         
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -155,6 +189,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
         
         assertEquals(16, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -175,7 +210,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(15, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -194,7 +230,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(24, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -213,7 +250,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
@@ -230,7 +268,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -249,7 +288,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(16, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
@@ -266,7 +306,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
@@ -283,7 +324,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
@@ -300,7 +342,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(1, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
@@ -317,7 +360,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(3, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
@@ -334,7 +378,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -353,7 +398,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(1, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
@@ -370,7 +416,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(3, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -389,7 +436,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(5, messages.size());
@@ -410,7 +458,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(3, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -429,7 +478,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -447,7 +497,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(4, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(4, messages.size());
@@ -467,7 +518,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(5, messages.size());
@@ -488,7 +540,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -506,7 +559,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -524,7 +578,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(3, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -543,7 +598,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(3, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -562,7 +618,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(4, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -581,7 +638,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(3, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -599,7 +657,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(3, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -617,7 +676,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -635,7 +695,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -653,7 +714,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -672,7 +734,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -690,7 +753,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -708,6 +772,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -727,6 +792,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -746,6 +812,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -764,7 +831,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -783,7 +851,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -802,7 +871,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -821,6 +891,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -840,6 +911,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -859,6 +931,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -878,6 +951,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -897,6 +971,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -916,6 +991,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -935,6 +1011,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -953,6 +1030,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -971,6 +1049,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -989,7 +1068,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -1007,7 +1087,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -1025,7 +1106,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -1043,7 +1125,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -1061,7 +1144,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(2, messages.size());
@@ -1079,6 +1163,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -1098,7 +1183,8 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
@@ -1117,6 +1203,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -1135,6 +1222,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(3, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -1153,6 +1241,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(7, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -1174,6 +1263,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -1191,6 +1281,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(8, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -1210,6 +1301,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(12, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -1227,6 +1319,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(4, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -1244,6 +1337,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+        assertTrue(info.getSigMatch().isEmpty());
 
         assertEquals(4, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -1261,11 +1355,12 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(wm.getName()), info.getSigMatch());
         assertEquals(0, info.getMessage().size());
 	}
 
 	@Test
-    public void parseValidWarcFileDiplicateConcurrentTo() throws Exception {
+    public void parseValidWarcFileDuplicateConcurrentTo() throws Exception {
 		File warcFile = new File("src/test/resources/warc/valid-warcfile-duplicate-concurrentto.warc");
 
 		WarcModule wm = new WarcModule();
@@ -1274,6 +1369,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(wm.getName()), info.getSigMatch());
         assertEquals(0, info.getMessage().size());
 	}
 
@@ -1287,6 +1383,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(wm.getName()), info.getSigMatch());
         assertEquals(0, info.getMessage().size());
 	}
 
@@ -1300,6 +1397,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(wm.getName()), info.getSigMatch());
         assertEquals(0, info.getMessage().size());
 	}
 
@@ -1313,6 +1411,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(wm.getName()), info.getSigMatch());
         assertEquals(0, info.getMessage().size());
 	}
 
@@ -1326,6 +1425,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(wm.getName()), info.getSigMatch());
         assertEquals(0, info.getMessage().size());
 	}
 
@@ -1339,6 +1439,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(wm.getName()), info.getSigMatch());
         assertEquals(0, info.getMessage().size());
 	}
 
@@ -1352,6 +1453,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(wm.getName()), info.getSigMatch());
         assertEquals(0, info.getMessage().size());
 	}
 
@@ -1365,6 +1467,7 @@ public class WarcModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(wm.getName()), info.getSigMatch());
         assertEquals(0, info.getMessage().size());
 	}
 
