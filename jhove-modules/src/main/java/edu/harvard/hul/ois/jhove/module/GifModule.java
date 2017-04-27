@@ -7,12 +7,12 @@
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at
  * your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
@@ -35,17 +35,17 @@ import javax.xml.parsers.SAXParserFactory;
 
 /**
  *  Module for identification and validation of GIF files.
- * 
+ *
  *  @author Gary McGath
  *
  */
-public class GifModule extends ModuleBase 
+public class GifModule extends ModuleBase
 {
     /******************************************************************
      * DEBUGGING FIELDS.
      * All debugging fields should be set to false for release code.
      ******************************************************************/
-    
+
     /* Set to true to allow application identifiers to be case-insensitive. */
     private static final boolean debug_appIdentCaseInsens = false;
 
@@ -93,38 +93,38 @@ public class GifModule extends ModuleBase
 
     /* First 6 bytes of file */
     protected byte _sig[];
-    
+
     /* Checksummer object */
     protected Checksummer _ckSummer;
-    
+
     /* XMP property */
     protected Property _xmpProp;
-    
+
     /* Input stream wrapper which handles checksums */
     protected ChecksumInputStream _cstream;
-    
+
     /* Data input stream wrapped around _cstream */
     protected DataInputStream _dstream;
-    
+
     /* Flag for presence of global color table */
     protected boolean _globalColorTableFlag;
-    
+
     /* Size of global color table */
     protected int _globalColorTableSize;
-    
+
     /* Count of graphic control extensions preceding
      * something to modify */
     protected int _gceCounter;
-    
+
     /* Top-level metadata property */
     protected Property _metadata;
-    
+
     /* Blocks list property */
     protected List _blocksList;
-    
+
     /* Total count of graphic and plain text extension blocks */
     protected int _numGraphicBlocks;
-    
+
     /******************************************************************
     * CLASS CONSTRUCTOR.
     ******************************************************************/
@@ -143,7 +143,7 @@ public class GifModule extends ModuleBase
                                     "storage and transmission of raster-" +
                                     "based graphics information",
                                     DocumentType.REPORT);
-       Builder builder = new Agent.Builder("Compuserve Interactive Services Inc.", 
+       Builder builder = new Agent.Builder("Compuserve Interactive Services Inc.",
                     AgentType.COMMERCIAL).address ("5000 Arlington Centre Blvd., Columbus, OS 43220").telephone ("(614) 457-8600").web ("http://www.compuserve.com/");
        Agent cmpsrvAgent = builder.build();
        doc.setAuthor (cmpsrvAgent);
@@ -161,14 +161,14 @@ public class GifModule extends ModuleBase
                                           IdentifierType.URL));
        _specification.add (doc);
 
-       Signature sig = new InternalSignature ("GIF", SignatureType.MAGIC, 
+       Signature sig = new InternalSignature ("GIF", SignatureType.MAGIC,
                                               SignatureUseType.MANDATORY, 0);
        _signature.add (sig);
-       sig = new InternalSignature ("87a", SignatureType.MAGIC, 
+       sig = new InternalSignature ("87a", SignatureType.MAGIC,
                                     SignatureUseType.MANDATORY_IF_APPLICABLE,
                                     3, "For version 87a");
        _signature.add (sig);
-       sig = new InternalSignature ("89a", SignatureType.MAGIC, 
+       sig = new InternalSignature ("89a", SignatureType.MAGIC,
                                     SignatureUseType.MANDATORY_IF_APPLICABLE,
                                     3, "For version 89a");
        _signature.add (sig);
@@ -176,7 +176,7 @@ public class GifModule extends ModuleBase
        sig = new ExternalSignature (".gif", SignatureType.EXTENSION,
                                     SignatureUseType.OPTIONAL);
        _signature.add (sig);
-       
+
        _bigEndian = false;
     }
 
@@ -195,9 +195,9 @@ public class GifModule extends ModuleBase
      *                    to reflect the results of the test
      */
     @Override
-    public void checkSignatures (File file, 
-                InputStream stream, 
-                RepInfo info) 
+    public void checkSignatures (File file,
+                InputStream stream,
+                RepInfo info)
         throws IOException
     {
         int[] sigBytes = { 'G', 'I', 'F', '8', '*', 'a' };
@@ -247,7 +247,7 @@ public class GifModule extends ModuleBase
      *                    to reflect the results of the parsing
      *   @param parseIndex  Must be 0 in first call to <code>parse</code>.  If
      *                    <code>parse</code> returns a nonzero value, it must be
-     *                    called again with <code>parseIndex</code> 
+     *                    called again with <code>parseIndex</code>
      *                    equal to that return value.
      */
     @Override
@@ -267,7 +267,7 @@ public class GifModule extends ModuleBase
                 _blocksList);
 
         // We may have already done the checksums while converting a
-        // temporary file. 
+        // temporary file.
         _ckSummer = null;
         if (_app != null && _je.getChecksumFlag () &&
             info.getChecksum().isEmpty()) {
@@ -280,18 +280,18 @@ public class GifModule extends ModuleBase
             _dstream = getBufferedDataStream (stream, _app != null ?
                     _je.getBufferSize () : 0);
         }
-                  
+
         if (!readSig (info)) {
             return 0;
         }
-        
+
         /* If we got this far, take note that the signature is OK. */
         info.setSigMatch(_name);
-        
+
         if (!readLSD (info)) {
             return 0;
         }
-        
+
         boolean moreToCome = true;
         while (moreToCome) {
             moreToCome = readBlock (info);
@@ -299,7 +299,7 @@ public class GifModule extends ModuleBase
                 return 0;
             }
         }
-        
+
         if (_ckSummer != null){
             /* We may not have actually hit the end of file. If we're calculating
              * checksums on the fly, we have to read and discard whatever is
@@ -316,7 +316,7 @@ public class GifModule extends ModuleBase
                 }
             }
             info.setSize (_cstream.getNBytes ());
-            info.setChecksum (new Checksum (_ckSummer.getCRC32 (), 
+            info.setChecksum (new Checksum (_ckSummer.getCRC32 (),
                         ChecksumType.CRC32));
             String value = _ckSummer.getMD5 ();
             if (value != null) {
@@ -330,7 +330,7 @@ public class GifModule extends ModuleBase
         if (_xmpProp != null) {
           // Making this an array rather than a list is a pain, but it's policy
           metaArray = new Property[3];
-        } 
+        }
         else {
           metaArray = new Property[2];
         }
@@ -363,12 +363,11 @@ public class GifModule extends ModuleBase
         _gceCounter = 0;
         _numGraphicBlocks = 0;
     }
-    
-    
+
+
     /*   Read the 6-byte signature. */
     protected boolean readSig (RepInfo info) throws IOException
     {
-        String badHeader = "Invalid GIF header";
         int nbyt = 0;
         while (nbyt < 6) {
             try {
@@ -382,7 +381,7 @@ public class GifModule extends ModuleBase
                 //}
             }
             catch (EOFException e) {
-                info.setMessage(new ErrorMessage (badHeader, 0));
+                info.setMessage(new ErrorMessage (MessageConstants.ERR_GIF_HEADER_INVALID, 0));
                 info.setWellFormed (RepInfo.FALSE);
                 return false;
             }
@@ -397,13 +396,13 @@ public class GifModule extends ModuleBase
             info.setProfile ("GIF 87a");
         }
         else {
-            info.setMessage(new ErrorMessage (badHeader, 0));
+            info.setMessage(new ErrorMessage (MessageConstants.ERR_GIF_HEADER_INVALID, 0));
             info.setWellFormed (RepInfo.FALSE);
             return false;
         }
         return true;
     }
-    
+
     /*   Read the Logical Screen Descriptor. */
     protected boolean readLSD (RepInfo info) throws IOException
     {
@@ -426,10 +425,10 @@ public class GifModule extends ModuleBase
         boolean sortFlag = (packedFields & 0X8) != 0;
         int rawGlobalColorTableSize = packedFields & 0X7;
         if (_globalColorTableFlag) {
-            _globalColorTableSize = 3 * 
+            _globalColorTableSize = 3 *
                 (1 << (rawGlobalColorTableSize + 1));
         }
-        
+
         int bgColorIndex = readUnsignedByte (_dstream, this);
         propVec.add (new Property ("BackgroundColorIndex",
                 PropertyType.INTEGER,
@@ -445,7 +444,7 @@ public class GifModule extends ModuleBase
                 GifStrings.GLOBAL_COLOR_TABLE_FLAG));
         propVec.add (addByteProperty ("GlobalColorTableSortFlag",
                 sortFlag ? 1 : 0,
-                GifStrings.COLOR_TABLE_SORT_FLAG));            
+                GifStrings.COLOR_TABLE_SORT_FLAG));
         propVec.add (new Property ("GlobalColorTableSize",
                 PropertyType.SHORT,
                 new Short ((short) rawGlobalColorTableSize)));
@@ -484,9 +483,8 @@ public class GifModule extends ModuleBase
             // The spec isn't fully clear on whether a trailer is
             // required, but seems to imply it is.
             info.setWellFormed (RepInfo.FALSE);
-            info.setMessage (new ErrorMessage
-                    ("End of file reached without encountering Trailer block",
-                        _nByte));
+            info.setMessage (new ErrorMessage (
+            		MessageConstants.ERR_TRAILER_BLOCK_MISSING, _nByte));
             return false;
         }
         try {
@@ -500,7 +498,7 @@ public class GifModule extends ModuleBase
                 default:
                     info.setWellFormed (RepInfo.FALSE);
                     info.setMessage (new ErrorMessage
-                        ("Unknown data block type",
+                        (MessageConstants.ERR_BLOCK_TYPE_UNKNOWN,
                          "Type = " + type, _nByte));
                     return false;
             }
@@ -509,11 +507,11 @@ public class GifModule extends ModuleBase
             // An EOF in the middle of a block is definitely a problem
             info.setWellFormed (RepInfo.FALSE);
             info.setMessage (new ErrorMessage
-                    ("Unexpected end of file", _nByte));
+                    (MessageConstants.ERR_UNEXPECTED_END_OF_FILE, _nByte));
             return false;
         }
     }
-    
+
     /* Read an extension block.
      */
     protected boolean readExtBlock (RepInfo info) throws IOException
@@ -531,13 +529,13 @@ public class GifModule extends ModuleBase
             default:
                 info.setWellFormed (RepInfo.FALSE);
                 info.setMessage (new ErrorMessage
-                    ("Unknown extension block type", 
-                     "Type = " + subtype, 
+                    (MessageConstants.ERR_EXTENSION_BLOCK_TYPE_UNKNOWN,
+                     "Type = " + subtype,
                      _nByte));
             return false;
         }
     }
-    
+
     /* Read an image descriptor and the subsequent data.
      * We are positioned just after the type byte of the
      * image descriptor.
@@ -549,7 +547,7 @@ public class GifModule extends ModuleBase
         NisoImageMetadata niso = new NisoImageMetadata ();
         Property nisoProp = new Property ("NisoImageMetadata",
                    PropertyType.NISOIMAGEMETADATA, niso);
-        
+
         // GIF doesn't have a lot of options, so several
         // NISO properties are constants.
         niso.setMimeType ("image/gif");
@@ -558,7 +556,7 @@ public class GifModule extends ModuleBase
         niso.setColorSpace (3);         // palette color
         niso.setOrientation(1);         // normal
         niso.setBitsPerSample (new int[] {8});
-        
+
         _gceCounter = 0;
         int leftPos = readUnsignedShort (_dstream);
         propVec.add (new Property ("ImageLeftPosition",
@@ -592,7 +590,7 @@ public class GifModule extends ModuleBase
                 new Short ((short) rawLocalColorTableSize)));
         propVec.add (nisoProp);
         if (localColorTableFlag != 0) {
-            localColorTableSize = 
+            localColorTableSize =
                 3 * (1 << (rawLocalColorTableSize + 1));
             skipBytes (_dstream, localColorTableSize, this);
         }
@@ -601,7 +599,7 @@ public class GifModule extends ModuleBase
             PropertyArity.ARRAY,
             vectorToPropArray (propVec));
         _blocksList.add (prop);
-        
+
         // Skip over the LZW minimum code size
         readUnsignedByte (_dstream, this);
         // Now read sub-blocks till we get one of zero size.
@@ -614,16 +612,16 @@ public class GifModule extends ModuleBase
         }
         return true;
     }
-    
+
     /*  Read an application extension block and fill in the appropriate
      *  properties */
-    protected boolean readAppExtension (RepInfo info) 
+    protected boolean readAppExtension (RepInfo info)
             throws IOException
     {
         int blockSize = readUnsignedByte (_dstream, this);
         if (blockSize != 11) {
             info.setMessage (new ErrorMessage
-                ("Wrong application extension block size",
+                (MessageConstants.ERR_APP_EXTENSION_BLOCK_SIZE_INVALID,
                  _nByte));
             info.setWellFormed (RepInfo.FALSE);
             return false;
@@ -637,7 +635,7 @@ public class GifModule extends ModuleBase
         propVec.add (new Property ("ApplicationIdentifier",
                 PropertyType.STRING,
                 appIdent.toString ()));
-        
+
         short[] appAuth = new short[3];
         for (i = 0; i < 3; i++) {
             appAuth[i] = (short) readUnsignedByte (_dstream, this);
@@ -646,11 +644,11 @@ public class GifModule extends ModuleBase
                 PropertyType.SHORT,
                 PropertyArity.ARRAY,
                 appAuth));
-        
+
         int appDataSize = 0;
         // We are interested in the application extension for XMP.
         if (("XMP Data".equals(appIdent.toString()) ||
-                (debug_appIdentCaseInsens && 
+                (debug_appIdentCaseInsens &&
                     "xmp data".equalsIgnoreCase(appIdent.toString()))) &&
                 appAuth[0] == (short) 'X' &&
                 appAuth[1] == (short) 'M' &&
@@ -671,7 +669,7 @@ public class GifModule extends ModuleBase
         propVec.add (new Property ("ApplicationDataSize",
                 PropertyType.INTEGER,
                 new Integer (appDataSize)));
-   
+
         Property prop = new Property ("ApplicationExtension",
                 PropertyType.PROPERTY,
                 PropertyArity.ARRAY,
@@ -679,12 +677,12 @@ public class GifModule extends ModuleBase
         _blocksList.add (prop);
         return true;
     }
-    
+
     /*  Read an application extension block and fill in the appropriate
      *  properties.  A comment extension should, by recommendation,
      *  contain ASCII, but actually can contain anything.  Nulls
      *  are skipped, but everything else is included as is. */
-    protected boolean readCommentExtension (RepInfo info) 
+    protected boolean readCommentExtension (RepInfo info)
             throws IOException
     {
         StringBuffer buf = new StringBuffer ();
@@ -704,11 +702,11 @@ public class GifModule extends ModuleBase
                 PropertyType.STRING,
                 buf.toString ());
         return true;
-    } 
+    }
 
     /*  Read an application extension block and fill in the appropriate
      *  properties */
-    protected boolean readPlainTextExtension (RepInfo info) 
+    protected boolean readPlainTextExtension (RepInfo info)
             throws IOException
     {
         ++_numGraphicBlocks;
@@ -716,16 +714,16 @@ public class GifModule extends ModuleBase
         int blockSize = readUnsignedByte (_dstream, this);
         if (blockSize != 12) {
             info.setMessage (new ErrorMessage
-                ("Wrong plain text extension block size",
+                (MessageConstants.ERR_PLAIN_TEXT_EXTENSION_BLOCK_SIZE_INVALID,
                  _nByte));
             info.setWellFormed (RepInfo.FALSE);
             return false;
         }
-        
+
         // A plain text extension requires a global color table
         if (!_globalColorTableFlag) {
             info.setMessage (new ErrorMessage
-                ("Plain text extension requires global color table",
+                (MessageConstants.ERR_PLAIN_TEXT_EXTENSION_COLOR_TABLE_MISSING,
                 _nByte));
             info.setValid (false);
         }
@@ -805,20 +803,20 @@ public class GifModule extends ModuleBase
 
     /* Read a graphics control block and fill in the
      * relevant properties */
-    protected boolean readGraphicsCtlBlock (RepInfo info) 
+    protected boolean readGraphicsCtlBlock (RepInfo info)
             throws IOException
     {
         Vector propVec = new Vector (5);
         if (++_gceCounter > 1) {
             info.setMessage (new ErrorMessage
-                ("Multiple graphics control blocks for one image",
+                (MessageConstants.ERR_GRAPH_CTL_BLOCK_EXTENSION_MULTIPLE,
                  _nByte));
             info.setWellFormed (RepInfo.FALSE);
         }
         int blockSize = readUnsignedByte (_dstream, this);
         if (blockSize != 4) {
             info.setMessage (new ErrorMessage
-                ("Wrong graphics control block size", 
+                (MessageConstants.ERR_GRAPH_CTL_BLOCK_SIZE_INVALID,
                  _nByte));
             info.setWellFormed (RepInfo.FALSE);
             return false;
@@ -846,7 +844,7 @@ public class GifModule extends ModuleBase
                 new Short ((short) transIndex)));
         // Skip the block terminator.
         readUnsignedByte (_dstream, this);
-        
+
         Property prop = new Property ("GraphicControlExtension",
                 PropertyType.PROPERTY,
                 PropertyArity.ARRAY,
@@ -869,7 +867,7 @@ public class GifModule extends ModuleBase
         final int bufsiz = 4096;
         byte[] curBuf = new byte[bufsiz];
         int curBufOff = 0;
-        
+
         // Fill up buffers till we hit a null.
         for (;;) {
             int ch = readUnsignedByte (_dstream, this);
@@ -885,7 +883,7 @@ public class GifModule extends ModuleBase
             }
             curBuf[curBufOff++] = (byte) ch;
         }
-        
+
         // Consolidate the buffers into one big buffer.
         // The magic trailer is 258 bytes long, of which 256
         // bytes were actually read into the buffers, so we
@@ -913,17 +911,17 @@ public class GifModule extends ModuleBase
             }
             bigBuf[bigBufOff++] = curBuf[i];
         }
-        
+
         // OK.  All that was just to get the XMP into one big byte
         // buffer.  Now process it.
-        final String badMetadata = "Invalid or ill-formed XMP metadata"; 
+        final String badMetadata = "Invalid or ill-formed XMP metadata";
         try {
-            ByteArrayInputStream strm = 
+            ByteArrayInputStream strm =
                 new ByteArrayInputStream (bigBuf);
             ByteArrayXMPSource src = new ByteArrayXMPSource (strm, "UTF-8");
 
             // Create an InputSource to feed the parser.
-            SAXParserFactory factory = 
+            SAXParserFactory factory =
                             SAXParserFactory.newInstance();
             factory.setNamespaceAware (true);
             XMLReader parser = factory.newSAXParser ().getXMLReader ();
@@ -963,7 +961,7 @@ public class GifModule extends ModuleBase
         }
 
     }
-    
+
     protected Property addByteProperty (String name, int value,
                        String [] labels)
     {
@@ -977,8 +975,8 @@ public class GifModule extends ModuleBase
         }
         return new Property (name, PropertyType.BYTE, new Byte ((byte) value));
     }
-   
-    
+
+
     /* GIF is always little-endian, so readUnsignedShort can
      * unambiguously drop its endian argument */
     protected int readUnsignedShort (DataInputStream stream)
