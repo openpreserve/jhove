@@ -102,7 +102,7 @@ showHelp() {
 
 # Execute the JHOVE "about" command and serialise the Output
 auditJhove() {
-  bash "$paramJhoveLoc/jhove" -c "$paramJhoveLoc/conf/jhove.conf" -h xml -o "$paramOutputRootDir/audit.jhove.xml"
+  bash "$paramJhoveLoc/jhove" -h xml -o "$paramOutputRootDir/audit.jhove.xml"
 }
 
 # Cycle through the test module directories and invoke the correct JHOVE module

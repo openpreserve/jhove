@@ -12,7 +12,7 @@ import java.util.Properties;
 
 /**
  * Immutable class that reads a properties file containing JHOVE release
- * details. The version number, build date and format are kept up to date by the
+ * details. The version number, build date and format are kept up to date by
  * Maven, which filters the properties as part of the build process.
  * 
  * 

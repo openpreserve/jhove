@@ -1,16 +1,16 @@
 #!/bin/sh
 
-########################################################################
 # JHOVE - JSTOR/Harvard Object Validation Environment
+#
 # Copyright 2003-2005 by JSTOR and the President and Fellows of Harvard College
 # JHOVE is made available under the GNU General Public License (see the
 # file LICENSE for details)
 #
-# Usage: jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
-#              [-o output] [-x saxclass] [-t tempdir] [-b bufsize]
-#              [-l loglevel] [[-krs] dir-file-or-uri [...]]
+# Usage: jhove [-c config] [-m module] [-h handler] [-e encoding]
+#              [-H handler] [-o output] [-x saxclass] [-t tempdir]
+#              [-b bufsize] [-l loglevel] [[-krs] dir-file-or-uri [...]]
 #
-# where -c config   Configuration file pathname
+# Where -c config   Configuration file pathname
 #       -m module   Module name
 #       -h handler  Output handler name (defaults to TEXT)
 #       -e encoding Character encoding of output handler (defaults to UTF-8)
@@ -19,37 +19,52 @@
 #       -x saxclass SAX parser class (defaults to J2SE 1.4 default)
 #       -t tempdir  Temporary directory in which to create temporary files
 #       -b bufsize  Buffer size for buffered I/O (defaults to J2SE 1.4 default)
+#       -l loglevel Logging level
 #       -k          Calculate CRC32, MD5, and SHA-1 checksums
 #       -r          Display raw data flags, not textual equivalents
 #       -s          Format identification based on internal signatures only
 #       dir-file-or-uri Directory, file pathname or URI of formatted content
-#
-# CHANGE for JHOVE 1.8:
-# You no longer have to figure out where JAVA_HOME is; that's the
-# operating system's job. If the OS tells you it can't find Java, 
-# adjust your shell's path or revert to the old way (commented out).
-# Configuration constants:
 
-JHOVE_HOME=%INSTALL_PATH
-JHOVE_VERSION=%APP_VER
-
-#XTRA_JARS=/users/stephen/xercesImpl.jar
-EXTRA_JARS=              # Extra .jar files to add to CLASSPATH
+# ***************************************************************************
+# Configuration options:
+# EXTRA_JARS  Extra JAR files to add to the Java class path
+# ***************************************************************************
+EXTRA_JARS=""
 
 # NOTE: Nothing below this line should be edited
-########################################################################
+#############################################################################
 
-CP=${JHOVE_HOME}/bin/jhove-apps-${JHOVE_VERSION}.jar:${EXTRA_JARS}
+# The %APP_VER variable will be replaced at install time
+JHOVE_VERSION="%APP_VER"
 
-# Retrieve a copy of all command line arguments to pass to the application.
+# Infer JHOVE_HOME from script location
+SCRIPT="${0}"
 
-ARGS="-c ${JHOVE_HOME}/conf/jhove.conf"
-for ARG do
-    ARGS="$ARGS $ARG"
+# Resolve absolute and relative symlinks
+while [ -h "${SCRIPT}" ]; do
+    LS=$( ls -ld "${SCRIPT}" )
+    LINK=$( expr "${LS}" : '.*-> \(.*\)$' )
+    if expr "${LINK}" : '/.*' > /dev/null; then
+        SCRIPT="${LINK}"
+    else
+        SCRIPT="$( dirname "${SCRIPT}" )/${LINK}"
+    fi
 done
 
-# Set the CLASSPATH and invoke the Java loader.
-#{JAVA} -classpath $CP Jhove $ARGS -x org.apache.xerces.parsers.SAXParser
-#${JAVA} -classpath $CP Jhove $ARGS
-# New way, doesn't require you to use JAVA_HOME.
-java -classpath $CP JhoveView $ARGS
+# Store absolute location
+CWD="$( pwd )"
+JHOVE_HOME="$( cd "$(dirname "${SCRIPT}" )" && pwd )"
+cd "${CWD}"
+
+# Create Java class path
+CP="${JHOVE_HOME}/bin/jhove-apps-${JHOVE_VERSION}.jar"
+if [ -n "${EXTRA_JARS}" ]; then
+    CP="${CP}:${EXTRA_JARS}"
+fi
+
+# Set default configuration location
+CONFIG="${JHOVE_HOME}/conf/jhove.conf"
+
+# Set class path and invoke Java
+JHOVE_CMD=$(java -classpath "${CP}" JhoveView -c "${CONFIG}" "${@}")
+$JHOVE_CMD

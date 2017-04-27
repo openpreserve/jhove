@@ -1,12 +1,14 @@
 package edu.harvard.hul.ois.jhove.module;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwat.common.ByteCountingPushBackInputStream;
 import org.jwat.common.Diagnosis;
 import org.jwat.common.Diagnostics;
 import org.jwat.common.InputStreamNoSkip;
@@ -20,6 +22,7 @@ import edu.harvard.hul.ois.jhove.AgentType;
 import edu.harvard.hul.ois.jhove.Document;
 import edu.harvard.hul.ois.jhove.DocumentType;
 import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.ExternalSignature;
 import edu.harvard.hul.ois.jhove.Identifier;
 import edu.harvard.hul.ois.jhove.IdentifierType;
 import edu.harvard.hul.ois.jhove.InfoMessage;
@@ -29,6 +32,9 @@ import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyArity;
 import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.Signature;
+import edu.harvard.hul.ois.jhove.SignatureType;
+import edu.harvard.hul.ois.jhove.SignatureUseType;
 import edu.harvard.hul.ois.jhove.module.gzip.GzipEntryProperties;
 
 /**
@@ -67,6 +73,8 @@ public class GzipModule extends ModuleBase {
     private static final String RIGHTS = "Copyright 2015 by The Royal Library of Denmark. " +
             "Released under the GNU Lesser General Public License.";
 
+    private static final String EXTENSION = ".gz";
+
     /** 
      * List of Property elements for the entry of the GZIP-file. 
      * Each Property contains a map of all properties for a given entry.
@@ -99,11 +107,12 @@ public class GzipModule extends ModuleBase {
         doc.setIdentifier(new Identifier("https://www.ietf.org/rfc/rfc1952.txt",
                 IdentifierType.RFC));
         _specification.add(doc);
+
+        // Add optional external signature (.gz)
+        Signature sig = new ExternalSignature (EXTENSION, SignatureType.EXTENSION,
+                SignatureUseType.OPTIONAL);
+        _signature.add (sig);
         
-        // TODO figure out, why the tests fail, when the signature is added.
-//        Signature sig = new ExternalSignature(".gz", SignatureType.EXTENSION,
-//                SignatureUseType.OPTIONAL);
-//        _signature.add(sig);
     }
 
     /**
@@ -120,7 +129,34 @@ public class GzipModule extends ModuleBase {
     public void resetParams() throws Exception {
         initialiseVariables();
     }
-
+    
+    @Override
+    public void checkSignatures (File file,
+            InputStream stream, 
+            RepInfo info) 
+    throws IOException  {
+        info.setFormat (_format[0]);
+        info.setMimeType (_mimeType[0]);
+        info.setModule (this);
+    	
+    	boolean checkIsGzip = GzipReader.isGzipped(new ByteCountingPushBackInputStream(stream, GzipReader.DEFAULT_INPUT_BUFFER_SIZE));
+        if (checkIsGzip) {
+            info.setSigMatch(_name);
+        } else {
+            info.setWellFormed (false);
+        }
+        
+    }
+    
+    @Override
+    public void checkSignatures (File file,
+            RandomAccessFile raf, 
+            RepInfo info) throws IOException {
+        InputStream stream = new RandomAccessFileInputStream(raf);
+        checkSignatures(file, stream, info);
+        stream.close();
+    }
+    
     @Override
     public void parse(RandomAccessFile file, RepInfo info) throws IOException {
         InputStream stream = new RandomAccessFileInputStream(file);
@@ -131,6 +167,11 @@ public class GzipModule extends ModuleBase {
     public int parse(InputStream stream, RepInfo info, int parseIndex) throws IOException {
         GzipReader reader = new GzipReader(new InputStreamNoSkip(stream), 8192);
         try {
+            info.setFormat(_format[0]);
+            info.setVersion("4.3"); // Is it really version 4.3?
+            info.setMimeType(_mimeType[0]);
+            info.setModule(this);
+
             parseRecords(reader);
 
             info.setValid(reader.isCompliant());
@@ -138,10 +179,9 @@ public class GzipModule extends ModuleBase {
 
             reportResults(reader, info);
 
-            info.setSigMatch(_name);
-            info.setFormat(_format[0]);
-            info.setVersion("4.3"); // Is it really version 4.3?
-            info.setMimeType(_mimeType[0]);
+            if (reader.isCompliant()) {
+            	info.setSigMatch(_name);
+            }
         } catch (Exception e) {
             info.setMessage(new ErrorMessage(e.getMessage()));
             info.setValid(false);

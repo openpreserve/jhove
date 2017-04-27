@@ -270,7 +270,7 @@ public abstract class Tokenizer
                     else if (_ch == PLUS || _ch == MINUS) {
                         _state = State.NUMERIC;
                         intValue = 0;
-                        negative = ((_ch == MINUS) ? true : false);
+                        negative = (_ch == MINUS);
                         token = new Numeric ();
                     }
                     else if (_ch == PERIOD) {
@@ -437,7 +437,12 @@ public abstract class Tokenizer
                     _state = State.HEXADECIMAL;
                     token = new Literal ();
                     buffer = new StringBuffer ();
-                    ((Literal) token).appendHex (_ch);
+                    if (_ch == GREATER_THAN) {
+                        backupChar();
+                    }
+                    else {
+                        ((Literal) token).appendHex(_ch);
+                    }
                     //h1 = _ch;
                 }
                 else if (_state == (State.LITERAL)) {

@@ -14,13 +14,13 @@ import java.util.*;
 
 /**
  * Module for identification and validation of WAVE sound files.
- * 
+ *
  * There is no published specification for WAVE files; this module is based on
  * several Internet sources.
- * 
+ *
  * WAVE format is a type of RIFF format. RIFF, in turn, is a variant on EA IFF
  * 85.
- * 
+ *
  * @author Gary McGath
  */
 public class WaveModule extends ModuleBase {
@@ -142,8 +142,8 @@ public class WaveModule extends ModuleBase {
     private static final int[] sigByte = { 0X52, 0X49, 0X46, 0X46 };
 
     private static final String NAME = "WAVE-hul";
-    private static final String RELEASE = "1.3";
-    private static final int[] DATE = { 2007, 12, 14 };
+    private static final String RELEASE = "1.4";
+    private static final int[] DATE = { 2017, 3, 14 };
     private static final String[] FORMAT = { "WAVE", "Audio for Windows",
             "EBU Technical Specification 3285", "Broadcast Wave Format", "BWF" };
     private static final String COVERAGE = "WAVE (WAVEFORMAT, PCMWAVEFORMAT, WAVEFORMATEX, WAVEFORMATEXTENSIBLE), "
@@ -235,7 +235,7 @@ public class WaveModule extends ModuleBase {
     /**
      * Parses the content of a purported WAVE digital object and stores the
      * results in RepInfo.
-     * 
+     *
      *
      * @param stream
      *            An InputStream, positioned at its beginning, which is
@@ -654,7 +654,7 @@ public class WaveModule extends ModuleBase {
 
     /**
      * Reads a WAVE Chunk.
-     * 
+     *
      */
     protected boolean readChunk(RepInfo info) throws IOException {
         Chunk chunk = null;
@@ -662,7 +662,7 @@ public class WaveModule extends ModuleBase {
         if (!chunkh.readHeader(_dstream)) {
             return false;
         }
-        int chunkSize = (int) chunkh.getSize();
+        long chunkSize = chunkh.getSize();
         bytesRemaining -= chunkSize + 8;
 
         if (bytesRemaining < 0) {
@@ -790,7 +790,7 @@ public class WaveModule extends ModuleBase {
     /**
      * General function for adding a property with a 32-bit value, with two
      * arrays of Strings to interpret 0 and 1 values as a bitmask.
-     * 
+     *
      * @param val
      *            The bitmask
      * @param name

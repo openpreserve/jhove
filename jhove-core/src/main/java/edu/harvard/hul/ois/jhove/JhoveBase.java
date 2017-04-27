@@ -301,7 +301,8 @@ public class JhoveBase {
             if (_logLevel != null) {
                 try {
                     _logger.setLevel(Level.parse(_logLevel));
-                } catch (Exception e) {
+                } catch (SecurityException e) {
+                    // Can't set the logger level due to security exception
                 }
             }
         }
