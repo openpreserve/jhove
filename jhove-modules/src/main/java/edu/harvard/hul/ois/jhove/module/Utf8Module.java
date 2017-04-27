@@ -272,7 +272,7 @@ public class Utf8Module extends ModuleBase {
 
                     if (0x80 > b[i] || b[i] > 0xbf) {
                         ErrorMessage error = new ErrorMessage("Not valid "
-                                + POSITION[i - 1] + " byte of UTF-8 endcoding",
+                                + POSITION[i - 1] + " byte of UTF-8 encoding",
                                 "Value = " + ((char) b[i]) + " (0x"
                                         + Integer.toHexString(b[i]) + ")",
                                 _nByte);
