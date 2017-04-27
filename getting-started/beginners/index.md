@@ -4,7 +4,7 @@ title: JHOVE - A Beginners Guide
 ---
 {{ page.title }}
 ================
-This guide assists newcomers to JHOVE (pronounced 'jove') with installation of the software and using the graphical user interface (GUI) .
+JHOVE is an open source file format identification, validation and characterisation tool. Format identification and validation are essential first steps in digital preservation workflows. This guide assists newcomers to JHOVE (pronounced 'jove') with installation of the software and using the graphical user interface (GUI).
 
 Getting JHOVE
 -------------
@@ -47,12 +47,18 @@ Getting JHOVE
 ![Screenshot of the JHOVE installer stage five on Windows](/img/jhv-install-win-5.png "JHOVE installer stage five")
 
 ### Running JHOVE on a Windows PC
-1. Then navigate to the folder where you have installed JHOVE e.g.: C:\Program Files (x86)\jhove and double click the `jhove-gui.bat` file:<br/>
+1. Then navigate to the folder where you have installed JHOVE e.g: C:\Program Files (x86)\jhove and double click the `jhove-gui.bat` file:<br/>
 ![Screenshot of the Windows explorer showing the JHOVE GUI bat file](/img/jhove-run-gui-win.png "JHOVE GUI batch file in Windows Explorer")
 
-2. This will first open a black comman window, `cmd.exe`:<br/>
+2. This will first open a black command window, `cmd.exe`:<br/>
 ![Screenshot of the Windows JHOVE GUI command window](/img/jhove-win-cmd.png "JHOVE GUI command shell on Windows")<br/>
 Leave this window, if you close it you'll stop the GUI process.
 
 3. The JHOVE GUI window should start:<br/>
 ![Screenshot of the Windows JHOVE GUI start screen](/img/jhv-gui-win.png "JHOVE GUI start screen on Windows")<br/>
+
+4. If this software does not open then you may not have Java installed on your computer, or you may have an incompatible version of Java installed on your computer. (Please go to the section ‘Installing Java on a PC’ for help.)
+
+5. You can check what metadata extractors (HUL modules) are installed by selecting the ‘Help’ menu and  ‘About JHOVE’.
+
+6. This will open a new window. JHOVE works by incorporating different ‘HUL’ modules that extract metadata from different types of files. Each of the HUL modules represents a different set of common file types (e.g. PDFs) that it can extract metadata from.
