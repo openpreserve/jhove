@@ -40,8 +40,8 @@ public class POCMarkerSegment extends MarkerSegment {
     protected boolean process(int bytesToEat) throws IOException {
         int compIdxBytes =  nCompBytes();
         if (compIdxBytes == 0) {
-            _repInfo.setMessage (new ErrorMessage 
-                    ("POC marker segment at wrong position in codestream"));
+            _repInfo.setMessage (new ErrorMessage
+                    (MessageConstants.ERR_POC_MARKER_POSITION_INVALID));
             // POC found before SIZ
             return false;
         }
@@ -52,7 +52,7 @@ public class POCMarkerSegment extends MarkerSegment {
         // Make sure it's an even multiple
         if (changeSize * nChanges != bytesToEat) {
             _repInfo.setMessage (new ErrorMessage 
-                    ("Invalid size for POC marker segment"));
+                    (MessageConstants.ERR_POC_MARKER_SIZE_INVALID));
             return false;
         }
         Property[] changes = new Property[nChanges];

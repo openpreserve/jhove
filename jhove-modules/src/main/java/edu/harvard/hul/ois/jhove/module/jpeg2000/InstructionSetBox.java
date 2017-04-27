@@ -68,7 +68,7 @@ public class InstructionSetBox extends JP2Box {
         if ((ityp & 0X2B) == 0) {
             if (sizeLeft != 0) {
                 _repInfo.setMessage (new ErrorMessage
-                    ("Data underrun in Instruction Set Box",
+                    (MessageConstants.ERR_INSTRUCTION_SET_BOX_DATA_UNDERRUN,
                     _module.getFilePos ()));
                 _repInfo.setWellFormed (false);
                 return false;
@@ -130,7 +130,7 @@ public class InstructionSetBox extends JP2Box {
                 }
                 if (sizeLeft < 0) {
                     _repInfo.setMessage (new ErrorMessage
-                        ("Data overrun in Instruction Set Box",
+                        (MessageConstants.ERR_INSTRUCTION_SET_BOX_DATA_OVERRUN,
                         _module.getFilePos ()));
                     _repInfo.setWellFormed (false);
                     return false;

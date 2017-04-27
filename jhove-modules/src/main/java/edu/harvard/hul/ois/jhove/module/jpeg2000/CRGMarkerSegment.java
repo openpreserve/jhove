@@ -40,13 +40,13 @@ public class CRGMarkerSegment extends MarkerSegment {
     {
         if (_ccs.getCurTile () != null) {
             _repInfo.setMessage (new ErrorMessage
-                    ("CRG header allowed only in main header of codestream"));
+                    (MessageConstants.ERR_CRG_MARKER_POSITION_INVALID));
             return false;
         }
         int ncomps = _cs.getNumComponents ();
         if (ncomps * 4 != bytesToEat) {
             _repInfo.setMessage (new ErrorMessage
-                    ("CRG marker segment has incorrect length"));
+                    (MessageConstants.ERR_CRG_MARKER_SIZE_INVALID));
         }
         int[] horOffsets = new int[ncomps];
         int[] vertOffsets = new int[ncomps];
