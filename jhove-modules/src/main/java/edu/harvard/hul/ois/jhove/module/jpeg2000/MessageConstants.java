@@ -53,6 +53,8 @@ public enum MessageConstants {
         "No JPEG 2000 header";
     public static final String ERR_FILE_TYPE_BOX_INVALID =
         "Expected File Type Box, got ";
+    public static final String ERR_NO_JP2_HEADER =
+        "Other boxes may not occur before JP2 Header";
     public static final String ERR_POC_MARKER_POSITION_INVALID =
         "POC marker segment at wrong position in codestream";
     public static final String ERR_POC_MARKER_SIZE_INVALID =

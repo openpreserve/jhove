@@ -23,7 +23,7 @@ public abstract class JP2Box extends BoxHolder {
     protected List<Property> associations;
     
     protected final static String noJP2Hdr = 
-        "Other boxes may not occur before JP2 Header";
+        MessageConstants.ERR_NO_JP2_HEADER;
 
     /* Name to be used for self-description property. */
     protected final static String DESCRIPTION_NAME =
