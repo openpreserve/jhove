@@ -32,6 +32,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.SAXParserFactory;
+import edu.harvard.hul.ois.jhove.module.gif.MessageConstants;
 
 /**
  *  Module for identification and validation of GIF files.
