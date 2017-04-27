@@ -67,7 +67,7 @@ public class CrossRefBox extends JP2Box {
         }
         if (!(box instanceof FragmentListBox)) {
             _repInfo.setMessage (new ErrorMessage 
-                    ("Cross Reference Box does not contain Fragment List Box",
+                    (MessageConstants.ERR_CROSS_REF_BOX_FRAGMENT_LIST_BOX_MISSING,
                      _module.getFilePos ()));
             _repInfo.setWellFormed (false);
             return false;

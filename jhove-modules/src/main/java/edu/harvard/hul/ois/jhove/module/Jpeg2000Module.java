@@ -342,7 +342,8 @@ public class Jpeg2000Module extends ModuleBase {
             badhdr = true;
         }
         if (badhdr) {
-            info.setMessage(new ErrorMessage("No JPEG 2000 header", i));
+            info.setMessage(new
+                    ErrorMessage(MessageConstants.ERR_SIGNATURE_INVALID, i));
             info.setWellFormed(false);
             return;
         }
@@ -744,8 +745,9 @@ public class Jpeg2000Module extends ModuleBase {
         hdr.readHeader();
         // 8 bytes have been read
         if (!"ftyp".equals(hdr.getType())) {
-            info.setMessage(new ErrorMessage("Expected File Type Box, got "
-                    + hdr.getType(), _nByte));
+            info.setMessage(new
+                    ErrorMessage(MessageConstants.ERR_FILE_TYPE_BOX_INVALID +
+                        hdr.getType(), _nByte));
             info.setWellFormed(false);
             return false;
 

@@ -98,7 +98,7 @@ public class ContCodestream {
     public boolean readCodestream (Codestream cs, RepInfo info) 
                 throws IOException
     {
-        final String badStream = "Ill-formed codestream";
+        final String badStream = MessageConstants.ERR_CODESTREAM_INVALID;
         _codestream = cs;
         long lengthLeft = _length;
         _tileLeft = 0;
@@ -132,7 +132,7 @@ public class ContCodestream {
                 int markLen = ms.readMarkLen ();
                 if (!ms.process (markLen == 0 ? 0 : markLen - 2)) {
                     info.setMessage (new ErrorMessage 
-                        ("Invalid marker segment"));
+                        (MessageConstants.ERR_CODESTREAM_MARKER_SEGMENT_INVALID));
                         info.setWellFormed (false);
                         return false;
                 }

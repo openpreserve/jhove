@@ -136,7 +136,7 @@ public class ColorSpecBox extends JP2Box {
             else {
                 //_module.setJP2Compliant (false);
                 _repInfo.setMessage(new ErrorMessage
-                        ("Color spec box with method 2 has unrecognized ICC profile", 
+                        (MessageConstants.ERR_COLOR_SPEC_BOX_ICC_PROFILE_INVALID,
                          filePos));
                 _repInfo.setValid(false);
             }
