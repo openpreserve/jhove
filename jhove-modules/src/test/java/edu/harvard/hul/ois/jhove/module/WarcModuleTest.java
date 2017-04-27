@@ -68,7 +68,7 @@ public class WarcModuleTest {
 	@Test
     public void checkSignatureInvalidEmptyFile() throws Exception {
 		File warcFile = new File("src/test/resources/warc/invalid-empty.warc");
-
+		assertNotNull("Checking Empty file is invalid");
 		invalidWithClassCheck(warcFile);
 	}
 	
@@ -88,6 +88,7 @@ public class WarcModuleTest {
 	@Test
     public void checkSignatureWavNotWarc() throws Exception {
 		File warcFile = new File("src/test/resources/warc/sample3.wav");
+		assertNotNull("Checking WAV doesn't trigger WARC sig");
 
 		invalidWithClassCheck(warcFile);
 	}
@@ -878,7 +879,7 @@ public class WarcModuleTest {
 	@Test
     public void parseValidWarcFileDuplicateConcurrentTo() throws Exception {
 		File warcFile = new File("src/test/resources/warc/valid-warcfile-duplicate-concurrentto.warc");
-
+		assertNotNull("Checking duplicate concurrent is valid");
 		generalWellFormedChecks(warcFile);
 	}
 
