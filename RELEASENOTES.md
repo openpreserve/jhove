@@ -14,7 +14,6 @@ JHOVE 1.16
 
 ### General
 
-- Using string contants for PDF module, XML module, and HTML module error messages
 - Added PDF and WAV test files submitted by community during JHOVE hack day
 - JHOVE Maven artefacts made available on Maven Central in addition to OPF Artifactory
 - Improved error reporting for Travis test failures
