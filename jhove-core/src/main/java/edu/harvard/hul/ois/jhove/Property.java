@@ -11,8 +11,8 @@ import java.util.*;
  *  This class encapsulates arbitrary format-specific properties.
  *  A Property's value can be a simple object or a structure.
  *  If it is a simple object, it has arity SCALAR.  If it is
- *  a structure, its must be a Map, a List, a Set, or an array,
- *  with corresponding Arity.  The simple object (in the case of
+ *  a structure, it must be a Map, List, Set, or array, with
+ *  the corresponding arity.  The simple object (in the case of
  *  arity SCALAR) or the components of the structure must have a
  *  type corresponding to one of the enumerations given by
  *  <code>PropertyType</code>.
