@@ -30,6 +30,7 @@ import edu.harvard.hul.ois.jhove.PropertyArity;
 import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.module.gzip.GzipEntryProperties;
+import edu.harvard.hul.ois.jhove.module.gzip.MessageConstants;
 
 /**
  * JHOVE module for identifying, validating and characterizing GZIP files.
@@ -170,7 +171,7 @@ public class GzipModule extends ModuleBase {
                 reader.diagnostics.addAll(entry.diagnostics);
             }
         } else {
-            throw new JhoveException("WarcReader is has not been properly instantiated.");
+               throw new JhoveException(MessageConstants.ERR_RECORD_NULL);
         }
     }
 
