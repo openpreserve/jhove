@@ -93,7 +93,7 @@ getCorpusModules() {
 		moduleName=${DIR}
 		if [[ ! -e "$paramOutputRootDir/audit-$moduleName.jhove.xml" ]]
 		then
-			bash "$SCRIPT_DIR/exec-with-to.sh" -t 10 "$paramJhoveLoc/jhove" -c "$paramJhoveLoc/conf/jhove.conf" -m "${moduleName}" -h xml -o "$paramOutputRootDir/audit-$moduleName.jhove.xml"
+			bash "$SCRIPT_DIR/exec-with-to.sh" -t 10 "$paramJhoveLoc/jhove" -m "${moduleName}" -h xml -o "$paramOutputRootDir/audit-$moduleName.jhove.xml"
 		fi
 		processModuleDir "$paramModuleLoc/$moduleName"
   done
@@ -105,7 +105,7 @@ processModuleDir() {
 		fileName=$( basename $FILE )
 		if [[ ! $fileName == .gitignore ]]; then
 			echo "Testing ${FILE}"
-			bash "$SCRIPT_DIR/exec-with-to.sh" -t 300 "$paramJhoveLoc/jhove" -c "$paramJhoveLoc/conf/jhove.conf" -m "${moduleName}" -h xml -o "$paramOutputRootDir/$moduleName/$fileName.jhove.xml" "$FILE"
+			bash "$SCRIPT_DIR/exec-with-to.sh" -t 300 "$paramJhoveLoc/jhove" -m "${moduleName}" -h xml -o "$paramOutputRootDir/$moduleName/$fileName.jhove.xml" "$FILE"
 		fi
 	done <    <(find "$moduleDir" -type f -print0)
 }
