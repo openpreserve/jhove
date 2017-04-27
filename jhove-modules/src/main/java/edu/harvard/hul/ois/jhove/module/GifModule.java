@@ -468,7 +468,14 @@ public class GifModule extends ModuleBase
         return true;
     }
 
-
+    public void main(String[] args) {
+    	try {
+			readBlock(null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
     /* Read Graphic blocks, Special blocks, and the trailer.
      * Return false if we get an error that prevents further
@@ -479,9 +486,10 @@ public class GifModule extends ModuleBase
         try {
             type = readUnsignedByte (_dstream, this);
         }
-        catch (EOFException e) {
+        catch (Exception e) {
             // The spec isn't fully clear on whether a trailer is
             // required, but seems to imply it is.
+        	System.out.println(MessageConstants.ERR_TRAILER_BLOCK_MISSING);
             info.setWellFormed (RepInfo.FALSE);
             info.setMessage (new ErrorMessage (
             		MessageConstants.ERR_TRAILER_BLOCK_MISSING, _nByte));
@@ -809,7 +817,7 @@ public class GifModule extends ModuleBase
         Vector propVec = new Vector (5);
         if (++_gceCounter > 1) {
             info.setMessage (new ErrorMessage
-                (MessageConstants.ERR_GRAPH_CTL_BLOCK_EXTENSION_MULTIPLE,
+                (MessageConstants.ERR_GRAPH_CTL_BLOCK_MULTIPLE,
                  _nByte));
             info.setWellFormed (RepInfo.FALSE);
         }
