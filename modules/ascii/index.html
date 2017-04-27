@@ -9,7 +9,9 @@ title: ASCII-hul Module
 <div class="container" role="main">
 <h1>ASCII-hul Module</h1>
 
-<h2>1 Introduction</h2>
+<a class="name" name="introduction">
+  <h2>1 Introduction</h2>
+</a>
 
 <p>
 The ASCII-hul module recognizes and validates ASCII content streams.
@@ -18,11 +20,25 @@ The module is invoked by the:
 </p>
 <blockquote>
 <pre>
-jhove ... -m ascii-hul ...
+jhove ... -m ASCII-hul ...
 </pre>
 </blockquote>
+<p>
 command line option.
-
+</p>
+  
+<p>
+  Parameters may be set in the configuration file to control some behaviours of the module.
+  These parameters are set in the &lt;param&gt; element under the &lt;module&gt; element. 
+  The parameters have the following significance:
+</p>
+<blockquote>
+  <pre>
+    &lt;param&gt;withTextMD=true&lt;/param&gt;
+  </pre>
+</blockquote>
+The parameter <tt>withTextMD</tt> asks for the output of a <a href="https://www.loc.gov/standards/textMD/">textMD</a> block in the text technical properties.
+  
 <a class="name" name="coverage">
 <h2>2 Coverage</h2></a>
 
@@ -65,12 +81,17 @@ The MIME type is reported as: text/plain; charset=US-ASCII
 
 <p>
 In addition to the standard JHOVE
-<a href="index.html#repinfo">representation information</a>, the module
+<a href="../documentation/index.html#repinfo">representation information</a>, the module
 defines the following properties:
 </p>
 <ul>
-<li> Line endings: CR, CRLF, or LF
-<li> Additional control characters
+<li>Property "ASCIIMetadata" of type PROPERTY and arity LIST 
+<ul>
+  <li> Property "LineEndings" of type STRING and arity LIST containing: CR, CRLF, or LF</li>
+  <li> Additional control characters</li>
+  <li> If withTextMD, Property "TextMDMetadata" of type TextMDMetadata and arity SCALAR</li>
+</ul>
+</li>
 </ul>
 </div>
 
