@@ -10,7 +10,9 @@ title: XML-hul Module
 <div class="container" role="main">
 <h1>XML-hul Module</h1>
 
+<a class="name" name="introduction">
 <h2>1 Introduction</h2>
+</a>
 
 <p>
 The XML-hul module recognizes and validates the XML (Extensible Markup
@@ -68,6 +70,15 @@ the use of any particular XML parser; the previous discussion is provided
 solely for information purposes.)
 </p>
 
+<p>
+This module can be <a href="/getting-started/config/">configured</a> with the following parameters:
+<ul>
+<li><tt>withTextMD=true</tt> to ask for the output of a <a href="/references#textmd">textMD</a> block in the text technical properties.</li>
+<li><tt>schema=[namespace];[schemaLocation]...</tt> in order to provide local schemas during the parsing of the file</li>
+</ul>
+</p>
+
+
 <a class="name" name="coverage">
 <h2>2 Coverage</h2></a>
 
@@ -112,7 +123,7 @@ The MIME type is reported as: application/xml
 
 <p>
 In addition to the standard JHOVE
-<a href="index.html#repinfo">representation information</a>, the following
+<a href="/documentation#repinfo">representation information</a>, the following
 XML-specific properties are reported:
 <ul>
 <li> Property "XMLMetadata" of type PROPERTY and arity LIST
@@ -183,6 +194,7 @@ and non-null)
 <ul>
 <li> Property "Comment" of type STRING and arity SCALAR
 </ul>
+<li> If withTextMD, Property "TextMDMetadata" of type TextMDMetadata and arity SCALAR</li>
 </ul>
 </ul>
 
@@ -192,7 +204,9 @@ in the XML file, not all of those that are defined in the DTD or XML Schema
 associated with the file.
 </p>
 
+<a class="name" name="extras">
 <h2>6 Additional Module Properties</h2>
+</a>
 
 <p></p>
 <ul>
