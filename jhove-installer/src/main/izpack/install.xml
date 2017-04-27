@@ -58,7 +58,7 @@
       <file targetdir="$INSTALL_PATH/bin" src="bin/jhove-apps-${project.version}.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/jhove-apps-${project.version}.jar"/>
       <file targetdir="$INSTALL_PATH/conf" src="config/jhove.conf"/>
-      <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="plain"/>
+      <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="xml"/>
     </pack>
     <pack name="JHOVE Shell Scripts" required="yes">
       <os family="unix"/>
