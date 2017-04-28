@@ -23,7 +23,7 @@ public abstract class JP2Box extends BoxHolder {
     protected List<Property> associations;
     
     protected final static String noJP2Hdr = 
-        MessageConstants.ERR_NO_JP2_HEADER;
+        MessageConstants.ERR_JP2_HEADER_CONTENT_MISSING;
 
     /* Name to be used for self-description property. */
     protected final static String DESCRIPTION_NAME =
@@ -365,7 +365,7 @@ public abstract class JP2Box extends BoxHolder {
     protected void emptyBox ()
     {
         _repInfo.setMessage (new ErrorMessage
-            (MessageConstants.ERR_BOX_EMPTY,
+            (MessageConstants.ERR_BOX_CONTENT_EMPTY,
              "Box type = " + getSelfPropName (), _module.getFilePos ()));
         _repInfo.setWellFormed (false);
     }

@@ -98,7 +98,8 @@ public class ContCodestream {
     public boolean readCodestream (Codestream cs, RepInfo info) 
                 throws IOException
     {
-        final String badStream = MessageConstants.ERR_CODESTREAM_INVALID;
+        final String badStream =
+            MessageConstants.ERR_CODESTREAM_CONTENT_INVALID;
         _codestream = cs;
         long lengthLeft = _length;
         _tileLeft = 0;

@@ -15,9 +15,11 @@ package edu.harvard.hul.ois.jhove.module.jpeg2000;
  * <ol>
  * <li>PREFIX: one of the three prefixes from the list above.</li>
  * <li>ENTITY_NAME: the name of the JPEG 2000 entity causing the prohlem, e.g.
- * FILE_TYPE_BOX.</li>
- * <li>Problem: a short indicator of the problem type, e.g. MISSING, ILLEGAL,
- * INVALID, etc.</li>
+ * BOX, FILE_TYPE_BOX, COC_MARKER, etc.</li>
+ * <li>PROBLEM_LOCATION: the location or component inside the entity, e.g.
+ * POSITION, SIZE, TYPE, NUMBER_OF_ENTRIES, etc.</li>
+ * <li>PROBLEM_TYPE: a short indicator of the problem type, e.g. MISSING,
+ * INVALID, EMPTY, OVERRUN, UNDERRUN, etc.</li>
  * </ol>
  * The elements should be separated by underscores. The messages currently
  * don't follow a consistent vocabulary, that is terms such as invalid,
@@ -47,11 +49,9 @@ public enum MessageConstants {
     /**
      * Error messages
      */
-    // TODO This should be rewritten to something like "Invalid JPEG 2000 file
-    // format signature".
     public static final String ERR_BOX_CONTEXT_INVALID =
         "Invalid context for ";
-    public static final String ERR_BOX_EMPTY =
+    public static final String ERR_BOX_CONTENT_EMPTY =
         "Box is empty";
     public static final String ERR_BOX_SIZE_INVALID =
         "Incorrect Box size for ";
@@ -59,7 +59,7 @@ public enum MessageConstants {
         "COC marker segment at wrong position in codestream";
     public static final String ERR_CODESTREAM_HEADER_BOX_START_INVALID =
         "First box of Codestream Header must be image header";
-    public static final String ERR_CODESTREAM_INVALID =
+    public static final String ERR_CODESTREAM_CONTENT_INVALID =
         "Ill-formed codestream";
     public static final String ERR_CODESTREAM_MARKER_SEGMENT_INVALID =
         "Invalid marker segment";
@@ -88,11 +88,11 @@ public enum MessageConstants {
         "Non-ASCII characters in compatibility item of File Type Box";
     public static final String ERR_FILE_TYPE_BOX_COMPAT_LIST_EMPTY =
         "Empty compatibility list in File Type Box";
-    public static final String ERR_FILE_TYPE_BOX_INVALID =
+    public static final String ERR_FILE_TYPE_BOX_POSITION_INVALID =
         "Expected File Type Box, got ";
     public static final String ERR_FRAGMENT_LIST_BOX_TABLE_SIZE_INVALID =
         "Fragment Table has invalid length";
-    public static final String ERR_FRAGMENT_TABLE_BOX_INVALID =
+    public static final String ERR_FRAGMENT_TABLE_BOX_CONTENT_INVALID =
         "Invalid fragment table";
     public static final String ERR_IMAGE_HEADER_BOX_COMPONENTS_EMPTY =
         "ImageHeader Box has zero components";
@@ -112,8 +112,12 @@ public enum MessageConstants {
         "Multiple JP2 Header Boxes not allowed";
     public static final String ERR_JP2_HEADER_BOX_START_INVALID =
         "First box of JP2 header must be image header";
-    public static final String ERR_NO_JP2_HEADER =
+    public static final String ERR_JP2_HEADER_CONTENT_MISSING =
         "Other boxes may not occur before JP2 Header";
+    // TODO This should be rewritten to something like "Invalid JPEG 2000 file
+    // format signature".
+    public static final String ERR_JP2_SIGNATURE_INVALID =
+        "No JPEG 2000 header";
     public static final String ERR_OPACITY_BOX_OTYP_INVALID =
         "Invalid OTyp field in Opacity Box";
     public static final String ERR_PALETTE_BOX_NUMBER_OF_ENTRIES_INVALID =
@@ -140,22 +144,21 @@ public enum MessageConstants {
         "Unrecognized quantization type in QCC marker segment";
     public static final String ERR_QCD_MARKER_QUANTIZATION_TYPE_INVALID =
         "Unrecognized quantization type in QCD marker segment";
-    public static final String ERR_READER_REQUIREMENTS_BOX_DATA_INVALID =
+    public static final String ERR_READER_REQUIREMENTS_BOX_CONTENT_INVALID =
         "Invalid data in Reader Requirements box";
     public static final String ERR_RGN_MARKER_POSITION_INVALID =
         "RGN marker segment at wrong position in codestream";
-    public static final String ERR_ROI_BOX_DATA_INVALID =
+    public static final String ERR_ROI_BOX_CONTENT_INVALID =
         "Invalid data in ROI";
     public static final String ERR_ROI_BOX_REGION_TYPE_INVALID =
         "Invalid region type in ROI Box";
-    public static final String ERR_SIGNATURE_INVALID =
-        "No JPEG 2000 header";
     public static final String ERR_SUPERBOX_OVERRUN =
         "Size of contained Box overruns ";
     public static final String ERR_SUPERBOX_UNDERRUN =
         "Size of contained Boxes underruns ";
     public static final String ERR_TLM_MARKER_ST_VALUE_INVALID =
         "Invalid ST value in TLM marker segment";
+    // TODO Use generic ERR_SUPERBOX_UNDERRUN instead of this?
     public static final String ERR_UUID_INFO_BOX_UNDERRUN =
         "Size of contained boxes underruns UUID Info Box";
 }

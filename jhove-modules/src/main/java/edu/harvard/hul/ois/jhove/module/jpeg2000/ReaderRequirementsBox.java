@@ -37,7 +37,7 @@ public class ReaderRequirementsBox extends JP2Box {
      */
     public boolean readBox() throws IOException {
         final String badRR =
-            MessageConstants.ERR_READER_REQUIREMENTS_BOX_DATA_INVALID;
+            MessageConstants.ERR_READER_REQUIREMENTS_BOX_CONTENT_INVALID;
         if (_parentBox != null) {
             wrongBoxContext();
             // System.out.println ("READBOX parentBox != null");

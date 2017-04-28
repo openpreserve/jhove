@@ -39,7 +39,7 @@ public class ROIBox extends JP2Box {
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
     public boolean readBox() throws IOException {
-        final String baddata = MessageConstants.ERR_ROI_BOX_DATA_INVALID;
+        final String baddata = MessageConstants.ERR_ROI_BOX_CONTENT_INVALID;
         initBytesRead ();
         int nroi = ModuleBase.readUnsignedByte (_dstrm, _module);
         
