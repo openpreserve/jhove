@@ -52,3 +52,12 @@ fi
 
 # Simply copy 1.16 for now we're not making any changes
 cp -R "${baselineRoot}" "${targetRoot}"
+
+# Use the new audit for gzip and warc modules since external signatures have been added
+if [[ -f "${candidateRoot}/examples/modules/audit-GZIP-kb.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/audit-GZIP-kb.jhove.xml" "${targetRoot}/examples/modules/"
+fi;
+if [[ -f "${candidateRoot}/examples/modules/audit-WARC-kb.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/audit-WARC-kb.jhove.xml" "${targetRoot}/examples/modules/"
+fi;
+

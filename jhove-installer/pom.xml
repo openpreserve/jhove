@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>jhove-installer</artifactId>
-  <name>JHOVE installer</name>
+  <name>JHOVE Installer</name>
   <description>Maven-built IzPack installer for JHOVE.</description>
 
   <properties>
