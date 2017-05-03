@@ -2137,13 +2137,14 @@ public class NisoImageMetadata
     	if (profile.getMajorVersion() <= 2) {
         	// ICC v2 http://www.color.org/ICC_Minor_Revision_for_Web.pdf
 	    	// Read only the ASCII form (cf 6.5.17 ICC v2)
-	    	final int OFFSET = 8;
+	    	final int OFFSET_LENGTH = 8;
+	    	final int OFFSET_DESC = OFFSET_LENGTH + 4;
 	    	
-	    	int lengthAscii = readUnsignedInt32(dataProf, OFFSET);
+	    	int lengthAscii = readUnsignedInt32(dataProf, OFFSET_LENGTH);
 	    	// readString
 	    	byte[] asciiDesc = new byte[lengthAscii -1];
 	    	for (int i = 0; i < lengthAscii -1; i++) {
-	    		asciiDesc[i] = dataProf[OFFSET + 4 + i];
+	    		asciiDesc[i] = dataProf[OFFSET_DESC + i];
 	    	}
 	    	
 			try {
@@ -2153,16 +2154,21 @@ public class NisoImageMetadata
 			}
     	} else {
         	// ICC v4 http://www.color.org/ICC1-V41.pdf
+	    	final int OFFSET_NUMBER = 8;
+	    	final int MLUC_TAG = 0x6D6C7563;
+	    	final int OFFSET_NAME_LENGTH = 20;
+	    	final int OFFSET_NAME_OFFSET = 24;
+	    	
     		// 6.2 segment tag table definition
     		int tagMluc = readUnsignedInt32(dataProf, 0);
     		
         	// Read the 1st mulc form (cf 6.5.12 ICC v4)
-    		int nb =  readUnsignedInt32(dataProf, 8);
-    		if (tagMluc != 0x6D6C7563 || nb < 1) {
+    		int nb =  readUnsignedInt32(dataProf, OFFSET_NUMBER);
+    		if (tagMluc != MLUC_TAG || nb < 1) {
     			throw new IllegalArgumentException("No description in ICC profile v4");
     		}
-    		int firstNameLength = readUnsignedInt32(dataProf, 20);
-    		int firstNameOffset = readUnsignedInt32(dataProf, 24);
+    		int firstNameLength = readUnsignedInt32(dataProf, OFFSET_NAME_LENGTH);
+    		int firstNameOffset = readUnsignedInt32(dataProf, OFFSET_NAME_OFFSET);
     		
         	// readString
         	byte[] desc = new byte[firstNameLength];
@@ -2183,10 +2189,11 @@ public class NisoImageMetadata
     }
     
     private static int readUnsignedInt32(byte[] data, int offset) {
-    	int b0 = data[offset + 0] & 0xff;
-    	int b1 = data[offset + 1] & 0xff;
-    	int b2 = data[offset + 2] & 0xff;
-    	int b3 = data[offset + 3] & 0xff;
+    	final int BYTE_MASK = 0xff;
+    	int b0 = data[offset + 0] & BYTE_MASK;
+    	int b1 = data[offset + 1] & BYTE_MASK;
+    	int b2 = data[offset + 2] & BYTE_MASK;
+    	int b3 = data[offset + 3] & BYTE_MASK;
     	return b0 << 24 | b1 << 16 | b2 << 8 | b3;
     }
 }

@@ -6,23 +6,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class NisoImageMetadataTest {
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
+	private final static String ERROR_TEST = "Not a icc profile ";
 	@Test
 	public void testExtractIccProfileDescriptionBad() {
 		byte[] badIcc = new byte[] { (byte)0xFF, (byte)0xFE, (byte)0xFD, (byte)0xFC };
 		try {
 			NisoImageMetadata.extractIccProfileDescription(badIcc);
-			fail("Not a profile !!!");
-		} catch (IllegalArgumentException ia) {
-			assertTrue(true);
+			fail(ERROR_TEST);
+		} catch (IllegalArgumentException iae) {
+			assertNotNull(iae); // Should always be true
 		}
 	}
 
@@ -36,7 +31,7 @@ public class NisoImageMetadataTest {
 			String profileName = NisoImageMetadata.extractIccProfileDescription(iccData);
 			assertEquals("sRGB2014", profileName);
 		} catch (IllegalArgumentException iae) {
-			fail("Not a icc profile " + iae.getMessage());
+			fail(ERROR_TEST + iae.getMessage());
 		}
 	}
 
@@ -50,15 +45,16 @@ public class NisoImageMetadataTest {
 			String profileName = NisoImageMetadata.extractIccProfileDescription(iccData);
 			assertEquals("sRGB v4 ICC preference perceptual intent beta", profileName);
 		} catch (IllegalArgumentException iae) {
-			fail("Not a icc profile " + iae.getMessage());
+			fail(ERROR_TEST + iae.getMessage());
 		}
 	}
 	
 	private byte[] toByteArray(InputStream is) throws IOException {
+		final int NB_READ = 16384;
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
 		int nRead;
-		byte[] data = new byte[16384];
+		byte[] data = new byte[NB_READ];
 
 		while ((nRead = is.read(data, 0, data.length)) != -1) {
 		  buffer.write(data, 0, nRead);

@@ -19,7 +19,6 @@
 
 package edu.harvard.hul.ois.jhove.module;
 
-import java.awt.color.ICC_Profile;
 import java.io.*;
 import java.util.*;
 import java.text.NumberFormat;
