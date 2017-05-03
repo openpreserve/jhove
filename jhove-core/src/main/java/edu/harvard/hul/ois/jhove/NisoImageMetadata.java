@@ -2190,10 +2190,12 @@ public class NisoImageMetadata
     
     private static int readUnsignedInt32(byte[] data, int offset) {
     	final int BYTE_MASK = 0xff;
-    	int b0 = data[offset + 0] & BYTE_MASK;
-    	int b1 = data[offset + 1] & BYTE_MASK;
-    	int b2 = data[offset + 2] & BYTE_MASK;
-    	int b3 = data[offset + 3] & BYTE_MASK;
-    	return b0 << 24 | b1 << 16 | b2 << 8 | b3;
+    	final int BYTE_LENGTH = 4;
+    	int result = 0;
+    	for (int i = 0; i < BYTE_LENGTH; i++) {
+    		int b = data[offset + i] & BYTE_MASK;
+    		result = result << 8 | b;
+    	}
+    	return result;
     }
 }

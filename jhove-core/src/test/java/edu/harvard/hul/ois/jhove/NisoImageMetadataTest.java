@@ -10,11 +10,15 @@ import org.junit.Test;
 
 public class NisoImageMetadataTest {
 	private final static String ERROR_TEST = "Not a icc profile ";
+
 	@Test
 	public void testExtractIccProfileDescriptionBad() {
-		byte[] badIcc = new byte[] { (byte)0xFF, (byte)0xFE, (byte)0xFD, (byte)0xFC };
+		final byte ANY_BYTE_1 = (byte) 0xFF;
+		final byte ANY_BYTE_2 = (byte) 0xFE;
+		final byte[] BAD_ICC = new byte[] { ANY_BYTE_1, ANY_BYTE_2, ANY_BYTE_1,
+				ANY_BYTE_2 };
 		try {
-			NisoImageMetadata.extractIccProfileDescription(badIcc);
+			NisoImageMetadata.extractIccProfileDescription(BAD_ICC);
 			fail(ERROR_TEST);
 		} catch (IllegalArgumentException iae) {
 			assertNotNull(iae); // Should always be true
@@ -26,9 +30,10 @@ public class NisoImageMetadataTest {
 		InputStream is = this.getClass().getResourceAsStream("sRGB2014.icc");
 		byte[] iccData = toByteArray(is);
 		is.close();
-		
+
 		try {
-			String profileName = NisoImageMetadata.extractIccProfileDescription(iccData);
+			String profileName = NisoImageMetadata
+					.extractIccProfileDescription(iccData);
 			assertEquals("sRGB2014", profileName);
 		} catch (IllegalArgumentException iae) {
 			fail(ERROR_TEST + iae.getMessage());
@@ -37,18 +42,21 @@ public class NisoImageMetadataTest {
 
 	@Test
 	public void testExtractIccProfileDescriptionGoodv4() throws IOException {
-		InputStream is = this.getClass().getResourceAsStream("sRGB_v4_ICC_preference.icc");
+		InputStream is = this.getClass().getResourceAsStream(
+				"sRGB_v4_ICC_preference.icc");
 		byte[] iccData = toByteArray(is);
 		is.close();
-		
+
 		try {
-			String profileName = NisoImageMetadata.extractIccProfileDescription(iccData);
-			assertEquals("sRGB v4 ICC preference perceptual intent beta", profileName);
+			String profileName = NisoImageMetadata
+					.extractIccProfileDescription(iccData);
+			assertEquals("sRGB v4 ICC preference perceptual intent beta",
+					profileName);
 		} catch (IllegalArgumentException iae) {
 			fail(ERROR_TEST + iae.getMessage());
 		}
 	}
-	
+
 	private byte[] toByteArray(InputStream is) throws IOException {
 		final int NB_READ = 16384;
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -57,10 +65,10 @@ public class NisoImageMetadataTest {
 		byte[] data = new byte[NB_READ];
 
 		while ((nRead = is.read(data, 0, data.length)) != -1) {
-		  buffer.write(data, 0, nRead);
+			buffer.write(data, 0, nRead);
 		}
 		buffer.flush();
-		return buffer.toByteArray();		
-		
+		return buffer.toByteArray();
+
 	}
 }
