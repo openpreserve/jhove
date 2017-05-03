@@ -7,6 +7,7 @@ package edu.harvard.hul.ois.jhove;
 
 import java.awt.color.ICC_Profile;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
 
@@ -2132,6 +2133,7 @@ public class NisoImageMetadata
     	}
 
     	String description = null;
+    	ByteBuffer bb = ByteBuffer.wrap(dataProf).asReadOnlyBuffer();
     	
     	LOGGER.fine("Version " + profile.getMajorVersion());
     	if (profile.getMajorVersion() <= 2) {
@@ -2140,12 +2142,12 @@ public class NisoImageMetadata
 	    	final int OFFSET_LENGTH = 8;
 	    	final int OFFSET_DESC = OFFSET_LENGTH + 4;
 	    	
-	    	int lengthAscii = readUnsignedInt32(dataProf, OFFSET_LENGTH);
+	    	int lengthAscii = bb.getInt(OFFSET_LENGTH);
+	    	
 	    	// readString
 	    	byte[] asciiDesc = new byte[lengthAscii -1];
-	    	for (int i = 0; i < lengthAscii -1; i++) {
-	    		asciiDesc[i] = dataProf[OFFSET_DESC + i];
-	    	}
+	    	bb.position(OFFSET_DESC);
+	    	bb.get(asciiDesc);
 	    	
 			try {
 				description = new String(asciiDesc, "US-ASCII");
@@ -2160,21 +2162,20 @@ public class NisoImageMetadata
 	    	final int OFFSET_NAME_OFFSET = 24;
 	    	
     		// 6.2 segment tag table definition
-    		int tagMluc = readUnsignedInt32(dataProf, 0);
+    		int tagMluc = bb.getInt(0);
     		
         	// Read the 1st mulc form (cf 6.5.12 ICC v4)
-    		int nb =  readUnsignedInt32(dataProf, OFFSET_NUMBER);
+    		int nb =  bb.getInt(OFFSET_NUMBER);
     		if (tagMluc != MLUC_TAG || nb < 1) {
     			throw new IllegalArgumentException("No description in ICC profile v4");
     		}
-    		int firstNameLength = readUnsignedInt32(dataProf, OFFSET_NAME_LENGTH);
-    		int firstNameOffset = readUnsignedInt32(dataProf, OFFSET_NAME_OFFSET);
+    		int firstNameLength = bb.getInt(OFFSET_NAME_LENGTH);
+    		int firstNameOffset = bb.getInt(OFFSET_NAME_OFFSET);
     		
         	// readString
         	byte[] desc = new byte[firstNameLength];
-        	for (int i = 0; i < firstNameLength; i++) {
-        		desc[i] = dataProf[firstNameOffset + i];
-        	}
+        	bb.position(firstNameOffset);
+        	bb.get(desc);
         	
     		try {
     			// The  Unicode  strings  in  storage  are  encoded  as  16-bit
@@ -2188,16 +2189,4 @@ public class NisoImageMetadata
     	return description;
     }
     
-    private static int readUnsignedInt32(byte[] data, int offset) {
-    	final int BYTE_MASK = 0xff;
-    	final int BYTE_LENGTH = 4;
-    	final int BITS_IN_BYTE = 8;
-    	
-    	int result = 0;
-    	for (int i = 0; i < BYTE_LENGTH; i++) {
-    		int b = data[offset + i] & BYTE_MASK;
-    		result = result << BITS_IN_BYTE | b;
-    	}
-    	return result;
-    }
 }
