@@ -5,6 +5,10 @@
 
 package edu.harvard.hul.ois.jhove;
 
+import java.awt.color.ICC_Profile;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Logger;
+
 
 /**
  * Encapsulation of the NISO Z39.87-2002 / AIIM 20-2002 Data Dictionary --
@@ -12,6 +16,9 @@ package edu.harvard.hul.ois.jhove;
  */
 public class NisoImageMetadata
 {
+	/** Logger for this class. */
+    private static final Logger LOGGER = Logger.getLogger(NisoImageMetadata.class.getCanonicalName());
+    
     /******************************************************************
      * PUBLIC CLASS FIELDS.
      ******************************************************************/
@@ -2113,5 +2120,73 @@ public class NisoImageMetadata
             // Malformed date
             return null;
         }
+    }
+    
+    public static String extractIccProfileDescription(byte[] data) throws IllegalArgumentException {
+    	// Validate the ICCProfile with the java library
+    	ICC_Profile profile = ICC_Profile.getInstance(data);
+    	// Extract the 'desc' record (cf http://www.color.org/ICC1-V41.pdf) 
+    	byte[] dataProf = profile.getData(ICC_Profile.icSigProfileDescriptionTag);
+    	if (dataProf == null) {
+    		return null;
+    	}
+
+    	String description = null;
+    	
+    	LOGGER.fine("Version " + profile.getMajorVersion());
+    	if (profile.getMajorVersion() <= 2) {
+        	// ICC v2 http://www.color.org/ICC_Minor_Revision_for_Web.pdf
+	    	// Read only the ASCII form (cf 6.5.17 ICC v2)
+	    	final int OFFSET = 8;
+	    	
+	    	int lengthAscii = readUnsignedInt32(dataProf, OFFSET);
+	    	// readString
+	    	byte[] asciiDesc = new byte[lengthAscii -1];
+	    	for (int i = 0; i < lengthAscii -1; i++) {
+	    		asciiDesc[i] = dataProf[OFFSET + 4 + i];
+	    	}
+	    	
+			try {
+				description = new String(asciiDesc, "US-ASCII");
+			} catch (UnsupportedEncodingException e) {
+				// IGNORE: US-ASCII always there... wait for Java 1.7
+			}
+    	} else {
+        	// ICC v4 http://www.color.org/ICC1-V41.pdf
+    		// 6.2 segment tag table definition
+    		int tagMluc = readUnsignedInt32(dataProf, 0);
+    		
+        	// Read the 1st mulc form (cf 6.5.12 ICC v4)
+    		int nb =  readUnsignedInt32(dataProf, 8);
+    		if (tagMluc != 0x6D6C7563 || nb < 1) {
+    			throw new IllegalArgumentException("No description in ICC profile v4");
+    		}
+    		int firstNameLength = readUnsignedInt32(dataProf, 20);
+    		int firstNameOffset = readUnsignedInt32(dataProf, 24);
+    		
+        	// readString
+        	byte[] desc = new byte[firstNameLength];
+        	for (int i = 0; i < firstNameLength; i++) {
+        		desc[i] = dataProf[firstNameOffset + i];
+        	}
+        	
+    		try {
+    			// The  Unicode  strings  in  storage  are  encoded  as  16-bit
+    			// big-endian,  UTF-16BE,  and should not be NULL terminated.
+    			description = new String(desc, "UTF-16BE");
+    		} catch (UnsupportedEncodingException e) {
+    			// IGNORE: UTF-16 always there... wait for Java 1.7
+    		}
+    		
+    	}
+    	return description;
+    }
+    
+    private static int readUnsignedInt32(byte[] data, int offset) {
+    	int b0 = data[offset + 0] & 0xff;
+    	int b1 = data[offset + 1] & 0xff;
+    	int b2 = data[offset + 2] & 0xff;
+    	int b3 = data[offset + 3] & 0xff;
+    	return b0 << 24 | b1 << 16 | b2 << 8 | b3;
     }
 }

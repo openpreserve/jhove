@@ -87,7 +87,7 @@ public class TiffTags
         /* 34377 */
         "ImageResources",
         /* 34665-34735 */
-        "ExifIFD", "InterColourProfile", "ImageLayer", "GeoKeyDirectoryTag", 
+        "ExifIFD", "ICCProfile", "ImageLayer", "GeoKeyDirectoryTag", 
         /* 34736-34850 */
         "GeoDoubleParamsTag", "GeoAsciiParamsTag", "ExposureProgram", 
         /* 34852-34856 */

@@ -14,6 +14,11 @@
    <mix:imageHeight>8192</mix:imageHeight>
    <mix:PhotometricInterpretation>
     <mix:colorSpace>RGB</mix:colorSpace>
+    <mix:ColorProfile>
+      <mix:IccProfile>
+        <mix:iccProfileName>Adobe RGB (1998)</mix:iccProfileName>
+      </mix:IccProfile>
+    </mix:ColorProfile>
     <mix:ReferenceBlackWhite>
      <mix:Component>
       <mix:componentPhotometricInterpretation>R</mix:componentPhotometricInterpretation>

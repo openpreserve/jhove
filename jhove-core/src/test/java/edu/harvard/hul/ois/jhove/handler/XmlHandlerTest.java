@@ -57,6 +57,7 @@ public class XmlHandlerTest {
 		TEST_NISO_IMAGE_MD.setImageWidth(EXPECTED_IMAGE_WIDTH);
 		TEST_NISO_IMAGE_MD.setImageLength(EXPECTED_IMAGE_WIDTH);
 		TEST_NISO_IMAGE_MD.setColorSpace(2);
+		TEST_NISO_IMAGE_MD.setProfileName("Adobe RGB (1998)");
 		Rational r0 = new Rational(0, 1);
 		Rational r255 = new Rational(EXPECTED_LAST_BYTE, 1);
 		TEST_NISO_IMAGE_MD.setReferenceBlackWhite(new Rational[] { r0, r255,

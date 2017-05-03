@@ -1667,10 +1667,10 @@ public class TextHandler
                                       rawOutput));
         }
         if ((s = niso.getProfileName ()) != null) {
-            _writer.println (margn2 + "iccProfileName: " + s);
+            _writer.println (margn2 + "ICCProfileName: " + s);
         }
         if ((s = niso.getProfileURL ()) != null) {
-            _writer.println (margn2 + "iccProfileURL: " + s);
+            _writer.println (margn2 + "ICCProfileURL: " + s);
         }
         int [] iarray = niso.getYCbCrSubSampling ();
         if (iarray != null) {

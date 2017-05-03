@@ -1294,7 +1294,7 @@ public class XmlHandler
             if (s2!= null) {
                 piBuf.append (margn6 + element ("mix:ProfileURL", s2) + EOL);
             }
-            piBuf.append (margn5 + elementEnd ("mix:ICCProfile"));
+            piBuf.append (margn5 + elementEnd ("mix:ICCProfile") + EOL);
             usePIBuf = true;
         }
         int [] iarray = niso.getYCbCrSubSampling ();
