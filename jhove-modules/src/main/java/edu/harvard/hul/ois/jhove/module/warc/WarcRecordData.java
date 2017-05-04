@@ -137,7 +137,7 @@ public class WarcRecordData {
      */
     public WarcRecordData(WarcRecord record) {
     	if (record == null) {
-    		throw new IllegalArgumentException("'record' should never be null");
+    		throw new IllegalArgumentException(MessageConstants.ERR_RECORD_DATA_NULL);
     	}
     	WarcHeader header = record.header;
         startOffset = record.getStartOffset();

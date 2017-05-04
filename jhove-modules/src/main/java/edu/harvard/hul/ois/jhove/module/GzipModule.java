@@ -36,6 +36,7 @@ import edu.harvard.hul.ois.jhove.Signature;
 import edu.harvard.hul.ois.jhove.SignatureType;
 import edu.harvard.hul.ois.jhove.SignatureUseType;
 import edu.harvard.hul.ois.jhove.module.gzip.GzipEntryProperties;
+import edu.harvard.hul.ois.jhove.module.gzip.MessageConstants;
 
 /**
  * JHOVE module for identifying, validating and characterizing GZIP files.
@@ -210,7 +211,7 @@ public class GzipModule extends ModuleBase {
                 reader.diagnostics.addAll(entry.diagnostics);
             }
         } else {
-            throw new JhoveException("WarcReader is has not been properly instantiated.");
+               throw new JhoveException(MessageConstants.ERR_RECORD_NULL);
         }
     }
 
