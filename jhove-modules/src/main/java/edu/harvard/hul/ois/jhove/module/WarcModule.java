@@ -41,16 +41,17 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.Signature;
 import edu.harvard.hul.ois.jhove.SignatureType;
 import edu.harvard.hul.ois.jhove.SignatureUseType;
+import edu.harvard.hul.ois.jhove.module.warc.MessageConstants;
 import edu.harvard.hul.ois.jhove.module.warc.WarcRecordProperties;
 
 /**
  * JHOVE module for identifying, validating and characterizing WARC files.
  * Ported from the JHOVE2 WARC module and based on the JWAT-tool, both
- * created by nicl@kb.dk (nclarkekb@git). 
- * 
- * This is a non-recursive validation. It only validates the WARC file format 
+ * created by nicl@kb.dk (nclarkekb@git).
+ *
+ * This is a non-recursive validation. It only validates the WARC file format
  * and WARC headers, not the actual payload of the WARC records.
- * 
+ *
  * @author jolf@kb.dk
  */
 public class WarcModule extends ModuleBase {
@@ -100,13 +101,13 @@ public class WarcModule extends ModuleBase {
     private boolean bStrictTargetUriValidation;
     private boolean bStrictUriValidation;
 
-    /** 
-     * Map of the WARC record versions and their count. 
+    /**
+     * Map of the WARC record versions and their count.
      * Used for reporting the most seen version, as the version for the WARC file.
      */
     private Map<String, Integer> versions;
-    /** 
-     * List of Property elements for the records of the WARC-file. 
+    /**
+     * List of Property elements for the records of the WARC-file.
      * Each Property contains a map of all properties for a given record.
      */
     private List<Property> recordProperties;
@@ -135,7 +136,7 @@ public class WarcModule extends ModuleBase {
         doc.setIdentifier(new Identifier("28500:2009",
                 IdentifierType.ISO));
         _specification.add(doc);
-        
+
         // Add optional external signatures (.warc or .warc.gz)
         Signature sig = new ExternalSignature (".warc", SignatureType.EXTENSION,
                 SignatureUseType.OPTIONAL);
@@ -143,7 +144,7 @@ public class WarcModule extends ModuleBase {
         sig = new ExternalSignature (".warc.gz", SignatureType.EXTENSION,
                 SignatureUseType.OPTIONAL, "when compressed");
         _signature.add (sig);
-        
+
     }
 
     /**
@@ -175,8 +176,8 @@ public class WarcModule extends ModuleBase {
 
     @Override
     public void checkSignatures (File file,
-            InputStream stream, 
-            RepInfo info) 
+            InputStream stream,
+            RepInfo info)
     throws IOException  {
         info.setFormat (_format[0]);
         info.setMimeType (_mimeType[0]);
@@ -198,17 +199,17 @@ public class WarcModule extends ModuleBase {
         // Not a warc or a gzip
         info.setWellFormed (false);
     }
-    
+
     @Override
     public void checkSignatures (File file,
-            RandomAccessFile raf, 
+            RandomAccessFile raf,
             RepInfo info) throws IOException {
         InputStream stream = new RandomAccessFileInputStream(raf);
         checkSignatures(file, stream, info);
         stream.close();
     }
-    
-    
+
+
     @Override
     public void parse(RandomAccessFile file, RepInfo info) throws IOException {
         InputStream stream = null;
@@ -263,10 +264,10 @@ public class WarcModule extends ModuleBase {
         reader.setBlockDigestEnabled(bComputeBlockDigest);
         reader.setPayloadDigestEnabled(bComputePayloadDigest);
         if (!reader.setBlockDigestAlgorithm(blockDigestAlgorithm)) {
-            throw new JhoveException("Invalid block digest algorithm: " + blockDigestAlgorithm);
+            throw new JhoveException(MessageConstants.ERR_BLOCK_DIGEST_INVALID + blockDigestAlgorithm);
         }
         if (!reader.setPayloadDigestAlgorithm(payloadDigestAlgorithm)) {
-            throw new JhoveException("Invalid payload digest algorithm: " + payloadDigestAlgorithm);
+            throw new JhoveException(MessageConstants.ERR_PAYLOAD_DIGEST_INVALID + payloadDigestAlgorithm);
         }
         reader.setBlockDigestEncoding(blockDigestEncoding);
         reader.setPayloadDigestEncoding(payloadDigestEncoding);
@@ -297,12 +298,12 @@ public class WarcModule extends ModuleBase {
                 reader.diagnostics.addAll(record.diagnostics);
             }
         } else {
-            throw new JhoveException("WarcReader has not been properly instantiated.");
+            throw new JhoveException(MessageConstants.ERR_RECORD_NULL);
         }
     }
 
     /**
-     * Process a WARC record. 
+     * Process a WARC record.
      * Does not characterize the record payload.
      * @param record WARC record from WARC reader
      * @throws EOFException if EOF occurs prematurely
@@ -321,7 +322,7 @@ public class WarcModule extends ModuleBase {
 
         WarcRecordProperties properties = new WarcRecordProperties(record);
         Property p = new Property("Record", PropertyType.STRING, PropertyArity.MAP, properties.getProperties());
-        
+
         recordProperties.add(p);
 
         record.close();
@@ -381,7 +382,7 @@ public class WarcModule extends ModuleBase {
         StringBuilder res = new StringBuilder();
         res.append("Entity: " + d.entity);
         for(String i : d.information) {
-            res.append(", " + i);    		
+            res.append(", " + i);
         }
         return res.toString();
     }
