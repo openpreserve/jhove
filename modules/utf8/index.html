@@ -9,23 +9,31 @@ title: UTF8-hul Module
 {% include navbar.html nav=site.data.navbar %}
 <div class="container" role="main">
   <h1>UTF8-hul Module</h1>
-  <p>
+
+<a class="name" name="introduction">
+  <h2>1 Introduction</h2>
+</a>
+
+<p>
     The UTF8-hul module recognizes and validates content streams encoded with the
     Unicode UTF-8 encoding.
   </p>
-  <a class="name" name="invocation">
-    <h2>Invocation</h2>
-  </a>
   <p>
   The module is invoked by the:
   </p>
     <pre>
-      jhove ... -m utf8-hul ...
+      jhove ... -m UTF8-hul ...
     </pre>
   <p>
   command line option.
   </p>
 
+<p>
+This module can be <a href="/getting-started/config/">configured</a> with the following parameters:
+<ul>
+<li><tt>withTextMD=true</tt> to ask for the output of a <a href="/references#textmd">textMD</a> block in the text technical properties.</li>
+</ul>
+</p>
   <a class="name" name="coverage">
     <h2>Coverage</h2>
   </a>
@@ -93,16 +101,17 @@ title: UTF8-hul Module
   </p>
   <p>
     In addition to the standard JHOVE
-    <a href="index.html#repinfo">representation information</a>, the module
+    <a href="/documentation#repinfo">representation information</a>, the module
     defines the following properties:
   </p>
   <ul>
-    <li> Line endings: CR, CRLF, or LF</li>
-    <li> Additional control characters</li>
-    <li> Number of characters</li>
-    <li>
-      Unicode 6.0.0 code blocks
-      [<a href="/references#blocks">Unicode Code Blocks</a>]
+    <li>Property "UTF8Metadata" of type PROPERTY and arity LIST 
+      <ul>
+        <li> Property "Characters" of type LONG and arity SCALAR containing the number of characters</li>
+        <li> Property "UnicodeBlocks" of type STRING and arity LIST containing Unicode 6.0.0 code blocks [<a href="/references#blocks">Unicode Code Blocks</a>]</li>
+        <li> Property "LineEndings" of type STRING and arity LIST containing: CR, CRLF, or LF</li>
+        <li> If withTextMD, Property "TextMDMetadata" of type TextMDMetadata and arity SCALAR</li>
+      </ul>
     </li>
   </ul>
 </div>

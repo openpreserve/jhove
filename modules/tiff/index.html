@@ -10,7 +10,9 @@ title: TIFF-hul Module
 <div class="container" role="main">
 <h1>JHOVE TIFF-hul Module</h1>
 
+<a class="name" name="introduction">
 <h2>1 Introduction</h2>
+</a>
 
 <p>
 The TIFF-hul module recognizes and validates the TIFF (Tagged Image File
@@ -24,12 +26,20 @@ The module is invoked by the:
 </p>
 <blockquote>
 <pre>
-jhove ... -m tiff-hul ...
+jhove ... -m TIFF-hul ...
 </pre>
 </blockquote>
 <p>
 command line option.
 </p>
+
+<p>
+This module can be <a href="/getting-started/config/">configured</a> with the following parameters:
+<ul>
+<li><tt>byteoffset=true</tt> to consider TIFFs with byte-aligned offsets as well-formed.</li>
+</ul>
+</p>
+
 <a class="name" name="coverage"><h2>2 Coverage</h2></a>
 <p>
 The TIFF-hul module recognizes and validates the following public profiles:
@@ -81,6 +91,8 @@ well-formed:
   <li>The final IFD is followed by an offset of 0</li>
 </ul>
 
+<p>Note that the 16-bit word aligned criteria can be by-passed by setting the byteoffset parameter</p>
+
 <a class="name" name="validity">
 <h2>4 Validity</h2></a>
 <p>
@@ -124,7 +136,7 @@ and the Class F profile, which is reported as: <tt>image/ief</tt>.
 </p>
 <p>
 In addition to the standard JHOVE
-<a href="index.html#repinfo">representation information</a>,
+<a href="/documentation#repinfo">representation information</a>,
 all <a href="tags">TIFF tags</a> and their values are displayed.
 </p>
 <p>
@@ -693,7 +705,9 @@ profile conformance.
     </li>
 </ul>
 
+<a class="name" name="extras">
 <h2>6 Additional Module Properties</h2>
+</a>
 
 <ul>
 <li> Nominal file extension: .tif
