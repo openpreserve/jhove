@@ -54,7 +54,7 @@ public class OpacityBox extends JP2Box {
                     JP2Strings.opacityTypeStr));
         if (otyp > 2) {
             _repInfo.setMessage (new ErrorMessage
-                    ("Invalid OTyp field in Opacity Box",
+                    (MessageConstants.ERR_OPACITY_BOX_OTYP_INVALID,
                      _module.getFilePos ()));
             _repInfo.setValid (false);
             return false;

@@ -61,7 +61,7 @@ public class CommentMarkerSegment extends MarkerSegment {
             
             default:
             _repInfo.setMessage( (new ErrorMessage 
-                    ("Unrecognized comment type")));
+                    (MessageConstants.ERR_COM_MARKER_TYPE_INVALID)));
             return false;        // other values are reserved
         }
         cs.addComment (prop);
