@@ -51,7 +51,7 @@ public class PPMMarkerSegment extends MarkerSegment {
             bytesToEat -= 4;
             if (nppm > bytesToEat) {
                 _repInfo.setMessage(new ErrorMessage 
-                        ("Invalid length for tile-part header in PPM packet"));
+                        (MessageConstants.ERR_PPM_MARKER_TILE_PART_HEADER_SIZE_INVALID));
                 return false;
             }
             _cs.addPPMLength (nppm);

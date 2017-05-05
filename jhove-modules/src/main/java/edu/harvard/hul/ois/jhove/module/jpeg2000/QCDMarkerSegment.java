@@ -67,7 +67,7 @@ public class QCDMarkerSegment extends MarkerSegment {
             
             default:
             _repInfo.setMessage (new ErrorMessage
-                    ("Unrecognized quantization type in QCD marker segment"));
+                    (MessageConstants.ERR_QCD_MARKER_QUANTIZATION_TYPE_INVALID));
             return false;    // reserved value
         }
         List propList = new ArrayList (2);

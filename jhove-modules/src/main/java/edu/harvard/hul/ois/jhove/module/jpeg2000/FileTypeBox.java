@@ -71,7 +71,7 @@ public class FileTypeBox extends JP2Box {
         int ncomp = (((int) _boxHeader.getLength ()) - 16) / 4;
         if (ncomp < 1) {
             _repInfo.setMessage (new ErrorMessage
-                        ("Empty compatibility list in File Type Box",
+                        (MessageConstants.ERR_FILE_TYPE_BOX_COMPAT_LIST_EMPTY,
                          _module.getFilePos ()));
             _repInfo.setWellFormed (false);
             return false;
@@ -97,7 +97,7 @@ public class FileTypeBox extends JP2Box {
                         eflag = true;   // Avoid multiple report of same error
                         _repInfo.setValid (false);
                         _repInfo.setMessage (new ErrorMessage
-                            ("Non-ASCII characters in compatibility item of File Type Box",
+                            (MessageConstants.ERR_FILE_TYPE_BOX_COMPAT_ITEM_NON_ASCII,
                              _module.getFilePos ()));
                     }
                     

@@ -39,6 +39,7 @@ public class GzipModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(gzm.getName()), info.getSigMatch());
         
         assertEquals(0, info.getMessage().size());
         
@@ -51,7 +52,7 @@ public class GzipModuleTest {
     }
 
     @Test
-    public void checkSignaturSampleTextGzipFile() throws Exception {
+    public void checkSignatureSampleTextGzipFile() throws Exception {
         File gzipFile = new File("src/test/resources/gzip/sample.txt.gz");
 
         GzipModule gzm = new GzipModule();
@@ -74,6 +75,7 @@ public class GzipModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+        assertEquals(Arrays.asList(gzm.getName()), info.getSigMatch());
         
         assertEquals(0, info.getMessage().size());
         
@@ -107,7 +109,8 @@ public class GzipModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         // Validate the failures.
         assertEquals(1, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -126,7 +129,8 @@ public class GzipModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         // Validate the failures.
         assertEquals(1, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -145,7 +149,8 @@ public class GzipModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         // Validate the failures.
         assertEquals(5, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -166,7 +171,8 @@ public class GzipModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         // Validate the failures.
         assertEquals(1, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
@@ -185,7 +191,8 @@ public class GzipModuleTest {
         
         assertEquals(RepInfo.FALSE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
-        
+        assertTrue(info.getSigMatch().isEmpty());
+
         // Validate the failures.
         assertEquals(1, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());

@@ -68,7 +68,7 @@ public class PLMMarkerSegment extends MarkerSegment {
                 if (--bytesToEat < 0) {
                     // bytes of a number can't cross marker segment boundaries
                     _repInfo.setMessage (new ErrorMessage
-                            ("Packet length in PLM marker segment crosses segment boundaries"));
+                            (MessageConstants.ERR_PLM_MARKER_PACKET_SIZE_INVALID));
                     return false;
                 }
                 pktLen = (pktLen << 7) | (pkByte | 0X7F);

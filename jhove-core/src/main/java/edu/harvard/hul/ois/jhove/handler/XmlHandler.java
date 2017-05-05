@@ -1159,7 +1159,7 @@ public class XmlHandler
         if ("variable".equals(textMD.getCharacter_size())) {
             String [][] attrs1 = {{"encoding", textMD.getCharset() }};
             _writer.println (margn3 + element("textmd:character_size", attrs1, "variable"));
-        } else {
+        } else if (textMD.getCharacter_size() != null && textMD.getCharacter_size().length() != 0) {
             _writer.println (margn3 + element("textmd:character_size", textMD.getCharacter_size()));
         }
         _writer.println (margn3 + element("textmd:linebreak", textMD.getLinebreakString()));
@@ -2811,12 +2811,12 @@ public class XmlHandler
             colorEncBuf.append (margn4 +
                     elementStart ("mix:WhitePoint") + EOL);
             if (r != null) {
-		rationalToString (colorEncBuf, "mix:whitePointXValue", margn5,
-				  r);
+            	colorEncBuf.append (margn5 + element ("mix:whitePointXValue",
+                                r.toString ()) + EOL);
             }
             if (r2 != null) {
-		rationalToString (colorEncBuf, "mix:whitePointYValue", margn5,
-				  r2);
+            	colorEncBuf.append (margn5 + element ("mix:whitePointYValue",
+                                r2.toString ()) + EOL);
             }
             colorEncBuf.append (margn4 + elementEnd ("mix:WhitePoint") + EOL);
             useColorEncBuf = true;
@@ -2828,38 +2828,38 @@ public class XmlHandler
         boolean useChromaBuf = false;
         r = niso.getPrimaryChromaticitiesRedX();
         if (r != null) {
-            rationalToString (chromaBuf, "mix:primaryChromaticitiesRedX",
-			      margn5, r);
+        	chromaBuf.append (margn5 + element ("mix:primaryChromaticitiesRedX",
+                    r.toString ()) + EOL);
             useChromaBuf = true;
         }
         r = niso.getPrimaryChromaticitiesRedY();
         if (r != null) {
-            rationalToString (chromaBuf, "mix:primaryChromaticitiesRedY",
-			      margn5, r);
+        	chromaBuf.append (margn5 + element ("mix:primaryChromaticitiesRedY",
+                    r.toString ()) + EOL);
             useChromaBuf = true;
         }
         r = niso.getPrimaryChromaticitiesGreenX();
         if (r != null) {
-            rationalToString (chromaBuf, "mix:primaryChromaticitiesGreenX",
-			      margn5, r);
+        	chromaBuf.append (margn5 + element ("mix:primaryChromaticitiesGreenX",
+                    r.toString ()) + EOL);
             useChromaBuf = true;
         }
         r = niso.getPrimaryChromaticitiesGreenY();
         if (r != null) {
-            rationalToString (chromaBuf, "mix:primaryChromaticitiesGreenY",
-			      margn5, r);
+        	chromaBuf.append (margn5 + element ("mix:primaryChromaticitiesGreenY",
+                    r.toString ()) + EOL);
             useChromaBuf = true;
         }
         r = niso.getPrimaryChromaticitiesBlueX();
         if (r != null) {
-            rationalToString (chromaBuf, "mix:primaryChromaticitiesBlueX",
-			      margn5, r);
+        	chromaBuf.append (margn5 + element ("mix:primaryChromaticitiesBlueX",
+                    r.toString ()) + EOL);
             useChromaBuf = true;
         }
         r = niso.getPrimaryChromaticitiesBlueY();
         if (r != null) {
-            rationalToString (chromaBuf, "mix:primaryChromaticitiesBlueY",
-			      margn5, r);
+        	chromaBuf.append (margn5 + element ("mix:primaryChromaticitiesBlueY",
+                    r.toString ()) + EOL);
             useChromaBuf = true;
         }
         chromaBuf.append (margn4 +

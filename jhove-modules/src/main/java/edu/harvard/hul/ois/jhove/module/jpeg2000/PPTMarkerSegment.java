@@ -39,13 +39,13 @@ public class PPTMarkerSegment extends MarkerSegment {
     {
         if (_ccs.isPPMSeen ()) {
             _repInfo.setMessage (new ErrorMessage
-                    ("PPT and PPM not allowed in same codestream"));
+                    (MessageConstants.ERR_PPT_MARKER_WITH_PPM_MARKER));
             return false;
         }
         Tile tile = _ccs.getCurTile ();
         if (tile == null ) {
             _repInfo.setMessage (new ErrorMessage
-                    ("PPT not allowed in codestream header"));
+                    (MessageConstants.ERR_PPT_MARKER_POSITION_INVALID));
             return false;
         }
         
@@ -57,7 +57,7 @@ public class PPTMarkerSegment extends MarkerSegment {
             bytesToEat -= 4;
             if (nppt > bytesToEat) {
                 _repInfo.setMessage(new ErrorMessage 
-                        ("Invalid length for tile-part header in PPM packet"));
+                        (MessageConstants.ERR_PPM_MARKER_TILE_PART_HEADER_SIZE_INVALID));
                 return false;
             }
             tile.addPPTLength (nppt);

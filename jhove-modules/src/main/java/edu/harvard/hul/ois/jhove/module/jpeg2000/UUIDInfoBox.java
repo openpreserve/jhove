@@ -76,7 +76,7 @@ public class UUIDInfoBox extends JP2Box {
         if (sizeLeft != 0) {
             // Underran the superbox -- get out quick
             _repInfo.setMessage (new ErrorMessage 
-                ("Size of contained boxes underruns UUID Info Box", 
+                (MessageConstants.ERR_UUID_INFO_BOX_UNDERRUN, 
                  _module.getFilePos ()));
             _repInfo.setWellFormed (false);
             return false;

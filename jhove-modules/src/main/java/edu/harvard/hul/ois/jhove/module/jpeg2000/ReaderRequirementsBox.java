@@ -36,7 +36,8 @@ public class ReaderRequirementsBox extends JP2Box {
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
     public boolean readBox() throws IOException {
-        final String badRR = "Invalid data in Reader Requirements box";
+        final String badRR =
+            MessageConstants.ERR_READER_REQUIREMENTS_BOX_CONTENT_INVALID;
         if (_parentBox != null) {
             wrongBoxContext();
             // System.out.println ("READBOX parentBox != null");

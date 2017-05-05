@@ -660,8 +660,12 @@ public abstract class ModuleBase
             int parseIndex = parse (stream, info, 0);
             while (parseIndex != 0) {
                 stream.close ();
-                stream = new FileInputStream (file);
-                parseIndex = parse (stream, info, parseIndex);
+                if (file != null) {
+	                stream = new FileInputStream (file);
+	                parseIndex = parse (stream, info, parseIndex);
+                } else {
+                	parseIndex = 0;
+                }
             }
         }
         else if (info.getWellFormed() == RepInfo.TRUE) {
@@ -1295,7 +1299,7 @@ public abstract class ModuleBase
     }
 
     public static double readDouble (RandomAccessFile file, boolean endian)
-        throws IOException 
+        throws IOException
     {
         double f = 0.0F;
         if (endian) {
@@ -1354,23 +1358,31 @@ public abstract class ModuleBase
         return f;
     }
 
-    /* Skip over some bytes.  */
-	public long skipBytes(DataInputStream stream, long bytesToSkip)
-            throws IOException
+    /** Skip over some bytes. Return number of bytes skipped. */
+    public long skipBytes(DataInputStream stream, long bytesToSkip)
+        throws IOException
     {
-	return skipBytes (stream, bytesToSkip, null);
+        return skipBytes(stream, bytesToSkip, null);
     }
 
-    /* Skip over some bytes.  */
-	public long skipBytes(DataInputStream stream, long bytesToSkip,
-			  ModuleBase counted) 
-            throws IOException
+    /** Skip over some bytes. Return number of bytes skipped. */
+    public long skipBytes(DataInputStream stream, long bytesToSkip,
+                          ModuleBase counted)
+        throws IOException
     {
-		long n = stream.skip(bytesToSkip);
-        if (counted != null) {
-            counted._nByte += n;
+        long totalBytesSkipped = 0;
+        while (bytesToSkip > 0) {
+            long bytesSkipped = stream.skip(bytesToSkip);
+            totalBytesSkipped += bytesSkipped;
+            bytesToSkip -= bytesSkipped;
+            // Cease skipping if end of stream reached before
+            // requested number of bytes have been skipped.
+            if (stream.available() == 0) break;
         }
-        return n;
+        if (counted != null) {
+            counted._nByte += totalBytesSkipped;
+        }
+        return totalBytesSkipped;
     }
 
     /**

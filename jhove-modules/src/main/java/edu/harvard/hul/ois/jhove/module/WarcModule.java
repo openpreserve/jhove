@@ -1,6 +1,7 @@
 package edu.harvard.hul.ois.jhove.module;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -10,11 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jwat.common.ByteCountingPushBackInputStream;
 import org.jwat.common.Diagnosis;
 import org.jwat.common.Diagnostics;
 import org.jwat.common.InputStreamNoSkip;
 import org.jwat.common.RandomAccessFileInputStream;
 import org.jwat.common.UriProfile;
+import org.jwat.gzip.GzipReader;
 import org.jwat.warc.WarcReader;
 import org.jwat.warc.WarcReaderFactory;
 import org.jwat.warc.WarcRecord;
@@ -25,6 +28,7 @@ import edu.harvard.hul.ois.jhove.AgentType;
 import edu.harvard.hul.ois.jhove.Document;
 import edu.harvard.hul.ois.jhove.DocumentType;
 import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.ExternalSignature;
 import edu.harvard.hul.ois.jhove.Identifier;
 import edu.harvard.hul.ois.jhove.IdentifierType;
 import edu.harvard.hul.ois.jhove.InfoMessage;
@@ -34,16 +38,20 @@ import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyArity;
 import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.Signature;
+import edu.harvard.hul.ois.jhove.SignatureType;
+import edu.harvard.hul.ois.jhove.SignatureUseType;
+import edu.harvard.hul.ois.jhove.module.warc.MessageConstants;
 import edu.harvard.hul.ois.jhove.module.warc.WarcRecordProperties;
 
 /**
  * JHOVE module for identifying, validating and characterizing WARC files.
  * Ported from the JHOVE2 WARC module and based on the JWAT-tool, both
- * created by nicl@kb.dk (nclarkekb@git). 
- * 
- * This is a non-recursive validation. It only validates the WARC file format 
+ * created by nicl@kb.dk (nclarkekb@git).
+ *
+ * This is a non-recursive validation. It only validates the WARC file format
  * and WARC headers, not the actual payload of the WARC records.
- * 
+ *
  * @author jolf@kb.dk
  */
 public class WarcModule extends ModuleBase {
@@ -93,13 +101,13 @@ public class WarcModule extends ModuleBase {
     private boolean bStrictTargetUriValidation;
     private boolean bStrictUriValidation;
 
-    /** 
-     * Map of the WARC record versions and their count. 
+    /**
+     * Map of the WARC record versions and their count.
      * Used for reporting the most seen version, as the version for the WARC file.
      */
     private Map<String, Integer> versions;
-    /** 
-     * List of Property elements for the records of the WARC-file. 
+    /**
+     * List of Property elements for the records of the WARC-file.
      * Each Property contains a map of all properties for a given record.
      */
     private List<Property> recordProperties;
@@ -128,10 +136,19 @@ public class WarcModule extends ModuleBase {
         doc.setIdentifier(new Identifier("28500:2009",
                 IdentifierType.ISO));
         _specification.add(doc);
+
+        // Add optional external signatures (.warc or .warc.gz)
+        Signature sig = new ExternalSignature (".warc", SignatureType.EXTENSION,
+                SignatureUseType.OPTIONAL);
+        _signature.add (sig);
+        sig = new ExternalSignature (".warc.gz", SignatureType.EXTENSION,
+                SignatureUseType.OPTIONAL, "when compressed");
+        _signature.add (sig);
+
     }
 
     /**
-     * Initialises the variables.
+     * Initializes the variables.
      */
     private void initialiseVariables() {
         versions = new HashMap<String, Integer>();
@@ -158,6 +175,42 @@ public class WarcModule extends ModuleBase {
     }
 
     @Override
+    public void checkSignatures (File file,
+            InputStream stream,
+            RepInfo info)
+    throws IOException  {
+        info.setFormat (_format[0]);
+        info.setMimeType (_mimeType[0]);
+        info.setModule (this);
+
+        ByteCountingPushBackInputStream pbin = new ByteCountingPushBackInputStream(stream, GzipReader.DEFAULT_INPUT_BUFFER_SIZE);
+    	// First try warc uncompressed
+    	boolean checkIsWarc = WarcReaderFactory.isWarcFile(pbin);
+        if (checkIsWarc) {
+            info.setSigMatch(_name);
+            return;
+        }
+    	// Then try warc compressed
+    	boolean checkIsGzip = GzipReader.isGzipped(pbin);
+        if (checkIsGzip) {
+            info.setSigMatch(_name);
+            return;
+        }
+        // Not a warc or a gzip
+        info.setWellFormed (false);
+    }
+
+    @Override
+    public void checkSignatures (File file,
+            RandomAccessFile raf,
+            RepInfo info) throws IOException {
+        InputStream stream = new RandomAccessFileInputStream(raf);
+        checkSignatures(file, stream, info);
+        stream.close();
+    }
+
+
+    @Override
     public void parse(RandomAccessFile file, RepInfo info) throws IOException {
         InputStream stream = null;
         try {
@@ -175,6 +228,10 @@ public class WarcModule extends ModuleBase {
     public int parse(InputStream stream, RepInfo info, int parseIndex) throws IOException {
         WarcReader reader = WarcReaderFactory.getReader(new InputStreamNoSkip(stream), 8192);
         try {
+            info.setFormat(_format[0]);
+            info.setMimeType(_mimeType[0]);
+            info.setModule(this);
+
             setReaderOptions(reader);
             parseRecords(reader);
 
@@ -183,9 +240,9 @@ public class WarcModule extends ModuleBase {
 
             reportResults(reader, info);
 
-            info.setSigMatch(_name);
-            info.setFormat(_format[0]);
-            info.setMimeType(_mimeType[0]);
+            if (reader.isCompliant()) {
+            	info.setSigMatch(_name);
+            }
         } catch (JhoveException e) {
             info.setMessage(new ErrorMessage(e.getMessage()));
             info.setValid(false);
@@ -207,10 +264,10 @@ public class WarcModule extends ModuleBase {
         reader.setBlockDigestEnabled(bComputeBlockDigest);
         reader.setPayloadDigestEnabled(bComputePayloadDigest);
         if (!reader.setBlockDigestAlgorithm(blockDigestAlgorithm)) {
-            throw new JhoveException("Invalid block digest algorithm: " + blockDigestAlgorithm);
+            throw new JhoveException(MessageConstants.ERR_BLOCK_DIGEST_INVALID + blockDigestAlgorithm);
         }
         if (!reader.setPayloadDigestAlgorithm(payloadDigestAlgorithm)) {
-            throw new JhoveException("Invalid payload digest algorithm: " + payloadDigestAlgorithm);
+            throw new JhoveException(MessageConstants.ERR_PAYLOAD_DIGEST_INVALID + payloadDigestAlgorithm);
         }
         reader.setBlockDigestEncoding(blockDigestEncoding);
         reader.setPayloadDigestEncoding(payloadDigestEncoding);
@@ -231,9 +288,9 @@ public class WarcModule extends ModuleBase {
      * @param reader WARC reader used to parse records
      * @throws EOFException if EOF occurs prematurely
      * @throws IOException if an IO error occurs while processing
-     * @throws JHOVE2Exception if a serious problem needs to be reported
+     * @throws JhoveException if a serious problem needs to be reported
      */
-    protected void parseRecords(WarcReader reader) throws EOFException, IOException, JhoveException {
+    protected void parseRecords(WarcReader reader) throws IOException, JhoveException {
         if (reader != null) {
             WarcRecord record;
             while ((record = reader.getNextRecord()) != null) {
@@ -241,19 +298,19 @@ public class WarcModule extends ModuleBase {
                 reader.diagnostics.addAll(record.diagnostics);
             }
         } else {
-            throw new JhoveException("WarcReader is has not been properly instantiated.");
+            throw new JhoveException(MessageConstants.ERR_RECORD_NULL);
         }
     }
 
     /**
-     * Process a WARC record. 
+     * Process a WARC record.
      * Does not characterize the record payload.
      * @param record WARC record from WARC reader
      * @throws EOFException if EOF occurs prematurely
      * @throws IOException if an IO error occurs while processing
      * @throws JhoveException if a serious problem needs to be reported
      */
-    protected void processRecord(WarcRecord record) throws EOFException, IOException, JhoveException {
+    protected void processRecord(WarcRecord record) throws IOException, JhoveException {
         if (record.header.bValidVersionFormat) {
             Integer count = versions.get(record.header.versionStr);
             if (count == null) {
@@ -265,7 +322,7 @@ public class WarcModule extends ModuleBase {
 
         WarcRecordProperties properties = new WarcRecordProperties(record);
         Property p = new Property("Record", PropertyType.STRING, PropertyArity.MAP, properties.getProperties());
-        
+
         recordProperties.add(p);
 
         record.close();
@@ -273,7 +330,7 @@ public class WarcModule extends ModuleBase {
 
     /**
      * Report the results of the characterization.
-     * @param reader The warc reader, which has read the warc-file. 
+     * @param reader The WARC reader, which has read the WARC-file.
      * @param repInfo The representation info, where to report the results.
      * @throws JhoveException
      * @throws IOException
@@ -300,7 +357,7 @@ public class WarcModule extends ModuleBase {
                 repInfo.setVersion(e.getKey());
             }
 
-            _features.add(e.getValue() + " warc records of version " + e.getKey());
+            _features.add(e.getValue() + " WARC records of version " + e.getKey());
         }
 
         repInfo.setProperty(new Property("Records", PropertyType.PROPERTY, PropertyArity.LIST, recordProperties));
@@ -325,7 +382,7 @@ public class WarcModule extends ModuleBase {
         StringBuilder res = new StringBuilder();
         res.append("Entity: " + d.entity);
         for(String i : d.information) {
-            res.append(", " + i);    		
+            res.append(", " + i);
         }
         return res.toString();
     }

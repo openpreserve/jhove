@@ -53,7 +53,9 @@ public class FragmentListBox extends JP2Box {
         int nFrags = _module.readUnsignedShort (_dstrm);
         if (_boxHeader.getLength () != 0 && len != 14 * nFrags + 2) {
             _repInfo.setMessage 
-                (new ErrorMessage ("Fragment Table has invalid length", _module.getFilePos ()));
+                (new ErrorMessage
+                 (MessageConstants.ERR_FRAGMENT_LIST_BOX_TABLE_SIZE_INVALID,
+                  _module.getFilePos ()));
             _repInfo.setWellFormed (false);
             return false;
         }
@@ -72,7 +74,8 @@ public class FragmentListBox extends JP2Box {
             if (dataRef != 0) {
                 _fragmentList = null;   // no can do fragments
                 _repInfo.setMessage (new InfoMessage 
-                    ("Document references an external file", _module.getFilePos()));
+                    (MessageConstants.INF_FRAGMENT_LIST_BOX_EXT_FILE_REFERENCE,
+                     _module.getFilePos()));
             }
             else if (_fragmentList != null) {
                 long[] frag = new long[2];

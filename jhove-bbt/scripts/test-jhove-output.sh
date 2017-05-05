@@ -79,7 +79,6 @@ checkParams () {
 	fi
 }
 
-
 # Show usage message
 showHelp() {
 	echo "usage: bbt-jhove [-b <baselineRoot>] [-c <candidateRoot>] [-k <key>] [-i] [-h|?]"
