@@ -80,7 +80,7 @@ public class BinaryFilterBox extends JP2Box {
         if (isGzip) {
             // report that we've left information unprocessed
             _repInfo.setMessage(new InfoMessage
-                    ("Binary Filter Box of type other than Gzip, contents not processed",
+                    (MessageConstants.INF_BINARY_FILTER_BOX_NOT_GZIP,
                      _module.getFilePos ()));
         }
         else {

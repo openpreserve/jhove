@@ -52,7 +52,8 @@ public class TLMMarkerSegment extends MarkerSegment {
             partLength += 2;
             break;
             case 3:
-            _repInfo.setMessage (new ErrorMessage ("Invalid ST value in TLM marker segment"));
+            _repInfo.setMessage (new ErrorMessage
+                    (MessageConstants.ERR_TLM_MARKER_ST_VALUE_INVALID));
             return false;      // invalid st value
         }
         
