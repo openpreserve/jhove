@@ -2431,7 +2431,10 @@ public class PdfModule
                     }
                 }
                 /* And finally extract the object from the object stream. */
-                return ostrm.getObject (objIndex);
+                /* Need to ensure the object number is set */
+                PdfObject obj = ostrm.getObject (objIndex);
+                obj.setObjNumber (objIndex);
+                return obj;
             }
             catch (Exception e) {
 
