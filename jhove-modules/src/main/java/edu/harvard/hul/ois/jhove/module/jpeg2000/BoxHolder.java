@@ -163,7 +163,7 @@ public class BoxHolder implements Iterator<Object> {
     protected void superboxOverrun ()
     {
         _repInfo.setMessage (new ErrorMessage 
-            ("Size of contained Box overruns " + getSelfPropName (), 
+            (MessageConstants.ERR_SUPERBOX_OVERRUN + getSelfPropName (), 
              _module.getFilePos ()));
         _repInfo.setWellFormed (false);
     }
@@ -176,7 +176,7 @@ public class BoxHolder implements Iterator<Object> {
     protected void superboxUnderrun ()
     {
         _repInfo.setMessage (new ErrorMessage 
-            ("Size of contained Boxes underruns " + getSelfPropName (), 
+            (MessageConstants.ERR_SUPERBOX_UNDERRUN + getSelfPropName (), 
              _module.getFilePos ()));
         _repInfo.setWellFormed (false);
     }

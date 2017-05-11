@@ -65,22 +65,22 @@ public class ParseHtml implements ParseHtmlConstants {
         }
       }
     } catch (ParseException e) {
-        String errText = "";
+        StringBuilder errText = new StringBuilder();
         for (;;) {
             token_source.SwitchTo(DEFAULT);
-                Token tok = getNextToken ();
-                if (tok.kind == LABRACKET || tok.kind == PCDATA) {
-                    break;
-                }
-                errText += "Text = \"" + tok.image + "\", Line = " +
-                    tok.beginLine + ", Column = " + tok.beginColumn;
-                /****** Added GDM 14-Jun-05 to avoid infinite loop ********/
-                if ("".equals (tok.image)) {
-                    break;
-                }
-                /******* End Added GDM 14-Jun-05 to avoid infinite loop ********/
+            Token tok = getNextToken ();
+            if (tok.kind == LABRACKET || tok.kind == PCDATA) {
+                break;
             }
-        {if (true) return new JHErrorElement(elements, "Parsing error", errText, true);}
+            errText.append("Text = \"").append(tok.image).append("\", Line = ")
+                .append(tok.beginLine).append(", Column = ").append(tok.beginColumn);
+            /****** Added GDM 14-Jun-05 to avoid infinite loop ********/
+            if ("".equals (tok.image)) {
+                break;
+            }
+            /******* End Added GDM 14-Jun-05 to avoid infinite loop ********/
+        }
+        {if (true) return new JHErrorElement(elements, MessageConstants.ERR_HTML_PARSING_ERROR, errText.toString(), true);}
     }
       {if (true) return elem;}
     throw new Error("Missing return statement in function");
@@ -111,7 +111,7 @@ public class ParseHtml implements ParseHtmlConstants {
             the whole thing from falling apart, yet will generate an error */
          {if (true) return new JHOpenTag (elements, name.image, attrs,
            name.beginLine, name.beginColumn,
-           "Construction with \"/>\" is incorrect except in XHTML");}
+           MessageConstants.WRN_INCORRECT_AUTO_CLOSED_TAG);}
      }
      else {
          {if (true) return new JHOpenTag (elements, name.image, attrs,
@@ -185,7 +185,7 @@ public class ParseHtml implements ParseHtmlConstants {
 
   JHErrorElement ConsumeError() throws ParseException {
     Token tok = getNextToken();
-        return new JHErrorElement (elements, "Parsing error", tok.image, true);
+        return new JHErrorElement (elements, MessageConstants.ERR_HTML_PARSING_ERROR, tok.image, true);
   }
 
   final public void DoctypeItem(List dtElements) throws ParseException {

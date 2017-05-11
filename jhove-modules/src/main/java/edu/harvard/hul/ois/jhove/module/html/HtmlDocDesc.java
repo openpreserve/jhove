@@ -181,7 +181,7 @@ public abstract class HtmlDocDesc {
                 toptag = top.getName();
             }
             info.setMessage (new ErrorMessage
-                    ("Tag illegal in context",
+                    (MessageConstants.ERR_HTML_ILLEGAL_TAG,
                      "Name = " + name + ", " + 
                      (toptag != null ? "Container = " + toptag + ", " : "") +
                      "Line = " + tag.getLine () + ", Column = " +
@@ -190,7 +190,7 @@ public abstract class HtmlDocDesc {
         }
         if (unknownTag) {
             info.setMessage (new ErrorMessage 
-                    ("Unknown tag",
+                    (MessageConstants.ERR_HTML_UNKNOWN_TAG,
                      "Name = " + name + ", Line = " + 
                      tag.getLine () + ", Column = " +
                      tag.getColumn ()));
@@ -213,7 +213,7 @@ public abstract class HtmlDocDesc {
                     tagDesc.namedAttDesc (attName);
                 if (attDesc == null) {
                     info.setMessage ( new ErrorMessage
-                        ("Undefined attribute for element",
+                        (MessageConstants.ERR_HTML_UNDEFINED_ATTRIBUTE,
                          "Name = " + name + ", Attribute = " + 
                          attName + ", Line = " + att.getLine () +
                           ", Column = " + att.getColumn ()));
@@ -223,7 +223,7 @@ public abstract class HtmlDocDesc {
                     /* Check if value is legit */
                     if (!attDesc.valueOK (attName, attVal)) {
                         info.setMessage (new ErrorMessage
-                            ("Improper value for attribute",
+                            (MessageConstants.ERR_HTML_BAD_VALUE_IN_ATTRIBUTE,
                              "Element = " + name + ", Attribute = " + 
                              attName + ", Value = " + attVal + 
                              ", Line = " + att.getLine () + 
@@ -260,7 +260,7 @@ public abstract class HtmlDocDesc {
                 while (miter.hasNext ()) {
                     String matt = (String) miter.next ();
                     info.setMessage (new ErrorMessage
-                        ("Missing required attribute",
+                        (MessageConstants.ERR_HTML_MISSING_ATTRIBUTE,
                          "Tag = " + name + ", Attribute = " + matt + 
                          ", Line = " + tag.getLine () +
                          ", Column = " + tag.getColumn ()));
@@ -288,7 +288,7 @@ public abstract class HtmlDocDesc {
         int idx = elementStack.search (name);
         if (idx == -1) {
             info.setMessage (new ErrorMessage
-                ("Close tag without matching open tag",
+                (MessageConstants.ERR_HTML_CLOSED_TAG_NO_OPEN,
                  "Name = " + name + ", Line = " + tag.getLine () +
                     ", Column = " + tag.getColumn ()));
             info.setValid (false);
@@ -315,7 +315,7 @@ public abstract class HtmlDocDesc {
             // It also means the document isn't valid, since the title
             // should precede any PCData.
             info.setMessage(new ErrorMessage 
-                ("Document must have implicit or explicit HEAD element"));
+                (MessageConstants.ERR_HTML_NO_HEAD_ELEMENT));
             info.setValid (false);
             return;
         }
@@ -340,7 +340,7 @@ public abstract class HtmlDocDesc {
                 return;
             }
         }
-        info.setMessage (new ErrorMessage ("PCData illegal in context",
+        info.setMessage (new ErrorMessage (MessageConstants.ERR_HTML_BAD_PC_DATA,
              "Line = " + 
              elem.getLine () + ", Column = " +
              elem.getColumn () ));
@@ -448,7 +448,7 @@ public abstract class HtmlDocDesc {
                     if (topElem.isCloseTagRequired()) {
                         info.setValid (false);
                         info.setMessage (new ErrorMessage
-                           ("Tag illegal in context",
+                           (MessageConstants.ERR_HTML_ILLEGAL_TAG,
                             "Name = " + name + ", " + 
                             "Container = " + top.getName() + ", " +
                             "Line = " + elem.getLine() + ", Column = " +
