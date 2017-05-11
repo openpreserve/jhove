@@ -6,6 +6,7 @@
 package edu.harvard.hul.ois.jhove.module.tiff;
 
 import edu.harvard.hul.ois.jhove.*;
+
 import java.io.*;
 import java.util.*;
 import org.xml.sax.XMLReader;
@@ -582,7 +583,7 @@ public class TiffIFD
     private int _focalPlaneResolutionUnit;
     private Rational _focalPlaneXResolution;
     private Rational _focalPlaneYResolution;
-    private int [] _interColourProfile;
+    private byte [] _iccProfile;
     private String _imageHistory;
     private long _imageNumber;
     private int _interlace;
@@ -1058,9 +1059,9 @@ public class TiffIFD
     }
 
     /** Returns the value of the ICC_PROFILE tag. */
-    public int [] getInterColourProfile ()
+    public byte [] getICCProfile ()
     {
-        return _interColourProfile;
+        return _iccProfile;
     }
     
     /** Returns the value of the INDEXED (364) tag. */
@@ -1665,8 +1666,8 @@ public class TiffIFD
             epList.add (new Property ("IPTCNAA", PropertyType.LONG,
                                       PropertyArity.ARRAY, _iptc));
         }
-        if (_interColourProfile != null) {
-            epList.add (new Property ("InterColourProfile",
+        if (_iccProfile != null) {
+            epList.add (new Property ("ICCProfile",
                                       PropertyType.BOOLEAN,
                                       Boolean.TRUE));
         }
@@ -3000,7 +3001,17 @@ public class TiffIFD
             }
             else if (tag == ICC_PROFILE) {
                 checkType  (tag, type, UNDEFINED);
-                _interColourProfile = readByteArray (type, count, value);
+                // Read the iccProdfile data as an array of bytes
+                _iccProfile = readTrueByteArray(type, count, value);
+                try {
+                	String desc = NisoImageMetadata.extractIccProfileDescription(_iccProfile);
+                	if (desc != null) {
+                		_niso.setProfileName(desc);
+                	}
+                } catch (IllegalArgumentException ie) {
+                	throw new TiffException ("Bad ICCProfile in tag " + tag +
+                            "; message " + ie.getMessage());
+                }
             }
             else if (tag == INTERLACE) {
                 checkType  (tag, type, SHORT);

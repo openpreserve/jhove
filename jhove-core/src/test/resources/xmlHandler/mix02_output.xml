@@ -7,6 +7,9 @@
    </mix:Compression>
    <mix:PhotometricInterpretation>
     <mix:ColorSpace>2</mix:ColorSpace>
+    <mix:ICCProfile>
+      <mix:ProfileName>Adobe RGB (1998)</mix:ProfileName>
+    </mix:ICCProfile>
     <mix:ReferenceBlackWhite>0.0 255.0 0.0 255.0 0.0 255.0</mix:ReferenceBlackWhite>
    </mix:PhotometricInterpretation>
   </mix:Format>

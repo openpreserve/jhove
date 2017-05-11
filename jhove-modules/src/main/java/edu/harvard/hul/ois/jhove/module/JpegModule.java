@@ -24,6 +24,7 @@ import java.util.*;
 import java.text.NumberFormat;
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.module.jpeg.*;
+
 import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.SAXParserFactory;
@@ -596,6 +597,8 @@ public class JpegModule extends ModuleBase {
                         break;
 
                     case 0XE2:
+                    	readAPP2(info);
+                    	break;
                     case 0XE3:
                     case 0XE4:
                     case 0XE5:
@@ -1177,6 +1180,61 @@ public class JpegModule extends ModuleBase {
         } else {
             skipBytes(_dstream, length - 8, this);
         }
+    }
+
+    /*
+     * Reads an APP2 marker segment. This may include an ICC_PROFILE.
+     */
+    protected void readAPP2(RepInfo info) throws IOException {
+        final String iccProfileSequence = "ICC_PROFILE\0";
+        final int SEQUENCE_LENGTH = 12;
+        
+        reportAppExt(0XE2, info);
+        
+        // The length field of a JPEG marker is only two bytes long;
+        // the length of the length field is included in the total.
+        int length = readUnsignedShort(_dstream);
+        byte[] ident = new byte[SEQUENCE_LENGTH];
+        for (int i = 0; i < SEQUENCE_LENGTH; i++) {
+            ident[i] = (byte)readUnsignedByte(_dstream, this);
+        }
+        String sIdent = new String(ident, "US-ASCII");
+        if (!iccProfileSequence.equalsIgnoreCase(sIdent)) {
+        	// This is not a APP2 segment containing an ICC_PROFILE
+        	skipBytes(_dstream, length - SEQUENCE_LENGTH - 2, this);
+        	return;
+        }
+
+        // See http://www.color.org/ICC1-V41.pdf Annex B.4
+       
+        // The ICC PROFILE can be on multiple chunks
+        int chunkNumber = readUnsignedByte(_dstream, this);
+        int numberOfChunks = readUnsignedByte(_dstream, this);
+        int profileLength = length - SEQUENCE_LENGTH - 2 - 2;
+        
+        if (numberOfChunks != 1) {
+        	if (chunkNumber == 1) {
+        		// report only once
+	        	info.setMessage(new InfoMessage(
+	        			"ICCProfile in multiple APP2 segments; not handled by JPEG-hul", _nByte));
+        	}
+        	skipBytes(_dstream, profileLength, this);
+        	return;
+        }
+        // Read the iccprofile data
+        byte[] iccProfile = new byte[profileLength];
+        readByteBuf(_dstream, iccProfile, this);
+        try {
+        	// Validate and record the name
+        	String desc = NisoImageMetadata.extractIccProfileDescription(iccProfile);
+        	if (desc != null) {
+        		_niso.setProfileName(desc);
+        	}
+        } catch (IllegalArgumentException ie) {
+        	info.setMessage(new ErrorMessage(
+        			"Bad ICCProfile in APP2 segment; message " + ie.getMessage(), _nByte));
+        }
+        
     }
 
     /* Read the VER marker, and set version information accordingly */

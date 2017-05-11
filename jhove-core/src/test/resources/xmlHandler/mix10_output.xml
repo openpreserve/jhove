@@ -11,6 +11,11 @@
       <mix:imageHeight>8192</mix:imageHeight>
       <mix:PhotometricInterpretation>
         <mix:colorSpace>2</mix:colorSpace>
+        <mix:ColorProfile>
+          <mix:IccProfile>
+            <mix:iccProfileName>Adobe RGB (1998)</mix:iccProfileName>
+          </mix:IccProfile>
+        </mix:ColorProfile>
         <mix:referenceBlackWhite>0 0 255 255 0 0 255 255 0 0 255 255</mix:referenceBlackWhite>
       </mix:PhotometricInterpretation>
     </mix:BasicImageCharacteristics>
