@@ -32,7 +32,7 @@ public class NisoImageMetadata
 
     /** 7.7.3.13 back light value labels. */
     public static final String [] BACKLIGHT = {
-	"front leight", "backlight 1", "backlight 2"
+	"front light", "backlight 1", "backlight 2"
     };
 
     /** 6.1.2 byte order value labels. */
@@ -111,6 +111,14 @@ public class NisoImageMetadata
 	"range or depth"
     };
 
+    public static final String [] EXPOSURE_PROGRAM = {
+	"Not defined", " Manual", "Normal program", "Aperture priority",
+	"Shutter priority", "Creative program (biased toward depth of field)", 
+	"Action program (biased toward fast shutter speed)",
+	"Portrait mode (for closeup photos with the background out of focus)",
+	"Landscape mode (for landscape photos with the background in focus)"
+    };
+    
     /** 7.7.3.10 flash value labels. */
     public static final String [] FLASH = {
 	"yes", "no"
@@ -149,7 +157,7 @@ public class NisoImageMetadata
 	
     /** 7.7.3.6 metering mode value labels. */
     public static final String [] METERING_MODE = {
-	"unidentified", "average", "center-weighted average", "spot",
+	"unidentified", "average", "center weighted average", "spot",
 	"multispot", "pattern", "partial"
     };
 
@@ -344,13 +352,22 @@ public class NisoImageMetadata
 
     /** 7.7.1 Digital camera manufacturer */
     private String _digitalCameraManufacturer;
-    /** 7.7.2 Digital camera model */
-    private String _digitalCameraModel;
+    /** 7.7.2 Digital camera model name */
+    private String _digitalCameraModelName;
+    /** 7.7.2 Digital camera model number */
+    private String _digitalCameraModelNumber;
+    /** 7.7.2 Digital camera model serial number*/
+    private String _digitalCameraModelSerialNo;
 
     /** 7.7.3.1 F number */
     private double _fNumber;
     /** 7.7.3.2 Exposure time */
     private double _exposureTime;
+    
+    private int _exposureProgram;
+    private String _exifVersion;
+    private Rational _maxApertureValue;
+    
     /** 7.7.3.3 Brightness */
     private double _brightness;
     /** 7.7.3.4 Exposure bias */
@@ -511,9 +528,15 @@ public class NisoImageMetadata
 	_compressionLevel = NULL;
 	_compressionScheme = NULL;
 	_dateTimeProcessed = null;
+	_digitalCameraManufacturer = null;
+	_digitalCameraModelName = null;
+	_digitalCameraModelNumber = null;
+	_digitalCameraModelSerialNo = null;
 	_displayOrientation = NULL;
+	_exifVersion = null;
 	_exposureBias = NILL;
 	_exposureIndex = NILL;
+	_exposureProgram = NULL;
 	_exposureTime = NILL;
 	_fileSize = NULL;
 	_flash = NULL;
@@ -525,6 +548,7 @@ public class NisoImageMetadata
 	_imageData = null;
 	_imageLength = NULL;
 	_imageWidth = NULL;
+	_maxApertureValue = null;
 	_meteringMode = NULL;
 	_orientation = NULL;
 	_performanceData = null;
@@ -536,6 +560,10 @@ public class NisoImageMetadata
 	_processingSoftwareVersion = null;
         _profiles = null;
 	_rowsPerStrip = NULL;
+	_scannerManufacturer = null;
+	_scannerModelName = null;
+	_scannerModelNumber = null;
+	_scannerModelSerialNo = null;
 	_samplesPerPixel = NULL;
 	_samplingFrequencyPlane = NULL;
 	_samplingFrequencyUnit = NULL;
@@ -693,15 +721,28 @@ public class NisoImageMetadata
     }
 
     /** Get 7.7.2 digital camera model. */
-    public String getDigitalCameraModel ()
+    public String getDigitalCameraModelName ()
     {
-	return _digitalCameraModel;
+	return _digitalCameraModelName;
+    }
+    public String getDigitalCameraModelNumber ()
+    {
+	return _digitalCameraModelNumber;
+    }
+    public String getDigitalCameraModelSerialNo()
+    {
+	return _digitalCameraModelSerialNo;
     }
 
     /** Get 6.2.5 Display orientation. */
     public int getDisplayOrientation ()
     {
 	return _displayOrientation;
+    }
+
+    public String getExifVersion ()
+    {
+	return _exifVersion;
     }
 
     /** Get 7.7.3.4 exposure bias. */
@@ -716,6 +757,11 @@ public class NisoImageMetadata
 	return _exposureIndex;
     }
 
+    public int getExposureProgram ()
+    {
+	return _exposureProgram;
+    }
+    
     /** Get 7.7.3.2 exposure time. */
     public double getExposureTime ()
     {
@@ -816,6 +862,11 @@ public class NisoImageMetadata
     public long getImageWidth ()
     {
 	return _imageWidth;
+    }
+
+    public Rational getMaxApertureValue ()
+    {
+	return _maxApertureValue;
     }
 
     /** Get 7.7.3.6 metering mode. */
@@ -1388,9 +1439,17 @@ public class NisoImageMetadata
     /** Set 7.7.2 digital camera model.
      * @param model Camera model
      */
-    public void setDigitalCameraModel (String model)
+    public void setDigitalCameraModelName (String modelName)
     {
-	_digitalCameraModel = model;
+	_digitalCameraModelName = modelName;
+    }
+    public void setDigitalCameraModelNumber (String modelNumber)
+    {
+	_digitalCameraModelNumber = modelNumber;
+    }
+    public void setDigitalCameraModelSerialNo (String modelSerialNo)
+    {
+	_digitalCameraModelSerialNo = modelSerialNo;
     }
 
     /** Set 6.2.5 display orientation.
@@ -1401,6 +1460,11 @@ public class NisoImageMetadata
 	_displayOrientation = orientation;
     }
 
+    public void setExifVersion (String version)
+    {
+    	_exifVersion = version;
+    }
+    
     /** Set 7.2.3.4 exposure bias.
      * @param bias Exposure bias
      */
@@ -1415,6 +1479,11 @@ public class NisoImageMetadata
     public void setExposureIndex (double index)
     {
 	_exposureIndex = index;
+    }
+
+    public void setExposureProgram (int program)
+    {
+	_exposureProgram = program;
     }
 
     /** Set 7.7.3.2 exposure time.
@@ -1551,6 +1620,11 @@ public class NisoImageMetadata
     public void setImageWidth (long width)
     {
 	_imageWidth = width;
+    }
+
+    public void setMaxApertureValue (Rational value)
+    {
+	_maxApertureValue = value;
     }
 
     /** Set 7.7.3.6 metering mode.

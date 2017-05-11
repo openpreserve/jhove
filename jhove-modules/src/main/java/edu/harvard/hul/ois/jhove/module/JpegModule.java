@@ -1670,8 +1670,8 @@ public class JpegModule extends ModuleBase {
             _niso.setDigitalCameraManufacturer(exifData
                     .getDigitalCameraManufacturer());
         }
-        if (exifData.getDigitalCameraModel() != null) {
-            _niso.setDigitalCameraModel(exifData.getDigitalCameraModel());
+        if (exifData.getDigitalCameraModelName() != null) {//TODO
+            _niso.setDigitalCameraModelName(exifData.getDigitalCameraModelName());
         }
         if (exifData.getExposureBias() != NULL) {
             _niso.setExposureBias(exifData.getExposureBias());

@@ -43,6 +43,7 @@ public class XmlHandlerTest {
 
 	/* Test instances to be serialized */
 	protected static NisoImageMetadata TEST_NISO_IMAGE_MD;
+	protected static NisoImageMetadata TEST_NISO_EXIF_MD;
 	protected static TextMDMetadata TEST_TEXTMD;
 
 	private File outputFile;
@@ -90,6 +91,32 @@ public class XmlHandlerTest {
 				EXPECTED_BLUEX_NUMENATOR, EXPECTED_DENOMINATOR));
 		TEST_NISO_IMAGE_MD.setPrimaryChromaticitiesBlueY(new Rational(
 				EXPECTED_BLUEY_NUMENATOR, EXPECTED_DENOMINATOR));
+
+		// Define the test instance of Exif for NisoImageMetadata to be serialized
+		TEST_NISO_EXIF_MD = new NisoImageMetadata();
+		TEST_NISO_EXIF_MD.setByteOrder(NisoImageMetadata.BYTEORDER[0]);
+		TEST_NISO_EXIF_MD.setCompressionScheme(6);
+		TEST_NISO_EXIF_MD.setImageWidth(4128);
+		TEST_NISO_EXIF_MD.setImageLength(2322);
+		TEST_NISO_EXIF_MD.setColorSpace(6);
+		TEST_NISO_EXIF_MD.setYCbCrPositioning(1);
+		TEST_NISO_EXIF_MD.setDateTimeCreated("2015-02-13T14:06:36");
+		TEST_NISO_EXIF_MD.setDigitalCameraManufacturer("SAMSUNG");
+		TEST_NISO_EXIF_MD.setDigitalCameraModelName("SM-N9005");
+		TEST_NISO_EXIF_MD.setFNumber(2.2);
+		TEST_NISO_EXIF_MD.setExposureProgram(2);
+		TEST_NISO_EXIF_MD.setExifVersion("0220");
+		Rational r228 = new Rational(228, 100);
+		TEST_NISO_EXIF_MD.setMaxApertureValue(r228);
+		TEST_NISO_EXIF_MD.setMeteringMode(2);
+		TEST_NISO_EXIF_MD.setFocalLength(4.13);
+		TEST_NISO_EXIF_MD.setSamplingFrequencyUnit(2);
+		Rational r72 = new Rational(72, 1);
+		TEST_NISO_EXIF_MD.setXSamplingFrequency(r72);
+		TEST_NISO_EXIF_MD.setYSamplingFrequency(r72);
+		TEST_NISO_EXIF_MD.setBitsPerSample(new int[] { EXPECTED_BYTE_SIZE,
+				EXPECTED_BYTE_SIZE, EXPECTED_BYTE_SIZE });
+		TEST_NISO_EXIF_MD.setSamplesPerPixel(EXPECTED_NUMBER_OF_BYTES);
 
 		// Define the test instance for TextMD to be serialized
 		TEST_TEXTMD = new TextMDMetadata();
@@ -166,6 +193,51 @@ public class XmlHandlerTest {
 
 		String generatedMix = readXmlFile(outputFile);
 		assertEquals("Mix v2.0 generated not conformant", expectedMix20,
+				generatedMix);
+	}
+
+	@Test
+	public void testShowNisoExifMetadata02() throws IOException {
+		File mix02File = new File(this.getClass().getResource("exif_mix02.xml").getPath());
+		LOGGER.info("testShowNisoExifMetadata02 with file " + mix02File);
+		assertTrue(mix02File.isFile());
+		String expectedMix02 = readXmlFile(mix02File);
+
+		this.handler.showNisoImageMetadata02(TEST_NISO_EXIF_MD);
+		this.handler.close();
+
+		String generatedMix = readXmlFile(outputFile);
+		assertEquals("Exif Mix v0.2 generated not conformant", expectedMix02,
+				generatedMix);
+	}
+
+	@Test
+	public void testShowNisoExifMetadata10() throws IOException {
+		File mix10File = new File(this.getClass().getResource("exif_mix10.xml").getPath());
+		LOGGER.info("testShowNisoExifMetadata10 with file " + mix10File);
+		assertTrue(mix10File.isFile());
+		String expectedMix10 = readXmlFile(mix10File);
+
+		this.handler.showNisoImageMetadata10(TEST_NISO_EXIF_MD);
+		this.handler.close();
+
+		String generatedMix = readXmlFile(outputFile);
+		assertEquals("Exif Mix v1.0 generated not conformant", expectedMix10,
+				generatedMix);
+	}
+
+	@Test
+	public void testShowNisoExifMetadata20() throws IOException {
+		File mix20File = new File(this.getClass().getResource("exif_mix20.xml").getPath());
+		LOGGER.info("testShowNisoExifMetadata20 with file " + mix20File);
+		assertTrue(mix20File.isFile());
+		String expectedMix20 = readXmlFile(mix20File);
+
+		this.handler.showNisoImageMetadata20(TEST_NISO_EXIF_MD);
+		this.handler.close();
+
+		String generatedMix = readXmlFile(outputFile);
+		assertEquals("Exif Mix v2.0 generated not conformant", expectedMix20,
 				generatedMix);
 	}
 
