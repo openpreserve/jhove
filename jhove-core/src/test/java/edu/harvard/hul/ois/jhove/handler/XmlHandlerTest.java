@@ -48,7 +48,8 @@ public class XmlHandlerTest {
 	private static final int EXPECTED_EXIF_IMAGE_RESOLUTION = 72;
 	private static final String EXPECTED_EXIF_VERSION = "0220";
 	private static final double EXPECTED_EXIF_FOCAL = 4.13;
-	private static final int EXPECTED_EXIF_APERTURE = 228;
+	private static final int EXPECTED_EXIF_APERTURE_NUM = 228;
+	private static final int EXPECTED_EXIF_APERTURE_DEN = 100;
 	private static final double EXPECTED_EXIT_FNUMBER = 2.2;
 
 	/* Test instances to be serialized */
@@ -116,7 +117,7 @@ public class XmlHandlerTest {
 		TEST_NISO_EXIF_MD.setFNumber(EXPECTED_EXIT_FNUMBER);
 		TEST_NISO_EXIF_MD.setExposureProgram(2);
 		TEST_NISO_EXIF_MD.setExifVersion(EXPECTED_EXIF_VERSION);
-		Rational r228 = new Rational(EXPECTED_EXIF_APERTURE, 100);
+		Rational r228 = new Rational(EXPECTED_EXIF_APERTURE_NUM, EXPECTED_EXIF_APERTURE_DEN);
 		TEST_NISO_EXIF_MD.setMaxApertureValue(r228);
 		TEST_NISO_EXIF_MD.setMeteringMode(2);
 		TEST_NISO_EXIF_MD.setFocalLength(EXPECTED_EXIF_FOCAL);

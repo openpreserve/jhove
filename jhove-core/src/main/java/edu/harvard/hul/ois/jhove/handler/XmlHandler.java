@@ -4062,10 +4062,10 @@ public class XmlHandler
  	/** Convert the metering mode value to one of the suggested
 	  *  values for MIX 2.0 */
 	private String meteringModeToString(int n) {
-		if (n < 1 || n > 6) {
-			n = 1;
+		String s = NisoImageMetadata.METERING_MODE[1];
+		if (n >= 1 && n <= 6) {
+			s = NisoImageMetadata.METERING_MODE[n];
 		}
-		String s = NisoImageMetadata.METERING_MODE[n];
 		// Capitalize first letter
 		return s.substring(0, 1).toUpperCase(Locale.ROOT) + s.substring(1);
 	}
