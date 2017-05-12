@@ -1161,9 +1161,17 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             val.add (new DefaultMutableTreeNode
                 ("DigitalCameraManufacturer: " + s, false));
         }
-        if ((s = niso.getDigitalCameraModel ()) != null) {
+        if ((s = niso.getDigitalCameraModelName ()) != null) {
             val.add (new DefaultMutableTreeNode
-                ("DigitalCameraModel: " + s, false));
+                ("DigitalCameraModelName: " + s, false));
+        }
+        if ((s = niso.getDigitalCameraModelNumber ()) != null) {
+            val.add (new DefaultMutableTreeNode
+                ("DigitalCameraModelNumber: " + s, false));
+        }
+        if ((s = niso.getDigitalCameraModelSerialNo ()) != null) {
+            val.add (new DefaultMutableTreeNode
+                ("DigitalCameraModelSerialNo: " + s, false));
         }
         if ((d = niso.getFNumber ()) != NisoImageMetadata.NILL) {
             val.add (new DefaultMutableTreeNode
@@ -1172,6 +1180,14 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         if ((d = niso.getExposureTime ()) != NisoImageMetadata.NILL) {
             val.add (new DefaultMutableTreeNode
                 ("ExposureTime: " + Double.toString (d), false));
+        }
+        if ((n = niso.getExposureProgram ()) != NisoImageMetadata.NULL) {
+            val.add (new DefaultMutableTreeNode
+                ("ExposureProgram: " + Integer.toString (n), false));
+        }
+        if ((s = niso.getExifVersion ()) != null) {
+            val.add (new DefaultMutableTreeNode
+                ("ExifVersion: " + s, false));
         }
         if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
             val.add (new DefaultMutableTreeNode
