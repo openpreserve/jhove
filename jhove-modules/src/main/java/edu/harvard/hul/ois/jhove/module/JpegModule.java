@@ -313,9 +313,9 @@ public class JpegModule extends ModuleBase {
         doc.setPublisher(isoAgent);
         _specification.add(doc);
 
-        // Define JEITA Exif 2.2 doc
+        // Define JEITA Exif 2.3 doc
         doc = new Document("Exchangeable image file format for digital "
-                + "still cameras: Exif Version 2.2", DocumentType.STANDARD);
+                + "still cameras: Exif Version 2.3", DocumentType.STANDARD);
         Agent jeitaAgent = new Agent.Builder(
                 "Japan Electronics and Information Technology "
                         + "Industries Association", AgentType.STANDARD)
@@ -327,8 +327,20 @@ public class JpegModule extends ModuleBase {
                 .telephone("+81(03) 3518-6421").fax("+81(03) 3295-8721")
                 .build();
         doc.setPublisher(jeitaAgent);
+        doc.setDate("2010-04");
+        Identifier ident = new Identifier("JEITA CP-3451C", IdentifierType.JEITA);
+        doc.setIdentifier(ident);
+        ident = new Identifier("http://home.jeita.or.jp/tsc/std-pdf/CP3451C.pdf",
+                IdentifierType.URL);
+        doc.setIdentifier(ident);
+        _specification.add(doc);
+
+        // Define JEITA Exif 2.2 doc
+        doc = new Document("Exchangeable image file format for digital "
+                + "still cameras: Exif Version 2.2", DocumentType.STANDARD);
+        doc.setPublisher(jeitaAgent);
         doc.setDate("2002-04");
-        Identifier ident = new Identifier("JEITA CP-3451", IdentifierType.JEITA);
+        ident = new Identifier("JEITA CP-3451", IdentifierType.JEITA);
         doc.setIdentifier(ident);
         ident = new Identifier("http://www.exif.org/Exif2-2.PDF",
                 IdentifierType.URL);
@@ -1075,7 +1087,7 @@ public class JpegModule extends ModuleBase {
             _seenExif = true;
             if (!JpegExif.isTiffAvailable()) {
                 info.setMessage(new InfoMessage(
-                        MessageConstants.INF_XIF_REPORT_REQUIRES_TIFF, _nByte));
+                        MessageConstants.INF_EXIF_REPORT_REQUIRES_TIFF, _nByte));
                 skipBytes(_dstream, length - 8, this);
                 return;
             }
@@ -1240,8 +1252,7 @@ public class JpegModule extends ModuleBase {
         if (numberOfChunks != 1) {
         	if (chunkNumber == 1) {
         		// report only once
-	        	info.setMessage(new InfoMessage(
-	        			"ICCProfile in multiple APP2 segments; not handled by JPEG-hul", _nByte));
+	        	info.setMessage(new InfoMessage(MessageConstants.INF_EXIF_APP2_MULTI_REPORT, _nByte));
         	}
         	skipBytes(_dstream, profileLength, this);
         	return;
@@ -1257,7 +1268,7 @@ public class JpegModule extends ModuleBase {
         	}
         } catch (IllegalArgumentException ie) {
         	info.setMessage(new ErrorMessage(
-        			"Bad ICCProfile in APP2 segment; message " + ie.getMessage(), _nByte));
+        			MessageConstants.ERR_ICCPROFILE_INVALID + ie.getMessage(), _nByte));
         }
         
     }

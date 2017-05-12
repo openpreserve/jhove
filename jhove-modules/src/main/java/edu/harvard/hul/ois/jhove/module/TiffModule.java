@@ -278,9 +278,9 @@ public class TiffModule extends ModuleBase {
         doc.setIdentifier(ident);
         _specification.add(doc);
 
-        // Define JEITA Exif 2.2 doc
+        // Define JEITA Exif 2.3 doc
         doc = new Document("Exchangeable image file format for digital "
-                + "still cameras: Exif Version 2.2", DocumentType.STANDARD);
+                + "still cameras: Exif Version 2.3", DocumentType.STANDARD);
         Agent jeitaAgent = new Agent.Builder(
                 "Japan Electronics and Information Technology "
                         + "Industries Association", AgentType.STANDARD)
@@ -291,6 +291,18 @@ public class TiffModule extends ModuleBase {
                                 + "Tokyo 101-0062, Japan")
                 .telephone("+81(03) 3518-6421").fax("+81(03) 3295-8721")
                 .build();
+        doc.setPublisher(jeitaAgent);
+        doc.setDate("2010-04");
+        ident = new Identifier("JEITA CP-3451C", IdentifierType.JEITA);
+        doc.setIdentifier(ident);
+        ident = new Identifier("http://home.jeita.or.jp/tsc/std-pdf/CP3451C.pdf",
+                IdentifierType.URL);
+        doc.setIdentifier(ident);
+        _specification.add(doc);
+
+        // Define JEITA Exif 2.2 doc
+        doc = new Document("Exchangeable image file format for digital "
+                + "still cameras: Exif Version 2.2", DocumentType.STANDARD);
         doc.setPublisher(jeitaAgent);
         doc.setDate("2002-04");
         ident = new Identifier("JEITA CP-3451", IdentifierType.JEITA);
