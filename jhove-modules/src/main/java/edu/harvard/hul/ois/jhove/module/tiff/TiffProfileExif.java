@@ -21,7 +21,9 @@ public final class TiffProfileExif extends TiffProfile
     /* The profile text depends on the version. */
     private String[] profileText = { "Exif 2.0",
             "Exif 2.1 (JEIDA-49-1998)",
-            "Exif 2.2 (JEITA CP-3451)"
+            "Exif 2.2 (JEITA CP-3451)",
+            "Exif 2.21 (JEITA CP-3451A)",
+            "Exif 2.3 (JEITA CP-3451C)" // http://www.cipa.jp/std/documents/e/DC-008-2012_E.pdf
             };
     private TiffProfileExifIFD _exifIFDProfile;
     
@@ -50,7 +52,9 @@ public final class TiffProfileExif extends TiffProfile
             return false;
         }
 
-        if (satisfiesCompression (tifd, 1)) {
+    	if (tifd.isFirst () && tifd.getTheExifIFD () != null) {
+    		// First image in Exif JPEG => no compression to verify
+    	} else if (satisfiesCompression (tifd, 1)) {
             if (niso.getImageWidth () == NisoImageMetadata.NULL ||
                     niso.getImageLength () == NisoImageMetadata.NULL ||
                     niso.getStripOffsets () == null ||
@@ -107,7 +111,13 @@ public final class TiffProfileExif extends TiffProfile
             int idx = 0;
             // If we passed the profile, the version will be one of
             // the following.
-            if (version.equals ("0220")) {
+            if (version.equals ("0230")) {
+                idx = 4;
+            }
+            else if (version.equals ("0221")) {
+                idx = 3;
+            }
+            else if (version.equals ("0220")) {
                 idx = 2;
             }
             else if (version.equals ("0210")) {

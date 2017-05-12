@@ -527,6 +527,10 @@ public class ExifIFD
             entries.add (addIntegerProperty ("GainControl", _gainControl,
 					     GAINCONTROL_L, rawOutput));
         }
+        if (_contrast != NULL) {
+            entries.add (addIntegerProperty ("Contrast", _contrast,
+					     CONTRAST_L, rawOutput));
+        }
         if (_saturation != NULL) {
             entries.add (addIntegerProperty ("Saturation", _saturation,
                                              SATURATION_L, rawOutput));
@@ -633,6 +637,7 @@ public class ExifIFD
                 checkType  (tag, type, SRATIONAL);
                 checkCount (tag, count, 1);
                 _brightnessValue = readRational (count, value);
+                _niso.setBrightness(_brightnessValue.toDouble());
             }
             else if (tag == CFAPATTERN) {
                 checkType  (tag, type, UNDEFINED);
@@ -642,11 +647,7 @@ public class ExifIFD
                 checkType  (tag, type, SHORT);
                 checkCount (tag, count, 1);
                 _colorSpace = readShort (type, count, value);
-            }
-            else if (tag == COLORSPACE) {
-                checkType  (tag, type, SHORT);
-                checkCount (tag, count, 1);
-                _colorSpace = readShort (type, count, value);
+                _niso.setColorSpace(_colorSpace);
             }
             else if (tag == COMPONENTSCONFIGURATION) {
                 checkType  (tag, type, UNDEFINED);
@@ -695,16 +696,19 @@ public class ExifIFD
                     carray[i] = (char) iarray[i];
                 }
                 _exifVersion = new String (carray);
+                _niso.setExifVersion(_exifVersion);
             }
             else if (tag == EXPOSUREBIASVALUE) {
                 checkType  (tag, type, SRATIONAL);
                 checkCount (tag, count, 1);
                 _exposureBiasValue = readRational (count, value);
+                _niso.setExposureBias(_exposureBiasValue.toDouble());
             }
             else if (tag == EXPOSUREINDEX) {
                 checkType  (tag, type, RATIONAL);
                 checkCount (tag, count, 1);
                 _exposureIndex = readRational (count, value);
+                _niso.setExposureIndex(_exposureIndex.toDouble());
             }
             else if (tag == EXPOSUREMODE) {
                 checkType  (tag, type, SHORT);
@@ -715,11 +719,13 @@ public class ExifIFD
                 checkType  (tag, type, SHORT);
                 checkCount (tag, count, 1);
                 _exposureProgram = readShort (type, count, value);
+                _niso.setExposureProgram(_exposureProgram);
             }
             else if (tag == EXPOSURETIME) {
                 checkType  (tag, type, RATIONAL);
                 checkCount (tag, count, 1);
                 _exposureTime = readRational (count, value);
+                _niso.setExposureTime(_exposureTime.toDouble());
             }
             else if (tag == FILESOURCE) {
                 checkType  (tag, type, UNDEFINED);
@@ -750,11 +756,13 @@ public class ExifIFD
                 checkType  (tag, type, RATIONAL);
                 checkCount (tag, count, 1);
                 _fNumber = readRational (count, value);
+                _niso.setFNumber(_fNumber.toDouble());
             }
             else if (tag == FOCALLENGTH) {
                 checkType  (tag, type, RATIONAL);
                 checkCount (tag, count, 1);
                 _focalLength = readRational (count, value);
+                _niso.setFocalLength(_focalLength.toDouble());
             }
             else if (tag == FOCALLENGTHIN35MMFILM) {
                 checkType  (tag, type, SHORT);
@@ -824,11 +832,13 @@ public class ExifIFD
                 checkType  (tag, type, RATIONAL);
                 checkCount (tag, count, 1);
                 _maxApertureValue = readRational (count, value);
+                _niso.setMaxApertureValue(_maxApertureValue);
             }
             else if (tag == METERINGMODE) {
                 checkType  (tag, type, SHORT);
                 checkCount (tag, count, 1);
                 _meteringMode = readShort (type, count, value);
+                _niso.setMeteringMode(_meteringMode);
             }
             else if (tag == OECF) {
                 checkType  (tag, type, SHORT);
@@ -920,6 +930,11 @@ public class ExifIFD
             else if (tag == USERCOMMENT) {
                 checkType  (tag, type, UNDEFINED);
                 _userComment = readByteArray (type, count, value);
+            }
+            else if (tag == WHITEBALANCE) {
+                checkType  (tag, type, SHORT);
+                checkCount (tag, count, 1);
+                _whiteBalance = readShort (type, count, value);
             }
             
             // Here we check for non-EXIF tags, because some documents use

@@ -44,14 +44,14 @@ public class TiffModule extends ModuleBase {
     protected Logger _logger;
 
     private static final String NAME = "TIFF-hul";
-    private static final String RELEASE = "1.7";
-    private static final int[] DATE = { 2012, 8, 12 };
+    private static final String RELEASE = "1.8";
+    private static final int[] DATE = { 2017, 5, 11 };
     private static final String[] FORMAT = { "TIFF", "Tagged Image File Format" };
     private static final String COVERAGE = "TIFF 4.0, 5.0, and 6.0; "
             + "TIFF/IT (ISO/DIS 12639:2003), including file types CT, LW, HC, MP, "
             + "BP, BL, and FP, and conformance levels P1 and P2; TIFF/EP "
             + "(ISO 12234-2:2001); "
-            + "Exif 2.0, 2.1 (JEIDA-49-1998), and 2.2 (JEITA CP-3451); "
+            + "Exif 2.0, 2.1 (JEIDA-49-1998), 2.2 (JEITA CP-3451), 2.21 (JEITA CP-3451A), and 2.3 (JEITA CP-3451C); "
             + "Baseline GeoTIFF "
             + "1.0; Baseline 6.0 bilevel (known in TIFF 5.0 as Class B), "
             + "grayscale (Class G), palette-color (Class P), and RGB (Class R); "
@@ -581,7 +581,7 @@ public class TiffModule extends ModuleBase {
      * @param raf
      *            Open TIFF file
      * @param info
-     *            Representation informatino
+     *            Representation information
      */
     public final List<IFD> exifParse(RandomAccessFile raf, RepInfo info)
             throws IOException {
@@ -611,12 +611,13 @@ public class TiffModule extends ModuleBase {
             inHeader = false; // There's SOMETHING in the file
 
             /*
-             * The offset of the first IFD is found at offset 4. /* The lowest
+             * The offset of the first IFD is found at offset 4. The lowest
              * recognized TIFF version is 4. Increment this as features specific
              * to higher versions are recognized.
+             * The first IFD is supposed to be normal TIFF IFD, see CP3451C 4.5.2.
              */
             _version = 4;
-            ifds = parseIFDs(4, info, true, IFD.EXIF);
+            ifds = parseIFDs(4, info, true, IFD.TIFF);
 
             // info.setVersion (Integer.toString (_version) + ".0");
 

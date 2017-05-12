@@ -39,15 +39,23 @@ public class TiffProfileExifIFD extends TiffProfile {
         }
         ExifIFD eifd = (ExifIFD) ifd;
         String version = eifd.getExifVersion ();
-        if (version.equals ("0220")) {
+        if ("0230".equals (version)) {
+            _majVersion = 2;
+            _minVersion = 3;
+        }
+        else if ("0221".equals (version)) {
+            _majVersion = 2;
+            _minVersion = 21;
+        }
+        else if ("0220".equals (version)) {
             _majVersion = 2;
             _minVersion = 2;
         }
-        else if (version.equals ("0210")) {
+        else if ("0210".equals (version)) {
             _majVersion = 2;
             _minVersion = 1;
         }
-        else if (version.equals ("0200")) {
+        else if ("0200".equals (version)) {
             _majVersion = 2;
             _minVersion = 0;
         }
@@ -55,7 +63,7 @@ public class TiffProfileExifIFD extends TiffProfile {
             // Other versions aren't accepted
             return false;
         }
-        if (!(eifd.getFlashpixVersion ().equals ("0100"))) {
+        if (!("0100".equals(eifd.getFlashpixVersion ()))) {
             return false;
         }
         int colspc = eifd.getColorspace ();
@@ -64,4 +72,12 @@ public class TiffProfileExifIFD extends TiffProfile {
         }
         return true;
     }
+
+    public int getMajorVersion() {
+		return _majVersion;
+	}
+
+    public int getMinorVersion() {
+		return _minVersion;
+	}
 }
