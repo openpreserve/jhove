@@ -21,7 +21,7 @@ public class ExifIFD
 
 
     /** ExifVersion tag. */
-    private static final int
+    protected static final int
         EXPOSURETIME = 33434,
         FNUMBER = 33437,
         EXPOSUREPROGRAM = 34850,
@@ -193,7 +193,7 @@ public class ExifIFD
     private Rational _apertureValue;
     private Rational _brightnessValue;
     private int [] _cfaPattern;
-    private int _colorSpace;
+    protected int _colorSpace;
     private int [] _componentsConfiguration;
     private Rational _compressedBitsPerPixel;
     private int _contrast; 
@@ -202,7 +202,7 @@ public class ExifIFD
     private String _dateTimeOriginal;
     private int [] _deviceSettingDescription;
     private Rational _digitalZoomRatio;
-    private String _exifVersion;
+    protected String _exifVersion;
     private Rational _exposureBiasValue;
     private Rational _exposureIndex;
     private int _exposureMode;
@@ -211,7 +211,7 @@ public class ExifIFD
     private int _fileSource;
     private int _flash;
     private Rational _flashEnergy;
-    private String _flashpixVersion;
+    protected String _flashpixVersion;
     private Rational _fNumber;
     private Rational _focalLength;
     private int _focalLengthIn35mmFilm;

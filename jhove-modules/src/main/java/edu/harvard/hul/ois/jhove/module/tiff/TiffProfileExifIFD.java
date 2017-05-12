@@ -14,6 +14,8 @@ package edu.harvard.hul.ois.jhove.module.tiff;
  *
  */
 public class TiffProfileExifIFD extends TiffProfile {
+	private static final String[] ACCEPTED_EXIF_VERSIONS = { "0200", "0210",
+			"0220", "0221", "0230" };
 
     private int _majVersion;
     private int _minVersion;
@@ -39,30 +41,18 @@ public class TiffProfileExifIFD extends TiffProfile {
         }
         ExifIFD eifd = (ExifIFD) ifd;
         String version = eifd.getExifVersion ();
-        if ("0230".equals (version)) {
-            _majVersion = 2;
-            _minVersion = 3;
+        for (String acceptedVersion : ACCEPTED_EXIF_VERSIONS) {
+        	if (acceptedVersion.equals (version)) {
+                _majVersion = Integer.parseInt(version.substring(0, 2));
+                _minVersion = Integer.parseInt(version.substring(2, 4));
+                break;
+        	}
         }
-        else if ("0221".equals (version)) {
-            _majVersion = 2;
-            _minVersion = 21;
-        }
-        else if ("0220".equals (version)) {
-            _majVersion = 2;
-            _minVersion = 2;
-        }
-        else if ("0210".equals (version)) {
-            _majVersion = 2;
-            _minVersion = 1;
-        }
-        else if ("0200".equals (version)) {
-            _majVersion = 2;
-            _minVersion = 0;
-        }
-        else {
+        if (_majVersion == -1) {
             // Other versions aren't accepted
             return false;
         }
+        
         if (!("0100".equals(eifd.getFlashpixVersion ()))) {
             return false;
         }

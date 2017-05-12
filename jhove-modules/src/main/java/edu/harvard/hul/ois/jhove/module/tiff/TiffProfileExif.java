@@ -19,13 +19,14 @@ import edu.harvard.hul.ois.jhove.*;
 public final class TiffProfileExif extends TiffProfile
 {
     /* The profile text depends on the version. */
-    private String[] profileText = { "Exif 2.0",
+	private static final String[] EXIF_VERSIONS = { "0200", "0210", "0220", "0221", "0230" };
+
+	private static final String[] PROFILE_TEXTS = { "Exif 2.0",
             "Exif 2.1 (JEIDA-49-1998)",
             "Exif 2.2 (JEITA CP-3451)",
             "Exif 2.21 (JEITA CP-3451A)",
             "Exif 2.3 (JEITA CP-3451C)"
             };
-	private String[] exifVersions = { "0200", "0210", "0220", "0221", "0230" };
 
 	private TiffProfileExifIFD _exifIFDProfile;
     
@@ -110,9 +111,9 @@ public final class TiffProfileExif extends TiffProfile
                 return false;
             }
             String version = eifd.getExifVersion ();
-            for (int idx = 0; idx < exifVersions.length; idx++) {
-            	if (exifVersions[idx].equals (version)) {
-                    _profileText = profileText[idx];
+            for (int idx = 0; idx < EXIF_VERSIONS.length; idx++) {
+            	if (EXIF_VERSIONS[idx].equals (version)) {
+                    _profileText = PROFILE_TEXTS[idx];
             		break;
             	}
             }

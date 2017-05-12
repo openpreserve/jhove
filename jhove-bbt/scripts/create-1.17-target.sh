@@ -67,7 +67,10 @@ fi
 if [[ -f "${candidateRoot}/examples/modules/JPEG-hul/AA_Banner.jpg.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/JPEG-hul/AA_Banner.jpg.jhove.xml" "${targetRoot}/examples/modules/JPEG-hul/"
 fi
-if [[ -f "${candidateRoot}/examples/modules/JPEG-hul/AA_Banner.tif.jhove.xml" ]]; then
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/6mp_soft.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/6mp_soft.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/AA_Banner.tif.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/TIFF-hul/AA_Banner.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
 fi
 # Issue 60 add new file 20150213_140637.jpg with exif profile
@@ -84,7 +87,10 @@ fi
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.2">JPEG-hul<\/module>$/   <module release="1.3">JPEG-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.7">TIFF-hul<\/module>$/   <module release="1.8">TIFF-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "*.tif.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">TIFF%<reportingModule release="1.8" date="2017-05-11">TIFF%' {} \;
+find "${targetRoot}" -type f -name "*.g3.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">TIFF%<reportingModule release="1.8" date="2017-05-11">TIFF%' {} \;
+find "${targetRoot}" -type f -name "bathy1.*.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">TIFF%<reportingModule release="1.8" date="2017-05-11">TIFF%' {} \;
+find "${targetRoot}" -type f -name "compos.*.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">TIFF%<reportingModule release="1.8" date="2017-05-11">TIFF%' {} \;
 find "${targetRoot}" -type f -name "*.jpg.jhove.xml" -exec sed -i 's%<reportingModule release="1.2" date="2007-02-13">JPEG%<reportingModule release="1.3" date="2017-05-11">JPEG%' {} \;
 find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">TIFF%<reportingModule release="1.8" date="2017-05-11">TIFF%' {} \;
 find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.2" date="2007-02-13">JPEG%<reportingModule release="1.3" date="2017-05-11">JPEG%' {} \;
-find "${targetRoot}" -type f -name "*.wav.jhove.xml" -exec sed -i 's%44100.0</aes:sampleRate>%44100</aes:sampleRate>' {} \;
+find "${targetRoot}" -type f -name "*.wav.jhove.xml" -exec sed -i 's%44100.0</aes:sampleRate>%44100</aes:sampleRate>%' {} \;
