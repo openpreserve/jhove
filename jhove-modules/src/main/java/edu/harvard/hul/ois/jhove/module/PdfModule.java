@@ -1625,7 +1625,7 @@ public class PdfModule
                                 PropertyType.STRING,
                                 PdfStrings.ALGORITHM[algValue]);
                         }
-                        catch (Exception e) {
+                        catch (ArrayIndexOutOfBoundsException aioobe) {
                             throw new PdfInvalidException
                                 ("Invalid algorithm value in encryption dictionary",
                                     _parser.getOffset ());
