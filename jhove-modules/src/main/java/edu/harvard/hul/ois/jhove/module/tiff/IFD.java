@@ -397,7 +397,7 @@ public abstract class IFD
             try {
                 prop = new Property (name, PropertyType.STRING, labels[value]);
             }
-            catch (Exception e) {
+            catch (ArrayIndexOutOfBoundsException aioobe) {
                 _errors.add (name + " value out of range: " + value);
             }
         }
@@ -466,7 +466,7 @@ public abstract class IFD
                 try {
                     s[i] = labels[value[i]];
                 }
-                catch (Exception e) {
+                catch (ArrayIndexOutOfBoundsException aioobe) {
                     _errors.add (name + " value out of range: " + value[i]);
                 }
             }
