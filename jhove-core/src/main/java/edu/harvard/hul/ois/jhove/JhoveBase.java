@@ -806,12 +806,15 @@ public class JhoveBase {
             /* Module needs random access input. */
 
             RandomAccessFile raf = new RandomAccessFile(file, "r");
-            if (_signature) {
-                module.checkSignatures(file, raf, info);
-            } else {
-                module.parse(raf, info);
+            try {
+                if (_signature) {
+                    module.checkSignatures(file, raf, info);
+                } else {
+                    module.parse(raf, info);
+                }
+            } finally {
+                raf.close();
             }
-            raf.close();
         } else {
 
             /* Module accepts stream input. */
