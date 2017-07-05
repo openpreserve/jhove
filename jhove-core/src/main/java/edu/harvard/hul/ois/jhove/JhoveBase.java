@@ -564,12 +564,12 @@ public class JhoveBase {
             if (!file.exists()) {
                 _logger.info("File not found");
                 info.setMessage(new ErrorMessage("File not found"));
-                info.setWellFormed(RepInfo.FALSE);
+                info.setWellFormed(RepInfo.UNDETERMINED);
                 info.show(handler);
             } else if (!file.isFile() || !file.canRead()) {
                 _logger.info("File cannot be read");
                 info.setMessage(new ErrorMessage("File cannot be read"));
-                info.setWellFormed(RepInfo.FALSE);
+                info.setWellFormed(RepInfo.UNDETERMINED);
                 info.show(handler);
             } else if (handler.okToProcess(dirFileOrUri)) {
                 info.setSize(file.length());
