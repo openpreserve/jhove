@@ -12,12 +12,14 @@ JHOVE 1.16
 ----------
 
 ### 2017-07-20 : FIX - NPE preventing CrossRefStream objects from being read
-See [Pull Request #258](https://github.com/openpreserve/jhove/pull/258)
+Contains:
+- [Pull Request #258](https://github.com/openpreserve/jhove/pull/258)
 
 Fixes PDFs with CrossRefStream objects being reported as "Well-formed and valid" when most of the file's contents remain unchecked.
 
 ### 2017-03-20 : FIX - Broken ModuleBase.skipBytes method
-See [Pull Request #194](https://github.com/openpreserve/jhove/pull/194)
+Contains:
+- [Pull Request #194](https://github.com/openpreserve/jhove/pull/194)
 
 Fixes:
 - [Issue #71](https://github.com/openpreserve/jhove/issues/71)
