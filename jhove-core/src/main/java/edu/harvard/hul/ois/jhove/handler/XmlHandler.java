@@ -21,6 +21,8 @@
 package edu.harvard.hul.ois.jhove.handler;
 
 import edu.harvard.hul.ois.jhove.*;
+
+import java.text.NumberFormat;
 import java.util.*;
 
 /**
@@ -36,6 +38,19 @@ public class XmlHandler
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
+	
+	/** Thread safe formatter for doubles */
+	private static final ThreadLocal<NumberFormat> formatters = new ThreadLocal<NumberFormat>(){
+		@Override
+		protected NumberFormat initialValue()
+		{
+	        NumberFormat _format = NumberFormat.getInstance (Locale.ROOT);
+	        _format.setGroupingUsed (false);
+	        _format.setMinimumFractionDigits (0);
+
+			return _format;
+		}
+	};
 
     /** Handler name. */
     private static final String NAME = "XML";
@@ -1576,7 +1591,7 @@ public class XmlHandler
         double d = niso.getPixelSize ();
         if (d != NisoImageMetadata.NILL) {
             scsBuf.append (margn5 + element ("mix:PixelSize",
-                                               Double.toString (d)) + EOL);
+                                               formatters.get().format (d)) + EOL);
             useSCSBuf = true;
         }
         d = niso.getXPhysScanResolution ();
@@ -1585,11 +1600,11 @@ public class XmlHandler
             scsBuf.append (margn5 + elementStart ("mix:PhysScanResolution") + EOL);
             if (d != NisoImageMetadata.NILL) {
                 scsBuf.append (margn6 + element ("mix:XphysScanResolution",
-                                               Double.toString (d)) + EOL);
+                                               formatters.get().format (d)) + EOL);
             }
             if (d1 != NisoImageMetadata.NILL) {
                 scsBuf.append (margn6 + element ("mix:YphysScanResolution",
-                                               Double.toString (d1)) + EOL);
+                                               formatters.get().format (d1)) + EOL);
             }
             scsBuf.append (margn5 + elementEnd ("mix:PhysScanResolution") + EOL);
             useSCSBuf = true;
@@ -1617,7 +1632,7 @@ public class XmlHandler
             dccBuf.append (margn4 + element ("mix:DigitalCameraManufacturer", s) + EOL);
             useDCCBuf = true;
         }
-        s = niso.getDigitalCameraModel ();
+        s = niso.getDigitalCameraModelName();
         if (s != null) {
             dccBuf.append (margn4 + element ("mix:DigitalCameraModel", s) + EOL);
             useDCCBuf = true;
@@ -1636,25 +1651,25 @@ public class XmlHandler
         d = niso.getFNumber ();
         if (d != NisoImageMetadata.NILL) {
             ccsBuf.append (margn4 + element ("mix:FNumber",
-                                       Double.toString (d)) + EOL);
+                                       formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
         d = niso.getExposureTime ();
         if (d != NisoImageMetadata.NILL) {
             ccsBuf.append (margn4 + element ("mix:ExposureTime",
-                                       Double.toString (d)) + EOL);
+                                       formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
         d = niso.getBrightness ();
         if (d != NisoImageMetadata.NILL) {
             ccsBuf.append (margn4 + element ("mix:Brightness",
-                                       Double.toString (d)) + EOL);
+                                       formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
         d = niso.getExposureBias ();
         if (d != NisoImageMetadata.NILL) {
             ccsBuf.append (margn4 + element ("mix:ExposureBias",
-                                       Double.toString (d)) + EOL);
+                                       formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
         double [] darray = niso.getSubjectDistance ();
@@ -1665,8 +1680,11 @@ public class XmlHandler
         }
         int n = niso.getMeteringMode ();
         if (n != NisoImageMetadata.NULL) {
-            ccsBuf.append (margn4 + element ("mix:MeteringMode",
-                                       Integer.toString (n)) + EOL);
+        	s = meteringModeToString(n);
+        	if (s.startsWith("Center weighted")) {
+        		s = "Center weighted Average";
+        	}
+            ccsBuf.append (margn4 + element ("mix:MeteringMode", s) + EOL);
             useCCSBuf = true;
         }
         n = niso.getSceneIlluminant ();
@@ -1678,13 +1696,13 @@ public class XmlHandler
         d = niso.getColorTemp ();
         if (d != NisoImageMetadata.NILL) {
             ccsBuf.append (margn4 + element ("mix:ColorTemp",
-                                       Double.toString (d)) + EOL);
+                                       formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
         d = niso.getFocalLength ();
         if (d != NisoImageMetadata.NILL) {
             ccsBuf.append (margn4 + element ("mix:FocalLength",
-                                       Double.toString (d)) + EOL);
+                                       formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
         n = niso.getFlash ();
@@ -1695,7 +1713,7 @@ public class XmlHandler
         d = niso.getFlashEnergy ();
         if (d != NisoImageMetadata.NILL) {
             ccsBuf.append (margn4 + element ("mix:FlashEnergy",
-                                       Double.toString (d)) + EOL);
+                                       formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
         n = niso.getFlashReturn ();
@@ -1713,7 +1731,7 @@ public class XmlHandler
         d = niso.getExposureIndex ();
         if (d != NisoImageMetadata.NILL) {
             ccsBuf.append (margn4 + element ("mix:ExposureIndex",
-                                       Double.toString (d)) + EOL);
+                                       formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
         n = niso.getAutoFocus ();
@@ -1728,11 +1746,11 @@ public class XmlHandler
             ccsBuf.append (margn4 + elementStart ("mix:PrintAspectRatio") + EOL);
             if (d != NisoImageMetadata.NILL) {
                 ccsBuf.append (margn5 + element ("mix:XPrintAspectRatio",
-                                       Double.toString (d)) + EOL);
+                                       formatters.get().format (d)) + EOL);
             }
             if (d1 != NisoImageMetadata.NILL) {
                 ccsBuf.append (margn5 + element ("mix:YPrintAspectRatio",
-                                       Double.toString (d1)) + EOL);
+                                       formatters.get().format (d1)) + EOL);
             ccsBuf.append (margn4 + elementEnd ("mix:PrintAspectRatio") + EOL);
             useCCSBuf = true;
             }
@@ -1822,7 +1840,7 @@ public class XmlHandler
             smBuf.append (margn5 + elementStart ("mix:Source_X") + EOL);
             if (d != NisoImageMetadata.NILL) {
                 smBuf.append (margn6 + element ("mix:Source_Xdimension",
-                                   Double.toString (d)) + EOL);
+                                   formatters.get().format (d)) + EOL);
             }
             if (n != NisoImageMetadata.NULL) {
                 smBuf.append (margn6 + element ("mix:Source_XdimensionUnit",
@@ -1838,7 +1856,7 @@ public class XmlHandler
             smBuf.append (margn4 + elementStart ("mix:Source_Y") + EOL);
             if (d != NisoImageMetadata.NILL) {
                 smBuf.append (margn5 + element ("mix:Source_Ydimension",
-                                   Double.toString (d)) + EOL);
+                                   formatters.get().format (d)) + EOL);
             }
             if (n != NisoImageMetadata.NULL) {
                 smBuf.append (margn5 + element ("mix:Source_YdimensionUnit",
@@ -2096,8 +2114,6 @@ public class XmlHandler
         String margn3 = margn2 + " ";
         String margn4 = margn3 + " ";
         String margn5 = margn4 + " ";
-        String margn6 = margn5 + " ";
-        String margn7 = margn6 + " ";
     
         // Yet again, build elements in tentative buffers and throw them
         // away if they prove trivial.
@@ -2386,14 +2402,14 @@ public class XmlHandler
         String s = niso.getSourceType ();
         if (s != null) {
             captureBuffer.append (margn3 + element ("mix:sourceType", s));
-	    useCaptureBuffer = true;
+            useCaptureBuffer = true;
         }
         s = niso.getSourceID ();
         if (s != null) {
             captureBuffer.append (margn3 + elementStart ("mix:SourceID"));
             captureBuffer.append (margn3 + element ("mix:sourceIDValue", s));
             captureBuffer.append (margn3 + elementEnd ("mix:sourceID"));
-	    useCaptureBuffer = true;
+            useCaptureBuffer = true;
         }
         double d = niso.getSourceXDimension ();
         int n = niso.getSourceXDimensionUnit ();
@@ -2405,7 +2421,7 @@ public class XmlHandler
             if (d != NisoImageMetadata.NILL) {
                 captureBuffer.append (margn5 +
 				      element ("mix:sourceXDimensionValue",
-					       Double.toString (d)) + EOL);
+					       formatters.get().format (d)) + EOL);
             }
             if (n != NisoImageMetadata.NULL) {
                 captureBuffer.append (margn5 +
@@ -2424,7 +2440,7 @@ public class XmlHandler
                 if (d != NisoImageMetadata.NILL) {
                     captureBuffer.append (margn5 +
 					  element ("mix:sourceYDimensionValue",
-						   Double.toString (d)) + EOL);
+						   formatters.get().format (d)) + EOL);
                 }
                 if (n != NisoImageMetadata.NULL) {
                     captureBuffer.append (margn5 +
@@ -2510,7 +2526,7 @@ public class XmlHandler
         if (xres != NisoImageMetadata.NULL && yres != NisoImageMetadata.NULL) {
             double res = (xres > yres ? xres : yres);
             scanCapBuf.append (margn4 + element 
-                     ("mix:maximumOpticalResolution", Double.toString (res)) +
+                     ("mix:maximumOpticalResolution", formatters.get().format (res)) +
 			       EOL);
         }
         s = niso.getScanningSoftware();
@@ -2546,18 +2562,29 @@ public class XmlHandler
         s = niso.getDigitalCameraManufacturer();
         if (s != null) {
             digCamBuf.append (margn4 +
-			      element ("mix:digitalCameraManufacturer") + EOL);
+			      element ("mix:digitalCameraManufacturer", s) + EOL);
             useDigCamBuf = true;
         }
-        s = niso.getDigitalCameraModel();
-        if (s != null) {
-            digCamBuf.append (margn4 + elementStart ("mix:DigitalCameraModel")+
-			      EOL);
-            digCamBuf.append (margn5 + element ("mix:digitalCameraModelName") + s +
-			      EOL);
-            digCamBuf.append (margn4 + elementEnd ("mix:DigitalCameraModel") +
-			      EOL);
-            useDigCamBuf = true;
+        String dcmodel = niso.getDigitalCameraModelName ();
+        String dcmodelNum = niso.getDigitalCameraModelNumber();
+        String dcserNum = niso.getDigitalCameraModelSerialNo();
+        if (dcmodel != null || dcmodelNum != null || dcserNum != null) {
+        	useDigCamBuf = true;
+        	digCamBuf.append (margn4 + elementStart ("mix:DigitalCameraModel") +
+			       EOL);
+            if (dcmodel != null) {
+            	digCamBuf.append (margn5 + element ("mix:digitalCameraModelName", dcmodel) +
+				   EOL);
+            }
+            if (dcmodelNum != null) {
+            	digCamBuf.append (margn5 + element ("mix:digitalCameraModelNumber", dcmodelNum)+
+				   EOL);
+            }
+            if (dcserNum != null) {
+            	digCamBuf.append (margn5 +
+				   element ("mix:mix:digitalCameraModelSerialNo", dcserNum) + EOL);
+            }
+            digCamBuf.append (margn4 + elementEnd ("mix:DigitalCameraModel") + EOL);
         }
         
         // Nest a buffer for CameraCaptureSettings
@@ -2572,25 +2599,41 @@ public class XmlHandler
         d = niso.getFNumber ();
         if (d != NisoImageMetadata.NULL) {
             ccSetBuf.append (margn6 + element ("mix:fNumber",
-					       Double.toString (d)) + EOL);
+					       formatters.get().format (d)) + EOL);
             useCcSetBuf = true;
         }
         d = niso.getExposureTime();
         if (d != NisoImageMetadata.NULL) {
             ccSetBuf.append (margn6 + element ("mix:exposureTime",
-					       Double.toString (d)) + EOL);
+					       formatters.get().format (d)) + EOL);
+            useCcSetBuf = true;
+        }
+        n = niso.getExposureProgram ();
+        if (n != NisoImageMetadata.NULL) {
+            ccSetBuf.append (margn6 + element ("mix:exposureProgram",
+					       Integer.toString (n)) + EOL);
+            useCcSetBuf = true;
+        }
+        s = niso.getExifVersion();
+        if ("0220".equals(s)) { // Only valid value
+            ccSetBuf.append (margn6 + element ("mix:exifVersion", s) + EOL);
             useCcSetBuf = true;
         }
         d = niso.getBrightness();
         if (d != NisoImageMetadata.NULL) {
             ccSetBuf.append (margn6 + element ("mix:brightnessValue",
-					       Double.toString (d)) + EOL);
+					       formatters.get().format (d)) + EOL);
             useCcSetBuf = true;
         }
         d = niso.getExposureBias();
         if (d != NisoImageMetadata.NULL) {
             ccSetBuf.append (margn6 + element ("mix:exposureBiasValue",
-					       Double.toString (d)) + EOL);
+					       formatters.get().format (d)) + EOL);
+            useCcSetBuf = true;
+        }
+        Rational r = niso.getMaxApertureValue();
+        if (r != null) {
+        	rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
             useCcSetBuf = true;
         }
         double[] darray = niso.getSubjectDistance ();
@@ -2599,14 +2642,14 @@ public class XmlHandler
             // schema clearly says a non-negative number is expected.
 	    // So just use darray[0].
             ccSetBuf.append (margn6 + element ("mix:subjectDistance",
-					       Double.toString (darray[0])) +
+					       formatters.get().format (darray[0])) +
 			     EOL);
             useCcSetBuf = true;
         }
         n = niso.getMeteringMode ();
         if (n != NisoImageMetadata.NULL) {
             ccSetBuf.append (margn6 + element ("mix:meteringMode",
-					       Integer.toString (n)) + EOL);
+            		meteringModeToString (n)) + EOL);
             useCcSetBuf = true;
         }
         n = niso.getFlash ();
@@ -2618,13 +2661,13 @@ public class XmlHandler
         d = niso.getFocalLength ();
         if (d != NisoImageMetadata.NULL) {
             ccSetBuf.append (margn6 + element ("mix:focalLength",
-					       Double.toString (d)) + EOL);
+					       formatters.get().format (d)) + EOL);
             useCcSetBuf = true;
         }
         d = niso.getFlashEnergy ();
         if (d != NisoImageMetadata.NULL) {
             ccSetBuf.append (margn6 + element ("mix:flashEnergy",
-					       Double.toString (d)) + EOL);
+					       formatters.get().format (d)) + EOL);
             useCcSetBuf = true;
         }
         n = niso.getBackLight ();
@@ -2636,7 +2679,7 @@ public class XmlHandler
         d = niso.getExposureIndex ();
         if (d != NisoImageMetadata.NULL) {
             ccSetBuf.append (margn6 + element ("mix:exposureIndex",
-					       Double.toString (d)) + EOL);
+					       formatters.get().format (d)) + EOL);
             useCcSetBuf = true;
         }
         n = niso.getAutoFocus ();
@@ -2652,12 +2695,12 @@ public class XmlHandler
 			     EOL);
             if (d != NisoImageMetadata.NULL) {
                 ccSetBuf.append (margn7 + 
-                        element ("mix:xPrintAspectRatio", Double.toString(d)) +
+                        element ("mix:xPrintAspectRatio", formatters.get().format(d)) +
 				 EOL);
             }
             if (d2 != NisoImageMetadata.NULL) {
                 ccSetBuf.append (margn7 + 
-                        element ("mix:yPrintAspectRatio", Double.toString(d)) 
+                        element ("mix:yPrintAspectRatio", formatters.get().format(d)) 
 				 + EOL);
             }
             
@@ -2706,7 +2749,6 @@ public class XmlHandler
         String margn3 = margn2 + " ";
         String margn4 = margn3 + " ";
         String margn5 = margn4 + " ";
-        String margn6 = margn5 + " ";
         
         _writer.println (margn2 + elementStart ("mix:ImageAssessmentMetadata"));
         StringBuffer metricsBuf = new StringBuffer (margn3 +
@@ -2948,7 +2990,6 @@ public class XmlHandler
         String margn3 = margn2 + " ";
         String margn4 = margn3 + " ";
         String margn5 = margn4 + " ";
-        String margn6 = margn5 + " ";
         
         // There may be nothing at all to write. Put the whole thing in a buffer.
         StringBuffer chBuf = 
@@ -3334,7 +3375,7 @@ public class XmlHandler
                  if (d != NisoImageMetadata.NILL) {
                      captureBuffer.append (margn6 +
                            element ("mix:sourceXDimensionValue",
-                                Double.toString (d)) + EOL);
+                                formatters.get().format (d)) + EOL);
                  }
                  if (n != NisoImageMetadata.NULL) {
                      captureBuffer.append (margn6 +
@@ -3353,7 +3394,7 @@ public class XmlHandler
                      if (d != NisoImageMetadata.NILL) {
                          captureBuffer.append (margn6 +
                             element ("mix:sourceYDimensionValue",
-                            Double.toString (d)) + EOL);
+                            formatters.get().format (d)) + EOL);
                      }
                      if (n != NisoImageMetadata.NULL) {
                          captureBuffer.append (margn6 +
@@ -3439,9 +3480,9 @@ public class XmlHandler
              scanCapBuf.append (margn4 + elementStart
                       ("mix:MaximumOpticalResolution") + EOL);
              scanCapBuf.append (margn5 + element 
-                      ("mix:xOpticalResolution", Double.toString (xres)) + EOL);
+                      ("mix:xOpticalResolution", formatters.get().format (xres)) + EOL);
              scanCapBuf.append (margn5 + element 
-                      ("mix:yOpticalResolution", Double.toString (yres)) + EOL);
+                      ("mix:yOpticalResolution", formatters.get().format (yres)) + EOL);
              scanCapBuf.append (margn5 + element
                       ("mix:resolutionUnit", "in.") + EOL);     // is this a safe assumption?
              scanCapBuf.append (margn4 + elementEnd ("mix:MaximumOpticalResolution"));
@@ -3477,18 +3518,29 @@ public class XmlHandler
          s = niso.getDigitalCameraManufacturer();
          if (s != null) {
              digCamBuf.append (margn4 +
-                   element ("mix:digitalCameraManufacturer") + EOL);
+                   element ("mix:digitalCameraManufacturer", s) + EOL);
              useDigCamBuf = true;
          }
-         s = niso.getDigitalCameraModel();
-         if (s != null) {
-             digCamBuf.append (margn4 + elementStart ("mix:DigitalCameraModel")+
-                   EOL);
-             digCamBuf.append (margn5 + element ("mix:digitalCameraModelName") + s +
-                   EOL);
-             digCamBuf.append (margn4 + elementEnd ("mix:DigitalCameraModel") +
-                   EOL);
-             useDigCamBuf = true;
+         String dcmodel = niso.getDigitalCameraModelName ();
+         String dcmodelNum = niso.getDigitalCameraModelNumber();
+         String dcserNum = niso.getDigitalCameraModelSerialNo();
+         if (dcmodel != null || dcmodelNum != null || dcserNum != null) {
+         	useDigCamBuf = true;
+         	digCamBuf.append (margn4 + elementStart ("mix:DigitalCameraModel") +
+ 			       EOL);
+             if (dcmodel != null) {
+             	digCamBuf.append (margn5 + element ("mix:digitalCameraModelName", dcmodel) +
+ 				   EOL);
+             }
+             if (dcmodelNum != null) {
+             	digCamBuf.append (margn5 + element ("mix:digitalCameraModelNumber", dcmodelNum)+
+ 				   EOL);
+             }
+             if (dcserNum != null) {
+             	digCamBuf.append (margn5 +
+ 				   element ("mix:mix:digitalCameraModelSerialNo", dcserNum) + EOL);
+             }
+             digCamBuf.append (margn4 + elementEnd ("mix:DigitalCameraModel") + EOL);
          }
          
          // Nest a buffer for CameraCaptureSettings
@@ -3503,25 +3555,45 @@ public class XmlHandler
          d = niso.getFNumber ();
          if (d != NisoImageMetadata.NULL) {
              ccSetBuf.append (margn6 + element ("mix:fNumber",
-                            Double.toString (d)) + EOL);
+                            formatters.get().format (d)) + EOL);
              useCcSetBuf = true;
          }
          d = niso.getExposureTime();
          if (d != NisoImageMetadata.NULL) {
              ccSetBuf.append (margn6 + element ("mix:exposureTime",
-                            Double.toString (d)) + EOL);
+                            formatters.get().format (d)) + EOL);
+             useCcSetBuf = true;
+         }
+		n = niso.getExposureProgram();
+		if (n != NisoImageMetadata.NULL) {
+			if (n > 8 || n < 0) {
+				n = 0; // force "Not defined" for bad value
+			}
+		
+			ccSetBuf.append(margn6 + element("mix:exposureProgram", NisoImageMetadata.EXPOSURE_PROGRAM[n])
+					+ EOL);
+			useCcSetBuf = true;
+		}
+         if (niso.getExifVersion() != null) {
+             ccSetBuf.append (margn6 + element ("mix:exifVersion",
+             		niso.getExifVersion()) + EOL);
              useCcSetBuf = true;
          }
          d = niso.getBrightness();
          if (d != NisoImageMetadata.NULL) {
              ccSetBuf.append (margn6 + element ("mix:brightnessValue",
-                            Double.toString (d)) + EOL);
+                            formatters.get().format (d)) + EOL);
              useCcSetBuf = true;
          }
          d = niso.getExposureBias();
          if (d != NisoImageMetadata.NULL) {
              ccSetBuf.append (margn6 + element ("mix:exposureBiasValue",
-                            Double.toString (d)) + EOL);
+                            formatters.get().format (d)) + EOL);
+             useCcSetBuf = true;
+         }
+         Rational r = niso.getMaxApertureValue();
+         if (r != null) {
+         	rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
              useCcSetBuf = true;
          }
          double[] darray = niso.getSubjectDistance ();  
@@ -3532,23 +3604,23 @@ public class XmlHandler
              useCcSetBuf = true;
              if (darray[0] == darray[1]) {
                  ccSetBuf.append (margn7 + element ("mix:distance",
-                        Double.toString(darray[0])) + EOL);
+                        formatters.get().format(darray[0])) + EOL);
              }
              else {
                  ccSetBuf.append (margn7 + elementStart("mix:MinMaxDistance") + EOL);
                  ccSetBuf.append (margn8 + element ("mix:minDistance", 
-                            Double.toString(darray[0])) + EOL);
+                            formatters.get().format(darray[0])) + EOL);
                  ccSetBuf.append (margn8 + element ("mix:maxDistance", 
-                            Double.toString(darray[1])) + EOL);
+                            formatters.get().format(darray[1])) + EOL);
                  ccSetBuf.append (margn7 + elementEnd("mix:MinMaxDistance") + EOL);
              }
              ccSetBuf.append (margn6 + elementEnd("mix:SubjectDistance") + EOL);
              
          }
          n = niso.getMeteringMode ();
-         if (n != NisoImageMetadata.NULL) {
+         if (n != NisoImageMetadata.NULL) { 
              ccSetBuf.append (margn6 + element ("mix:meteringMode",
-                            Integer.toString (n)) + EOL);
+            		 meteringModeToString (n)) + EOL);
              useCcSetBuf = true;
          }
          n = niso.getFlash ();
@@ -3560,25 +3632,25 @@ public class XmlHandler
          d = niso.getFocalLength ();
          if (d != NisoImageMetadata.NULL) {
              ccSetBuf.append (margn6 + element ("mix:focalLength",
-                            Double.toString (d)) + EOL);
+                            formatters.get().format (d)) + EOL);
              useCcSetBuf = true;
          }
          d = niso.getFlashEnergy ();
          if (d != NisoImageMetadata.NULL) {
              ccSetBuf.append (margn6 + element ("mix:flashEnergy",
-                            Double.toString (d)) + EOL);
+                            formatters.get().format (d)) + EOL);
              useCcSetBuf = true;
          }
          n = niso.getBackLight ();
          if (n != NisoImageMetadata.NULL) {
              ccSetBuf.append (margn6 + element ("mix:backLight",
-                            Integer.toString (n)) + EOL);
+            		 	Integer.toString (n)) + EOL);
              useCcSetBuf = true;
          }
          d = niso.getExposureIndex ();
          if (d != NisoImageMetadata.NULL) {
              ccSetBuf.append (margn6 + element ("mix:exposureIndex",
-                            Double.toString (d)) + EOL);
+                            formatters.get().format (d)) + EOL);
              useCcSetBuf = true;
          }
          n = niso.getAutoFocus ();
@@ -3594,12 +3666,12 @@ public class XmlHandler
                   EOL);
              if (d != NisoImageMetadata.NULL) {
                  ccSetBuf.append (margn7 + 
-                         element ("mix:xPrintAspectRatio", Double.toString(d)) +
+                         element ("mix:xPrintAspectRatio", formatters.get().format(d)) +
                          EOL);
              }
              if (d2 != NisoImageMetadata.NULL) {
                  ccSetBuf.append (margn7 + 
-                         element ("mix:yPrintAspectRatio", Double.toString(d)) 
+                         element ("mix:yPrintAspectRatio", formatters.get().format(d)) 
                          + EOL);
              }
              
@@ -3661,7 +3733,6 @@ public class XmlHandler
      String margn3 = margn2 + " ";
      String margn4 = margn3 + " ";
      String margn5 = margn4 + " ";
-     String margn6 = margn5 + " ";
      
      _writer.println (margn2 + elementStart ("mix:ImageAssessmentMetadata"));
      StringBuffer metricsBuf = new StringBuffer (margn3 +
@@ -3988,6 +4059,17 @@ public class XmlHandler
      
  }
 
+ 	/** Convert the metering mode value to one of the suggested
+	  *  values for MIX 2.0 */
+	private String meteringModeToString(int n) {
+		String s = NisoImageMetadata.METERING_MODE[1];
+		if (n >= 1 && n <= 6) {
+			s = NisoImageMetadata.METERING_MODE[n];
+		}
+		// Capitalize first letter
+		return s.substring(0, 1).toUpperCase(Locale.ROOT) + s.substring(1);
+	}
+
     /** Convert the color space value (which is based on the TIFF
      *  PhotometricInterpretation convention) to one of the suggested
      *  values for MIX 2.0 */
@@ -4194,7 +4276,7 @@ public class XmlHandler
                 }
                 if (sampleRate != AESAudioMetadata.NILL) {
                     _writer.println (margn4 + element ("aes:sampleRate",
-                                Double.toString (sampleRate)));
+                                formatters.get().format (sampleRate)));
                 }
                 if (wordSize != AESAudioMetadata.NULL) {
                     _writer.println (margn4 + element ("aes:wordSize",
