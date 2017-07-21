@@ -586,8 +586,16 @@ public class JhoveBase {
                     /* Invoke the specified module. */
                     _logger.info("Processing " + file.getName()
                             + " with module " + module.getClass().getName());
-                    if (!processFile(app, module, false, file, info)) {
-                        return false;
+                    try {
+                        if (!processFile(app, module, false, file, info)) {
+                            return false;
+                        }
+                    } catch (Exception e) {
+                        String message = "Validation ended prematurely "
+                                + "due to an unhandled exception.";
+                        info.setMessage(new ErrorMessage(message));
+                        info.setWellFormed(RepInfo.UNDETERMINED);
+                        _logger.log(Level.SEVERE, message, e);
                     }
                 } else {
 
