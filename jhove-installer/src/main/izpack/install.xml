@@ -8,7 +8,7 @@
     <url>http://jhove.openpreservation.org</url>
     <javaversion>${java.target.version}</javaversion>
     <authors>
-      <author name="Carl Wilson" email="carl@openpreserve.org" />
+      <author name="Carl Wilson" email="carl@openpreservation.org" />
     </authors>
   </info>
 
@@ -31,8 +31,9 @@
   </locale>
 
   <resources>
-    <res id="HTMLHelloPanel.welcome" src="welcome.html"/>
+    <res id="customicons.xml" src="customicons.xml" />
     <res id="HTMLInfoPanel.welcome" src="welcome.html"/>
+    <res id="JFrameIcon" src="icon.png"/>
     <res id="OPFLogo" src="jhovelogo.png"/>
   </resources>
 
