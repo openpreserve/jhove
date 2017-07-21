@@ -105,6 +105,7 @@ public class CrossRefStream {
 
                 _index = new IndexRange[indexObjCount / 2];
                 for (int i = 0; i < _index.length; i++) {
+                    _index[i] = new IndexRange();
                     _index[i].start = ((PdfSimpleObject)indexObjs.get(i * 2)).getIntValue();
                     _index[i].len = ((PdfSimpleObject)indexObjs.get(i * 2 + 1)).getIntValue();
                 }
@@ -112,6 +113,7 @@ public class CrossRefStream {
             else {
                 // Set up default index.
                 _index = new IndexRange[1];
+                _index[0] = new IndexRange();
                 _index[0].start = 0;
                 _index[0].len = _size;
             }

@@ -10,7 +10,22 @@ Versions 1.12 onwards of JHOVE released by the Open Preservation Foundation.
 
 JHOVE 1.16
 ----------
-2016-03-16
+
+### 2017-07-20 : FIX - NPE preventing CrossRefStream objects from being read
+Contains:
+- [Pull Request #258](https://github.com/openpreserve/jhove/pull/258)
+
+Fixes PDFs with CrossRefStream objects being reported as "Well-formed and valid" when most of the file's contents remain unchecked.
+
+### 2017-03-20 : FIX - Broken ModuleBase.skipBytes method
+Contains:
+- [Pull Request #194](https://github.com/openpreserve/jhove/pull/194)
+
+Fixes:
+- [Issue #71](https://github.com/openpreserve/jhove/issues/71)
+- [Issue #193](https://github.com/openpreserve/jhove/issues/193)
+
+2017-03-16
 
 ### General
 

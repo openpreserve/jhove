@@ -114,8 +114,8 @@ public class PdfModule
      ******************************************************************/
 
     private static final String NAME = "PDF-hul";
-    private static final String RELEASE = "1.8";
-    private static final int [] DATE = {2017, 3, 14};
+    private static final String RELEASE = "1.9";
+    private static final int [] DATE = {2017, 7, 20};
     private static final String [] FORMAT = {
         "PDF", "Portable Document Format"
     };
