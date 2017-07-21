@@ -22,13 +22,13 @@ import java.util.*;
 
 public class ParseHtml
 {
-	private List elements;
-	
-	public List getElements ()
-	{
-	    return elements;
-	}
-	
+    private List elements;
+    
+    public List getElements ()
+    {
+        return elements;
+    }
+    
 
 }
 
@@ -74,7 +74,7 @@ TOKEN:
 <IN_TAG, IN_DOCTYPE>
 TOKEN:
 {
-	<QMARK: "?" > |
+    <QMARK: "?" > |
     <SLASH: "/" > |
     <COLON: ":" >
 }
@@ -137,7 +137,7 @@ SPECIAL_TOKEN :
 
 List HtmlDoc () :
 {
-	elements = new LinkedList ();
+    elements = new LinkedList ();
 }
 {
 /* Production block -- looks a little like Java but isn't */
@@ -151,8 +151,8 @@ JHElement Element (List elements) :
 }
 {
     try {
-    	LOOKAHEAD(2)
-    	elem = Doctype () { return elem; } |
+        LOOKAHEAD(2)
+        elem = Doctype () { return elem; } |
         LOOKAHEAD(2)
         elem = OpenTag() { return elem; } |
         LOOKAHEAD(2)
@@ -163,17 +163,22 @@ JHElement Element (List elements) :
         elem = ProcessingInst() */ 
     }
     catch (ParseException e) {
-    	String errText = "";
-    	for (;;) {
+        StringBuilder errText = new StringBuilder();
+        for (;;) {
             token_source.SwitchTo(DEFAULT);
-	        Token tok = getNextToken ();
-	        if (tok.kind == LABRACKET || tok.kind == PCDATA) {
-	            break;
-	        }
-	        errText += "Text = \"" + tok.image + "\", Line = " +
-                    tok.beginLine + ", Column = " + tok.beginColumn;
-	    }
-        return new JHErrorElement(elements, "Parsing error", errText, true); 
+            Token tok = getNextToken ();
+            if (tok.kind == LABRACKET || tok.kind == PCDATA) {
+                break;
+            }
+            errText.append("Text = \"").append(tok.image).append("\", Line = ")
+                .append(tok.beginLine).append(", Column = ").append(tok.beginColumn);
+            /****** Added GDM 14-Jun-05 to avoid infinite loop ********/
+            if ("".equals (tok.image)) {
+                break;
+            }
+            /******* End Added GDM 14-Jun-05 to avoid infinite loop ********/
+        }
+        return new JHErrorElement(elements, MessageConstants.ERR_HTML_PARSING_ERROR, errText.toString(), true); 
     }
     { return elem; } 
 }
@@ -193,7 +198,7 @@ JHOpenTag OpenTag () :
             the whole thing from falling apart, yet will generate an error */
          return new JHOpenTag (elements, name.image, attrs, 
            name.beginLine, name.beginColumn,
-           "Construction with \"/>\" is incorrect except in XHTML");
+           MessageConstants.WRN_INCORRECT_AUTO_CLOSED_TAG);
      }
      else {
          return new JHOpenTag (elements, name.image, attrs, 
@@ -207,8 +212,8 @@ JHXmlDecl XMLDecl () :
     List attrs = new LinkedList ();
 }
 {
-	<LABRACKET> <QMARK> <NAME> (Attribute(attrs))* <QMARK><RABRACKET>
-	{  return new JHXmlDecl (elements); }
+    <LABRACKET> <QMARK> <NAME> (Attribute(attrs))* <QMARK><RABRACKET>
+    {  return new JHXmlDecl (elements); }
 }
 
 JHCloseTag CloseTag () :
@@ -244,7 +249,7 @@ JHDoctype Doctype () :
 JAVACODE JHErrorElement ConsumeError () 
 {
     Token tok = getNextToken();
-	return new JHErrorElement (elements, "Parsing error", tok.image, true);
+    return new JHErrorElement (elements, MessageConstants.ERR_HTML_PARSING_ERROR, tok.image, true);
 }
 
 void DoctypeItem (List dtElements) :
@@ -286,13 +291,13 @@ void Attribute (List attrs) :
     LOOKAHEAD(2)
     namespace = Name() <COLON> name = Name() <EQUALS> val = AttrVal()
     { attval = new JHAttribute (name.image, namespace.image, val,
-    		name.beginLine, name.beginColumn);
+            name.beginLine, name.beginColumn);
       attrs.add(attval); } |
      LOOKAHEAD(2)
     namespace = Name() <COLON> name = Name()
     { attval = new JHAttribute (name.image, namespace.image, 
             null,
-    		name.beginLine, name.beginColumn);
+            name.beginLine, name.beginColumn);
       attrs.add(attval); } |
     LOOKAHEAD(2)
     name = Name() <EQUALS> val = AttrVal()

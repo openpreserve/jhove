@@ -23,7 +23,7 @@ public abstract class JP2Box extends BoxHolder {
     protected List<Property> associations;
     
     protected final static String noJP2Hdr = 
-        "Other boxes may not occur before JP2 Header";
+        MessageConstants.ERR_JP2_HEADER_CONTENT_MISSING;
 
     /* Name to be used for self-description property. */
     protected final static String DESCRIPTION_NAME =
@@ -342,7 +342,7 @@ public abstract class JP2Box extends BoxHolder {
     protected void wrongBoxSize () 
     {
         _repInfo.setMessage (new ErrorMessage
-            ("Incorrect Box size for " + getSelfPropName (),
+            (MessageConstants.ERR_BOX_SIZE_INVALID + getSelfPropName (),
              _module.getFilePos ()));
         _repInfo.setWellFormed (false);
     }
@@ -354,7 +354,7 @@ public abstract class JP2Box extends BoxHolder {
     protected void wrongBoxContext ()
     {
         _repInfo.setMessage (new ErrorMessage
-            ("Invalid context for " + getSelfPropName (),
+            (MessageConstants.ERR_BOX_CONTEXT_INVALID + getSelfPropName (),
              _module.getFilePos ()));
         _repInfo.setWellFormed (false);
     }
@@ -365,8 +365,8 @@ public abstract class JP2Box extends BoxHolder {
     protected void emptyBox ()
     {
         _repInfo.setMessage (new ErrorMessage
-            ("Box is empty", "Box type = " + getSelfPropName (),
-             _module.getFilePos ()));
+            (MessageConstants.ERR_BOX_CONTENT_EMPTY,
+             "Box type = " + getSelfPropName (), _module.getFilePos ()));
         _repInfo.setWellFormed (false);
     }
     

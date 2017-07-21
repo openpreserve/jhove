@@ -10,7 +10,7 @@
 
   <groupId>org.openpreservation.jhove</groupId>
   <artifactId>jhove</artifactId>
-  <version>1.16.0</version>
+  <version>1.17.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
@@ -78,16 +78,22 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <mvn.compiler.version>3.3</mvn.compiler.version>
-    <mvn.deploy.version>2.8.1</mvn.deploy.version>
-    <mvn.resources.version>2.6</mvn.resources.version>
+    <mvn.antrun.version>1.8</mvn.antrun.version>
+    <mvn.assembly.version>3.0.0</mvn.assembly.version>
+    <mvn.clean.version>3.0.0</mvn.clean.version>
+    <mvn.compiler.version>3.6.1</mvn.compiler.version>
+    <mvn.dependency.version>3.0.0</mvn.dependency.version>
+    <mvn.deploy.version>2.8.2</mvn.deploy.version>
+    <mvn.install.version>2.5.2</mvn.install.version>
+    <mvn.resources.version>3.0.2</mvn.resources.version>
+    <mvn.site.version>3.6</mvn.site.version>
     <mvn.gpg.version>1.6</mvn.gpg.version>
-    <mvn.jar.version>2.6</mvn.jar.version>
-    <mvn.javadoc.version>2.10</mvn.javadoc.version>
-    <mvn.source.version>2.4</mvn.source.version>
+    <mvn.jar.version>3.0.2</mvn.jar.version>
+    <mvn.javadoc.version>2.10.4</mvn.javadoc.version>
+    <mvn.source.version>3.0.1</mvn.source.version>
     <mvn.surefire.version>2.19.1</mvn.surefire.version>
     <mvn.release.version>2.5.3</mvn.release.version>
-    <jacoco.version>0.7.6.201602180812</jacoco.version>
+    <jacoco.version>0.7.9</jacoco.version>
     <java.source.version>1.5</java.source.version>
     <java.target.version>1.6</java.target.version>
     <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
@@ -99,12 +105,37 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>${mvn.antrun.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${mvn.assembly.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${mvn.clean.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>${mvn.dependency.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${mvn.compiler.version}</version>
           <configuration>
             <source>${java.source.version}</source>
             <target>${java.target.version}</target>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>${mvn.install.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -115,6 +146,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
           <version>${mvn.resources.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>${mvn.site.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -230,13 +266,6 @@
           <execution>
             <goals>
               <goal>prepare-agent</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>report</id>
-            <phase>test</phase>
-            <goals>
-              <goal>report</goal>
             </goals>
           </execution>
         </executions>

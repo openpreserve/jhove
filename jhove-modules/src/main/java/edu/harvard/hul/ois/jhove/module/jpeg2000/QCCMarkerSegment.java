@@ -47,7 +47,7 @@ public class QCCMarkerSegment extends MarkerSegment {
         if (compIdxBytes == 0) {
             // QCC found before SIZ
             _repInfo.setMessage (new ErrorMessage 
-                    ("QCC marker segment at wrong position in codestream"));
+                    (MessageConstants.ERR_QCC_MARKER_POSITION_INVALID));
             return false;
         }
         int compIdx;
@@ -89,7 +89,7 @@ public class QCCMarkerSegment extends MarkerSegment {
             break;
 	default:
             _repInfo.setMessage (new ErrorMessage
-                    ("Unrecognized quantization type in QCC marker segment"));
+                    (MessageConstants.ERR_QCC_MARKER_QUANTIZATION_TYPE_INVALID));
             return false;    // reserved value
         }
 

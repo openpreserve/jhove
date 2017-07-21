@@ -67,7 +67,7 @@ public final class JpegExif {
         }
         catch (IOException e) {
             info.setMessage (new ErrorMessage
-                    ("Error creating temporary file. Check your configuration: " +
+                    (MessageConstants.ERR_TEMP_FILE_CREATION +
                      e.getMessage ()));
             return info;
         }
@@ -166,7 +166,7 @@ public final class JpegExif {
         }
         catch (IOException e) {
             info.setMessage (new ErrorMessage
-                ("I/O exception processing Exif metadata: " +
+                (MessageConstants.ERR_EXIF_PROCESSING_IO_EXCEP +
 		 e.getMessage ()));
             // Maybe should put this directly in the parent's
             // RepInfo, otherwise I have to copy the message afterwards.
