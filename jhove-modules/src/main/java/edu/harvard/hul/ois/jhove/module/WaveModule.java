@@ -1,16 +1,21 @@
 /**********************************************************************
- * Jhove - JSTOR/Harvard Object Validation Environment Copyright 2004-2007 by
- * JSTOR and the President and Fellows of Harvard College
- *
+ * JHOVE - JSTOR/Harvard Object Validation Environment
+ * Copyright 2004-2007 by JSTOR and the President and Fellows of Harvard College
  **********************************************************************/
 
 package edu.harvard.hul.ois.jhove.module;
 
 import edu.harvard.hul.ois.jhove.*;
-import edu.harvard.hul.ois.jhove.module.iff.*;
+import edu.harvard.hul.ois.jhove.module.iff.Chunk;
+import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
 import edu.harvard.hul.ois.jhove.module.wave.*;
-import java.io.*;
-import java.util.*;
+
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Module for identification and validation of WAVE sound files.
@@ -24,123 +29,8 @@ import java.util.*;
  * @author Gary McGath
  */
 public class WaveModule extends ModuleBase {
-    /******************************************************************
-     * PRIVATE INSTANCE FIELDS.
-     ******************************************************************/
 
-    /* Checksummer object */
-    protected Checksummer _ckSummer;
-
-    /* Input stream wrapper which handles checksums */
-    protected ChecksumInputStream _cstream;
-
-    /* Data input stream wrapped around _cstream */
-    protected DataInputStream _dstream;
-
-    /* Top-level metadata property */
-    protected Property _metadata;
-
-    /* Top-level property list */
-    protected List<Property> _propList;
-
-    /* List of Note properties */
-    protected List<Property> _notes;
-
-    /* List of Label properties */
-    protected List<Property> _labels;
-
-    /* List of Labeled Text properties */
-    protected List<Property> _labeledText;
-
-    /* List of Sample properties */
-    protected List<Property> _samples;
-
-    /* AES audio metadata to go into AIFF metadata */
-    protected AESAudioMetadata _aesMetadata;
-
-    /* Bytes remaining to be read. */
-    protected long bytesRemaining;
-
-    /* Bytes needed to store a file. */
-    protected int _blockAlign;
-
-    /* Exif data from file. */
-    protected ExifInfo _exifInfo;
-
-    /* Compression format, used for profile verification. */
-    protected int compressionCode;
-
-    /*
-     * Number of samples in the file. Obtained from the DATA chunk for
-     * uncompressed files, and the FACT chunk for compressed ones.
-     */
-    protected long numSamples;
-
-    /* Sample rate from file. */
-    protected long sampleRate;
-
-    /* Flag to check for exactly one format chunk */
-    protected boolean formatChunkSeen;
-
-    /* Flag to check for presence of fact chunk */
-    protected boolean factChunkSeen;
-
-    /* Flag to check for not more than one data chunk */
-    protected boolean dataChunkSeen;
-
-    /* Flag to check for not more than one instrument chunk */
-    protected boolean instrumentChunkSeen;
-
-    /* Flag to check for not more than one MPEG chunk */
-    protected boolean mpegChunkSeen;
-
-    /* Flag to check for not more than one Cart chunk */
-    protected boolean cartChunkSeen;
-
-    /* Flag to check for not more than one broadcast audio extension chunk */
-    protected boolean broadcastExtChunkSeen;
-
-    /* Flag to check for not more than one peak envelope chunk */
-    protected boolean peakChunkSeen;
-
-    /* Flag to check for not more than one link chunk */
-    protected boolean linkChunkSeen;
-
-    /* Flag to check for not more than one cue chunk */
-    protected boolean cueChunkSeen;
-
-    /* Profile flag for PCMWAVEFORMAT */
-    protected boolean flagPCMWaveFormat;
-
-    /* Profile flag for WAVEFORMATEX */
-    protected boolean flagWaveFormatEx;
-
-    /* Profile flag for WAVEFORMATEXTENSIBLE */
-    protected boolean flagWaveFormatExtensible;
-
-    /*
-     * Profile flag for Broadcast Wave format. This indicates only that the
-     * Format chunk is acceptable; it is also necessary to verify that certain
-     * chunks were found.
-     */
-    protected boolean flagBroadcastWave;
-
-    /*
-     * Version of Broadcast Wave, as determined from the Broadcast Extension
-     * Chunk.
-     */
-    protected int broadcastVersion;
-
-    /* Flag to note that first sample offset has been recorded */
-    protected boolean firstSampleOffsetMarked;
-
-    /******************************************************************
-     * PRIVATE CLASS FIELDS.
-     ******************************************************************/
-
-    /* Fixed value for first 4 bytes */
-    private static final int[] sigByte = { 0X52, 0X49, 0X46, 0X46 };
-
+    /* Module metadata */
     private static final String NAME = "WAVE-hul";
     private static final String RELEASE = "1.4";
     private static final int[] DATE = { 2017, 3, 14 };
@@ -158,28 +48,138 @@ public class WaveModule extends ModuleBase {
             + "President and Fellows of Harvard College. "
             + "Released under the GNU Lesser General Public License.";
 
-    /******************************************************************
-     * CLASS CONSTRUCTOR.
-     ******************************************************************/
+    /** Fixed values of first four bytes */
+    private static final int[] RIFF_SIGNATURE = { 'R', 'I', 'F', 'F' };
+
+    /** Checksummer object */
+    protected Checksummer _ckSummer;
+
+    /** Input stream wrapper which handles checksums */
+    protected ChecksumInputStream _cstream;
+
+    /** Data input stream wrapped around _cstream */
+    protected DataInputStream _dstream;
+
+    /** Top-level metadata property */
+    protected Property _metadata;
+
+    /** Top-level property list */
+    protected List<Property> _propList;
+
+    /** List of Note properties */
+    protected List<Property> _notes;
+
+    /** List of Label properties */
+    protected List<Property> _labels;
+
+    /** List of Labeled Text properties */
+    protected List<Property> _labeledText;
+
+    /** List of Sample properties */
+    protected List<Property> _samples;
+
+    /** AES audio metadata to go into WAVE metadata */
+    protected AESAudioMetadata _aesMetadata;
+
+    /** Bytes remaining to be read */
+    protected long bytesRemaining;
+
+    /** Bytes needed to store a file */
+    protected int _blockAlign;
+
+    /** Exif data from file */
+    protected ExifInfo _exifInfo;
+
+    /** Compression format, used for profile verification */
+    protected int compressionCode;
+
     /**
-     * Instantiates an <tt>WaveModule</tt> object.
+     * Number of samples in the file. Obtained from the Data chunk for
+     * uncompressed files, and the Fact chunk for compressed ones.
+     */
+    protected long numSamples;
+
+    /** Sample rate from file */
+    protected long sampleRate;
+
+    /** Flag to check for exactly one Format chunk */
+    protected boolean formatChunkSeen;
+
+    /** Flag to check for presence of a Fact chunk */
+    protected boolean factChunkSeen;
+
+    /** Flag to check for not more than one Data chunk */
+    protected boolean dataChunkSeen;
+
+    /** Flag to check for not more than one Instrument chunk */
+    protected boolean instrumentChunkSeen;
+
+    /** Flag to check for not more than one MPEG chunk */
+    protected boolean mpegChunkSeen;
+
+    /** Flag to check for not more than one Cart chunk */
+    protected boolean cartChunkSeen;
+
+    /** Flag to check for not more than one Broadcast Audio Extension chunk */
+    protected boolean broadcastExtChunkSeen;
+
+    /** Flag to check for not more than one Peak Envelope chunk */
+    protected boolean peakChunkSeen;
+
+    /** Flag to check for not more than one Link chunk */
+    protected boolean linkChunkSeen;
+
+    /** Flag to check for not more than one Cue chunk */
+    protected boolean cueChunkSeen;
+
+    /** Profile flag for PCMWAVEFORMAT */
+    protected boolean flagPCMWaveFormat;
+
+    /** Profile flag for WAVEFORMATEX */
+    protected boolean flagWaveFormatEx;
+
+    /** Profile flag for WAVEFORMATEXTENSIBLE */
+    protected boolean flagWaveFormatExtensible;
+
+    /**
+     * Profile flag for Broadcast Wave Format. This indicates only that the
+     * Format chunk is acceptable; it is also necessary to verify that certain
+     * chunks were found.
+     */
+    protected boolean flagBroadcastWave;
+
+    /**
+     * Version of Broadcast Wave, as determined from the Broadcast Extension
+     * Chunk.
+     */
+    protected int broadcastVersion;
+
+    /** Flag to note that first sample offset has been recorded */
+    protected boolean firstSampleOffsetMarked;
+
+    /**
+     * Class constructor.
+     *
+     * Instantiates a <code>WaveModule</code> object.
      */
     public WaveModule() {
         super(NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
                 VALIDITY, REPINFO, NOTE, RIGHTS, false);
         _vendor = Agent.harvardInstance();
 
-        Agent msagent = new Agent.Builder("Microsoft Corporation",
+        Agent msAgent = new Agent.Builder("Microsoft Corporation",
                 AgentType.COMMERCIAL)
-                .address(" One Microsoft Way, " + "Redmond, WA 98052-6399")
-                .telephone("+1 (800) 426-9400").web("http://www.microsoft.com")
+                .address("One Microsoft Way, Redmond, WA 98052-6399")
+                .telephone("+1 (800) 426-9400")
+                .web("http://www.microsoft.com")
                 .build();
+
         Document doc = new Document("PCMWAVEFORMAT", DocumentType.WEB);
         doc.setIdentifier(new Identifier(
                 "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/"
                         + "multimed/htm/_win32_pcmwaveformat_str.asp",
                 IdentifierType.URL));
-        doc.setPublisher(msagent);
+        doc.setPublisher(msAgent);
         _specification.add(doc);
 
         doc = new Document("WAVEFORMATEX", DocumentType.WEB);
@@ -187,7 +187,7 @@ public class WaveModule extends ModuleBase {
                 "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/"
                         + "multimed/htm/_win32_waveformatex_str.asp",
                 IdentifierType.URL));
-        doc.setPublisher(msagent);
+        doc.setPublisher(msAgent);
         _specification.add(doc);
 
         doc = new Document("WAVEFORMATEXTENSIBLE", DocumentType.WEB);
@@ -195,23 +195,25 @@ public class WaveModule extends ModuleBase {
                 "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/"
                         + "multimed/htm/_win32_waveformatextensible_str.asp",
                 IdentifierType.URL));
-        doc.setPublisher(msagent);
+        doc.setPublisher(msAgent);
         _specification.add(doc);
 
-        Agent agent = new Agent.Builder("European Broadcasting Union",
+        Agent ebuAgent = new Agent.Builder("European Broadcasting Union",
                 AgentType.COMMERCIAL)
-                .address(
-                        "Casa postale 45, Ancienne Route 17A, "
-                                + "CH-1218 Grand-Saconex, Geneva, Switzerland")
-                .telephone("+ 41 (0)22 717 2111").fax("+ 41 (0)22 747 4000")
-                .email("techreview@ebu.ch").web("http://www.ebu.ch").build();
+                .address("Casa postale 45, Ancienne Route 17A, "
+                        + "CH-1218 Grand-Saconex, Geneva, Switzerland")
+                .telephone("+41 (0)22 717 2111")
+                .fax("+41 (0)22 747 4000")
+                .email("techreview@ebu.ch")
+                .web("http://www.ebu.ch")
+                .build();
 
         doc = new Document("Broadcast Wave Format (EBU N22-1987)",
                 DocumentType.REPORT);
         doc.setIdentifier(new Identifier(
                 "http://www.ebu.ch/CMSimages/en/tec_doc_t3285_tcm6-10544.pdf",
                 IdentifierType.URL));
-        doc.setPublisher(agent);
+        doc.setPublisher(ebuAgent);
         _specification.add(doc);
 
         Signature sig = new ExternalSignature(".wav", SignatureType.EXTENSION,
@@ -225,6 +227,7 @@ public class WaveModule extends ModuleBase {
         sig = new InternalSignature("RIFF", SignatureType.MAGIC,
                 SignatureUseType.MANDATORY, 0);
         _signature.add(sig);
+
         sig = new InternalSignature("WAVE", SignatureType.MAGIC,
                 SignatureUseType.MANDATORY, 8);
         _signature.add(sig);
@@ -263,10 +266,8 @@ public class WaveModule extends ModuleBase {
             _aesMetadata.setPrimaryIdentifierType(AESAudioMetadata.FILE_NAME);
         }
 
-        /*
-         * We may have already done the checksums while converting a temporary
-         * file.
-         */
+        // We may have already done the checksums
+        // while converting a temporary file.
         _ckSummer = null;
         if (_je != null && _je.getChecksumFlag()
                 && info.getChecksum().isEmpty()) {
@@ -283,14 +284,14 @@ public class WaveModule extends ModuleBase {
             // Check the start of the file for the right opening bytes
             for (int i = 0; i < 4; i++) {
                 int ch = readUnsignedByte(_dstream, this);
-                if (ch != sigByte[i]) {
+                if (ch != RIFF_SIGNATURE[i]) {
                     info.setMessage(new ErrorMessage(
                             "Document does not start with RIFF chunk", 0));
                     info.setWellFormed(false);
                     return 0;
                 }
             }
-            /* If we got this far, take note that the signature is OK. */
+            // If we got this far, take note that the signature is OK.
             info.setSigMatch(_name);
 
             // Get the length of the Form chunk. This includes all
@@ -313,7 +314,7 @@ public class WaveModule extends ModuleBase {
                     break;
                 }
             }
-        } catch (EOFException e) {
+        } catch (EOFException eofe) {
             info.setWellFormed(false);
             info.setMessage(new ErrorMessage("Unexpected end of file", _nByte));
             return 0;
@@ -357,13 +358,11 @@ public class WaveModule extends ModuleBase {
             return 0;
         }
 
-        /* This file looks OK. */
+        // This file looks OK.
         if (_ckSummer != null) {
-            /*
-             * We may not have actually hit the end of file. If we're
-             * calculating checksums on the fly, we have to read and discard
-             * whatever is left, so it will get checksummed.
-             */
+            // We may not have actually hit the end of the file. If we're
+            // calculating checksums on the fly, we have to read and discard
+            // whatever is left, so it will get checksummed.
             for (;;) {
                 try {
                     long n = skipBytes(_dstream, 2048, this);
@@ -411,15 +410,14 @@ public class WaveModule extends ModuleBase {
             if (flagBroadcastWave) {
                 String prof = null;
                 switch (broadcastVersion) {
-                case 0:
-                    prof = "Broadcast Wave Version 0";
-                    break;
+                    case 0:
+                        prof = "Broadcast Wave Version 0";
+                        break;
+                    case 1:
+                        prof = "Broadcast Wave Version 1";
+                        break;
 
-                case 1:
-                    prof = "Broadcast Wave Version 1";
-                    break;
-
-                // Other versions are unknown at this time
+                    // Other versions are unknown at this time
                 }
                 if (prof != null) {
                     info.setProfile(prof);
@@ -445,7 +443,7 @@ public class WaveModule extends ModuleBase {
         _exifInfo = exifInfo;
     }
 
-    /** Set the number of bytes that holds an aligned sample. */
+    /** Sets the number of bytes that holds an aligned sample. */
     public void setBlockAlign(int align) {
         _blockAlign = align;
     }
@@ -463,9 +461,7 @@ public class WaveModule extends ModuleBase {
         return compressionCode;
     }
 
-    /**
-     * Returns the number of bytes needed per aligned sample.
-     */
+    /** Returns the number of bytes needed per aligned sample. */
     public int getBlockAlign() {
         return _blockAlign;
     }
@@ -551,7 +547,7 @@ public class WaveModule extends ModuleBase {
      * for ID's of various kinds.
      */
     public String read4Chars(DataInputStream stream) throws IOException {
-        StringBuffer sbuf = new StringBuffer(4);
+        StringBuilder sbuf = new StringBuilder(4);
         for (int i = 0; i < 4; i++) {
             int ch = readUnsignedByte(stream, this);
             if (ch != 0) {
@@ -561,54 +557,50 @@ public class WaveModule extends ModuleBase {
         return sbuf.toString();
     }
 
-    /**
-     * Set the compression format. Called from the Format chunk.
-     */
+    /** Sets the compression format. Called from the Format chunk. */
     public void setCompressionCode(int cf) {
         compressionCode = cf;
     }
 
     /**
-     * Add to the number of data bytes. This may be called multiple times to
+     * Adds to the number of data bytes. This may be called multiple times to
      * give a cumulative total.
      */
     public void addSamples(long samples) {
         numSamples += samples;
     }
 
-    /** Set the sample rate. */
+    /** Sets the sample rate. */
     public void setSampleRate(long rate) {
         sampleRate = rate;
     }
 
-    /** Set the profile flag for PCMWAVEFORMAT. */
+    /** Sets the profile flag for PCMWAVEFORMAT. */
     public void setPCMWaveFormat(boolean b) {
         flagPCMWaveFormat = b;
     }
 
-    /** Set the profile flag for WAVEFORMATEX. */
+    /** Sets the profile flag for WAVEFORMATEX. */
     public void setWaveFormatEx(boolean b) {
         flagWaveFormatEx = b;
     }
 
-    /** Set the profile flag for WAVEFORMATEXTENSIBLE. */
+    /** Sets the profile flag for WAVEFORMATEXTENSIBLE. */
     public void setWaveFormatExtensible(boolean b) {
         flagWaveFormatExtensible = b;
     }
 
-    /** Set the profile flag for Broadcast Wave. */
+    /** Sets the profile flag for Broadcast Wave. */
     public void setBroadcastWave(boolean b) {
         flagBroadcastWave = b;
     }
 
-    /** Set the version from the Broadcast Extension chunk. */
+    /** Sets the version from the Broadcast Audio Extension chunk. */
     public void setBroadcastVersion(int version) {
         broadcastVersion = version;
     }
 
-    /**
-     * Initializes the state of the module for parsing.
-     */
+    /** Initializes the state of the module for parsing. */
     @Override
     protected void initParse() {
         super.initParse();
@@ -652,10 +644,7 @@ public class WaveModule extends ModuleBase {
         flagBroadcastWave = false;
     }
 
-    /**
-     * Reads a WAVE Chunk.
-     *
-     */
+    /** Reads a WAVE chunk. */
     protected boolean readChunk(RepInfo info) throws IOException {
         Chunk chunk = null;
         ChunkHeader chunkh = new ChunkHeader(this, info);
@@ -757,8 +746,8 @@ public class WaveModule extends ModuleBase {
                 if (!chunk.readChunk(info)) {
                     return false;
                 }
-            } catch (JhoveException e) {
-                info.setMessage(new ErrorMessage(e.getMessage()));
+            } catch (JhoveException je) {
+                info.setMessage(new ErrorMessage(je.getMessage()));
                 info.setWellFormed(false);
                 return false;
             }
@@ -780,7 +769,7 @@ public class WaveModule extends ModuleBase {
         return _aesMetadata;
     }
 
-    /* Factor out the reporting of duplicate chunks. */
+    /** Reports a duplicate chunk. */
     protected void dupChunkError(RepInfo info, String chunkName) {
         info.setMessage(new ErrorMessage("Multiple " + chunkName
                 + " Chunks not permitted", _nByte));
@@ -803,12 +792,12 @@ public class WaveModule extends ModuleBase {
     public Property buildBitmaskProperty(int val, String name,
             String[] oneValueNames, String[] zeroValueNames) {
         if (_je != null && _je.getShowRawFlag()) {
-            return new Property(name, PropertyType.INTEGER, new Integer(val));
+            return new Property(name, PropertyType.INTEGER, val);
         }
         List<String> slist = new LinkedList<String>();
         try {
             for (int i = 0; i < oneValueNames.length; i++) {
-                String s = null;
+                String s;
                 if ((val & (1 << i)) != 0) {
                     s = oneValueNames[i];
                 } else {
