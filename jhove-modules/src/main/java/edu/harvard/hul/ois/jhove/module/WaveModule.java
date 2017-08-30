@@ -36,9 +36,10 @@ public class WaveModule extends ModuleBase {
     private static final int[] DATE = { 2017, 3, 14 };
     private static final String[] FORMAT = { "WAVE", "Audio for Windows",
             "EBU Technical Specification 3285", "Broadcast Wave Format", "BWF" };
-    private static final String COVERAGE = "WAVE (WAVEFORMAT, PCMWAVEFORMAT, WAVEFORMATEX, WAVEFORMATEXTENSIBLE), "
+    private static final String COVERAGE = "WAVE (PCMWAVEFORMAT, WAVEFORMATEX, WAVEFORMATEXTENSIBLE), "
             + "Broadcast Wave Format (BWF) version 0 and 1";
-    private static final String[] MIMETYPE = { "audio/x-wave", "audio/wave" };
+    private static final String[] MIMETYPE = { "audio/vnd.wave", "audio/wav",
+            "audio/wave", "audio/x-wav", "audio/x-wave" };
     private static final String WELLFORMED = null;
     private static final String VALIDITY = null;
     private static final String REPINFO = null;
