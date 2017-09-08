@@ -123,8 +123,9 @@ public class GzipModule extends ModuleBase {
         entryProperties = new ArrayList<Property>();
     }
 
-    /** Reset parameter settings.
-     *  Returns to a default state without any parameters.
+    /**
+     * Resets parameter settings.
+     * Returns to a default state without any parameters.
      */
     @Override
     public void resetParams() throws Exception {
@@ -197,11 +198,11 @@ public class GzipModule extends ModuleBase {
     }
     
     /**
-     * Parse GZIP entries. Parsing should be straight forward with all records accessible through the same source.
+     * Parses GZIP entries. Parsing should be straight forward with all records accessible through the same source.
      * @param reader GZIP reader used to parse records
      * @throws EOFException if EOF occurs prematurely
      * @throws IOException if an IO error occurs while processing
-     * @throws JHOVE2Exception if a serious problem needs to be reported
+     * @throws JhoveException if a serious problem needs to be reported
      */
     protected void parseRecords(GzipReader reader) throws EOFException, IOException, JhoveException {
         if (reader != null) {
@@ -216,9 +217,9 @@ public class GzipModule extends ModuleBase {
     }
 
     /**
-     * Process a GZIP entry.
+     * Processes a GZIP entry.
      * Extracts all the properties of the entry into a map, and puts this map on the list.
-     * @param entry ZGIP entry from GZIP reader
+     * @param entry GZIP entry from GZIP reader
      * @throws EOFException if EOF occurs prematurely
      * @throws IOException if an IO error occurs while processing
      * @throws JhoveException if a serious problem needs to be reported
@@ -233,7 +234,7 @@ public class GzipModule extends ModuleBase {
     }
     
     /**
-     * Report the results of the characterization.
+     * Reports the results of the characterization.
      * @param reader The GZIP reader, which has read the GZIP-file. 
      * @param repInfo The representation info, where to report the results.
      * @throws JhoveException
@@ -269,7 +270,7 @@ public class GzipModule extends ModuleBase {
     /**
      * Extracts the message from the diagnosis.
      * @param d The diagnosis
-     * @return The message containing entity and informations.
+     * @return The message containing entity and information.
      */
     private String extractDiagnosisMessage(Diagnosis d) {
         StringBuilder res = new StringBuilder();
