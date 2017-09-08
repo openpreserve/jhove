@@ -1,51 +1,55 @@
 RELEASE NOTES
 =============
-JHOVE - JSTOR/Harvard Object Validation Environment
-Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.
+JHOVE - JSTOR/Harvard Object Validation Environment  
+Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.  
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details).
 
-Versions 1.7 to 1.11 of JHOVE released independently.
-Versions 1.12 onwards of JHOVE released by the Open Preservation Foundation.
+Versions 1.7 to 1.11 of JHOVE released independently.  
+Versions 1.12 onwards released by the Open Preservation Foundation.
 
-JHOVE 1.16
-----------
+JHOVE 1.16.7
+------------
+2017-07-20
 
-### 2017-07-20 : FIX - NPE preventing CrossRefStream objects from being read
-Contains:
-- [Pull Request #258](https://github.com/openpreserve/jhove/pull/258)
+### PDF module
 
-Fixes PDFs with CrossRefStream objects being reported as "Well-formed and valid" when most of the file's contents remain unchecked.
+- Fixed: Some PDFs being reported as "Well-formed and valid" while remaining
+  largely unchecked [[#258](https://github.com/openpreserve/jhove/pull/258)]
 
-### 2017-03-20 : FIX - Broken ModuleBase.skipBytes method
-Contains:
-- [Pull Request #194](https://github.com/openpreserve/jhove/pull/194)
+JHOVE 1.16.5
+------------
+2017-03-20
 
-Fixes:
-- [Issue #71](https://github.com/openpreserve/jhove/issues/71)
-- [Issue #193](https://github.com/openpreserve/jhove/issues/193)
+### General
 
+- Fixed: Core method causing modules to skip more bytes than expected
+  [[#194](https://github.com/openpreserve/jhove/pull/194)]
+
+JHOVE 1.16.0
+------------
 2017-03-16
 
 ### General
 
-- Added PDF and WAV test files submitted by community during JHOVE hack day
+- Added PDF and WAVE test files submitted by community during JHOVE hack day
 - JHOVE Maven artefacts made available on Maven Central in addition to OPF Artifactory
 - Improved error reporting for Travis test failures
 - Improvements to GitHub pages website
-- Consistency and formatting improvments for README.md, RELEASENOTES.md and pom.xml
+- Formatting improvements to README.md, RELEASENOTES.md and pom.xml
 
 ### PDF module
 
-- Fixed: CrossRefStream incorrectly assumes /Index value is a 2 element array
-- Fixed: Bug in skipIISBytes and PdfModule.getObject
-- Better handling Pdf-files where image heigth and width are PdfIndirectObjects
-- Better handling of Pdf-files with "empty" hex strings
-- Better handling of Pdf-files where form-fields are PdfIndirectObjects
+- Fixed: CrossRefStream incorrectly assumes Index value is a two-element array
+- Fixed: Bug in `skipIISBytes` and `PdfModule.getObject`
+- Better handling where image heights and widths are PdfIndirectObjects
+- Better handling of "empty" hex strings
+- Better handling where form-fields are PdfIndirectObjects
 
-### WAV module
-- Fixed: validation of WAV files larger than 2 GB
-- Fixed: Skip Bytes issue for WAV files larger than 100 MB
+### WAVE module
+
+- Fixed: Validation of WAVE files larger than 2 GB
+- Fixed: Skip Bytes issue for WAVE files larger than 100 MB
 
 JHOVE 1.14
 ----------
