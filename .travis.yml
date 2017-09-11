@@ -1,5 +1,11 @@
+dist: trusty
+sudo: required
+
 language: java
 jdk:
+  - openjdk6
+  - openjdk7
+  - openjkd8
   - oraclejdk7
   - oraclejdk8
 
