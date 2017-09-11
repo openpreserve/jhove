@@ -3,10 +3,8 @@ sudo: required
 
 language: java
 jdk:
-  - openjdk6
   - openjdk7
-  - openjkd8
-  - oraclejdk7
+  - openjdk8
   - oraclejdk8
 
 branches:
