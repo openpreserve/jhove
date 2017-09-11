@@ -60,6 +60,7 @@ fi
 if [[ -f "${candidateRoot}/examples/modules/audit-WARC-kb.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/audit-WARC-kb.jhove.xml" "${targetRoot}/examples/modules/"
 fi
+
 # Issue 62 add ICCProfileName
 if [[ -f "${candidateRoot}/examples/modules/JPEG-hul/AA_Banner-progressive.jpg.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/JPEG-hul/AA_Banner-progressive.jpg.jhove.xml" "${targetRoot}/examples/modules/JPEG-hul/"
@@ -71,3 +72,18 @@ if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/AA_Banner.tif.jhove.xml" ]]
 	cp "${candidateRoot}/examples/modules/TIFF-hul/AA_Banner.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
 fi;
 
+# Copy over the fixed version for an encrypted file testRoot
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/AA_Banner.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-22-govdocs-000187.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/"
+fi;
+
+# Sed fix for changed key encryption message
+find "${targetRoot}" -type f -name "pdf-hul-43-govdocs-486355.pdf.jhove.xml" -exec sed -i 's/Key greater than 40/40-bit or greater RC4 or AES/' {} \;
+
+# Copy over the fixed version for an encrypted file testRoot
+if [[ -f "${candidateRoot}/examples/modules/audit-WAVE-hul.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/audit-WAVE-hul.jhove.xml" "${targetRoot}/examples/modules/"
+fi;
+
+# Sed fix for change to WAV MIME type
+find "${targetRoot}" -type f -name "*.wav.jhove.xml" -exec sed -i 's/audio\/x-wave<\/mimeType>/audio\/vnd.wave<\/mimeType>/' {} \;

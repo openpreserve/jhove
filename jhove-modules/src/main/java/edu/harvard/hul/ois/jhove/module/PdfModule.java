@@ -1625,7 +1625,7 @@ public class PdfModule
                                 PropertyType.STRING,
                                 PdfStrings.ALGORITHM[algValue]);
                         }
-                        catch (Exception e) {
+                        catch (ArrayIndexOutOfBoundsException aioobe) {
                             throw new PdfInvalidException
                                 ("Invalid algorithm value in encryption dictionary",
                                     _parser.getOffset ());
@@ -2410,22 +2410,6 @@ public class PdfModule
 
         return buffer.toString ();
     }
-
-    // Store a PDF object in the object map.  The key is a Long
-    // consisting of the concatenation of the object and generation
-    // numbers.  Do I really need this?  Is the xref table
-    // sufficient?
-    /* protected void addObject (int objectNum, int genNum, Object obj)
-    {
-<<<<<<< HEAD
-        long key = ((long) objectNum << 32) +
-                   ((long) genNum & 0XFFFFFFFF);
-=======
-        long key = ((long) objectNum << 32) +
-                   ((long) genNum & 0xFFFFFFFF);
->>>>>>> 57aea666c1ab8167c5ab71fcd40a0a132c4db9a7
-        _objects.put (new Long (key), obj);
-    } */
 
     /**
      *  If the argument is an indirect object reference,

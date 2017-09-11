@@ -12,11 +12,11 @@ JHOVE
 Licensing
 ---------
 Copyright 2003-2012 by JSTOR and the President and Fellows of Harvard College,
-2015-2016 by the [Open Preservation Foundation](http://openpreservation.org).
+2015-2017 by the [Open Preservation Foundation](http://openpreservation.org).
 JHOVE is made available under the
 [GNU Lesser General Public License (LGPL)](http://www.gnu.org/licenses/lgpl.html).
 
-Rev. 1.16.5, 2017-03-20
+Rev. 1.16.7, 2017-07-20
 
 JHOVE Homepage
 --------------
@@ -57,7 +57,7 @@ JHOVE is currently being maintained by the
 
 Pre-requisites
 --------------
- 1. Java JRE 1.6
+ 1. Java JRE 1.6  
     (JHOVE was originally implemented using the Sun J2SE SDK 1.4.1 and has
     been tested to work with 1.5). Version 1.16 of JHOVE is built and
     tested against Oracle JDK 7, and OpenJDK 6 & 7 on Travis. Releases are
@@ -73,15 +73,17 @@ Getting JHOVE
 You can download the [latest version of JHOVE here](http://software.openpreservation.org/rel/jhove-latest.jar).
 
 ### For Developers: JHOVE JARs via Maven
-From v1.16 onwards all production releases of JHOVE are deployed to Maven central. Add the version of JHOVE you'd like to use as a property in your Maven
+From v1.16 onwards all production releases of JHOVE are deployed to Maven
+Central. Add the version of JHOVE you'd like to use as a property in your Maven
 POM:
 ```xml
 <properties>
   ...
-  <jhove.version>1.16.6</jhove.version>
+  <jhove.version>1.16.7</jhove.version>
 </properties>
 ```
-Use this dependency for the core classes Maven module (e.g. `JhoveBase`, `Module`, `ModuleBase`, etc.):
+Use this dependency for the core classes Maven module (e.g. `JhoveBase`,
+`Module`, `ModuleBase`, etc.):
 ```xml
 <dependency>
   <groupId>org.openpreservation.jhove</groupId>
@@ -105,7 +107,9 @@ and this for the JHOVE applications:
   <version>${jhove.version}</version>
 </dependency>
 ```
-If you want the latest development packages you'll need to add the [Open Preservation Foundation's Maven repository](http://artifactory.openpreservation.org/artifactory/opf-dev) to your settings file:
+If you want the latest development packages you'll need to add the
+[Open Preservation Foundation's Maven repository](http://artifactory.openpreservation.org/artifactory/opf-dev)
+to your settings file:
 ```xml
   <profiles>
     <profile>
@@ -128,7 +132,8 @@ If you want the latest development packages you'll need to add the [Open Preserv
 ```
 You can then follow the instructions above to include particular Maven modules,
 but you can now also choose odd minor versioned development builds. At the time
-of writing the latest development version could be included by using the following property:
+of writing the latest development version could be included by using the
+following property:
 ```xml
 <properties>
   ...
@@ -159,8 +164,8 @@ Installation
 ------------
 
 ### Application Installation
-Download the JHOVE installer, this requires Java 1.6 or later to be pre-installed.
-We'll assume that you've downloaded `<userHome>/Downloads/jhove-latest.jar`. Installation is OS dependant.
+Download the JHOVE installer. The installer itself requires Java 1.6 or later
+to be pre-installed. Installation is OS dependant:
 
 #### Windows
 *Currently only tested on Windows 7.*
@@ -228,7 +233,9 @@ For now we're producing:
 
 Currently all options, including the installer, require Java 1.6 or above to be
 pre-installed. Supporting 1.5 is no longer realistic, Oracle ceased support for
-its own 1.6 distribution in 2012. We've kept to 1.6 as a transition towards moving to 1.7. If you really need a 1.5-compatible build then you can override the target version for the Maven build, e.g.:
+its own 1.6 distribution in 2012. We've kept to 1.6 as a transition towards
+moving to 1.7. If you really need a 1.5-compatible build then you can override
+the target version for the Maven build, e.g.:
 
     mvn clean install -Djava.target.version=1.5
 
@@ -297,8 +304,8 @@ where `<configFile>` is the pathname of the JHOVE configuration file.
 
 Project Structure
 -----------------
-A quick introduction to the restructured Maven project. The project's been broken
-into three Maven modules with an additional installer module added.
+A quick introduction to the restructured Maven project. The project's been
+broken into three Maven modules with an additional installer module added.
 
     jhove/
       |-jhove-apps/
@@ -328,18 +335,19 @@ The `jhove-core` JAR contains a single module implementation, the default
 the `jhove-modules` JAR.
 
 ### jhove-modules
-The `jhove-modules` contain all of JHOVE's core format specific module
+The `jhove-modules` contain all of JHOVE's core format-specific module
 implementations, specifically:
 
  * AIFF
+ * ASCII
  * GIF
  * HTML
- * IFF
  * JPEG
  * JPEG 2000
  * PDF
  * PNG
  * TIFF
+ * UTF-8
  * WARC
  * WAVE
  * XML
@@ -367,8 +375,9 @@ looking after:
    get bash scripts; and
  * optionally generating unattended install and uninstall files.
 
-The module produces two JARs, one called `jhove-installer-${project.version}`, which
-contains the JARs for the installer, and an executable JAR to install JHOVE:
+The module produces two JARs, one called `jhove-installer-${project.version}`,
+which contains the JARs for the installer, and an executable JAR to install
+JHOVE:
 
     ./jhove/jhove-installer/target/jhove-xplt-installer-${project.version}.jar
 
