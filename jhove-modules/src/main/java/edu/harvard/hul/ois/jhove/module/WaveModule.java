@@ -214,6 +214,19 @@ public class WaveModule extends ModuleBase {
         doc.setDate("2011-05");
         _specification.add(doc);
 
+        Agent ietfAgent = new Agent.Builder("IETF", AgentType.STANDARD)
+                .web("https://www.ietf.org")
+                .build();
+
+        doc = new Document("WAVE and AVI Codec Registries",
+                DocumentType.RFC);
+        doc.setPublisher(ietfAgent);
+        doc.setDate("1998-06");
+        doc.setIdentifier(new Identifier("RFC 2361", IdentifierType.RFC));
+        doc.setIdentifier(new Identifier(
+                "https://www.ietf.org/rfc/rfc2361.txt", IdentifierType.URL));
+        _specification.add(doc);
+
         Signature sig = new ExternalSignature(".wav", SignatureType.EXTENSION,
                 SignatureUseType.OPTIONAL);
         _signature.add(sig);
