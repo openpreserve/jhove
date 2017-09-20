@@ -94,7 +94,7 @@
     <mvn.surefire.version>2.19.1</mvn.surefire.version>
     <mvn.release.version>2.5.3</mvn.release.version>
     <jacoco.version>0.7.9</jacoco.version>
-    <java.source.version>1.5</java.source.version>
+    <java.source.version>1.6</java.source.version>
     <java.target.version>1.6</java.target.version>
     <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>

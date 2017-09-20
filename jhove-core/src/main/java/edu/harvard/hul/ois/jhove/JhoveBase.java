@@ -149,15 +149,15 @@ public class JhoveBase {
      * Instantiate a <tt>JhoveBase</tt> object.
      * 
      * @throws JhoveException
-     *             If invoked with JVM lower than 1.5
+     *             If invoked with JVM lower than 1.6
      */
     public JhoveBase() throws JhoveException {
         _logger = Logger.getLogger("edu.harvard.hul.ois.jhove");
         _logger.setLevel(Level.SEVERE); // May be changed by config file
         /* Make sure we have a satisfactory version of Java. */
         String version = System.getProperty("java.vm.version");
-        if (version.compareTo("1.5.0") < 0) {
-            String bad = "Java 1.5 or higher is required";
+        if (version.compareTo("1.6.0") < 0) {
+            String bad = "Java 1.6 or higher is required";
             _logger.severe(bad);
             throw new JhoveException(bad);
         }
