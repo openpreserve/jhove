@@ -418,9 +418,9 @@ public abstract class Tokenizer
                         int ch1 = readChar ();
                         int ch2 = readChar ();
                         // Will throw a PDFException if not hexadecimal:
-                        _ch = (hexValue(ch1) << 8) + hexValue(ch2);
+                        _ch = (hexValue(ch1) << 4) + hexValue(ch2);
                     }
-                    if (isDelimiter (_ch) || isWhitespace (_ch)) {
+                    else if (isDelimiter (_ch) || isWhitespace (_ch)) {
                         _state = State.WHITESPACE;
                         ((StringValuedToken) token).setValue(buffer.toString());
 
