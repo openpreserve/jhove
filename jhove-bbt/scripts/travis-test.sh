@@ -73,9 +73,10 @@ if [[ ! -d "${TARGET_ROOT}/${MAJOR_MINOR_VER}" ]]
 then
 	echo "Generating the baseline for ${MAJOR_MINOR_VER}."
 	bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${TEST_ROOT}/corpora" -o "${TEST_ROOT}/candidates/${MAJOR_MINOR_VER}"
-	echo "Applying the baseline patches for ${MAJOR_MINOR_VER}."
-	bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "${BASELINE_VERSION}" -c "${MAJOR_MINOR_VER}"
 fi
+
+echo "Applying the baseline patches for ${MAJOR_MINOR_VER}."
+bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "${BASELINE_VERSION}" -c "${MAJOR_MINOR_VER}"
 
 echo "Black box testing ${MAJOR_MINOR_VER}."
 bash "${SCRIPT_DIR}/bbt-jhove.sh" -b "${TEST_ROOT}/targets/${MAJOR_MINOR_VER}" -c "${TEST_ROOT}/corpora" -j . -o "${TEST_ROOT}/candidates" -k "dev-${MAJOR_MINOR_VER}" -i

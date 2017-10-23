@@ -72,85 +72,80 @@ public class CrossRefStream {
      * information from the dictionary for subsequent processing.
      */
     public boolean isValid () {
-        try {
-            PdfObject typeObj = _dict.get ("Type");
-            String typeStr = null;
-            if (typeObj instanceof PdfSimpleObject) {
-                typeStr = ((PdfSimpleObject) typeObj).getStringValue ();
-                if (!("XRef".equals (typeStr))) {
-                    return false;
-                }
-            }
-            if (typeStr == null) {
+        PdfObject typeObj = _dict.get ("Type");
+        String typeStr = null;
+        if (typeObj instanceof PdfSimpleObject) {
+            typeStr = ((PdfSimpleObject) typeObj).getStringValue ();
+            if (!("XRef".equals (typeStr))) {
                 return false;
             }
-
-            PdfObject sizeObj = _dict.get ("Size");
-            if (sizeObj instanceof PdfSimpleObject) {
-                _size = ((PdfSimpleObject) sizeObj).getIntValue();
-            }
-            else {
-                return false;
-            }
-
-            // The Index entry is optional, but must have the right
-            // format if present: [start1, length1, start2, length2, ...]
-            PdfObject indexObj = _dict.get ("Index");
-            if (indexObj instanceof PdfArray) {
-                Vector indexObjs = ((PdfArray) indexObj).getContent();
-                int indexObjCount = indexObjs.size();
-
-                // Must contain an even number of objects
-                if (indexObjCount % 2 != 0) return false;
-
-                _index = new IndexRange[indexObjCount / 2];
-                for (int i = 0; i < _index.length; i++) {
-                    _index[i] = new IndexRange();
-                    _index[i].start = ((PdfSimpleObject)indexObjs.get(i * 2)).getIntValue();
-                    _index[i].len = ((PdfSimpleObject)indexObjs.get(i * 2 + 1)).getIntValue();
-                }
-            }
-            else {
-                // Set up default index.
-                _index = new IndexRange[1];
-                _index[0] = new IndexRange();
-                _index[0].start = 0;
-                _index[0].len = _size;
-            }
-
-            // Get the field sizes.
-            PdfObject wObj = _dict.get ("W");
-            if (wObj instanceof PdfArray) {
-                Vector vec = ((PdfArray) wObj).getContent ();
-                int len = vec.size ();
-                _fieldSizes = new int[len];
-                for (int i = 0; i < len; i++) {
-                    PdfSimpleObject ob = (PdfSimpleObject) vec.get (i);
-                    _fieldSizes[i] = ob.getIntValue ();
-                }
-            }
-
-            // Get the offset to the previous xref stream, if any.
-            PdfObject prevObj = _dict.get ("Prev");
-            if (prevObj instanceof PdfSimpleObject) {
-                _prevXref = ((PdfSimpleObject) prevObj).getIntValue();
-            }
-            else {
-                _prevXref = -1;
-            }
-            
-            // Get the filter, for subsequent decompression.
-            // We're guaranteed by the spec that this won't be a decryption
-            // filter.
-            _filters = _xstrm.getFilters();
-            // Why isn't this being used?
-            
-            // passed all tests
-            return true;
         }
-        catch (Exception e) {
+        if (typeStr == null) {
             return false;
         }
+
+        PdfObject sizeObj = _dict.get ("Size");
+        if (sizeObj instanceof PdfSimpleObject) {
+            _size = ((PdfSimpleObject) sizeObj).getIntValue();
+        }
+        else {
+            return false;
+        }
+
+        // The Index entry is optional, but must have the right
+        // format if present: [start1 length1 start2 length2 ...]
+        PdfObject indexObj = _dict.get ("Index");
+        if (indexObj instanceof PdfArray) {
+            Vector indexObjs = ((PdfArray) indexObj).getContent();
+            int indexObjCount = indexObjs.size();
+
+            // Must contain an even number of objects
+            if (indexObjCount % 2 != 0) return false;
+
+            _index = new IndexRange[indexObjCount / 2];
+            for (int i = 0; i < _index.length; i++) {
+                _index[i] = new IndexRange();
+                _index[i].start = ((PdfSimpleObject)indexObjs.get(i * 2)).getIntValue();
+                _index[i].len = ((PdfSimpleObject)indexObjs.get(i * 2 + 1)).getIntValue();
+            }
+        }
+        else {
+            // Set up default index.
+            _index = new IndexRange[1];
+            _index[0] = new IndexRange();
+            _index[0].start = 0;
+            _index[0].len = _size;
+        }
+
+        // Get the field sizes.
+        PdfObject wObj = _dict.get ("W");
+        if (wObj instanceof PdfArray) {
+            Vector vec = ((PdfArray) wObj).getContent ();
+            int len = vec.size ();
+            _fieldSizes = new int[len];
+            for (int i = 0; i < len; i++) {
+                PdfSimpleObject ob = (PdfSimpleObject) vec.get (i);
+                _fieldSizes[i] = ob.getIntValue ();
+            }
+        }
+
+        // Get the offset to the previous xref stream, if any.
+        PdfObject prevObj = _dict.get ("Prev");
+        if (prevObj instanceof PdfSimpleObject) {
+            _prevXref = ((PdfSimpleObject) prevObj).getIntValue();
+        }
+        else {
+            _prevXref = -1;
+        }
+
+        // Get the filter, for subsequent decompression.
+        // We're guaranteed by the spec that this won't be a decryption
+        // filter.
+        _filters = _xstrm.getFilters();
+        // Why isn't this being used?
+
+        // passed all tests
+        return true;
     }
 
     /**
