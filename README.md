@@ -58,10 +58,9 @@ JHOVE is currently being maintained by the
 Pre-requisites
 --------------
  1. Java JRE 1.6  
-    (JHOVE was originally implemented using the Sun J2SE SDK 1.4.1 and has
-    been tested to work with 1.5). Version 1.16 of JHOVE is built and
-    tested against Oracle JDK 7, and OpenJDK 6 & 7 on Travis. Releases are
-    built using Oracle JDK 7 from the [OPF's Jenkins server](http://jenkins.openpreservation.org/).
+    Version 1.16 of JHOVE is built and tested against Oracle JDK 8,
+    and OpenJDK 7 & 8 on Travis. Releases are built using Oracle JDK 7
+    from the [OPF's Jenkins server](http://jenkins.openpreservation.org/).
 
  2. If you would like to build JHOVE from source, then life will be easiest if
     you use [Apache Maven](https://maven.apache.org/).

@@ -37,7 +37,7 @@ public class WaveModule extends ModuleBase {
     private static final String[] FORMAT = { "WAVE", "Audio for Windows",
             "EBU Technical Specification 3285", "Broadcast Wave Format", "BWF" };
     private static final String COVERAGE = "WAVE (PCMWAVEFORMAT, WAVEFORMATEX, WAVEFORMATEXTENSIBLE), "
-            + "Broadcast Wave Format (BWF) version 0 and 1";
+            + "Broadcast Wave Format (BWF) version 0, 1 and 2";
     private static final String[] MIMETYPE = { "audio/vnd.wave", "audio/wav",
             "audio/wave", "audio/x-wav", "audio/x-wave" };
     private static final String WELLFORMED = null;
@@ -149,12 +149,6 @@ public class WaveModule extends ModuleBase {
      */
     protected boolean flagBroadcastWave;
 
-    /**
-     * Version of Broadcast Wave, as determined from the Broadcast Extension
-     * Chunk.
-     */
-    protected int broadcastVersion;
-
     /** Flag to note that first sample offset has been recorded */
     protected boolean firstSampleOffsetMarked;
 
@@ -209,12 +203,28 @@ public class WaveModule extends ModuleBase {
                 .web("http://www.ebu.ch")
                 .build();
 
-        doc = new Document("Broadcast Wave Format (EBU N22-1987)",
+        doc = new Document("Specification of the Broadcast Wave Format (BWF)",
                 DocumentType.REPORT);
+        doc.setIdentifier(new Identifier("EBU Technical Specification 3285",
+                IdentifierType.OTHER));
         doc.setIdentifier(new Identifier(
-                "http://www.ebu.ch/CMSimages/en/tec_doc_t3285_tcm6-10544.pdf",
+                "https://tech.ebu.ch/docs/tech/tech3285.pdf",
                 IdentifierType.URL));
         doc.setPublisher(ebuAgent);
+        doc.setDate("2011-05");
+        _specification.add(doc);
+
+        Agent ietfAgent = new Agent.Builder("IETF", AgentType.STANDARD)
+                .web("https://www.ietf.org")
+                .build();
+
+        doc = new Document("WAVE and AVI Codec Registries",
+                DocumentType.RFC);
+        doc.setPublisher(ietfAgent);
+        doc.setDate("1998-06");
+        doc.setIdentifier(new Identifier("RFC 2361", IdentifierType.RFC));
+        doc.setIdentifier(new Identifier(
+                "https://www.ietf.org/rfc/rfc2361.txt", IdentifierType.URL));
         _specification.add(doc);
 
         Signature sig = new ExternalSignature(".wav", SignatureType.EXTENSION,
@@ -409,20 +419,7 @@ public class WaveModule extends ModuleBase {
                 }
             }
             if (flagBroadcastWave) {
-                String prof = null;
-                switch (broadcastVersion) {
-                    case 0:
-                        prof = "Broadcast Wave Version 0";
-                        break;
-                    case 1:
-                        prof = "Broadcast Wave Version 1";
-                        break;
-
-                    // Other versions are unknown at this time
-                }
-                if (prof != null) {
-                    info.setProfile(prof);
-                }
+                info.setProfile("BWF");
             }
         }
         return 0;
@@ -594,11 +591,6 @@ public class WaveModule extends ModuleBase {
     /** Sets the profile flag for Broadcast Wave. */
     public void setBroadcastWave(boolean b) {
         flagBroadcastWave = b;
-    }
-
-    /** Sets the version from the Broadcast Audio Extension chunk. */
-    public void setBroadcastVersion(int version) {
-        broadcastVersion = version;
     }
 
     /** Initializes the state of the module for parsing. */
