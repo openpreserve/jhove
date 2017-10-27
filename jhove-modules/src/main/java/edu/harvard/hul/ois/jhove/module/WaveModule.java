@@ -735,13 +735,7 @@ public class WaveModule extends ModuleBase {
         }
 
         if (chunk != null) {
-            try {
-                if (!chunk.readChunk(info)) {
-                    return false;
-                }
-            } catch (JhoveException je) {
-                info.setMessage(new ErrorMessage(je.getMessage()));
-                info.setWellFormed(false);
+            if (!chunk.readChunk(info)) {
                 return false;
             }
         } else {

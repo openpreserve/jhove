@@ -5,7 +5,6 @@
 
 package edu.harvard.hul.ois.jhove.module.iff;
 
-import edu.harvard.hul.ois.jhove.JhoveException;
 import edu.harvard.hul.ois.jhove.ModuleBase;
 import edu.harvard.hul.ois.jhove.RepInfo;
 
@@ -46,8 +45,7 @@ public abstract class Chunk {
      * @return      <code>false</code> if the chunk is structurally
      *              invalid, otherwise <code>true</code>
      */
-    public abstract boolean readChunk(RepInfo info)
-            throws IOException, JhoveException;
+    public abstract boolean readChunk(RepInfo info) throws IOException;
 
     /**
      * Converts a byte buffer cleanly into an ASCII string.
