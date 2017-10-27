@@ -275,6 +275,7 @@ public class Utf8Module extends ModuleBase {
                             case 1: errMessage = Utf8MessageConstants.ERR_INVALID_SECOND_BYTE_ENCODING; break;
                             case 2: errMessage = Utf8MessageConstants.ERR_INVALID_THIRD_BYTE_ENCODING; break;
                             case 3: errMessage = Utf8MessageConstants.ERR_INVALID_FOURTH_BYTE_ENCODING; break;
+                            default: break;
                         }
                         ErrorMessage error = new ErrorMessage(errMessage, subMessage , _nByte);
                         info.setMessage(error);

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package edu.harvard.hul.ois.jhove.module.xml;
 
@@ -26,7 +26,7 @@ package edu.harvard.hul.ois.jhove.module.xml;
  * malformed are used without definition.
  *
  * @author Thomas Ledoux
- * 
+ *
  */
 
 public enum MessageConstants {
@@ -35,7 +35,5 @@ public enum MessageConstants {
     public static final String WRN_SAX_EXCEPTION = "SaxParseException: {0}";
     public static final String WRN_TOO_MANY_MESSAGES = "Error messages in excess of {0} not reported";
 
-    public static final String ERR_SAX_EXCEPTION = "SaxParseException: {0}";
-
-
+    public static final String ERR_SAX_EXCEPTION = WRN_SAX_EXCEPTION;
 }
