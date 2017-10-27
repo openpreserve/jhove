@@ -40,9 +40,21 @@ public class XmlHandlerTest {
 	private static final long EXPECTED_GREENY_NUMENATOR = 2576980480L;
 	private static final long EXPECTED_BLUEX_NUMENATOR = 644245120L;
 	private static final long EXPECTED_BLUEY_NUMENATOR = 257698032L;
+	
+	private static final int EXPECTED_JPEG_COMPRESSION = 6;
+	private static final int EXPECTED_EXIF_COLORSPACE = 6;
+	private static final int EXPECTED_EXIF_IMAGE_LENGTH = 2322;
+	private static final int EXPECTED_EXIF_IMAGE_WIDTH = 4128;
+	private static final int EXPECTED_EXIF_IMAGE_RESOLUTION = 72;
+	private static final String EXPECTED_EXIF_VERSION = "0220";
+	private static final double EXPECTED_EXIF_FOCAL = 4.13;
+	private static final int EXPECTED_EXIF_APERTURE_NUM = 228;
+	private static final int EXPECTED_EXIF_APERTURE_DEN = 100;
+	private static final double EXPECTED_EXIT_FNUMBER = 2.2;
 
 	/* Test instances to be serialized */
 	protected static NisoImageMetadata TEST_NISO_IMAGE_MD;
+	protected static NisoImageMetadata TEST_NISO_EXIF_MD;
 	protected static TextMDMetadata TEST_TEXTMD;
 
 	private File outputFile;
@@ -91,6 +103,32 @@ public class XmlHandlerTest {
 		TEST_NISO_IMAGE_MD.setPrimaryChromaticitiesBlueY(new Rational(
 				EXPECTED_BLUEY_NUMENATOR, EXPECTED_DENOMINATOR));
 
+		// Define the test instance of Exif for NisoImageMetadata to be serialized
+		TEST_NISO_EXIF_MD = new NisoImageMetadata();
+		TEST_NISO_EXIF_MD.setByteOrder(NisoImageMetadata.BYTEORDER[0]);
+		TEST_NISO_EXIF_MD.setCompressionScheme(EXPECTED_JPEG_COMPRESSION);
+		TEST_NISO_EXIF_MD.setImageWidth(EXPECTED_EXIF_IMAGE_WIDTH);
+		TEST_NISO_EXIF_MD.setImageLength(EXPECTED_EXIF_IMAGE_LENGTH);
+		TEST_NISO_EXIF_MD.setColorSpace(EXPECTED_EXIF_COLORSPACE);
+		TEST_NISO_EXIF_MD.setYCbCrPositioning(1);
+		TEST_NISO_EXIF_MD.setDateTimeCreated("2015-02-13T14:06:36");
+		TEST_NISO_EXIF_MD.setDigitalCameraManufacturer("SAMSUNG");
+		TEST_NISO_EXIF_MD.setDigitalCameraModelName("SM-N9005");
+		TEST_NISO_EXIF_MD.setFNumber(EXPECTED_EXIT_FNUMBER);
+		TEST_NISO_EXIF_MD.setExposureProgram(2);
+		TEST_NISO_EXIF_MD.setExifVersion(EXPECTED_EXIF_VERSION);
+		Rational r228 = new Rational(EXPECTED_EXIF_APERTURE_NUM, EXPECTED_EXIF_APERTURE_DEN);
+		TEST_NISO_EXIF_MD.setMaxApertureValue(r228);
+		TEST_NISO_EXIF_MD.setMeteringMode(2);
+		TEST_NISO_EXIF_MD.setFocalLength(EXPECTED_EXIF_FOCAL);
+		TEST_NISO_EXIF_MD.setSamplingFrequencyUnit(2);
+		Rational r72 = new Rational(EXPECTED_EXIF_IMAGE_RESOLUTION, 1);
+		TEST_NISO_EXIF_MD.setXSamplingFrequency(r72);
+		TEST_NISO_EXIF_MD.setYSamplingFrequency(r72);
+		TEST_NISO_EXIF_MD.setBitsPerSample(new int[] { EXPECTED_BYTE_SIZE,
+				EXPECTED_BYTE_SIZE, EXPECTED_BYTE_SIZE });
+		TEST_NISO_EXIF_MD.setSamplesPerPixel(EXPECTED_NUMBER_OF_BYTES);
+
 		// Define the test instance for TextMD to be serialized
 		TEST_TEXTMD = new TextMDMetadata();
 		TEST_TEXTMD.setCharset(TextMDMetadata.CHARSET_UTF8);
@@ -123,8 +161,7 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowNisoImageMetadata02() throws IOException {
-		File mix02File = new File(
-				"src/test/resources/xmlHandler/mix02_output.xml");
+		File mix02File = new File(this.getClass().getResource("mix02_output.xml").getPath());
 		LOGGER.info("testShowNisoImageMetadata02 with file " + mix02File);
 		assertTrue(mix02File.isFile());
 		String expectedMix02 = readXmlFile(mix02File);
@@ -139,8 +176,7 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowNisoImageMetadata10() throws IOException {
-		File mix10File = new File(
-				"src/test/resources/xmlHandler/mix10_output.xml");
+		File mix10File = new File(this.getClass().getResource("mix10_output.xml").getPath());
 		LOGGER.info("testShowNisoImageMetadata10 with file " + mix10File);
 		assertTrue(mix10File.isFile());
 		String expectedMix10 = readXmlFile(mix10File);
@@ -155,8 +191,7 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowNisoImageMetadata20() throws IOException {
-		File mix20File = new File(
-				"src/test/resources/xmlHandler/mix20_output.xml");
+		File mix20File = new File(this.getClass().getResource("mix20_output.xml").getPath());
 		LOGGER.info("testShowNisoImageMetadata20 with file " + mix20File);
 		assertTrue(mix20File.isFile());
 		String expectedMix20 = readXmlFile(mix20File);
@@ -170,9 +205,53 @@ public class XmlHandlerTest {
 	}
 
 	@Test
+	public void testShowNisoExifMetadata02() throws IOException {
+		File mix02File = new File(this.getClass().getResource("exif_mix02.xml").getPath());
+		LOGGER.info("testShowNisoExifMetadata02 with file " + mix02File);
+		assertTrue(mix02File.isFile());
+		String expectedMix02 = readXmlFile(mix02File);
+
+		this.handler.showNisoImageMetadata02(TEST_NISO_EXIF_MD);
+		this.handler.close();
+
+		String generatedMix = readXmlFile(outputFile);
+		assertEquals("Exif Mix v0.2 generated not conformant", expectedMix02,
+				generatedMix);
+	}
+
+	@Test
+	public void testShowNisoExifMetadata10() throws IOException {
+		File mix10File = new File(this.getClass().getResource("exif_mix10.xml").getPath());
+		LOGGER.info("testShowNisoExifMetadata10 with file " + mix10File);
+		assertTrue(mix10File.isFile());
+		String expectedMix10 = readXmlFile(mix10File);
+
+		this.handler.showNisoImageMetadata10(TEST_NISO_EXIF_MD);
+		this.handler.close();
+
+		String generatedMix = readXmlFile(outputFile);
+		assertEquals("Exif Mix v1.0 generated not conformant", expectedMix10,
+				generatedMix);
+	}
+
+	@Test
+	public void testShowNisoExifMetadata20() throws IOException {
+		File mix20File = new File(this.getClass().getResource("exif_mix20.xml").getPath());
+		LOGGER.info("testShowNisoExifMetadata20 with file " + mix20File);
+		assertTrue(mix20File.isFile());
+		String expectedMix20 = readXmlFile(mix20File);
+
+		this.handler.showNisoImageMetadata20(TEST_NISO_EXIF_MD);
+		this.handler.close();
+
+		String generatedMix = readXmlFile(outputFile);
+		assertEquals("Exif Mix v2.0 generated not conformant", expectedMix20,
+				generatedMix);
+	}
+
+	@Test
 	public void testShowTextMDMetadata() throws IOException {
-		File textMD30File = new File(
-				"src/test/resources/xmlHandler/text30_output.xml");
+		File textMD30File = new File(this.getClass().getResource("text30_output.xml").getPath());
 		LOGGER.info("testShowTextMDMetadata with file " + textMD30File);
 		assertTrue(textMD30File.isFile());
 		String expectedText30 = readXmlFile(textMD30File);
