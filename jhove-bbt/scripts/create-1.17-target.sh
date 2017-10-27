@@ -91,6 +91,10 @@ fi;
 # Sed fix for change to WAV MIME type
 find "${targetRoot}" -type f -name "*.wav.jhove.xml" -exec sed -i 's/audio\/x-wave<\/mimeType>/audio\/vnd.wave<\/mimeType>/' {} \;
 
+# Add SaxParseException header to XML output messages
+find "${targetRoot}" -type f -name "jhoveconf.xml.jhove.xml" -exec sed -i 's/severity="error">Element type/severity="error">SaxParseException: Element type/' {} \;
+severity="error">Element type
+
 # Issue 60 add new file 20150213_140637.jpg with exif profile
 if [[ -f "${candidateRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml" "${targetRoot}/examples/modules/JPEG-hul/"
