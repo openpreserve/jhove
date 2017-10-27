@@ -28,7 +28,7 @@ glbCleanedBackRet=""
 # Include utils script
 . "$SCRIPT_DIR/inc/bb-utils.sh"
 
-# Globals to hold the checked param vals
+# Globals to hold the checked param vals, default to JHOVE version 11
 paramTestRoot="./test-root"
 paramMinorVersion="11"
 
@@ -52,10 +52,10 @@ checkParams () {
   # Check dest dir exists
 	if  [[ ! -d "$paramTestRoot" ]]
 	then
-		echo "Destination testRoot not found: $paramTestRoot"
+		echo "Test Root folder not found: $paramTestRoot"
 		exit 1;
 	fi
-
+	# Remove the backslash and assign the retval
 	removeBackSlash $paramTestRoot;
 	paramTestRoot=${glbCleanedBackRet};
 }
@@ -78,11 +78,20 @@ baselineLegacyJhove() {
 	then
 		return;
 	fi;
+	# Get the minor version param
 	minorVersion=$1;
+	# Test installation root is the jhove/minorVersion, e.g. ./test-root/jhove/1.11 for JHOVE version 11
 	jhoveRoot="${paramTestRoot}/jhove"
+	# Test baselines root is the jhove/minorVersion, e.g. ./test-root/baselines/1.11 for JHOVE version 11
 	baselinesRoot="${paramTestRoot}/baselines/1.${minorVersion}"
-	installLegacyJhove "${minorVersion}" "${jhoveRoot}"
+	if [ -d "${baselinesRoot}" ]
+	then
+		return;
+	fi;
 
+	# Install the legacy
+	installLegacyJhove "${minorVersion}" "${jhoveRoot}"
+	# We can now clean the baselines directory as we'll be creating a new baseline.
 	if [ -e "${baselinesRoot}" ]
 	then
 		rm -rf "${baselinesRoot}"

@@ -6,12 +6,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -146,13 +146,13 @@ public class Utf8Module extends ModuleBase {
     /**
      * Parse the content of a stream digital object and store the results in
      * RepInfo.
-     * 
+     *
      * @param stream
      *            An InputStream, positioned at its beginning, which is
      *            generated from the object to be parsed. If multiple calls to
      *            <code>parse</code> are made on the basis of a nonzero value
      *            being returned, a new InputStream must be provided each time.
-     * 
+     *
      * @param info
      *            A fresh (on the first call) RepInfo object which will be
      *            modified to reflect the results of the parsing If multiple
@@ -508,7 +508,7 @@ public class Utf8Module extends ModuleBase {
 
     /**
      * Accumulate information about line endings.
-     * 
+     *
      * @param ch
      *            Current character
      */

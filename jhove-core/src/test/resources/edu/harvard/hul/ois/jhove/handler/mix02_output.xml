@@ -1,0 +1,54 @@
+<mix:mix xmlns:mix="http://www.loc.gov/mix/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mix/ http://www.loc.gov/mix/mix02.xsd">
+ <mix:BasicImageParameters>
+  <mix:Format>
+   <mix:ByteOrder>little-endian</mix:ByteOrder>
+   <mix:Compression>
+    <mix:CompressionScheme>1</mix:CompressionScheme>
+   </mix:Compression>
+   <mix:PhotometricInterpretation>
+    <mix:ColorSpace>2</mix:ColorSpace>
+    <mix:ICCProfile>
+      <mix:ProfileName>Adobe RGB (1998)</mix:ProfileName>
+    </mix:ICCProfile>
+    <mix:ReferenceBlackWhite>0.0 255.0 0.0 255.0 0.0 255.0</mix:ReferenceBlackWhite>
+   </mix:PhotometricInterpretation>
+  </mix:Format>
+  <mix:File>
+   <mix:Orientation>1</mix:Orientation>
+  </mix:File>
+ </mix:BasicImageParameters>
+ <mix:ImageCreation>
+  <mix:ImageProducer>BnF</mix:ImageProducer>
+  <mix:ScanningSystemCapture>
+   <mix:ScanningSystemSoftware>
+    <mix:ScanningSoftware>Archiver</mix:ScanningSoftware>
+   </mix:ScanningSystemSoftware>
+  </mix:ScanningSystemCapture>
+  <mix:DateTimeCreated>2015-07-15T16:47:26</mix:DateTimeCreated>
+ </mix:ImageCreation>
+  <mix:ImagingPerformanceAssessment>
+   <mix:SpatialMetrics>
+    <mix:SamplingFrequencyUnit>2</mix:SamplingFrequencyUnit>
+    <mix:XSamplingFrequency>564</mix:XSamplingFrequency>
+    <mix:YSamplingFrequency>564</mix:YSamplingFrequency>
+    <mix:ImageWidth>8192</mix:ImageWidth>
+    <mix:ImageLength>8192</mix:ImageLength>
+  </mix:SpatialMetrics>
+  <mix:Energetics>
+   <mix:BitsPerSample>8,8,8</mix:BitsPerSample>
+   <mix:SamplesPerPixel>3</mix:SamplesPerPixel>
+   <mix:WhitePoint>
+    <mix:WhitePoint_Xvalue>1343036288/4294967295</mix:WhitePoint_Xvalue>
+    <mix:WhitePoint_Yvalue>1343036288/4294967295</mix:WhitePoint_Yvalue>
+   </mix:WhitePoint>
+   <mix:PrimaryChromaticities>
+    <mix:PrimaryChromaticities_RedX>2748779008/4294967295</mix:PrimaryChromaticities_RedX>
+    <mix:PrimaryChromaticities_RedY>1417339264/4294967295</mix:PrimaryChromaticities_RedY>
+    <mix:PrimaryChromaticities_GreenX>1288490240/4294967295</mix:PrimaryChromaticities_GreenX>
+    <mix:PrimaryChromaticities_GreenY>2576980480/4294967295</mix:PrimaryChromaticities_GreenY>
+    <mix:PrimaryChromaticities_BlueX>644245120/4294967295</mix:PrimaryChromaticities_BlueX>
+    <mix:PrimaryChromaticities_BlueY>257698032/4294967295</mix:PrimaryChromaticities_BlueY>
+   </mix:PrimaryChromaticities>
+  </mix:Energetics>
+ </mix:ImagingPerformanceAssessment>
+</mix:mix>

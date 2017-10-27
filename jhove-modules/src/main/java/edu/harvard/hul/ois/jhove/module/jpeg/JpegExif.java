@@ -12,7 +12,6 @@ import edu.harvard.hul.ois.jhove.module.tiff.ExifIFD;
 import edu.harvard.hul.ois.jhove.module.tiff.TiffIFD;
 import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileExif;
 import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileExifIFD;
-//import edu.harvard.hul.ois.jhove.module.*;
 
 /**
  * Reader of Exif data embedded in a JPEG App1 block.  This makes use
@@ -25,10 +24,14 @@ import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileExifIFD;
 public final class JpegExif {
 
     private boolean _exifProfileOK;
+    private String _profileText;
+    private NisoImageMetadata _exifNiso;
     
     public JpegExif ()
     {
         _exifProfileOK = false;
+        _profileText = null;
+        _exifNiso = null;
     }
 
 
@@ -38,7 +41,7 @@ public final class JpegExif {
     public static boolean isTiffAvailable ()
     {
         try {
-            Class tiffClass = Class.forName ("edu.harvard.hul.ois.jhove.module.TiffModule");
+            Class.forName ("edu.harvard.hul.ois.jhove.module.TiffModule");
             return true;
         }
         catch (Exception e) {
@@ -67,7 +70,7 @@ public final class JpegExif {
         }
         catch (IOException e) {
             info.setMessage (new ErrorMessage
-                    ("Error creating temporary file. Check your configuration: " +
+                    (MessageConstants.ERR_TEMP_FILE_CREATION +
                      e.getMessage ()));
             return info;
         }
@@ -115,20 +118,25 @@ public final class JpegExif {
             ListIterator iter = ifds.listIterator();
             boolean first = true;
             boolean haveNisoMetadata = false;
+            NisoImageMetadata niso = null;
             while (iter.hasNext()) {
                 Object ifd = iter.next ();
                 if (ifd instanceof TiffIFD) {
                     // The TIFF IFD has useful information, which gets put
                     // into its NISO metadata.  Make it available to the caller.
                     if (first) {
-                        NisoImageMetadata niso = ((TiffIFD) ifd).getNisoImageMetadata ();
+                    	TiffIFD tifd = (TiffIFD)ifd;
+                        niso = tifd.getNisoImageMetadata ();
                         // The first one is presumed to be the interesting one.
                         info.setProperty (new Property ("NisoImageMetadata",
                                                PropertyType.NISOIMAGEMETADATA,
                                                niso));
                         haveNisoMetadata = true;
                         TiffProfileExif exifProfile = new TiffProfileExif ();
-                        _exifProfileOK = exifProfile.satisfiesProfile ((TiffIFD) ifd);
+                        _exifProfileOK = exifProfile.satisfiesProfile (tifd);
+                        if (_exifProfileOK) {
+                        	_profileText = exifProfile.getText();
+                        }
                     }
                 }
                 if (ifd instanceof ExifIFD) {
@@ -142,9 +150,12 @@ public final class JpegExif {
                     if (ifdProp != null) {
                         exifList = eifd.exifProps (ifdProp);
                     }
-                    if (_exifProfileOK) {
+                    if (first || _exifProfileOK) {
                         TiffProfileExifIFD exifIFDProfile = new TiffProfileExifIFD ();
                         _exifProfileOK = exifIFDProfile.satisfiesProfile(eifd);
+                        if (!_exifProfileOK) {
+                        	_profileText = null;
+                        }
                     }
                     if (exifList != null) {
                         info.setProperty(new Property ("Exif",
@@ -155,10 +166,13 @@ public final class JpegExif {
                     // See if we have any interesting NISO metadata. If so, and
                     // we haven't gotten real NISO metadata, use it.
                     if (!haveNisoMetadata) {
-                        NisoImageMetadata niso = eifd.getNisoImageMetadata ();
+                        niso = eifd.getNisoImageMetadata ();
                         info.setProperty (new Property ("NisoImageMetadata",
                                 PropertyType.NISOIMAGEMETADATA,
                                 niso));
+                    } else {
+                    	// Get the exif version
+                        _exifNiso = eifd.getNisoImageMetadata ();
                     }
                 }
                 first = false;
@@ -166,7 +180,7 @@ public final class JpegExif {
         }
         catch (IOException e) {
             info.setMessage (new ErrorMessage
-                ("I/O exception processing Exif metadata: " +
+                (MessageConstants.ERR_EXIF_PROCESSING_IO_EXCEP +
 		 e.getMessage ()));
             // Maybe should put this directly in the parent's
             // RepInfo, otherwise I have to copy the message afterwards.
@@ -202,4 +216,19 @@ public final class JpegExif {
     {
         return _exifProfileOK;
     }
+
+    /**
+     *  Returns the text which describes the exif profile.
+     */
+    public String getProfileText () 
+    {
+        return _profileText;
+    }
+
+    /**
+     *  Returns the NisoImageMetadata from the Exif SubIFD
+     */
+	public NisoImageMetadata getExifNiso() {
+		return _exifNiso;
+	}
 }

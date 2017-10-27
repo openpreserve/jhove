@@ -104,9 +104,14 @@ public class IhdrChunk extends PNGChunk {
 		_nisoMetadata.setImageLength (height);
 		int[] bits = { bitDepth };
 		_nisoMetadata.setBitsPerSample (bits);
-		_nisoMetadata.setColorSpace(colorTypeToNiso (colorType));
-		_module.setColorType (colorType);
-		if (colorType == 1 || colorType == 5 || colorType > 6) {
+		boolean ctErr = false;
+		try {
+			_nisoMetadata.setColorSpace(colorTypeToNiso (colorType));
+			_module.setColorType (colorType);
+		} catch (PNGException e) {
+			ctErr = true;
+		}
+		if (ctErr || colorType == 1 || colorType == 5 || colorType > 6) {
 			ErrorMessage msg = 
 					new ErrorMessage("Invalid color type " + colorType);
 			info.setMessage(msg);
@@ -161,7 +166,7 @@ public class IhdrChunk extends PNGChunk {
 	}
 	
 	/* Convert PNG colour type to NISO color space */
-	int colorTypeToNiso (int typ) {
+	private int colorTypeToNiso (int typ) throws PNGException {
 		int val = 0;
 		switch (typ) {
 		case COLOR_GRAYSCALE:
@@ -176,8 +181,7 @@ public class IhdrChunk extends PNGChunk {
 			val = 3;
 			break;
 		default:
-			// This is an error, should report it TODO
-			break;
+			throw new PNGException ("Invalid color type");
 		}
 		return val;
 	}

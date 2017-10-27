@@ -18,13 +18,18 @@
  * USA
  **********************************************************************/
 
+import java.awt.Toolkit;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import edu.harvard.hul.ois.jhove.*;
-import edu.harvard.hul.ois.jhove.viewer.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
-import javax.swing.*;
+import edu.harvard.hul.ois.jhove.App;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.JhoveException;
+import edu.harvard.hul.ois.jhove.viewer.JhoveWindow;
 
 /**
  * JhoveView - JSTOR/Harvard Object Validation Environment.
@@ -39,7 +44,8 @@ public class JhoveView
      ******************************************************************/
 
     /** Application name. */
-    private static final String NAME = "JhoveView";
+    private static final String NAME = "JhoveView"; //$NON-NLS-1$
+    private static final String iconPath = "org/openpreservation/jhove/icon.png"; //$NON-NLS-1$
 
     /******************************************************************
      * Action constants.
@@ -74,8 +80,8 @@ public class JhoveView
     public static void main (String [] args)
     {
         /* Make sure we have a satisfactory version of Java. */
-        String version = System.getProperty ("java.vm.version");
-        if (version.compareTo ("1.5.0") < 0) {
+        String version = System.getProperty ("java.vm.version"); //$NON-NLS-1$
+        if (version.compareTo ("1.5.0") < 0) { //$NON-NLS-1$
             final String message = "Java 1.5 or higher is required"; 
             LOGGER.log(Level.SEVERE, message);
             errorAlert (message);
@@ -84,7 +90,7 @@ public class JhoveView
 
         // If we're running on a Macintosh, put the menubar at the top
         // of the screen where it belongs.
-        System.setProperty ("apple.laf.useScreenMenuBar", "true");
+        System.setProperty ("apple.laf.useScreenMenuBar", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 
         App app = App.newAppWithName(NAME);
         try {
@@ -145,6 +151,9 @@ public class JhoveView
             // Create the main window to select a file.
             
             JhoveWindow jwin = new JhoveWindow (app, je);
+			URL url = ClassLoader.getSystemResource(iconPath); //$NON-NLS-1$
+			Toolkit kit = Toolkit.getDefaultToolkit();
+			jwin.setIconImage(kit.createImage(url));
             jwin.setVisible (true);
 
         }

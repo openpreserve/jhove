@@ -1,0 +1,39 @@
+<mix:mix xmlns:mix="http://www.loc.gov/mix/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mix/ http://www.loc.gov/mix/mix02.xsd">
+	<mix:BasicImageParameters>
+		<mix:Format>
+			<mix:ByteOrder>big-endian</mix:ByteOrder>
+			<mix:Compression>
+				<mix:CompressionScheme>6</mix:CompressionScheme>
+			</mix:Compression>
+			<mix:PhotometricInterpretation>
+				<mix:ColorSpace>6</mix:ColorSpace>
+				<mix:YCbCrPositioning>1</mix:YCbCrPositioning>
+			</mix:PhotometricInterpretation>
+		</mix:Format>
+	</mix:BasicImageParameters>
+	<mix:ImageCreation>
+		<mix:DigitalCameraCapture>
+			<mix:DigitalCameraManufacturer>SAMSUNG</mix:DigitalCameraManufacturer>
+			<mix:DigitalCameraModel>SM-N9005</mix:DigitalCameraModel>
+		</mix:DigitalCameraCapture>
+		<mix:CameraCaptureSettings>
+			<mix:FNumber>2.2</mix:FNumber>
+			<mix:MeteringMode>Center weighted Average</mix:MeteringMode>
+			<mix:FocalLength>4.13</mix:FocalLength>
+		</mix:CameraCaptureSettings>
+		<mix:DateTimeCreated>2015-02-13T14:06:36</mix:DateTimeCreated>
+	</mix:ImageCreation>
+	<mix:ImagingPerformanceAssessment>
+		<mix:SpatialMetrics>
+			<mix:SamplingFrequencyUnit>2</mix:SamplingFrequencyUnit>
+			<mix:XSamplingFrequency>72</mix:XSamplingFrequency>
+			<mix:YSamplingFrequency>72</mix:YSamplingFrequency>
+			<mix:ImageWidth>4128</mix:ImageWidth>
+			<mix:ImageLength>2322</mix:ImageLength>
+		</mix:SpatialMetrics>
+		<mix:Energetics>
+			<mix:BitsPerSample>8,8,8</mix:BitsPerSample>
+			<mix:SamplesPerPixel>3</mix:SamplesPerPixel>
+		</mix:Energetics>
+	</mix:ImagingPerformanceAssessment>
+</mix:mix>

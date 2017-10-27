@@ -65,7 +65,7 @@ public class TextHandler
         super (NAME, RELEASE, DATE, NOTE, RIGHTS);
         _vendor = Agent.harvardInstance();
 
-        _format = NumberFormat.getInstance ();
+        _format = NumberFormat.getInstance (Locale.ROOT);
         _format.setGroupingUsed (false);
         _format.setMinimumFractionDigits (0);
     }
@@ -1338,8 +1338,14 @@ public class TextHandler
         if ((s = niso.getDigitalCameraManufacturer ()) != null) {
             _writer.println (margn2 + "DigitalCameraManufacturer: " + s);
         }
-        if ((s = niso.getDigitalCameraModel ()) != null) {
-            _writer.println (margn2 + "DigitalCameraModel: " + s);
+        if ((s = niso.getDigitalCameraModelName ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelName: " + s);
+        }
+        if ((s = niso.getDigitalCameraModelNumber ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelNumber: " + s);
+        }
+        if ((s = niso.getDigitalCameraModelSerialNo ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelSerialNo: " + s);
         }
         if ((d = niso.getFNumber ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "FNumber: " + d);
@@ -1667,10 +1673,10 @@ public class TextHandler
                                       rawOutput));
         }
         if ((s = niso.getProfileName ()) != null) {
-            _writer.println (margn2 + "iccProfileName: " + s);
+            _writer.println (margn2 + "ICCProfileName: " + s);
         }
         if ((s = niso.getProfileURL ()) != null) {
-            _writer.println (margn2 + "iccProfileURL: " + s);
+            _writer.println (margn2 + "ICCProfileURL: " + s);
         }
         int [] iarray = niso.getYCbCrSubSampling ();
         if (iarray != null) {
@@ -1759,14 +1765,33 @@ public class TextHandler
         if ((s = niso.getDigitalCameraManufacturer ()) != null) {
             _writer.println (margn2 + "DigitalCameraManufacturer: " + s);
         }
-        if ((s = niso.getDigitalCameraModel ()) != null) {
-            _writer.println (margn2 + "DigitalCameraModel: " + s);
+        if ((s = niso.getDigitalCameraModelName ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelName: " + s);
+        }
+        if ((s = niso.getDigitalCameraModelNumber ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelNumber: " + s);
+        }
+        if ((s = niso.getDigitalCameraModelSerialNo ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelSerialNo: " + s);
         }
         if ((d = niso.getFNumber ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "FNumber: " + d);
+            _writer.println (margn2 + "FNumber: " + _format.format(d));
+        }
+        if ((s = niso.getExifVersion ()) != null) {
+            _writer.println (margn2 + "ExifVersion: " + s);
+        }
+        Rational r;
+        if ((r = niso.getMaxApertureValue ()) != null) {
+            _writer.println (margn2 + "MaxApertureValue: " + 
+            		addRationalValue (r, rawOutput));
         }
         if ((d = niso.getExposureTime ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "ExposureTime: " + d);
+            _writer.println (margn2 + "ExposureTime: " + _format.format(d));
+        }
+        if ((n = niso.getExposureProgram ()) != NisoImageMetadata.NULL) {
+            _writer.println (margn2 + "ExposureProgram: " + 
+            		addIntegerValue (n, NisoImageMetadata.EXPOSURE_PROGRAM,
+            				rawOutput));
         }
         if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "BrightnessValue: " + d);
@@ -1835,7 +1860,7 @@ public class TextHandler
              addIntegerValue (n, NisoImageMetadata.SAMPLING_FREQUENCY_UNIT,
                               rawOutput));
         }
-        Rational r = niso.getXSamplingFrequency ();
+        r = niso.getXSamplingFrequency ();
         if (r != null) {
             _writer.println (margn2 + "XSamplingFrequency: " +
                              addRationalValue (r, rawOutput));

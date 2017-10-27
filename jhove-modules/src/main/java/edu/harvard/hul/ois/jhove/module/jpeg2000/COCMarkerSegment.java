@@ -47,7 +47,7 @@ public class COCMarkerSegment extends MarkerSegment {
         if (compIdxBytes == 0) {
             // COC found before SIZ
             _repInfo.setMessage (new ErrorMessage 
-                    ("COC marker segment at wrong position in codestream"));
+                    (MessageConstants.ERR_COC_MARKER_POSITION_INVALID));
             return false;
         }
         int compIdx;

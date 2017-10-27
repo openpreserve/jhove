@@ -96,8 +96,7 @@ public class ComposLayerHdrBox extends JP2Box {
         }
         if (hasOpacity && hasChannelDef) {
             _repInfo.setMessage (new ErrorMessage
-                    ("Compositing Layer Header may not have both " +
-                     "Opacity and Channel Definition Boxes",
+                    (MessageConstants.ERR_COMP_LAYER_HEADER_BOX_OPACITY_WITH_CHANNEL,
                      _module.getFilePos ()));
             _repInfo.setValid (false);
         }

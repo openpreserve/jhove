@@ -40,7 +40,7 @@ public class PLTMarkerSegment extends MarkerSegment {
         Tile tile = _ccs.getCurTile ();
         if (tile == null) {
             _repInfo.setMessage (new ErrorMessage
-                    ("PLT marker segment not allowed in codestream header"));
+                    (MessageConstants.ERR_PLT_MARKER_POSITION_INVALID));
             return false;    // a tile (SOT) is required
         }
         int zplt = ModuleBase.readUnsignedByte (_dstream, _module);
@@ -57,7 +57,7 @@ public class PLTMarkerSegment extends MarkerSegment {
                 if (--bytesToEat < 0) {
                     // bytes of a number can't cross marker segment boundaries
                     _repInfo.setMessage (new ErrorMessage
-                            ("Packet length in PLT marker segment crosses segment boundaries"));
+                            (MessageConstants.ERR_PLT_MARKER_PACKET_SIZE_INVALID));
                     return false;
                 }
                 pktLen = (pktLen << 7) | (pkByte | 0X7F);

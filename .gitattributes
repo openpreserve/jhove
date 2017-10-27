@@ -1,0 +1,9 @@
+# Prevent interpretation as text and end-of-line conversions.
+*.warc binary
+*.pdf binary
+*.gif binary
+*.jpg binary
+*.jp2 binary
+*.jpx binary
+*.tif binary
+*.wav binary
