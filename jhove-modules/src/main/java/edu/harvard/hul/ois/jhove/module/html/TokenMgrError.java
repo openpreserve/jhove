@@ -94,13 +94,18 @@ public class TokenMgrError extends Error
     *    curchar     : the offending character
     * Note: You can customize the lexical error message by modifying this method.
     */
-   protected static String LexicalError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar) {
-      return("Lexical error at line " +
-           errorLine + ", column " +
-           errorColumn + ".  Encountered: " +
-           (EOFSeen ? "<EOF> " : ("\"" + addEscapes(String.valueOf(curChar)) + "\"") + " (" + (int)curChar + "), ") +
-           "after : \"" + addEscapes(errorAfter) + "\"");
-   }
+    protected static String LexicalError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar) {
+        StringBuilder errMsg = new StringBuilder();
+        errMsg.append(MessageConstants.ERR_LEXICAL_ERROR);
+        errMsg.append(" at line ").append(errorLine).append(", column ").append(errorColumn).append(". Encountered: ");
+        if (EOFSeen) {
+            errMsg.append("<EOF> ");
+        } else {
+            errMsg.append("\"").append(addEscapes(String.valueOf(curChar))).append("\" (").append((int)curChar).append("), ");
+        }
+        errMsg.append("after : \"").append(addEscapes(errorAfter)).append("\"");
+        return(errMsg.toString());
+    }
 
    /**
     * You can also modify the body of this method to customize your error messages.

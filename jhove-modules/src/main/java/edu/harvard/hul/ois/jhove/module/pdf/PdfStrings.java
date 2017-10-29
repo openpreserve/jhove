@@ -21,10 +21,13 @@ public class PdfStrings
 
     /** Encryption algorithm strings. */
     public final static String[] ALGORITHM = 
-    { "Undocumented", 
-        "40 bit key", 
-        "Key greater than 40", 
-        "Unpublished" };
+    {
+        "Undocumented",
+        "40-bit RC4 or AES",
+        "40-bit or greater RC4 or AES",
+        "Unpublished",
+        "Document-defined"
+    };
 
     /** Flags for FontDescriptor.  In PDF notation, bit 1
      * (not 0) is the low-order bit.
@@ -49,7 +52,8 @@ public class PdfStrings
         "",              // 16
         "AllCap",        // 17
         "SmallCap",      // 18
-        "ForceBold"};      // 19
+        "ForceBold"      // 19
+    };
 
     /** Flags for user access permissions when revision 3 is specified. */
     public final static String[] USERPERMFLAGS3 =

@@ -21,9 +21,11 @@ package edu.harvard.hul.ois.jhove.module;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Logger;
 import java.text.NumberFormat;
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.module.jpeg.*;
+
 import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.SAXParserFactory;
@@ -54,14 +56,16 @@ public class JpegModule extends ModuleBase {
      * DEBUGGING FIELDS. All debugging fields should be set to false for release
      * code.
      ******************************************************************/
+	private static final Logger LOGGER = Logger.getLogger(JpegModule.class
+			.getName());
 
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
     private static final String NISO_IMAGE_MD = "NisoImageMetadata";
     private static final String NAME = "JPEG-hul";
-    private static final String RELEASE = "1.2";
-    private static final int[] DATE = { 2007, 2, 13 };
+    private static final String RELEASE = "1.3";
+    private static final int[] DATE = { 2017, 5, 11 };
     private static final String[] FORMAT = { "JPEG", "ISO/IEC 10918-1:1994",
             "Joint Photographic Experts Group", "JFIF",
             "JPEG File Interchange Format", "SPIFF", "ISO/IEC 10918-3:1997",
@@ -70,7 +74,7 @@ public class JpegModule extends ModuleBase {
             "ISO/IEC 14495" };
     private static final String COVERAGE = "JPEG (ISO/IEC 10918-1:1994), JFIF 1.02, "
             + "SPIFF (ISO/IEC 10918-3:1997), "
-            + "Exif 2.0, 2.1 (JEIDA-49-1998), and 2.2 (JEITA CP-3451), "
+            + "Exif 2.0, 2.1 (JEIDA-49-1998), 2.2 (JEITA CP-3451), 2.21 (JEITA CP-3451A), and 2.3 (JEITA CP-3451C), "
             + "JTIP (ISO/IEC 10918-3:1997), JPEG-LS (ISO/IEC 14495)";
     private static final String[] MIMETYPE = { "image/jpeg" };
     private static final String WELLFORMED = "A JPEG file is well-formed if "
@@ -170,6 +174,9 @@ public class JpegModule extends ModuleBase {
     /* Flag indicating an APP0 JFIF segment has been read */
     protected boolean _seenJFIF;
 
+    /* Flag indicating an APP0 JFIF segment has been read first */
+    protected boolean _seenJFIFFirst;
+
     /* Flag indicating an APP8 SPIFF segment has been read */
     protected boolean _seenSPIFF;
 
@@ -189,6 +196,9 @@ public class JpegModule extends ModuleBase {
 
     /* Flag indicating the Exif profile is satisfied */
     protected boolean _exifProfileOK;
+
+    /* Exif profile if one is satisfied, more specific than just Exif */
+    protected String _exifProfileText;
 
     /* Flag indicating lack of a JFIF segment has been reported */
     protected boolean _reportedJFIF;
@@ -303,9 +313,9 @@ public class JpegModule extends ModuleBase {
         doc.setPublisher(isoAgent);
         _specification.add(doc);
 
-        // Define JEITA Exif 2.2 doc
+        // Define JEITA Exif 2.3 doc
         doc = new Document("Exchangeable image file format for digital "
-                + "still cameras: Exif Version 2.2", DocumentType.STANDARD);
+                + "still cameras: Exif Version 2.3", DocumentType.STANDARD);
         Agent jeitaAgent = new Agent.Builder(
                 "Japan Electronics and Information Technology "
                         + "Industries Association", AgentType.STANDARD)
@@ -317,8 +327,20 @@ public class JpegModule extends ModuleBase {
                 .telephone("+81(03) 3518-6421").fax("+81(03) 3295-8721")
                 .build();
         doc.setPublisher(jeitaAgent);
+        doc.setDate("2010-04");
+        Identifier ident = new Identifier("JEITA CP-3451C", IdentifierType.JEITA);
+        doc.setIdentifier(ident);
+        ident = new Identifier("http://home.jeita.or.jp/tsc/std-pdf/CP3451C.pdf",
+                IdentifierType.URL);
+        doc.setIdentifier(ident);
+        _specification.add(doc);
+
+        // Define JEITA Exif 2.2 doc
+        doc = new Document("Exchangeable image file format for digital "
+                + "still cameras: Exif Version 2.2", DocumentType.STANDARD);
+        doc.setPublisher(jeitaAgent);
         doc.setDate("2002-04");
-        Identifier ident = new Identifier("JEITA CP-3451", IdentifierType.JEITA);
+        ident = new Identifier("JEITA CP-3451", IdentifierType.JEITA);
         doc.setIdentifier(ident);
         ident = new Identifier("http://www.exif.org/Exif2-2.PDF",
                 IdentifierType.URL);
@@ -487,7 +509,7 @@ public class JpegModule extends ModuleBase {
                     dbyt = readUnsignedByte(_dstream, this);
                     if (dbyt != 0XFF) {
                         info.setMessage(new ErrorMessage(
-                                "Expected marker byte 255, got " + dbyt, _nByte));
+                                MessageConstants.ERR_MARKER_MISSING + dbyt, _nByte));
                         info.setWellFormed(false);
                         return 0;
                     }
@@ -501,7 +523,7 @@ public class JpegModule extends ModuleBase {
                 if (!_seenJFIF && !_seenSPIFF && !_seenExif && !_seenJPEGL
                         && _numSegments >= 2 && !_reportedJFIF) {
                     info.setMessage(new ErrorMessage(
-                            "File does not begin with SPIFF, Exif or JFIF segment",
+                            MessageConstants.ERR_START_SEGMENT_MISSING,
                             _nByte));
                     info.setValid(false);
                     _reportedJFIF = true;
@@ -596,6 +618,8 @@ public class JpegModule extends ModuleBase {
                         break;
 
                     case 0XE2:
+                    	readAPP2(info);
+                    	break;
                     case 0XE3:
                     case 0XE4:
                     case 0XE5:
@@ -642,7 +666,7 @@ public class JpegModule extends ModuleBase {
 
                     default:
                         // Other values don't belong at the top level.
-                        msg = new ErrorMessage("Marker not valid in context",
+                        msg = new ErrorMessage(MessageConstants.ERR_MARKER_INVALID,
                                 _nByte);
                         info.setMessage(msg);
                         info.setValid(false);
@@ -651,7 +675,7 @@ public class JpegModule extends ModuleBase {
             }
 
         } catch (EOFException e) {
-            msg = new ErrorMessage("Unexpected end of file", _nByte);
+            msg = new ErrorMessage(MessageConstants.ERR_EOF_UNEXPECTED, _nByte);
             info.setMessage(msg);
             info.setWellFormed(false);
             return 0;
@@ -749,11 +773,15 @@ public class JpegModule extends ModuleBase {
                 PropertyArity.LIST, _primaryImageList));
 
         // Report profiles.
-        if (_seenJFIF) {
+        if (_seenJFIF && _seenJFIFFirst) {
             info.setProfile(jfifProfileName);
         }
         if (_seenExif && _exifProfileOK) {
-            info.setProfile(exifProfileName);
+        	if (_exifProfileText != null) {
+        		info.setProfile(_exifProfileText);
+        	} else {
+        		info.setProfile(exifProfileName);
+        	}
         }
         if (_seenSPIFF) {
             info.setProfile(spiffProfileName);
@@ -834,12 +862,14 @@ public class JpegModule extends ModuleBase {
         _restartInterval = -1;
         _seenSOF = false;
         _seenJFIF = false;
+        _seenJFIFFirst = false;
         _seenSPIFF = false;
         _seenJPEGL = false;
         _spiffDir = null;
         _seenExif = false;
         _reportedSigMatch = false;
         _exifProfileOK = false;
+        _exifProfileText = null;
         _reportedJFIF = false;
         _numSegments = 0;
         _numScans = 0;
@@ -884,7 +914,7 @@ public class JpegModule extends ModuleBase {
             valid = false;
         }
         if (!valid) {
-            info.setMessage(new ErrorMessage("Invalid JPEG header", 0));
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_HEADER_INVALID, 0));
             info.setWellFormed(false);
             return false;
         }
@@ -923,15 +953,20 @@ public class JpegModule extends ModuleBase {
             ident[i] = readUnsignedByte(_dstream, this);
         }
         if (equalArray(ident, jfifByte)) {
-            if (_numSegments > 1) {
-                // Apparently this is OK in a spiff file
-                info.setMessage(new ErrorMessage(
-                        "JFIF APP0 marker not at beginning of file", _nByte));
-                info.setValid(false);
-                skipBytes(_dstream, length - 7, this);
-            }
+			if (_numSegments > 1) {
+				if (!_seenExif) {
+					LOGGER.fine("Seen Exif " + _seenExif + " exif profile ok " + _exifProfileOK);
+					// Apparently this is OK in a exif file
+					info.setMessage(new ErrorMessage(
+							MessageConstants.ERR_JFIF_APP_MARKER_MISSING, _nByte));
+					info.setValid(false);
+					skipBytes(_dstream, length - 7, this);
+				}
+			} else {
+				_seenJFIFFirst = true;
+			}
             // This is a JFIF APP0 marker. It may come only
-            // at the beginning of a file.
+            // at the beginning of a file, except for Exif profiles.
             _seenJFIF = true;
             int majorVersion = readUnsignedByte(_dstream, this);
             int minorVersion = readUnsignedByte(_dstream, this);
@@ -1052,7 +1087,7 @@ public class JpegModule extends ModuleBase {
             _seenExif = true;
             if (!JpegExif.isTiffAvailable()) {
                 info.setMessage(new InfoMessage(
-                        "TIFF-HUL module required to report Exif data", _nByte));
+                        MessageConstants.INF_EXIF_REPORT_REQUIRES_TIFF, _nByte));
                 skipBytes(_dstream, length - 8, this);
                 return;
             }
@@ -1072,8 +1107,13 @@ public class JpegModule extends ModuleBase {
                 if (nisoProp != null) {
                     extractExifNisoData((NisoImageMetadata) nisoProp.getValue());
                 }
+                // Or there is info from the exif IFD
+                if (je.getExifNiso() != null) {
+                    extractExifNisoData(je.getExifNiso());
+                }
             }
             _exifProfileOK = je.isExifProfileOK();
+            _exifProfileText = je.getProfileText();
         } else if (equalArray(ident, xmpByte) && length >= 32) {
             // Check if the rest of xmpStr matches
             boolean match = true;
@@ -1129,7 +1169,7 @@ public class JpegModule extends ModuleBase {
         if (equalArray(ident, spiffByte)) {
             if (_numSegments > 1) {
                 info.setMessage(new ErrorMessage(
-                        "SPIFF marker not at beginning of file", _nByte));
+                        MessageConstants.ERR_SPIF_MARKER_MISSING, _nByte));
                 info.setValid(false);
             }
             // This is a SPIFF marker. It may come only
@@ -1179,6 +1219,60 @@ public class JpegModule extends ModuleBase {
         }
     }
 
+    /*
+     * Reads an APP2 marker segment. This may include an ICC_PROFILE.
+     */
+    protected void readAPP2(RepInfo info) throws IOException {
+        final String iccProfileSequence = "ICC_PROFILE\0";
+        final int SEQUENCE_LENGTH = 12;
+        
+        reportAppExt(0XE2, info);
+        
+        // The length field of a JPEG marker is only two bytes long;
+        // the length of the length field is included in the total.
+        int length = readUnsignedShort(_dstream);
+        byte[] ident = new byte[SEQUENCE_LENGTH];
+        for (int i = 0; i < SEQUENCE_LENGTH; i++) {
+            ident[i] = (byte)readUnsignedByte(_dstream, this);
+        }
+        String sIdent = new String(ident, "US-ASCII");
+        if (!iccProfileSequence.equalsIgnoreCase(sIdent)) {
+        	// This is not a APP2 segment containing an ICC_PROFILE
+        	skipBytes(_dstream, length - SEQUENCE_LENGTH - 2, this);
+        	return;
+        }
+
+        // See http://www.color.org/ICC1-V41.pdf Annex B.4
+       
+        // The ICC PROFILE can be on multiple chunks
+        int chunkNumber = readUnsignedByte(_dstream, this);
+        int numberOfChunks = readUnsignedByte(_dstream, this);
+        int profileLength = length - SEQUENCE_LENGTH - 2 - 2;
+        
+        if (numberOfChunks != 1) {
+        	if (chunkNumber == 1) {
+        		// report only once
+	        	info.setMessage(new InfoMessage(MessageConstants.INF_EXIF_APP2_MULTI_REPORT, _nByte));
+        	}
+        	skipBytes(_dstream, profileLength, this);
+        	return;
+        }
+        // Read the iccprofile data
+        byte[] iccProfile = new byte[profileLength];
+        readByteBuf(_dstream, iccProfile, this);
+        try {
+        	// Validate and record the name
+        	String desc = NisoImageMetadata.extractIccProfileDescription(iccProfile);
+        	if (desc != null) {
+        		_niso.setProfileName(desc);
+        	}
+        } catch (IllegalArgumentException ie) {
+        	info.setMessage(new ErrorMessage(
+        			MessageConstants.ERR_ICCPROFILE_INVALID + ie.getMessage(), _nByte));
+        }
+        
+    }
+
     /* Read the VER marker, and set version information accordingly */
     protected void readVer(RepInfo info) throws IOException {
         int length = readUnsignedShort(_dstream);
@@ -1225,7 +1319,7 @@ public class JpegModule extends ModuleBase {
         readUnsignedShort(_dstream);
         if (_tiling == null) {
             info.setMessage(new ErrorMessage(
-                    "DTT segment without previous DTI", _nByte));
+                    MessageConstants.ERR_DTT_SEG_MISSING_PREV_DTI, _nByte));
             info.setValid(false);
             return;
         }
@@ -1516,7 +1610,7 @@ public class JpegModule extends ModuleBase {
         } catch (Exception e) {
             // Out of bounds value -- punt.
             // Should add an error message here.
-            info.setMessage(new ErrorMessage("Unrecognized tiling data"));
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_TILING_DATA_UNRECOGNISED));
             info.setValid(false);
             return null;
         }
@@ -1593,6 +1687,10 @@ public class JpegModule extends ModuleBase {
      */
     protected void extractExifNisoData(NisoImageMetadata exifData) {
         int NULL = NisoImageMetadata.NULL; // just a shorthand
+        LOGGER.fine("Copying exif nisoImageMD to principal nisoImageMD");
+        if (exifData.getExifVersion() != null) {
+            _niso.setExifVersion(exifData.getExifVersion());
+        }
         if (exifData.getAutoFocus() != NULL) {
             _niso.setAutoFocus(exifData.getAutoFocus());
         }
@@ -1612,8 +1710,14 @@ public class JpegModule extends ModuleBase {
             _niso.setDigitalCameraManufacturer(exifData
                     .getDigitalCameraManufacturer());
         }
-        if (exifData.getDigitalCameraModel() != null) {
-            _niso.setDigitalCameraModel(exifData.getDigitalCameraModel());
+        if (exifData.getDigitalCameraModelName() != null) {
+            _niso.setDigitalCameraModelName(exifData.getDigitalCameraModelName());
+        }
+        if (exifData.getDigitalCameraModelNumber() != null) {
+            _niso.setDigitalCameraModelNumber(exifData.getDigitalCameraModelNumber());
+        }
+        if (exifData.getDigitalCameraModelSerialNo() != null) {
+            _niso.setDigitalCameraModelSerialNo(exifData.getDigitalCameraModelSerialNo());
         }
         if (exifData.getExposureBias() != NULL) {
             _niso.setExposureBias(exifData.getExposureBias());
@@ -1623,6 +1727,9 @@ public class JpegModule extends ModuleBase {
         }
         if (exifData.getExposureTime() != NULL) {
             _niso.setExposureTime(exifData.getExposureTime());
+        }
+        if (exifData.getExposureProgram() != NULL) {
+            _niso.setExposureProgram(exifData.getExposureProgram());
         }
         if (exifData.getFlash() != NULL) {
             _niso.setFlash(exifData.getFlash());
@@ -1636,6 +1743,9 @@ public class JpegModule extends ModuleBase {
         if (exifData.getFNumber() != NULL) {
             _niso.setFNumber(exifData.getFNumber());
         }
+        if (exifData.getFocalLength() != NULL) {
+            _niso.setFocalLength(exifData.getFocalLength());
+        }
         if (exifData.getHostComputer() != null) {
             _niso.setHostComputer(exifData.getHostComputer());
         }
@@ -1644,6 +1754,9 @@ public class JpegModule extends ModuleBase {
         }
         if (exifData.getImageProducer() != null) {
             _niso.setImageProducer(exifData.getImageProducer());
+        }
+        if (exifData.getMaxApertureValue() != null) {
+            _niso.setMaxApertureValue(exifData.getMaxApertureValue());
         }
         if (exifData.getMeteringMode() != NULL) {
             _niso.setMeteringMode(exifData.getMeteringMode());
@@ -1685,6 +1798,35 @@ public class JpegModule extends ModuleBase {
         }
         if (exifData.getSubjectDistance() != null) {
             _niso.setSubjectDistance(exifData.getSubjectDistance());
+        }
+        // Copy information that could come from alternative sources 
+        if (_niso.getDateTimeCreated() == null && exifData.getDateTimeCreated() != null) {
+            _niso.setDateTimeCreated(exifData.getDateTimeCreated());
+        }
+        if (_niso.getXSamplingFrequency() == null && exifData.getXSamplingFrequency() != null) {
+            _niso.setXSamplingFrequency(exifData.getXSamplingFrequency());
+            _niso.setSamplingFrequencyUnit(exifData.getSamplingFrequencyUnit());
+        }
+        if (_niso.getYSamplingFrequency() == null && exifData.getYSamplingFrequency() != null) {
+            _niso.setYSamplingFrequency(exifData.getYSamplingFrequency());
+            _niso.setSamplingFrequencyUnit(exifData.getSamplingFrequencyUnit());
+        }
+        
+        // If exif FNumber is defined then assume is a camera and not a scanner,
+        // migrate Scanner info to DigitalCamera info
+        if (_niso.getFNumber() != NULL) {
+        	if (_niso.getDigitalCameraManufacturer() == null && _niso.getScannerManufacturer() != null) {
+        		_niso.setDigitalCameraManufacturer(_niso.getScannerManufacturer());
+        	}
+        	if (_niso.getDigitalCameraModelName() == null && _niso.getScannerModelName() != null) {
+        		_niso.setDigitalCameraModelName(_niso.getScannerModelName());
+        	}
+        	if (_niso.getDigitalCameraModelNumber() == null && _niso.getScannerModelNumber() != null) {
+        		_niso.setDigitalCameraModelNumber(_niso.getScannerModelNumber());
+        	}
+        	if (_niso.getDigitalCameraModelSerialNo() == null && _niso.getScannerModelSerialNo() != null) {
+        		_niso.setDigitalCameraModelSerialNo(_niso.getScannerModelSerialNo());
+        	}
         }
     }
 

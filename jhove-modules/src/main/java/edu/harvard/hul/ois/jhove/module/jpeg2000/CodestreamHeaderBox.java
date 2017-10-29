@@ -85,7 +85,7 @@ public class CodestreamHeaderBox extends JP2Box {
                 }
                 else {
                     _repInfo.setMessage (new ErrorMessage
-                        ("First box of Codestream Header must be image header", 
+                        (MessageConstants.ERR_CODESTREAM_HEADER_BOX_START_INVALID, 
                                 _module.getFilePos ()));
                     _repInfo.setWellFormed (false);
                     return false;

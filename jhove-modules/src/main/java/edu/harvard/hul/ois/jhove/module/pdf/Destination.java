@@ -72,16 +72,16 @@ public final class Destination
             else if (destObj instanceof PdfArray) {
                 // We extract only the page reference, not the view.
                 _indirect = false;
-                Vector v= ((PdfArray) destObj).getContent ();
+                Vector v = ((PdfArray) destObj).getContent ();
                 _pageDest = (PdfDictionary) module.resolveIndirectObject
                         ((PdfObject) v.elementAt (0));
             }
             else if (named && destObj instanceof PdfDictionary) {
-                PdfArray destObj1 = (PdfArray) 
-                    ((PdfDictionary) destObj).get ("D");
-                // the D entry is just like the array above.
+                PdfArray destArray = (PdfArray)
+                        ((PdfDictionary) destObj).get ("D");
+                // The D entry is just like the array above.
                 _indirect = false;
-                Vector v= ((PdfArray) destObj1).getContent ();
+                Vector v = destArray.getContent ();
                 _pageDest = (PdfDictionary) module.resolveIndirectObject
                         ((PdfObject) v.elementAt (0));
             }

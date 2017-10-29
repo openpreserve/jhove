@@ -55,7 +55,6 @@ public enum MessageConstants {
 	public static final String INF_K_ELEM_IS_ARRY = "Type K element is an array";
 	public static final String INF_K_ELEM_IS_DICT = "Type K element is dictionary";
 	public static final String INF_LIN_PROF_CHK = "Checking Linearized Profile";
-	public static final String INF_NAMES_DICT_CLASS_CAST = "ClassCastException on names dictionary";
 	public static final String INF_NAMES_DICT_EXCEP = "Exception on names dictionary: ";
 	public static final String INF_NO_CHILD_STRUCT_ELEM = "No children are structure elements";
 	public static final String INF_NO_CHILD_OBJS = "No child objects, exiting";
@@ -156,5 +155,6 @@ public enum MessageConstants {
 	public static final String ERR_XREF_TABLE_MALFORMED = "Malformed cross-reference table";
 	public static final String ERR_XREF_TABLE_OPERATOR_ILLEGAL = "Illegal operator in xref table";
 	public static final String ERR_XREF_TABLES_BROKEN = "Cross reference tables are broken";
-
+	public static final String ERR_INDIRECT_DEST_INVALID_1 = "Invalid indirect destination - referenced object '";
+	public static final String ERR_INDIRECT_DEST_INVALID_2 = "' cannot be found";
 }

@@ -5,6 +5,11 @@
 
 package edu.harvard.hul.ois.jhove;
 
+import java.awt.color.ICC_Profile;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.util.logging.Logger;
+
 
 /**
  * Encapsulation of the NISO Z39.87-2002 / AIIM 20-2002 Data Dictionary --
@@ -12,6 +17,9 @@ package edu.harvard.hul.ois.jhove;
  */
 public class NisoImageMetadata
 {
+	/** Logger for this class. */
+    private static final Logger LOGGER = Logger.getLogger(NisoImageMetadata.class.getCanonicalName());
+    
     /******************************************************************
      * PUBLIC CLASS FIELDS.
      ******************************************************************/
@@ -24,7 +32,7 @@ public class NisoImageMetadata
 
     /** 7.7.3.13 back light value labels. */
     public static final String [] BACKLIGHT = {
-	"front leight", "backlight 1", "backlight 2"
+	"front light", "backlight 1", "backlight 2"
     };
 
     /** 6.1.2 byte order value labels. */
@@ -103,6 +111,14 @@ public class NisoImageMetadata
 	"range or depth"
     };
 
+    public static final String [] EXPOSURE_PROGRAM = {
+	"Not defined", " Manual", "Normal program", "Aperture priority",
+	"Shutter priority", "Creative program (biased toward depth of field)", 
+	"Action program (biased toward fast shutter speed)",
+	"Portrait mode (for closeup photos with the background out of focus)",
+	"Landscape mode (for landscape photos with the background in focus)"
+    };
+    
     /** 7.7.3.10 flash value labels. */
     public static final String [] FLASH = {
 	"yes", "no"
@@ -141,7 +157,7 @@ public class NisoImageMetadata
 	
     /** 7.7.3.6 metering mode value labels. */
     public static final String [] METERING_MODE = {
-	"unidentified", "average", "center-weighted average", "spot",
+	"unidentified", "average", "center weighted average", "spot",
 	"multispot", "pattern", "partial"
     };
 
@@ -336,13 +352,22 @@ public class NisoImageMetadata
 
     /** 7.7.1 Digital camera manufacturer */
     private String _digitalCameraManufacturer;
-    /** 7.7.2 Digital camera model */
-    private String _digitalCameraModel;
+    /** 7.7.2 Digital camera model name */
+    private String _digitalCameraModelName;
+    /** 7.7.2 Digital camera model number */
+    private String _digitalCameraModelNumber;
+    /** 7.7.2 Digital camera model serial number*/
+    private String _digitalCameraModelSerialNo;
 
     /** 7.7.3.1 F number */
     private double _fNumber;
     /** 7.7.3.2 Exposure time */
     private double _exposureTime;
+    
+    private int _exposureProgram;
+    private String _exifVersion;
+    private Rational _maxApertureValue;
+    
     /** 7.7.3.3 Brightness */
     private double _brightness;
     /** 7.7.3.4 Exposure bias */
@@ -503,9 +528,15 @@ public class NisoImageMetadata
 	_compressionLevel = NULL;
 	_compressionScheme = NULL;
 	_dateTimeProcessed = null;
+	_digitalCameraManufacturer = null;
+	_digitalCameraModelName = null;
+	_digitalCameraModelNumber = null;
+	_digitalCameraModelSerialNo = null;
 	_displayOrientation = NULL;
+	_exifVersion = null;
 	_exposureBias = NILL;
 	_exposureIndex = NILL;
+	_exposureProgram = NULL;
 	_exposureTime = NILL;
 	_fileSize = NULL;
 	_flash = NULL;
@@ -517,6 +548,7 @@ public class NisoImageMetadata
 	_imageData = null;
 	_imageLength = NULL;
 	_imageWidth = NULL;
+	_maxApertureValue = null;
 	_meteringMode = NULL;
 	_orientation = NULL;
 	_performanceData = null;
@@ -528,6 +560,10 @@ public class NisoImageMetadata
 	_processingSoftwareVersion = null;
         _profiles = null;
 	_rowsPerStrip = NULL;
+	_scannerManufacturer = null;
+	_scannerModelName = null;
+	_scannerModelNumber = null;
+	_scannerModelSerialNo = null;
 	_samplesPerPixel = NULL;
 	_samplingFrequencyPlane = NULL;
 	_samplingFrequencyUnit = NULL;
@@ -685,15 +721,28 @@ public class NisoImageMetadata
     }
 
     /** Get 7.7.2 digital camera model. */
-    public String getDigitalCameraModel ()
+    public String getDigitalCameraModelName ()
     {
-	return _digitalCameraModel;
+	return _digitalCameraModelName;
+    }
+    public String getDigitalCameraModelNumber ()
+    {
+	return _digitalCameraModelNumber;
+    }
+    public String getDigitalCameraModelSerialNo()
+    {
+	return _digitalCameraModelSerialNo;
     }
 
     /** Get 6.2.5 Display orientation. */
     public int getDisplayOrientation ()
     {
 	return _displayOrientation;
+    }
+
+    public String getExifVersion ()
+    {
+	return _exifVersion;
     }
 
     /** Get 7.7.3.4 exposure bias. */
@@ -708,6 +757,11 @@ public class NisoImageMetadata
 	return _exposureIndex;
     }
 
+    public int getExposureProgram ()
+    {
+	return _exposureProgram;
+    }
+    
     /** Get 7.7.3.2 exposure time. */
     public double getExposureTime ()
     {
@@ -808,6 +862,11 @@ public class NisoImageMetadata
     public long getImageWidth ()
     {
 	return _imageWidth;
+    }
+
+    public Rational getMaxApertureValue ()
+    {
+	return _maxApertureValue;
     }
 
     /** Get 7.7.3.6 metering mode. */
@@ -1380,9 +1439,17 @@ public class NisoImageMetadata
     /** Set 7.7.2 digital camera model.
      * @param model Camera model
      */
-    public void setDigitalCameraModel (String model)
+    public void setDigitalCameraModelName (String modelName)
     {
-	_digitalCameraModel = model;
+	_digitalCameraModelName = modelName;
+    }
+    public void setDigitalCameraModelNumber (String modelNumber)
+    {
+	_digitalCameraModelNumber = modelNumber;
+    }
+    public void setDigitalCameraModelSerialNo (String modelSerialNo)
+    {
+	_digitalCameraModelSerialNo = modelSerialNo;
     }
 
     /** Set 6.2.5 display orientation.
@@ -1393,6 +1460,11 @@ public class NisoImageMetadata
 	_displayOrientation = orientation;
     }
 
+    public void setExifVersion (String version)
+    {
+    	_exifVersion = version;
+    }
+    
     /** Set 7.2.3.4 exposure bias.
      * @param bias Exposure bias
      */
@@ -1407,6 +1479,11 @@ public class NisoImageMetadata
     public void setExposureIndex (double index)
     {
 	_exposureIndex = index;
+    }
+
+    public void setExposureProgram (int program)
+    {
+	_exposureProgram = program;
     }
 
     /** Set 7.7.3.2 exposure time.
@@ -1543,6 +1620,11 @@ public class NisoImageMetadata
     public void setImageWidth (long width)
     {
 	_imageWidth = width;
+    }
+
+    public void setMaxApertureValue (Rational value)
+    {
+	_maxApertureValue = value;
     }
 
     /** Set 7.7.3.6 metering mode.
@@ -2114,4 +2196,71 @@ public class NisoImageMetadata
             return null;
         }
     }
+    
+    public static String extractIccProfileDescription(byte[] data) throws IllegalArgumentException {
+    	// Validate the ICCProfile with the java library
+    	ICC_Profile profile = ICC_Profile.getInstance(data);
+    	// Extract the 'desc' record (cf http://www.color.org/ICC1-V41.pdf) 
+    	byte[] dataProf = profile.getData(ICC_Profile.icSigProfileDescriptionTag);
+    	if (dataProf == null) {
+    		return null;
+    	}
+
+    	String description = null;
+    	ByteBuffer bb = ByteBuffer.wrap(dataProf).asReadOnlyBuffer();
+    	
+    	LOGGER.fine("Version " + profile.getMajorVersion());
+    	if (profile.getMajorVersion() <= 2) {
+        	// ICC v2 http://www.color.org/ICC_Minor_Revision_for_Web.pdf
+	    	// Read only the ASCII form (cf 6.5.17 ICC v2)
+	    	final int OFFSET_LENGTH = 8;
+	    	final int OFFSET_DESC = OFFSET_LENGTH + 4;
+	    	
+	    	int lengthAscii = bb.getInt(OFFSET_LENGTH);
+	    	
+	    	// readString
+	    	byte[] asciiDesc = new byte[lengthAscii -1];
+	    	bb.position(OFFSET_DESC);
+	    	bb.get(asciiDesc);
+	    	
+			try {
+				description = new String(asciiDesc, "US-ASCII");
+			} catch (UnsupportedEncodingException e) {
+				// IGNORE: US-ASCII always there... wait for Java 1.7
+			}
+    	} else {
+        	// ICC v4 http://www.color.org/ICC1-V41.pdf
+	    	final int OFFSET_NUMBER = 8;
+	    	final int MLUC_TAG = 0x6D6C7563;
+	    	final int OFFSET_NAME_LENGTH = 20;
+	    	final int OFFSET_NAME_OFFSET = 24;
+	    	
+    		// 6.2 segment tag table definition
+    		int tagMluc = bb.getInt(0);
+    		
+        	// Read the 1st mulc form (cf 6.5.12 ICC v4)
+    		int nb =  bb.getInt(OFFSET_NUMBER);
+    		if (tagMluc != MLUC_TAG || nb < 1) {
+    			throw new IllegalArgumentException("No description in ICC profile v4");
+    		}
+    		int firstNameLength = bb.getInt(OFFSET_NAME_LENGTH);
+    		int firstNameOffset = bb.getInt(OFFSET_NAME_OFFSET);
+    		
+        	// readString
+        	byte[] desc = new byte[firstNameLength];
+        	bb.position(firstNameOffset);
+        	bb.get(desc);
+        	
+    		try {
+    			// The  Unicode  strings  in  storage  are  encoded  as  16-bit
+    			// big-endian,  UTF-16BE,  and should not be NULL terminated.
+    			description = new String(desc, "UTF-16BE");
+    		} catch (UnsupportedEncodingException e) {
+    			// IGNORE: UTF-16 always there... wait for Java 1.7
+    		}
+    		
+    	}
+    	return description;
+    }
+    
 }

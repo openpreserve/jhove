@@ -97,14 +97,7 @@ public class ListInfoChunk extends Superchunk {
                     ("Chunk type '" + id + "' in List Info Chunk ignored"));
             }
             else {
-                try {
-                    if (!chunk.readChunk (info)) {
-                        return false;
-                    }
-                }
-                catch (JhoveException e) {
-                    info.setMessage(new ErrorMessage (e.getMessage()));
-                    info.setWellFormed (false);
+                if (!chunk.readChunk (info)) {
                     return false;
                 }
             }
@@ -157,14 +150,7 @@ public class ListInfoChunk extends Superchunk {
                     ("Chunk type '" + id + "' in Associated Data Chunk ignored"));
             }
             else {
-                try {
-                    if (!chunk.readChunk (info)) {
-                        return false;
-                    }
-                }
-                catch (JhoveException e) {
-                    info.setMessage(new ErrorMessage (e.getMessage()));
-                    info.setWellFormed (false);
+                if (!chunk.readChunk (info)) {
                     return false;
                 }
             }
@@ -210,14 +196,7 @@ public class ListInfoChunk extends Superchunk {
 				  "' in Associated Data Chunk ignored"));
             }
             else {
-                try {
-                    if (!chunk.readChunk (info)) {
-                        return false;
-                    }
-                }
-                catch (JhoveException e) {
-                    info.setMessage(new ErrorMessage (e.getMessage()));
-                    info.setWellFormed (false);
+                if (!chunk.readChunk (info)) {
                     return false;
                 }
             }

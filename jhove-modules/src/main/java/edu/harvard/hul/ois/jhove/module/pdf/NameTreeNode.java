@@ -106,6 +106,9 @@ public class NameTreeNode
         if (_lowerLimit == null) {
             return true;    // root node
         }
+        if (_upperLimit == null) {
+            return true;    // no upper limit is specified
+        }
         if (compareKey (key, _lowerLimit) < 0 || 
             compareKey (key, _upperLimit) > 0) {
             return false;
@@ -150,7 +153,10 @@ public class NameTreeNode
                             (PdfObject) _kids.elementAt (i));
                     NameTreeNode kidnode = new NameTreeNode (_module, this, kid);
                     if (kidnode.inBounds (key)) {
-                        return kidnode.get (key);
+                        PdfObject res = kidnode.get (key);
+                        if (res != null) {
+                            return res;
+                        }
                     }
                 }
                 return null;    // Not in any subnode

@@ -42,7 +42,7 @@ public class JP2HeaderBox extends JP2Box {
         //int sizeLeft = (int) _boxHeader.getDataLength ();
         if (_module.isJP2HdrSeen ()) {
             _repInfo.setMessage (new ErrorMessage
-                        ("Multiple JP2 Header Boxes not allowed",
+                        (MessageConstants.ERR_JP2_HEADER_BOX_REDUNDANT,
                          _module.getFilePos ()));
             // Skip the redundant box and set invalid flag,
             // but keep going.
@@ -99,7 +99,7 @@ public class JP2HeaderBox extends JP2Box {
                 }
                 else {
                     _repInfo.setMessage (new ErrorMessage
-                        ("First box of JP2 header must be image header", 
+                        (MessageConstants.ERR_JP2_HEADER_BOX_START_INVALID, 
                                 _module.getFilePos ()));
                     _repInfo.setWellFormed (false);
                     return false;
@@ -132,13 +132,13 @@ public class JP2HeaderBox extends JP2Box {
         // Consistency checks
         if (hasCMap && !hasPalette) {
             _repInfo.setMessage (new ErrorMessage
-                ("JP2 Header has Component Mapping box without Palette Box",
+                (MessageConstants.ERR_JP2_HEADER_BOX_PALETTE_MISSING,
                  _module.getFilePos ()));
             _repInfo.setValid (false);
         }
         if (!hasCMap && hasPalette) {
             _repInfo.setMessage (new ErrorMessage
-                ("JP2 Header has Palette box without Component Mapping Box",
+                (MessageConstants.ERR_JP2_HEADER_BOX_COMPONENT_MISSING,
                  _module.getFilePos ()));
             _repInfo.setValid (false);
         }

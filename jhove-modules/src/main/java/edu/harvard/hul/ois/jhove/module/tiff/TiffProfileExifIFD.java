@@ -14,6 +14,8 @@ package edu.harvard.hul.ois.jhove.module.tiff;
  *
  */
 public class TiffProfileExifIFD extends TiffProfile {
+	private static final String[] ACCEPTED_EXIF_VERSIONS = { "0200", "0210",
+			"0220", "0221", "0230" };
 
     private int _majVersion;
     private int _minVersion;
@@ -39,23 +41,19 @@ public class TiffProfileExifIFD extends TiffProfile {
         }
         ExifIFD eifd = (ExifIFD) ifd;
         String version = eifd.getExifVersion ();
-        if (version.equals ("0220")) {
-            _majVersion = 2;
-            _minVersion = 2;
+        for (String acceptedVersion : ACCEPTED_EXIF_VERSIONS) {
+        	if (acceptedVersion.equals (version)) {
+                _majVersion = Integer.parseInt(version.substring(0, 2));
+                _minVersion = Integer.parseInt(version.substring(2, 4));
+                break;
+        	}
         }
-        else if (version.equals ("0210")) {
-            _majVersion = 2;
-            _minVersion = 1;
-        }
-        else if (version.equals ("0200")) {
-            _majVersion = 2;
-            _minVersion = 0;
-        }
-        else {
+        if (_majVersion == -1) {
             // Other versions aren't accepted
             return false;
         }
-        if (!(eifd.getFlashpixVersion ().equals ("0100"))) {
+        
+        if (!("0100".equals(eifd.getFlashpixVersion ()))) {
             return false;
         }
         int colspc = eifd.getColorspace ();
@@ -64,4 +62,12 @@ public class TiffProfileExifIFD extends TiffProfile {
         }
         return true;
     }
+
+    public int getMajorVersion() {
+		return _majVersion;
+	}
+
+    public int getMinorVersion() {
+		return _minVersion;
+	}
 }

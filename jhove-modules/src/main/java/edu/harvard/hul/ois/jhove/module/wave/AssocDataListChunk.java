@@ -87,17 +87,9 @@ public class AssocDataListChunk extends Superchunk {
                     ("Chunk type '" + id + "' in Associated Data Chunk ignored"));
             }
             else {
-                try {
-                    if (!chunk.readChunk (info)) {
-                        return false;
-                    }
-                }
-                catch (JhoveException e) {
-                    info.setMessage(new ErrorMessage (e.getMessage()));
-                    info.setWellFormed (false);
+                if (!chunk.readChunk (info)) {
                     return false;
                 }
-
             }
         }
         return true;

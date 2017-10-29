@@ -123,7 +123,10 @@ public class ObjectStream {
             if (off != null) {
                 int offset = off.intValue ();
                 _parser.seek (offset + _firstOffset);
-                return _parser.readObject (false);
+                PdfObject object = _parser.readObject (false);
+                /* Need to ensure the object number is set */
+                object.setObjNumber(objnum);
+                return object;
             }
             return null;
         }

@@ -57,7 +57,7 @@ public class FormatChunk extends Chunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException, JhoveException {
+    public boolean readChunk(RepInfo info) throws IOException {
         WaveModule module = (WaveModule) _module;
         int validBitsPerSample = -1;
         byte[] subformat = null;
@@ -88,7 +88,7 @@ public class FormatChunk extends Chunk {
                 validBitsPerSample = module.readUnsignedShort (_dstream);
                 channelMask = module.readUnsignedInt (_dstream);
                 // The subformat is a GUID
-                subformat = new byte[20];
+                subformat = new byte[16];
                 ModuleBase.readByteBuf(_dstream, subformat, module);
                 
                 // Nitpicking profile requirements
@@ -136,20 +136,12 @@ public class FormatChunk extends Chunk {
                 compressionCode == WAVE_FORMAT_MPEG) {
             module.setBroadcastWave (true);
         }
+        Property prop = module.addIntegerProperty("CompressionCode", compressionCode,
+                    WaveStrings.COMPRESSION_FORMAT, WaveStrings.COMPRESSION_INDEX);
+        module.addWaveProperty(prop);
+        String compName = (String)prop.getValue();
         
-        module.addWaveProperty
-            (module.addIntegerProperty ("CompressionCode", compressionCode,
-                    WaveStrings.COMPRESSION_FORMAT,
-                    WaveStrings.COMPRESSION_INDEX));
         AESAudioMetadata aes = module.getAESMetadata ();
-        String compName;
-        try {
-            compName = WaveStrings.COMPRESSION_FORMAT
-                [WaveStrings.COMPRESSION_INDEX[compressionCode]];
-        }
-        catch (Exception e) {
-            throw new JhoveException ("Error in FormatChunk: " + e.getClass().getName());
-        }
         aes.setAudioDataEncoding(compName);
         aes.setNumChannels(numChannels);
         setChannelLocations (aes, numChannels);

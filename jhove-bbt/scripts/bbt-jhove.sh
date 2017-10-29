@@ -71,11 +71,7 @@ checkParams () {
 	fi
 
   # Check dest dir exists
-	if  [[ ! -d "$paramBaseline" ]]
-	then
-		echo "Baseline output directory not found: $paramBaseline"
-		exit 1;
-	fi
+	[[ -d "$paramBaseline" ]] || mkdir -p "$paramBaseline"
 
   # Check dest dir exists
 	if  [[ ! -d "$paramCorpusLoc" ]]
@@ -127,17 +123,24 @@ showHelp() {
 # Check and setup parameters
 checkParams "$@";
 candidate="${paramOutputLoc:?}/${paramKey}"
-#sed -i "s%^    <expiresdate>.*%%" "${paramJhoveLoc:?}/jhove-installer/src/main/izpack/install.xml"
-#mvn clean package
-#git checkout "${paramJhoveLoc:?}/jhove-installer/src/main/izpack/install.xml"
 tempInstallLoc="/tmp/to-test";
-if [[ -d "${tempInstallLoc}" ]]; then
-	rm -rf "${tempInstallLoc}"
-fi
-MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
-installJhoveFromFile "${paramJhoveLoc:?}/jhove-installer/target/jhove-xplt-installer-${MVN_VERSION}.jar" "${tempInstallLoc}"
+# if [[ -d "${tempInstallLoc}" ]]; then
+# 	rm -rf "${tempInstallLoc}"
+# fi
+
+# MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
+
+# JHOVE_INSTALLER="${paramJhoveLoc:?}/jhove-installer/target/jhove-xplt-installer-${MVN_VERSION}.jar"
+# if [[ ! -e "${JHOVE_INSTALLER}" ]]
+# then
+# 	mvn clean package
+# fi
+#
+# installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
+sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.9\/org\.jacoco.agent-0\.7\.9-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
 bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${paramCorpusLoc}" -o "${candidate}"
 
+# echo "java -jar ${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar -b ${paramBaseline} -c ${candidate} -k ${paramKey} -i"
 if [ "$paramIgnoreRelease" =  true ] ;
 then
 	java -jar "${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar" -b "${paramBaseline}" -c "${candidate}" -k "${paramKey}" -i

@@ -25,7 +25,7 @@ public class Literal
     /** Used for accumulating a hex string */
     private StringBuffer rawHex;
     
-    /** Used for accomodating the literal */
+    /** Used for accommodating the literal */
     private StringBuffer buffer;
 
     /** Indicates if a character for the first half of a hex byte
@@ -308,30 +308,31 @@ public class Literal
      */
     public void convertHex () throws PdfException
     {
-        boolean utf = false;
-        StringBuffer buffer = new StringBuffer ();
-        // If a high byte is left hanging, complete it with a '0'
-        if (haveHi) {
-            _rawBytes.add (new Integer (hexToInt (hi, '0')));
-        }
-        if (_rawBytes.size () >= 2 && rawByte (0) == 0XFE &&
-                        rawByte(1) == 0XFF) {
-            utf = true;
-        }
-        if (utf) {
-            // Gather pairs of bytes into characters without conversion
-            for (int i = 2; i < _rawBytes.size(); i += 2) {
-                buffer.append 
-                    ((char) (rawByte (i) * 256 + rawByte (i + 1)));
+        if (_rawBytes != null) {
+            boolean utf = false;
+            StringBuffer buffer = new StringBuffer();
+            // If a high byte is left hanging, complete it with a '0'
+            if (haveHi) {
+                _rawBytes.add(new Integer(hexToInt(hi, '0')));
             }
-        }
-        else {
-            // Convert single bytes to PDF encoded characters.
-            for (int i = 0; i < _rawBytes.size (); i++) {
-                buffer.append (Tokenizer.PDFDOCENCODING[rawByte (i)]);
+            if (_rawBytes.size() >= 2 && rawByte(0) == 0XFE &&
+                    rawByte(1) == 0XFF) {
+                utf = true;
             }
+            if (utf) {
+                // Gather pairs of bytes into characters without conversion
+                for (int i = 2; i < _rawBytes.size(); i += 2) {
+                    buffer.append
+                            ((char) (rawByte(i) * 256 + rawByte(i + 1)));
+                }
+            } else {
+                // Convert single bytes to PDF encoded characters.
+                for (int i = 0; i < _rawBytes.size(); i++) {
+                    buffer.append(Tokenizer.PDFDOCENCODING[rawByte(i)]);
+                }
+            }
+            _value = buffer.toString();
         }
-        _value = buffer.toString ();
     }
     
     private static int hexToInt (int c1, int c2) throws PdfException
