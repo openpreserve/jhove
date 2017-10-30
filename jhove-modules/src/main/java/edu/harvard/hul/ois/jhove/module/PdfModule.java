@@ -113,18 +113,11 @@ public class PdfModule
 	public static final String MIME_TYPE = "application/pdf";
 	public static final String EXT = ".pdf";
 	
-	private static final String font = "Font";
-	private static final String crop_box = "CropBox";
-	private static final String base = "Base";
-	private static final String name = "Name";
-	private static final String file = "File";
-	private static final String plural_s = "s";
-
 	private static final String PDF_VER1_HEADER_PREFIX = "PDF-1.";
 	private static final String PDF_SIG_HEADER = "%" + PDF_VER1_HEADER_PREFIX;
 	private static final String POSTSCRIPT_HEADER_PREFIX = "!PS-Adobe-";
 	private static final String ENCODING_PREFIX = "ENC=";
-    private static final String NO_HEADER = "No PDF header";
+	private static final String NO_HEADER = "No PDF header";
 
 	private static final String DEFAULT_PAGE_LAYOUT = "SinglePage";
 	private static final String DEFAULT_MODE = "UseNone";
@@ -173,7 +166,7 @@ public class PdfModule
 
 	private static final String DICT_KEY_FONT_DESCRIPTOR = "FontDescriptor";
 	private static final String DICT_KEY_STARTXREF = "startxref";
-	private static final String DICT_KEY_BASE_FONT = base + font;
+	private static final String DICT_KEY_BASE_FONT = "BaseFont";
 	private static final String DICT_KEY_CONTENTS = "Contents";
 	private static final String DICT_KEY_CID_INFO = "CIDSystemInfo";
 	private static final String DICT_KEY_DIFFERENCES = "Differences";
@@ -189,12 +182,12 @@ public class PdfModule
 	private static final String DICT_KEY_ENCRYPT = "Encrypt";
 	private static final String DICT_KEY_INFO = "Info";
 	private static final String DICT_KEY_ID = "ID";
-	private static final String DICT_KEY_FONT_NAME = font + name;
-	private static final String DICT_KEY_FONT_FILE = font + file;
+	private static final String DICT_KEY_FONT_NAME = "FontName";
+	private static final String DICT_KEY_FONT_FILE = "FontFile";
 	private static final String DICT_KEY_FONT_FILE_2 = DICT_KEY_FONT_FILE + "2";
 	private static final String DICT_KEY_FONT_FILE_3= DICT_KEY_FONT_FILE + "3";
 	private static final String DICT_KEY_BBOX = "BBox";
-	private static final String DICT_KEY_FONT_BBOX = font + DICT_KEY_BBOX;
+	private static final String DICT_KEY_FONT_BBOX = "Font" + DICT_KEY_BBOX;
 	private static final String DICT_KEY_XREF_STREAM = "XRefStm";
 	private static final String DICT_KEY_VIEWER_PREFS = "ViewerPreferences";
 	private static final String DICT_KEY_PAGE_LAYOUT = "PageLayout";
@@ -207,8 +200,8 @@ public class PdfModule
 	private static final String DICT_KEY_PAGES = "Pages";
 	private static final String DICT_KEY_PAGE_LABELS = "PageLabels";
 	private static final String DICT_KEY_VERSION = "Version";
-	private static final String DICT_KEY_NAMES = name + plural_s;
-	private static final String DICT_KEY_NAME = name;
+	private static final String DICT_KEY_NAME = "Name";
+	private static final String DICT_KEY_NAMES = DICT_KEY_NAME + "s";
 	private static final String DICT_KEY_EMBEDDED_FILES = "EmbeddedFiles";
 	private static final String DICT_KEY_DESTS = "Dests";
 	private static final String DICT_KEY_FILTER = "Filter";
@@ -217,7 +210,7 @@ public class PdfModule
 	private static final String DICT_KEY_R = "R";
 	private static final String DICT_KEY_V = "V";
 	private static final String DICT_KEY_ENCODING = "Encoding";
-	private static final String DICT_KEY_BASE_ENCODING = base + DICT_KEY_ENCODING;
+	private static final String DICT_KEY_BASE_ENCODING = "Base" + DICT_KEY_ENCODING;
 	private static final String DICT_KEY_LENGTH = "Length";
 	private static final String DICT_KEY_WIDTH = "Width";
 	private static final String DICT_KEY_HEIGHT = "Height";
@@ -260,7 +253,7 @@ public class PdfModule
 	private static final String PROP_NAME_CALLOUT_LINE = "CalloutLine";
 	private static final String PROP_NAME_CMAP_DICT = "CMapDictionary";
 	private static final String PROP_NAME_CID_INFO = DICT_KEY_CID_INFO;
-	private static final String PROP_NAME_CID_INFOS = PROP_NAME_CID_INFO + plural_s;
+	private static final String PROP_NAME_CID_INFOS = PROP_NAME_CID_INFO + "s";
 	private static final String PROP_NAME_CONTENTS = DICT_KEY_CONTENTS;
 	private static final String PROP_NAME_DISTANCE = "Distance";
 	private static final String PROP_NAME_DIFFERENCES = DICT_KEY_DIFFERENCES;
@@ -270,12 +263,12 @@ public class PdfModule
 	private static final String PROP_NAME_EXTERNAL_STREAMS = "ExternalStreams";
 	private static final String PROP_NAME_FILTER = DICT_KEY_FILTER;
 	private static final String PROP_NAME_FILTERS = "Filters";
-	private static final String PROP_NAME_FILE = file;
+	private static final String PROP_NAME_FILE = "File";
 	private static final String PROP_NAME_FIRST_CHAR = DICT_KEY_FIRST_CHAR;
 	private static final String PROP_NAME_FLAGS = DICT_KEY_FLAGS;
 	private static final String PROP_NAME_AREA = "Area";
 	private static final String PROP_NAME_IMAGE = "Image";
-	private static final String PROP_NAME_IMAGES = PROP_NAME_IMAGE + plural_s;
+	private static final String PROP_NAME_IMAGES = PROP_NAME_IMAGE + "s";
 	private static final String PROP_NAME_OBJECTS = "Objects";
 	private static final String PROP_NAME_RESOURCES = DICT_KEY_RESOURCES;
 	private static final String PROP_NAME_SUBTYPE= DICT_KEY_XOBJ_SUBTYPE;
@@ -329,9 +322,9 @@ public class PdfModule
 	private static final String PROP_NAME_FONT_TRUE_TYPE = FONT_TRUE_TYPE;
 	private static final String PROP_NAME_FONT_CID_TYPE0 = FONT_CID_TYPE0;
 	private static final String PROP_NAME_FONT_CID_TYPE2 = FONT_CID_TYPE2;
-	private static final String PROP_NAME_FONT = font;
-	private static final String PROP_NAME_FONTS = PROP_NAME_FONT + plural_s;
-	private static final String PROP_NAME_FONT_SUBSET = font + "Subset";
+	private static final String PROP_NAME_FONT = "Font";
+	private static final String PROP_NAME_FONTS = PROP_NAME_FONT + "s";
+	private static final String PROP_NAME_FONT_SUBSET = PROP_NAME_FONT + "Subset";
 	private static final String PROP_NAME_FONT_BBOX = DICT_KEY_FONT_BBOX;
 	private static final String PROP_NAME_FONT_DESC = DICT_KEY_FONT_DESCRIPTOR;
 	private static final String PROP_NAME_FONT_FILE = DICT_KEY_FONT_FILE;
@@ -349,13 +342,14 @@ public class PdfModule
 	private static final String PROP_NAME_ROTATE = DICT_KEY_ROTATE;
 	private static final String PROP_NAME_REPLY_TYPE = "ReplyType";
 	private static final String PROP_NAME_VIEWPORT = "Viewport";
-	private static final String PROP_NAME_VIEWPORTS = PROP_NAME_VIEWPORT + plural_s;
+	private static final String PROP_NAME_VIEWPORTS = PROP_NAME_VIEWPORT + "s";
 	private static final String PROP_NAME_THUMB = DICT_KEY_THUMB;
 	private static final String PROP_NAME_TO_UNICODE = DICT_KEY_TO_UNICODE;
 	private static final String PROP_NAME_PAGE = "Page";
 	private static final String PROP_NAME_LABEL = "Label";
 	private static final String PROP_NAME_RATIO = "Ratio";
 
+	private static final String PROP_VAL_CROP_BOX = "CropBox";
 	private static final String PROP_VAL_FONT_BBOX = DICT_KEY_FONT_BBOX;
 	private static final String PROP_VAL_NULL = "null";
 	private static final String PROP_VAL_EXTERNAL = "External";
@@ -4008,7 +4002,7 @@ public class PdfModule
         if (ob instanceof PdfSimpleObject) {
             s = ((PdfSimpleObject) ob).getStringValue();
         }
-        else s = crop_box;
+        else s = PROP_VAL_CROP_BOX;
         p = new Property(PROP_NAME_VIEW_AREA, PropertyType.STRING, s);
         propList.add(p);
 
@@ -4016,7 +4010,7 @@ public class PdfModule
         if (ob instanceof PdfSimpleObject) {
             s = ((PdfSimpleObject) ob).getStringValue();
         }
-        else s = crop_box;
+        else s = PROP_VAL_CROP_BOX;
         p = new Property(PROP_NAME_VIEW_CLIP, PropertyType.STRING, s);
         propList.add(p);
 
@@ -4024,7 +4018,7 @@ public class PdfModule
         if (ob instanceof PdfSimpleObject) {
             s = ((PdfSimpleObject) ob).getStringValue();
         }
-        else s = crop_box;
+        else s = PROP_VAL_CROP_BOX;
         p = new Property(PROP_NAME_PRINT_AREA, PropertyType.STRING, s);
         propList.add(p);
 
@@ -4032,7 +4026,7 @@ public class PdfModule
         if (ob instanceof PdfSimpleObject) {
             s = ((PdfSimpleObject) ob).getStringValue();
         }
-        else s = crop_box;
+        else s = PROP_VAL_CROP_BOX;
         p = new Property(PROP_NAME_PAGE_CLIP, PropertyType.STRING, s);
         propList.add(p);
         return prop;

@@ -55,8 +55,8 @@ public abstract class Tokenizer
         '\u00f8','\u00f9','\u00fa','\u00fb','\u00fc','\u00fd','\u00fe','\u00ff'
     };
 
-    private static final String empty = "";
-    private static final String stream = "stream";
+    private static final String EMPTY = "";
+    private static final String STREAM = "stream";
     
     /* ASCII control character codes */
     private static final int NUL = 0x00;
@@ -120,7 +120,7 @@ public abstract class Tokenizer
     public Tokenizer ()
     {
         _state = State.WHITESPACE;
-        _wsString = empty;
+        _wsString = EMPTY;
         _lookAhead = false;
         _ch = 0;
         _offset = 0;
@@ -155,7 +155,7 @@ public abstract class Tokenizer
         Token token = null;
         StringBuilder buffer = null;
         _state = State.WHITESPACE;
-        _wsString = empty;
+        _wsString = EMPTY;
         // Numeric sign.
         boolean negative = false;
         // Floating value.
@@ -219,12 +219,12 @@ public abstract class Tokenizer
                     }
                     else if (_ch == '[') {
                         _state = State.WHITESPACE;
-                        _wsString = empty;
+                        _wsString = EMPTY;
                         return new ArrayStart ();
                     }
                     else if (_ch == ']') {
                         _state = State.WHITESPACE;
-                        _wsString = empty;
+                        _wsString = EMPTY;
 
                         return new ArrayEnd ();
                     }
@@ -299,7 +299,7 @@ public abstract class Tokenizer
 
                     if (isDelimiter (_ch) || isWhitespace (_ch)) {
                         _state = State.WHITESPACE;
-                        _wsString = empty + (char) _ch;
+                        _wsString = EMPTY + (char) _ch;
                         if (negative) {
                             realValue = -realValue;
                         }
@@ -321,7 +321,7 @@ public abstract class Tokenizer
                     else {
                         // Invalid character in a number
                         _state = State.WHITESPACE;
-                        _wsString = empty;
+                        _wsString = EMPTY;
                         throw new PdfMalformedException (MessageConstants.ERR_TOKEN_LEXICAL, _offset);
                     }
                 }
@@ -329,11 +329,11 @@ public abstract class Tokenizer
                     // '>' must be followed by another '>' as a dict end
                     if (_ch == '>') {
                         _state = State.WHITESPACE;
-                        _wsString = empty;
+                        _wsString = EMPTY;
                         return new DictionaryEnd ();
                     }
                     _state = State.WHITESPACE;
-                    _wsString = empty;
+                    _wsString = EMPTY;
                     throw new PdfMalformedException (MessageConstants.ERR_TOKEN_LEXICAL, _offset);
                 }
                 else if (_state == (State.HEXADECIMAL)) {
@@ -344,7 +344,7 @@ public abstract class Tokenizer
                     if (_ch == '>') {
                         // A '>' terminates the string.
                         _state = State.WHITESPACE;
-                        _wsString = empty;
+                        _wsString = EMPTY;
                         ((Literal) token).convertHex ();
                         return token;
                     }
@@ -357,7 +357,7 @@ public abstract class Tokenizer
                         if (isDelimiter (_ch)) {
                             _lookAhead = true;
                         }
-                        if (stream.equals(buffer.toString())) {
+                        if (STREAM.equals(buffer.toString())) {
                             // Streams can't be nested, so this is
                             // (or better be) a FileTokenizer.
 
@@ -372,7 +372,7 @@ public abstract class Tokenizer
                         }
                         else {
                             _state = State.WHITESPACE;
-                            _wsString = empty + (char) _ch;
+                            _wsString = EMPTY + (char) _ch;
                             ((StringValuedToken) token).setValue
                                     (buffer.toString ());
                             if (!token.isPdfACompliant()) {
@@ -393,7 +393,7 @@ public abstract class Tokenizer
 
                     if (_ch == '<' || _scanMode) {
                         _state = State.WHITESPACE;
-                        _wsString = empty;
+                        _wsString = EMPTY;
                         return new DictionaryStart ();
                     }
                     _state = State.HEXADECIMAL;
@@ -410,7 +410,7 @@ public abstract class Tokenizer
                     backupChar ();
                     _offset += ((Literal) token).processLiteral (this) - 1;
                     _state = State.WHITESPACE;
-                    _wsString = empty;
+                    _wsString = EMPTY;
                     return token;
                 }
                 else if (_state == (State.NAME)) {
@@ -428,10 +428,10 @@ public abstract class Tokenizer
 
                         if (isDelimiter (_ch)) {
                             _lookAhead = true;
-                            _wsString = empty;
+                            _wsString = EMPTY;
                         }
                         else {
-                            _wsString = empty + (char) _ch;
+                            _wsString = EMPTY + (char) _ch;
                         }
 
                         if (!token.isPdfACompliant()) {
@@ -467,10 +467,10 @@ public abstract class Tokenizer
 
                         if (isDelimiter (_ch)) {
                             _lookAhead = true;
-                            _wsString = empty;
+                            _wsString = EMPTY;
                         }
                         else {
-                            _wsString = empty + (char) _ch;
+                            _wsString = EMPTY + (char) _ch;
                         }
 
                         if (!token.isPdfACompliant()) {
@@ -618,10 +618,10 @@ public abstract class Tokenizer
 
                         if (isDelimiter (_ch)) {
                             _lookAhead = true;
-                            _wsString = empty;
+                            _wsString = EMPTY;
                         }
                         else {
-                            _wsString = empty + (char) _ch;
+                            _wsString = EMPTY + (char) _ch;
                         }
 
                         return token;
@@ -701,7 +701,7 @@ public abstract class Tokenizer
     protected void seekReset (long offset)
     {
         _state = State.WHITESPACE;
-        _wsString = empty;
+        _wsString = EMPTY;
         _lookAhead = false;
         _ch = 0;
         /* Don't panic, _offset is used only for reporting purposes */
