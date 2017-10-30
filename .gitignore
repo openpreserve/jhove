@@ -12,3 +12,7 @@ Gemfile.lock
 # Ignore Test Root
 /test-root/
 
+# Ignore Eclipse artefacts
+**/.settings
+**/.project
+**/.classpath

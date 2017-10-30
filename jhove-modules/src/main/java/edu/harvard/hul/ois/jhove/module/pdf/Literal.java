@@ -161,7 +161,7 @@ public class Literal
             // If we get -1, then we've hit an EOF without proper termination of
             // the literal. Throw an exception.
             if (ch < 0) {
-                throw new EOFException ("Unterminated literal in PDF file");
+                throw new EOFException (MessageConstants.ERR_LITERAL_UNTERMINATED);
             }
             offset++;
             _rawBytes.add (new Integer (ch));
@@ -356,7 +356,7 @@ public class Literal
             d = h - 0x57;
         }
         else {
-            throw new PdfMalformedException ("Invalid character in hex string");
+            throw new PdfMalformedException (MessageConstants.ERR_HEX_STRING_CHAR_INVALID);
         }
         return d;
     }

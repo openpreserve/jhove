@@ -109,8 +109,17 @@ if [[ -f "${candidateRoot}/examples/modules/audit-TIFF-hul.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/audit-TIFF-hul.jhove.xml" "${targetRoot}/examples/modules/"
 fi;
 
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.9">PDF-hul<\/module>$/   <module release="1.10">PDF-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.2">JPEG-hul<\/module>$/   <module release="1.3">JPEG-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.7">TIFF-hul<\/module>$/   <module release="1.8">TIFF-hul<\/module>/' {} \;
+
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's%<release>1.9<\/release>%<release>1.10<\/release>%' {} \;
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's%<date>2017-07-20<\/date>%<date>2017-10-31<\/date>%' {} \;
+find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.9" date="2017-07-20">PDF%<reportingModule release="1.10" date="2017-10-31">PDF%' {} \;
+find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.9" date="2017-07-20">PDF%<reportingModule release="1.10" date="2017-10-31">PDF%' {} \;
+
+
+find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">TIFF%<reportingModule release="1.8" date="2017-05-11">TIFF%' {} \;
 find "${targetRoot}" -type f -name "*.tif.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">TIFF%<reportingModule release="1.8" date="2017-05-11">TIFF%' {} \;
 find "${targetRoot}" -type f -name "*.g3.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">TIFF%<reportingModule release="1.8" date="2017-05-11">TIFF%' {} \;
 find "${targetRoot}" -type f -name "bathy1.*.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">TIFF%<reportingModule release="1.8" date="2017-05-11">TIFF%' {} \;

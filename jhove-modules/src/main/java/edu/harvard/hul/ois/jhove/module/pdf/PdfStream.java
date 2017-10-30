@@ -201,7 +201,7 @@ public class PdfStream extends PdfObject
             }
         }
         catch (Exception e) {
-            throw new PdfMalformedException ("Malformed filter");
+            throw new PdfMalformedException (MessageConstants.ERR_FILTER_MALFORMED);
         }
     }
 

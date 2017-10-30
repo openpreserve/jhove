@@ -63,7 +63,7 @@ public class FileSpecification
             }
         }
         catch (ClassCastException e) {
-            throw new PdfInvalidException ("Invalid file specification");
+            throw new PdfInvalidException (MessageConstants.ERR_FILE_SPEC_INVALID);
         }
     }
     

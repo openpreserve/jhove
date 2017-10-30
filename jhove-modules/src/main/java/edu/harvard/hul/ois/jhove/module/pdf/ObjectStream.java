@@ -132,7 +132,7 @@ public class ObjectStream {
         }
         catch (IOException e) {
             throw new PdfMalformedException 
-                    ("Offset out of bounds in object stream");
+                    (MessageConstants.ERR_OBJ_STREAM_OFFSET_OUT_OF_BOUNDS);
         }
     }
 

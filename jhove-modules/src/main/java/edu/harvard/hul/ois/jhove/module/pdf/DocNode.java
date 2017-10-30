@@ -99,9 +99,8 @@ public abstract class DocNode
      */
     public PdfDictionary getResources () throws PdfException
     {
-        String invres = "Invalid Resources Entry in document";
         if (_dict == null) {
-            throw new PdfMalformedException ("Missing dictionary in document node");
+            throw new PdfMalformedException (MessageConstants.ERR_DOC_NODE_DICT_MISSING);
         }
         try {
             PdfObject resdict = _dict.get ("Resources");
@@ -109,10 +108,10 @@ public abstract class DocNode
             return (PdfDictionary) resdict;
         }
         catch (ClassCastException e) {
-            throw new PdfInvalidException (invres);
+            throw new PdfInvalidException (MessageConstants.ERR_RESOURCES_ENTRY_INVALID);
         }
         catch (IOException f) {
-            throw new PdfInvalidException (invres);
+            throw new PdfInvalidException (MessageConstants.ERR_RESOURCES_ENTRY_INVALID);
         }
     }
 
@@ -135,7 +134,7 @@ public abstract class DocNode
             }
             catch (Exception e) {
                 throw new PdfMalformedException 
-                        ("Invalid Font entry in Resources");
+                        (MessageConstants.ERR_RESOURCES_FONT_ENTRY_INVALID);
             }
         }
         return null;
@@ -149,17 +148,16 @@ public abstract class DocNode
      */
     public PdfArray getMediaBox () throws PdfInvalidException
     {
-        final String badbox = "Malformed MediaBox in page tree";
         try {
 	    PdfArray mbox = (PdfArray) get ("MediaBox", true);
             if (mbox.toRectangle () != null) {
                 return mbox;
             }
             // There's a MediaBox, but it's not a rectangle
-            throw new PdfInvalidException (badbox);
+            throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_MEDIA_BOX_MALFORMED);
         }
         catch (Exception e) {
-            throw new PdfInvalidException (badbox);
+            throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_MEDIA_BOX_MALFORMED);
         }
     }
 
