@@ -435,7 +435,7 @@ public class TiffModule extends ModuleBase {
             byte ch0 = _raf.readByte();
             byte ch1 = _raf.readByte();
             if (ch0 != ch1 || (ch0 != 0X49 && ch0 != 0X4D)) {
-                throw new TiffException("No TIFF header: " + (char) ch0
+                throw new TiffException(MessageConstants.ERR_TIFF_HEADER_MISSING + (char) ch0
                         + (char) ch1, 0);
             }
             inHeader = false;
@@ -446,7 +446,7 @@ public class TiffModule extends ModuleBase {
 
             int magic = readUnsignedShort(_raf, _bigEndian);
             if (magic != 42) {
-                throw new TiffException("No TIFF magic number: " + magic, 2);
+                throw new TiffException(MessageConstants.ERR_TIFF_MAGIC_NUM_MISSING + magic, 2);
             }
 
             /* If we got this far, take note that the signature is OK. */
@@ -556,7 +556,7 @@ public class TiffModule extends ModuleBase {
         } catch (IOException e) {
             String msg;
             if (inHeader) {
-                msg = "File is too short";
+                msg = MessageConstants.ERR_FILE_TOO_SHORT;
             } else {
                 msg = e.getClass().getName();
             }
@@ -611,14 +611,14 @@ public class TiffModule extends ModuleBase {
             byte ch0 = _raf.readByte();
             byte ch1 = _raf.readByte();
             if (ch0 != ch1 || (ch0 != 0X49 && ch0 != 0X4D)) {
-                throw new TiffException("No TIFF header: " + (char) ch0
+                throw new TiffException(MessageConstants.ERR_TIFF_HEADER_MISSING + (char) ch0
                         + (char) ch1, 0);
             }
             _bigEndian = (ch0 == 0X4D);
 
             int magic = readUnsignedShort(_raf, _bigEndian);
             if (magic != 42) {
-                throw new TiffException("No TIFF magic number: " + magic, 2);
+                throw new TiffException(MessageConstants.ERR_TIFF_MAGIC_NUM_MISSING + magic, 2);
             }
             inHeader = false; // There's SOMETHING in the file
 
@@ -665,7 +665,7 @@ public class TiffModule extends ModuleBase {
         } catch (IOException e) {
             String msg;
             if (inHeader) {
-                msg = "Embedded Exif block is too short";
+                msg = MessageConstants.ERR_EXIF_BLOCK_TOO_SHORT;
             } else {
                 msg = e.getClass().getName();
             }
@@ -779,15 +779,15 @@ public class TiffModule extends ModuleBase {
         NisoImageMetadata niso = ifd.getNisoImageMetadata();
         int photometricInterpretation = niso.getColorSpace();
         if (photometricInterpretation == NisoImageMetadata.NULL) {
-            reportInvalid("PhotometricInterpretation not defined", info);
+            reportInvalid(MessageConstants.INF_PHO_NO_DEF, info);
         }
         long imageWidth = niso.getImageWidth();
         if (imageWidth == NisoImageMetadata.NULL) {
-            reportInvalid("ImageWidth not defined", info);
+            reportInvalid(MessageConstants.INF_IMAGE_WID_NO_DEF, info);
         }
         long imageLength = niso.getImageLength();
         if (imageLength == NisoImageMetadata.NULL) {
-            reportInvalid("ImageLength not defined", info);
+            reportInvalid(MessageConstants.INF_IMAGE_WID_NO_DEF, info);
         }
 
         /* Strips and tiles. */
@@ -804,12 +804,12 @@ public class TiffModule extends ModuleBase {
                 || tileLength != NisoImageMetadata.NULL || tileOffsets != null || tileByteCounts != null);
 
         if (stripsDefined && tilesDefined) {
-            reportInvalid("Strips and tiles defined together", info);
-            throw new TiffException("Strips and tiles defined together");
+            reportInvalid(MessageConstants.INF_STR_AND_TILE_TOGETHER, info);
+            throw new TiffException(MessageConstants.INF_STR_AND_TILE_TOGETHER);
         }
         if (!stripsDefined && !tilesDefined) {
-            reportInvalid("Neither strips nor tiles defined", info);
-            throw new TiffException("Neither strips nor tiles defined");
+            reportInvalid(MessageConstants.INF_STR_AND_TILE_NO_DEF, info);
+            throw new TiffException(MessageConstants.INF_STR_AND_TILE_NO_DEF);
         }
 
         int planarConfiguration = niso.getPlanarConfiguration();
@@ -817,18 +817,17 @@ public class TiffModule extends ModuleBase {
 
         if (stripsDefined) {
             if (stripOffsets == null) {
-                reportInvalid("StripOffsets not defined", info);
-                throw new TiffException("StripOffsets not defined");
+                reportInvalid(MessageConstants.INF_STR_OFF_NO_DEF, info);
+                throw new TiffException(MessageConstants.INF_STR_OFF_NO_DEF);
             }
             if (stripByteCounts == null) {
-                reportInvalid("StripByteCounts not defined", info);
-                throw new TiffException("StripByteCounts not defined");
+                reportInvalid(MessageConstants.INF_STR_BYTE_COUNT_NO_DEF, info);
+                throw new TiffException(MessageConstants.INF_STR_BYTE_COUNT_NO_DEF);
             }
 
             int len = stripOffsets.length;
             if (len != stripByteCounts.length) {
-                reportInvalid("StripOffsets inconsistent with "
-                        + "StripByteCounts: " + len + "!="
+                reportInvalid(MessageConstants.INF_STR_OFF_BYTE_COUNT_INCONS + len + "!="
                         + stripByteCounts.length, info);
             }
             /* Check that all the strips are located within the file */
@@ -838,7 +837,7 @@ public class TiffModule extends ModuleBase {
                     long offset = stripOffsets[i];
                     long count = stripByteCounts[i];
                     if (offset + count > fileLength) {
-                        reportInvalid("Invalid strip offset", info);
+                        reportInvalid(MessageConstants.INF_STR_OFF_INVALID, info);
                     }
                 }
             } catch (IOException e) {
@@ -847,24 +846,24 @@ public class TiffModule extends ModuleBase {
 
         if (tilesDefined) {
             if (tileWidth == NisoImageMetadata.NULL) {
-                reportInvalid("TileWidth not defined", info);
+                reportInvalid(MessageConstants.ERR_TILE_WID_NO_DEF, info);
             }
             if (tileLength == NisoImageMetadata.NULL) {
-                reportInvalid("TileLength not defined", info);
+                reportInvalid(MessageConstants.ERR_TILE_LEN_NO_DEF, info);
             }
             if (tileOffsets == null) {
-                reportInvalid("TileOffsets not defined", info);
+                reportInvalid(MessageConstants.ERR_TILE_OFF_NO_DEF, info);
             }
             if (tileByteCounts == null) {
-                reportInvalid("TileByteCounts not defined", info);
+                reportInvalid(MessageConstants.ERR_TILE_COUNT_NO_DEF, info);
             }
 
             if (tileWidth % 16 > 0) {
-                reportInvalid("TileWidth not a multiple of 16: " + tileWidth,
+                reportInvalid(MessageConstants.ERR_TILE_WID_NOT_DIV_16 + tileWidth,
                         info);
             }
             if (tileLength % 16 > 0) {
-                reportInvalid("TileLength not a multiple of 16: " + tileLength,
+                reportInvalid(MessageConstants.ERR_TILE_LEN_NOT_DIV_16 + tileLength,
                         info);
             }
 
@@ -873,23 +872,21 @@ public class TiffModule extends ModuleBase {
             if (planarConfiguration == 2) {
                 long spp_tpi = samplesPerPixel * tilesPerImage;
                 if (tileOffsets != null && tileOffsets.length < spp_tpi) {
-                    reportInvalid("Insufficient values for " + "TileOffsets: "
+                    reportInvalid(MessageConstants.ERR_TILE_OFF_MISS_VALS
                             + tileOffsets.length + "<" + spp_tpi, info);
                 }
                 if (tileByteCounts != null && tileByteCounts.length < spp_tpi) {
-                    reportInvalid("Insufficient values for "
-                            + "TileByteCountts: " + tileByteCounts.length + "<"
+                    reportInvalid(MessageConstants.ERR_TILE_COUNT_MISS_VALS + tileByteCounts.length + "<"
                             + spp_tpi, info);
                 }
             } else {
                 if (tileOffsets != null && tileOffsets.length < tilesPerImage) {
-                    reportInvalid("Insufficient values for " + "TileOffsets: "
+                    reportInvalid(MessageConstants.ERR_TILE_OFF_MISS_VALS
                             + tileOffsets.length + "<" + tilesPerImage, info);
                 }
                 if (tileByteCounts != null
                         && tileByteCounts.length < tilesPerImage) {
-                    reportInvalid("Insufficient values for "
-                            + "TileByteCounts: " + tileByteCounts.length + "<"
+                    reportInvalid(MessageConstants.ERR_TILE_COUNT_MISS_VALS + tileByteCounts.length + "<"
                             + tilesPerImage, info);
                 }
             }
@@ -900,15 +897,13 @@ public class TiffModule extends ModuleBase {
         int newSubfileType = (int) ifd.getNewSubfileType();
         if ((photometricInterpretation == 4 && (newSubfileType & 4) == 0)
                 || (photometricInterpretation != 4 && (newSubfileType & 4) != 0)) {
-            reportInvalid("PhotometricInterpretation and "
-                    + "NewSubfileType must agree on " + "transparency mask",
+            reportInvalid(MessageConstants.ERR_PHO_AND_NEW_SUBFILE_INCONSISTENT,
                     info);
         }
         int[] bitsPerSample = niso.getBitsPerSample();
         if (photometricInterpretation == 4) {
             if (samplesPerPixel < 1 || bitsPerSample[0] != 1) {
-                reportInvalid("For transparency mask BitsPerSample "
-                        + "must be 1", info);
+                reportInvalid(MessageConstants.ERR_TRANS_MASK_BPS, info);
             }
         }
 
@@ -918,16 +913,14 @@ public class TiffModule extends ModuleBase {
                 || photometricInterpretation == 3
                 || photometricInterpretation == 4) {
             if (samplesPerPixel < 1) {
-                reportInvalid("For PhotometricInterpretation, "
-                        + "SamplesPerPixel must be >= 1, equals"
+                reportInvalid(MessageConstants.ERR_PHO_INT_SPP_GT_1
                         + samplesPerPixel, info);
             }
         }
         if (photometricInterpretation == 2 || photometricInterpretation == 6
                 || photometricInterpretation == 8) {
             if (samplesPerPixel < 3) {
-                reportInvalid("For PhotometricInterpretation, "
-                        + "SamplesPerPixel must be >= 3, equals"
+                reportInvalid(MessageConstants.ERR_PHO_INT_SPP_GT_1
                         + samplesPerPixel, info);
             }
         }
@@ -941,26 +934,24 @@ public class TiffModule extends ModuleBase {
             int[] colormapBlueValue = niso.getColormapBlueValue();
             if (colormapBitCodeValue == null || colormapRedValue == null
                     || colormapGreenValue == null || colormapBlueValue == null) {
-                reportInvalid("ColorMap not defined for " + "palette-color",
+                reportInvalid(MessageConstants.ERR_COL_MAP_NOT_DEF,
                         info);
             }
             if (samplesPerPixel != 1) {
-                reportInvalid("For palette-color SamplesPerPixel "
-                        + "must be 1: " + samplesPerPixel, info);
+                reportInvalid(MessageConstants.ERR_PAL_COL_SPP_NE_1 + samplesPerPixel, info);
             }
             int len = (1 << bitsPerSample[0]);
             if (colormapBitCodeValue.length < len) {
-                reportInvalid("Insufficient ColorMap values for "
-                        + "palette-color: " + colormapBitCodeValue.length + "<"
-                        + len, info);
+                reportInvalid(MessageConstants.ERR_COL_MAP_MISS_VALS +
+                		      colormapBitCodeValue.length + "<"  + len,
+                		      info);
             }
         }
 
         /* Cells. */
 
         if (ifd.getCellLength() != IFD.NULL && ifd.getThreshholding() != 2) {
-            reportInvalid("CellLength tag not permitted when "
-                    + "Threshholding not 2", info);
+            reportInvalid(MessageConstants.ERR_CELL_LEN_NOT_ALLWD, info);
         }
 
         /* Dot range. */
@@ -970,15 +961,14 @@ public class TiffModule extends ModuleBase {
             int sampleMax = 1 << bitsPerSample[0];
             if (dotRange.length < 2 || dotRange[0] >= sampleMax
                     || dotRange[1] >= sampleMax) {
-                reportInvalid("DotRange out of range specified "
-                        + "by BitsPerSample", info);
+                reportInvalid(MessageConstants.ERR_DOT_RANGE_BPS, info);
             }
         }
 
         /* JPEG. */
 
         if (niso.getCompressionScheme() == 6 && ifd.getJPEGProc() == IFD.NULL) {
-            reportInvalid("JPEGProc not defined for JPEG " + "compression",
+            reportInvalid(MessageConstants.ERR_JPEGPROC_NO_DEF,
                     info);
         }
 
@@ -992,13 +982,12 @@ public class TiffModule extends ModuleBase {
             }
             int in = samplesPerPixel - len;
             if (in != 1 && in != 3) {
-                reportInvalid("SamplesPerPixel-ExtraSamples not " + "1 or 3: "
+                reportInvalid(MessageConstants.ERR_SPP_EXTRA_NT_1_OR_3 
                         + samplesPerPixel + "-" + len, info);
             }
             for (int i = 0; i < bitsPerSample.length; i++) {
                 if (bitsPerSample[i] != 8 && bitsPerSample[i] != 16) {
-                    reportInvalid("BitsPerSample not 8 or 16 for "
-                            + "CIE L*a*b*", info);
+                    reportInvalid(MessageConstants.ERR_CIELAB_BPS_NOT_8_OR_16, info);
                 }
             }
         }
@@ -1007,7 +996,7 @@ public class TiffModule extends ModuleBase {
 
         if (ifd.getClipPath() != null) {
             if (ifd.getXClipPathUnits() == IFD.NULL) {
-                reportInvalid("XClipPathUnits not defined for " + "ClipPath",
+                reportInvalid(MessageConstants.ERR_XCLIP_PATH_NO_DEF,
                         info);
             }
         }
@@ -1017,13 +1006,13 @@ public class TiffModule extends ModuleBase {
         String dateTime = ifd.getDateTime();
         if (dateTime != null) {
             if (dateTime.length() != 19) {
-                reportInvalid("Invalid DateTime length: " + dateTime, info);
+                reportInvalid(MessageConstants.ERR_DATE_TIME_LEN_INV + dateTime, info);
                 return;
             }
             if (dateTime.charAt(4) != ':' || dateTime.charAt(7) != ':'
                     || dateTime.charAt(10) != ' ' || dateTime.charAt(13) != ':'
                     || dateTime.charAt(16) != ':') {
-                reportInvalid("Invalid DateTime separator: " + dateTime, info);
+                reportInvalid(MessageConstants.ERR_DATE_TIME_SEP_INV + dateTime, info);
                 return;
             }
             try {
@@ -1036,10 +1025,10 @@ public class TiffModule extends ModuleBase {
                 if (yyyy < 0 || yyyy > 9999 || mm < 1 || mm > 12 || dd < 1
                         || dd > 31 || hh < 0 || hh > 24 || mn < 0 || mn > 59
                         || ss < 0 || mn > 59) {
-                    reportInvalid("Invalid DateTime digit: " + dateTime, info);
+                    reportInvalid(MessageConstants.ERR_DATE_TIME_DIG_INV + dateTime, info);
                 }
             } catch (Exception e) {
-                reportInvalid("Invalid DateTime digit: " + dateTime, info);
+                reportInvalid(MessageConstants.ERR_DATE_TIME_DIG_INV + dateTime, info);
             }
         }
     }
@@ -1081,21 +1070,20 @@ public class TiffModule extends ModuleBase {
             _raf.seek(offset);
             next = readUnsignedInt(_raf, _bigEndian);
         } catch (IOException e) {
-            throw new TiffException("Premature EOF", offset);
+            throw new TiffException(MessageConstants.ERR_TIFF_PREM_EOF, offset);
         }
 
         if (next == 0L) {
-            throw new TiffException("No IFD in file", offset);
+            throw new TiffException(MessageConstants.ERR_IFD_MISSING, offset);
         }
 
         List<IFD> list = new LinkedList<IFD>();
         while (next != 0L) {
             if ((next & 1) != 0) {
-                throw new TiffException("IFD offset not word-aligned: " + next);
+                throw new TiffException(MessageConstants.ERR_IFD_OFF_MISALIGN + next);
             }
             if (list.size() > 50) {
-                throw new TiffException(
-                        "More than 50 IFDs in chain, probably an infinite loop");
+                throw new TiffException(MessageConstants.ERR_IFD_MAX_EXCEEDED);
             }
             _logger.info("Parsing next IFD at offset " + next);
             IFD ifd = parseIFDChain(next, info, ifdType, list, suppressErrors);

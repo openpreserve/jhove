@@ -15,6 +15,7 @@ import java.util.*;
 public class GPSInfoIFD
     extends IFD
 {
+	private static final String period = ".";
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
@@ -185,481 +186,481 @@ public class GPSInfoIFD
      ******************************************************************/
 
     /** Get the GPSAltitude (6). */
-    public Rational getGPSAltitude ()
+    public Rational getGPSAltitude()
     {
 	return _gpsAltitude;
     }
 
     /** Get the GPSAltitudeRef (5). */
-    public int getGPSAltitudeRef ()
+    public int getGPSAltitudeRef()
     {
 	return _gpsAltitudeRef;
     }
 
     /** Get the GPSDateStamp (29). */
-    public String getGPSDateStamp ()
+    public String getGPSDateStamp()
     {
 	return _gpsDateStamp;
     }
 
     /** Get the GPSDestBearing (24). */
-    public Rational getGPSDestBearing ()
+    public Rational getGPSDestBearing()
     {
 	return _gpsDestBearing;
     }
 
     /** Get the GPSDestBearingRef (23). */
-    public String getGPSDestBearingRef ()
+    public String getGPSDestBearingRef()
     {
 	return _gpsDestBearingRef;
     }
 
     /** Get the GPSDestDistance (26). */
-    public Rational getGPSDestDistance ()
+    public Rational getGPSDestDistance()
     {
 	return _gpsDestDistance;
     }
 
     /** Get the GPSDestDistanceRef (25). */
-    public String getGPSDestDistanceRef ()
+    public String getGPSDestDistanceRef()
     {
 	return _gpsDestDistanceRef;
     }
 
     /** Get the GPSDestLatitude (20). */
-    public Rational [] getGPSDestLatitude ()
+    public Rational [] getGPSDestLatitude()
     {
 	return _gpsDestLatitude;
     }
 
     /** Get the GPSDestLatitudeRef (19). */
-    public String getGPSDestLatitudeRef ()
+    public String getGPSDestLatitudeRef()
     {
 	return _gpsDestLatitudeRef;
     }
 
     /** Get the GPSDestLongitude (22). */
-    public Rational [] getGPSDestLongitude ()
+    public Rational [] getGPSDestLongitude()
     {
 	return _gpsDestLongitude;
     }
 
     /** Get the GPSDestLongitudeRef (21). */
-    public String getGPSDestLongitudeRef ()
+    public String getGPSDestLongitudeRef()
     {
 	return _gpsDestLongitudeRef;
     }
 
     /** Get the GPSDifferential (30). */
-    public int getGPSDifferential ()
+    public int getGPSDifferential()
     {
 	return _gpsDifferential;
     }
 
     /** Get the GPSDOP (11). */
-    public Rational getGPSDOP ()
+    public Rational getGPSDOP()
     {
 	return _gpsDOP;
     }
 
     /** Get the GPSImgDirection (17). */
-    public Rational getGPSImgDirection ()
+    public Rational getGPSImgDirection()
     {
 	return _gpsImgDirection;
     }
 
     /** Get the GPSImgDirectionRef (16). */
-    public String getGPSImgDirectionRef ()
+    public String getGPSImgDirectionRef()
     {
 	return _gpsImgDirectionRef;
     }
 
     /** Get the GPSLatitude (2). */
-    public Rational [] getGPSLatitude ()
+    public Rational [] getGPSLatitude()
     {
 	return _gpsLatitude;
     }
 
     /** Get the GPSLatitudeRef (1). */
-    public String getGPSLatitudeRef ()
+    public String getGPSLatitudeRef()
     {
 	return _gpsLatitudeRef;
     }
 
     /** Get the GPSLongitude (4). */
-    public Rational [] getGPSLongitude ()
+    public Rational [] getGPSLongitude()
     {
 	return _gpsLongitude;
     }
 
     /** Get the GPSLongitudeRef (3). */
-    public String getGPSLongitudeRef ()
+    public String getGPSLongitudeRef()
     {
 	return _gpsLongitudeRef;
     }
 
     /** Get the GPSMapDatum (18). */
-    public String getGPSMapDatum ()
+    public String getGPSMapDatum()
     {
 	return _gpsMapDatum;
     }
 
     /** Get the GPSMeasureMode (10). */
-    public String getGPSMeasureMode ()
+    public String getGPSMeasureMode()
     {
 	return _gpsMeasureMode;
     }
 
     /** Get the GPSProcessingMethod (27). */
-    public int [] getGPSProcessingMethod ()
+    public int [] getGPSProcessingMethod()
     {
 	return _gpsProcessingMethod;
     }
 
     /** Get the GPSSatellites (8). */
-    public String getGPSSatellites ()
+    public String getGPSSatellites()
     {
 	return _gpsSatellites;
     }
 
     /** Get the GPSSpeed (13). */
-    public Rational getGPSSpeed ()
+    public Rational getGPSSpeed()
     {
 	return _gpsSpeed;
     }
 
     /** Get the GPSSpeedRef (12). */
-    public String getGPSSpeedRef ()
+    public String getGPSSpeedRef()
     {
 	return _gpsSpeedRef;
     }
 
     /** Get the GPSStatus (9). */
-    public String getGPStatus ()
+    public String getGPStatus()
     {
 	return _gpsStatus;
     }
 
     /** Get the GPSTimeStamp (7). */
-    public Rational [] getGPTimeStamp ()
+    public Rational [] getGPTimeStamp()
     {
 	return _gpsTimeStamp;
     }
 
     /** Get the GPSTrack (15). */
-    public Rational getGPSTrack ()
+    public Rational getGPSTrack()
     {
 	return _gpsTrack;
     }
 
     /** Get the GPSTrackRef (14). */
-    public String getGPSTrackRef ()
+    public String getGPSTrackRef()
     {
 	return _gpsTrackRef;
     }
 
     /** Get the GPSVersionID (1). */
-    public int [] getGPSVersionID ()
+    public int [] getGPSVersionID()
     {
 	return _gpsVersionID;
     }
 
     /** Get the IFD properties. */
-    public Property getProperty (boolean rawOutput)
+    public Property getProperty(boolean rawOutput)
     {
-	List entries = new LinkedList ();
-	entries.add (new Property ("GPSVersionID", PropertyType.STRING,
-				   Integer.toString (_gpsVersionID[0]) + "." +
-				   Integer.toString (_gpsVersionID[1]) + "." +
-				   Integer.toString (_gpsVersionID[2]) + "." +
-				   Integer.toString (_gpsVersionID[3])));
+	List entries = new LinkedList();
+	entries.add(new Property("GPSVersionID", PropertyType.STRING,
+				   Integer.toString(_gpsVersionID[0]) + period +
+				   Integer.toString(_gpsVersionID[1]) + period +
+				   Integer.toString(_gpsVersionID[2]) + period +
+				   Integer.toString(_gpsVersionID[3])));
 	if (_gpsLatitudeRef != null) {
-	    entries.add (new Property ("GPSLatitudeRef", PropertyType.STRING,
+	    entries.add(new Property("GPSLatitudeRef", PropertyType.STRING,
 				       _gpsLatitudeRef));
 	}
 	if (_gpsLatitude != null) {
-	    entries.add (new Property ("GPSLatitude", PropertyType.RATIONAL,
+	    entries.add(new Property("GPSLatitude", PropertyType.RATIONAL,
 				       PropertyArity.ARRAY, _gpsLatitude));
 	}
 	if (_gpsLongitudeRef != null) {
-	    entries.add (new Property ("GPSLongitudeRef", PropertyType.STRING,
+	    entries.add(new Property("GPSLongitudeRef", PropertyType.STRING,
 				       _gpsLongitudeRef));
 	}
 	if (_gpsLongitude != null) {
-	    entries.add (new Property ("GPSLongitude", PropertyType.RATIONAL,
+	    entries.add(new Property("GPSLongitude", PropertyType.RATIONAL,
 				       PropertyArity.ARRAY, _gpsLongitude));
 	}
-	entries.add (new Property ("GPSAltitudeRef", PropertyType.INTEGER,
-				   new Integer (_gpsAltitudeRef)));
+	entries.add(new Property("GPSAltitudeRef", PropertyType.INTEGER,
+				   new Integer(_gpsAltitudeRef)));
 	if (_gpsAltitude != null) {
-	    entries.add (new Property ("GPSAltitude", PropertyType.RATIONAL,
+	    entries.add(new Property("GPSAltitude", PropertyType.RATIONAL,
 				       _gpsAltitude));
 	}
 	if (_gpsTimeStamp != null) {
-	    entries.add (new Property ("GPSTimeStamp", PropertyType.RATIONAL,
+	    entries.add(new Property("GPSTimeStamp", PropertyType.RATIONAL,
 				       PropertyArity.ARRAY, _gpsTimeStamp));
 	}
 	if (_gpsSatellites != null) {
-	    entries.add (new Property ("GPSSatellites", PropertyType.STRING,
+	    entries.add(new Property("GPSSatellites", PropertyType.STRING,
 				       _gpsSatellites));
 	}
 	if (_gpsStatus != null) {
-	    entries.add (new Property ("GPSStatus", PropertyType.STRING,
+	    entries.add(new Property("GPSStatus", PropertyType.STRING,
 				       _gpsStatus));
 	}
 	if (_gpsMeasureMode != null) {
-	    entries.add (new Property ("GPSMeasureMode", PropertyType.STRING,
+	    entries.add(new Property("GPSMeasureMode", PropertyType.STRING,
 				       _gpsMeasureMode));
 	}
 	if (_gpsDOP != null) {
-	    entries.add (new Property ("GPSDOP", PropertyType.RATIONAL,
+	    entries.add(new Property("GPSDOP", PropertyType.RATIONAL,
 				       _gpsDOP));
 	}
-	entries.add (new Property ("GPSSpeedRef", PropertyType.STRING,
+	entries.add(new Property("GPSSpeedRef", PropertyType.STRING,
 				   _gpsSpeedRef));
 	if (_gpsSpeed != null) {
-	    entries.add (new Property ("GPSSpeed", PropertyType.RATIONAL,
+	    entries.add(new Property("GPSSpeed", PropertyType.RATIONAL,
 				       _gpsSpeed));
 	}
-	entries.add (new Property ("GPSTrackRef", PropertyType.STRING,
+	entries.add(new Property("GPSTrackRef", PropertyType.STRING,
 				   _gpsTrackRef));
 	if (_gpsTrack != null) {
-	    entries.add (new Property ("GPSTrack", PropertyType.RATIONAL,
+	    entries.add(new Property("GPSTrack", PropertyType.RATIONAL,
 				       _gpsTrack));
 	}
-	entries.add (new Property ("GPSImgDirectionRef", PropertyType.STRING,
+	entries.add(new Property("GPSImgDirectionRef", PropertyType.STRING,
 				   _gpsImgDirectionRef));
 	if (_gpsImgDirection != null) {
-	    entries.add (new Property ("GPSImgDirection",
+	    entries.add(new Property("GPSImgDirection",
 				       PropertyType.RATIONAL,
 				       _gpsImgDirection));
 	}
 	if (_gpsMapDatum != null) {
-	    entries.add (new Property ("GPSMapDatum", PropertyType.STRING,
+	    entries.add(new Property("GPSMapDatum", PropertyType.STRING,
 				       _gpsMapDatum));
 	}
 	if (_gpsDestLatitudeRef != null) {
-	    entries.add (new Property ("GPSDestLatitudeRef",
+	    entries.add(new Property("GPSDestLatitudeRef",
 				       PropertyType.STRING,
 				       _gpsDestLatitudeRef));
 	}
 	if (_gpsDestLatitude != null) {
-	    entries.add (new Property ("GPSDestLatitude",
+	    entries.add(new Property("GPSDestLatitude",
 				       PropertyType.RATIONAL,
 				       PropertyArity.ARRAY,
 				       _gpsDestLatitude));
 	}
 	if (_gpsDestLongitudeRef != null) {
-	    entries.add (new Property ("GPSDestLongitudeRef",
+	    entries.add(new Property("GPSDestLongitudeRef",
 				       PropertyType.STRING,
 				       _gpsDestLongitudeRef));
 	}
 	if (_gpsDestLongitude != null) {
-	    entries.add (new Property ("GPSDestLongitude",
+	    entries.add(new Property("GPSDestLongitude",
 				       PropertyType.RATIONAL,
 				       PropertyArity.ARRAY,
 				       _gpsDestLongitude));
 	}
-	entries.add (new Property ("GPSDestBearingRef", PropertyType.STRING,
+	entries.add(new Property("GPSDestBearingRef", PropertyType.STRING,
 				   _gpsDestBearingRef));
 	if (_gpsDestBearing != null) {
-	    entries.add (new Property ("GPSDestBearing",
+	    entries.add(new Property("GPSDestBearing",
 				       PropertyType.RATIONAL,
 				       _gpsDestBearing));
 	}
-	entries.add (new Property ("GPSDestDistanceRef", PropertyType.STRING,
+	entries.add(new Property("GPSDestDistanceRef", PropertyType.STRING,
 				   _gpsDestDistanceRef));
 	if (_gpsDestDistance != null) {
-	    entries.add (new Property ("GPSDestDistance",
+	    entries.add(new Property("GPSDestDistance",
 				       PropertyType.RATIONAL,
 				       _gpsDestDistance));
 	}
 	if (_gpsDestDistanceRef != null) {
-	    entries.add (new Property ("GPSDestDistanceRef",
+	    entries.add(new Property("GPSDestDistanceRef",
 				       PropertyType.STRING,
 				       _gpsDestDistanceRef));
 	}
 	if (_gpsProcessingMethod != null) {
-	    entries.add (new Property ("GPSProcessingMethod",
+	    entries.add(new Property("GPSProcessingMethod",
 				       PropertyType.INTEGER,
 				       PropertyArity.ARRAY,
 				       _gpsProcessingMethod));
 	}
 	if (_gpsAreaInformation != null) {
-	    entries.add (new Property ("GPSAreaInformation",
+	    entries.add(new Property("GPSAreaInformation",
 				       PropertyType.INTEGER,
 				       PropertyArity.ARRAY,
 				       _gpsAreaInformation));
 	}
 	if (_gpsDateStamp != null) {
-	    entries.add (new Property ("GPSDateStamp", PropertyType.STRING,
+	    entries.add(new Property("GPSDateStamp", PropertyType.STRING,
 				       _gpsDateStamp));
 	}
-	entries.add (new Property ("GPSDifferential", PropertyType.INTEGER,
-				   new Integer (_gpsDifferential)));
+	entries.add(new Property("GPSDifferential", PropertyType.INTEGER,
+				   new Integer(_gpsDifferential)));
 
-	return propertyHeader ("GPSInfo", entries);
+	return propertyHeader("GPSInfo", entries);
     }
 
     /** Lookup an IFD tag. */
-    public void lookupTag (int tag, int type, long count, long value)
+    public void lookupTag(int tag, int type, long count, long value)
 	throws TiffException
     {
 	try {
 	    if (tag == GPSALTITUDE) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 1);
-		_gpsAltitude = readRational (count, value);
+		checkType (tag, type, RATIONAL);
+		checkCount(tag, count, 1);
+		_gpsAltitude = readRational(count, value);
 	    }
 	    else if (tag == GPSALTITUDEREF) {
-		checkType  (tag, type, BYTE);
-		checkCount (tag, count, 1);
-		_gpsAltitudeRef = readByte (type, count, value);
+		checkType(tag, type, BYTE);
+		checkCount(tag, count, 1);
+		_gpsAltitudeRef = readByte(type, count, value);
 	    }
 	    else if (tag == GPSDATESTAMP) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 11);
-		_gpsDateStamp = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 11);
+		_gpsDateStamp = readASCII(count, value);
 	    }
 	    else if (tag == GPSDESTBEARING) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 1);
-		_gpsDestBearing = readRational (count, value);
+		checkType(tag, type, RATIONAL);
+		checkCount(tag, count, 1);
+		_gpsDestBearing = readRational(count, value);
 	    }
 	    else if (tag == GPSDESTBEARINGREF) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 2);
-		_gpsDestBearingRef = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 2);
+		_gpsDestBearingRef = readASCII(count, value);
 	    }
 	    else if (tag == GPSDESTDISTANCE) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 1);
-		_gpsDestDistance = readRational (count, value);
+		checkType(tag, type, RATIONAL);
+		checkCount(tag, count, 1);
+		_gpsDestDistance = readRational(count, value);
 	    }
 	    else if (tag == GPSDESTDISTANCEREF) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 2);
-		_gpsDestDistanceRef = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 2);
+		_gpsDestDistanceRef = readASCII(count, value);
 	    }
 	    else if (tag == GPSDESTLATITUDE) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 3);
-		_gpsDestLatitude = readRationalArray (count, value);
+		checkType(tag, type, RATIONAL);
+		checkCount(tag, count, 3);
+		_gpsDestLatitude = readRationalArray(count, value);
 	    }
 	    else if (tag == GPSDESTLATITUDEREF) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 2);
-		_gpsDestLatitudeRef = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 2);
+		_gpsDestLatitudeRef = readASCII(count, value);
 	    }
 	    else if (tag == GPSDESTLONGITUDE) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 3);
-		_gpsDestLongitude = readRationalArray (count, value);
+		checkType(tag, type, RATIONAL);
+		checkCount(tag, count, 3);
+		_gpsDestLongitude = readRationalArray(count, value);
 	    }
 	    else if (tag == GPSDESTLONGITUDEREF) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 2);
-		_gpsDestLongitudeRef = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 2);
+		_gpsDestLongitudeRef = readASCII(count, value);
 	    }
 	    else if (tag == GPSDIFFERENTIAL) {
-		checkType  (tag, type, SHORT);
-		checkCount (tag, count, 1);
-		_gpsDifferential = readShort (type, count, value);
+		checkType(tag, type, SHORT);
+		checkCount(tag, count, 1);
+		_gpsDifferential = readShort(type, count, value);
 	    }
 	    else if (tag == GPSDOP) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 1);
-		_gpsDOP = readRational (count, value);
+		checkType(tag, type, RATIONAL);
+		checkCount(tag, count, 1);
+		_gpsDOP = readRational(count, value);
 	    }
 	    else if (tag == GPSIMGDIRECTION) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 1);
-		_gpsImgDirection = readRational (count, value);
+		checkType(tag, type, RATIONAL);
+		checkCount(tag, count, 1);
+		_gpsImgDirection = readRational(count, value);
 	    }
 	    else if (tag == GPSIMGDIRECTIONREF) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 2);
-		_gpsImgDirectionRef = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 2);
+		_gpsImgDirectionRef = readASCII(count, value);
 	    }
 	    else if (tag == GPSLATITUDE) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 3);
-		_gpsLatitude = readRationalArray (count, value);
+		checkType(tag, type, RATIONAL);
+		checkCount(tag, count, 3);
+		_gpsLatitude = readRationalArray(count, value);
 	    }
 	    else if (tag == GPSLATITUDEREF) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 2);
-		_gpsLatitudeRef = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 2);
+		_gpsLatitudeRef = readASCII(count, value);
 	    }
 	    else if (tag == GPSLONGITUDE) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 3);
-		_gpsLongitude = readRationalArray (count, value);
+		checkType(tag, type, RATIONAL);
+		checkCount(tag, count, 3);
+		_gpsLongitude = readRationalArray(count, value);
 	    }
 	    else if (tag == GPSLONGITUDEREF) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 2);
-		_gpsLongitudeRef = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 2);
+		_gpsLongitudeRef = readASCII(count, value);
 	    }
 	    else if (tag == GPSMAPDATUM) {
-		checkType  (tag, type, ASCII);
-		_gpsMapDatum = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		_gpsMapDatum = readASCII(count, value);
 	    }
 	    else if (tag == GPSMEASUREMODE) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 2);
-		_gpsMeasureMode = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 2);
+		_gpsMeasureMode = readASCII(count, value);
 	    }
 	    else if (tag == GPSPROCESSINGMETHOD) {
-		checkType  (tag, type, UNDEFINED);
-		_gpsProcessingMethod = readByteArray (type, count, value);
+		checkType(tag, type, UNDEFINED);
+		_gpsProcessingMethod = readByteArray(type, count, value);
 	    }
 	    else if (tag == GPSSATELLITES) {
-		checkType  (tag, type, ASCII);
-		_gpsSatellites = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		_gpsSatellites = readASCII(count, value);
 	    }
 	    else if (tag == GPSSPEED) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 1);
-		_gpsSpeed = readRational (count, value);
+		checkType(tag, type, RATIONAL);
+		checkCount(tag, count, 1);
+		_gpsSpeed = readRational(count, value);
 	    }
 	    else if (tag == GPSSPEEDREF) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 2);
-		_gpsSpeedRef = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 2);
+		_gpsSpeedRef = readASCII(count, value);
 	    }
 	    else if (tag == GPSSTATUS) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 2);
-		_gpsStatus = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 2);
+		_gpsStatus = readASCII(count, value);
 	    }
 	    else if (tag == GPSTIMESTAMP) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 3);
-		_gpsTimeStamp = readRationalArray (count, value);
+		checkType(tag, type, RATIONAL);
+		checkCount(tag, count, 3);
+		_gpsTimeStamp = readRationalArray(count, value);
 	    }
 	    else if (tag == GPSTRACK) {
-		checkType  (tag, type, RATIONAL);
-		checkCount (tag, count, 1);
-		_gpsTrack = readRational (count, value);
+		checkType(tag, type, RATIONAL);
+		checkCount(tag, count, 1);
+		_gpsTrack = readRational(count, value);
 	    }
 	    else if (tag == GPSTRACKREF) {
-		checkType  (tag, type, ASCII);
-		checkCount (tag, count, 2);
-		_gpsTrackRef = readASCII (count, value);
+		checkType(tag, type, ASCII);
+		checkCount(tag, count, 2);
+		_gpsTrackRef = readASCII(count, value);
 	    }
 	    else if (tag == GPSVERSIONID) {
-		checkType  (tag, type, BYTE);
-		checkCount (tag, count, 4);
-		_gpsVersionID = readByteArray (type, count, value);
+		checkType(tag, type, BYTE);
+		checkCount(tag, count, 4);
+		_gpsVersionID = readByteArray(type, count, value);
 	    }
 	    else {
-		_info.setMessage (new ErrorMessage ("Unknown GPSInfo IFD tag",
-						    "Tag = " + tag, value));
+		_info.setMessage(new ErrorMessage(MessageConstants.ERR_GPS_IFD_TAG_UNK,
+				MessageConstants.TAG_SUB_MESS + tag, value));
 	    }
 	}
 	catch (IOException e) {
-	    throw new TiffException ("Read error for tag" + tag, value);
+	    throw new TiffException(MessageConstants.ERR_TAG_IO_READ + tag, value);
 	}
     }
 }
