@@ -190,7 +190,7 @@ public class TiffIFD
         HCUSAGE = 34030;
 
     public static final String[] BACKGROUNDCOLORINDICATOR_L = {
-        "background not defined", "Background color defined", 
+        "background not defined", "Background color defined",
         "full transparency, background color not defined"
     };
     public static final String [] HCUSAGE_L = {
@@ -294,7 +294,7 @@ public class TiffIFD
         MODELPIXELSCALETAG = 33550,
         MODELTRANSFORMATIONTAG = 34264;
     /** GeoTIFF key values. */
-    public static final int 
+    public static final int
         GTMODELTYPEGEOKEY = 1024,
         GTRASTERTYPEGEOKEY = 1025,
         GTCITATIONGEOKEY = 1026,
@@ -355,8 +355,8 @@ public class TiffIFD
     private static final int
         JPEGTABLES = 347,
         IMAGESOURCEDATA = 37724;
-    
-    /** More Photoshop TIFF tags. 
+
+    /** More Photoshop TIFF tags.
     */
     private static final int
         PHOTOSHOPPROPS = 34377,
@@ -381,8 +381,8 @@ public class TiffIFD
     public static final String [] IMAGELAYER_L = {
             "", "Background", "Mask", "Foreground"
     };
-    
-    
+
+
     /** DNG tags. */
     private static final int
         DNGVERSION = 50706,
@@ -393,7 +393,7 @@ public class TiffIFD
         CFALAYOUT = 50711,
         LINEARIZATIONTABLE = 50712,
         BLACKLEVELREPEATDIM = 50713,
-        BLACKLEVEL = 50714, 
+        BLACKLEVEL = 50714,
         BLACKLEVELDELTAH = 50715,
         BLACKLEVELDELTAV = 50716,
         WHITELEVEL = 50717,
@@ -533,11 +533,11 @@ public class TiffIFD
     /** JPEG point transforms tag (518). */
     private int [] _jpegPointTransforms;
     /** JPEG Q tables tag (519). */
-    private long [] _jpegQTables; 
+    private long [] _jpegQTables;
     /** JPEG DC tables tag (520). */
-    private long [] _jpegDCTables; 
+    private long [] _jpegDCTables;
     /** JPEG AC tables tag (521). */
-    private long [] _jpegACTables; 
+    private long [] _jpegACTables;
     /** Copyright tag (33432). */
     private String _copyright;
     /** Exif IFD tag (34665). */
@@ -608,10 +608,10 @@ public class TiffIFD
     private double[] _modelPixelScaleTag;
     private double[] _modelTiepointTag;
     private double[] _modelTransformationTag;
-    
+
     /* XMP property. */
     private Property _xmpProp;
-    
+
     /* Tiff/FX tag values. */
     private long[] _stripRowCounts;
     private int[] _imageLayer;
@@ -624,7 +624,7 @@ public class TiffIFD
     private InteroperabilityIFD _theInteroperabilityIFD;
     /** GlobalParameters IFD. */
     private GlobalParametersIFD _theGlobalParametersIFD;
-    
+
     /* DNG tag values.  The spec says that some of these tags go into
      * a "raw IFD," which isn't defined. Until this is explained,
      * throw it all in here. */
@@ -642,7 +642,7 @@ public class TiffIFD
     private Rational[] _blackLevel;
     private Rational[] _blackLevelDeltaH;
     private Rational[] _blackLevelDeltaV;
-    // Though BlackLevel can be RATIONAL, WhiteLevel can't.  
+    // Though BlackLevel can be RATIONAL, WhiteLevel can't.
     // There must be a rational explanation.
     private long[] _whiteLevel;
     private Rational[] _defaultScale;
@@ -745,19 +745,19 @@ public class TiffIFD
         _interlace = NULL;
         _interoperabilityIFD = NULL;
         _globalParametersIFD = NULL;
-        
+
         /* Class F/RFC 1324 defaults. */
         _badFaxLines = NULL;
         _cleanFaxData = NULL;
         _consecutiveBadFaxLines = NULL;
-        
+
         /* XMP default. */
         _xmpProp = null;
-        
+
         /* Tiff/FX defaults. */
         _stripRowCounts = null;
         _imageLayer = null;
-        
+
         /* DNG defaults. */
         _dngVersion = null;
         _dngBackwardVersion = null;
@@ -874,7 +874,7 @@ public class TiffIFD
         return _clipPath;
     }
 
-    /** Returns the value of the COLORSEQUENCE 
+    /** Returns the value of the COLORSEQUENCE
      *  (34017) tag. */
     public String getColorSequence ()
     {
@@ -956,7 +956,7 @@ public class TiffIFD
         return _focalPlaneXResolution;
     }
 
-    /** Returns the value of the FOCALPLANEYRESOLUTION 
+    /** Returns the value of the FOCALPLANEYRESOLUTION
      *  (37390) tag. */
     public Rational getFocalPlaneYResolution ()
     {
@@ -1063,13 +1063,13 @@ public class TiffIFD
     {
         return _iccProfile;
     }
-    
+
     /** Returns the value of the INDEXED (364) tag. */
     public int getIndexed ()
     {
         return _indexed;
     }
-    
+
     public long getJpegInterchangeFormat ()
     {
         return _jpegInterchangeFormat;
@@ -1106,7 +1106,7 @@ public class TiffIFD
     {
         return _maxAperatureValue;
     }
-    
+
     /** Returns the value of the MODELTIEPOINTTAG (33922)
      *  tag. */
     public double[] getModelTiepointTag ()
@@ -1210,7 +1210,7 @@ public class TiffIFD
     {
         return _spectralSensitivity;
     }
-    
+
     /** Returns the value of the STRIPROWCOUNTS (559) tag. */
     public long[] getStripRowCounts ()
     {
@@ -1295,7 +1295,7 @@ public class TiffIFD
     {
         return _xClipPathUnits;
     }
-    
+
     /** Returns the value of the XPOSITION (286) tag. */
     public Rational getXPosition ()
     {
@@ -1307,31 +1307,31 @@ public class TiffIFD
     {
         return _yPosition;
     }
-    
+
     /** Returns the value of the DNGVERSION (50706) tag. */
     public int[] getDNGVersion ()
     {
         return _dngVersion;
     }
-    
+
     /** Returns the value of the DNG UNIQUECAMERAMODEL (50708) tag. */
     public String getUniqueCameraModel ()
     {
         return _uniqueCameraModel;
     }
-    
+
     /** Returns the value of the CFAPlaneColor (50710) tag. */
     public int[] getCFAPlaneColor ()
     {
         return _cfaPlaneColor;
     }
-    
+
     /** Returns the value of the AsShotNeutral (50728) tag. */
     public Rational[] getAsShotNeutral ()
     {
         return _asShotNeutral;
     }
-    
+
     /** Returns the value of the AsShotWhiteXY (50729) tag. */
     public Rational[] getAsShotWhiteXY ()
     {
@@ -1413,7 +1413,7 @@ public class TiffIFD
         }
         if (_copyright != null) {
             entries.add (new Property ("Copyright", PropertyType.STRING,
-                                       _copyright));    
+                                       _copyright));
         }
         if (_fillOrder != NULL) {
             entries.add (addIntegerProperty ("FillOrder", _fillOrder,
@@ -1577,7 +1577,7 @@ public class TiffIFD
                                        PropertyArity.ARRAY, _freeOffsets));
         }
     }
-    
+
     private void addTiffITProperties (List<Property> entries, boolean rawOutput)
     {
         /* Add TIFF/IT properties. */
@@ -1642,7 +1642,7 @@ public class TiffIFD
         entries.add (new Property ("TIFFITProperties", PropertyType.PROPERTY,
                                    PropertyArity.LIST, itList));
     }
-    
+
 
         /* Add TIFF/EP properties. */
     private void addTiffEPProperties (List<Property> entries, boolean rawOutput)
@@ -1776,13 +1776,13 @@ public class TiffIFD
                                        PropertyType.PROPERTY,
                                        PropertyArity.LIST, epList));
         }
-        
+
         if (_xmpProp != null) {
             entries.add (_xmpProp);
         }
     }
-    
-    
+
+
     private void addGeoTiffProperties (List<Property> entries, boolean rawOutput)
             throws TiffException
     {
@@ -1818,7 +1818,7 @@ public class TiffIFD
                         sval = _geoAsciiParamsTag.substring (offset, offset + count-1);
                     }
                     catch (Exception e) {
-                        throw new TiffException ("Invalid GeoKeyDirectory tag");
+                        throw new TiffException(MessageConstants.ERR_GEO_KEY_DIRECT_INVALID);
                     }
                 }
 
@@ -2087,7 +2087,7 @@ public class TiffIFD
                                        PropertyArity.LIST, geoList));
         }
     }
-    
+
     /* Add Tiff/FX properties */
     private void addTiffFXProperties (List<Property> entries, boolean rawOutput)
     {
@@ -2107,7 +2107,7 @@ public class TiffIFD
                 layerProps[1] = new Property ("OrdinalNumber",
                                 PropertyType.INTEGER,
                                 new Integer (_imageLayer[1]));
-                                
+
                 entries.add (new Property ("ImageLayer",
                                            PropertyType.PROPERTY,
                                            PropertyArity.ARRAY,
@@ -2330,15 +2330,15 @@ public class TiffIFD
                     _dngPrivateData));
         }
         if (_makerNoteSafety != NULL) {
-            dngList.add (addIntegerProperty ("MakerNoteSafety", _makerNoteSafety,
+            dngList.add (addIntegerProperty("MakerNoteSafety", _makerNoteSafety,
                                              MAKERNOTESAFETY_L, rawOutput));
         }
         if (dngList.size () > 0) {
-            entries.add (new Property ("DNGProperties",
-                                       PropertyType.PROPERTY,
-                                       PropertyArity.LIST, dngList));
+            entries.add (new Property("DNGProperties",
+                                      PropertyType.PROPERTY,
+                                      PropertyArity.LIST, dngList));
         }
-        
+
     }
 
 
@@ -2371,7 +2371,7 @@ public class TiffIFD
                 if (unique) {
                     uniqueColors[nUnique++] = color;
                 }
-                
+
             }
             return nUnique;
         }
@@ -2395,11 +2395,11 @@ public class TiffIFD
                 _dngBackwardVersion[2] = 0;
                 _dngBackwardVersion[3] = 0;
             }
-            
+
             if (_uniqueCameraModel != null && _localizedCameraModel == null) {
                 _localizedCameraModel = _uniqueCameraModel;
             }
-            
+
             if (_calibrationIlluminant1 == NULL) {
                 _calibrationIlluminant1 = 0;
             }
@@ -2423,7 +2423,7 @@ public class TiffIFD
             // This would require processing the IFD's out of order, so those
             // defaults (AnalogBalance) go unreported.
         }
-        
+
         if (_photometricInterpretation == TiffProfileDNG.CFA ||
                 _photometricInterpretation == TiffProfileDNG.LINEAR_RAW) {
             // Apply "Raw IFD" defaults.  This really isn't sufficient
@@ -2434,18 +2434,18 @@ public class TiffIFD
             if (_cfaPlaneColor == null) {
                 _cfaPlaneColor = new int[] {0, 1, 2};
             }
-            
+
             if (_cfaLayout == NULL) {
                 _cfaLayout = 1;
             }
-            
+
             // The size of the LinearizationTable is -- I quote -- N.
             // This is NOT useful.  Skip that default.
-            
+
             if (_blackLevelRepeatDim == null) {
                 _blackLevelRepeatDim = new int[] { 1, 1 };
             }
-            
+
             Rational zero = new Rational (0, 1);
             if (_blackLevel == null) {
                 _blackLevel = new Rational [_blackLevelRepeatDim[0] *
@@ -2455,7 +2455,7 @@ public class TiffIFD
                     _blackLevel[i] = zero;
                 }
             }
-            
+
             if (_blackLevelDeltaH == null) {
                 _blackLevelDeltaH = new Rational [(int) _niso.getImageWidth()];
                 for (int i = 0; i < _blackLevelDeltaH.length; i++) {
@@ -2469,7 +2469,7 @@ public class TiffIFD
                     _blackLevelDeltaV[i] = zero;
                 }
             }
-            
+
             if (_whiteLevel == null) {
                 _whiteLevel = new long[_niso.getSamplesPerPixel()];
                 long defWhite = (1L << _niso.getBitsPerSample()[0] - 1);
@@ -2477,20 +2477,20 @@ public class TiffIFD
                     _whiteLevel[i] = defWhite;
                 }
             }
-            
+
             Rational one = new Rational (1, 1);
             if (_defaultScale == null) {
                 _defaultScale = new Rational[] { one, one };
             }
-            
+
             if (_bestQualityScale == null) {
                 _bestQualityScale = one;
             }
-            
+
             if (_defaultCropOrigin == null) {
                 _defaultCropOrigin = new Rational[] {zero, zero};
             }
-            
+
             if (_defaultCropSize == null) {
                 _defaultCropSize = new Rational[2];
                 _defaultCropSize[0] = new Rational (_niso.getImageWidth(), 1);
@@ -2573,7 +2573,7 @@ public class TiffIFD
                 else {
                     _batteryLevel = readASCII (count, value);
                 }
-            }                                      
+            }
             else if (tag == BITSPEREXTENDEDRUNLENGTH) {
                 checkType  (tag, type, SHORT);
                 checkCount (tag, count, 1);
@@ -2692,8 +2692,7 @@ public class TiffIFD
                     _t6Options = 0;
                 }
                 if (scheme == 6) {
-                    _info.setMessage(new InfoMessage
-                          ("TIFF compression scheme 6 is deprecated"));
+                    _info.setMessage(new InfoMessage(MessageConstants.INF_COMP_SCH_6_DEPR));
                 }
 
             }
@@ -2865,8 +2864,8 @@ public class TiffIFD
                     int j = i*4 + 4;
                     int key = _geoKeyDirectoryTag[j];
                     if (prevKey > key) {
-                        throw new TiffException ("GeoKey " + key +
-                                                 " out of sequence");
+                        throw new TiffException(MessageConstants.ERR_GEO_KEY_OUT_SEQ + key +
+                                                MessageConstants.ERR_GEO_KEY_OUT_SEQ_2);
                     }
                     prevKey = key;
                 }
@@ -2874,7 +2873,7 @@ public class TiffIFD
             else if (tag == GLOBALPARAMETERSIFD) {
                 checkType  (tag, type, LONG, IFD);
                 // RFC 2301 allows only IFD, but the latest working
-                // draft allows LONG.  Even though allowing LONG 
+                // draft allows LONG.  Even though allowing LONG
                 // technically isn't allowed yet, letting it by seems
                 // reasonable, since other IFD tags can be LONG.
                 checkCount (tag, count, 1);
@@ -2961,7 +2960,7 @@ public class TiffIFD
                 // The ImageSourceData tag sometimes has a gigantic
                 // amount of data, and we don't actually do anything with
                 // it in the current version of JHOVE except determine if
-                // it's there.  
+                // it's there.
                 _imageSourceData = new int[] {1};
             }
             else if (tag == PHOTOSHOPPROPS) {
@@ -3009,8 +3008,8 @@ public class TiffIFD
                 		_niso.setProfileName(desc);
                 	}
                 } catch (IllegalArgumentException ie) {
-                	throw new TiffException ("Bad ICCProfile in tag " + tag +
-                            "; message " + ie.getMessage());
+                	throw new TiffException (MessageConstants.ERR_TAG_ICCPROFILE_BAD + tag +
+                            MessageConstants.MESSAGE_SUB_MESS + ie.getMessage());
                 }
             }
             else if (tag == INTERLACE) {
@@ -3024,7 +3023,7 @@ public class TiffIFD
                 _interoperabilityIFD = readLong (type, count, value);
             }
             else if (tag == IPTCNAA) {
-                
+
                 if (type == ASCII) {
                     String s = readASCII (count, value);
                     long [] larray = new long [s.length ()];
@@ -3231,14 +3230,14 @@ public class TiffIFD
                 _photometricInterpretation = readShort (type, count, value);
                 _niso.setColorSpace (_photometricInterpretation);
 
-                // Set default values appropriate to interpretation, 
+                // Set default values appropriate to interpretation,
                 // only if no value has been set.
                 if (_photometricInterpretation == 5) {
                     if (_inkSet == NULL) {
                         _inkSet = 1;
                     }
                     if (_numberOfInks == NULL) {
-                        _numberOfInks = 4;   
+                        _numberOfInks = 4;
                     }
                 }
             	else if (_photometricInterpretation == 6) {
@@ -3255,7 +3254,7 @@ public class TiffIFD
             		_niso.setYCbCrSubSampling (new int [] {2, 2});
             	    }
             	}
-            
+
             	int colorSpace = _niso.getColorSpace ();
             	if (colorSpace == 3 || colorSpace == 4) {
             	    if (_version < 5) {
@@ -3609,7 +3608,7 @@ public class TiffIFD
                     len--;
                 }
                 _localizedCameraModel = new String (lcm, 0, len);
-                
+
             }
             else if (tag == CFAPLANECOLOR) {
                 checkType (tag, type, BYTE);
@@ -3629,7 +3628,7 @@ public class TiffIFD
             }
             else if (tag == BLACKLEVEL) {
                 // Just to make things complicated, this can be SHORT, LONG
-                // or RATIONAL.  To give these a least common (pardon the 
+                // or RATIONAL.  To give these a least common (pardon the
                 // expression) denominator, we convert all to rational.
                 if (type == RATIONAL) {
                     _blackLevel = readRationalArray(count, value);
@@ -3668,7 +3667,7 @@ public class TiffIFD
             else if (tag == DEFAULTCROPORIGIN) {
                 checkCount (tag, count, 2);
                 // Just to make things complicated, this can be SHORT, LONG
-                // or RATIONAL.  To give these a least common (pardon the 
+                // or RATIONAL.  To give these a least common (pardon the
                 // expression) denominator, we convert all to rational.
                 if (type == RATIONAL) {
                     _defaultCropOrigin = readRationalArray(count, value);
@@ -3791,8 +3790,8 @@ public class TiffIFD
                 _antiAliasStrength = readRational (count, value);
             }
             else if (tag == SHADOWSCALE) {
-                _info.setMessage (new InfoMessage ("Undocumented TIFF tag ",
-                    "ShadowScale (50739)"));
+                _info.setMessage (new InfoMessage(MessageConstants.INF_TIFF_TAG_UNDOC,
+                    MessageConstants.INF_SHADOW_SCALE));
             }
             else if (tag == DNGPRIVATEDATA) {
                 checkType (tag, type, BYTE);
@@ -3803,12 +3802,11 @@ public class TiffIFD
                 _makerNoteSafety = readShort (type, count, value);
             }
             else {
-                _info.setMessage (new InfoMessage ("Unknown TIFF IFD " +
-                                                    "tag: " + tag, value));
+                _info.setMessage (new InfoMessage(MessageConstants.INF_IFD_TAG_UNK + tag, value));
             }
         }
         catch (IOException e) {
-            throw new TiffException ("Read error for tag " + tag, value);
+            throw new TiffException (MessageConstants.ERR_TAG_IO_READ + tag, value);
         }
     }
 
@@ -3855,7 +3853,7 @@ public class TiffIFD
 //            _photometricInterpretation == 2 ||
 //            _photometricInterpretation == 3 ||
 //            _photometricInterpretation == 6) {
-//            // Set default transfer function only for indicated 
+//            // Set default transfer function only for indicated
 //            // photometricInterpretations.
 //            if (_transferFunction == null) {
 //                int n = 1<<bitsPerSample[0];
@@ -3913,7 +3911,7 @@ public class TiffIFD
     {
         _theInteroperabilityIFD = interOp;
     }
-    
+
     public void setTheGlobalParametersIFD (GlobalParametersIFD gp)
     {
         _theGlobalParametersIFD = gp;
@@ -3924,19 +3922,18 @@ public class TiffIFD
                 throws TiffException
     {
         Property xmpProp = null;
-        final String badMetadata = "Invalid or ill-formed XMP metadata"; 
         try {
             byte[] buf = readTrueByteArray (BYTE, count, value);
-            ByteArrayInputStream strm = 
+            ByteArrayInputStream strm =
                 new ByteArrayInputStream (buf);
             ByteArrayXMPSource src = new ByteArrayXMPSource (strm);
 
             // Create an InputSource to feed the parser.
-            SAXParserFactory factory = 
+            SAXParserFactory factory =
                             SAXParserFactory.newInstance();
             factory.setNamespaceAware (true);
             XMLReader parser = factory.newSAXParser ().getXMLReader ();
-            //InputStream stream = new XMLWrapperStream 
+            //InputStream stream = new XMLWrapperStream
             //    (new StreamInputStream (metadata, getFile ()), "dummyroot");
             XMPHandler handler = new XMPHandler ();
             parser.setContentHandler (handler);
@@ -3959,7 +3956,7 @@ public class TiffIFD
                         parser.parse (src);
                     }
                     catch (UnsupportedEncodingException uee) {
-                        throw new TiffException (badMetadata);
+                        throw new TiffException(MessageConstants.ERR_XMP_INVALID);
                     }
                 }
                 xmpProp = src.makeProperty ();

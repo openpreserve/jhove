@@ -50,38 +50,37 @@ public class InteroperabilityIFD
      ******************************************************************/
 
     /** Get the InteroperabilityIndex tag (1). */
-    public String getInteroperabilityIndex ()
+    public String getInteroperabilityIndex()
     {
 	return _interoperabilityIndex;
     }
 
     /** Get the IFD properties. */
-    public Property getProperty (boolean rawOutput)
+    public Property getProperty(boolean rawOutput)
     {
-	List entries = new LinkedList ();
-	entries.add (new Property ("Index", PropertyType.STRING,
+	List entries = new LinkedList();
+	entries.add (new Property("Index", PropertyType.STRING,
 				   _interoperabilityIndex));
 
-	return propertyHeader ("Exif Interoperability", entries);
+	return propertyHeader("Exif Interoperability", entries);
     }
 
     /** Lookup an IFD tag. */
-    public void lookupTag (int tag, int type, long count, long value)
+    public void lookupTag(int tag, int type, long count, long value)
 	throws TiffException
     {
 	try {
 	    if (tag == INTEROPERABILITYINDEX) {
 		checkType (tag, type, ASCII);
-		_interoperabilityIndex = readASCII (count, value);
+		_interoperabilityIndex = readASCII(count, value);
 	    }
 	    else {
-		_info.setMessage (new ErrorMessage ("Unknown Exif " +
-						    "Interoperability IFD tag",
-						    "Tag = " + tag, value));
+		_info.setMessage (new ErrorMessage(MessageConstants.ERR_EXIF_INTER_IFD_UNK,
+										   MessageConstants.TAG_SUB_MESS + tag, value));
 	    }
 	}
 	catch (IOException e) {
-	    throw new TiffException ("Read error for tag " + tag, value);
+	    throw new TiffException(MessageConstants.ERR_TAG_IO_READ + tag, value);
 	}
     }
 }

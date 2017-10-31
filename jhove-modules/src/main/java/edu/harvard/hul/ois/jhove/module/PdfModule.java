@@ -117,7 +117,7 @@ public class PdfModule
 	private static final String PDF_SIG_HEADER = "%" + PDF_VER1_HEADER_PREFIX;
 	private static final String POSTSCRIPT_HEADER_PREFIX = "!PS-Adobe-";
 	private static final String ENCODING_PREFIX = "ENC=";
-	private static final String NO_HEADER = "No PDF header";
+//	private static final String NO_HEADER = "No PDF header";
 
 	private static final String DEFAULT_PAGE_LAYOUT = "SinglePage";
 	private static final String DEFAULT_MODE = "UseNone";
@@ -1067,7 +1067,6 @@ public class PdfModule
     {
         Token  token = null;
         String value = null;
-        final String nohdr = NO_HEADER;
 
         /* Parse file header. */
 
@@ -2385,7 +2384,7 @@ public class PdfModule
                                         boolean b = imgmsk.isTrue();
                                         imgList.add(new Property(PROP_NAME_IMAGE_MASK,
                                                 PropertyType.BOOLEAN,
-                                                new Boolean(b)));
+                                                Boolean.valueOf(b)));
                                     }
 
                                     PdfArray dcd = (PdfArray) xobdict.get(DICT_KEY_DECODE);
@@ -2409,7 +2408,7 @@ public class PdfModule
                                         boolean b = intrp.isTrue();
                                         imgList.add(new Property(PROP_NAME_INTERPOLATE,
                                                 PropertyType.BOOLEAN,
-                                                new Boolean(b)));
+                                                Boolean.valueOf(b)));
                                     }
 
                                     PdfSimpleObject nam = (PdfSimpleObject)
@@ -3616,7 +3615,7 @@ public class PdfModule
 //            PdfObject charProcs = dict.get("CharProcs");
 //            prop = new Property("CharProcs",
 //                        PropertyType.BOOLEAN,
-//                        new Boolean(charProcs != null));
+//                        Boolean.valueOf(charProcs != null));
 //            fontPropList.add(prop);
         }
 
@@ -3820,7 +3819,7 @@ public class PdfModule
         PdfObject diffs = encodingDict.get(DICT_KEY_DIFFERENCES);
         Property diffsProp = new Property(PROP_NAME_DIFFERENCES,
                         PropertyType.BOOLEAN,
-                        new Boolean(diffs != null));
+                        Boolean.valueOf(diffs != null));
         propList.add(diffsProp);
 
         return prop;
@@ -3929,7 +3928,7 @@ public class PdfModule
         else {
             b = false;
         }
-        p = new Property(PROP_NAME_HIDE_TOOLBAR, PropertyType.BOOLEAN, new Boolean(b));
+        p = new Property(PROP_NAME_HIDE_TOOLBAR, PropertyType.BOOLEAN, Boolean.valueOf(b));
         propList.add(p);
 
         ob = prefDict.get(DICT_KEY_HIDE_MENUBAR);
@@ -3939,7 +3938,7 @@ public class PdfModule
         else {
             b = false;
         }
-        p = new Property(PROP_NAME_HIDE_MENUBAR, PropertyType.BOOLEAN, new Boolean(b));
+        p = new Property(PROP_NAME_HIDE_MENUBAR, PropertyType.BOOLEAN, Boolean.valueOf(b));
         propList.add(p);
 
         ob = prefDict.get(DICT_KEY_HIDE_WINDOW_UI);
@@ -3949,7 +3948,7 @@ public class PdfModule
         else {
             b = false;
         }
-        p = new Property(PROP_NAME_HIDE_WINDOW_UI, PropertyType.BOOLEAN, new Boolean(b));
+        p = new Property(PROP_NAME_HIDE_WINDOW_UI, PropertyType.BOOLEAN, Boolean.valueOf(b));
         propList.add(p);
 
         ob = prefDict.get(DICT_KEY_FIT_WINDOW);
@@ -3959,7 +3958,7 @@ public class PdfModule
         else {
             b = false;
         }
-        p = new Property(PROP_NAME_FIT_WINDOW, PropertyType.BOOLEAN, new Boolean(b));
+        p = new Property(PROP_NAME_FIT_WINDOW, PropertyType.BOOLEAN, Boolean.valueOf(b));
         propList.add(p);
 
         ob = prefDict.get(DICT_KEY_CENTER_WINDOW);
@@ -3969,7 +3968,7 @@ public class PdfModule
         else {
             b = false;
         }
-        p = new Property(PROP_NAME_CENTER_WINDOW, PropertyType.BOOLEAN, new Boolean(b));
+        p = new Property(PROP_NAME_CENTER_WINDOW, PropertyType.BOOLEAN, Boolean.valueOf(b));
         propList.add(p);
 
         ob = prefDict.get(DICT_KEY_DISP_DOC_TITLE);
@@ -3979,7 +3978,7 @@ public class PdfModule
         else {
             b = false;
         }
-        p = new Property(PROP_NAME_DISP_DOC_TITLE, PropertyType.BOOLEAN, new Boolean(b));
+        p = new Property(PROP_NAME_DISP_DOC_TITLE, PropertyType.BOOLEAN, Boolean.valueOf(b));
         propList.add(p);
 
         ob = prefDict.get(DICT_KEY_NO_FULL_PAGE);
@@ -4153,8 +4152,7 @@ public class PdfModule
             PdfIndirectObj ob = (PdfIndirectObj) dict.get(DICT_KEY_PREV);
             ob = (PdfIndirectObj) dict.get(DICT_KEY_NEXT);
             ob = (PdfIndirectObj) dict.get(DICT_KEY_FIRST);
-            // TODO: Check that this shouldn't be "Last"
-            ob = (PdfIndirectObj) dict.get(DICT_KEY_FIRST);
+            ob = (PdfIndirectObj) dict.get(DICT_KEY_LAST);
 
             // Check if there are Actions in the outline.  This saves going
             // through the outlines all over again if a Profile checker

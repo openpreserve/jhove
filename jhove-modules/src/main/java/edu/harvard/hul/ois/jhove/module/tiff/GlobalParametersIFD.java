@@ -150,7 +150,7 @@ public class GlobalParametersIFD extends IFD {
             }
         }
         catch (IOException e) {
-            throw new TiffException ("Read error for tag " + tag, value);
+            throw new TiffException(MessageConstants.ERR_TAG_IO_READ + tag, value);
         }
     }
 
