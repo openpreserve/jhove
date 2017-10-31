@@ -59,7 +59,7 @@ public class CommonChunk extends Chunk {
                 // This is a rather special case, but testing did turn up
                 // a file that misbehaved in this way.
                 info.setMessage (new ErrorMessage
-                        ("Common Chunk in AIFF-C does not have compression type",
+                        (MessageConstants.ERR_COMMON_CHUNK_NO_COMP_TYPE,
                          module.getNByte()));
                 info.setWellFormed (false);
                 return false;
@@ -94,25 +94,25 @@ public class CommonChunk extends Chunk {
 	    if (compressionType.equals ("NONE")) {
 	    }
 	    else if (compressionType.equals ("raw ")) {
-            aes.setAudioDataEncoding ("PCM 8-bit offset-binary");
+            aes.setAudioDataEncoding("PCM 8-bit offset-binary");
 	    }
 	    else if (compressionType.equals ("twos")) {
-            aes.setAudioDataEncoding ("PCM 16-bit twos-complement big-endian");
+            aes.setAudioDataEncoding("PCM 16-bit twos-complement big-endian");
 	    }
-	    else if (compressionType.equals ("sowt")) {
-            aes.setAudioDataEncoding ("PCM 16-bit twos-complement little-endian");
+	    else if (compressionType.equals("sowt")) {
+            aes.setAudioDataEncoding("PCM 16-bit twos-complement little-endian");
 	    }
-	    else if (compressionType.equals ("fl32")) {
-            aes.setAudioDataEncoding ("PCM 32-bit integer");
+	    else if (compressionType.equals("fl32")) {
+            aes.setAudioDataEncoding("PCM 32-bit integer");
 	    }
-	    else if (compressionType.equals ("fl64")) {
-            aes.setAudioDataEncoding ("PCM 64-bit floating point");
+	    else if (compressionType.equals("fl64")) {
+            aes.setAudioDataEncoding("PCM 64-bit floating point");
 	    }
-	    else if (compressionType.equals ("in24")) {
-            aes.setAudioDataEncoding ("PCM 24-bit integer");
+	    else if (compressionType.equals("in24")) {
+            aes.setAudioDataEncoding("PCM 24-bit integer");
 	    }
-	    else if (compressionType.equals ("in32")) {
-            aes.setAudioDataEncoding ("PCM 32-bit integer");
+	    else if (compressionType.equals("in32")) {
+            aes.setAudioDataEncoding("PCM 32-bit integer");
 	    }
 	    else {
             aes.setAudioDataEncoding (compressionName);

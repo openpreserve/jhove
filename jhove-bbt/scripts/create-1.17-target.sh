@@ -93,7 +93,6 @@ find "${targetRoot}" -type f -name "*.wav.jhove.xml" -exec sed -i 's/audio\/x-wa
 
 # Add SaxParseException header to XML output messages
 find "${targetRoot}" -type f -name "jhoveconf.xml.jhove.xml" -exec sed -i 's/severity="error">Element type/severity="error">SaxParseException: Element type/' {} \;
-severity="error">Element type
 
 # Issue 60 add new file 20150213_140637.jpg with exif profile
 if [[ -f "${candidateRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml" ]]; then
@@ -109,12 +108,15 @@ if [[ -f "${candidateRoot}/examples/modules/audit-TIFF-hul.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/audit-TIFF-hul.jhove.xml" "${targetRoot}/examples/modules/"
 fi;
 
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.3">AIFF-hul<\/module>$/   <module release="1.4">AIFF-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.9">PDF-hul<\/module>$/   <module release="1.10">PDF-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.2">JPEG-hul<\/module>$/   <module release="1.3">JPEG-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.7">TIFF-hul<\/module>$/   <module release="1.8">TIFF-hul<\/module>/' {} \;
 
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's%<release>1.9<\/release>%<release>1.10<\/release>%' {} \;
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's%<date>2017-07-20<\/date>%<date>2017-10-31<\/date>%' {} \;
+find "${targetRoot}" -type f -name "audit-AIFF-hul.jhove.xml" -exec sed -i 's%<release>1.3<\/release>%<release>1.4<\/release>%' {} \;
+find "${targetRoot}" -type f -name "audit-AIFF-hul.jhove.xml" -exec sed -i 's%<date>2006-09-05<\/date>%<date>2017-10-31<\/date>%' {} \;
 find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.9" date="2017-07-20">PDF%<reportingModule release="1.10" date="2017-10-31">PDF%' {} \;
 find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.9" date="2017-07-20">PDF%<reportingModule release="1.10" date="2017-10-31">PDF%' {} \;
 

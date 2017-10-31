@@ -8,7 +8,8 @@ package edu.harvard.hul.ois.jhove.module;
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.Agent.Builder;
 import edu.harvard.hul.ois.jhove.module.aiff.*;
-import edu.harvard.hul.ois.jhove.module.iff.*;
+import edu.harvard.hul.ois.jhove.module.iff.Chunk;
+import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
 
 import java.io.*;
 import java.util.*;
@@ -112,8 +113,8 @@ public class AiffModule
        { 0X46, 0X4F, 0X52, 0X4D };
 
     private static final String NAME = "AIFF-hul";
-    private static final String RELEASE = "1.3";
-    private static final int [] DATE = {2006, 9, 5};
+    private static final String RELEASE = "1.4";
+    private static final int [] DATE = {2017, 10, 31};
     private static final String [] FORMAT = {
 	"AIFF", "Audio Interchange File Format"
     };
@@ -256,7 +257,7 @@ public class AiffModule
            for (int i = 0; i < 4; i++) {
                int ch = readUnsignedByte(_dstream, this);
                if (ch != sigByte[i]) {
-                   info.setMessage(new ErrorMessage ("Document does not start with AIFF FORM Chunk", 0));
+                   info.setMessage(new ErrorMessage(MessageConstants.ERR_NOT_AIFF_CHU, 0));
                    info.setWellFormed (RepInfo.FALSE);
                    return 0;
                }
@@ -284,19 +285,19 @@ public class AiffModule
        catch (EOFException e) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage 
-                ("Unexpected EOF", _nByte));
+                (MessageConstants.ERR_EOF_UNEXPECTED, _nByte));
            return 0;
        }
        
        if (!commonChunkSeen) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage
-                ("Document does not contain a Common Chunk"));
+                (MessageConstants.ERR_COMMON_CHUNK_MISS));
        }
        if (fileType == AIFCTYPE && !formatVersionChunkSeen) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage
-                ("AIFF-C document must contain a Format Version Chunk"));
+                (MessageConstants.ERR_FORMAT_VER_CHUNK_MISS));
        }
        if (info.getWellFormed () != RepInfo.TRUE) {
            return 0;
@@ -592,7 +593,7 @@ public class AiffModule
         }
         else {
             info.setMessage (new ErrorMessage 
-                    ("File type in Form Chunk is not AIFF or AIFC", _nByte));
+                    (MessageConstants.ERR_FORM_CHUNK_NOT_AAIF, _nByte));
             info.setWellFormed (RepInfo.FALSE);
             return false;
         }
@@ -713,7 +714,7 @@ public class AiffModule
         }
         else {
             info.setMessage (new InfoMessage
-                ("Chunk type '" + id + "' ignored", _nByte));
+                (MessageConstants.INF_CHUNK_TYPE_IGNORED + id, _nByte));
         }
         if (chunk != null) {
             if (!chunk.readChunk (info)) {
@@ -742,7 +743,8 @@ public class AiffModule
     protected void dupChunkError (RepInfo info, String chunkName)
     {
         info.setMessage (new ErrorMessage
-                        ("Multiple " + chunkName + " Chunks not permitted",
+                        (MessageConstants.ERR_MULTI_CHUNK_NOT_PERM + chunkName +
+                         MessageConstants.ERR_MULTI_CHUNK_NOT_PERM_2,
                          _nByte));
         info.setValid (false);
     }
