@@ -943,8 +943,8 @@ public class TiffModule extends ModuleBase {
             int len = (1 << bitsPerSample[0]);
             if (colormapBitCodeValue.length < len) {
                 reportInvalid(MessageConstants.ERR_COL_MAP_MISS_VALS +
-                		      colormapBitCodeValue.length + "<"  + len,
-                		      info);
+                              colormapBitCodeValue.length + "<"  + len,
+                              info);
             }
         }
 

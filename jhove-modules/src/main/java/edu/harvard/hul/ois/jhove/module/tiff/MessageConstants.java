@@ -94,7 +94,7 @@ public enum MessageConstants {
 	public static final String ERR_TAG_IO_READ = ERR_IO_READ + " for tag ";
 	public static final String ERR_TAG_ICCPROFILE_BAD = "Bad ICCProfile in tag ";
 	public static final String ERR_TAG_OUT_OF_SEQ_1 = "Tag ";
-	public static final String ERR_TAG_OUT_OF_SEQ_2 = " out of sequence";
+	public static final String ERR_TAG_OUT_OF_SEQ_2 = ERR_GEO_KEY_OUT_SEQ_2;
 	public static final String ERR_TAG_TYPE_MISMATCH = "Type" + tagMismatch;
 	public static final String ERR_TIFF_HEADER_MISSING = "No TIFF header: ";
 	public static final String ERR_TIFF_MAGIC_NUM_MISSING = "No TIFF magic number: ";

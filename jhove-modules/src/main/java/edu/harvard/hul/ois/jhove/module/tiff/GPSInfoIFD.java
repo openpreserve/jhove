@@ -15,7 +15,6 @@ import java.util.*;
 public class GPSInfoIFD
     extends IFD
 {
-	private static final String period = ".";
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
@@ -370,9 +369,9 @@ public class GPSInfoIFD
     {
 	List entries = new LinkedList();
 	entries.add(new Property("GPSVersionID", PropertyType.STRING,
-				   Integer.toString(_gpsVersionID[0]) + period +
-				   Integer.toString(_gpsVersionID[1]) + period +
-				   Integer.toString(_gpsVersionID[2]) + period +
+				   Integer.toString(_gpsVersionID[0]) + "." +
+				   Integer.toString(_gpsVersionID[1]) + "." +
+				   Integer.toString(_gpsVersionID[2]) + "." +
 				   Integer.toString(_gpsVersionID[3])));
 	if (_gpsLatitudeRef != null) {
 	    entries.add(new Property("GPSLatitudeRef", PropertyType.STRING,
