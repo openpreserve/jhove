@@ -110,8 +110,8 @@ public class BroadcastExtChunk extends Chunk {
             // If it's a higher version, we can't read its fields,
             // so skip any remaining reserved bytes anyway.
             module.skipBytes(_dstream, VER_2_RESERVED_LENGTH, module);
-            info.setMessage(new InfoMessage(
-                    "BWF version '" + version +"' unrecognized"));
+            info.setMessage(new InfoMessage(MessageConstants.ERR_BWF_VER_UNREC +
+                   version));
         }
 
         String codingHistory = "";

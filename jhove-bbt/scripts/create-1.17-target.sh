@@ -112,11 +112,14 @@ find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.9">PDF-hul<\/module>$/   <module release="1.10">PDF-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.2">JPEG-hul<\/module>$/   <module release="1.3">JPEG-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.7">TIFF-hul<\/module>$/   <module release="1.8">TIFF-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.4">WAVE-hul<\/module>$/   <module release="1.5">WAVE-hul<\/module>/' {} \;
 
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's%<release>1.9<\/release>%<release>1.10<\/release>%' {} \;
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's%<date>2017-07-20<\/date>%<date>2017-10-31<\/date>%' {} \;
 find "${targetRoot}" -type f -name "audit-AIFF-hul.jhove.xml" -exec sed -i 's%<release>1.3<\/release>%<release>1.4<\/release>%' {} \;
 find "${targetRoot}" -type f -name "audit-AIFF-hul.jhove.xml" -exec sed -i 's%<date>2006-09-05<\/date>%<date>2017-10-31<\/date>%' {} \;
+find "${targetRoot}" -type f -name "audit-WAVE-hul.jhove.xml" -exec sed -i 's%<release>1.4<\/release>%<release>1.5<\/release>%' {} \;
+find "${targetRoot}" -type f -name "audit-WAVE-hul.jhove.xml" -exec sed -i 's%<date>2017-03-14<\/date>%<date>2017-10-31<\/date>%' {} \;
 find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.9" date="2017-07-20">PDF%<reportingModule release="1.10" date="2017-10-31">PDF%' {} \;
 find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.9" date="2017-07-20">PDF%<reportingModule release="1.10" date="2017-10-31">PDF%' {} \;
 
@@ -129,4 +132,6 @@ find "${targetRoot}" -type f -name "compos.*.jhove.xml" -exec sed -i 's%<reporti
 find "${targetRoot}" -type f -name "*.jpg.jhove.xml" -exec sed -i 's%<reportingModule release="1.2" date="2007-02-13">JPEG%<reportingModule release="1.3" date="2017-05-11">JPEG%' {} \;
 find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.7" date="2012-08-12">TIFF%<reportingModule release="1.8" date="2017-05-11">TIFF%' {} \;
 find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.2" date="2007-02-13">JPEG%<reportingModule release="1.3" date="2017-05-11">JPEG%' {} \;
-find "${targetRoot}" -type f -name "*.wav.jhove.xml" -exec sed -i 's%44100.0</aes:sampleRate>%44100</aes:sampleRate>%' {} \;
+find "${targetRoot}" -type f -name "*.wav.jhove.xml" -exec sed -i 's%<reportingModule release="1.4" date="2017-03-14">WAVE%<reportingModule release="1.5" date="2017-10-31">WAVE%' {} \;
+find "${targetRoot}" -type f -name "*.wav.jhove.xml" -exec sed -i 's%44100.0<\/aes:sampleRate>%44100<\/aes:sampleRate>%' {} \;
+find "${targetRoot}" -type f -name "*.wav.jhove.xml" -exec sed -i "s%Chunk type 'id3 ' ignored%Ignored Chunk type: id3 %" {} \;

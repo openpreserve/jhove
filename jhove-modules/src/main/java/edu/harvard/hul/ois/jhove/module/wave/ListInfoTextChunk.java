@@ -143,7 +143,7 @@ public class ListInfoTextChunk extends Chunk {
         }
         else {
             info.setMessage (new InfoMessage
-                ("Chunk type '" + _chunkID + "' in List Info Chunk ignored"));
+                (MessageConstants.INF_INFO_CHUNK_TYPE_IGN + _chunkID));
         }
         return true;
     }

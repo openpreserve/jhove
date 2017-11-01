@@ -76,7 +76,7 @@ public class PeakEnvelopeChunk extends Chunk {
             else {
                 info.setValid (false);
                 info.setMessage (new ErrorMessage 
-                        ("Invalid format value in Peak Envelope Chunk"));
+                        (MessageConstants.ERR_PEC_FORMAT_INVAL));
             }
             if (pointsPerValue == 1) {
                 nValues = nPoints;
@@ -87,7 +87,7 @@ public class PeakEnvelopeChunk extends Chunk {
             else {
                 info.setValid (false);
                 info.setMessage (new ErrorMessage 
-                        ("Invalid pointsPerValue in Peak Envelope Chunk"));
+                        (MessageConstants.ERR_PEC_PPV_INVAL));
             }
             if (info.getValid() == RepInfo.FALSE) {
                 module.skipBytes (_dstream, (int) bytesLeft - 120, module);
