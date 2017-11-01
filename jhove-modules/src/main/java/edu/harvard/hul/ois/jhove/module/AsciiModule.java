@@ -6,12 +6,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -29,10 +29,13 @@ import java.util.*;
  * Module for analysis of content as an ASCII stream.
  */
 public class AsciiModule extends ModuleBase {
+
+    public final static String ERR_CHAR_INV = "Invalid character";
+    public final static String INF_PRINT_CHAR_MISS = "No printable characters";
+
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
-
     private static final String NAME = "ASCII-hul";
     private static final String RELEASE = "1.3";
     private static final int[] DATE = { 2006, 9, 5 };
@@ -248,7 +251,7 @@ public class AsciiModule extends ModuleBase {
          * Only non-zero-length files are well-formed ASCII.
          */
         if (_nByte == 0) {
-            info.setMessage(new ErrorMessage("Zero-length file"));
+            info.setMessage(new ErrorMessage(ERR_CHAR_INV));
             info.setWellFormed(RepInfo.FALSE);
             return 0;
         }
@@ -317,7 +320,7 @@ public class AsciiModule extends ModuleBase {
         }
 
         if (!printableChars) {
-            info.setMessage(new InfoMessage("No printable characters"));
+            info.setMessage(new InfoMessage(INF_PRINT_CHAR_MISS));
         }
 
         return 0;
@@ -395,4 +398,5 @@ public class AsciiModule extends ModuleBase {
             _lineEndCR = true;
         }
     }
+
 }
