@@ -54,7 +54,7 @@ public class ExifUserCommentChunk extends Chunk {
         WaveModule module = (WaveModule) _module;
         if (bytesLeft < 8) {
             info.setMessage (new ErrorMessage
-                ("Exif User Comment Chunk is too short"));
+                (MessageConstants.ERR_EXIF_COMM_TOO_SHORT));
             info.setWellFormed (false);
             return false;
         }

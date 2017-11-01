@@ -64,9 +64,8 @@ public class ListInfoChunk extends Superchunk {
             return readAdtlChunk (info);
         }
         else {
-            info.setMessage (new ErrorMessage ("Unknown list type " +
-                    typeID + " in List Chunk", 
-                    _module.getNByte()));
+            info.setMessage (new ErrorMessage (MessageConstants.ERR_LIST_CHUNK_TYPE_UNK +
+                    typeID,_module.getNByte()));
             info.setWellFormed (false);
             return false;
         }
@@ -94,7 +93,7 @@ public class ListInfoChunk extends Superchunk {
             if (chunk == null) {
                 _module.skipBytes (_dstream, (int) chunkSize, _module);
                 info.setMessage (new InfoMessage
-                    ("Chunk type '" + id + "' in List Info Chunk ignored"));
+                    (MessageConstants.INF_INFO_CHUNK_TYPE_IGN + id));
             }
             else {
                 if (!chunk.readChunk (info)) {
@@ -147,7 +146,7 @@ public class ListInfoChunk extends Superchunk {
             if (chunk == null) {
                 _module.skipBytes (_dstream, (int) chunkSize, _module);
                 info.setMessage (new InfoMessage
-                    ("Chunk type '" + id + "' in Associated Data Chunk ignored"));
+                    (MessageConstants.INF_DATA_CHUNK_TYPE_IGN + id));
             }
             else {
                 if (!chunk.readChunk (info)) {
@@ -192,8 +191,7 @@ public class ListInfoChunk extends Superchunk {
            
             if (chunk == null) {
                 _module.skipBytes (_dstream, (int) chunkSize, _module);
-                info.setMessage (new InfoMessage ("Chunk type '" + id +
-				  "' in Associated Data Chunk ignored"));
+                info.setMessage (new InfoMessage (MessageConstants.INF_DATA_CHUNK_TYPE_IGN + id));
             }
             else {
                 if (!chunk.readChunk (info)) {

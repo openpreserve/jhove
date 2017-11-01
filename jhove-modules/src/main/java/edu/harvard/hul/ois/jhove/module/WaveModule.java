@@ -32,8 +32,8 @@ public class WaveModule extends ModuleBase {
 
     /* Module metadata */
     private static final String NAME = "WAVE-hul";
-    private static final String RELEASE = "1.4";
-    private static final int[] DATE = { 2017, 3, 14 };
+    private static final String RELEASE = "1.5";
+    private static final int[] DATE = { 2017, 10, 31 };
     private static final String[] FORMAT = { "WAVE", "Audio for Windows",
             "EBU Technical Specification 3285", "Broadcast Wave Format", "BWF" };
     private static final String COVERAGE = "WAVE (PCMWAVEFORMAT, WAVEFORMATEX, WAVEFORMATEXTENSIBLE), "
@@ -297,7 +297,7 @@ public class WaveModule extends ModuleBase {
                 int ch = readUnsignedByte(_dstream, this);
                 if (ch != RIFF_SIGNATURE[i]) {
                     info.setMessage(new ErrorMessage(
-                            "Document does not start with RIFF chunk", 0));
+                            MessageConstants.ERR_RIFF_CHUNK_MISSING, 0));
                     info.setWellFormed(false);
                     return 0;
                 }
@@ -315,7 +315,7 @@ public class WaveModule extends ModuleBase {
             bytesRemaining -= 4;
             if (!"WAVE".equals(typ)) {
                 info.setMessage(new ErrorMessage(
-                        "File type in RIFF header is not WAVE", _nByte));
+                        MessageConstants.ERR_RIFF_HDR_TYPE_NOT_WAV, _nByte));
                 info.setWellFormed(false);
                 return 0;
             }
@@ -327,12 +327,12 @@ public class WaveModule extends ModuleBase {
             }
         } catch (EOFException eofe) {
             info.setWellFormed(false);
-            info.setMessage(new ErrorMessage("Unexpected end of file", _nByte));
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_EOF_UNEXPECTED, _nByte));
             return 0;
         } catch (Exception e) { // TODO make this more specific
             e.printStackTrace();
             info.setWellFormed(false);
-            info.setMessage(new ErrorMessage("Exception reading file: "
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_FILE_IO_EXCEP
                     + e.getClass().getName() + ", " + e.getMessage(), _nByte));
             return 0;
         }
@@ -364,7 +364,7 @@ public class WaveModule extends ModuleBase {
             _propList.add(_exifInfo.buildProperty());
         }
         if (!formatChunkSeen) {
-            info.setMessage(new ErrorMessage("No Format Chunk"));
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_FMT_CHUNK_MISS));
             info.setWellFormed(false);
             return 0;
         }
@@ -648,7 +648,7 @@ public class WaveModule extends ModuleBase {
         bytesRemaining -= chunkSize + 8;
 
         if (bytesRemaining < 0) {
-            info.setMessage(new ErrorMessage("Invalid chunk size", _nByte));
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_CHUNK_SIZE_INVAL, _nByte));
             return false;
         }
 
@@ -730,7 +730,7 @@ public class WaveModule extends ModuleBase {
             chunk = new CueChunk(this, chunkh, _dstream);
             cueChunkSeen = true;
         } else {
-            info.setMessage(new InfoMessage("Chunk type '" + id + "' ignored",
+            info.setMessage(new InfoMessage(MessageConstants.INF_CHU_TYPE_IGND + id,
                     _nByte));
         }
 
@@ -758,8 +758,8 @@ public class WaveModule extends ModuleBase {
 
     /** Reports a duplicate chunk. */
     protected void dupChunkError(RepInfo info, String chunkName) {
-        info.setMessage(new ErrorMessage("Multiple " + chunkName
-                + " Chunks not permitted", _nByte));
+        info.setMessage(new ErrorMessage(MessageConstants.ERR_CHUNK_DUP + chunkName,
+                                         _nByte));
         info.setValid(false);
     }
 

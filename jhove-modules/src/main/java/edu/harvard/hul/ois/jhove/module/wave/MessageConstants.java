@@ -34,77 +34,31 @@ package edu.harvard.hul.ois.jhove.module.wave;
 public enum MessageConstants {
 	INSTANCE;
 
+	public static final String SUB_MESS_TYPE = "Type = ";
 	/**
 	 * Information messages
 	 */
-	public static final String ERR_NOT_START_RIFF = "Document does not start with RIFF chunk";
+	public static final String INF_CHU_TYPE_IGND = "Ignored Chunk type: ";
+	public static final String INF_DATA_CHUNK_TYPE_IGN = "Ignored Associated Data Chunk of type: ";
+	public static final String INF_INFO_CHUNK_TYPE_IGN = "Ignored List Info Chunk of type: ";
 
-	// public static final String ERR_NOT_WAVE_HEAD_BYTES = _nByte
-	public static final String ERR_NOT_WAVE_HEAD_STRING = "File type in RIFF header is not WAVE ";
-	// + ERR_NOT_WAVE_HEAD_BYTES 
-
-	// public static final String ERR_UNEX_EOF_BYTES = _nByte
-	public static final String ERR_UNEX_EOF_BYTES_STRING = "Unexpected end of file ";
-	// + ERR_UNEX_EOF_BYTES
-
-	// public static final String ERR_EX_READ_NAME =  // e.getClass().getName() 
-	// public static final String ERR_EX_READ_MESSAGE = // e.getMessage()
-	//	public static final String ERR_EX_READ_BYTES = _nByte
-	public static final String ERR_EX_READ_STRING = "Exception reading file: ";
-	//+ ERR_EX_READ_NAME  + ", " + ERR_EX_READ_MESSAGE, ERR_EX_READ_BYTES
-
-	//public static final String ERR_INV_CHU_SIZE_BYTES = _nByte
-	public static final String ERR_INV_CHU_SIZE_STRING = "Invalid chunk size";
-	// , ERR_INV_CHU_SIZE_BYTES 
-
-	// public static final String ERR_MULTI_CHU_NO_PERM_NAME = chunkName
-	// public static final String ERR_MULTI_CHU_NO_PERM_BYTES = _nByte
-	public static final String ERR_MULTI_CHU_NO_PERM_STRING_1 = "Multiple ";
-	public static final String ERR_MULTI_CHU_NO_PERM_STRING_2 = " Chunks not permitted";
-	// + ERR_MULTI_CHU_NO_PERM_NAME + " Chunks not permitted", ERR_MULTI_CHU_NO_PERM_BYTES
-
-	// public static final String ERR_UNKNO_LIST_TYPE_IN_CHU_TYPE = typeID
-	// public static final String ERR_UNKNO_LIST_TYPE_IN_CHU_BYTES = // _module.getNByte()
-	public static final String ERR_UNKNO_LIST_TYPE_IN_CHU_STRING = "Unknown list type in Associated Data List Chunk";
-	// , "Type = " + ERR_UNKNO_LIST_TYPE_IN_CHU_TYPE , ERR_UNKNO_LIST_TYPE_IN_CHU_BYTES 
-
-	// public static final String INF_ASSOC_CHU_IGNOR_ID = id
-	public static final String INF_ASSOC_CHU_IGNOR_STRING_1 = "Chunk type '";
-	// + INF_ASSOC_CHU_IGNOR_ID +
-	public static final String INF_ASSOC_CHU_IGNOR_STRING_2 = "' in Associated Data Chunk ignored";
-
-	public static final String ERR_EXIF_USER_COMM__TOO_SHORT = "Exif User Comment Chunk is too short";
-	public static final String ERR_INCOR_LEN_EXIF_V_CHU = "Incorrect length for Exif Version Chunk";
-	
-	// public static final String JHO_ERR_IN_FORMAT_CHU_NAME = //e.getClass().getName()
-	public static final String JHO_ERR_IN_FORMAT_CHU_STRING = "Error in FormatChunk: ";
-	// + JHO_ERR_IN_FORMAT_CHU_NAME
-
-	public static final String ERR_SAX_EXC_READ_LINK_CHU = "SAXException in reading Link Chunk";
-	public static final String ERR_PARS_EXC_READ_LINK_CHU = "ParserConfigurationException in reading Link Chunk";
-	
-	//public static final String ERR_UNKN_LIST_TYPE_ID = typeID
-	//public static final String ERR_UNKN_LIST_TYPE_NAME = // _module.getNByte()
-	public static final String ERR_UNKN_LIST_TYPE_STRING_1 = "Unknown list type ";
-	// + ERR_UNKN_LIST_TYPE_ID +
-	public static final String ERR_UNKN_LIST_TYPE_STRING_2 = " in List Chunk";
-	// , ERR_UNKN_LIST_TYPE_NAME
-
-	// public static final String INF_CHU_IGNOR_LIST_ID = id
-	public static final String INF_CHU_IGNOR_LIST_STRING_1 = "Chunk type '";
-	// + INF_CHU_IGNOR_LIST_ID + 
-	public static final String INF_CHU_IGNOR_LIST_STRING_2 = "' in List Info Chunk ignored";
-
-	// public static final String INF_CHU_IGNOR_ASS_ID = id
-	public static final String INF_CHU_IGNOR_ASS_STRING_1 = "Chunk type '";
-	// + INF_CHU_IGNOR_ASS_ID +
-	public static final String INF_CHU_IGNOR_ASS_STRING_2 = "' in Associated Data Chunk ignored";
-
-	// public static final String INF_CHU_IGNOR_LIST_CHU_ID = _chunkID
-	public static final String INF_CHU_IGNOR_LIST_CHU_STRING_1 = "Chunk type '";
-	// + INF_CHU_IGNOR_LIST_CHU_ID +
-	public static final String INF_CHU_IGNOR_LIST_CHU_STRING_2 = "' in List Info Chunk ignored";
-
-	public static final String ERR_INVA_PEAK_VALUE = "Invalid format value in Peak Envelope Chunk";
-	public static final String ERR_INVA_PPV_PEAK_ENV_CHU = "Invalid pointsPerValue in Peak Envelope Chunk";
+	/**
+	 * Error messages
+	 */
+	public static final String ERR_CHUNK_DUP = "Duplicate Chunks found for type: ";
+	public static final String ERR_EXIF_COMM_TOO_SHORT = "Exif User Comment Chunk is too short";
+	public static final String ERR_EXIF_VER_CHUNK_LEN_WRNG = "Incorrect length for Exif Version Chunk";
+	public static final String ERR_CHUNK_SIZE_INVAL = "Invalid chunk size";
+	public static final String ERR_BWF_VER_UNREC = "Unrecognized BWF version: ";
+	public static final String ERR_EOF_UNEXPECTED = "Unexpected end of file";
+	public static final String ERR_FILE_IO_EXCEP = "Exception reading file: ";
+	public static final String ERR_FMT_CHUNK_MISS = "No Format Chunk";
+	public static final String ERR_LINK_CHUNK_SAX_EXCEP = "SAXException in reading Link Chunk";
+	public static final String ERR_LINK_CHUNK_PARS_EXCEP = "ParserConfigurationException in reading Link Chunk";
+	public static final String ERR_LIST_TYPE_UNK = "Unknown list type in Associated Data List Chunk";
+	public static final String ERR_LIST_CHUNK_TYPE_UNK = "List Chunk contains unknown type: ";
+	public static final String ERR_PEC_FORMAT_INVAL = "Invalid format value in Peak Envelope Chunk";
+	public static final String ERR_PEC_PPV_INVAL = "Invalid pointsPerValue in Peak Envelope Chunk";
+	public static final String ERR_RIFF_CHUNK_MISSING = "Document does not start with RIFF chunk";
+	public static final String ERR_RIFF_HDR_TYPE_NOT_WAV = "File type in RIFF header is not WAVE ";
 }
