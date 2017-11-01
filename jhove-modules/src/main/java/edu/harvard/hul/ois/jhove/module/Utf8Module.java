@@ -28,10 +28,12 @@ import java.util.*;
  * Module for analysis of content as a UTF-8 stream.
  */
 public class Utf8Module extends ModuleBase {
+
+    public final static String INF_PRINT_CHAR_MISS = "No printable characters";
+
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
-
     private static final String NAME = "UTF8-hul";
     private static final String RELEASE = "1.6";
     private static final int[] DATE = { 2014, 7, 18 };
@@ -418,7 +420,7 @@ public class Utf8Module extends ModuleBase {
         }
 
         if (!printableChars) {
-            info.setMessage(new InfoMessage("No printable characters"));
+            info.setMessage(new InfoMessage(INF_PRINT_CHAR_MISS));
         }
 
         return 0;
