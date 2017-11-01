@@ -7,12 +7,12 @@
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at
  * your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
@@ -56,7 +56,7 @@ public class XmlModule
     /* According to RFC 3023, text/xml should be used for human-readable
      * XML documents, and application/xml should be used for documents
      * that aren't easily read by humans.  Since that determination
-     * is beyond the scope of this project, we err on the side of 
+     * is beyond the scope of this project, we err on the side of
      * pessimism and use application/xml as the primary MIME type.
      * <code>MIMETYPE[2]</code> is only for XHTML. */
     private static final String [] MIMETYPE = {
@@ -85,32 +85,32 @@ public class XmlModule
 
     /* Checksummer object */
     protected Checksummer _ckSummer;
-    
+
     /* Input stream wrapper which handles checksums */
     protected ChecksumInputStream _cstream;
-    
+
     /* Data input stream wrapped around _cstream */
     protected DataInputStream _dstream;
 
     /* Top-level property list. */
     protected List<Property> _propList;
-    
+
     /* Top-level property. */
     protected Property _metadata;
-    
+
     /* Doctype for XHTML documents only, otherwise null. */
     protected String _xhtmlDoctype;
-    
+
     /* Base URL for DTD's.  If null, all DTD URL's are absolute. */
     protected String _baseURL;
-    
+
     /* Flag to control signature checking behavior. If true,
      * checkSignatures insists on an XML document declaration; if
      * false, it will parse the file if there is no document
      * declaration.
      */
     protected boolean _sigWantsDecl;
-    
+
     /* Flag to indicate we're invoking the parser from checkSignatures.
      * When true, it's up to checkSignatures to mark a signature as present.
      */
@@ -120,10 +120,10 @@ public class XmlModule
     protected boolean _withTextMD = false;
     /* Hold the information needed to generate a textMD metadata fragment */
     protected TextMDMetadata _textMD;
-    
+
     /* Map from URIs to locally stored schemas */
     protected Map<String, File> _localSchemas;
-    
+
     /******************************************************************
     * CLASS CONSTRUCTOR.
     ******************************************************************/
@@ -186,7 +186,7 @@ public class XmlModule
      *        If the parameter starts with "schema", then the part to the
      *        right of the equal sign identifies a URI with a local path
      *        (URI, then semicolon, then path).
-     *        If the first character is 's' and the parameter isn't "schema", 
+     *        If the first character is 's' and the parameter isn't "schema",
      *        then signature checking requires
      *        a document declaration, and the rest of the URL is considered
      *        as follows.
@@ -216,7 +216,7 @@ public class XmlModule
    /**
     *   Parse the content of a purported XML digital object and store the
     *   results in RepInfo.
-    * 
+    *
     *   This is designed to be called in two passes.  On the first pass,
     *   a nonvalidating parse is done.  If this succeeds, and the presence
     *   of DTD's or schemas is detected, then parse returns 1 so that it
@@ -225,21 +225,21 @@ public class XmlModule
     *
      *   @param stream    An InputStream, positioned at its beginning,
      *                    which is generated from the object to be parsed.
-     *                    If multiple calls to <code>parse</code> are made 
+     *                    If multiple calls to <code>parse</code> are made
      *                    on the basis of a nonzero value being returned,
      *                    a new InputStream must be provided each time.
-     * 
-     *   @param info      A fresh (on the first call) RepInfo object 
+     *
+     *   @param info      A fresh (on the first call) RepInfo object
      *                    which will be modified
      *                    to reflect the results of the parsing
-     *                    If multiple calls to <code>parse</code> are made 
-     *                    on the basis of a nonzero value being returned, 
+     *                    If multiple calls to <code>parse</code> are made
+     *                    on the basis of a nonzero value being returned,
      *                    the same RepInfo object should be passed with each
      *                    call.
      *
      *   @param parseIndex  Must be 0 in first call to <code>parse</code>.  If
      *                    <code>parse</code> returns a nonzero value, it must be
-     *                    called again with <code>parseIndex</code> 
+     *                    called again with <code>parseIndex</code>
      *                    equal to that return value.
     */
     @Override
@@ -258,7 +258,7 @@ public class XmlModule
                 }
             }
         }
-        
+
         boolean canValidate = true;
         initParse ();
         info.setFormat (_format[0]);
@@ -268,7 +268,7 @@ public class XmlModule
             _textMD = new TextMDMetadata();
             _xhtmlDoctype = null;
         }
-        
+
         /* We may have already done the checksums while converting a
            temporary file. */
         _ckSummer = null;
@@ -289,7 +289,7 @@ public class XmlModule
         XmlModuleHandler handler = null;
         XmlLexicalHandler lexHandler = new XmlLexicalHandler ();
         XmlDeclHandler declHandler = new XmlDeclHandler ();
-        
+
         // The XmlDeclStream filters the characters, looking for an
         // XML declaration,  since there's no way to get that info
         // out of SAX.
@@ -308,7 +308,7 @@ public class XmlModule
             }
             String saxClass = _je.getSaxClass();
             if (saxClass == null) {
-                SAXParserFactory factory = 
+                SAXParserFactory factory =
                                 SAXParserFactory.newInstance();
                 factory.setNamespaceAware (true);
                 parser = factory.newSAXParser ().getXMLReader ();
@@ -324,28 +324,23 @@ public class XmlModule
             parser.setEntityResolver (handler);
             parser.setDTDHandler (handler);
             try {
-                parser.setProperty 
+                parser.setProperty
                     ("http://xml.org/sax/properties/lexical-handler",
                      lexHandler);
             }
             catch (SAXException e) {
-                info.setMessage (new InfoMessage 
-                        ("The XML implementation in use does not " +
-                        "support the LexicalHandler interface. " +
-                        "This may result in some properties not being reported."));
+                info.setMessage (new InfoMessage(MessageConstants.INF_LEX_HND_UNSPPRTD));
             }
             try {
-                parser.setProperty 
+                parser.setProperty
                     ("http://xml.org/sax/properties/declaration-handler",
                      declHandler);
             }
             catch (SAXException e) {
-                info.setMessage (new InfoMessage 
-                        ("The XML implementation in use does not " +
-                        "support the DeclHandler interface. " +
-                        "This may result in some properties not being reported."));
+                info.setMessage (new InfoMessage
+                        (MessageConstants.INF_DEC_HND_UNSPPRTD));
             }
-            
+
         }
         catch (Exception f) {
             info.setMessage(new ErrorMessage (f.getMessage()));
@@ -359,8 +354,8 @@ public class XmlModule
         }
         catch (SAXException se) {
             if (parseIndex != 0) {
-                info.setMessage (new InfoMessage 
-                    ("The SAX parser is not capable of validation."));
+                info.setMessage (new InfoMessage
+                    (MessageConstants.INF_SAX_VALID_UNSPPRTD));
             }
             canValidate = false;
         }
@@ -369,8 +364,8 @@ public class XmlModule
                 true);
         }
         catch (SAXException se) {
-            info.setMessage (new InfoMessage 
-                ("The SAX parser does not support namespaces."));
+            info.setMessage (new InfoMessage
+                (MessageConstants.INF_SAX_NMSPC_UNSPPRTD));
         }
         // This property for supporting schemas is a JAXP 1.2
         // recommendation, not likely to be supported widely as
@@ -379,7 +374,7 @@ public class XmlModule
         // for schema validation in the future, and at least the
         // info message will tell users why they're getting bogus
         // invalid status.
-        
+
         // Try 2 different ways of setting schema validation;
         // it appears that no one way works for all parsers.
         if (parseIndex > 0) {
@@ -389,16 +384,13 @@ public class XmlModule
             }
             catch (SAXException ee) {
                 try {
-                    parser.setProperty 
+                    parser.setProperty
                         ("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
                          "http://www.w3.org/2001/XMLSchema");
                 }
                 catch (SAXException e) {
-                    info.setMessage (new InfoMessage 
-                            ("The XML implementation in use does not " +
-                            "support schema language identification.  This " +
-                            "may result in documents specified by schemas " +
-                            "being reported as invalid."));
+                    info.setMessage (new InfoMessage
+                            (MessageConstants.INF_XML_SCHMID_UNSPPRTD));
                 }
             }
         }
@@ -408,7 +400,7 @@ public class XmlModule
         catch (FileNotFoundException ef) {
             // Make this particular exception a little more user-friendly
             info.setMessage (new ErrorMessage
-                    ("File not found",
+                    (MessageConstants.ERR_FILE_NOT_FOUND,
                      ef.getMessage ().toString ()));
             info.setWellFormed (false);
             return 0;
@@ -417,18 +409,18 @@ public class XmlModule
             if (handler.getSigFlag () && !_parseFromSig) {
                 info.setSigMatch(_name);
             }
-            info.setMessage (new ErrorMessage ("Invalid character encoding"));
+            info.setMessage (new ErrorMessage (MessageConstants.ERR_CHR_ENC_INV));
             info.setWellFormed (false);
             return 0;
         }
         catch (IOException e) {
             // We may get an IOException from trying to resolve an
             // external entity.
-            if (handler.getSigFlag () && !_parseFromSig) {               
+            if (handler.getSigFlag () && !_parseFromSig) {
                 info.setSigMatch(_name);
             }
             info.setMessage (new ErrorMessage
-                    (e.getClass().getName() + ": " + 
+                    (e.getClass().getName() + ": " +
                      e.getMessage ().toString ()));
             info.setWellFormed (false);
             return 0;
@@ -440,7 +432,7 @@ public class XmlModule
             }
             int line = e.getLineNumber();
             int col = e.getColumnNumber();
-            info.setMessage (new ErrorMessage 
+            info.setMessage (new ErrorMessage
                     (e.getMessage ().toString (),
                      "Line = " + line + ", Column = " + col));
             info.setWellFormed (false);
@@ -456,24 +448,20 @@ public class XmlModule
             String msg = e.getMessage ();
             if (msg == null) {
                 Throwable ee = e.getCause();
-                if (ee != null) {
-                    msg = "SAXException, cause = " +
-                        ee.getClass().getName();
-                }
-                else {
-                    msg = "Unspecified SAXException";
-                }
+                msg = (ee != null) ?
+                        MessageConstants.ERR_SAX_EXCEP_CAUSE + ee.getClass().getName():
+                            MessageConstants.ERR_SAX_EXCEP_UNSPC;
             }
             info.setMessage (new ErrorMessage (msg));
             info.setWellFormed (false);
             return 0;
         }
-        
+
         // Check if user has aborted
         if (_je.getAbort ()) {
             return 0;
         }
-        
+
         if (handler.getSigFlag () && parseIndex == 0) {
             info.setSigMatch(_name);
         }
@@ -485,7 +473,7 @@ public class XmlModule
         // declarations as contributing to validity.)
         String dtdURI = handler.getDTDURI ();
         List<SchemaInfo> schemaList = handler.getSchemas ();
-        
+
         // In order to find the "primary" markup language, we try 3 things :
         // 1/ first, the first NamespaceURI
         // 3/ then, the first SchemaLocation
@@ -498,15 +486,15 @@ public class XmlModule
             if (isNotEmpty(schItems.namespaceURI)) {
                 _textMD.setMarkup_language(schItems.namespaceURI);
             // Then SchemaLocation
-            } 
+            }
             else if (isNotEmpty(schItems.location)) {
                 _textMD.setMarkup_language(schItems.location);
             }
-        } 
+        }
         else if (isNotEmpty(dtdURI)) {
             _textMD.setMarkup_language(dtdURI);
         }
-        
+
         if (parseIndex == 0) {
             if ((handler.getDTDURI () != null ||
                  !schemaList.isEmpty ()) &&
@@ -517,11 +505,11 @@ public class XmlModule
             // This may get downgraded to false, but won't
             // be upgraded to true.
         }
-        
+
         // Take a deep breath.  We parsed it.  Now assemble the
         // properties.
         info.setProperty (_metadata);
-        
+
         // If it's XHTML, add the HTML property.
         HtmlMetadata hMetadata = handler.getHtmlMetadata ();
         if (hMetadata != null) {
@@ -549,7 +537,7 @@ public class XmlModule
             }
         }
         _textMD.setMarkup_basis_version(vers);
-        
+
         // Add the encoding property.
         String encoding = xds.getEncoding ();
         if (encoding == null) {
@@ -559,7 +547,7 @@ public class XmlModule
         _propList.add (new Property ("Encoding",
                         PropertyType.STRING,
                         encoding));
-        
+
         _textMD.setCharset(encoding);
         String textMDEncoding = _textMD.getCharset();
         if (textMDEncoding.indexOf("UTF") != -1) {
@@ -567,7 +555,7 @@ public class XmlModule
                     _bigEndian?TextMDMetadata.BYTE_ORDER_BIG:TextMDMetadata.BYTE_ORDER_LITTLE);
                 _textMD.setByte_size("8");
                 _textMD.setCharacter_size("variable");
-        } 
+        }
         else {
             _textMD.setByte_order(
                     _bigEndian?TextMDMetadata.BYTE_ORDER_BIG:TextMDMetadata.BYTE_ORDER_LITTLE);
@@ -577,7 +565,7 @@ public class XmlModule
         // CRLF from XmlDeclStream ...
         String lineEnd = xds.getKindOfLineEnd();
         if (lineEnd == null) {
-            info.setMessage(new InfoMessage("Not able to determine type of end of line"));
+            info.setMessage(new InfoMessage(MessageConstants.INF_EOL_UNDET));
             _textMD.setLinebreak(TextMDMetadata.NILL);
         } else if ("CR".equalsIgnoreCase(lineEnd)) {
             _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
@@ -586,7 +574,7 @@ public class XmlModule
         } else if ("CRLF".equalsIgnoreCase(lineEnd)) {
             _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CRLF);
         }
-        
+
         // Add the standalone property.
         String sa = xds.getStandalone ();
         if (sa != null) {
@@ -594,7 +582,7 @@ public class XmlModule
                         PropertyType.STRING,
                         sa));
         }
-        
+
         // Add the DTD property.
         if (dtdURI != null) {
             _propList.add (new Property ("DTD_URI",
@@ -632,7 +620,7 @@ public class XmlModule
                             schemaPropList);
             _propList.add (prop);
         }
-        
+
         // Add the root element.
         String root = handler.getRoot ();
         String rootPrefix = null;
@@ -655,7 +643,7 @@ public class XmlModule
         if (rootPrefix == null) {
             rootPrefix = "";
         }
-        
+
         // Declare properties we're going to add.  They have
         // some odd interdependencies, so we create them all
         // and them add them in the right (specified) order.
@@ -666,7 +654,7 @@ public class XmlModule
         Property procInstProp = null;
         Property commentProp = null;
         Property unicodeBlocksProp = null;
-        
+
         Map<String, String> ns = handler.getNamespaces ();
         if (!ns.isEmpty ()) {
             Set<String> keys = ns.keySet ();
@@ -686,8 +674,8 @@ public class XmlModule
                             PropertyType.PROPERTY,
                             PropertyArity.ARRAY,
                             supPropArr);
-                nsList.add (onens); 
-                
+                nsList.add (onens);
+
                 // Try to find the namespace URI of root
                 if (rootPrefix.equalsIgnoreCase(key) && isNotEmpty(val)) {
                     _textMD.setMarkup_language(val);
@@ -698,7 +686,7 @@ public class XmlModule
                             PropertyArity.LIST,
                             nsList);
         }
-       
+
         // CharacterReferences property goes here.
         // Report as a list of 4-digit hexadecimal strings,
         // e.g., 003C, 04AA, etc.
@@ -714,15 +702,15 @@ public class XmlModule
                 refList.add (intTo4DigitHex (refint));
                 utf8BM.markBlock(refint);
             }
-            charRefsProp = new Property 
+            charRefsProp = new Property
                     ("CharacterReferences",
                      PropertyType.STRING,
                      PropertyArity.LIST,
                      refList);
-            unicodeBlocksProp = 
+            unicodeBlocksProp =
                 utf8BM.getBlocksUsedProperty("UnicodeCharRefBlocks");
         }
-        
+
         // Entities property
         // External unparsed entities
         Set<String> entNames = lexHandler.getEntityNames ();
@@ -740,7 +728,7 @@ public class XmlModule
                 String[] entarr = iter.next ();
                 String name = entarr[0];
                 if (nameInCollection (name, attributeVals)) {
-                    // Add the notation name to the list 
+                    // Add the notation name to the list
                     // unparsedNotationNames, so we can use it
                     // in determining which notations are used.
                     unparsedNotationNames.add (entarr[3]);
@@ -760,7 +748,7 @@ public class XmlModule
                     subPropList.add( new Property ("NotationName",
                             PropertyType.STRING,
                             entarr[3]));
-                    
+
                     entProps.add (new Property ("Entity",
                             PropertyType.PROPERTY,
                             PropertyArity.LIST,
@@ -768,7 +756,7 @@ public class XmlModule
                 }
             }
         }
-  
+
         // Internal entities
         List<String[]> declEnts = declHandler.getInternalEntityDeclarations ();
         if (!declEnts.isEmpty ()) {
@@ -822,7 +810,7 @@ public class XmlModule
                             PropertyType.STRING,
                             entarr[2]));
                     }
-                    
+
                     entProps.add (new Property ("Entity",
                         PropertyType.PROPERTY,
                         PropertyArity.LIST,
@@ -830,14 +818,14 @@ public class XmlModule
                 }
             }
         }
-        
+
         if (!entProps.isEmpty ()) {
             entitiesProp = new Property ("Entities",
                     PropertyType.PROPERTY,
                     PropertyArity.LIST,
                     entProps);
         }
-        
+
         List<ProcessingInstructionInfo> pi = handler.getProcessingInstructions ();
         List<String> piTargets = new LinkedList<String> ();
         if (!pi.isEmpty()) {
@@ -883,7 +871,7 @@ public class XmlModule
             while (iter.hasNext ()) {
                 String[] notArray = iter.next();
                 String notName = notArray[0];
-                // Check for use of Notation before including 
+                // Check for use of Notation before including
                 // TODO this is implemented wrong! Need to reinvestigate
                 if (nameInCollection (notName, piTargets) ||
                     nameInCollection (notName, unparsedNotationNames)) {
@@ -914,7 +902,7 @@ public class XmlModule
                         PropertyArity.LIST,
                         notProps);
             }
-        } 
+        }
 
         // Now add all the properties we created.
         if (namespaceProp != null) {
@@ -946,7 +934,7 @@ public class XmlModule
         if (commentProp != null) {
             _propList.add (commentProp);
         }
-        
+
         // Check if parse detected invalid XML
         if (!handler.isValid ()) {
             info.setValid (false);
@@ -960,14 +948,14 @@ public class XmlModule
                 info.setMimeType (_mimeType[0]);
             }
         }
-        
+
         // Add any messages from the parse.
         List msgs = handler.getMessages ();
         ListIterator msgi = msgs.listIterator ();
         while (msgi.hasNext ()) {
             info.setMessage ((Message) msgi.next ());
-        } 
-        
+        }
+
         if (_withTextMD) {
             _textMD.setMarkup_basis(info.getFormat());
             _textMD.setMarkup_basis_version(info.getVersion());
@@ -975,9 +963,9 @@ public class XmlModule
                     PropertyType.TEXTMDMETADATA, PropertyArity.SCALAR, _textMD);
             _propList.add(property);
         }
-        
+
         if (_ckSummer != null){
-            info.setChecksum (new Checksum (_ckSummer.getCRC32 (), 
+            info.setChecksum (new Checksum (_ckSummer.getCRC32 (),
                         ChecksumType.CRC32));
             String value = _ckSummer.getMD5 ();
             if (value != null) {
@@ -993,13 +981,13 @@ public class XmlModule
         }
         return 0;
     }
-    
-    
+
+
     /**
      *  Check if the digital object conforms to this Module's
      *  internal signature information.
-     *  
-     *  XML is a particularly messy case; in general, there's no 
+     *
+     *  XML is a particularly messy case; in general, there's no
      *  even moderately good way to check "signatures" without parsing
      *  the whole file, since the document declaration is optional.
      *  We provide the user two choices, based on the "s" parameter.
@@ -1017,8 +1005,8 @@ public class XmlModule
      */
     @Override
     public void checkSignatures (File file,
-                InputStream stream, 
-                RepInfo info) 
+                InputStream stream,
+                RepInfo info)
         throws IOException
     {
         _parseFromSig = false;
@@ -1053,12 +1041,12 @@ public class XmlModule
             return;
         }
         if (_sigWantsDecl) {
-            
+
             // No XML declaration, and it's manadatory according to the param.
             info.setWellFormed (false);
             return;
         }
-        
+
         // No XML signature, but we're allowed to parse the file now.
         // This means rewinding back to the start of the file.
         int parseIndex = 1;
@@ -1072,9 +1060,9 @@ public class XmlModule
             info.setSigMatch (_name);
         }
     }
-    
-    
-    
+
+
+
     @Override
     protected void initParse ()
     {
@@ -1089,9 +1077,9 @@ public class XmlModule
 //           }
 //       }
     }
-    
+
     /* Checks if a String is .equals to any member of a Set of strings. */
-    protected static boolean nameInCollection (String name, Collection<String> coll) 
+    protected static boolean nameInCollection (String name, Collection<String> coll)
     {
         Iterator<String> iter = coll.iterator ();
         while (iter.hasNext ()) {
@@ -1102,7 +1090,7 @@ public class XmlModule
         }
         return false;
     }
-    
+
     /* Converts an int to a 4-digit hex value, e.g.,
      * 003F or F10A.  This is used for Character References. */
     protected static String intTo4DigitHex (int n)
@@ -1119,7 +1107,7 @@ public class XmlModule
         }
         return buf.toString ();
     }
-    
+
     /**
      * Verification that the string contains something usefull.
      * @param value string to test
@@ -1127,12 +1115,12 @@ public class XmlModule
      */
     protected static boolean isNotEmpty(String value) {
         return (
-                (value != null) && 
-                (value.length() != 0) && 
+                (value != null) &&
+                (value.length() != 0) &&
                 !("[None]".equals(value))
          );
     }
-    
+
     /**
      * Add a mapping from a schema URI to a local file.
      * The parameter is of the form schema=[URI];[path]
