@@ -8,6 +8,8 @@ JHOVE
 [![Maven Central](https://img.shields.io/maven-central/v/org.openpreservation.jhove/jhove.svg)](http://repo1.maven.org/maven2/org/openpreservation/jhove/ "JHOVE on Maven central")
 [![CodeCov Coverage](https://img.shields.io/codecov/c/github/openpreserve/jhove.svg)](https://codecov.io/gh/openpreserve/jhove/ "CodeCov test coverage figure")
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9561b9ee71624cc5a69bd78ebc86e3af)](https://www.codacy.com/app/openpreserve/jhove?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=openpreserve/jhove&amp;utm_campaign=Badge_Grade)
+[![GitHub issues](https://img.shields.io/github/issues/openpreserve/jhove.svg)](https://github.com/openpreserve/jhove/issues "Open issues on GitHub")
+[![GitHub forks](https://img.shields.io/github/forks/openpreserve/jhove.svg)](https://github.com/openpreserve/jhove/network "Number of forks on GitHub")
 
 Licensing
 ---------
