@@ -30,10 +30,10 @@ import java.util.*;
  */
 public class AsciiModule extends ModuleBase {
 
-	public final static String ERR_CHAR_INV = "Invalid character";
-	public final static String INF_PRINT_CHAR_MISS = "No printable characters";
+    public final static String ERR_CHAR_INV = "Invalid character";
+    public final static String INF_PRINT_CHAR_MISS = "No printable characters";
 
-	/******************************************************************
+    /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
     private static final String NAME = "ASCII-hul";
