@@ -148,9 +148,8 @@ public class JhoveBase {
         // Make sure we have a satisfactory version of Java.
         String version = System.getProperty("java.vm.version");
         if (version.compareTo("1.6.0") < 0) {
-            String bad = "Java 1.6 or higher is required";
-            _logger.severe(bad);
-            throw new JhoveException(bad);
+            _logger.severe(CoreMessageConstants.EXC_JAVA_VER_INCMPT);
+            throw new JhoveException(CoreMessageConstants.EXC_JAVA_VER_INCMPT);
         }
 
         // Tell any HTTPS connections to be accepted automatically.
@@ -192,17 +191,15 @@ public class JhoveBase {
     public void init(String configFile, String saxClass) throws JhoveException {
 
         if (configFile == null) {
-            throw new JhoveException("Initialization exception; "
-                    + "location not specified for configuration file.");
+            throw new JhoveException(CoreMessageConstants.EXC_CONF_FILE_LOC_MISS);
         }
         _configFile = configFile;
 
         File config = new File(_configFile);
 
         if (!config.exists() || !config.isFile()) {
-            throw new JhoveException(
-                    "Configuration file " + config.getAbsolutePath()
-                    + " not found or not readable; use -c to specify.");
+            throw new JhoveException(config.getAbsolutePath() +
+                    CoreMessageConstants.EXC_CONF_FILE_INVAL);
         }
 
         _saxClass = saxClass;
@@ -219,7 +216,7 @@ public class JhoveBase {
             }
         } catch (Exception e) {
             // If we can't get a SAX parser, we're stuck.
-            throw new JhoveException("SAX parser not found: " + saxClass, e);
+            throw new JhoveException(CoreMessageConstants.EXC_SAX_PRSR_MISS + saxClass, e);
         }
 
         _logger.info("Using SAX parser " + parser.getClass().getName());
@@ -245,10 +242,10 @@ public class JhoveBase {
             fileURL += canonicalPath;
             parser.parse(fileURL);
         } catch (IOException ioe) {
-            throw new JhoveException("Cannot read configuration file: "
+            throw new JhoveException(CoreMessageConstants.EXC_CONF_FILE_UNRDBL
                     + configFile, ioe);
         } catch (SAXException saxe) {
-            throw new JhoveException("Error parsing configuration file: "
+            throw new JhoveException(CoreMessageConstants.EXC_CONF_FILE_UNPRS
                     + saxe.getMessage(), saxe);
         }
 
@@ -326,7 +323,7 @@ public class JhoveBase {
                 _moduleMap.put(module.getName().toLowerCase(), module);
                 _logger.info("Initialized " + module.getName());
             } catch (Exception e) {
-                throw new JhoveException("Cannot instantiate module: "
+                throw new JhoveException(CoreMessageConstants.EXC_MODL_INST_FAIL
                         + modInfo.clas, e);
             }
         }
@@ -344,7 +341,7 @@ public class JhoveBase {
                 _handlerList.add(handler);
                 _handlerMap.put(handler.getName().toLowerCase(), handler);
             } catch (Exception e) {
-                throw new JhoveException("Cannot instantiate handler: "
+                throw new JhoveException(CoreMessageConstants.EXC_HNDL_INST_FAIL
                         + tuple[0], e);
             }
         }
@@ -479,7 +476,7 @@ public class JhoveBase {
             try {
                 url = uri.toURL();
             } catch (Exception e) {
-                throw new JhoveException("Cannot convert URI to URL: "
+                throw new JhoveException(CoreMessageConstants.EXC_URI_CONV_FAIL
                         + dirFileOrUri);
             }
             URLConnection conn = url.openConnection();
@@ -493,11 +490,11 @@ public class JhoveBase {
                     ((HttpsURLConnection) conn).setSSLSocketFactory(sf);
                     int code = ((HttpsURLConnection) conn).getResponseCode();
                     if (200 > code || code >= 300) {
-                        throw new JhoveException("URL not found: "
+                        throw new JhoveException(CoreMessageConstants.EXC_URL_NOT_FND
                                 + dirFileOrUri);
                     }
                 } catch (Exception e) {
-                    throw new JhoveException("URL not found: " + dirFileOrUri);
+                    throw new JhoveException(CoreMessageConstants.EXC_URL_NOT_FND + dirFileOrUri);
                 }
             }
             lastModified = conn.getLastModified();
@@ -546,12 +543,12 @@ public class JhoveBase {
 
             if (!file.exists()) {
                 _logger.info("File not found");
-                info.setMessage(new ErrorMessage("File not found"));
+                info.setMessage(new ErrorMessage(CoreMessageConstants.ERR_FILE_NOT_FOUND));
                 info.setWellFormed(RepInfo.UNDETERMINED);
                 info.show(handler);
             } else if (!file.isFile() || !file.canRead()) {
                 _logger.info("File cannot be read");
-                info.setMessage(new ErrorMessage("File cannot be read"));
+                info.setMessage(new ErrorMessage(CoreMessageConstants.ERR_FILE_READ));
                 info.setWellFormed(RepInfo.UNDETERMINED);
                 info.show(handler);
             } else if (handler.okToProcess(dirFileOrUri)) {
@@ -571,11 +568,9 @@ public class JhoveBase {
                             return false;
                         }
                     } catch (Exception e) {
-                        String message = "Validation ended prematurely "
-                                + "due to an unhandled exception.";
-                        info.setMessage(new ErrorMessage(message));
+                        info.setMessage(new ErrorMessage(CoreMessageConstants.EXC_UNEXPECTED));
                         info.setWellFormed(RepInfo.UNDETERMINED);
-                        _logger.log(Level.SEVERE, message, e);
+                        _logger.log(Level.SEVERE, CoreMessageConstants.EXC_UNEXPECTED, e);
                     }
                 } else {
 
@@ -632,7 +627,7 @@ public class JhoveBase {
             tempFile = newTempFile();
         } catch (IOException ioe) {
             // Throw a more meaningful exception
-            throw new IOException("Cannot create temporary file");
+            throw new IOException(CoreMessageConstants.EXC_TEMP_FILE_CRT);
         }
 
         OutputStream outstrm = null;
@@ -1184,10 +1179,10 @@ public class JhoveBase {
                 osw = new OutputStreamWriter(stream, encoding);
                 output = new PrintWriter(osw);
             } catch (UnsupportedEncodingException uee) {
-                throw new JhoveException("Unsupported character encoding: "
+                throw new JhoveException(CoreMessageConstants.EXC_CHAR_ENC_UNSPPTD
                         + encoding);
             } catch (FileNotFoundException fnfe) {
-                throw new JhoveException("Cannot open output file: "
+                throw new JhoveException(CoreMessageConstants.EXC_FILE_OPEN
                         + outputFile);
             }
         }
@@ -1195,7 +1190,7 @@ public class JhoveBase {
             try {
                 osw = new OutputStreamWriter(System.out, encoding);
             } catch (UnsupportedEncodingException uee) {
-                throw new JhoveException("Unsupported character encoding: "
+                throw new JhoveException(CoreMessageConstants.EXC_CHAR_ENC_UNSPPTD
                         + encoding);
             }
             output = new PrintWriter(osw);
