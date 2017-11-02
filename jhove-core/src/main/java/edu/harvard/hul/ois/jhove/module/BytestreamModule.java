@@ -126,7 +126,7 @@ public final class BytestreamModule
         }
         info.setSize (_nByte);
 	if (_nByte == 0) {
-	    info.setMessage (new InfoMessage ("Zero-length file"));
+	    info.setMessage (new InfoMessage (CoreMessageConstants.INF_FILE_EMPTY));
 	}
         if (ckSummer != null) {
 	    info.setChecksum (new Checksum (ckSummer.getCRC32 (), 

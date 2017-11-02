@@ -77,34 +77,34 @@ public class Property
            types here may help avoid difficult chasing down
            of the bugs such mismatches cause. */
 	if (value == null) {
-	    throw new NullPointerException ("Null value for Property not permitted");
+	    throw new NullPointerException (CoreMessageConstants.EXC_PROP_VAL_NULL);
 	}
 	if (arity == PropertyArity.SCALAR) {
 	    if (value instanceof List ||
 		    value instanceof Map ||
 		    value instanceof Set) {
 		throw new IncompatibleClassChangeError
-			("Wrong class for Scalar Property");
+			(CoreMessageConstants.EXC_SCL_PROP_CLSS_INCMPT);
 	    }
 	}
 	else if (arity == PropertyArity.MAP) {
 	    if (!(value instanceof Map)) {
 		throw new IncompatibleClassChangeError
-			("Wrong class for Map Property");
+			(CoreMessageConstants.EXC_MAP_PROP_CLSS_INCMPT);
 	    }
 
 	}
 	else if (arity == PropertyArity.SET) {
 	    if (!(value instanceof Set)) {
 		throw new IncompatibleClassChangeError
-			("Wrong class for Set Property");
+			(CoreMessageConstants.EXC_SET_PROP_CLSS_INCMPT);
 	    }
 
 	}
 	else if (arity == PropertyArity.LIST) {
 	    if (!(value instanceof List)) {
 		throw new IncompatibleClassChangeError
-			("Wrong class for List Property");
+			(CoreMessageConstants.EXC_LIST_PROP_CLSS_INCMPT);
 	    }
 
 	}

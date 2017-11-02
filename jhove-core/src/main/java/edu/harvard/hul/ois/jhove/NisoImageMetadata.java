@@ -2241,7 +2241,7 @@ public class NisoImageMetadata
         	// Read the 1st mulc form (cf 6.5.12 ICC v4)
     		int nb =  bb.getInt(OFFSET_NUMBER);
     		if (tagMluc != MLUC_TAG || nb < 1) {
-    			throw new IllegalArgumentException("No description in ICC profile v4");
+                throw new IllegalArgumentException(CoreMessageConstants.ERR_ICC_PRFL_DESC_MISS);
     		}
     		int firstNameLength = bb.getInt(OFFSET_NAME_LENGTH);
     		int firstNameOffset = bb.getInt(OFFSET_NAME_OFFSET);
