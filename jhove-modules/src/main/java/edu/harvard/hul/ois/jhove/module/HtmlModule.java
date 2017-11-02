@@ -6,12 +6,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -26,22 +26,22 @@ import edu.harvard.hul.ois.jhove.module.html.*;
 
 /**
  * Module for identification and validation of HTML files.
- * 
+ *
  * HTML is different from most of the other documents in that sloppy
  * construction is practically assumed in the specification. This module attempt
  * to report as many errors as possible and recover reasonably from errors. To
  * do this, there is more heuristic behavior built into this module than into
  * the more straightforward ones.
- * 
+ *
  * XHTML is recognized by this module, but is handed off to the XML module for
  * processing. If the XML module is missing (which it shouldn't be if you've
  * installed the JHOVE application without modifications), this won't be able to
  * deal with XHTML files.
- * 
+ *
  * HTML should be placed ahead of XML in the module order. If the XML module
  * sees an XHTML file first, it will recognize it as XHTML, but won't be able to
  * report the complete properties.
- * 
+ *
  * The HTML module uses code created with the JavaCC parser generator and
  * lexical analyzer generator. There is apparently a bug in JavaCC which causes
  * blank lines not to be counted in certain cases, causing lexical errors to be
@@ -61,7 +61,7 @@ public class HtmlModule extends ModuleBase {
     private static final String HTML_4_0 = "HTML 4.0";
     private static final String HTML_4_01 = "HTML 4.01";
     private static final String XHTML_1_0 = "XHTML 1.0";
-    
+
     private static final String NAME = "HTML-hul";
     private static final String RELEASE = "1.3";
     private static final int[] DATE = { 2006, 9, 5 };
@@ -234,14 +234,14 @@ public class HtmlModule extends ModuleBase {
     /**
      * Parse the content of a purported HTML stream digital object and store the
      * results in RepInfo.
-     * 
+     *
      *
      * @param stream
      *            An InputStream, positioned at its beginning, which is
      *            generated from the object to be parsed. If multiple calls to
      *            <code>parse</code> are made on the basis of a nonzero value
      *            being returned, a new InputStream must be provided each time.
-     * 
+     *
      * @param info
      *            A fresh (on the first call) RepInfo object which will be
      *            modified to reflect the results of the parsing If multiple
@@ -283,7 +283,7 @@ public class HtmlModule extends ModuleBase {
             // but someone who really wanted to could remove it. In
             // that case, you deserve what you get.
             info.setMessage(new ErrorMessage(
-                    "XML-HUL module required to validate XHTML documents"));
+                    MessageConstants.ERR_XML_HUL_MISS));
             info.setWellFormed(false); // Treat it as completely wrong
             return 0;
         }
@@ -331,7 +331,7 @@ public class HtmlModule extends ModuleBase {
             cstream = new HtmlCharStream(_dstream, "ISO-8859-1");
             parser = new ParseHtml(cstream);
         } catch (UnsupportedEncodingException e) {
-            info.setMessage(new ErrorMessage("Internal error: "
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_INTERNAL_ERR
                     + e.getMessage()));
             info.setWellFormed(false);
             return 0; // shouldn't happen!
@@ -342,13 +342,13 @@ public class HtmlModule extends ModuleBase {
             if (elements.isEmpty()) {
                 // Consider an empty document bad
                 info.setWellFormed(false);
-                info.setMessage(new ErrorMessage("Document is empty"));
+                info.setMessage(new ErrorMessage(MessageConstants.ERR_DOC_EMPTY));
                 return 0;
             }
             type = checkDoctype(elements);
             if (type < 0) {
                 info.setWellFormed(false);
-                info.setMessage(new ErrorMessage("DOCTYPE is not HTML"));
+                info.setMessage(new ErrorMessage(MessageConstants.ERR_DOCTYPE_NOT_HTML));
                 return 0;
             }
             /*
@@ -373,7 +373,7 @@ public class HtmlModule extends ModuleBase {
             }
             if (!hasElements) {
                 info.setMessage(new ErrorMessage(
-                        "Document contains no html, head, body or title tags"));
+                        MessageConstants.ERR_HTML_HEAD_BODY_TAGS_MISS));
                 info.setWellFormed(false);
                 return 0;
             }
@@ -382,7 +382,7 @@ public class HtmlModule extends ModuleBase {
             String lineEnd = cstream.getKindOfLineEnd();
             if (lineEnd == null) {
                 info.setMessage(new InfoMessage(
-                        "Not able to determine type of end of line"));
+                        MessageConstants.ERR_EOL_TYPE_UNDET));
                 _textMD.setLinebreak(TextMDMetadata.NILL);
             } else if ("CR".equalsIgnoreCase(lineEnd)) {
                 _textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
@@ -403,16 +403,14 @@ public class HtmlModule extends ModuleBase {
                     break; // fall through
                 case 1: // XML but not HTML
                     info.setMessage(new ErrorMessage(
-                            "Document has XML declaration but no DOCTYPE; "
-                                    + "probably XML rather than HTML"));
+                            MessageConstants.ERR_DOCTYPE_MISS));
                     info.setWellFormed(false);
                     return 0;
                 case 2: // probably XHTML
                     return 100;
                 }
                 info.setMessage(new ErrorMessage(
-                        "Unrecognized or missing DOCTYPE declaration; "
-                                + "validation continuing as HTML 3.2"));
+                        MessageConstants.ERR_DOCTYPE_UNREC));
                 info.setValid(false);
                 // But keep going
             }
@@ -467,8 +465,7 @@ public class HtmlModule extends ModuleBase {
             _textMD.setMarkup_language(_doctype);
             if (docDesc == null) {
                 info.setMessage(new InfoMessage(
-                        "Code for appropriate HTML version not available yet:"
-                                + "substituting HTML 3.2"));
+                        MessageConstants.INF_HTML_VER_UNSPPRTD));
                 docDesc = new Html3_2DocDesc();
             }
             docDesc.validate(elements, info);
@@ -494,11 +491,11 @@ public class HtmlModule extends ModuleBase {
             }
         } catch (ParseException e) {
             Token t = e.currentToken;
-            info.setMessage(new ErrorMessage("Parse error", "Line = "
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_PARSE_ERR, "Line = "
                     + t.beginLine + ", column = " + t.beginColumn));
             info.setWellFormed(false);
         } catch (TokenMgrError f) {
-            info.setMessage(new ErrorMessage("TokenMgrError: "
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_TKN_MGR_ERR
                     + f.getLocalizedMessage()));
             info.setWellFormed(false);
         }
@@ -541,7 +538,7 @@ public class HtmlModule extends ModuleBase {
     /**
      * Check if the digital object conforms to this Module's internal signature
      * information.
-     * 
+     *
      * HTML is one of the most ill-defined of any open formats, so checking a
      * "signature" really means using some heuristics. The only required tag is
      * TITLE, but that could occur well into the file. So we look for any of
@@ -663,7 +660,7 @@ public class HtmlModule extends ModuleBase {
      * See if this document, even if it lacks a doctype, is most likely XHTML.
      * The test is that the document starts with an XML declaration and has
      * "html" for its first tag.
-     * 
+     *
      * Returns: 0 if there's no XML declaration 1 if there's an XML declaration
      * but no html tag; in this case it's probably some other kind of XML 2 if
      * there's an XML declaration and an html tag
