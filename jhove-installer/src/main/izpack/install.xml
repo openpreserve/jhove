@@ -55,10 +55,10 @@
 
   <packs>
     <pack name="JHOVE Application" required="yes">
-      <description>JHOVE application JARs and configuration files.</description>
+      <description>JHOVE application JARs including the internal modules and configuration files.</description>
       <file targetdir="$INSTALL_PATH/bin" src="bin/jhove-apps-${project.version}.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/jhove-apps-${project.version}.jar"/>
-      <file targetdir="$INSTALL_PATH/conf" src="config/jhove.conf"/>
+      <file targetdir="$INSTALL_PATH/conf"  override="true" src="config/jhove.conf"/>
       <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="xml"/>
     </pack>
     <pack name="JHOVE Shell Scripts" required="yes">
@@ -80,6 +80,13 @@
       <file targetdir="$INSTALL_PATH" src="scripts/jhove-gui.bat"/>
       <parsable targetfile="$INSTALL_PATH/jhove-gui.bat" type="plain"/>
       <executable targetfile="$INSTALL_PATH/jhove-gui.bat"/>
+    </pack>
+    <pack name="JHOVE External Modules" required="no">
+      <description>Third party validation modules developed for JHOVE, currently GZIP, PNG and WARC.</description>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/jhove-ext-modules-${project.version}.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/jhove-apps-${project.version}.jar"/>
+      <file targetdir="$INSTALL_PATH/conf" override="true" src="config/ext-modules/jhove.conf"/>
+      <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="xml"/>
     </pack>
   </packs>
 </izpack:installation>
