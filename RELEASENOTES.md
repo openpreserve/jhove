@@ -1,12 +1,30 @@
 RELEASE NOTES
 =============
-JHOVE - JSTOR/Harvard Object Validation Environment  
-Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.  
+JHOVE - JSTOR/Harvard Object Validation Environment
+Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details).
 
-Versions 1.7 to 1.11 of JHOVE released independently.  
+Versions 1.7 to 1.11 of JHOVE released independently.
 Versions 1.12 onwards released by the Open Preservation Foundation.
+
+JHOVE 1.18-RC
+-------------
+- Validation for ICC profiles in JPEG and TIFF files [[#249](https://github.com/openpreserve/jhove/pull/249)]
+- Added WAVE module support for BWF v2 recognition [[#273](https://github.com/openpreserve/jhove/pull/273)].
+- External modules now an optional installation (default to yes) [[#292](https://github.com/openpreserve/jhove/pull/292)].
+- Fixed bug in parsing of escape characters in PDF name objects [[#280](https://github.com/openpreserve/jhove/pull/280)].
+- Fixed handling of Exif profiles in JPEG files [[#253](https://github.com/openpreserve/jhove/pull/253)].
+- Fixed ArrayIndexOutOfBoundsException when processing some WAVE files [[#118](https://github.com/openpreserve/jhove/pull/118)]
+- Fixes for various small issues in [[#257](https://github.com/openpreserve/jhove/pull/257)]:
+  * fix for false invalid result for encrypted PDFs;
+  * improvements to TIFF and PDF error handling;
+  * inaccessible files now return "Unknown" status; and
+  * changed WAVE reported MIME type from `audio/xwave` to `audio/vnd.wave`.
+- Improvements to report of PDF indirect references with non-existent destination [[#123](https://github.com/openpreserve/jhove/pull/123)].
+- All JHOVE module error messages now factored as String constants in discrete message classes.
+- JHOVE core error messages factored as String constants in [`CoreMessageConstants`](https://github.com/openpreserve/jhove/blob/integration/jhove-core/src/main/java/edu/harvard/hul/ois/jhove/CoreMessageConstants.java).
+- Improvements to WAVE module documentation [[#269](https://github.com/openpreserve/jhove/pull/269)]
 
 JHOVE 1.16.7
 ------------
