@@ -16,13 +16,14 @@ JHOVE 1.18-RC
 
 - Installation of external modules is now optional [[#292][]]
 - Inaccessible files are now reported as "Unknown" instead of "Not well-formed" [[#257][]]
-- General improvements to error handling and uncaught module exceptions,
+- Improvements to error handling and uncaught module exceptions,
   increasing resilience during batch processing [[#257][], [#259][]]
 - Improved path handling, allowing installation locations and file paths to
-  contain spaces and more exotic characters [[#206][]]
+  contain spaces, and more exotic characters [[#206][]]
 - Error and informational messages have been consolidated into discrete message
   classes for easier maintenance and future improvement [[#120][], [#157][],
   [#283][]–[#285][], [#287][]–[#291][]]
+- Increased the minimum version of Java from 1.5 to 1.6 [[#273][]]
 
 ### JPEG Module
 
@@ -49,7 +50,7 @@ JHOVE 1.18-RC
 - Added support for reporting BWF v2 fields [[#273][]]
 - Simplified BWF profile detection, allowing detection of any future BWF
   versions. All BWF versions will now be reported as "BWF" instead of
-  "BWF version #", with any unrecognized versions being reported [[#273][]]
+  "BWF version #", with any unrecognized versions being flagged [[#273][]]
 - Reformatted the BWF UMID field into a hexadecimal string instead of a long
   sequence of numbers [[#273][]]
 - Fixed incorrectly reported format names and `ArrayIndexOutOfBoundsException`
