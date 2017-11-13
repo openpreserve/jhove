@@ -15,7 +15,8 @@ JHOVE 1.18-RC
 ### General
 
 - Installation of external modules is now optional [[#292][]]
-- Inaccessible files are now reported as "Unknown" instead of "Not well-formed" [[#257][]]
+- Inaccessible files are now reported as of "Unknown" status instead of 
+  "Not well-formed" [[#257][]]
 - Improvements to error handling and uncaught module exceptions,
   increasing resilience during batch processing [[#257][], [#259][]]
 - Improved path handling, allowing installation locations and file paths to
@@ -53,6 +54,8 @@ JHOVE 1.18-RC
   "BWF version #", with any unrecognized versions being flagged [[#273][]]
 - Reformatted the BWF UMID field into a hexadecimal string instead of a long
   sequence of numbers [[#273][]]
+- Changed property label from "Originator Reference" to "OriginatorReference"
+  for consistency and predictability [[#273][]]
 - Fixed incorrectly reported format names and `ArrayIndexOutOfBoundsException`
   errors when processing certain non-PCM WAVE files [[#118][]]
 - Changed reported MIME type from `audio/x-wave` to `audio/vnd.wave` [[#257][]]
