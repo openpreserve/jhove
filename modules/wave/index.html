@@ -48,7 +48,7 @@ title: WAVE-hul Module
   <li>WAVEFORMATEXTENSIBLE
       [<a href="/references#waveformatextensible">WAVEFORMATEXTENSIBLE</a>]</li>
   <li>EBU Technical Specification 3285,
-      Broadcast Wave Format (BWF) version 0 and 1
+      Broadcast Wave Format (BWF) version 0, 1 and 2
       [<a href="/references#bwf">BWF</a>,
       <a href="/references#bwf-1">BWF Supp 1</a>,
       <!--<a href="/references#bwf-2">BWF Supp 2</a>,-->
@@ -91,7 +91,7 @@ title: WAVE-hul Module
 <h2 id="repinfo">5 Representation Information</h2>
 
 <p>
-  The MIME type is reported as: <code>audio/x-wave</code>.
+  The MIME type is reported as: <code>audio/vnd.wave</code>.
 </p>
 
 <p>
@@ -242,7 +242,7 @@ title: WAVE-hul Module
 
 <ul>
   <li><var>wFormatTag</var> ≠ 0xFFFE</li>
-  <li>If <var>wFormatTag</var> = 1 then
+  <li>If <var>wFormatTag</var> = 0x0001 then
     <ul>
       <li><var>nAvgBytesPerSec</var> = <var>nSamplesPerSec</var>
           × <var>nBlockAlign</var> (recommended)</li>
@@ -301,18 +301,19 @@ title: WAVE-hul Module
 </ul>
 
 
-<h4>Broadcast Wave Format 0 and 1</h4>
+<h4>BWF</h4>
 
 <p>
-  Broadcast Wave Format (BWF) is an extension of the WAVEFORMATEX profile
-  defined by the European Broadcast Union (EBU) as
-  EBU Technical Specification 3285
+  Broadcast Wave Format is an extension of the WAVEFORMATEX profile, defined by
+  the European Broadcast Union (EBU) as EBU Technical Specification 3285 and
+  its supplements
   [<a href="/references#bwf">BWF</a>,
   <a href="/references#bwf-1">BWF Supp 1</a>,
   <a href="/references#bwf-2">BWF Supp 2</a>,
   <a href="/references#bwf-3">BWF Supp 3</a>,
   <a href="/references#bwf-4">BWF Supp 4</a>,
-  <a href="/references#bwf-5">BWF Supp 5</a>].
+  <a href="/references#bwf-5">BWF Supp 5</a>,
+  <a href="/references#bwf-6">BWF Supp 6</a>].
 </p>
 
 <p>
@@ -320,8 +321,13 @@ title: WAVE-hul Module
 </p>
 
 <ul>
+  <li>"bext" chunk exists</li>
   <li>"fmt " chunk <var>wFormatTag</var> = 0x0001 or 0x0050</li>
-  <li>"bext" chunk <var>version</var> = 0 or 1</li>
+  <li>If <var>wFormatTag</var> = 0x0050 then
+    <ul>
+      <li>"fact" chunk exists</li>
+    </ul>
+  </li>
 </ul>
 
 
