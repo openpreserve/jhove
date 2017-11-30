@@ -53,6 +53,7 @@
     <panel classname="FinishPanel" id="finish"/>
   </panels>
 
+
   <packs>
     <pack name="JHOVE Application" required="yes">
       <description>JHOVE application JARs including the internal modules and configuration files.</description>
@@ -60,24 +61,27 @@
       <executable targetfile="$INSTALL_PATH/bin/jhove-apps-${project.version}.jar"/>
       <file targetdir="$INSTALL_PATH/conf"  override="true" src="config/jhove.conf"/>
       <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="xml"/>
+      <updatecheck>
+        <include name="bin/**" />
+      </updatecheck>
     </pack>
     <pack name="JHOVE Shell Scripts" required="yes">
       <os family="unix"/>
       <description>Bash execution scripts for command line and GUI apps.</description>
-      <file targetdir="$INSTALL_PATH" src="scripts/jhove"/>
+      <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove"/>
       <parsable targetfile="$INSTALL_PATH/jhove" type="shell"/>
       <executable targetfile="$INSTALL_PATH/jhove"/>
-      <file targetdir="$INSTALL_PATH" src="scripts/jhove-gui"/>
+      <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove-gui"/>
       <parsable targetfile="$INSTALL_PATH/jhove-gui" type="shell"/>
       <executable targetfile="$INSTALL_PATH/jhove-gui"/>
     </pack>
     <pack name="JHOVE Batch Script" required="yes">
       <os family="windows"/>
       <description>DOS batch execution scripts for command line and GUI apps.</description>
-      <file targetdir="$INSTALL_PATH" src="scripts/jhove.bat"/>
+      <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove.bat"/>
       <parsable targetfile="$INSTALL_PATH/jhove.bat" type="plain"/>
       <executable targetfile="$INSTALL_PATH/jhove.bat"/>
-      <file targetdir="$INSTALL_PATH" src="scripts/jhove-gui.bat"/>
+      <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove-gui.bat"/>
       <parsable targetfile="$INSTALL_PATH/jhove-gui.bat" type="plain"/>
       <executable targetfile="$INSTALL_PATH/jhove-gui.bat"/>
     </pack>
