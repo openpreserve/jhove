@@ -8,6 +8,7 @@ JHOVE
 [![Maven Central](https://img.shields.io/maven-central/v/org.openpreservation.jhove/jhove.svg)](http://repo1.maven.org/maven2/org/openpreservation/jhove/ "JHOVE on Maven central")
 [![CodeCov Coverage](https://img.shields.io/codecov/c/github/openpreserve/jhove.svg)](https://codecov.io/gh/openpreserve/jhove/ "CodeCov test coverage figure")
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9561b9ee71624cc5a69bd78ebc86e3af)](https://www.codacy.com/app/openpreserve/jhove?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=openpreserve/jhove&amp;utm_campaign=Badge_Grade)
+
 [![GitHub issues](https://img.shields.io/github/issues/openpreserve/jhove.svg)](https://github.com/openpreserve/jhove/issues "Open issues on GitHub")
 [![GitHub forks](https://img.shields.io/github/forks/openpreserve/jhove.svg)](https://github.com/openpreserve/jhove/network "Number of forks on GitHub")
 
@@ -18,7 +19,7 @@ Copyright 2003-2012 by JSTOR and the President and Fellows of Harvard College,
 JHOVE is made available under the
 [GNU Lesser General Public License (LGPL)](http://www.gnu.org/licenses/lgpl.html).
 
-Rev. 1.16.7, 2017-07-20
+Rev. 1.18.1, 2017-11-30
 
 JHOVE Homepage
 --------------
@@ -59,8 +60,8 @@ JHOVE is currently being maintained by the
 
 Pre-requisites
 --------------
- 1. Java JRE 1.6  
-    Version 1.16 of JHOVE is built and tested against Oracle JDK 8,
+ 1. Java JRE 1.6
+    Version 1.18 of JHOVE is built and tested against Oracle JDK 8,
     and OpenJDK 7 & 8 on Travis. Releases are built using Oracle JDK 7
     from the [OPF's Jenkins server](http://jenkins.openpreservation.org/).
 
@@ -80,7 +81,7 @@ POM:
 ```xml
 <properties>
   ...
-  <jhove.version>1.16.7</jhove.version>
+  <jhove.version>1.18.1</jhove.version>
 </properties>
 ```
 Use this dependency for the core classes Maven module (e.g. `JhoveBase`,
@@ -92,11 +93,19 @@ Use this dependency for the core classes Maven module (e.g. `JhoveBase`,
   <version>${jhove.version}</version>
 </dependency>
 ```
-this for the JHOVE module implementations:
+this for the JHOVE internal module implementations:
 ```xml
 <dependency>
   <groupId>org.openpreservation.jhove</groupId>
   <artifactId>jhove-modules</artifactId>
+  <version>${jhove.version}</version>
+</dependency>
+```
+this for the JHOVE external module implementations:
+```xml
+<dependency>
+  <groupId>org.openpreservation.jhove</groupId>
+  <artifactId>jhove-ext-modules</artifactId>
   <version>${jhove.version}</version>
 </dependency>
 ```
@@ -138,17 +147,17 @@ following property:
 ```xml
 <properties>
   ...
-  <jhove.version>1.17.1</jhove.version>
+  <jhove.version>1.19.1</jhove.version>
 </properties>
 ```
 or even:
 ```xml
 <properties>
   ...
-  <jhove.version>[1.17.0,1.18.0]</jhove.version>
+  <jhove.version>[1.19.0,1.20.0]</jhove.version>
 </properties>
 ```
-to always use the latest 1.17 build.
+to always use the latest 1.19 build.
 
 ### For Developers: Building JHOVE from Source
 Clone this project, checkout the integration branch, and use Maven, e.g.:
@@ -312,10 +321,11 @@ broken into three Maven modules with an additional installer module added.
       |-jhove-apps/
       |-jhove-core/
       |-jhove-installer/
+      |-jhove-ext-modules/
       |-jhove-modules/
 All Maven artifacts are produced in versioned form,
 i.e. `${artifactId}-${project.version}.jar`, where `${project.version}` defaults
-to `1.16.0` unless you explicitly set the version number.
+to `1.18.0` unless you explicitly set the version number.
 
 ### jhove
 The `jhove` project root acts as a Maven parent and reactor for the sub-modules.
@@ -336,7 +346,7 @@ The `jhove-core` JAR contains a single module implementation, the default
 the `jhove-modules` JAR.
 
 ### jhove-modules
-The `jhove-modules` contain all of JHOVE's core format-specific module
+The `jhove-modules` contains all of JHOVE's core format-specific module
 implementations, specifically:
 
  * AIFF
@@ -346,16 +356,25 @@ implementations, specifically:
  * JPEG
  * JPEG 2000
  * PDF
- * PNG
  * TIFF
  * UTF-8
- * WARC
  * WAVE
  * XML
 
 These are all packaged in a single modules JAR:
 
     ./jhove/jhove-modules/target/jhove-modules-${project.version}.jar
+
+### jhove-ext-modules
+The `jhove-ext-modules` contains JHOVE modules developed by external parties, specifically:
+
+ * PNG
+ * WARC
+ * GZIP
+
+These are all packaged in a single modules JAR:
+
+    ./jhove/jhove-ext-modules/target/jhove-ext-modules-${project.version}.jar
 
 ### jhove-apps
 The `jhove-apps` module contains the command-line and GUI application code and
