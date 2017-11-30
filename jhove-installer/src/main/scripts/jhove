@@ -57,7 +57,7 @@ JHOVE_HOME="$( cd "$(dirname "${SCRIPT}" )" && pwd )"
 cd "${CWD}"
 
 # Create Java class path
-CP="${JHOVE_HOME}/bin/jhove-apps-${JHOVE_VERSION}.jar"
+CP="${JHOVE_HOME}/bin/*"
 if [ -n "${EXTRA_JARS}" ]; then
     CP="${CP}:${EXTRA_JARS}"
 fi

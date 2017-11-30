@@ -41,7 +41,7 @@ REM Infer JHOVE_HOME from script location
 SET "JHOVE_HOME=%~dp0"
 
 REM Create Java class path
-SET "CP=%JHOVE_HOME%bin\jhove-apps-%JHOVE_VERSION%.jar"
+SET "CP=%JHOVE_HOME%bin\*"
 IF "%EXTRA_JARS%" NEQ "" (
   SET "CP=%CP%;%EXTRA_JARS%"
 )

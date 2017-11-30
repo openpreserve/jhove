@@ -43,6 +43,7 @@
   <modules>
     <module>jhove-core</module>
     <module>jhove-modules</module>
+    <module>jhove-ext-modules</module>
     <module>jhove-apps</module>
     <module>jhove-installer</module>
   </modules>
