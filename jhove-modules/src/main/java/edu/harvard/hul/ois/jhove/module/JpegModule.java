@@ -1025,7 +1025,7 @@ public class JpegModule extends ModuleBase {
                 // width and height. We just grab those and skip the rest.
                 int xThumbPix = readUnsignedByte(_dstream, this);
                 int yThumbPix = readUnsignedByte(_dstream, this);
-                skipBytes(_dstream, length - 4, this);
+                skipBytes(_dstream, length - 10, this);
                 NisoImageMetadata thumbNiso = new NisoImageMetadata();
                 thumbNiso.setImageWidth(xThumbPix);
                 thumbNiso.setImageLength(yThumbPix);
