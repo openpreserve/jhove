@@ -1041,7 +1041,7 @@ public class JpegModule extends ModuleBase {
                 _imageList.add(thumbProp);
 
             default:
-                skipBytes(_dstream, length - 2, this);
+                skipBytes(_dstream, length - 8, this);
                 break;
 
             // we may want to do stuff with the JFXX APP0
