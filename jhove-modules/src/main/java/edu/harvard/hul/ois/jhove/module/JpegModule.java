@@ -1047,7 +1047,7 @@ public class JpegModule extends ModuleBase {
             // we may want to do stuff with the JFXX APP0
             }
         } else {
-            skipBytes(_dstream, length - 2, this);
+            skipBytes(_dstream, length - 7, this);
         }
     }
 
