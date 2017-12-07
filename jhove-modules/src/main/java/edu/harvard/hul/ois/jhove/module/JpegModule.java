@@ -1039,6 +1039,7 @@ public class JpegModule extends ModuleBase {
                         PropertyType.PROPERTY, PropertyArity.LIST,
                         thumbPropList);
                 _imageList.add(thumbProp);
+                break;
 
             default:
                 skipBytes(_dstream, length - 8, this);
