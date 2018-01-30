@@ -1099,9 +1099,7 @@ public abstract class ModuleBase
 
 
     /**
-     *  Reads eight bytes as a signed 64-bit value from a
-     *  DataInputStream.  (There is no way in Java to have
-     *  an unsigned long.)
+     *  Reads eight bytes as a signed 64-bit value from a DataInputStream.
      *
      *  @param stream     The stream to read from.
      *  @param bigEndian  If true, interpret the first byte as the high

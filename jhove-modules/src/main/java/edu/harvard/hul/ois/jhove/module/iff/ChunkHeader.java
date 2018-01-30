@@ -75,7 +75,13 @@ public class ChunkHeader {
     {
         return _chunkID;
     }
-    
+
+    /** Sets the chunk size */
+    public void setSize(long size)
+    {
+        _size = size;
+    }
+
     /** Returns the chunk size (excluding the first 8 bytes) */
     public long getSize ()
     {

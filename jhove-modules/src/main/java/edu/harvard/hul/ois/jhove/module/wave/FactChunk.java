@@ -23,6 +23,8 @@ import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
  */
 public class FactChunk extends Chunk {
 
+    private final static int BASE_CHUNK_SIZE = 4;
+
     /**
      * Constructor.
      * 
@@ -45,17 +47,23 @@ public class FactChunk extends Chunk {
      */
     public boolean readChunk(RepInfo info) throws IOException {
         WaveModule module = (WaveModule) _module;
-        Property sizeProp = new Property ("Size",
-                PropertyType.LONG,
-                new Long(bytesLeft));
-        module.addWaveProperty (new Property ("Fact",
-                PropertyType.PROPERTY,
-                sizeProp));
-        long numSamples = module.readUnsignedInt (_dstream);
-        module.addSamples (numSamples);
-        bytesLeft -= 4;
-        module.skipBytes (_dstream, (int) bytesLeft, module);
+
+        long sampleLength = module.readUnsignedInt(_dstream);
+        if (module.hasExtendedDataSizes()
+                && sampleLength == WaveModule.LOOKUP_EXTENDED_DATA_SIZE) {
+            sampleLength = module.getExtendedSampleLength();
+        }
+
+        module.addSamples(sampleLength);
+        bytesLeft -= BASE_CHUNK_SIZE;
+
+        module.skipBytes(_dstream, bytesLeft, module);
+
+        Property sizeProp = new Property("Size",
+                PropertyType.LONG, chunkSize);
+        module.addWaveProperty(new Property("Fact",
+                PropertyType.PROPERTY, sizeProp));
+
         return true;
     }
-
 }

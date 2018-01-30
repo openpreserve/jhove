@@ -14,8 +14,10 @@ import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Module for identification and validation of WAVE sound files.
@@ -34,11 +36,12 @@ public class WaveModule extends ModuleBase {
     private static final String NAME = "WAVE-hul";
     private static final String RELEASE = "1.5";
     private static final int[] DATE = { 2017, 10, 31 };
-    private static final String[] FORMAT = { "WAVE", "Audio for Windows",
-            "EBU Technical Specification 3285", "Broadcast Wave Format", "BWF" };
-    private static final String COVERAGE = "WAVE (PCMWAVEFORMAT, WAVEFORMATEX, WAVEFORMATEXTENSIBLE), "
-            + "Broadcast Wave Format (BWF) version 0, 1 and 2";
-    private static final String[] MIMETYPE = { "audio/vnd.wave", "audio/wav",
+    private static final String[] FORMATS = { "WAVE", "Audio for Windows",
+            "EBU Technical Specification 3285", "Broadcast Wave Format", "BWF",
+            "EBU Technical Specification 3306", "RF64" };
+    private static final String COVERAGE = "WAVE (PCMWAVEFORMAT, WAVEFORMATEX, WAVEFORMATEXTENSIBLE); "
+            + "Broadcast Wave Format (BWF) version 0, 1 and 2; RF64";
+    private static final String[] MIMETYPES = { "audio/vnd.wave", "audio/wav",
             "audio/wave", "audio/x-wav", "audio/x-wave" };
     private static final String WELLFORMED = null;
     private static final String VALIDITY = null;
@@ -49,8 +52,26 @@ public class WaveModule extends ModuleBase {
             + "President and Fellows of Harvard College. "
             + "Released under the GNU Lesser General Public License.";
 
-    /** Fixed values of first four bytes */
-    private static final int[] RIFF_SIGNATURE = { 'R', 'I', 'F', 'F' };
+    /** Fixed value for first four bytes of WAVE files */
+    private static final String RIFF_SIGNATURE = "RIFF";
+
+    /** Fixed value for first four bytes of RF64 files */
+    private static final String RF64_SIGNATURE = "RF64";
+
+    /** Length of the RIFF form type field in bytes */
+    private static final int RIFF_FORM_TYPE_LENGTH = 4;
+
+    /** Length of chunk headers in bytes */
+    private static final int CHUNK_HEADER_LENGTH = 8;
+
+    /** Value indicating a required 64-bit data size lookup */
+    public static final long LOOKUP_EXTENDED_DATA_SIZE = 0xFFFFFFFFL;
+
+    /**
+     * Map of 64-bit chunk sizes found in the Data Size 64 chunk.
+     * <code>Long</code> size values should be treated as unsigned.
+     */
+    protected Map<String, Long> extendedChunkSizes;
 
     /** Checksummer object */
     protected Checksummer _ckSummer;
@@ -82,7 +103,10 @@ public class WaveModule extends ModuleBase {
     /** AES audio metadata to go into WAVE metadata */
     protected AESAudioMetadata _aesMetadata;
 
-    /** Bytes remaining to be read */
+    /**
+     * Bytes of the RIFF chunk remaining to be read.
+     * Value should be treated as unsigned.
+     */
     protected long bytesRemaining;
 
     /** Bytes needed to store a file */
@@ -94,11 +118,18 @@ public class WaveModule extends ModuleBase {
     /** Compression format, used for profile verification */
     protected int compressionCode;
 
+    /** Extended (and unsigned) RIFF size as found in Data Size 64 chunk */
+    protected long extendedRiffSize;
+
+    /** Extended (and unsigned) sample length as found in Data Size 64 chunk */
+    protected long extendedSampleLength;
+
     /**
      * Number of samples in the file. Obtained from the Data chunk for
-     * uncompressed files, and the Fact chunk for compressed ones.
+     * uncompressed files, and the Fact chunk for compressed ones. Value
+     * should be treated as unsigned.
      */
-    protected long numSamples;
+    protected long sampleCount;
 
     /** Sample rate from file */
     protected long sampleRate;
@@ -111,6 +142,9 @@ public class WaveModule extends ModuleBase {
 
     /** Flag to check for not more than one Data chunk */
     protected boolean dataChunkSeen;
+
+    /** Flag to check for a Data Size 64 chunk */
+    protected boolean dataSize64ChunkSeen;
 
     /** Flag to check for not more than one Instrument chunk */
     protected boolean instrumentChunkSeen;
@@ -149,6 +183,9 @@ public class WaveModule extends ModuleBase {
      */
     protected boolean flagBroadcastWave;
 
+    /** Profile flag for RF64 */
+    protected boolean flagRF64;
+
     /** Flag to note that first sample offset has been recorded */
     protected boolean firstSampleOffsetMarked;
 
@@ -158,7 +195,7 @@ public class WaveModule extends ModuleBase {
      * Instantiates a <code>WaveModule</code> object.
      */
     public WaveModule() {
-        super(NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
+        super(NAME, RELEASE, DATE, FORMATS, COVERAGE, MIMETYPES, WELLFORMED,
                 VALIDITY, REPINFO, NOTE, RIGHTS, false);
         _vendor = Agent.harvardInstance();
 
@@ -214,6 +251,17 @@ public class WaveModule extends ModuleBase {
         doc.setDate("2011-05");
         _specification.add(doc);
 
+        doc = new Document("MBWF / RF64: An Extended File Format for Audio",
+                DocumentType.REPORT);
+        doc.setIdentifier(new Identifier("EBU Technical Specification 3306",
+                IdentifierType.OTHER));
+        doc.setIdentifier(new Identifier(
+                "https://tech.ebu.ch/docs/tech/tech3306-2009.pdf",
+                IdentifierType.URL));
+        doc.setPublisher(ebuAgent);
+        doc.setDate("2009-07");
+        _specification.add(doc);
+
         Agent ietfAgent = new Agent.Builder("IETF", AgentType.STANDARD)
                 .web("https://www.ietf.org")
                 .build();
@@ -235,8 +283,16 @@ public class WaveModule extends ModuleBase {
                 SignatureUseType.OPTIONAL, "For BWF profile");
         _signature.add(sig);
 
+        sig = new ExternalSignature(".rf64", SignatureType.EXTENSION,
+                SignatureUseType.OPTIONAL, "For RF64 profile");
+        _signature.add(sig);
+
         sig = new InternalSignature("RIFF", SignatureType.MAGIC,
-                SignatureUseType.MANDATORY, 0);
+                SignatureUseType.MANDATORY_IF_APPLICABLE, 0);
+        _signature.add(sig);
+
+        sig = new InternalSignature("RF64", SignatureType.MAGIC,
+                SignatureUseType.MANDATORY_IF_APPLICABLE, 0);
         _signature.add(sig);
 
         sig = new InternalSignature("WAVE", SignatureType.MAGIC,
@@ -293,31 +349,62 @@ public class WaveModule extends ModuleBase {
 
         try {
             // Check the start of the file for the right opening bytes
-            for (int i = 0; i < 4; i++) {
-                int ch = readUnsignedByte(_dstream, this);
-                if (ch != RIFF_SIGNATURE[i]) {
-                    info.setMessage(new ErrorMessage(
-                            MessageConstants.ERR_RIFF_CHUNK_MISSING, 0));
-                    info.setWellFormed(false);
-                    return 0;
-                }
+            String firstFourChars = read4Chars(_dstream);
+            if (firstFourChars.equals(RF64_SIGNATURE)) {
+                info.setProfile("RF64");
+                flagRF64 = true;
             }
-            // If we got this far, take note that the signature is OK.
-            info.setSigMatch(_name);
+            else if (!firstFourChars.equals(RIFF_SIGNATURE)) {
+                info.setMessage(new ErrorMessage(
+                        MessageConstants.ERR_RIFF_CHUNK_MISSING, 0));
+                info.setWellFormed(false);
+                return 0;
+            }
 
             // Get the length of the Form chunk. This includes all
-            // the subsequent chunks in the file, but excludes the
-            // header ("FORM" and the length itself).
-            bytesRemaining = readUnsignedInt(_dstream);
+            // subsequent form fields and form subchunks, but excludes
+            // the form chunks's header (its ID and the its length).
+            long riffSize = readUnsignedInt(_dstream);
+            bytesRemaining = riffSize;
 
-            // Read the file type.
-            String typ = read4Chars(_dstream);
-            bytesRemaining -= 4;
-            if (!"WAVE".equals(typ)) {
+            // Read the RIFF form type
+            String formType = read4Chars(_dstream);
+            bytesRemaining -= RIFF_FORM_TYPE_LENGTH;
+            if (!"WAVE".equals(formType)) {
                 info.setMessage(new ErrorMessage(
                         MessageConstants.ERR_RIFF_HDR_TYPE_NOT_WAV, _nByte));
                 info.setWellFormed(false);
                 return 0;
+            }
+
+            // If we get this far, the signature is OK.
+            info.setSigMatch(_name);
+
+            if (flagRF64) {
+                // For RF64 files the first chunk should be a Data Size 64 chunk
+                // containing the extended data sizes for a number of elements.
+                if (readChunk(info) && dataSize64ChunkSeen) {
+                    if (riffSize == LOOKUP_EXTENDED_DATA_SIZE) {
+                        // Even though RF64 can support files larger than
+                        // Long.MAX_VALUE, this module currently does not.
+                        if (Long.compareUnsigned(extendedRiffSize, Long.MAX_VALUE) > 0) {
+                            info.setMessage(new InfoMessage(
+                                    MessageConstants.INF_FILE_TOO_LARGE));
+                            info.setWellFormed(RepInfo.UNDETERMINED);
+                            return 0;
+                        } else {
+                            // Adjust the byte count with the new RIFF size
+                            long bytesRead = riffSize - bytesRemaining;
+                            bytesRemaining = extendedRiffSize - bytesRead;
+                        }
+                    }
+                }
+                else {
+                    info.setMessage(new ErrorMessage(
+                            MessageConstants.ERR_DS64_NOT_FIRST_CHUNK, _nByte));
+                    info.setWellFormed(false);
+                    return 0;
+                }
             }
 
             while (bytesRemaining > 0) {
@@ -338,8 +425,8 @@ public class WaveModule extends ModuleBase {
         }
 
         // Set duration from number of samples and rate.
-        if (numSamples > 0) {
-            _aesMetadata.setDuration(numSamples);
+        if (sampleCount > 0) {
+            _aesMetadata.setDuration(sampleCount);
         }
 
         // Add note and label properties, if there's anything
@@ -565,7 +652,7 @@ public class WaveModule extends ModuleBase {
      * give a cumulative total.
      */
     public void addSamples(long samples) {
-        numSamples += samples;
+        sampleCount += samples;
     }
 
     /** Sets the sample rate. */
@@ -597,13 +684,17 @@ public class WaveModule extends ModuleBase {
     @Override
     protected void initParse() {
         super.initParse();
-        _propList = new LinkedList<Property>();
-        _notes = new LinkedList<Property>();
-        _labels = new LinkedList<Property>();
-        _labeledText = new LinkedList<Property>();
-        _samples = new LinkedList<Property>();
+        _propList = new LinkedList<>();
+        _notes = new LinkedList<>();
+        _labels = new LinkedList<>();
+        _labeledText = new LinkedList<>();
+        _samples = new LinkedList<>();
         firstSampleOffsetMarked = false;
-        numSamples = 0;
+        sampleCount = 0;
+        bytesRemaining = 0;
+        extendedRiffSize = 0;
+        extendedSampleLength = 0;
+        extendedChunkSizes = new HashMap<>();
 
         _metadata = new Property("WAVEMetadata", PropertyType.PROPERTY,
                 PropertyArity.LIST, _propList);
@@ -622,6 +713,7 @@ public class WaveModule extends ModuleBase {
         // Clear flags for whether they have been seen.
         formatChunkSeen = false;
         dataChunkSeen = false;
+        dataSize64ChunkSeen = false;
         instrumentChunkSeen = false;
         cartChunkSeen = false;
         mpegChunkSeen = false;
@@ -635,103 +727,118 @@ public class WaveModule extends ModuleBase {
         flagWaveFormatEx = false;
         flagWaveFormatExtensible = false;
         flagBroadcastWave = false;
+        flagRF64 = false;
     }
 
     /** Reads a WAVE chunk. */
     protected boolean readChunk(RepInfo info) throws IOException {
+
         Chunk chunk = null;
         ChunkHeader chunkh = new ChunkHeader(this, info);
         if (!chunkh.readHeader(_dstream)) {
             return false;
         }
-        long chunkSize = chunkh.getSize();
-        bytesRemaining -= chunkSize + 8;
 
-        if (bytesRemaining < 0) {
+        String chunkID = chunkh.getID();
+        long chunkSize = chunkh.getSize();
+        if (hasExtendedDataSizes() && chunkSize == LOOKUP_EXTENDED_DATA_SIZE) {
+            Long extendedSize = extendedChunkSizes.get(chunkID);
+            if (extendedSize != null) {
+                chunkh.setSize(extendedSize);
+                chunkSize = extendedSize;
+            }
+        }
+
+        // Check if the chunk size is greater than the RIFF's remaining length
+        if (Long.compareUnsigned(bytesRemaining, chunkSize + CHUNK_HEADER_LENGTH) < 0) {
             info.setMessage(new ErrorMessage(MessageConstants.ERR_CHUNK_SIZE_INVAL, _nByte));
             return false;
         }
 
-        String id = chunkh.getID();
-        if ("fmt ".equals(id)) {
+        bytesRemaining -= CHUNK_HEADER_LENGTH + chunkSize;
+
+        if ("fmt ".equals(chunkID)) {
             if (formatChunkSeen) {
                 dupChunkError(info, "Format");
             }
             chunk = new FormatChunk(this, chunkh, _dstream);
             formatChunkSeen = true;
-        } else if ("data".equals(id)) {
+        } else if ("data".equals(chunkID)) {
             if (dataChunkSeen) {
                 dupChunkError(info, "Data");
             }
             chunk = new DataChunk(this, chunkh, _dstream);
             dataChunkSeen = true;
-        } else if ("fact".equals(id)) {
+        } else if ("ds64".equals(chunkID)) {
+            chunk = new DataSize64Chunk(this, chunkh, _dstream);
+            dataSize64ChunkSeen = true;
+        } else if ("fact".equals(chunkID)) {
             chunk = new FactChunk(this, chunkh, _dstream);
             factChunkSeen = true;
             // Are multiple 'fact' chunks allowed?
-        } else if ("note".equals(id)) {
+        } else if ("note".equals(chunkID)) {
             chunk = new NoteChunk(this, chunkh, _dstream);
             // Multiple note chunks are allowed
-        } else if ("labl".equals(id)) {
+        } else if ("labl".equals(chunkID)) {
             chunk = new LabelChunk(this, chunkh, _dstream);
             // Multiple label chunks are allowed
-        } else if ("list".equals(id)) {
+        } else if ("list".equals(chunkID)) {
             chunk = new AssocDataListChunk(this, chunkh, _dstream, info);
             // Are multiple chunks allowed? Who knows?
-        } else if ("LIST".equals(id)) {
+        } else if ("LIST".equals(chunkID)) {
             chunk = new ListInfoChunk(this, chunkh, _dstream, info);
             // Multiple list chunks must be OK, since there can
             // be different types, e.g., an INFO list and an exif list.
-        } else if ("smpl".equals(id)) {
+        } else if ("smpl".equals(chunkID)) {
             chunk = new SampleChunk(this, chunkh, _dstream);
             // Multiple sample chunks are allowed -- I think
-        } else if ("inst".equals(id)) {
+        } else if ("inst".equals(chunkID)) {
             if (instrumentChunkSeen) {
                 dupChunkError(info, "Instrument");
             }
             chunk = new InstrumentChunk(this, chunkh, _dstream);
             // Only one instrument chunk is allowed
             instrumentChunkSeen = true;
-        } else if ("mext".equals(id)) {
+        } else if ("mext".equals(chunkID)) {
             if (mpegChunkSeen) {
                 dupChunkError(info, "MPEG");
             }
             chunk = new MpegChunk(this, chunkh, _dstream);
             // I think only one MPEG chunk is allowed
             mpegChunkSeen = true;
-        } else if ("cart".equals(id)) {
+        } else if ("cart".equals(chunkID)) {
             if (cartChunkSeen) {
                 dupChunkError(info, "Cart");
             }
             chunk = new CartChunk(this, chunkh, _dstream);
             cartChunkSeen = true;
-        } else if ("bext".equals(id)) {
+        } else if ("bext".equals(chunkID)) {
             if (broadcastExtChunkSeen) {
                 dupChunkError(info, "Broadcast Audio Extension");
             }
             chunk = new BroadcastExtChunk(this, chunkh, _dstream);
             broadcastExtChunkSeen = true;
-        } else if ("levl".equals(id)) {
+        } else if ("levl".equals(chunkID)) {
             if (peakChunkSeen) {
                 dupChunkError(info, "Peak Envelope");
             }
             chunk = new PeakEnvelopeChunk(this, chunkh, _dstream);
             peakChunkSeen = true;
-        } else if ("link".equals(id)) {
+        } else if ("link".equals(chunkID)) {
             if (linkChunkSeen) {
                 dupChunkError(info, "Link");
             }
             chunk = new LinkChunk(this, chunkh, _dstream);
             linkChunkSeen = true;
-        } else if ("cue ".equals(id)) {
+        } else if ("cue ".equals(chunkID)) {
             if (cueChunkSeen) {
                 dupChunkError(info, "Cue");
             }
             chunk = new CueChunk(this, chunkh, _dstream);
             cueChunkSeen = true;
         } else {
-            info.setMessage(new InfoMessage(MessageConstants.INF_CHU_TYPE_IGND + id,
-                    _nByte));
+            info.setMessage(new InfoMessage(
+                    MessageConstants.INF_CHU_TYPE_IGND + chunkID, _nByte));
         }
 
         if (chunk != null) {
@@ -799,5 +906,36 @@ public class WaveModule extends ModuleBase {
         }
         return new Property(name, PropertyType.STRING, PropertyArity.LIST,
                 slist);
+    }
+
+    /**
+     * Returns whether or not the module has parsed the chunks required to
+     * provide extended data sizes, namely RF64's Data Size 64 chunk.
+     */
+    public boolean hasExtendedDataSizes() {
+        return flagRF64 && dataSize64ChunkSeen;
+    }
+
+    /** Sets the extended RIFF size. */
+    public void setExtendedRiffSize(long size) {
+        extendedRiffSize = size;
+    }
+
+    /** Sets the extended sample length. */
+    public void setExtendedSampleLength(long length) {
+        extendedSampleLength = length;
+    }
+
+    /** Returns the extended sample length. */
+    public long getExtendedSampleLength() {
+        return extendedSampleLength;
+    }
+
+    /**
+     * Adds a chunk's extended chunk size to the map of extended sizes.
+     * If a chunk has previously been mapped, its chunk size will be replaced.
+     */
+    public void addExtendedChunkSize(String chunkId, Long chunkSize) {
+        extendedChunkSizes.put(chunkId, chunkSize);
     }
 }

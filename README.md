@@ -60,9 +60,9 @@ JHOVE is currently being maintained by the
 
 Pre-requisites
 --------------
- 1. Java JRE 1.6  
+ 1. Java JRE 1.8  
     Version 1.18 of JHOVE is built and tested against Oracle JDK 8,
-    and OpenJDK 7 & 8 on Travis. Releases are built using Oracle JDK 7
+    and OpenJDK 8 on Travis. Releases are built using Oracle JDK 8
     from the [OPF's Jenkins server](http://jenkins.openpreservation.org/).
 
  2. If you would like to build JHOVE from source, then life will be easiest if
@@ -240,16 +240,6 @@ For now we're producing:
    who doesn't want to use the new installer; and
  * a simple cross-platform installer that installs the application JAR, support
    scripts, etc.
-
-Currently all options, including the installer, require Java 1.6 or above to be
-pre-installed. Supporting 1.5 is no longer realistic, Oracle ceased support for
-its own 1.6 distribution in 2012. We've kept to 1.6 as a transition towards
-moving to 1.7. If you really need a 1.5-compatible build then you can override
-the target version for the Maven build, e.g.:
-
-    mvn clean install -Djava.target.version=1.5
-
-This also produces an installer that will work on 1.5 JREs.
 
 Usage
 -----
