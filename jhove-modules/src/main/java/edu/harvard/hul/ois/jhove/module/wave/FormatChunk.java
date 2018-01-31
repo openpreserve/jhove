@@ -6,13 +6,15 @@
 
 package edu.harvard.hul.ois.jhove.module.wave;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.module.WaveModule;
 import edu.harvard.hul.ois.jhove.module.iff.Chunk;
 import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
+
+import javax.xml.bind.DatatypeConverter;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Implementation of the WAVE Format Chunk.
@@ -30,8 +32,18 @@ public class FormatChunk extends Chunk {
     
     /** Compression code for Microsoft Extensible Wave Format */
     public final static int WAVE_FORMAT_EXTENSIBLE = 0XFFFE;
-    
-    /** Table of lossless compression codes. */
+
+    /** Chunk size for PCMWAVEFORMAT files */
+    private final static int PCMWAVEFORMAT_LENGTH = 16;
+
+    /** Minimum extra chunk bytes for WAVEFORMATEXTENSIBLE files */
+    private final static int EXTRA_WAVEFORMATEXTENSIBLE_LENGTH = 22;
+
+    /** Suffix given to GUIDs migrated from Format Tags */
+    private final static String FORMAT_TAG_GUID_SUFFIX =
+            "-0000-0010-8000-00AA00389B71";
+
+    /** Table of losslessly compressed codecs */
     private final static int[] losslessCodecs = {
         0X163,         // WMA lossless
         0X1971         // Sonic foundry lossless
@@ -60,10 +72,10 @@ public class FormatChunk extends Chunk {
     public boolean readChunk(RepInfo info) throws IOException {
         WaveModule module = (WaveModule) _module;
         int validBitsPerSample = -1;
-        byte[] subformat = null;
+        String subformat = null;
         long channelMask = -1;
-        int compressionCode = module.readUnsignedShort (_dstream);
-        module.setCompressionCode (compressionCode);
+        int waveCodec = module.readUnsignedShort (_dstream);
+        module.setWaveCodec(waveCodec);
         int numChannels = module.readUnsignedShort (_dstream);
         long sampleRate = module.readUnsignedInt (_dstream);
         module.setSampleRate (sampleRate);
@@ -71,12 +83,13 @@ public class FormatChunk extends Chunk {
         int blockAlign = module.readUnsignedShort (_dstream);
         module.setBlockAlign (blockAlign);
         int bitsPerSample = module.readUnsignedShort (_dstream);
-        bytesLeft -= 16;
+        bytesLeft -= PCMWAVEFORMAT_LENGTH;
         byte[] extraBytes = null;
         if (bytesLeft > 0) {
             int extraFormatBytes = module.readUnsignedShort (_dstream);
             extraBytes = new byte[extraFormatBytes];
-            if (compressionCode == WAVE_FORMAT_EXTENSIBLE && bytesLeft >= 22) {
+            if (waveCodec == WAVE_FORMAT_EXTENSIBLE
+                    && extraFormatBytes >= EXTRA_WAVEFORMATEXTENSIBLE_LENGTH) {
                 // This is -- or should be -- WAVEFORMATEXTENSIBLE.
                 // Need to do some additional checks on profile satisfaction.
                 boolean wfe = true;     // accept tentatively
@@ -87,10 +100,20 @@ public class FormatChunk extends Chunk {
                 // exhaustively researching all compression formats.
                 validBitsPerSample = module.readUnsignedShort (_dstream);
                 channelMask = module.readUnsignedInt (_dstream);
-                // The subformat is a GUID
-                subformat = new byte[16];
-                ModuleBase.readByteBuf(_dstream, subformat, module);
-                
+
+                // The Subformat field is a Microsoft GUID
+                byte[] guidBytes = new byte[16];
+                ModuleBase.readByteBuf(_dstream, guidBytes, module);
+                subformat = formatGUID(guidBytes);
+
+                // If the Subformat GUID was generated from a Format Tag value,
+                // extract the old Format Tag value from its GUID so we can
+                // properly identify the codec and treat it the same way.
+                if (subformat.endsWith(FORMAT_TAG_GUID_SUFFIX)) {
+                    waveCodec = Integer.parseInt(subformat.substring(4, 8), 16);
+                    module.setWaveCodec(waveCodec);
+                }
+
                 // Nitpicking profile requirements
                 if ((((bitsPerSample + 7) / 8) * numChannels) != blockAlign) {
                     wfe = false;
@@ -108,7 +131,7 @@ public class FormatChunk extends Chunk {
                 }
             }
             else {
-                if (compressionCode != WAVE_FORMAT_PCM ||
+                if (waveCodec != WAVE_FORMAT_PCM ||
                     (((bitsPerSample + 7) / 8) * numChannels) == blockAlign) {
                     module.setWaveFormatEx (true);
                 }
@@ -121,22 +144,15 @@ public class FormatChunk extends Chunk {
             }
         }
         else {
-            // no extra bytes signifies the PCM profile.  In this
-            // case, the compression code also needs to be 1 (Microsoft
-            // PCM).
-            if (compressionCode == WAVE_FORMAT_PCM &&
+            // No extra bytes signifies the PCM profile. In this case,
+            // the wave codec also needs to be Microsoft PCM.
+            if (waveCodec == WAVE_FORMAT_PCM &&
                     (((bitsPerSample + 7) / 8) * numChannels) == blockAlign) {
                 module.setPCMWaveFormat(true);
             }
         }
-        
-        // Set a TENTATIVE flag if this chunk satisfies the broadcast
-        // wave format.
-        if (compressionCode == WAVE_FORMAT_PCM ||
-                compressionCode == WAVE_FORMAT_MPEG) {
-            module.setBroadcastWave (true);
-        }
-        Property prop = module.addIntegerProperty("CompressionCode", compressionCode,
+
+        Property prop = module.addIntegerProperty("CompressionCode", waveCodec,
                     WaveStrings.COMPRESSION_FORMAT, WaveStrings.COMPRESSION_INDEX);
         module.addWaveProperty(prop);
         String compName = (String)prop.getValue();
@@ -147,15 +163,15 @@ public class FormatChunk extends Chunk {
         setChannelLocations (aes, numChannels);
         aes.setSampleRate(sampleRate);
         aes.setBitDepth(bitsPerSample);
-        
-        // Check which codecs are non-lossy
+
+        // Check which codecs are losslessly compressed
         String qual = "LOSSY";
-        for (int i = 0; i < losslessCodecs.length; i++) {
-            if (compressionCode == losslessCodecs[i]) {
+        for (int losslessCodec : losslessCodecs) {
+            if (waveCodec == losslessCodec) {
                 qual = "CODE_REGENERATING";
             }
-        } 
-        if (compressionCode == WAVE_FORMAT_PCM) {
+        }
+        if (waveCodec == WAVE_FORMAT_PCM) {
             aes.clearBitrateReduction ();
         }
         else {
@@ -189,8 +205,7 @@ public class FormatChunk extends Chunk {
         }
         if (subformat != null) {
             module.addWaveProperty (new Property ("Subformat",
-                    PropertyType.BYTE,
-                    PropertyArity.ARRAY,
+                    PropertyType.STRING,
                     subformat));
         }
         return true;
@@ -216,5 +231,47 @@ public class FormatChunk extends Chunk {
             }
         }
         aes.setMapLocations(mapLoc);
+    }
+
+    /**
+     * Returns the string representation of a Microsoft GUID.
+     *
+     * @param guidBytes  a 16-byte array with GUID values in little-endian order
+     * @return           a String of the form 00000001-0000-0010-8000-00AA00389B71
+     */
+    private String formatGUID(byte[] guidBytes) {
+
+        StringBuilder guid = new StringBuilder(36);
+
+        byte[] doubleWord = reverseBytes(Arrays.copyOf(guidBytes, 4));
+        guid.append(DatatypeConverter.printHexBinary(doubleWord));
+        guid.append("-");
+
+        byte[] word = reverseBytes(Arrays.copyOfRange(guidBytes, 4, 6));
+        guid.append(DatatypeConverter.printHexBinary(word));
+        guid.append("-");
+
+        word = reverseBytes(Arrays.copyOfRange(guidBytes, 6, 8));
+        guid.append(DatatypeConverter.printHexBinary(word));
+        guid.append("-");
+
+        byte[] bytes = Arrays.copyOfRange(guidBytes, 8, 10);
+        guid.append(DatatypeConverter.printHexBinary(bytes));
+        guid.append("-");
+
+        bytes = Arrays.copyOfRange(guidBytes, 10, 16);
+        guid.append(DatatypeConverter.printHexBinary(bytes));
+
+        return guid.toString();
+    }
+
+    /** Reverses a byte array in place */
+    private byte[] reverseBytes(byte[] bytes) {
+        for (int i = 0; i < bytes.length / 2; i++) {
+            byte valueToSwap = bytes[i];
+            bytes[i] = bytes[bytes.length - 1 - i];
+            bytes[bytes.length - 1 - i] = valueToSwap;
+        }
+        return bytes;
     }
 }

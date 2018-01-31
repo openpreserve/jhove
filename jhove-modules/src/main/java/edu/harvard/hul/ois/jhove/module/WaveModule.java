@@ -115,8 +115,8 @@ public class WaveModule extends ModuleBase {
     /** Exif data from file */
     protected ExifInfo _exifInfo;
 
-    /** Compression format, used for profile verification */
-    protected int compressionCode;
+    /** WAVE codec, used for profile verification */
+    protected int waveCodec;
 
     /** Extended (and unsigned) RIFF size as found in Data Size 64 chunk */
     protected long extendedRiffSize;
@@ -175,13 +175,6 @@ public class WaveModule extends ModuleBase {
 
     /** Profile flag for WAVEFORMATEXTENSIBLE */
     protected boolean flagWaveFormatExtensible;
-
-    /**
-     * Profile flag for Broadcast Wave Format. This indicates only that the
-     * Format chunk is acceptable; it is also necessary to verify that certain
-     * chunks were found.
-     */
-    protected boolean flagBroadcastWave;
 
     /** Profile flag for RF64 */
     protected boolean flagRF64;
@@ -495,20 +488,13 @@ public class WaveModule extends ModuleBase {
         if (flagWaveFormatExtensible) {
             info.setProfile("WAVEFORMATEXTENSIBLE");
         }
-        if (flagBroadcastWave) {
-            // Need to do some additional checks.
-            if (!broadcastExtChunkSeen) {
-                flagBroadcastWave = false;
-            }
-            if (compressionCode == FormatChunk.WAVE_FORMAT_MPEG) {
-                if (!broadcastExtChunkSeen || !factChunkSeen) {
-                    flagBroadcastWave = false;
-                }
-            }
-            if (flagBroadcastWave) {
+        if (broadcastExtChunkSeen) {
+            if ((waveCodec == FormatChunk.WAVE_FORMAT_MPEG && factChunkSeen)
+                    || waveCodec == FormatChunk.WAVE_FORMAT_PCM) {
                 info.setProfile("BWF");
             }
         }
+
         return 0;
     }
 
@@ -541,9 +527,9 @@ public class WaveModule extends ModuleBase {
         return _exifInfo;
     }
 
-    /** Returns the compression code. */
-    public int getCompressionCode() {
-        return compressionCode;
+    /** Returns the WAVE codec value. */
+    public int getWaveCodec() {
+        return waveCodec;
     }
 
     /** Returns the number of bytes needed per aligned sample. */
@@ -642,9 +628,9 @@ public class WaveModule extends ModuleBase {
         return sbuf.toString();
     }
 
-    /** Sets the compression format. Called from the Format chunk. */
-    public void setCompressionCode(int cf) {
-        compressionCode = cf;
+    /** Sets the WAVE codec. */
+    public void setWaveCodec(int value) {
+        waveCodec = value;
     }
 
     /**
@@ -675,11 +661,6 @@ public class WaveModule extends ModuleBase {
         flagWaveFormatExtensible = b;
     }
 
-    /** Sets the profile flag for Broadcast Wave. */
-    public void setBroadcastWave(boolean b) {
-        flagBroadcastWave = b;
-    }
-
     /** Initializes the state of the module for parsing. */
     @Override
     protected void initParse() {
@@ -690,6 +671,7 @@ public class WaveModule extends ModuleBase {
         _labeledText = new LinkedList<>();
         _samples = new LinkedList<>();
         firstSampleOffsetMarked = false;
+        waveCodec = -1;
         sampleCount = 0;
         bytesRemaining = 0;
         extendedRiffSize = 0;
@@ -726,7 +708,6 @@ public class WaveModule extends ModuleBase {
         flagPCMWaveFormat = false;
         flagWaveFormatEx = false;
         flagWaveFormatExtensible = false;
-        flagBroadcastWave = false;
         flagRF64 = false;
     }
 
