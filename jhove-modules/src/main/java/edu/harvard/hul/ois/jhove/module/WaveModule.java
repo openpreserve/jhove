@@ -315,8 +315,6 @@ public class WaveModule extends ModuleBase {
     public int parse(InputStream stream, RepInfo info, int parseIndex)
             throws IOException {
         initParse();
-        info.setFormat(_format[0]);
-        info.setMimeType(_mimeType[0]);
         info.setModule(this);
 
         _aesMetadata.setPrimaryIdentifier(info.getUri());
@@ -372,6 +370,8 @@ public class WaveModule extends ModuleBase {
 
             // If we get this far, the signature is OK.
             info.setSigMatch(_name);
+            info.setFormat(_format[0]);
+            info.setMimeType(_mimeType[0]);
 
             if (flagRF64) {
                 // For RF64 files the first chunk should be a Data Size 64 chunk

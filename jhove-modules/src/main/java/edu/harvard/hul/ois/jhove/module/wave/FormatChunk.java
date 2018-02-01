@@ -152,6 +152,14 @@ public class FormatChunk extends Chunk {
             }
         }
 
+        // Add extended MIME type information when available
+        if (waveCodec != WAVE_FORMAT_EXTENSIBLE) {
+            String codecID = Integer.toHexString(waveCodec).toUpperCase();
+            String extendedMIMEType = _module.getMimeType()[0]
+                    + "; codec=" + codecID;
+            info.setMimeType(extendedMIMEType);
+        }
+
         Property prop = module.addIntegerProperty("CompressionCode", waveCodec,
                     WaveStrings.COMPRESSION_FORMAT, WaveStrings.COMPRESSION_INDEX);
         module.addWaveProperty(prop);
