@@ -1370,12 +1370,12 @@ public abstract class ModuleBase
     {
         long totalBytesSkipped = 0;
         while (bytesToSkip > 0) {
+            // Skipping when at the end of a FileInputStream
+            // can lead to inaccurate results, so abort if so
+            if (stream.available() == 0) break;
             long bytesSkipped = stream.skip(bytesToSkip);
             totalBytesSkipped += bytesSkipped;
             bytesToSkip -= bytesSkipped;
-            // Cease skipping if end of stream reached before
-            // requested number of bytes have been skipped.
-            if (stream.available() == 0) break;
         }
         if (counted != null) {
             counted._nByte += totalBytesSkipped;

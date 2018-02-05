@@ -39,6 +39,7 @@ public enum MessageConstants {
 	 * Information messages
 	 */
 	public static final String INF_CHU_TYPE_IGND = "Ignored Chunk type: ";
+	public static final String INF_CHU_DATA_IGND = "Ignored unexpected data in chunk: ";
 	public static final String INF_DATA_CHUNK_TYPE_IGN = "Ignored Associated Data Chunk of type: ";
 	public static final String INF_INFO_CHUNK_TYPE_IGN = "Ignored List Info Chunk of type: ";
 	public static final String INF_FILE_TOO_LARGE = "File too large to validate";

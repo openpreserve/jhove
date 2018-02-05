@@ -730,13 +730,13 @@ public class WaveModule extends ModuleBase {
             }
         }
 
+        bytesRemaining -= CHUNK_HEADER_LENGTH;
+
         // Check if the chunk size is greater than the RIFF's remaining length
-        if (Long.compareUnsigned(bytesRemaining, chunkSize + CHUNK_HEADER_LENGTH) < 0) {
+        if (Long.compareUnsigned(bytesRemaining, chunkSize) < 0) {
             info.setMessage(new ErrorMessage(MessageConstants.ERR_CHUNK_SIZE_INVAL, _nByte));
             return false;
         }
-
-        bytesRemaining -= CHUNK_HEADER_LENGTH + chunkSize;
 
         if ("fmt ".equals(chunkID)) {
             if (formatChunkSeen) {
@@ -823,13 +823,24 @@ public class WaveModule extends ModuleBase {
         }
 
         if (chunk != null) {
+            long dataRead = _nByte;
             if (!chunk.readChunk(info)) {
                 return false;
+            }
+            // Ensure that we pass over any unexpected chunk data
+            // so that we align with the start of any subsequent chunk
+            dataRead = _nByte - dataRead;
+            if (dataRead < chunkSize && _dstream.available() > 0) {
+                info.setMessage(new InfoMessage(
+                        MessageConstants.INF_CHU_DATA_IGND + chunkID, _nByte));
+                skipBytes(_dstream, chunkSize - dataRead, this);
             }
         } else {
             // Other chunk types are legal, just skip over them
             skipBytes(_dstream, chunkSize, this);
         }
+
+        bytesRemaining -= chunkSize;
 
         if ((chunkSize & 1) != 0) {
             // Must come out to an even byte boundary
