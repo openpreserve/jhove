@@ -299,7 +299,6 @@ public class WaveModule extends ModuleBase {
      * Parses the content of a purported WAVE digital object and stores the
      * results in RepInfo.
      *
-     *
      * @param stream
      *            An InputStream, positioned at its beginning, which is
      *            generated from the object to be parsed
@@ -354,7 +353,7 @@ public class WaveModule extends ModuleBase {
 
             // Get the length of the Form chunk. This includes all
             // subsequent form fields and form subchunks, but excludes
-            // the form chunks's header (its ID and the its length).
+            // the form chunk's header (its ID and the its length).
             long riffSize = readUnsignedInt(_dstream);
             bytesRemaining = riffSize;
 
@@ -428,8 +427,7 @@ public class WaveModule extends ModuleBase {
             _aesMetadata.setDuration(sampleCount);
         }
 
-        // Add note and label properties, if there's anything
-        // to report.
+        // Add note and label properties, if there's anything to report.
         if (!_labels.isEmpty()) {
             _propList.add(new Property("Labels", PropertyType.PROPERTY,
                     PropertyArity.LIST, _labels));
@@ -532,8 +530,9 @@ public class WaveModule extends ModuleBase {
     }
 
     /**
-     * Returns the ExifInfo object. If no ExifInfo object has been set, returns
-     * null.
+     * Returns the ExifInfo object.
+     *
+     * If no ExifInfo object has been set, returns <code>null</code>.
      */
     public ExifInfo getExifInfo() {
         return _exifInfo;
@@ -582,8 +581,7 @@ public class WaveModule extends ModuleBase {
 
     /**
      * One-argument version of <code>readSignedLong</code>. WAVE is always
-     * little-endian, so readSignedInt can unambiguously drop its endian
-     * argument.
+     * little-endian, so we can unambiguously drop its endian argument.
      */
     public long readSignedLong(DataInputStream stream) throws IOException {
         return readSignedLong(stream, false, this);
@@ -591,8 +589,7 @@ public class WaveModule extends ModuleBase {
 
     /**
      * One-argument version of <code>readUnsignedInt</code>. WAVE is always
-     * little-endian, so readUnsignedInt can unambiguously drop its endian
-     * argument.
+     * little-endian, so we can unambiguously drop its endian argument.
      */
     public long readUnsignedInt(DataInputStream stream) throws IOException {
         return readUnsignedInt(stream, false, this);
@@ -600,8 +597,7 @@ public class WaveModule extends ModuleBase {
 
     /**
      * One-argument version of <code>readSignedInt</code>. WAVE is always
-     * little-endian, so readSignedInt can unambiguously drop its endian
-     * argument.
+     * little-endian, so we can unambiguously drop its endian argument.
      */
     public int readSignedInt(DataInputStream stream) throws IOException {
         return readSignedInt(stream, false, this);
@@ -609,8 +605,7 @@ public class WaveModule extends ModuleBase {
 
     /**
      * One-argument version of <code>readUnsignedShort</code>. WAVE is always
-     * little-endian, so readUnsignedShort can unambiguously drop its endian
-     * argument.
+     * little-endian, so we can unambiguously drop its endian argument.
      */
     public int readUnsignedShort(DataInputStream stream) throws IOException {
         return readUnsignedShort(stream, false, this);
@@ -618,8 +613,7 @@ public class WaveModule extends ModuleBase {
 
     /**
      * One-argument version of <code>readSignedShort</code>. WAVE is always
-     * little-endian, so readSignedShort can unambiguously drop its endian
-     * argument.
+     * little-endian, so we can unambiguously drop its endian argument.
      */
     public int readSignedShort(DataInputStream stream) throws IOException {
         return readSignedShort(stream, false, this);
@@ -630,14 +624,15 @@ public class WaveModule extends ModuleBase {
      * for ID's of various kinds.
      */
     public String read4Chars(DataInputStream stream) throws IOException {
-        StringBuilder sbuf = new StringBuilder(4);
+        StringBuilder sb = new StringBuilder(4);
         for (int i = 0; i < 4; i++) {
             int ch = readUnsignedByte(stream, this);
+            // Omit nulls
             if (ch != 0) {
-                sbuf.append((char) ch); // omit nulls
+                sb.append((char) ch);
             }
         }
-        return sbuf.toString();
+        return sb.toString();
     }
 
     /** Sets the WAVE codec. */
@@ -799,7 +794,7 @@ public class WaveModule extends ModuleBase {
             instrumentChunkSeen = true;
         } else if ("mext".equals(chunkID)) {
             if (mpegChunkSeen) {
-                dupChunkError(info, "MPEG");
+                dupChunkError(info, "MPEG Audio Extension");
             }
             chunk = new MpegChunk(this, chunkh, _dstream);
             // I think only one MPEG chunk is allowed
@@ -830,7 +825,7 @@ public class WaveModule extends ModuleBase {
             linkChunkSeen = true;
         } else if ("cue ".equals(chunkID)) {
             if (cueChunkSeen) {
-                dupChunkError(info, "Cue");
+                dupChunkError(info, "Cue Points");
             }
             chunk = new CueChunk(this, chunkh, _dstream);
             cueChunkSeen = true;
@@ -872,6 +867,7 @@ public class WaveModule extends ModuleBase {
             // Must come out to an even byte boundary
             bytesRemaining -= skipBytes(_dstream, 1, this);
         }
+
         return true;
     }
 

@@ -1,7 +1,6 @@
 /**********************************************************************
- * Jhove - JSTOR/Harvard Object Validation Environment
+ * JHOVE - JSTOR/Harvard Object Validation Environment
  * Copyright 2004 by JSTOR and the President and Fellows of Harvard College
- *
  **********************************************************************/
 
 package edu.harvard.hul.ois.jhove.module.wave;
@@ -20,18 +19,17 @@ import java.util.Arrays;
  * Implementation of the WAVE Format Chunk.
  *
  * @author Gary McGath
- *
  */
 public class FormatChunk extends Chunk {
 
     /** Compression code for original Microsoft PCM */
-    public final static int WAVE_FORMAT_PCM = 1;
-    
+    public final static int WAVE_FORMAT_PCM = 0x0001;
+
     /** Compression code for MPEG */
-    public final static int WAVE_FORMAT_MPEG = 0X50;
-    
+    public final static int WAVE_FORMAT_MPEG = 0x0050;
+
     /** Compression code for Microsoft Extensible Wave Format */
-    public final static int WAVE_FORMAT_EXTENSIBLE = 0XFFFE;
+    public final static int WAVE_FORMAT_EXTENSIBLE = 0xFFFE;
 
     /** Chunk size for PCMWAVEFORMAT files */
     private final static int PCMWAVEFORMAT_LENGTH = 16;
@@ -45,10 +43,11 @@ public class FormatChunk extends Chunk {
 
     /** Table of losslessly compressed codecs */
     private final static int[] losslessCodecs = {
-        0X163,         // WMA lossless
-        0X1971         // Sonic foundry lossless
+            0x0163,     // WMA lossless
+            0x1971,     // Sonic foundry lossless
+            0xF1AC      // FLAC
     };
-    
+
     /**
      * Constructor.
      * 
@@ -57,49 +56,54 @@ public class FormatChunk extends Chunk {
      * @param dstrm    The stream from which the WAVE data are being read
      */
     public FormatChunk(
-        WaveModule module,
-        ChunkHeader hdr,
-        DataInputStream dstrm) {
+            WaveModule module,
+            ChunkHeader hdr,
+            DataInputStream dstrm) {
         super(module, hdr, dstrm);
     }
 
-    /** Reads a chunk and puts appropriate Properties into
-     *  the RepInfo object. 
+    /**
+     * Reads a chunk and puts appropriate Properties into the RepInfo object.
      * 
-     *  @return   <code>false</code> if the chunk is structurally
-     *            invalid, otherwise <code>true</code>
+     * @return   <code>false</code> if the chunk is structurally invalid,
+     *           otherwise <code>true</code>
      */
     public boolean readChunk(RepInfo info) throws IOException {
+
         WaveModule module = (WaveModule) _module;
+
         int validBitsPerSample = -1;
+        byte[] extraBytes = null;
         String subformat = null;
         long channelMask = -1;
-        int waveCodec = module.readUnsignedShort (_dstream);
+
+        int waveCodec = module.readUnsignedShort(_dstream);
         module.setWaveCodec(waveCodec);
-        int numChannels = module.readUnsignedShort (_dstream);
-        long sampleRate = module.readUnsignedInt (_dstream);
-        module.setSampleRate (sampleRate);
-        long bytesPerSecond = module.readUnsignedInt (_dstream);
-        int blockAlign = module.readUnsignedShort (_dstream);
-        module.setBlockAlign (blockAlign);
-        int bitsPerSample = module.readUnsignedShort (_dstream);
+        int numChannels = module.readUnsignedShort(_dstream);
+        long sampleRate = module.readUnsignedInt(_dstream);
+        module.setSampleRate(sampleRate);
+        long bytesPerSecond = module.readUnsignedInt(_dstream);
+        int blockAlign = module.readUnsignedShort(_dstream);
+        module.setBlockAlign(blockAlign);
+        int bitsPerSample = module.readUnsignedShort(_dstream);
+
         bytesLeft -= PCMWAVEFORMAT_LENGTH;
-        byte[] extraBytes = null;
+
         if (bytesLeft > 0) {
-            int extraFormatBytes = module.readUnsignedShort (_dstream);
+            int extraFormatBytes = module.readUnsignedShort(_dstream);
             extraBytes = new byte[extraFormatBytes];
             if (waveCodec == WAVE_FORMAT_EXTENSIBLE
                     && extraFormatBytes >= EXTRA_WAVEFORMATEXTENSIBLE_LENGTH) {
                 // This is -- or should be -- WAVEFORMATEXTENSIBLE.
                 // Need to do some additional checks on profile satisfaction.
-                boolean wfe = true;     // accept tentatively
+                boolean wfe = true;     // Accept tentatively
                 // The next word may be valid bits per sample, samples
                 // per block, or merely "reserved".  Which one it is
                 // apparently depends on the compression format.  I really
                 // can't figure out how to tell which it is without
                 // exhaustively researching all compression formats.
-                validBitsPerSample = module.readUnsignedShort (_dstream);
-                channelMask = module.readUnsignedInt (_dstream);
+                validBitsPerSample = module.readUnsignedShort(_dstream);
+                channelMask = module.readUnsignedInt(_dstream);
 
                 // The Subformat field is a Microsoft GUID
                 byte[] guidBytes = new byte[16];
@@ -133,14 +137,14 @@ public class FormatChunk extends Chunk {
             else {
                 if (waveCodec != WAVE_FORMAT_PCM ||
                     (((bitsPerSample + 7) / 8) * numChannels) == blockAlign) {
-                    module.setWaveFormatEx (true);
+                    module.setWaveFormatEx(true);
                 }
-                ModuleBase.readByteBuf (_dstream, extraBytes, module);
+                ModuleBase.readByteBuf(_dstream, extraBytes, module);
             }
             
             // Possible pad to maintain even alignment
             if ((extraFormatBytes & 1) != 0) {
-                _module.skipBytes (_dstream, 1, module);
+                _module.skipBytes(_dstream, 1, module);
             }
         }
         else {
@@ -164,11 +168,11 @@ public class FormatChunk extends Chunk {
                     WaveStrings.COMPRESSION_FORMAT, WaveStrings.COMPRESSION_INDEX);
         module.addWaveProperty(prop);
         String compName = (String)prop.getValue();
-        
-        AESAudioMetadata aes = module.getAESMetadata ();
+
+        AESAudioMetadata aes = module.getAESMetadata();
         aes.setAudioDataEncoding(compName);
         aes.setNumChannels(numChannels);
-        setChannelLocations (aes, numChannels);
+        setChannelLocations(aes, numChannels);
         aes.setSampleRate(sampleRate);
         aes.setBitDepth(bitsPerSample);
 
@@ -180,21 +184,21 @@ public class FormatChunk extends Chunk {
             }
         }
         if (waveCodec == WAVE_FORMAT_PCM) {
-            aes.clearBitrateReduction ();
+            aes.clearBitrateReduction();
         }
         else {
-            aes.setBitrateReduction (compName, "", "", "",
-                qual, Long.toString (bytesPerSecond), "FIXED");
+            aes.setBitrateReduction(compName, "", "", "",
+                qual, Long.toString(bytesPerSecond), "FIXED");
         }
 
-        module.addWaveProperty (new Property ("AverageBytesPerSecond",
+        module.addWaveProperty(new Property("AverageBytesPerSecond",
                     PropertyType.LONG,
-                    new Long (bytesPerSecond)));
-        module.addWaveProperty (new Property ("BlockAlign",
+                    bytesPerSecond));
+        module.addWaveProperty(new Property("BlockAlign",
                     PropertyType.INTEGER,
-                    new Integer (blockAlign)));
+                    blockAlign));
         if (extraBytes != null) {
-            module.addWaveProperty (new Property ("ExtraFormatBytes",
+            module.addWaveProperty(new Property("ExtraFormatBytes",
                     PropertyType.BYTE,
                     PropertyArity.ARRAY,
                     extraBytes));
@@ -202,41 +206,43 @@ public class FormatChunk extends Chunk {
         if (validBitsPerSample != -1) {
             // Should this property be called something like
             // ValidBitsPersampleOrSamplesPerBlock?
-            module.addWaveProperty (new Property ("ValidBitsPerSample",
+            module.addWaveProperty(new Property("ValidBitsPerSample",
                     PropertyType.INTEGER,
-                    new Integer (validBitsPerSample)));
+                    validBitsPerSample));
         }
         if (channelMask != -1) {
-            module.addWaveProperty (new Property ("ChannelMask",
+            module.addWaveProperty(new Property("ChannelMask",
                     PropertyType.LONG,
-                    new Long (channelMask)));
+                    channelMask));
         }
         if (subformat != null) {
-            module.addWaveProperty (new Property ("Subformat",
+            module.addWaveProperty(new Property("Subformat",
                     PropertyType.STRING,
                     subformat));
         }
+
         return true;
     }
 
-    /* Set default channel assignments.  This is fairly simple,
+    /**
+     * Set default channel assignments. This is fairly simple,
      * but it's helpful to keep the same structure as the equivalent
-     * CommonChunk.setChannelLocations function. */
-    private void setChannelLocations 
-        (AESAudioMetadata aes, int numChannels)
-    {
+     * CommonChunk.setChannelLocations function.
+     */
+    private void setChannelLocations(AESAudioMetadata aes, int numChannels) {
+
         String[] mapLoc = new String[numChannels];
         switch (numChannels) {
             case 2:
-            mapLoc[0] = "LEFT";
-            mapLoc[1] = "RIGHT";
-            break;
-            
+                mapLoc[0] = "LEFT";
+                mapLoc[1] = "RIGHT";
+                break;
+
             // If we get some other number of channels, punt.
             default:
-            for (int i = 0; i < numChannels; i++) {
-                mapLoc[i] = "UNKNOWN";
-            }
+                for (int i = 0; i < numChannels; i++) {
+                    mapLoc[i] = "UNKNOWN";
+                }
         }
         aes.setMapLocations(mapLoc);
     }
