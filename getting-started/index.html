@@ -621,10 +621,10 @@ directory, e.g.:
 &lt;jhove xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xmlns="http://hul.harvard.edu/ois/xml/ns/jhove"
           xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/jhove
-                              http://hul.harvard.edu/ois/xml/xsd/jhove/1.3/jhove.xsd"
-          name="Jhove" release="1.0 (beta 3)" date="2005-02-04"&gt;
- &lt;date&gt;2005-02-10T09:37:11-05:00&lt;/date&gt;
- &lt;audit&gt;
+                              http://hul.harvard.edu/ois/xml/xsd/jhove/1.6/jhove.xsd"
+          name="Jhove" release="1.18.1" date="2017-11-30"&gt;
+ &lt;date&gt;2018-03-02T09:37:11-05:00&lt;/date&gt;
+ &lt;audit home="/home/user"&gt;
   &lt;file mime="application/pdf" status="valid"&gt;jhove/examples/pdf/AA_Banner-single.pdf&lt;/file&gt;
   &lt;file mime="text/plain; charset=US-ASCII" status="valid"&gt;jhove/examples/pdf/AA_Banner.pdf&lt;/file&gt;
   &lt;file mime="text/plain; charset=US-ASCII" status="valid"&gt;jhove/examples/pdf/README&lt;/file&gt;
@@ -638,8 +638,8 @@ directory, e.g.:
 &lt;/jhove&gt;
 &lt;!-- Summary by MIME type:
 application/pdf: 6 (4,2)
-text/plain; charset=US-ASCII: 9 (9,0)
-Total: 15 (13,2)
+text/plain; charset=US-ASCII: 3 (3,0)
+Total: 9 (7,2)
 --&gt;
 &lt;!-- Summary by directory:
 jhove/examples/pdf: 6 (6,0) + 0,0
@@ -649,8 +649,26 @@ Total: 9 (7,2) + 0,0
 &lt;!-- Elapsed time: 0:00:05 --&gt;
 </pre>
 <p>
+The numbers in the MIME type summary are to be read as follows:
+
+<pre>
+number of files (number of valid files, number of well-formed files)
+</pre>
+
+So in the example there are 6 PDF files, 4 of them valid and 2 well-formed, and
+3 plain text files, all of them valid. This sums up to a total of 9 files, 7
+valid and 2 well-formed. The numbers in the directory summary are to be read as
+follows:
+
+<pre>
+number of files (number of valid files, number of well-formed files) + number of
+files that were not processed, number of files that were not found
+</pre>
+</p>
+<p>
 It is intended that the Audit handler will form the basis for other, more
-interesting handlers.
+interesting handlers but it can also be used for a quick overview of MIME types
+and validity status.
 </p>
 
 <pre>
