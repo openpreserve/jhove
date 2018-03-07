@@ -407,8 +407,14 @@ public class WaveModule extends ModuleBase {
             }
         } catch (EOFException eofe) {
             info.setWellFormed(false);
-            info.setMessage(new ErrorMessage(MessageConstants.ERR_EOF_UNEXPECTED, _nByte));
-            return 0;
+            String subMessage = MessageConstants.SUB_MESS_BYTES_MISSING
+                    + bytesRemaining;
+            if (eofe.getMessage() != null) {
+                subMessage += "; " + eofe.getMessage();
+            }
+            info.setMessage(new ErrorMessage(
+                    MessageConstants.ERR_EOF_UNEXPECTED,
+                    subMessage, _nByte));
         } catch (Exception e) { // TODO make this more specific
             e.printStackTrace();
             info.setWellFormed(false);
@@ -443,8 +449,14 @@ public class WaveModule extends ModuleBase {
         if (_exifInfo != null) {
             _propList.add(_exifInfo.buildProperty());
         }
+
         if (!formatChunkSeen) {
             info.setMessage(new ErrorMessage(MessageConstants.ERR_FMT_CHUNK_MISS));
+            info.setWellFormed(false);
+            return 0;
+        }
+        if (!dataChunkSeen) {
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_DATA_CHUNK_MISS));
             info.setWellFormed(false);
             return 0;
         }
@@ -745,6 +757,11 @@ public class WaveModule extends ModuleBase {
             chunk = new FormatChunk(this, chunkh, _dstream);
             formatChunkSeen = true;
         } else if ("data".equals(chunkID)) {
+            if (!formatChunkSeen) {
+                info.setMessage(new ErrorMessage(
+                        MessageConstants.ERR_DATA_BEFORE_FMT, _nByte));
+                info.setValid(false);
+            }
             if (dataChunkSeen) {
                 dupChunkError(info, "Data");
             }
@@ -822,30 +839,38 @@ public class WaveModule extends ModuleBase {
                     MessageConstants.INF_CHU_TYPE_IGND + chunkID, _nByte));
         }
 
+        long dataRead = _nByte;
         if (chunk != null) {
-            long dataRead = _nByte;
             if (!chunk.readChunk(info)) {
                 return false;
-            }
-            // Ensure that we pass over any unexpected chunk data
-            // so that we align with the start of any subsequent chunk
-            dataRead = _nByte - dataRead;
-            if (dataRead < chunkSize && _dstream.available() > 0) {
-                info.setMessage(new InfoMessage(
-                        MessageConstants.INF_CHU_DATA_IGND + chunkID, _nByte));
-                skipBytes(_dstream, chunkSize - dataRead, this);
             }
         } else {
             // Other chunk types are legal, just skip over them
             skipBytes(_dstream, chunkSize, this);
         }
+        dataRead = _nByte - dataRead;
 
-        bytesRemaining -= chunkSize;
+        bytesRemaining -= dataRead;
+
+        if (dataRead < chunkSize) {
+            // The file has been truncated or there
+            // remains unexpected chunk data to skip
+            if (_dstream.available() > 0) {
+                // Pass over any remaining chunk data so that
+                // we align with the start of any subsequent chunk
+                info.setMessage(new InfoMessage(
+                        MessageConstants.INF_CHU_DATA_IGND + chunkID, _nByte));
+                bytesRemaining -= skipBytes(_dstream, chunkSize - dataRead, this);
+            }
+            else {
+                throw new EOFException(
+                        MessageConstants.SUB_MESS_TRUNCATED_CHUNK + chunkID);
+            }
+        }
 
         if ((chunkSize & 1) != 0) {
             // Must come out to an even byte boundary
-            skipBytes(_dstream, 1, this);
-            --bytesRemaining;
+            bytesRemaining -= skipBytes(_dstream, 1, this);
         }
         return true;
     }

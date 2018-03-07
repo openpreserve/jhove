@@ -35,6 +35,9 @@ public enum MessageConstants {
 	INSTANCE;
 
 	public static final String SUB_MESS_TYPE = "Type = ";
+	public static final String SUB_MESS_BYTES_MISSING = "Bytes missing = ";
+	public static final String SUB_MESS_TRUNCATED_CHUNK = "Truncated chunk = ";
+
 	/**
 	 * Information messages
 	 */
@@ -55,6 +58,8 @@ public enum MessageConstants {
 	public static final String ERR_EOF_UNEXPECTED = "Unexpected end of file";
 	public static final String ERR_FILE_IO_EXCEP = "Exception reading file: ";
 	public static final String ERR_FMT_CHUNK_MISS = "No Format Chunk";
+	public static final String ERR_DATA_CHUNK_MISS = "No Data chunk found";
+	public static final String ERR_DATA_BEFORE_FMT = "Data chunk appears before Format chunk";
 	public static final String ERR_LINK_CHUNK_SAX_EXCEP = "SAXException in reading Link Chunk";
 	public static final String ERR_LINK_CHUNK_PARS_EXCEP = "ParserConfigurationException in reading Link Chunk";
 	public static final String ERR_LIST_TYPE_UNK = "Unknown list type in Associated Data List Chunk";
