@@ -86,6 +86,7 @@ import edu.harvard.hul.ois.jhove.module.pdf.Parser;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfArray;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfDictionary;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfException;
+import edu.harvard.hul.ois.jhove.module.pdf.PdfHeader;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfIndirectObj;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfInvalidException;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfMalformedException;
@@ -113,9 +114,6 @@ public class PdfModule
 	public static final String MIME_TYPE = "application/pdf";
 	public static final String EXT = ".pdf";
 	
-	private static final String PDF_VER1_HEADER_PREFIX = "PDF-1.";
-	private static final String PDF_SIG_HEADER = "%" + PDF_VER1_HEADER_PREFIX;
-	private static final String POSTSCRIPT_HEADER_PREFIX = "!PS-Adobe-";
 	private static final String ENCODING_PREFIX = "ENC=";
 //	private static final String NO_HEADER = "No PDF header";
 
@@ -638,7 +636,7 @@ public class PdfModule
         _signature.add(new ExternalSignature(EXT,
                                         SignatureType.EXTENSION,
                                         SignatureUseType.OPTIONAL));
-        _signature.add(new InternalSignature(PDF_SIG_HEADER,
+        _signature.add(new InternalSignature(PdfHeader.PDF_SIG_HEADER,
                                         SignatureType.MAGIC,
                                         SignatureUseType.MANDATORY,
                                         0));
@@ -1088,7 +1086,7 @@ public class PdfModule
             }
             if (token instanceof Comment) {
                 value = ((Comment) token).getValue();
-                if (value.indexOf(PDF_VER1_HEADER_PREFIX) == 0) {
+                if (value.indexOf(PdfHeader.PDF_VER1_HEADER_PREFIX) == 0) {
                     foundSig = true;
                     _version = value.substring(4, 7);
                     /* If we got this far, take note that the signature is OK. */
@@ -1097,10 +1095,10 @@ public class PdfModule
                 }
                 // The implementation notes (though not the spec)
                 // allow an alternative signature of %!PS-Adobe-N.n PDF-M.m
-                if (value.indexOf(POSTSCRIPT_HEADER_PREFIX) == 0) {
+                if (value.indexOf(PdfHeader.POSTSCRIPT_HEADER_PREFIX) == 0) {
                     // But be careful: that much by itself is the standard
                     // PostScript signature.
-                    int n = value.indexOf(PDF_VER1_HEADER_PREFIX);
+                    int n = value.indexOf(PdfHeader.PDF_VER1_HEADER_PREFIX);
                     if (n >= 11) {
                         foundSig = true;
                         _version = value.substring(n + 4);
