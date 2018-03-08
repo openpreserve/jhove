@@ -71,7 +71,7 @@ public class CueChunk extends Chunk {
             //    isn't saying. I'm assuming that it's a byte offset, 
             //    like the above 2 fields.
             long dwSampleOffset = module.readUnsignedInt (_dstream);
-            Property[] cueProps = new Property[5];
+            Property[] cueProps = new Property[6];
             cueProps[0] = new Property ("ID",
                     PropertyType.LONG,
                     new Long (dwIdent));
@@ -81,12 +81,15 @@ public class CueChunk extends Chunk {
             cueProps[2] = new Property ("DataChunkID",
                     PropertyType.STRING,
                     fccID);
-            cueProps[3] = new Property ("BlockStart",
+            cueProps[3] = new Property("ChunkStart",
                     PropertyType.LONG,
                     new Long (dwChunkStart));
-            cueProps[4] = new Property ("SampleOffset",
+            cueProps[4] = new Property ("BlockStart",
                     PropertyType.LONG,
                     new Long (dwBlockStart));
+            cueProps[5] = new Property ("SampleOffset",
+                    PropertyType.LONG,
+                    dwSampleOffset);
             points.add (new Property ("CuePoint",
                     PropertyType.PROPERTY,
                     PropertyArity.ARRAY,
