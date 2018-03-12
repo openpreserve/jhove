@@ -11,7 +11,7 @@ TEST_BASELINES_ROOT="${TEST_ROOT}/baselines"
 TEST_INSTALL_ROOT="${TEST_ROOT}/jhove"
 CANDIADATE_ROOT="${TEST_ROOT}/candidates"
 TARGET_ROOT="${TEST_ROOT}/targets"
-BASELINE_VERSION=1.16
+BASELINE_VERSION=1.18
 
 # Create the JHOVE test root if it doesn't exist
 [[ -d "${TEST_ROOT}" ]] || mkdir -p "${TEST_ROOT}"
@@ -20,22 +20,22 @@ BASELINE_VERSION=1.16
 # Create the JHOVE baseline installation root if it doesn't exist
 [[ -d "${TEST_BASELINES_ROOT}" ]] || mkdir -p "${TEST_BASELINES_ROOT}"
 
-# Install v1.16 and create test baseline
-echo "Checking if baseline version ${BASELINE_VERSION} is installed."
+# Install baseline JHOVE version and create test baseline
+echo "Checking for baseline installation for release version ${BASELINE_VERSION}."
 if [[ ! -d "${TEST_INSTALL_ROOT}/${BASELINE_VERSION}" ]]; then
-	echo "Installing baseline version ${BASELINE_VERSION} is installed."
+	echo " - installing baseline version ${BASELINE_VERSION} to: ${TEST_INSTALL_ROOT}/${BASELINE_VERSION}."
 	installJhoveFromURL "http://software.openpreservation.org/rel/jhove/jhove-${BASELINE_VERSION}.jar" "${TEST_INSTALL_ROOT}" "${BASELINE_VERSION}"
 else
-	echo "Baseline version ${BASELINE_VERSION} is already installed."
+	echo " - using baseline version ${BASELINE_VERSION} at: ${TEST_INSTALL_ROOT}/${BASELINE_VERSION}."
 fi
 
-echo "Checking if baseline version ${BASELINE_VERSION} data has been generated."
+echo "Baseline data generation for version: ${BASELINE_VERSION}."
 if [[ ! -d "${TEST_BASELINES_ROOT}/${BASELINE_VERSION}" ]]; then
-	echo "Generating baseline version ${BASELINE_VERSION} data."
+	echo " - generating new baseline data to: ${TEST_BASELINES_ROOT}/${BASELINE_VERSION}."
 	mkdir "${TEST_BASELINES_ROOT}/${BASELINE_VERSION}"
   bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${TEST_INSTALL_ROOT}/${BASELINE_VERSION}" -c "${TEST_ROOT}/corpora" -o "${TEST_BASELINES_ROOT}/${BASELINE_VERSION}"
 else
-	echo "Baseline version ${BASELINE_VERSION} data has already been generated."
+	echo " - using existing baseline data at: ${TEST_BASELINES_ROOT}/${BASELINE_VERSION}."
 fi
 
 # Create the JHOVE baseline installation root if it doesn't exist

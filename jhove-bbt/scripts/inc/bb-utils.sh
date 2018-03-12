@@ -60,12 +60,20 @@ installJhoveFromFile() {
 		return;
 	fi;
 	jhoveFile=$1;
-	installDest=$2;
+
+	# need full path of installation directory for auto installer
+	installDest=`realpath $2`;
+
+	# create install directiory if it doesn't exist
 	if [[ -e $installDest ]]
 	then
 		rm -rf "${installDest}"
 	fi;
+
+	# Overwrite the auto-install configured installation directory using sed.
 	autoInstallConfig="${SCRIPT_DIR}/auto-vagrant-install.xml"
 	sed -i "s%^<installpath>.*%<installpath>${installDest}</installpath>%" "${autoInstallConfig}"
+
+	# run the installer
 	java -jar "${jhoveFile}" "${autoInstallConfig}"
 }
