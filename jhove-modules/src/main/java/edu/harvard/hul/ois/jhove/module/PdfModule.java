@@ -1063,83 +1063,16 @@ public class PdfModule
 
     protected boolean parseHeader(RepInfo info) throws IOException
     {
-        Token  token = null;
-        String value = null;
-
-        /* Parse file header. */
-
-        boolean foundSig = false;
-        for (;;) {
-            if (_parser.getOffset() > 1024) {
-                break;
-            }
-            try {
-                token = null;
-                token = _parser.getNext(1024L);
-            }
-            catch (IOException ee) {
-                break;
-            }
-            catch (Exception e) {}   // fall through
-            if (token == null) {
-                break;
-            }
-            if (token instanceof Comment) {
-                value = ((Comment) token).getValue();
-                if (value.indexOf(PdfHeader.PDF_VER1_HEADER_PREFIX) == 0) {
-                    foundSig = true;
-                    _version = value.substring(4, 7);
-                    /* If we got this far, take note that the signature is OK. */
-                    info.setSigMatch(_name);
-                    break;
-                }
-                // The implementation notes (though not the spec)
-                // allow an alternative signature of %!PS-Adobe-N.n PDF-M.m
-                if (value.indexOf(PdfHeader.POSTSCRIPT_HEADER_PREFIX) == 0) {
-                    // But be careful: that much by itself is the standard
-                    // PostScript signature.
-                    int n = value.indexOf(PdfHeader.PDF_VER1_HEADER_PREFIX);
-                    if (n >= 11) {
-                        foundSig = true;
-                        _version = value.substring(n + 4);
-                        // However, this is not PDF-A compliant.
-                        _pdfACompliant = false;
-                        info.setSigMatch(_name);
-                        break;
-                    }
-                }
-            }
-
-            // If we don't find it right at the beginning, we aren't
-            // PDF/A compliant.
-            _pdfACompliant = false;
-        }
-        if (!foundSig) {
+    	PdfHeader header = PdfHeader.parseHeader(_parser);
+    	if (header == null) {
             info.setWellFormed(false);
-			info.setMessage(new ErrorMessage(MessageConstants.ERR_PDF_HEADER_MISSING, 0L));
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_PDF_HEADER_MISSING, 0L));
             return false;
         }
-        // Check for PDF/A conformance.  The next item must be
-        // a comment with four characters, each greater than 127
-        try {
-            token = _parser.getNext();
-            String cmt = ((Comment) token).getValue();
-            char[] cmtArray = cmt.toCharArray();
-            int ctlcnt = 0;
-            for (int i = 0; i < 4; i++) {
-                if (cmtArray[i] > 127) {
-                    ctlcnt++;
-                }
-            }
-            if (ctlcnt < 4) {
-                _pdfACompliant = false;
-            }
-        }
-        catch (Exception e) {
-            // Most likely a ClassCastException on a non-comment
-            _pdfACompliant = false;
-        }
-        return true;
+		_version = header.getVersionString();
+		_pdfACompliant = header.isPdfACompliant();
+        info.setSigMatch(_name);
+		return true;
     }
 
 
