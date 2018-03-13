@@ -55,27 +55,27 @@ MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' -
 MAJOR_MINOR_VER="${MVN_VERSION%.*}"
 JHOVE_INSTALLER="./jhove-installer/target/jhove-xplt-installer-${MVN_VERSION}.jar"
 
-echo "Checking if development Jhove installer has been built."
+echo "Checking dev build of Jhove installer: ${JHOVE_INSTALLER}."
 if [[ ! -e "${JHOVE_INSTALLER}" ]]
 then
-	echo "Building the development Jhove installer."
+	echo " - mvn building the dev Jhove installer: ${JHOVE_INSTALLER}"
 	mvn clean package
 else
-	echo "Using the existing build of the development Jhove installer."
+	echo " - found existing dev build Jhove installer: ${JHOVE_INSTALLER}"
 fi
 echo "Installing the development build of the Jhove installer to ${tempInstallLoc}."
 installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
 
 [[ -d "${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}" ]] || mkdir -p "${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}"
 
-echo "Checking if target Jhove ${MAJOR_MINOR_VER} exists."
+echo "Checking baseline data for target Jhove: ${MAJOR_MINOR_VER}."
 if [[ ! -d "${TARGET_ROOT}/${MAJOR_MINOR_VER}" ]]
 then
-	echo "Generating the baseline for ${MAJOR_MINOR_VER}."
+	echo " - enerating the baseline for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
 	bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${TEST_ROOT}/corpora" -o "${TEST_ROOT}/candidates/${MAJOR_MINOR_VER}"
 fi
 
-echo "Applying the baseline patches for ${MAJOR_MINOR_VER}."
+echo " - applying the baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
 bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "${BASELINE_VERSION}" -c "${MAJOR_MINOR_VER}"
 
 echo "Black box testing ${MAJOR_MINOR_VER}."
