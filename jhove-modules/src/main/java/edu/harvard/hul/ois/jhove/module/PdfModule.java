@@ -360,8 +360,8 @@ public class PdfModule
      ******************************************************************/
 
     private static final String NAME = "PDF-hul";
-    private static final String RELEASE = "1.10";
-    private static final int [] DATE = {2017, 10, 31};
+    private static final String RELEASE = "1.11-RC";
+    private static final int [] DATE = {2018, 03, 16};
     private static final String [] FORMAT = {
         "PDF", "Portable Document Format"
     };
@@ -1069,6 +1069,10 @@ public class PdfModule
             info.setMessage(new ErrorMessage(MessageConstants.ERR_PDF_HEADER_MISSING, 0L));
             return false;
         }
+		if (!header.isVersionValid()) {
+			info.setValid(false);
+			info.setMessage(new ErrorMessage(MessageConstants.ERR_PDF_MINOR_INVALID, 0L));
+		}
 		_version = header.getVersionString();
 		_pdfACompliant = header.isPdfACompliant();
         info.setSigMatch(_name);
