@@ -64,14 +64,14 @@ checkParams () {
 # Check that the JOVE testing tool exists
 	if  [[ ! -e "$paramJhoveLoc"/jhove ]]
 	then
-		echo "JHOVE not found: $paramJhoveLoc"
+		echo "JHOVE not found at: $paramJhoveLoc"
 		exit 1;
 	fi
 
   # Check that the corpora directory exists
 	if  [[ ! -d "$paramCorporaLoc" ]]
 	then
-		echo "Corpora directory not found: $paramCorporaLoc"
+		echo "Corpora directory not found at: $paramCorporaLoc"
 		exit 1;
 	fi
 
@@ -82,7 +82,7 @@ checkParams () {
   # Check that the output directory exists
 	if  [[ ! -d "$paramOutputRootDir" ]]
 	then
-		echo "Output directory not found: $paramOutputRootDir"
+		echo "Output directory not found at: $paramOutputRootDir"
 		exit 1;
 	fi
 
