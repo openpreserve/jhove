@@ -379,7 +379,7 @@ public class WaveModule extends ModuleBase {
                     if (riffSize == LOOKUP_EXTENDED_DATA_SIZE) {
                         // Even though RF64 can support files larger than
                         // Long.MAX_VALUE, this module currently does not.
-                        if (Long.compareUnsigned(extendedRiffSize, Long.MAX_VALUE) > 0) {
+                        if (compareUnsignedLongs(extendedRiffSize, Long.MAX_VALUE) > 0) {
                             info.setMessage(new InfoMessage(
                                     MessageConstants.INF_FILE_TOO_LARGE));
                             info.setWellFormed(RepInfo.UNDETERMINED);
@@ -580,6 +580,21 @@ public class WaveModule extends ModuleBase {
     }
 
     /**
+     * A copy of Java 8's <code>Long.compareUnsigned</code> method to preserve
+     * compatibility with Java 6. This should be replaced once Java 8 is supported.
+     *
+     * @param  x  the first <code>long</code> to compare
+     * @param  y  the second <code>long</code> to compare
+     * @return    the value <code>0</code> if <code>x == y</code>;
+     *            a value less than <code>0</code> if <code>x < y</code>; and
+     *            a value greater than <code>0</code> if <code>x > y</code>
+     */
+    private int compareUnsignedLongs(long x, long y) {
+        x += Long.MIN_VALUE; y += Long.MIN_VALUE;
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
+    }
+
+    /**
      * One-argument version of <code>readSignedLong</code>. WAVE is always
      * little-endian, so we can unambiguously drop its endian argument.
      */
@@ -672,18 +687,18 @@ public class WaveModule extends ModuleBase {
     @Override
     protected void initParse() {
         super.initParse();
-        _propList = new LinkedList<>();
-        _notes = new LinkedList<>();
-        _labels = new LinkedList<>();
-        _labeledText = new LinkedList<>();
-        _samples = new LinkedList<>();
+        _propList = new LinkedList<Property>();
+        _notes = new LinkedList<Property>();
+        _labels = new LinkedList<Property>();
+        _labeledText = new LinkedList<Property>();
+        _samples = new LinkedList<Property>();
         firstSampleOffsetMarked = false;
         waveCodec = -1;
         sampleCount = 0;
         bytesRemaining = 0;
         extendedRiffSize = 0;
         extendedSampleLength = 0;
-        extendedChunkSizes = new HashMap<>();
+        extendedChunkSizes = new HashMap<String, Long>();
 
         _metadata = new Property("WAVEMetadata", PropertyType.PROPERTY,
                 PropertyArity.LIST, _propList);
@@ -740,7 +755,7 @@ public class WaveModule extends ModuleBase {
         bytesRemaining -= CHUNK_HEADER_LENGTH;
 
         // Check if the chunk size is greater than the RIFF's remaining length
-        if (Long.compareUnsigned(bytesRemaining, chunkSize) < 0) {
+        if (compareUnsignedLongs(bytesRemaining, chunkSize) < 0) {
             info.setMessage(new ErrorMessage(MessageConstants.ERR_CHUNK_SIZE_INVAL, _nByte));
             return false;
         }
