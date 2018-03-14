@@ -77,6 +77,9 @@ public enum MessageConstants {
 	public static final String ERR_DICT_DELIMETERS_IMPROPERLY_NESTED = "Improperly nested dictionary delimiters";
 	public static final String ERR_DICT_MALFORMED = "Malformed dictionary";
 	public static final String ERR_DOC_CAT_DICT_MISSING = "No document catalog dictionary";
+	public static final String ERR_DOC_CAT_TYPE_NO_CAT = "Document catalog Type key must have value Catalog";
+	public static final String ERR_DOC_CAT_NO_TYPE = "Document catalog has no Type key or it has a null value.";
+	public static final String ERR_DOC_CAT_NOT_SIMPLE = "Document catalog Type key does not have a simple String value.";
 	public static final String ERR_DOC_CAT_VERSION_INVALID = "Invalid Version in document catalog";
 	public static final String ERR_DOC_NODE_DICT_MISSING = "Missing dictionary in document node";
 	public static final String ERR_DOC_STRUCT_ATT_INVALID = "Invalid attribute in document structure";
