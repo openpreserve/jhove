@@ -20,16 +20,6 @@ env:
   global:
     secure: P3baCsYCRF45nZExdjc3QzAt8PKqK9i+0M04N87I7UJgv8ibqPb2kVah/YXcRdAUxAN3vE095LALf4NszXKa3fx/QnsoyfQqnVpwmVbNM0cCScT3Du304j2XnwoSghvNT8bDlvT+qmhLr9N8xE3E6sodChMpYLNPqfJWSG1nOJY=
 
-addons:
-  coverity_scan:
-    project:
-      name: openpreserve/jhove
-      description: File validation and characterisation
-    notification_email: carl@openpreservation.org
-    build_command_prepend: mvn clean
-    build_command: mvn -DskipTests=true compile
-    branch_pattern: integration
-
 coverage:
   notify:
     slack:
