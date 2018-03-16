@@ -179,9 +179,6 @@ public final class PdfHeader {
 				ctlcnt++;
 			}
 		}
-		if (ctlcnt < 4) {
-			return false;
-		}
-		return true;
+		return (ctlcnt > 3);
 	}
 }
