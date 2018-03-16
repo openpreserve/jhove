@@ -13,13 +13,9 @@ import org.junit.Test;
 public class GeoTiffStringsTest {
 
     private GeoTiffStrings profile;
-    
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @Test
-    public void GeoTiffStringsMapping() {
+    public void geoTiffStringsMapping() {
         assertEquals("Mapping MODELTYPE", profile.MODELTYPE_INDEX.length, profile.MODELTYPE.length);
         assertEquals("Mapping RASTERTYPE", profile.RASTERTYPE_INDEX.length, profile.RASTERTYPE.length);
         assertEquals("Mapping LINEARUNITS", profile.LINEARUNITS_INDEX.length, profile.LINEARUNITS.length);
@@ -37,33 +33,33 @@ public class GeoTiffStringsTest {
     }
 
     @Test /* MODELTYPE */
-    public void MODELTYPE_MappingPick() {
+    public void pickMODELTYPE() {
         assertMappingMatch(profile.MODELTYPE_INDEX, profile.MODELTYPE, 1, "Projected");
         assertMappingMatch(profile.MODELTYPE_INDEX, profile.MODELTYPE, 3, "Geocentric");
     }
     
     @Test /* RASTERTYPE */
-    public void RASTERTYPE_MappingPick() {
+    public void pickRASTERTYPE() {
         assertMappingMatch(profile.RASTERTYPE_INDEX, profile.RASTERTYPE, 1, "PixelIsArea"); // could be 'Pixel Is Area'
         assertMappingMatch(profile.RASTERTYPE_INDEX, profile.RASTERTYPE, 2, "PixelIsPoint"); // could be 'Pixel Is Point'
     }
     
     @Test /* LINEARUNITS */
-    public void LINEARUNITS_MappingPick() {
+    public void pickLINEARUNITS() {
         assertMappingMatch(profile.LINEARUNITS_INDEX, profile.LINEARUNITS, 9001, "Meter");
         assertMappingMatch(profile.LINEARUNITS_INDEX, profile.LINEARUNITS, 9004, "Foot Modified American");
         assertMappingMatch(profile.LINEARUNITS_INDEX, profile.LINEARUNITS, 9015, "Mile International Nautical");
     }
     
     @Test /* ANGULARUNITS */
-    public void ANGULARUNITS_MappingPick() {
+    public void pickANGULARUNITS() {
         assertMappingMatch(profile.ANGULARUNITS_INDEX, profile.ANGULARUNITS, 9101, "Radian");
         assertMappingMatch(profile.ANGULARUNITS_INDEX, profile.ANGULARUNITS, 9104, "Arc Second");
         assertMappingMatch(profile.ANGULARUNITS_INDEX, profile.ANGULARUNITS, 9108, "DMS Hemisphere");
     }
 
     @Test /* GEOGRAPHICS */
-    public void GEOGRAPHICS_MappingPick() {
+    public void pickGEOGRAPHICS() {
         assertMappingMatch(profile.GEOGRAPHICS_INDEX, profile.GEOGRAPHICS, 4001, "Airy 1830");
         assertMappingMatch(profile.GEOGRAPHICS_INDEX, profile.GEOGRAPHICS, 4035, "Sphere");
         assertMappingMatch(profile.GEOGRAPHICS_INDEX, profile.GEOGRAPHICS, 4120, "Greek");
@@ -77,7 +73,7 @@ public class GeoTiffStringsTest {
     }
 
     @Test /* GEODETICDATUM */
-    public void GEODETICDATUM_MappingPick() {
+    public void pickGEODETICDATUM() {
         assertMappingMatch(profile.GEODETICDATUM_INDEX, profile.GEODETICDATUM, 6001, "Airy 1830");
         assertMappingMatch(profile.GEODETICDATUM_INDEX, profile.GEODETICDATUM, 6034, "Clarke 1880");
         assertMappingMatch(profile.GEODETICDATUM_INDEX, profile.GEODETICDATUM, 6215, "Reseau National Belge 1950");
@@ -89,7 +85,7 @@ public class GeoTiffStringsTest {
     }
 
     @Test /* ELLIPSOID */
-    public void ELLIPSOID_MappingPick() {
+    public void pickELLIPSOID() {
         assertMappingMatch(profile.ELLIPSOID_INDEX, profile.ELLIPSOID, 7001, "Airy 1830");
         assertMappingMatch(profile.ELLIPSOID_INDEX, profile.ELLIPSOID, 7009, "Clarke 1866 Michigan");
         assertMappingMatch(profile.ELLIPSOID_INDEX, profile.ELLIPSOID, 7021, "Indonesian National Spheroid");
@@ -97,17 +93,17 @@ public class GeoTiffStringsTest {
     }
 
     @Test /* PRIMEMERIDIAN */
-    public void PRIMEMERIDIAN_MappingPick() {
+    public void pickPRIMEMERIDIAN() {
         assertMappingMatch(profile.PRIMEMERIDIAN_INDEX, profile.PRIMEMERIDIAN, 8901, "Greenwich");
         assertMappingMatch(profile.PRIMEMERIDIAN_INDEX, profile.PRIMEMERIDIAN, 8911, "Stockholm");
         assertMappingMatch(profile.PRIMEMERIDIAN_INDEX, profile.PRIMEMERIDIAN, 32767, "User Defined");
     }
 
     @Test /* PROJECTEDCSTYPE */
-    public void PROJECTEDCSTYPE_MappingPick() {
+    public void pickPROJECTEDCSTYPE() {
         //assertMappingMatch(profile.PROJECTEDCSTYPE_INDEX, profile.PROJECTEDCSTYPE, 2100, "GGRS87 Greek Grid");
         /* https://sno.phy.queensu.ca/~phil/exiftool/TagNames/GeoTiff.html */
-        /* keys 2100 - 3300 not found in spec, therefore no test for exists ( TODO: should or should not exist? )*/
+        /* keys 2100 - 3300 not found in spec, therefore no test for exists ( TODO: (discuss) should or should not exist? )*/
         assertMappingMatch(profile.PROJECTEDCSTYPE_INDEX, profile.PROJECTEDCSTYPE, 20137, "Adindan UTM zone 37N");
         assertMappingMatch(profile.PROJECTEDCSTYPE_INDEX, profile.PROJECTEDCSTYPE, 20255, "AGD66 AMG zone 55");
         assertMappingMatch(profile.PROJECTEDCSTYPE_INDEX, profile.PROJECTEDCSTYPE, 26730, "NAD27 Alabama West");
@@ -118,7 +114,7 @@ public class GeoTiffStringsTest {
     }
 
     @Test /* PROJECTION */
-    public void PROJECTION_MappingPick() {
+    public void pickPROJECTION() {
         assertMappingMatch(profile.PROJECTION_INDEX, profile.PROJECTION, 10101, "Alabama CS27 East");
         assertMappingMatch(profile.PROJECTION_INDEX, profile.PROJECTION, 10434, "California CS83 4");
         assertMappingMatch(profile.PROJECTION_INDEX, profile.PROJECTION, 12733, "Nevada CS83 West");
@@ -129,7 +125,7 @@ public class GeoTiffStringsTest {
     }
 
     @Test /* COORDINATETRANSFORMATION */
-    public void COORDINATETRANSFORMATION_MappingPick() {
+    public void pickCOORDINATETRANSFORMATION() {
         assertMappingMatch(profile.COORDINATETRANSFORMATION_INDEX, profile.COORDINATETRANSFORMATION, 1, "Transverse Mercator");
         assertMappingMatch(profile.COORDINATETRANSFORMATION_INDEX, profile.COORDINATETRANSFORMATION, 8, "Lambert Conf Conic 2SP");
         assertMappingMatch(profile.COORDINATETRANSFORMATION_INDEX, profile.COORDINATETRANSFORMATION, 16, "Oblique Stereographic");
@@ -137,7 +133,7 @@ public class GeoTiffStringsTest {
     }
 
     @Test /* VERTICALCSTYPE */
-    public void VERTICALCSTYPE_MappingPick() {
+    public void pickVERTICALCSTYPE() {
         assertMappingMatch(profile.VERTICALCSTYPE_INDEX, profile.VERTICALCSTYPE, 5001, "Airy 1830 ellipsoid");
         assertMappingMatch(profile.VERTICALCSTYPE_INDEX, profile.VERTICALCSTYPE, 5011, "Clarke 1880 IGN ellipsoid");
         assertMappingMatch(profile.VERTICALCSTYPE_INDEX, profile.VERTICALCSTYPE, 5028, "Struve 1860 ellipsoid");
@@ -145,7 +141,7 @@ public class GeoTiffStringsTest {
     }
 
     @Test /* VERTICALCSDATUM */
-    public void VERTICALCSDATUM_MappingPick() {
+    public void pickVERTICALCSDATUM() {
         assertMappingMatch(profile.VERTICALCSDATUM_INDEX, profile.VERTICALCSDATUM, 0, "Undefined");
         assertMappingMatch(profile.VERTICALCSDATUM_INDEX, profile.VERTICALCSDATUM, 32767, "User Defined");
     }
@@ -171,6 +167,5 @@ public class GeoTiffStringsTest {
         }
         return -1;
     }
-
 
 }
