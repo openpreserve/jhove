@@ -19,7 +19,7 @@ import edu.harvard.hul.ois.jhove.module.TestUtils;
 public class DocCatTests {
 	private static final String pdfResourcePath = "/edu/harvard/hul/ois/jhove/module/pdf/";
 	private static final String minimalPdfPath = pdfResourcePath
-			+ "T01_000_minimal.pdf";
+			+ "T00_000_minimal-valid.pdf";
 	private static final String catNoCat = pdfResourcePath
 			+ "T02-01_001_document-catalog-No-document-catalog.pdf";
 	private static final String catWrongObjNumberPath = pdfResourcePath
