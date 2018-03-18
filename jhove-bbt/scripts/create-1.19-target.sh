@@ -59,3 +59,8 @@ find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <date>2017-10-31<\/date>$/  <date>2018-03-16<\/date>/' {} \;
 find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.10" date="2017-10-31">PDF%<reportingModule release="1.11-RC" date="2018-03-16">PDF%' {} \;
 find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.10" date="2017-10-31">PDF%<reportingModule release="1.11-RC" date="2018-03-16">PDF%' {} \;
+
+# Improved handling of inconsistent XRef table
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/corruptionOneByteMissing.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/PDF-hul/corruptionOneByteMissing.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/"
+fi
