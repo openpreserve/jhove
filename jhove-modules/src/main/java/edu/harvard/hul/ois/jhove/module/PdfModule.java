@@ -197,6 +197,7 @@ public class PdfModule
 	private static final String DICT_KEY_LANG = "Lang";
 	private static final String DICT_KEY_PAGES = "Pages";
 	private static final String DICT_KEY_PAGE_LABELS = "PageLabels";
+	private static final String DICT_KEY_TYPE = "Type";
 	private static final String DICT_KEY_VERSION = "Version";
 	private static final String DICT_KEY_NAME = "Name";
 	private static final String DICT_KEY_NAMES = DICT_KEY_NAME + "s";
@@ -1598,6 +1599,27 @@ public class PdfModule
             return false;
         }
         try {
+            // Check that the catalog has a key type and the types value is catalog
+            PdfObject type = _docCatDict.get(DICT_KEY_TYPE);
+            if (type != null && type instanceof PdfSimpleObject) {
+                // If the type key is not null and is a simple object
+                String typeText = ((PdfSimpleObject) type).getStringValue();
+                if (!typeText.equals("Catalog")) {
+                    // If the type key value is not Catalog
+                    info.setWellFormed(false);
+                    info.setMessage(new ErrorMessage(MessageConstants.ERR_DOC_CAT_TYPE_NO_CAT, 0));
+                    return false;
+                }
+            } else {
+                // There's no type key or it's not a simple object
+                info.setWellFormed(false);
+                // Choose message depending on whether the value is null or of the wrong type
+                String message = (type == null) ?
+                    MessageConstants.ERR_DOC_CAT_NO_TYPE :
+                        MessageConstants.ERR_DOC_CAT_NOT_SIMPLE;
+                info.setMessage(new ErrorMessage(message, 0));
+                return false;
+            }
 
             PdfObject viewPref = _docCatDict.get(DICT_KEY_VIEWER_PREFS);
             viewPref = resolveIndirectObject(viewPref);
