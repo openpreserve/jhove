@@ -18,20 +18,27 @@ import edu.harvard.hul.ois.jhove.module.TestUtils;
 
 public class DocCatTests {
 	private static final String pdfResourcePath = "/edu/harvard/hul/ois/jhove/module/pdf/";
+	private static final String docCatResourcePath = pdfResourcePath + "doc-cat/";
+
 	private static final String minimalPdfPath = pdfResourcePath
 			+ "T00_000_minimal-valid.pdf";
-	private static final String catNoCat = pdfResourcePath
-			+ "T02-01_001_document-catalog-No-document-catalog.pdf";
-	private static final String catWrongObjNumberPath = pdfResourcePath
-			+ "T02-01_002_document-catalog-wrong-object-number.pdf";
-	private static final String catTypeKyMissPath = pdfResourcePath
-			+ "T02-01_005_document-catalog-type-key-missing.pdf";
-	private static final String catTypeValNotCatalogPath = pdfResourcePath
-			+ "T02-01_006_document-catalog-wrong-type-key.pdf";
-	private static final String catTypeKyValPairMissPath = pdfResourcePath
-			+ "T02-01_007_document-catalog-type-key-value-pair-missing.pdf";
 	private static final String oneByteMissingPath = pdfResourcePath
 			+ "corruptionOneByteMissing.pdf";
+
+	private static final String catNoCat = docCatResourcePath
+			+ "T02-01_001_document-catalog-No-document-catalog.pdf";
+	private static final String catWrongObjNumberPath = docCatResourcePath
+			+ "T02-01_002_document-catalog-wrong-object-number.pdf";
+	private static final String catPagRefMissPath = docCatResourcePath
+			+ "T02-01_003_document-catalog-indirecte-pages-reference-missing.pdf";
+	private static final String catPageRefIncorrectPath = docCatResourcePath
+			+ "T02-01_004_document-catalog-incorrect-pages-reference.pdf";
+	private static final String catTypeKyMissPath = docCatResourcePath
+			+ "T02-01_005_document-catalog-type-key-missing.pdf";
+	private static final String catTypeValNotCatalogPath = docCatResourcePath
+			+ "T02-01_006_document-catalog-wrong-type-key.pdf";
+	private static final String catTypeKyValPairMissPath = docCatResourcePath
+			+ "T02-01_007_document-catalog-type-key-value-pair-missing.pdf";
 
 	private PdfModule module;
 
@@ -44,7 +51,7 @@ public class DocCatTests {
 
 	/**
 	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
 	 */
 	@Test
 	public final void testValidCatType() throws URISyntaxException {
@@ -54,7 +61,7 @@ public class DocCatTests {
 
 	/**
 	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
 	 */
 	@Test
 	public final void testNoCat() throws URISyntaxException {
@@ -64,7 +71,7 @@ public class DocCatTests {
 
 	/**
 	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
 	 */
 	@Test
 	public final void testCatWrongObjNum() throws URISyntaxException {
@@ -74,7 +81,29 @@ public class DocCatTests {
 
 	/**
 	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
+	 */
+	@Test
+	public final void testPagRefMiss() throws URISyntaxException {
+		TestUtils.testValidateResource(this.module, catPagRefMissPath,
+				RepInfo.FALSE, RepInfo.FALSE,
+				MessageConstants.ERR_OBJ_DEF_INVALID);
+	}
+
+	/**
+	 * Test method for
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
+	 */
+	@Test
+	public final void testPageRefIncorrect() throws URISyntaxException {
+		TestUtils.testValidateResource(this.module, catPageRefIncorrectPath,
+				RepInfo.FALSE, RepInfo.FALSE,
+				ArrayIndexOutOfBoundsException.class.getName());
+	}
+
+	/**
+	 * Test method for
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
 	 */
 	@Test
 	public final void testCatTypeKeyMiss() throws URISyntaxException {
@@ -84,7 +113,7 @@ public class DocCatTests {
 
 	/**
 	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
 	 */
 	@Test
 	public final void testCatTypeVal() throws URISyntaxException {
@@ -95,7 +124,7 @@ public class DocCatTests {
 
 	/**
 	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
 	 */
 	@Test
 	public final void testCatTypeKeyValMiss() throws URISyntaxException {
@@ -105,7 +134,7 @@ public class DocCatTests {
 
 	/**
 	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
 	 */
 	@Test
 	public final void testOneByteMiss() throws URISyntaxException {

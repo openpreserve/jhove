@@ -1610,7 +1610,6 @@ public class PdfModule extends ModuleBase {
                     // If the type key value is not Catalog
                     info.setWellFormed(false);
                     info.setMessage(new ErrorMessage(MessageConstants.ERR_DOC_CAT_TYPE_NO_CAT, 0));
-                    info.setMessage(new ErrorMessage(MessageConstants.ERR_DOC_CAT_TYPE_NO_CAT, 0));
                     return false;
                 }
             } else {
