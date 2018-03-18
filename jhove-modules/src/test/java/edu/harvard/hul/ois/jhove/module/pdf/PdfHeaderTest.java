@@ -1,12 +1,5 @@
 package edu.harvard.hul.ois.jhove.module.pdf;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.net.URISyntaxException;
 
 import org.junit.Before;
@@ -15,6 +8,7 @@ import org.junit.Test;
 import edu.harvard.hul.ois.jhove.JhoveBase;
 import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
+import edu.harvard.hul.ois.jhove.module.TestUtils;
 
 /**
  * Tests for the {@link PdfHeader} class and for JHOVE's PDF Header validation

@@ -1,4 +1,4 @@
-package edu.harvard.hul.ois.jhove.module.pdf;
+package edu.harvard.hul.ois.jhove.module;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -15,8 +15,7 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
 
 /**
- * Test utilities for PDF Module, but general enough for any module. Provides
- * convenience methods to test that the result of JHOVE validation are as
+ * Convenience methods to test that the result of JHOVE validation are as
  * expected. The tests are:
  * <ul>
  * <li>The well formed result is equal to a pre-defined value.</li>
@@ -60,7 +59,7 @@ public final class TestUtils {
 			final String resToTest, final int expctWllFrmd, final int expctVld,
 			final String expctMessage) throws URISyntaxException {
 		File toTest = new File(
-				PdfModuleTest.class.getResource(resToTest).toURI());
+				TestUtils.class.getResource(resToTest).toURI());
 
 		testValidateFile(pdfModule, toTest, expctWllFrmd, expctVld,
 				expctMessage);

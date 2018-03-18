@@ -8,6 +8,7 @@ import org.junit.Test;
 import edu.harvard.hul.ois.jhove.JhoveBase;
 import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
+import edu.harvard.hul.ois.jhove.module.TestUtils;
 
 /**
  * @author <a href="mailto:carl@openpreservation.org">Carl Wilson</a>
