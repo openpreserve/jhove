@@ -49,24 +49,24 @@ public final class TestUtils {
 	 * @param expctVld
 	 *            the expected is valid value
 	 * @param expctMessage
-	 *            a JHOVE validation string message expected to be found in
-	 *            the list of validation messages. If this parameter is null the
+	 *            a JHOVE validation string message expected to be found in the
+	 *            list of validation messages. If this parameter is null the
 	 *            test isn't performed.
 	 * @throws URISyntaxException
-	 *            when there's an issue converting the resource name to a path
+	 *             when there's an issue converting the resource name to a path
 	 */
 	public static void testValidateResource(final PdfModule pdfModule,
 			final String resToTest, final int expctWllFrmd, final int expctVld,
 			final String expctMessage) throws URISyntaxException {
-		File toTest = new File(
-				TestUtils.class.getResource(resToTest).toURI());
+		File toTest = new File(TestUtils.class.getResource(resToTest).toURI());
 
 		testValidateFile(pdfModule, toTest, expctWllFrmd, expctVld,
 				expctMessage);
 	}
 
 	/**
-	 * Method that takes a file and tests that the results of JHOVE are as expected.
+	 * Method that takes a file and tests that the results of JHOVE are as
+	 * expected.
 	 * 
 	 * @param pdfModule
 	 *            a {@link edu.harvard.hul.ois.jhove.module.PdfModule} instance
@@ -78,8 +78,8 @@ public final class TestUtils {
 	 * @param expctVld
 	 *            the expected is valid value
 	 * @param expctMessage
-	 *            a JHOVE validation string message expected to be found in
-	 *            the list of validation messages. If this parameter is null the
+	 *            a JHOVE validation string message expected to be found in the
+	 *            list of validation messages. If this parameter is null the
 	 *            test isn't performed.
 	 */
 	public static void testValidateFile(final PdfModule pdfModule,
@@ -106,16 +106,19 @@ public final class TestUtils {
 				}
 			}
 			if (!messagePresent) {
-				System.out.println("Expected message not found, messages in RepInfo:");
+				System.out.println(String.format(
+						"Expected message: %s, not found.", expctMessage));
+				System.out.println("Info Messages found:");
 				for (Message mess : info.getMessage()) {
-					System.out.println(" - message: " + mess.getMessage());
+					System.out.println(String.format(" MESSAGE: %s", mess.getMessage()));
 				}
 			}
 			assertTrue("Expected message: " + expctMessage, messagePresent);
 		}
 	}
 
-	private static RepInfo parseTestFile(final PdfModule pdfModule, final File toTest) {
+	private static RepInfo parseTestFile(final PdfModule pdfModule,
+			final File toTest) {
 		RepInfo info = new RepInfo(toTest.getName());
 		RandomAccessFile raf = null;
 		try {

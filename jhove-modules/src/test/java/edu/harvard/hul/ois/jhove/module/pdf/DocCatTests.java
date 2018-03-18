@@ -16,7 +16,7 @@ import edu.harvard.hul.ois.jhove.module.TestUtils;
  * @version 0.1 Created 13 Mar 2018:18:17:45
  */
 
-public class PdfModuleTest {
+public class DocCatTests {
 	private static final String pdfResourcePath = "/edu/harvard/hul/ois/jhove/module/pdf/";
 	private static final String minimalPdfPath = pdfResourcePath
 			+ "T01_000_minimal.pdf";
