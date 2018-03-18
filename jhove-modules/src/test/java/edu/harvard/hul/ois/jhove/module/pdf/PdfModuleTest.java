@@ -1,6 +1,3 @@
-/**
- *
- */
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import java.net.URISyntaxException;
@@ -50,7 +47,7 @@ public class PdfModuleTest {
 	 */
 	@Test
 	public final void testValidCatType() throws URISyntaxException {
-		TestUtils.testValidateFile(this.module, minimalPdfPath, RepInfo.TRUE,
+		TestUtils.testValidateResource(this.module, minimalPdfPath, RepInfo.TRUE,
 				RepInfo.TRUE, null);
 	}
 
@@ -60,7 +57,7 @@ public class PdfModuleTest {
 	 */
 	@Test
 	public final void testNoCat() throws URISyntaxException {
-		TestUtils.testValidateFile(this.module, catNoCat, RepInfo.FALSE,
+		TestUtils.testValidateResource(this.module, catNoCat, RepInfo.FALSE,
 				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_DICT_MISSING);
 	}
 
@@ -70,7 +67,7 @@ public class PdfModuleTest {
 	 */
 	@Test
 	public final void testCatWrongObjNum() throws URISyntaxException {
-		TestUtils.testValidateFile(this.module, catWrongObjNumberPath, RepInfo.FALSE,
+		TestUtils.testValidateResource(this.module, catWrongObjNumberPath, RepInfo.FALSE,
 				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_OBJ_NUM_INCNSTNT);
 	}
 
@@ -80,7 +77,7 @@ public class PdfModuleTest {
 	 */
 	@Test
 	public final void testCatTypeKeyMiss() throws URISyntaxException {
-		TestUtils.testValidateFile(this.module, catTypeKyMissPath, RepInfo.FALSE,
+		TestUtils.testValidateResource(this.module, catTypeKyMissPath, RepInfo.FALSE,
 				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_DICT_MISSING);
 	}
 
@@ -90,7 +87,7 @@ public class PdfModuleTest {
 	 */
 	@Test
 	public final void testCatTypeVal() throws URISyntaxException {
-		TestUtils.testValidateFile(this.module, catTypeValNotCatalogPath,
+		TestUtils.testValidateResource(this.module, catTypeValNotCatalogPath,
 				RepInfo.FALSE, RepInfo.FALSE,
 				MessageConstants.ERR_DOC_CAT_TYPE_NO_CAT);
 	}
@@ -101,7 +98,7 @@ public class PdfModuleTest {
 	 */
 	@Test
 	public final void testCatTypeKeyValMiss() throws URISyntaxException {
-		TestUtils.testValidateFile(this.module, catTypeKyValPairMissPath, RepInfo.FALSE,
+		TestUtils.testValidateResource(this.module, catTypeKyValPairMissPath, RepInfo.FALSE,
 				RepInfo.FALSE, MessageConstants.ERR_OBJ_DEF_INVALID);
 	}
 
@@ -111,7 +108,7 @@ public class PdfModuleTest {
 	 */
 	@Test
 	public final void testOneByteMiss() throws URISyntaxException {
-		TestUtils.testValidateFile(this.module, oneByteMissingPath, RepInfo.FALSE,
+		TestUtils.testValidateResource(this.module, oneByteMissingPath, RepInfo.FALSE,
 				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_OBJ_NUM_INCNSTNT);
 	}
 

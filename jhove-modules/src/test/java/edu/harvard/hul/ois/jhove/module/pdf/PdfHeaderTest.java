@@ -1,6 +1,3 @@
-/**
- *
- */
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import static org.junit.Assert.assertEquals;
