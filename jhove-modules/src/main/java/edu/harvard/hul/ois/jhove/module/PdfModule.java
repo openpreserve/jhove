@@ -246,6 +246,7 @@ public class PdfModule
 	private static final String DICT_KEY_FIRST = "First";
 	private static final String DICT_KEY_LAST = "Last";
 	private static final String DICT_KEY_FLAGS = "Flags";
+	private static final String KEY_VAL_CATALOG = "Catalog";
 	
 	
 	private static final String PROP_NAME_BASE_FONT = DICT_KEY_BASE_FONT;
@@ -1604,7 +1605,7 @@ public class PdfModule
             if (type != null && type instanceof PdfSimpleObject) {
                 // If the type key is not null and is a simple object
                 String typeText = ((PdfSimpleObject) type).getStringValue();
-                if (!typeText.equals("Catalog")) {
+                if (!KEY_VAL_CATALOG.equals(typeText)) {
                     // If the type key value is not Catalog
                     info.setWellFormed(false);
                     info.setMessage(new ErrorMessage(MessageConstants.ERR_DOC_CAT_TYPE_NO_CAT, 0));
