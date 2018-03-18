@@ -22,7 +22,7 @@ import edu.harvard.hul.ois.jhove.module.PdfModule;
  * <li>The is valid result is equal to a pre-defined value.</li>
  * <li>The message list contains an expected message (optionally).</li>
  * </ul>
- * 
+ *
  * @author <a href="mailto:carl@openpreservation.org">Carl Wilson</a>
  *         <a href="https://github.com/carlwilson">carlwilson AT github</a>
  * @version 0.1 Created 14 Mar 2018:20:14:19
@@ -38,7 +38,7 @@ public final class TestUtils {
 	/**
 	 * Convenience method that takes the path to a test resource and tests that
 	 * the results of JHOVE are as expected.
-	 * 
+	 *
 	 * @param pdfModule
 	 *            a {@link edu.harvard.hul.ois.jhove.module.PdfModule} instance
 	 *            to use to validate the resource.
@@ -67,7 +67,7 @@ public final class TestUtils {
 	/**
 	 * Method that takes a file and tests that the results of JHOVE are as
 	 * expected.
-	 * 
+	 *
 	 * @param pdfModule
 	 *            a {@link edu.harvard.hul.ois.jhove.module.PdfModule} instance
 	 *            to use to validate the resource.
