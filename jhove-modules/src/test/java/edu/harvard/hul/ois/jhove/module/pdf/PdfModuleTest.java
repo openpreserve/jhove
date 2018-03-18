@@ -1,14 +1,8 @@
 /**
- * 
+ *
  */
 package edu.harvard.hul.ois.jhove.module.pdf;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.net.URISyntaxException;
 
 import org.junit.Before;
@@ -19,21 +13,28 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.module.PdfModule;
 
 /**
- * @author  <a href="mailto:carl@openpreservation.org">Carl Wilson</a>
- *          <a href="https://github.com/carlwilson">carlwilson AT github</a>
- *
- * @version 0.1
- * 
- * Created 13 Mar 2018:18:17:45
+ * @author <a href="mailto:carl@openpreservation.org">Carl Wilson</a>
+ *         <a href="https://github.com/carlwilson">carlwilson AT github</a>
+ * @version 0.1 Created 13 Mar 2018:18:17:45
  */
 
 public class PdfModuleTest {
 	private static final String pdfResourcePath = "/edu/harvard/hul/ois/jhove/module/pdf/";
 	private static final String minimalPdfPath = pdfResourcePath
 			+ "T01_000_minimal.pdf";
-	private static final String invalidCatTypePath = pdfResourcePath
+	private static final String catNoCat = pdfResourcePath
+			+ "T02-01_001_document-catalog-No-document-catalog.pdf";
+	private static final String catWrongObjNumberPath = pdfResourcePath
+			+ "T02-01_002_document-catalog-wrong-object-number.pdf";
+	private static final String catTypeKyMissPath = pdfResourcePath
+			+ "T02-01_005_document-catalog-type-key-missing.pdf";
+	private static final String catTypeValNotCatalogPath = pdfResourcePath
 			+ "T02-01_006_document-catalog-wrong-type-key.pdf";
-	
+	private static final String catTypeKyValPairMissPath = pdfResourcePath
+			+ "T02-01_007_document-catalog-type-key-value-pair-missing.pdf";
+	private static final String oneByteMissingPath = pdfResourcePath
+			+ "corruptionOneByteMissing.pdf";
+
 	private PdfModule module;
 
 	@Before
@@ -48,58 +49,70 @@ public class PdfModuleTest {
 	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
 	 */
 	@Test
-	public final void testValidCatType()
-			throws URISyntaxException {
-		File validCatType = new File(
-				PdfModuleTest.class.getResource(minimalPdfPath).toURI());
-
-		RepInfo info = parseTestFile(validCatType);
-
-		// Major version number < 8 should be well formed
-		assertEquals("Should be well formed.", RepInfo.TRUE, info.getWellFormed());
-		// Major version number < 8 should be invalid
-		assertEquals("Should be valid.", RepInfo.TRUE, info.getValid());
+	public final void testValidCatType() throws URISyntaxException {
+		TestUtils.testValidateFile(this.module, minimalPdfPath, RepInfo.TRUE,
+				RepInfo.TRUE, null);
 	}
-
 
 	/**
 	 * Test method for
 	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
 	 */
 	@Test
-	public final void testInvalidCatType()
-			throws URISyntaxException {
-		File invalidCatType = new File(
-				PdfModuleTest.class.getResource(invalidCatTypePath).toURI());
-
-		RepInfo info = parseTestFile(invalidCatType);
-
-		// Doc catalog type not Catalog, should not be well formed 
-		assertEquals("Should NOT be well formed.", RepInfo.FALSE, info.getWellFormed());
-		// Doc catalog type not Catalog, should be invalid
-		assertEquals("Should NOT be valid.", RepInfo.FALSE, info.getValid());
+	public final void testNoCat() throws URISyntaxException {
+		TestUtils.testValidateFile(this.module, catNoCat, RepInfo.FALSE,
+				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_DICT_MISSING);
 	}
 
-	private RepInfo parseTestFile(final File toTest) {
-		RepInfo info = new RepInfo(toTest.getName());
-		RandomAccessFile raf = null;
-		try {
-			raf = new RandomAccessFile(toTest, "r");
-			this.module.parse(raf, info);
-		} catch (FileNotFoundException excep) {
-			excep.printStackTrace();
-			fail("Couldn't find file to test: " + toTest.getName());
-		} catch (IOException excep) {
-			excep.printStackTrace();
-			fail("IOException Reading: " + toTest.getName());
-		}
-		try {
-			if (raf != null) {
-				raf.close();
-			}
-		} catch (@SuppressWarnings("unused") IOException excep) {
-			// We don't care about this..
-		}
-		return info;
+	/**
+	 * Test method for
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 */
+	@Test
+	public final void testCatWrongObjNum() throws URISyntaxException {
+		TestUtils.testValidateFile(this.module, catWrongObjNumberPath, RepInfo.FALSE,
+				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_OBJ_NUM_INCNSTNT);
 	}
+
+	/**
+	 * Test method for
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 */
+	@Test
+	public final void testCatTypeKeyMiss() throws URISyntaxException {
+		TestUtils.testValidateFile(this.module, catTypeKyMissPath, RepInfo.FALSE,
+				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_DICT_MISSING);
+	}
+
+	/**
+	 * Test method for
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 */
+	@Test
+	public final void testCatTypeVal() throws URISyntaxException {
+		TestUtils.testValidateFile(this.module, catTypeValNotCatalogPath,
+				RepInfo.FALSE, RepInfo.FALSE,
+				MessageConstants.ERR_DOC_CAT_TYPE_NO_CAT);
+	}
+
+	/**
+	 * Test method for
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 */
+	@Test
+	public final void testCatTypeKeyValMiss() throws URISyntaxException {
+		TestUtils.testValidateFile(this.module, catTypeKyValPairMissPath, RepInfo.FALSE,
+				RepInfo.FALSE, MessageConstants.ERR_OBJ_DEF_INVALID);
+	}
+
+	/**
+	 * Test method for
+	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 */
+	@Test
+	public final void testOneByteMiss() throws URISyntaxException {
+		TestUtils.testValidateFile(this.module, oneByteMissingPath, RepInfo.FALSE,
+				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_OBJ_NUM_INCNSTNT);
+	}
+
 }

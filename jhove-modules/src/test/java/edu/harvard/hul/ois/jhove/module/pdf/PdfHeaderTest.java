@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package edu.harvard.hul.ois.jhove.module.pdf;
 
@@ -31,7 +31,7 @@ public class PdfHeaderTest {
 			+ "T01_000_minimal.pdf";
 	private static final String invalidMinorPath = pdfResourcePath
 			+ "T01_002_header-invalid-minor-version.pdf";
-	
+
 	private PdfModule module;
 
 	@Before
@@ -75,7 +75,7 @@ public class PdfHeaderTest {
 		assertEquals("Should be well formed.", RepInfo.TRUE, info.getWellFormed());
 		assertEquals("Should NOT be valid.", RepInfo.FALSE, info.getValid());
 	}
-	
+
 	private RepInfo parseTestFile(final File toTest) {
 		RepInfo info = new RepInfo(toTest.getName());
 		RandomAccessFile raf = null;
