@@ -1963,6 +1963,11 @@ public class PdfModule extends ModuleBase {
             // Continue parsing if it's only invalid
             return (e instanceof PdfInvalidException);
         }
+        catch (ArrayIndexOutOfBoundsException excep) {
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_PAGE_TREE_MISSING, _parser.getOffset()));
+            info.setWellFormed(false);
+            return false;
+        }
         catch (Exception e) {
             // Catch any odd exceptions
             info.setMessage(new ErrorMessage(e.getClass().getName(), _parser.getOffset()));
@@ -2675,13 +2680,12 @@ public class PdfModule extends ModuleBase {
                 /* And finally extract the object from the object stream. */
                 return ostrm.getObject(objIndex);
             }
+            catch (ZipException excep) {
+                _logger.info(excep.getMessage());
+                throw new PdfMalformedException(MessageConstants.ERR_COMPRESSION_INVALID_OR_UNKNOWN);
+            }
             catch (Exception e) {
-
                 _logger.info(e.getMessage());
-                if (e instanceof ZipException) {
-                    throw new PdfMalformedException
-                      (MessageConstants.ERR_COMPRESSION_INVALID_OR_UNKNOWN);
-                }
                 /* Fall through with error */
             }
             throw new PdfMalformedException(MessageConstants.ERR_OBJ_STREAM_OR_NUMBER_INVALID);
