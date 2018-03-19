@@ -194,7 +194,7 @@ public class PdfModule extends ModuleBase {
 	private static final String DICT_KEY_LANG = "Lang";
 	private static final String DICT_KEY_PAGES = "Pages";
 	private static final String DICT_KEY_PAGE_LABELS = "PageLabels";
-    private static final String DICT_KEY_TYPE = "Type";
+	private static final String DICT_KEY_TYPE = "Type";
 	private static final String DICT_KEY_VERSION = "Version";
 	private static final String DICT_KEY_NAME = "Name";
 	private static final String DICT_KEY_NAMES = DICT_KEY_NAME + "s";
@@ -361,7 +361,7 @@ public class PdfModule extends ModuleBase {
 
     private static final String NAME = "PDF-hul";
     private static final String RELEASE = "1.11-RC";
-    private static final int [] DATE = {2018, 03, 16};
+    private static final int [] DATE = {2018, 03, 19};
     private static final String [] FORMAT = {
         "PDF", "Portable Document Format"
     };
