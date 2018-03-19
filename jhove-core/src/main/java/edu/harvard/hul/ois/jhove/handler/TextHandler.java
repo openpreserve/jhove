@@ -1073,10 +1073,14 @@ public class TextHandler
         _writer.println (margn2 + "TimeBase: 1000");
         _writer.println (margn2 + "VideoField: FIELD_1");
         _writer.println (margn2 + "CountingMode: NTSC_NON_DROP_FRAME");
-        _writer.println (margn2 + "Hours: " + Integer.toString (start.getHours ()));
-        _writer.println (margn2 + "Minutes: " + Integer.toString (start.getMinutes ()));
-        _writer.println (margn2 + "Seconds: " + Integer.toString (start.getSeconds ()));
-        _writer.println (margn2 + "Frames: " + Integer.toString (start.getFrames ()));
+        _writer.println (margn2 + "Hours: " +
+                Long.toString (start.getHours ()));
+        _writer.println (margn2 + "Minutes: " +
+                Long.toString (start.getMinutes ()));
+        _writer.println (margn2 + "Seconds: " +
+                Long.toString (start.getSeconds ()));
+        _writer.println (margn2 + "Frames: " +
+                Long.toString (start.getFrames ()));
         _writer.println (margn2 + "Samples: ");
 	double sr = start.getSampleRate ();
 	if (sr == 1.0) {
@@ -1084,8 +1088,8 @@ public class TextHandler
 	}
 	_writer.println (margn3 + "SampleRate: S" +
 			 Integer.toString ((int) sr));
-	_writer.println (margn3 + "NumberOfSamples: " + 
-			 Integer.toString (start.getSamples ()));
+        _writer.println (margn3 + "NumberOfSamples: " +
+                Long.toString (start.getSamples ()));
         _writer.println (margn2 + "FilmFraming: NOT_APPLICABLE");
 	_writer.println (margn3 + "Type: ntscFilmFramingType");
  
@@ -1096,13 +1100,13 @@ public class TextHandler
            _writer.println (margn2 + "VideoField: FIELD_1");
            _writer.println (margn2 + "CountingMode: NTSC_NON_DROP_FRAME");
            _writer.println (margn2 + "Hours: " +
-			    Integer.toString (duration.getHours ()));
+                    Long.toString (duration.getHours ()));
            _writer.println (margn2 + "Minutes: " +
-			    Integer.toString (duration.getMinutes ()));
+                    Long.toString (duration.getMinutes ()));
            _writer.println (margn2 + "Seconds: " +
-			    Integer.toString (duration.getSeconds ()));
+                    Long.toString (duration.getSeconds ()));
            _writer.println (margn2 + "Frames: " +
-			    Integer.toString (duration.getFrames ()));
+                    Long.toString (duration.getFrames ()));
            _writer.println (margn2 + "Samples: ");
 	   sr = duration.getSampleRate ();
 	   if (sr == 1.0) {
@@ -1111,7 +1115,7 @@ public class TextHandler
 	   _writer.println (margn3 + "SampleRate: S" +
 			    Integer.toString ((int) sr));
 	   _writer.println (margn3 + "NumberOfSamples: " + 
-			    Integer.toString (duration.getSamples ()));
+			    Long.toString (duration.getSamples ()));
            _writer.println (margn2 + "FilmFraming: NOT_APPLICABLE");
 	   _writer.println (margn3 + "Type: ntscFilmFramingType");
         }
