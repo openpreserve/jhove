@@ -56,9 +56,9 @@ cp -R "${baselineRoot}" "${targetRoot}"
 # Add the Release Canidate PDF-HUL details
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.10">PDF-hul<\/module>$/   <module release="1.11-RC">PDF-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <release>1.10<\/release>$/  <release>1.11-RC<\/release>/' {} \;
-find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <date>2017-10-31<\/date>$/  <date>2018-03-16<\/date>/' {} \;
-find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.10" date="2017-10-31">PDF%<reportingModule release="1.11-RC" date="2018-03-16">PDF%' {} \;
-find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.10" date="2017-10-31">PDF%<reportingModule release="1.11-RC" date="2018-03-16">PDF%' {} \;
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <date>2017-10-31<\/date>$/  <date>2018-03-19<\/date>/' {} \;
+find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.10" date="2017-10-31">PDF%<reportingModule release="1.11-RC" date="2018-03-19">PDF%' {} \;
+find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.10" date="2017-10-31">PDF%<reportingModule release="1.11-RC" date="2018-03-19">PDF%' {} \;
 
 # Improved handling of inconsistent XRef table
 if [[ -f "${candidateRoot}/errors/modules/PDF-hul/corruptionOneByteMissing.pdf.jhove.xml" ]]; then
