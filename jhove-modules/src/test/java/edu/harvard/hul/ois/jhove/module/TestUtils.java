@@ -91,32 +91,13 @@ public final class TestUtils {
 
 	private static void testResult(final RepInfo info, final int expctWllFrmd,
 			final int expctVld, final String expctMessage) {
-		String message = (expctWllFrmd == RepInfo.TRUE)
-				? "Should be well formed."
-				: "Should NOT be well formed.";
-		assertEquals(message, expctWllFrmd, info.getWellFormed());
-		message = (expctVld == RepInfo.TRUE) ? "Should be valid."
-				: "Should NOT be valid.";
-		assertEquals(message, expctVld, info.getValid());
-		boolean messagePresent = false;
+		testWellFormed(info, expctWllFrmd);
+		testIsValid(info, expctVld);
 		if (expctMessage != null) {
-			for (Message mess : info.getMessage()) {
-				if (mess.getMessage().equals(expctMessage)) {
-					messagePresent = true;
-				}
-			}
-			if (!messagePresent) {
-				System.out.println(String.format(
-						"Expected message: %s, not found.", expctMessage));
-				System.out.println("Info Messages found:");
-				for (Message mess : info.getMessage()) {
-					System.out.println(String.format(" MESSAGE: %s", mess.getMessage()));
-				}
-			}
-			assertTrue("Expected message: " + expctMessage, messagePresent);
+			testIsMessagePresent(info, expctMessage);
 		}
 	}
-
+	
 	private static RepInfo parseTestFile(final PdfModule pdfModule,
 			final File toTest) {
 		RepInfo info = new RepInfo(toTest.getName());
@@ -141,4 +122,34 @@ public final class TestUtils {
 		return info;
 	}
 
+	private static void testWellFormed(final RepInfo info, final int expctWllFrmd) {
+		String message = (expctWllFrmd == RepInfo.TRUE)
+				? "Should be well formed."
+				: "Should NOT be well formed.";
+		assertEquals(message, expctWllFrmd, info.getWellFormed());
+	}
+
+	private static void testIsValid(final RepInfo info, final int expctVld) {
+		String message = (expctVld == RepInfo.TRUE) ? "Should be valid."
+				: "Should NOT be valid.";
+		assertEquals(message, expctVld, info.getValid());
+	}
+	
+	private static void testIsMessagePresent(final RepInfo info, final String expctMessage) {
+		boolean messagePresent = false;
+		for (Message mess : info.getMessage()) {
+			if (mess.getMessage().equals(expctMessage)) {
+				messagePresent = true;
+			}
+		}
+		if (!messagePresent) {
+			System.out.println(String.format(
+					"Expected message: %s, not found.", expctMessage));
+			System.out.println("Info Messages found:");
+			for (Message mess : info.getMessage()) {
+				System.out.println(String.format(" MESSAGE: %s", mess.getMessage()));
+			}
+		}
+		assertTrue("Expected message: " + expctMessage, messagePresent);
+	}
 }
