@@ -119,7 +119,7 @@ public class DocCatTests {
 	public final void testCatTypeVal() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, catTypeValNotCatalogPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_DOC_CAT_TYPE_NO_CAT);
+				MessageConstants.ERR_DOC_CAT_TYPE_INVALID);
 	}
 
 	/**
