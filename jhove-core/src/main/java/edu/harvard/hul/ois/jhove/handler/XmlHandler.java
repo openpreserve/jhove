@@ -56,10 +56,10 @@ public class XmlHandler
     private static final String NAME = "XML";
 
     /** Handler release identifier. */
-    private static final String RELEASE = "1.7";
+    private static final String RELEASE = "1.8-RC";
 
     /** Handler release date. */
-    private static final int [] DATE = {2012, 8, 12};
+    private static final int [] DATE = {2018, 03, 16};
 
     /** Handler informative note. */
     private static final String NOTE =
@@ -70,7 +70,7 @@ public class XmlHandler
     private static final String RIGHTS =
             "Derived from software Copyright 2004-2011 " +
                     "by the President and Fellows of Harvard College. " +
-                    "Version 1.7 independently released. " +
+                    "Version 1.8 release by Open Preservation Foundation. " +
                     "Released under the GNU Lesser General Public License.";
 
     /** Localized line separator character. */

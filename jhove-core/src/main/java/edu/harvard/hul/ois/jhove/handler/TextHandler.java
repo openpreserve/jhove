@@ -35,13 +35,15 @@ public class TextHandler
      ******************************************************************/
 
     private static final String NAME = "TEXT";
-    private static final String RELEASE = "1.5";
-    private static final int [] DATE = {2009, 10, 14};
+    private static final String RELEASE = "1.6-RC";
+    private static final int [] DATE = {2018, 03, 16};
     private static final String NOTE = "This is the default JHOVE output " +
         "handler";
-    private static final String RIGHTS = "Copyright 2003-2009 by JSTOR and " +
-        "the President and Fellows of Harvard College. " +
-        "Released under the terms of the GNU Lesser General Public License.";
+    private static final String RIGHTS =
+            "Derived from software Copyright 2004-2011 " +
+                "by the President and Fellows of Harvard College. " +
+                "Version 1.6 release by Open Preservation Foundation. " +
+                "Released under the GNU Lesser General Public License.";
 
     private NumberFormat _format;
 
