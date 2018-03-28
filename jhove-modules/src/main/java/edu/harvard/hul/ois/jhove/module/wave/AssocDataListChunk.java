@@ -53,6 +53,7 @@ public class AssocDataListChunk extends Superchunk {
         // this was intended to allow other list structures (don't ask
         // why), but any others will be considered non-conforming.
         String typeID = module.read4Chars(_dstream);
+        bytesLeft -= 4;
         if (!"adtl".equals (typeID)) {
             info.setMessage (new ErrorMessage (MessageConstants.ERR_LIST_TYPE_UNK, 
                     MessageConstants.SUB_MESS_TYPE + typeID,
