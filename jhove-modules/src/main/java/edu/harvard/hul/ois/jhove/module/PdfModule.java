@@ -1063,20 +1063,20 @@ public class PdfModule
 
     protected boolean parseHeader(RepInfo info) throws IOException
     {
-    	PdfHeader header = PdfHeader.parseHeader(_parser);
-    	if (header == null) {
+        PdfHeader header = PdfHeader.parseHeader(_parser);
+        if (header == null) {
             info.setWellFormed(false);
             info.setMessage(new ErrorMessage(MessageConstants.ERR_PDF_HEADER_MISSING, 0L));
             return false;
         }
-		if (!header.isVersionValid()) {
-			info.setValid(false);
-			info.setMessage(new ErrorMessage(MessageConstants.ERR_PDF_MINOR_INVALID, 0L));
-		}
-		_version = header.getVersionString();
-		_pdfACompliant = header.isPdfACompliant();
+        if (!header.isVersionValid()) {
+            info.setValid(false);
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_PDF_MINOR_INVALID, 0L));
+        }
+        _version = header.getVersionString();
+        _pdfACompliant = header.isPdfACompliant();
         info.setSigMatch(_name);
-		return true;
+        return true;
     }
 
 
