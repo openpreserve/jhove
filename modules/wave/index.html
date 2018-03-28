@@ -55,6 +55,8 @@ title: WAVE-hul Module
       <a href="/references#bwf-3">BWF Supp 3</a>,
       <a href="/references#bwf-4">BWF Supp 4</a>]
       <!--<a href="/references#bwf-5">BWF Supp 5</a>]--></li>
+  <li>EBU Technical Specification 3306, RF64
+    [<a href="/references#rf64">RF64</a>]</li>
 </ul>
 
 
@@ -66,13 +68,14 @@ title: WAVE-hul Module
 </p>
 
 <ul>
-  <li>Magic numbers: "RIFF" at byte offset 0; "WAVE" at offset 8</li>
+  <li>"RIFF" or "RF64" at byte offset 0; "WAVE" at offset 8</li>
   <li>All chunk structures are well-formed: a four ASCII character 
-      <var>ID</var>, followed by a 32-bit signed integer <var>size</var>, 
+      <var>ID</var>, followed by a 32-bit unsigned integer <var>size</var>, 
       followed by a <var>size</var>-length data block (if <var>size</var> is
       odd, then the data block includes a final padding byte of 0x00)</li>
-  <li>No data exist before the first byte of the chunk or after the last byte 
-      of the last chunk</li>
+  <li>If RF64, the first chunk is a Data Size 64 chunk</li>
+  <li>A Format chunk exists</li>
+  <li>A Data chunk exists</li>
 </ul>
 
 
@@ -85,13 +88,29 @@ title: WAVE-hul Module
 
 <ul>
   <li>The file is well-formed</li>
+  <li>The Format chunk appears before the Data chunk</li>
+  <li>The following chunks appear no more than once:
+    <ul>
+      <li>Broadcast Audio Extension</li>
+      <li>Cart</li>
+      <li>Cue Points</li>
+      <li>Data</li>
+      <li>Format</li>
+      <li>Instrument</li>
+      <li>Link</li>
+      <li>MPEG Audio Extension</li>
+      <li>Peak Envelope</li>
+    </ul>
+  </li>
 </ul>
 
 
 <h2 id="repinfo">5 Representation Information</h2>
 
 <p>
-  The MIME type is reported as: <code>audio/vnd.wave</code>.
+  The base MIME type is reported as <code>audio/vnd.wave</code>, but
+  may be extended with a <code>codec</code> parameter as described in
+  RFC&nbsp;2361 [<a href="/references#rfc2361">RFC&nbsp;2361</a>].
 </p>
 
 <p>
@@ -114,36 +133,152 @@ title: WAVE-hul Module
   The WAVE module recognizes the following chunks:
 </p>
 
-<ul>
-  <li>"fmt " Format chunk (required)</li>
-  <li>"fact" Fact chunk (required for non-PCM data)</li>
-  <li>"data" Data chunk</li>
-  <li>"cue " Cue chunk</li>
-  <li>"labl" Label chunk</li>
-  <li>"LIST" LIST chunks
-    <ul>
-      <li>"INFO" INFO List chunk</li>
-      <li>"exif" Exif List chunk</li>
-      <li>"adtl" Associated Data List chunk</li>
-    </ul>
-  </li>
-  <li>"list" Associated Data List chunk</li>
-  <li>"note" Note chunk</li>
-  <li>"smpl" Sampler chunk</li>
-  <li>"inst" Instrument chunk</li>
-  <li>"bext" Broadcast Audio Extension chunk
-      [<a href="/references#bwf">BWF</a>]</li>
-  <li>"mext" MPEG Audio Extension chunk
-      [<a href="/references#bwf-1">BWF Supp 1</a>]</li>
-  <!--<li>"qlty" Quality chunk
-      [<a href="/references#bwf-2">BWF Supp 2</a>]</li>-->
-  <li>"levl" Peak Envelope chunk
-      [<a href="/references#bwf-3">BWF Supp 3</a>]</li>
-  <li>"link" Link chunk
-      [<a href="/references#bwf-4">BWF Supp 4</a>]</li>
-  <!--<li>"axml" AXML chunk
-      [<a href="/references#bwf-5">BWF Supp 5</a>]</li>-->
-</ul>
+<table class="table table-condensed table-hover">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Notes</th>
+    <th>References</th>
+  </tr>
+  <tr>
+    <td><code>adtl</code></td>
+    <td>Associated Data List</td>
+    <td>Only in <code>LIST</code> chunks.</td>
+    <td></td>
+  </tr>
+<!--
+  <tr>
+    <td><code>axml</code></td>
+    <td>AXML</td>
+    <td></td>
+    <td>[<a href="/references#bwf-5">BWF Supp 5</a>]</td>
+  </tr>
+-->
+  <tr>
+    <td><code>bext</code></td>
+    <td>Broadcast Audio Extension</td>
+    <td></td>
+    <td>[<a href="/references#bwf">BWF</a>]</td>
+  </tr>
+  <tr>
+    <td><code>cue </code></td>
+    <td>Cue Points</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>data</code></td>
+    <td>Data</td>
+    <td>Required.</td>
+    <td></td>
+  </tr>
+<!--
+  <tr>
+    <td><code>dbmd</code></td>
+    <td>Dolby Metadata</td>
+    <td></td>
+    <td>[<a href="/references#bwf-6">BWF Supp 6</a>]</td>
+  </tr>
+-->
+  <tr>
+    <td><code>ds64</code></td>
+    <td>Data Size 64</td>
+    <td>Required for RF64 files.</td>
+    <td>[<a href="/references#rf64">RF64</a>]</td>
+  </tr>
+  <tr>
+    <td><code>exif</code></td>
+    <td>Exif List</td>
+    <td>Only in <code>LIST</code> chunks.</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>fact</code></td>
+    <td>Fact</td>
+    <td>Required for non-PCM data.</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>fmt </code></td>
+    <td>Format</td>
+    <td>Required.</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>INFO</code></td>
+    <td>Info List</td>
+    <td>Only in <code>LIST</code> chunks.</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>inst</code></td>
+    <td>Instrument</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>labl</code></td>
+    <td>Label</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>levl</code></td>
+    <td>Peak Envelope</td>
+    <td></td>
+    <td>[<a href="/references#bwf-3">BWF Supp 3</a>]</td>
+  </tr>
+  <tr>
+    <td><code>link</code></td>
+    <td>Link</td>
+    <td></td>
+    <td>[<a href="/references#bwf-4">BWF Supp 4</a>]</td>
+  </tr>
+  <tr>
+    <td><code>LIST</code></td>
+    <td>List</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>list</code></td>
+    <td>Associated Data List</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>ltxt</code></td>
+    <td>Labeled Text</td>
+    <td>Only in <code>list</code> and <code>adtl</code> chunks.</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>mext</code></td>
+    <td>MPEG Audio Extension</td>
+    <td></td>
+    <td>[<a href="/references#bwf-1">BWF Supp 1</a>]</td>
+  </tr>
+  <tr>
+    <td><code>note</code></td>
+    <td>Note</td>
+    <td></td>
+    <td></td>
+  </tr>
+<!--
+  <tr>
+    <td><code>qlty</code></td>
+    <td>Quality</td>
+    <td></td>
+    <td>[<a href="/references#bwf-2">BWF Supp 2</a>]</td>
+  </tr>
+-->
+  <tr>
+    <td><code>smpl</code></td>
+    <td>Sample</td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 <p>
   The WAVE module reports audio properties using the draft standard AES-X098B,
@@ -191,8 +326,8 @@ title: WAVE-hul Module
 <p>
   The specific form of the sampled data is specified by the <code>fmt</code>
   chunk's <var>wFormatTag</var> field. For a list of registered
-  <var>wFormatTag</var> values, see RFC 2361
-  [<a href="/references#wave-codec">RFC 2361</a>].
+  <var>wFormatTag</var> values, see RFC&nbsp;2361
+  [<a href="/references#rfc2361">RFC&nbsp;2361</a>].
 </p>
 
 
@@ -321,13 +456,30 @@ title: WAVE-hul Module
 </p>
 
 <ul>
-  <li>"bext" chunk exists</li>
-  <li>"fmt " chunk <var>wFormatTag</var> = 0x0001 or 0x0050</li>
+  <li><code>bext</code> chunk exists</li>
+  <li><var>wFormatTag</var> = 0x0001 or 0x0050</li>
   <li>If <var>wFormatTag</var> = 0x0050 then
     <ul>
-      <li>"fact" chunk exists</li>
+      <li><code>fact</code> chunk exists</li>
     </ul>
   </li>
+</ul>
+
+
+<h4>RF64</h4>
+
+<p>
+  The RF64 format was defined by the European Broadcast Union (EBU) in
+  EBU Technical Specification 3306 to allow WAVE format files and chunks
+  to exceed 4 gigabytes in size [<a href="/references#rf64">RF64</a>].
+</p>
+
+<p>
+  Profile requirements include:
+</p>
+
+<ul>
+  <li>"RF64" at byte offset 0</li>
 </ul>
 
 
@@ -335,7 +487,7 @@ title: WAVE-hul Module
 
 <ul>
   <li>Nominal file extension: .wav</li>
-  <li>Nominal file extension: .bwf</li>
+  <li>Alternative file extensions: .bwf, .rf64</li>
 </ul>
 
 </div>
