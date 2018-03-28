@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import static org.junit.Assert.assertEquals;
@@ -25,9 +22,6 @@ import edu.harvard.hul.ois.jhove.module.PdfModule;
 
 public final class TestUtils {
 
-	/**
-	 * 
-	 */
 	private TestUtils() {
 		// Keep out
 		throw new AssertionError("Should never be in constructor.");

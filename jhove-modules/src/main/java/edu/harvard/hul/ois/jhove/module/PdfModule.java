@@ -196,7 +196,7 @@ public class PdfModule extends ModuleBase {
 	private static final String DICT_KEY_LANG = "Lang";
 	private static final String DICT_KEY_PAGES = "Pages";
 	private static final String DICT_KEY_PAGE_LABELS = "PageLabels";
-    private static final String DICT_KEY_TYPE = "Type";
+	private static final String DICT_KEY_TYPE = "Type";
 	private static final String DICT_KEY_VERSION = "Version";
 	private static final String DICT_KEY_NAME = "Name";
 	private static final String DICT_KEY_NAMES = DICT_KEY_NAME + "s";
@@ -1673,7 +1673,6 @@ public class PdfModule extends ModuleBase {
                 if (!typeText.equals("Catalog")) {
                     // If the type key value is not Catalog
                     info.setWellFormed(false);
-                    info.setMessage(new ErrorMessage(MessageConstants.ERR_DOC_CAT_TYPE_NO_CAT, 0));
                     info.setMessage(new ErrorMessage(MessageConstants.ERR_DOC_CAT_TYPE_NO_CAT, 0));
                     return false;
                 }
