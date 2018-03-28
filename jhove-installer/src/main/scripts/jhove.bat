@@ -34,9 +34,6 @@ SET "EXTRA_JARS="
 REM NOTE: Nothing below this line should be edited
 REM #########################################################################
 
-REM The $APP_VER variable will be replaced at install time
-SET "JHOVE_VERSION=$APP_VER"
-
 REM Infer JHOVE_HOME from script location
 SET "JHOVE_HOME=%~dp0"
 

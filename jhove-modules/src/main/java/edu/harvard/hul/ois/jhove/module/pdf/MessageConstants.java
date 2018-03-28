@@ -127,6 +127,7 @@ public enum MessageConstants {
 	public static final String ERR_PAGE_TREE_NODE_INVALID = "Invalid page tree node";
 	public static final String ERR_PAGE_TREE_TRIMBOX_MALFORMED = "Malformed TrimBox in page tree";
 	public static final String ERR_PDF_HEADER_MISSING = "No PDF header";
+	public static final String ERR_PDF_MINOR_INVALID = "PDF minor version number is greater than 7.";
 	public static final String ERR_PDF_TRAILER_MISSING = "No PDF trailer";
 	public static final String ERR_PREV_OFFSET_TRAILER_DICT_INVALID = "Invalid Prev offset in trailer dictionary";
 	public static final String ERR_RESOURCES_ENTRY_INVALID = "Invalid Resources Entry in document";
