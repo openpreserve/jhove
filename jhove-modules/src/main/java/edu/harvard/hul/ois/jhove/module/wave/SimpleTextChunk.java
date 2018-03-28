@@ -45,7 +45,7 @@ public abstract class SimpleTextChunk extends Chunk {
         bytesLeft -= 4;
         byte[] buf = new byte[(int) bytesLeft];
         ModuleBase.readByteBuf (_dstream, buf, module);
-        String txt = new String (buf);
+        String txt = new String (buf).trim ();
         Property[] propArr = new Property[2];
         propArr[0] = new Property ("CuePointID",
                 PropertyType.LONG,
