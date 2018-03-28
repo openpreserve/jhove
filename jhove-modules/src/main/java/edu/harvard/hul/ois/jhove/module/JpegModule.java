@@ -1025,7 +1025,7 @@ public class JpegModule extends ModuleBase {
                 // width and height. We just grab those and skip the rest.
                 int xThumbPix = readUnsignedByte(_dstream, this);
                 int yThumbPix = readUnsignedByte(_dstream, this);
-                skipBytes(_dstream, length - 4, this);
+                skipBytes(_dstream, length - 10, this);
                 NisoImageMetadata thumbNiso = new NisoImageMetadata();
                 thumbNiso.setImageWidth(xThumbPix);
                 thumbNiso.setImageLength(yThumbPix);
@@ -1039,15 +1039,16 @@ public class JpegModule extends ModuleBase {
                         PropertyType.PROPERTY, PropertyArity.LIST,
                         thumbPropList);
                 _imageList.add(thumbProp);
+                break;
 
             default:
-                skipBytes(_dstream, length - 2, this);
+                skipBytes(_dstream, length - 8, this);
                 break;
 
             // we may want to do stuff with the JFXX APP0
             }
         } else {
-            skipBytes(_dstream, length - 2, this);
+            skipBytes(_dstream, length - 7, this);
         }
     }
 

@@ -34,9 +34,6 @@ EXTRA_JARS=""
 # NOTE: Nothing below this line should be edited
 #############################################################################
 
-# The %APP_VER variable will be replaced at install time
-JHOVE_VERSION="%APP_VER"
-
 # Infer JHOVE_HOME from script location
 SCRIPT="${0}"
 
