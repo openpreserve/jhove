@@ -81,7 +81,7 @@ bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "${BASELINE_VERSION}
 echo "Black box testing ${MAJOR_MINOR_VER}."
 echo " - using development JHOVE installer: ${TEST_ROOT}/targets/${MAJOR_MINOR_VER}."
 bash "${SCRIPT_DIR}/bbt-jhove.sh" -b "${TEST_ROOT}/targets/${MAJOR_MINOR_VER}" -c "${TEST_ROOT}/corpora" -j . -o "${TEST_ROOT}/candidates" -k "dev-${MAJOR_MINOR_VER}" -i
-echo " - test comparison key is: dev-${MAJOR_MINOR_VER}."
 exitStatus=$?
+echo " - test comparison key is: dev-${MAJOR_MINOR_VER}."
 echo " - BB Testing output is: ${exitStatus}"
 exit $exitStatus

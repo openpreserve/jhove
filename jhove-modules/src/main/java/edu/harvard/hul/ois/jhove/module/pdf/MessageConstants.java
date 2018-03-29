@@ -78,7 +78,7 @@ public enum MessageConstants {
 	public static final String ERR_DICT_MALFORMED = "Malformed dictionary";
 	public static final String ERR_DOC_CAT_DICT_MISSING = "No document catalog dictionary";
 	public static final String ERR_DOC_CAT_OBJ_NUM_INCNSTNT = "Document catalog dictionary object number and trailer root ref number are inconsistent.";
-	public static final String ERR_DOC_CAT_TYPE_NO_CAT = "Document catalog Type key must have value Catalog";
+	public static final String ERR_DOC_CAT_TYPE_INVALID = "Document catalog Type key must have value Catalog";
 	public static final String ERR_DOC_CAT_NO_TYPE = "Document catalog has no Type key or it has a null value.";
 	public static final String ERR_DOC_CAT_NOT_SIMPLE = "Document catalog Type key does not have a simple String value.";
 	public static final String ERR_DOC_CAT_VERSION_INVALID = "Invalid Version in document catalog";
@@ -109,7 +109,10 @@ public enum MessageConstants {
 	public static final String ERR_OUTLINE_DICT_MALFORMED = "Malformed outline dictionary";
 	public static final String ERR_PAGE_DICT_DATA_INVALID = "Invalid dictionary data for page";
 	public static final String ERR_PAGE_DICT_INVALID = "Invalid page dictionary";
+	public static final String ERR_PAGE_DICT_NO_TYPE = "Pages dictionary has no Type key or it has a null value.";
+	public static final String ERR_PAGE_DICT_NOT_SIMPLE = "Pages dictionary Type key does not have a simple String value.";
 	public static final String ERR_PAGE_DICT_OBJ_INVALID = "Invalid page dictionary object";
+	public static final String ERR_PAGE_DICT_TYPE_INVALID = "Pages dictionary Type key must have value /Pages.";
 	public static final String ERR_PAGE_FONT_DICT_MISSING = "Expected dictionary for font entry in page resource";
 	public static final String ERR_PAGE_LABEL_INFO_INVALID = "Invalid page label info";
 	public static final String ERR_PAGE_LABEL_NODE_INVALID = "Invalid page label node";
@@ -125,6 +128,7 @@ public enum MessageConstants {
 	public static final String ERR_PAGE_TREE_MEDIA_BOX_MALFORMED = "Malformed MediaBox in page tree";
 	public static final String ERR_PAGE_TREE_MISSING = "Document page tree not found";
 	public static final String ERR_PAGE_TREE_NODE_INVALID = "Invalid page tree node";
+	public static final String ERR_PAGE_TREE_NODE_NOT_FOUND = "Page tree node not found.";
 	public static final String ERR_PAGE_TREE_TRIMBOX_MALFORMED = "Malformed TrimBox in page tree";
 	public static final String ERR_PDF_HEADER_MISSING = "No PDF header";
 	public static final String ERR_PDF_MINOR_INVALID = "PDF minor version number is greater than 7.";

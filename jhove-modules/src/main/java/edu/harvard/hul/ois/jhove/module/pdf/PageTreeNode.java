@@ -134,6 +134,9 @@ public class PageTreeNode extends DocNode
         catch (PdfException ee) {
             throw ee;
         }
+        catch (ArrayIndexOutOfBoundsException excep) {
+            throw new PdfInvalidException(MessageConstants.ERR_PAGE_TREE_NODE_NOT_FOUND);
+        }
         catch (Exception e) {
             throw new PdfInvalidException(MessageConstants.ERR_PAGE_TREE_NODE_INVALID);
         }

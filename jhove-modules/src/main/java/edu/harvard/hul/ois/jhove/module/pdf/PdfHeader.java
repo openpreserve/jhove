@@ -7,7 +7,7 @@ import java.io.IOException;
  * was to introduce a simple version check for the PDF/A minor version number,
  * see {@link PdfHeader#isVersionValid()}, while not changing anything else
  * through over ambition.
- * 
+ *
  * @author <a href="mailto:carl@openpreservation.org">Carl Wilson</a>
  *         <a href="https://github.com/carlwilson">carlwilson AT github</a>
  * @version 0.1 Created 8 Mar 2018:00:46:39
@@ -23,7 +23,7 @@ public final class PdfHeader {
 	private final boolean isPdfACompilant;
 
 	/**
-	 * 
+	 *
 	 */
 	private PdfHeader(final String versionString,
 			final boolean isPdfaCompliant) {
@@ -51,7 +51,7 @@ public final class PdfHeader {
 	 * method parses the minor version number from the version String and tests
 	 * whether it is less than or equal to
 	 * {@link PdfHeader#MAX_VALID_MAJOR_VERSION}.
-	 * 
+	 *
 	 * @return true if an integer minor version number can be parsed from the
 	 *         version string AND it is less than or equal to
 	 *         {@link PdfHeader#MAX_VALID_MAJOR_VERSION}. Otherwise false.
@@ -70,7 +70,7 @@ public final class PdfHeader {
 
 	/**
 	 * Creates a new {@link PdfHeader} instance using the passed parameters.
-	 * 
+	 *
 	 * @param versionString
 	 *            the version number from the PDF Header, should be of form
 	 *            <code>1.x</code> where x should be of the range 0-7.
@@ -93,7 +93,7 @@ public final class PdfHeader {
 	/**
 	 * Factory method for {@link PdfHeader} that parses a new instance using the
 	 * supplied {@link Parser} instance.
-	 * 
+	 *
 	 * @param _parser
 	 *            the {@link Parser} instance that will be used to parse header
 	 *            details

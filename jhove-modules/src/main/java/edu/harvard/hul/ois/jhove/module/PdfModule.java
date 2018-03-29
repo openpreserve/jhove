@@ -111,7 +111,7 @@ public class PdfModule extends ModuleBase {
 	public static final String MIME_TYPE = "application/pdf";
 	public static final String EXT = ".pdf";
 
-  private static final String ENCODING_PREFIX = "ENC=";
+	private static final String ENCODING_PREFIX = "ENC=";
 
 	private static final String DEFAULT_PAGE_LAYOUT = "SinglePage";
 	private static final String DEFAULT_MODE = "UseNone";
@@ -249,8 +249,10 @@ public class PdfModule extends ModuleBase {
 	private static final String DICT_KEY_FIRST = "First";
 	private static final String DICT_KEY_LAST = "Last";
 	private static final String DICT_KEY_FLAGS = "Flags";
+
 	private static final String KEY_VAL_CATALOG = "Catalog";
-	
+	private static final String KEY_VAL_PAGES = "Pages";
+
 	private static final String PROP_NAME_BASE_FONT = DICT_KEY_BASE_FONT;
 	private static final String PROP_NAME_CALLOUT_LINE = "CalloutLine";
 	private static final String PROP_NAME_CMAP_DICT = "CMapDictionary";
@@ -365,7 +367,7 @@ public class PdfModule extends ModuleBase {
 
     private static final String NAME = "PDF-hul";
     private static final String RELEASE = "1.11-RC";
-    private static final int [] DATE = {2018, 03, 16};
+    private static final int [] DATE = {2018, 03, 19};
     private static final String [] FORMAT = {
         "PDF", "Portable Document Format"
     };
@@ -1606,24 +1608,11 @@ public class PdfModule extends ModuleBase {
             return false;
         }
         try {
-            // Check that the catalog has a key type and the types value is catalog
-            PdfObject type = _docCatDict.get(DICT_KEY_TYPE);
-            if (type != null && type instanceof PdfSimpleObject) {
-                // If the type key is not null and is a simple object
-                String typeText = ((PdfSimpleObject) type).getStringValue();
-                if (!KEY_VAL_CATALOG.equals(typeText)) {
-                    // If the type key value is not Catalog
-                    info.setWellFormed(false);
-                    info.setMessage(new ErrorMessage(MessageConstants.ERR_DOC_CAT_TYPE_NO_CAT, 0));
-                    return false;
-                }
-            } else {
-                // There's no type key or it's not a simple object
-                // Choose message depending on whether the value is null or of
-                // the wrong type
-                String message = (type == null) ? MessageConstants.ERR_DOC_CAT_NO_TYPE
-                                                : MessageConstants.ERR_DOC_CAT_NOT_SIMPLE;
-                info.setMessage(new ErrorMessage(message, 0));
+            // Check that the catalog has a key type and the types value is "Catalog"
+            if (!checkTypeKey(_docCatDict, info, KEY_VAL_CATALOG,
+                              MessageConstants.ERR_DOC_CAT_TYPE_INVALID,
+                              MessageConstants.ERR_DOC_CAT_NO_TYPE,
+                              MessageConstants.ERR_DOC_CAT_NOT_SIMPLE)) {
                 return false;
             }
 
@@ -1958,6 +1947,14 @@ public class PdfModule extends ModuleBase {
                 throw new PdfMalformedException(MessageConstants.ERR_PAGE_DICT_OBJ_INVALID);
             PdfDictionary pagesDict = (PdfDictionary) pagesObj;
 
+            // Check that the pages dict has a key type and the types value is Pages
+            if (!checkTypeKey(pagesDict, info, KEY_VAL_PAGES,
+                              MessageConstants.ERR_PAGE_DICT_TYPE_INVALID,
+                              MessageConstants.ERR_PAGE_DICT_NO_TYPE,
+                              MessageConstants.ERR_PAGE_DICT_NOT_SIMPLE)) {
+                return false;
+            }
+
             _docTreeRoot = new PageTreeNode(this, null, pagesDict);
             _docTreeRoot.buildSubtree(true, 100);
         }
@@ -1967,6 +1964,11 @@ public class PdfModule extends ModuleBase {
                        (e.getMessage(), _parser.getOffset()));
             // Continue parsing if it's only invalid
             return (e instanceof PdfInvalidException);
+        }
+        catch (ArrayIndexOutOfBoundsException excep) {
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_PAGE_TREE_MISSING, _parser.getOffset()));
+            info.setWellFormed(false);
+            return false;
         }
         catch (Exception e) {
             // Catch any odd exceptions
@@ -2682,13 +2684,12 @@ public class PdfModule extends ModuleBase {
                 /* And finally extract the object from the object stream. */
                 return ostrm.getObject(objIndex);
             }
+            catch (ZipException excep) {
+                _logger.info(excep.getMessage());
+                throw new PdfMalformedException(MessageConstants.ERR_COMPRESSION_INVALID_OR_UNKNOWN);
+            }
             catch (Exception e) {
-
                 _logger.info(e.getMessage());
-                if (e instanceof ZipException) {
-                    throw new PdfMalformedException
-                      (MessageConstants.ERR_COMPRESSION_INVALID_OR_UNKNOWN);
-                }
                 /* Fall through with error */
             }
             throw new PdfMalformedException(MessageConstants.ERR_OBJ_STREAM_OR_NUMBER_INVALID);
@@ -4413,6 +4414,33 @@ public class PdfModule extends ModuleBase {
                 PropertyType.INTEGER,
                 PropertyArity.ARRAY,
                 iarr);
+    }
+
+    private static boolean checkTypeKey(final PdfDictionary dict, final RepInfo info,
+                                 final String expctVal, final String typeInvalMess,
+                                 final String typeNotFoundMess,
+                                 final String typeNotSimpleMess) {
+        // Get the type key from the dictionary
+        PdfObject typeObj = dict.get(DICT_KEY_TYPE);
+        if (typeObj != null && typeObj instanceof PdfSimpleObject) {
+            // If the type key is not null and is a simple object
+            String typeValue = ((PdfSimpleObject) typeObj).getStringValue();
+            if (!expctVal.equals(typeValue)) {
+                // If the type key value is not of the expected value
+                info.setWellFormed(false);
+                info.setMessage(new ErrorMessage(typeInvalMess, 0));
+                return false;
+            }
+        } else {
+            // There's no type key or it's not a simple object
+            // Choose message depending on whether the value is null or of
+            // the wrong type
+            String message = (typeObj == null) ? typeNotFoundMess
+                                            : typeNotSimpleMess;
+            info.setMessage(new ErrorMessage(message, 0));
+            return false;
+        }
+        return true;
     }
 
     private static String imageMimeFromFilters(Filter[] filters) {

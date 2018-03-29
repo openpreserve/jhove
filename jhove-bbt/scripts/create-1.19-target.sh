@@ -61,9 +61,14 @@ find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/<outputHand
 # Add the Release Canidate PDF-HUL details
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.10">PDF-hul<\/module>$/   <module release="1.11-RC">PDF-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <release>1.10<\/release>$/  <release>1.11-RC<\/release>/' {} \;
-find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <date>2017-10-31<\/date>$/  <date>2018-03-16<\/date>/' {} \;
-find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.10" date="2017-10-31">PDF%<reportingModule release="1.11-RC" date="2018-03-16">PDF%' {} \;
-find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.10" date="2017-10-31">PDF%<reportingModule release="1.11-RC" date="2018-03-16">PDF%' {} \;
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <date>2017-10-31<\/date>$/  <date>2018-03-19<\/date>/' {} \;
+find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.10" date="2017-10-31">PDF%<reportingModule release="1.11-RC" date="2018-03-19">PDF%' {} \;
+find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.10" date="2017-10-31">PDF%<reportingModule release="1.11-RC" date="2018-03-19">PDF%' {} \;
+
+# Improved handling of inconsistent XRef table
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/corruptionOneByteMissing.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/PDF-hul/corruptionOneByteMissing.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/"
+fi
 
 ##
 # WAV Module changes
@@ -124,7 +129,7 @@ if [[ -f "${candidateRoot}/examples/modules/WAVE-hul/rf64-pcm-44khz-8bit-mono-ds
 	cp "${candidateRoot}/examples/modules/WAVE-hul/rf64-pcm-44khz-8bit-mono-ds64-chunk-unnecessary.wav.jhove.xml" "${targetRoot}/examples/modules/WAVE-hul/rf64-pcm-44khz-8bit-mono-ds64-chunk-unnecessary.wav.jhove.xml"
 fi;
 if [[ -f "${candidateRoot}/examples/modules/WAVE-hul/rf64-pcm-44khz-8bit-mono-minimal.wav.jhove.xml" ]]; then
-	cp "${candidateRoot}/examples/modules/WAVE-hulrf64-pcm-44khz-8bit-mono-minimal.wav.jhove.xml/" "${targetRoot}/examples/modules/WAVE-hul/rf64-pcm-44khz-8bit-mono-minimal.wav.jhove.xml"
+	cp "${candidateRoot}/examples/modules/WAVE-hul/rf64-pcm-44khz-8bit-mono-minimal.wav.jhove.xml" "${targetRoot}/examples/modules/WAVE-hul/rf64-pcm-44khz-8bit-mono-minimal.wav.jhove.xml"
 fi;
 if [[ -f "${candidateRoot}/examples/modules/WAVE-hul/rf64-ulaw-44khz-8bit-mono-minimal.wav.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/WAVE-hul/rf64-ulaw-44khz-8bit-mono-minimal.wav.jhove.xml" "${targetRoot}/examples/modules/WAVE-hul/rf64-ulaw-44khz-8bit-mono-minimal.wav.jhove.xml"

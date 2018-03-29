@@ -31,7 +31,7 @@ public final class TestUtils {
 			final String pathToTest, final int expctWllFrmd, final int expctVld,
 			final String expctMessage) throws URISyntaxException {
 		File toTest = new File(
-				PdfModuleTest.class.getResource(pathToTest).toURI());
+				TestUtils.class.getResource(pathToTest).toURI());
 
 		RepInfo info = parseTestFile(pdfModule, toTest);
 		testResult(info, expctWllFrmd, expctVld, expctMessage);
