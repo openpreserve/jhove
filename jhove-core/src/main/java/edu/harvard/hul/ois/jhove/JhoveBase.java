@@ -138,7 +138,7 @@ public class JhoveBase {
      * Instantiates a <code>JhoveBase</code> object.
      * 
      * @throws JhoveException
-     *             If invoked with JVM lower than 1.6
+     *             if invoked with a JVM lower than 1.6
      */
     public JhoveBase() throws JhoveException {
 

@@ -1,6 +1,3 @@
-/**
- *
- */
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import java.io.IOException;

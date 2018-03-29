@@ -1099,9 +1099,7 @@ public abstract class ModuleBase
 
 
     /**
-     *  Reads eight bytes as a signed 64-bit value from a
-     *  DataInputStream.  (There is no way in Java to have
-     *  an unsigned long.)
+     *  Reads eight bytes as a signed 64-bit value from a DataInputStream.
      *
      *  @param stream     The stream to read from.
      *  @param bigEndian  If true, interpret the first byte as the high
@@ -1372,12 +1370,28 @@ public abstract class ModuleBase
     {
         long totalBytesSkipped = 0;
         while (bytesToSkip > 0) {
-            long bytesSkipped = stream.skip(bytesToSkip);
+            long bytesSkipped;
+            long availableBytes = stream.available();
+            if (availableBytes == 0) break;
+            // The count of skipped bytes returned by FileInputStream's 'skip'
+            // method is unreliable and may be greater than what was available
+            // to skip. So we need to monitor and correct any discrepancies
+            // ourselves. Luckily the 'available' method seems to accurately
+            // report the number of bytes available to be skipped, but because
+            // it returns an int, we're limited to skipping Integer.MAX_VALUE
+            // each call lest we skip more bytes than we can verify.
+            if (bytesToSkip > availableBytes) {
+                bytesSkipped = stream.skip(availableBytes);
+            } else {
+                bytesSkipped = stream.skip(bytesToSkip);
+            }
+            // If it reports skipping more bytes than were available,
+            // correct it to the most it could have skipped.
+            if (bytesSkipped > availableBytes) {
+                bytesSkipped = availableBytes;
+            }
             totalBytesSkipped += bytesSkipped;
             bytesToSkip -= bytesSkipped;
-            // Cease skipping if end of stream reached before
-            // requested number of bytes have been skipped.
-            if (stream.available() == 0) break;
         }
         if (counted != null) {
             counted._nByte += totalBytesSkipped;

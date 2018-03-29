@@ -64,7 +64,6 @@ import edu.harvard.hul.ois.jhove.SignatureUseType;
 import edu.harvard.hul.ois.jhove.XMPHandler;
 import edu.harvard.hul.ois.jhove.module.pdf.AProfile;
 import edu.harvard.hul.ois.jhove.module.pdf.AProfileLevelA;
-import edu.harvard.hul.ois.jhove.module.pdf.Comment;
 import edu.harvard.hul.ois.jhove.module.pdf.CrossRefStream;
 import edu.harvard.hul.ois.jhove.module.pdf.Destination;
 import edu.harvard.hul.ois.jhove.module.pdf.DictionaryStart;
@@ -117,7 +116,14 @@ public class PdfModule extends ModuleBase {
 	private static final String DEFAULT_PAGE_LAYOUT = "SinglePage";
 	private static final String DEFAULT_MODE = "UseNone";
 
+	private static final String FILTER_NAME_CCITT = "CCITTFaxDecode";
 	private static final String FILTER_NAME_CRYPT = "Crypt";
+	private static final String FILTER_NAME_DCT = "DCTDecode";
+	private static final String FILTER_NAME_FLATE = "FlateDecode";
+	private static final String FILTER_NAME_JPX = "JPXDecode";
+	private static final String FILTER_NAME_LZW = "LZWDecode";
+	private static final String FILTER_NAME_RUN_LENGTH= "RunLengthDecode";
+
 	private static final String FILTER_VAL_STANDARD = "Standard";
 
 	private static final String RESOURCE_NAME_XOBJECT = "XObject";
@@ -516,7 +522,7 @@ public class PdfModule extends ModuleBase {
 
     /* Name-to-value array pairs for NISO metadata */
     private final static String[] compressionStrings =
-        { "LZWDecode", /* "FlateDecode", */ "RunLengthDecode", "DCTDecode", "CCITTFaxDecode"};
+        { FILTER_NAME_LZW, /* "FlateDecode", */ FILTER_NAME_RUN_LENGTH, FILTER_NAME_DCT, FILTER_NAME_CCITT };
     private final static int[] compressionValues  =
         { 5, /* 8, */ 32773, 6, 2};
     /* The value of 2 (CCITTFaxDecode) is a placeholder; additional
@@ -2234,7 +2240,6 @@ public class PdfModule extends ModuleBase {
                                     NisoImageMetadata niso = new NisoImageMetadata();
                                     imgList.add(new Property(PROP_NAME_NISO_IMAGE_MD,
                                                PropertyType.NISOIMAGEMETADATA, niso));
-                                    niso.setMimeType(MIME_TYPE);
                                     PdfObject widthBase = xobdict.get(DICT_KEY_WIDTH);
                                     PdfSimpleObject widObj = (PdfSimpleObject) resolveIndirectObject(widthBase);
                                     niso.setImageWidth(widObj.getIntValue());
@@ -2244,6 +2249,9 @@ public class PdfModule extends ModuleBase {
 
                                     // Check for filters to add to the filter list
                                     Filter[] filters = ((PdfStream) xob).getFilters();
+                                    // Try to derive the image MIME type from filter names
+                                    String mimeType = imageMimeFromFilters(filters);
+                                    niso.setMimeType(mimeType);
                                     String filt = extractFilters(filters, (PdfStream) xob);
                                     if (filt != null) {
                                         // If the filter is one which the NISO schema
@@ -4433,5 +4441,57 @@ public class PdfModule extends ModuleBase {
             return false;
         }
         return true;
+    }
+
+    private static String imageMimeFromFilters(Filter[] filters) {
+        // If there's no filters it's a PNG
+        if (filters == null || filters.length == 0)
+        {
+            return "image/png";
+        }
+        // Iterate the filter list
+        for (Filter filt : filters) {
+            // Get the Filter name
+            String filterName = filt.getFilterName();
+            // And the MIME type from htat
+            String mime = imageMimeFromFilterName(filterName);
+            if (mime != null)
+            {
+                // If it's not null then return
+                return mime;
+            }
+            // Next filter
+        }
+        // No MIME type match made for filter list
+        return null;
+    }
+
+    // Stolen from an Apache PDF Box method:
+    // https://github.com/apache/pdfbox/blob/2.0/pdfbox/src/main/java/org/apache/pdfbox/pdmodel/graphics/image/PDImageXObject.java#L767
+    private static String imageMimeFromFilterName(final String filterName) {
+        if (FILTER_NAME_DCT.equals(filterName))
+        {
+            // DCTDecode is JPEG
+            return "image/jpg";
+        }
+        else if (FILTER_NAME_JPX.equals(filterName))
+        {
+            // JPX Decode for JPX (JP2K)
+            return "image/jpx";
+        }
+        else if (FILTER_NAME_CCITT.equals(filterName))
+        {
+            // CCITT is a TIFF image
+            return "image/tiff";
+        }
+        else if (FILTER_NAME_FLATE.equals(filterName)
+                || FILTER_NAME_LZW.equals(filterName)
+                || FILTER_NAME_RUN_LENGTH.equals(filterName))
+        {
+            // There's a bunch of PNG possibilities
+            return "image/png";
+        }
+        // No match made
+        return null;
     }
 }
