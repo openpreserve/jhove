@@ -1,11 +1,11 @@
 RELEASE NOTES
 =============
-JHOVE - JSTOR/Harvard Object Validation Environment
-Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.
+JHOVE - JSTOR/Harvard Object Validation Environment  
+Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.  
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details).
 
-Versions 1.7 to 1.11 of JHOVE released independently.
+Versions 1.7 to 1.11 of JHOVE released independently.  
 Versions 1.12 onwards released by the Open Preservation Foundation.
 
 JHOVE 1.20
@@ -15,43 +15,47 @@ JHOVE 1.20
 ### General
 
 - Removed obsolete subsitituion from izpack installer [[#300][]]
+- Improved counting accuracy of skipped bytes, allowing better
+  EOF detection [[#308][]]
 
 ### JPEG Module
-- Fixed bug causing JHOVE to skip the wrong number of character in `APP0`
-  segments[[#303][]]
+
+- Fixed bug causing JHOVE to skip the wrong number of characters in `APP0`
+  segments [[#303][]]
 
 ### PDF Module
 
 - Header check for invalid PDF minor version (not > 7) [[#317][]]
 - Unit tests for PDF Header parsing conditions [[#317][]]
-- Check that document catalog dictionary key `\Type == Catalog` [[#318][]]
+- Check that document catalog dictionary key `\Type` equals `Catalog` [[#318][]]
 - Test that document catalog XRef lookup retrieves the right object
   number [[#319][]]
 - Unit tests for document catalog issues [[#318][]]
-- Test that page dictionary key `\Type == Pages`  [[#322][]]
+- Test that page dictionary key `\Type` equals `Pages` [[#322][]]
 - Unit tests for page dictionary issues [[#322][]]
 - Improved handling of XRef lookup errors for document catalog and pages
   dictonary [[#322][]]
 - Added synthetic test files created by @asciim0 for iPres as unit
   test resources ([[#317][]-[#319][]])
 - Fixed assignment of `application/pdf` as MIME type for images embedded
-  in a PDF. [[#324][]]
-- added method to derive MIME type from Filters and assign to NISO metatadata
-  and added String constants for Filter names. [[#324][]]
+  in a PDF [[#324][]]
+- Added method to derive MIME type from Filters and assign to NISO metatadata
+  and added String constants for Filter names [[#324][]]
 
 ### WAVE Module
 
-- Fixed byte skipping issue when parsing Associated Data List [[#309][]]
+- Fixed byte skipping issue when parsing Associated Data List chunks [[#309][]]
 - Added support for parsing and validating RF64 files [[#308][]]
 - Made WAVE parser more resilient to unexpected chunk data [[#308][]]
 - Improved reporting of WAVE codecs in WAVEFORMATEXTENSIBLE files [[#308][]]
 - Avoids reporting file format and MIME type until signatures have been verified
-  and reports extended MIME type information, e.g. `audio/vnd.wave; codec=1`, as per RFC 2361 [[#308][]]
+  and reports extended MIME type information, e.g. `audio/vnd.wave; codec=1`,
+  as per RFC 2361 [[#308][]]
 - Subformat GUID's are now reported in their standard format, e.g.
   `00000001-0000-0010-8000-00AA00389B71`, instead of as an
   array of byte values [[#308][]]
-- Added check to verify the existence of Data chunks and to verify that
-  Format chunks appear before Data chunks [[#308][]]
+- Added checks to verify the existence of Data chunks and their apperance 
+  after Format chunks [[#308][]]
 - Expanded WAVE example corpora to cover more formats and errors [[#308][]]
 - Improved truncation detection and reporting [[#308][]]
 - Fixed erroneous reporting of Cue Point values and renamed "Cue" report
@@ -59,13 +63,13 @@ JHOVE 1.20
 
 ### Text Handler
 
-- NISO MIX 1.0 output now includes MIME type as `FormatName:`. [[#323][]]
+- NISO MIX 1.0 output now includes MIME type as `FormatName` [[#323][]]
 
 ### XML Handler
 
 - NISO MIX 1.0 output now included mandatory `<FormatDesignation>`
-  element. [[#323][]]
-- Image MIME type output as mandatory `<FormatName>` element. [[#323][]]
+  element [[#323][]]
+- Image MIME type output as mandatory `<FormatName>` element [[#323][]]
 
 [#300]: https://github.com/openpreserve/jhove/pull/300
 [#303]: https://github.com/openpreserve/jhove/pull/303
