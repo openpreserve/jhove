@@ -64,7 +64,6 @@ import edu.harvard.hul.ois.jhove.SignatureUseType;
 import edu.harvard.hul.ois.jhove.XMPHandler;
 import edu.harvard.hul.ois.jhove.module.pdf.AProfile;
 import edu.harvard.hul.ois.jhove.module.pdf.AProfileLevelA;
-import edu.harvard.hul.ois.jhove.module.pdf.Comment;
 import edu.harvard.hul.ois.jhove.module.pdf.CrossRefStream;
 import edu.harvard.hul.ois.jhove.module.pdf.Destination;
 import edu.harvard.hul.ois.jhove.module.pdf.DictionaryStart;
@@ -121,7 +120,6 @@ public class PdfModule extends ModuleBase {
 	private static final String FILTER_NAME_CRYPT = "Crypt";
 	private static final String FILTER_NAME_DCT = "DCTDecode";
 	private static final String FILTER_NAME_FLATE = "FlateDecode";
-	private static final String FILTER_NAME_JBIG = "JBIG2Decode";
 	private static final String FILTER_NAME_JPX = "JPXDecode";
 	private static final String FILTER_NAME_LZW = "LZWDecode";
 	private static final String FILTER_NAME_RUN_LENGTH= "RunLengthDecode";
