@@ -63,7 +63,17 @@ public final class PdfHeader {
 		try {
 			minorVersion = getMinorVersion(this.versionString);
 		} catch (NumberFormatException nfe) {
-			// TODO : Do nothing for now, the version number is still invalid.
+			// TODO : This currently catches non-numbers and
+			// returns false. This marks the version number
+			// as invalid and ensured existing JHOVE behaviour
+			// changed as little as possible for v1.20 March 2018.
+			// Really this should be thrown as it's own validation
+			// exception and be assigned its own message
+			// Version numbers need better handling as PDF1. is
+			// baked into JHOVE's header signature rather than
+			// as part of version parsing and validation.
+			// The arrival of PDF 2.0 in summer 2017 leaves
+			// this looking very dubious behaviour.
 		}
 		return minorVersion <= MAX_VALID_MAJOR_VERSION;
 	}

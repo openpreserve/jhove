@@ -56,10 +56,10 @@ public class XmlHandler
     private static final String NAME = "XML";
 
     /** Handler release identifier. */
-    private static final String RELEASE = "1.8-RC";
+    private static final String RELEASE = "1.8";
 
     /** Handler release date. */
-    private static final int [] DATE = {2018, 03, 16};
+    private static final int [] DATE = {2018, 03, 29};
 
     /** Handler informative note. */
     private static final String NOTE =

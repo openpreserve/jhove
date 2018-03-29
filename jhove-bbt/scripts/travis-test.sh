@@ -71,7 +71,7 @@ installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
 echo "Checking baseline data for target Jhove: ${MAJOR_MINOR_VER}."
 if [[ ! -d "${TARGET_ROOT}/${MAJOR_MINOR_VER}" ]]
 then
-	echo " - enerating the baseline for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
+	echo " - Generating the baseline for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
 	bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${TEST_ROOT}/corpora" -o "${TEST_ROOT}/candidates/${MAJOR_MINOR_VER}"
 fi
 
