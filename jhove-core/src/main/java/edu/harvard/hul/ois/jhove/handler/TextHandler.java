@@ -35,8 +35,8 @@ public class TextHandler
      ******************************************************************/
 
     private static final String NAME = "TEXT";
-    private static final String RELEASE = "1.6-RC";
-    private static final int [] DATE = {2018, 03, 16};
+    private static final String RELEASE = "1.6";
+    private static final int [] DATE = {2018, 03, 29};
     private static final String NOTE = "This is the default JHOVE output " +
         "handler";
     private static final String RIGHTS =

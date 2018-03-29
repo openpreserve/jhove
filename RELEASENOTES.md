@@ -8,13 +8,17 @@ see the file LICENSE for details).
 Versions 1.7 to 1.11 of JHOVE released independently.
 Versions 1.12 onwards released by the Open Preservation Foundation.
 
-JHOVE 1.20-RC
+JHOVE 1.20
 -------------
-2018-03-20
+2018-03-29
 
 ### General
 
 - Removed obsolete subsitituion from izpack installer [[#300][]]
+
+### JPEG Module
+- Fixed bug causing JHOVE to skip the wrong number of character in `APP0`
+  segments[[#303][]]
 
 ### PDF Module
 
@@ -31,9 +35,9 @@ JHOVE 1.20-RC
 - Added synthetic test files created by @asciim0 for iPres as unit
   test resources ([[#317][]-[#319][]])
 - Fixed assignment of `application/pdf` as MIME type for images embedded
-  in a PDF.
+  in a PDF. [[#324][]]
 - added method to derive MIME type from Filters and assign to NISO metatadata
-  and added String constants for Filter names.
+  and added String constants for Filter names. [[#324][]]
 
 ### WAVE Module
 
@@ -55,19 +59,24 @@ JHOVE 1.20-RC
 
 ### Text Handler
 
-- NISO MIX 1.0 output now includes MIME type as `FormatName:`.
+- NISO MIX 1.0 output now includes MIME type as `FormatName:`. [[#323][]]
 
 ### XML Handler
 
-- NISO MIX 1.0 output now included mandatory `<FormatDesignation>` element.
-- Image MIME type output as mandatory `<FormatName>` element.
+- NISO MIX 1.0 output now included mandatory `<FormatDesignation>`
+  element. [[#323][]]
+- Image MIME type output as mandatory `<FormatName>` element. [[#323][]]
 
 [#300]: https://github.com/openpreserve/jhove/pull/300
+[#303]: https://github.com/openpreserve/jhove/pull/303
 [#308]: https://github.com/openpreserve/jhove/pull/308
+[#309]: https://github.com/openpreserve/jhove/pull/309
 [#317]: https://github.com/openpreserve/jhove/pull/317
 [#318]: https://github.com/openpreserve/jhove/pull/318
 [#319]: https://github.com/openpreserve/jhove/pull/319
 [#322]: https://github.com/openpreserve/jhove/pull/322
+[#323]: https://github.com/openpreserve/jhove/pull/323
+[#324]: https://github.com/openpreserve/jhove/pull/324
 
 
 JHOVE 1.18.1
