@@ -67,7 +67,7 @@ public class CompositionBox extends JP2Box {
         box = (JP2Box) next ();
         if (!(box instanceof CompOptionsBox)) {
             _repInfo.setMessage (new ErrorMessage
-                ("First box in Composition Box must be " +                    "Composition Options Box",
+                (MessageConstants.ERR_COMPOSITION_BOX_START_INVALID,
                  _module.getFilePos()));
             _repInfo.setWellFormed (false);
             return false;

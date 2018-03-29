@@ -124,20 +124,7 @@ showHelp() {
 checkParams "$@";
 candidate="${paramOutputLoc:?}/${paramKey}"
 tempInstallLoc="/tmp/to-test";
-if [[ -d "${tempInstallLoc}" ]]; then
-	rm -rf "${tempInstallLoc}"
-fi
-
-MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
-
-JHOVE_INSTALLER="${paramJhoveLoc:?}/jhove-installer/target/jhove-xplt-installer-${MVN_VERSION}.jar"
-if [[ ! -e "${JHOVE_INSTALLER}" ]]
-then
-	mvn clean package
-fi
-
-installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
-sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.6.201602180812\/org\.jacoco.agent-0\.7\.6\.201602180812-runtime\.jar=destfile=jhove-modules\/target\/jacoco\.exec -classpath $CP Jhove $ARGS/g' "${tempInstallLoc}/jhove"
+sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.9\/org\.jacoco.agent-0\.7\.9-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
 bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${paramCorpusLoc}" -o "${candidate}"
 
 if [ "$paramIgnoreRelease" =  true ] ;

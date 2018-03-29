@@ -6,12 +6,12 @@
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at
  * your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
@@ -35,13 +35,15 @@ public class TextHandler
      ******************************************************************/
 
     private static final String NAME = "TEXT";
-    private static final String RELEASE = "1.5";
-    private static final int [] DATE = {2009, 10, 14};
+    private static final String RELEASE = "1.6";
+    private static final int [] DATE = {2018, 03, 29};
     private static final String NOTE = "This is the default JHOVE output " +
         "handler";
-    private static final String RIGHTS = "Copyright 2003-2009 by JSTOR and " +
-        "the President and Fellows of Harvard College. " +
-        "Released under the terms of the GNU Lesser General Public License.";
+    private static final String RIGHTS =
+            "Derived from software Copyright 2004-2011 " +
+                "by the President and Fellows of Harvard College. " +
+                "Version 1.6 release by Open Preservation Foundation. " +
+                "Released under the GNU Lesser General Public License.";
 
     private NumberFormat _format;
 
@@ -65,7 +67,7 @@ public class TextHandler
         super (NAME, RELEASE, DATE, NOTE, RIGHTS);
         _vendor = Agent.harvardInstance();
 
-        _format = NumberFormat.getInstance ();
+        _format = NumberFormat.getInstance (Locale.ROOT);
         _format.setGroupingUsed (false);
         _format.setMinimumFractionDigits (0);
     }
@@ -139,7 +141,7 @@ public class TextHandler
 
     /**
      *  Outputs information about the OutputHandler specified
-     *  in the parameter 
+     *  in the parameter
      */
     public void show (OutputHandler handler)
     {
@@ -285,26 +287,26 @@ public class TextHandler
                 case RepInfo.TRUE:
                 s = "Well-Formed";
                 break;
-                
+
                 case RepInfo.FALSE:
                 s = "Not well-formed";
                 break;
-                
+
                 default:
                 s = "Unknown";
                 break;
             }
             if (info.getWellFormed () == RepInfo.TRUE) {
                 switch (info.getValid ()) {
-                    
+
                     case RepInfo.TRUE:
                     s += " and valid";
                     break;
-                
+
                     case RepInfo.FALSE:
                     s += ", but not valid";
                     break;
-                    
+
                     // case UNDETERMINED: add nothing
                 }
             }
@@ -317,7 +319,7 @@ public class TextHandler
                 case RepInfo.TRUE:
                     s = "Well-Formed";
                     break;
-                    
+
                     default:
                     s = "Not well-formed";
                     break;
@@ -329,7 +331,7 @@ public class TextHandler
         if (n > 0) {
             _writer.println (margin + " SignatureMatches:");
             for (int i = 0; i < n; i++) {
-                _writer.println (margin + "  " + 
+                _writer.println (margin + "  " +
                         (String) list.get (i));
             }
         }
@@ -595,7 +597,7 @@ public class TextHandler
                                    margin + " ", _je.getShowRawFlag ());
         }
         else if (PropertyType.TEXTMDMETADATA.equals(type)) {
-            showTextMDMetadata((TextMDMetadata) property.getValue(), 
+            showTextMDMetadata((TextMDMetadata) property.getValue(),
                     margin + " ", _je.getShowRawFlag ());
         }
         else {
@@ -609,7 +611,7 @@ public class TextHandler
         boolean valueIsProperty  = PropertyType.PROPERTY.equals (type);
         boolean valueIsNiso  = PropertyType.NISOIMAGEMETADATA.equals (type);
         boolean valueIsTextMD = PropertyType.TEXTMDMETADATA.equals(type);
-        
+
         List list = (List) property.getValue ();
 
         int n = list.size ();
@@ -686,7 +688,7 @@ public class TextHandler
         }
     }
 
-    private void showSetProperty (Property property, 
+    private void showSetProperty (Property property,
                                    String margin) {
         PropertyType type = property.getType ();
         boolean valueIsProperty  = PropertyType.PROPERTY.equals (type);
@@ -713,7 +715,7 @@ public class TextHandler
             else {
                 if (first) {
                     _writer.print (val.toString ());
-                    first = false; 
+                    first = false;
                 }
                 else {
                     _writer.print (", " + val.toString ());
@@ -876,7 +878,7 @@ public class TextHandler
         }
         if (propType != PropertyType.PROPERTY &&
                 propType != PropertyType.NISOIMAGEMETADATA) {
-            _writer.println ();     
+            _writer.println ();
         }
     }
 
@@ -944,15 +946,15 @@ public class TextHandler
         s = aes.getSchemaVersion ();
         if (s != null) {
             _writer.println (margn2 + "SchemaVersion: " + s);
-        }        
+        }
         s = aes.getFormat ();
         if (s != null) {
             _writer.println (margn2 + "Format: " + s);
-        }        
+        }
         s = aes.getSpecificationVersion ();
         if (s != null) {
             _writer.println (margn2 + "SpecificationVersion: " + s);
-        }        
+        }
         s = aes.getAppSpecificData();
         if (s != null) {
             _writer.println (margn2 + "AppSpecificData: " + s);
@@ -989,7 +991,7 @@ public class TextHandler
         List facelist = aes.getFaceList ();
         if (!facelist.isEmpty ()) {
             // Add the face information, which is mostly filler.
-            AESAudioMetadata.Face f = 
+            AESAudioMetadata.Face f =
                     (AESAudioMetadata.Face) facelist.get(0);
             _writer.println (margn2 + "Face: ");
             _writer.println (margn3 + "TimeLine: ");
@@ -1017,7 +1019,7 @@ public class TextHandler
         // iteration loop on formatList.
         List flist = aes.getFormatList ();
         if (!flist.isEmpty ()) {
-            AESAudioMetadata.FormatRegion rgn = 
+            AESAudioMetadata.FormatRegion rgn =
                 (AESAudioMetadata.FormatRegion) flist.get(0);
             int bitDepth = rgn.getBitDepth ();
             double sampleRate = rgn.getSampleRate ();
@@ -1041,9 +1043,9 @@ public class TextHandler
                 }
                 if (bitRed != null) {
                     _writer.println (margn4 + "BitrateReduction");
-                      _writer.println (margn5 +  
+                      _writer.println (margn5 +
                             "CodecName: " + bitRed[0]);
-                      _writer.println (margn5 + 
+                      _writer.println (margn5 +
                             "codecNameVersion: " + bitRed[1]);
                       _writer.println (margn5 +
                             "codecCreatorApplication: " + bitRed[2]);
@@ -1073,10 +1075,14 @@ public class TextHandler
         _writer.println (margn2 + "TimeBase: 1000");
         _writer.println (margn2 + "VideoField: FIELD_1");
         _writer.println (margn2 + "CountingMode: NTSC_NON_DROP_FRAME");
-        _writer.println (margn2 + "Hours: " + Integer.toString (start.getHours ()));
-        _writer.println (margn2 + "Minutes: " + Integer.toString (start.getMinutes ()));
-        _writer.println (margn2 + "Seconds: " + Integer.toString (start.getSeconds ()));
-        _writer.println (margn2 + "Frames: " + Integer.toString (start.getFrames ()));
+        _writer.println (margn2 + "Hours: " +
+                Long.toString (start.getHours ()));
+        _writer.println (margn2 + "Minutes: " +
+                Long.toString (start.getMinutes ()));
+        _writer.println (margn2 + "Seconds: " +
+                Long.toString (start.getSeconds ()));
+        _writer.println (margn2 + "Frames: " +
+                Long.toString (start.getFrames ()));
         _writer.println (margn2 + "Samples: ");
 	double sr = start.getSampleRate ();
 	if (sr == 1.0) {
@@ -1084,11 +1090,11 @@ public class TextHandler
 	}
 	_writer.println (margn3 + "SampleRate: S" +
 			 Integer.toString ((int) sr));
-	_writer.println (margn3 + "NumberOfSamples: " + 
-			 Integer.toString (start.getSamples ()));
+        _writer.println (margn3 + "NumberOfSamples: " +
+                Long.toString (start.getSamples ()));
         _writer.println (margn2 + "FilmFraming: NOT_APPLICABLE");
-	_writer.println (margn3 + "Type: ntscFilmFramingType");
- 
+        _writer.println (margn3 + "Type: ntscFilmFramingType");
+
         if (duration != null) {
            _writer.println (margn1 + "Duration:");
            _writer.println (margn2 + "FrameCount: 30");
@@ -1096,13 +1102,13 @@ public class TextHandler
            _writer.println (margn2 + "VideoField: FIELD_1");
            _writer.println (margn2 + "CountingMode: NTSC_NON_DROP_FRAME");
            _writer.println (margn2 + "Hours: " +
-			    Integer.toString (duration.getHours ()));
+                    Long.toString (duration.getHours ()));
            _writer.println (margn2 + "Minutes: " +
-			    Integer.toString (duration.getMinutes ()));
+                    Long.toString (duration.getMinutes ()));
            _writer.println (margn2 + "Seconds: " +
-			    Integer.toString (duration.getSeconds ()));
+                    Long.toString (duration.getSeconds ()));
            _writer.println (margn2 + "Frames: " +
-			    Integer.toString (duration.getFrames ()));
+                    Long.toString (duration.getFrames ()));
            _writer.println (margn2 + "Samples: ");
 	   sr = duration.getSampleRate ();
 	   if (sr == 1.0) {
@@ -1111,12 +1117,12 @@ public class TextHandler
 	   _writer.println (margn3 + "SampleRate: S" +
 			    Integer.toString ((int) sr));
 	   _writer.println (margn3 + "NumberOfSamples: " + 
-			    Integer.toString (duration.getSamples ()));
-           _writer.println (margn2 + "FilmFraming: NOT_APPLICABLE");
+			    Long.toString (duration.getSamples ()));
+     _writer.println (margn2 + "FilmFraming: NOT_APPLICABLE");
 	   _writer.println (margn3 + "Type: ntscFilmFramingType");
         }
     }
-    
+
 
     /**
      * Display the NISO image metadata formatted according to
@@ -1248,7 +1254,7 @@ public class TextHandler
             _writer.println ();
         }
         if ((n = niso.getPlanarConfiguration ()) != NisoImageMetadata.NULL) {
-            _writer.println (margn2 + "PlanarConfiguration: " + 
+            _writer.println (margn2 + "PlanarConfiguration: " +
              addIntegerValue (n, NisoImageMetadata.PLANAR_CONFIGURATION,
                               rawOutput));
         }
@@ -1262,7 +1268,7 @@ public class TextHandler
             _writer.println (margn2 + "FileSize: " + ln);
         }
         if ((n = niso.getChecksumMethod ()) != NisoImageMetadata.NULL) {
-            _writer.println (margn2 + "ChecksumMethod: " + 
+            _writer.println (margn2 + "ChecksumMethod: " +
              addIntegerValue (n, NisoImageMetadata.CHECKSUM_METHOD,
                               rawOutput));
         }
@@ -1270,12 +1276,12 @@ public class TextHandler
             _writer.println (margn2 + "ChecksumValue: " + s);
         }
         if ((n = niso.getOrientation ()) != NisoImageMetadata.NULL) {
-            _writer.println (margn2 + "Orientation: " + 
+            _writer.println (margn2 + "Orientation: " +
                              addIntegerValue (n, NisoImageMetadata.ORIENTATION,
                                               rawOutput));
         }
         if ((n = niso.getDisplayOrientation ()) != NisoImageMetadata.NULL) {
-            _writer.println (margn2 + "DisplayOrientation: " + 
+            _writer.println (margn2 + "DisplayOrientation: " +
              addIntegerValue (n, NisoImageMetadata.DISPLAY_ORIENTATION,
                               rawOutput));
         }
@@ -1338,8 +1344,14 @@ public class TextHandler
         if ((s = niso.getDigitalCameraManufacturer ()) != null) {
             _writer.println (margn2 + "DigitalCameraManufacturer: " + s);
         }
-        if ((s = niso.getDigitalCameraModel ()) != null) {
-            _writer.println (margn2 + "DigitalCameraModel: " + s);
+        if ((s = niso.getDigitalCameraModelName ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelName: " + s);
+        }
+        if ((s = niso.getDigitalCameraModelNumber ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelNumber: " + s);
+        }
+        if ((s = niso.getDigitalCameraModelSerialNo ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelSerialNo: " + s);
         }
         if ((d = niso.getFNumber ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "FNumber: " + d);
@@ -1353,7 +1365,7 @@ public class TextHandler
         if ((d = niso.getExposureBias ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "ExposureBias: " + d);
         }
-        
+
         double [] darray = niso.getSubjectDistance ();
         if (darray != null) {
             _writer.print (margn2 + "SubjectDistance: " + darray[0]);
@@ -1440,7 +1452,7 @@ public class TextHandler
         }
         r = niso.getYSamplingFrequency ();
         if (r != null) {
-            _writer.println (margn2 + "YSamplingFrequency: " + 
+            _writer.println (margn2 + "YSamplingFrequency: " +
                             addRationalValue (r, rawOutput));
         }
         if ((ln = niso.getImageWidth ()) != NisoImageMetadata.NULL) {
@@ -1564,8 +1576,8 @@ public class TextHandler
         }
         if ((n = niso.getTargetType ()) != NisoImageMetadata.NULL) {
             _writer.println (margn2 + "TargetType: " +
-             addIntegerValue (n, NisoImageMetadata.TARGET_TYPE, rawOutput)); 
-        } 
+             addIntegerValue (n, NisoImageMetadata.TARGET_TYPE, rawOutput));
+        }
         if ((s = niso.getTargetIDManufacturer ()) != null) {
             _writer.println (margn2 + "TargetIDManufacturer: " + s);
         }
@@ -1626,6 +1638,9 @@ public class TextHandler
         if ((ln = niso.getFileSize ()) != NisoImageMetadata.NULL) {
             _writer.println (margn2 + "FileSize: " + ln);
         }
+        if ((s = niso.getMimeType()) != null) {
+            _writer.println (margn2 + "FormatName: " + s);
+        }
         if ((s = niso.getByteOrder ()) != null) {
             // Convert strings to MIX 1.0 form
             if (s.startsWith ("big")) {
@@ -1647,7 +1662,7 @@ public class TextHandler
             _writer.println (margn2 + "CompressionLevel: " + n);
         }
         if ((n = niso.getChecksumMethod ()) != NisoImageMetadata.NULL) {
-            _writer.println (margn2 + "ChecksumMethod: " + 
+            _writer.println (margn2 + "ChecksumMethod: " +
              addIntegerValue (n, NisoImageMetadata.CHECKSUM_METHOD,
                               rawOutput));
         }
@@ -1667,10 +1682,10 @@ public class TextHandler
                                       rawOutput));
         }
         if ((s = niso.getProfileName ()) != null) {
-            _writer.println (margn2 + "iccProfileName: " + s);
+            _writer.println (margn2 + "ICCProfileName: " + s);
         }
         if ((s = niso.getProfileURL ()) != null) {
-            _writer.println (margn2 + "iccProfileURL: " + s);
+            _writer.println (margn2 + "ICCProfileURL: " + s);
         }
         int [] iarray = niso.getYCbCrSubSampling ();
         if (iarray != null) {
@@ -1747,7 +1762,7 @@ public class TextHandler
         double yres = niso.getYPhysScanResolution();
         if (xres != NisoImageMetadata.NULL && yres != NisoImageMetadata.NULL) {
             double res = (xres > yres ? xres : yres);
-            _writer.println (margn2 +  
+            _writer.println (margn2 +
                      "MaximumOpticalResolution: " + Double.toString (res));
         }
         if ((s = niso.getScanningSoftware ()) != null) {
@@ -1759,14 +1774,33 @@ public class TextHandler
         if ((s = niso.getDigitalCameraManufacturer ()) != null) {
             _writer.println (margn2 + "DigitalCameraManufacturer: " + s);
         }
-        if ((s = niso.getDigitalCameraModel ()) != null) {
-            _writer.println (margn2 + "DigitalCameraModel: " + s);
+        if ((s = niso.getDigitalCameraModelName ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelName: " + s);
+        }
+        if ((s = niso.getDigitalCameraModelNumber ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelNumber: " + s);
+        }
+        if ((s = niso.getDigitalCameraModelSerialNo ()) != null) {
+            _writer.println (margn2 + "DigitalCameraModelSerialNo: " + s);
         }
         if ((d = niso.getFNumber ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "FNumber: " + d);
+            _writer.println (margn2 + "FNumber: " + _format.format(d));
+        }
+        if ((s = niso.getExifVersion ()) != null) {
+            _writer.println (margn2 + "ExifVersion: " + s);
+        }
+        Rational r;
+        if ((r = niso.getMaxApertureValue ()) != null) {
+            _writer.println (margn2 + "MaxApertureValue: " +
+            		addRationalValue (r, rawOutput));
         }
         if ((d = niso.getExposureTime ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "ExposureTime: " + d);
+            _writer.println (margn2 + "ExposureTime: " + _format.format(d));
+        }
+        if ((n = niso.getExposureProgram ()) != NisoImageMetadata.NULL) {
+            _writer.println (margn2 + "ExposureProgram: " +
+            		addIntegerValue (n, NisoImageMetadata.EXPOSURE_PROGRAM,
+            				rawOutput));
         }
         if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "BrightnessValue: " + d);
@@ -1818,7 +1852,7 @@ public class TextHandler
             _writer.println (margn2 + "YPrintAspectRatio: " + d);
         }
         if ((n = niso.getOrientation ()) != NisoImageMetadata.NULL) {
-            _writer.println (margn2 + "Orientation: " + 
+            _writer.println (margn2 + "Orientation: " +
                              addIntegerValue (n, NisoImageMetadata.ORIENTATION,
                                               rawOutput));
         }
@@ -1835,7 +1869,7 @@ public class TextHandler
              addIntegerValue (n, NisoImageMetadata.SAMPLING_FREQUENCY_UNIT,
                               rawOutput));
         }
-        Rational r = niso.getXSamplingFrequency ();
+        r = niso.getXSamplingFrequency ();
         if (r != null) {
             _writer.println (margn2 + "XSamplingFrequency: " +
                              addRationalValue (r, rawOutput));
@@ -1843,7 +1877,7 @@ public class TextHandler
         }
         r = niso.getYSamplingFrequency ();
         if (r != null) {
-            _writer.println (margn2 + "YSamplingFrequency: " + 
+            _writer.println (margn2 + "YSamplingFrequency: " +
                             addRationalValue (r, rawOutput));
         }
         if ((iarray = niso.getBitsPerSample ()) != null) {
@@ -1921,8 +1955,8 @@ public class TextHandler
         }
         if ((n = niso.getTargetType ()) != NisoImageMetadata.NULL) {
             _writer.println (margn2 + "TargetType: " +
-             addIntegerValue (n, NisoImageMetadata.TARGET_TYPE, rawOutput)); 
-        } 
+             addIntegerValue (n, NisoImageMetadata.TARGET_TYPE, rawOutput));
+        }
         if ((s = niso.getTargetIDManufacturer ()) != null) {
             _writer.println (margn2 + "TargetIDManufacturer: " + s);
         }
@@ -1970,8 +2004,8 @@ public class TextHandler
 
 
     }
-    
-    
+
+
     private String addIntegerValue (int value, String [] labels,
                                     boolean rawOutput)
     {

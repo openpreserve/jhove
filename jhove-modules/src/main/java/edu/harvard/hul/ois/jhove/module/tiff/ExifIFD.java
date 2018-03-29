@@ -21,7 +21,7 @@ public class ExifIFD
 
 
     /** ExifVersion tag. */
-    private static final int
+    protected static final int
         EXPOSURETIME = 33434,
         FNUMBER = 33437,
         EXPOSUREPROGRAM = 34850,
@@ -193,7 +193,7 @@ public class ExifIFD
     private Rational _apertureValue;
     private Rational _brightnessValue;
     private int [] _cfaPattern;
-    private int _colorSpace;
+    protected int _colorSpace;
     private int [] _componentsConfiguration;
     private Rational _compressedBitsPerPixel;
     private int _contrast; 
@@ -202,7 +202,7 @@ public class ExifIFD
     private String _dateTimeOriginal;
     private int [] _deviceSettingDescription;
     private Rational _digitalZoomRatio;
-    private String _exifVersion;
+    protected String _exifVersion;
     private Rational _exposureBiasValue;
     private Rational _exposureIndex;
     private int _exposureMode;
@@ -211,7 +211,7 @@ public class ExifIFD
     private int _fileSource;
     private int _flash;
     private Rational _flashEnergy;
-    private String _flashpixVersion;
+    protected String _flashpixVersion;
     private Rational _fNumber;
     private Rational _focalLength;
     private int _focalLengthIn35mmFilm;
@@ -527,6 +527,10 @@ public class ExifIFD
             entries.add (addIntegerProperty ("GainControl", _gainControl,
 					     GAINCONTROL_L, rawOutput));
         }
+        if (_contrast != NULL) {
+            entries.add (addIntegerProperty ("Contrast", _contrast,
+					     CONTRAST_L, rawOutput));
+        }
         if (_saturation != NULL) {
             entries.add (addIntegerProperty ("Saturation", _saturation,
                                              SATURATION_L, rawOutput));
@@ -633,6 +637,7 @@ public class ExifIFD
                 checkType  (tag, type, SRATIONAL);
                 checkCount (tag, count, 1);
                 _brightnessValue = readRational (count, value);
+                _niso.setBrightness(_brightnessValue.toDouble());
             }
             else if (tag == CFAPATTERN) {
                 checkType  (tag, type, UNDEFINED);
@@ -642,11 +647,7 @@ public class ExifIFD
                 checkType  (tag, type, SHORT);
                 checkCount (tag, count, 1);
                 _colorSpace = readShort (type, count, value);
-            }
-            else if (tag == COLORSPACE) {
-                checkType  (tag, type, SHORT);
-                checkCount (tag, count, 1);
-                _colorSpace = readShort (type, count, value);
+                _niso.setColorSpace(_colorSpace);
             }
             else if (tag == COMPONENTSCONFIGURATION) {
                 checkType  (tag, type, UNDEFINED);
@@ -695,16 +696,19 @@ public class ExifIFD
                     carray[i] = (char) iarray[i];
                 }
                 _exifVersion = new String (carray);
+                _niso.setExifVersion(_exifVersion);
             }
             else if (tag == EXPOSUREBIASVALUE) {
                 checkType  (tag, type, SRATIONAL);
                 checkCount (tag, count, 1);
                 _exposureBiasValue = readRational (count, value);
+                _niso.setExposureBias(_exposureBiasValue.toDouble());
             }
             else if (tag == EXPOSUREINDEX) {
                 checkType  (tag, type, RATIONAL);
                 checkCount (tag, count, 1);
                 _exposureIndex = readRational (count, value);
+                _niso.setExposureIndex(_exposureIndex.toDouble());
             }
             else if (tag == EXPOSUREMODE) {
                 checkType  (tag, type, SHORT);
@@ -715,11 +719,13 @@ public class ExifIFD
                 checkType  (tag, type, SHORT);
                 checkCount (tag, count, 1);
                 _exposureProgram = readShort (type, count, value);
+                _niso.setExposureProgram(_exposureProgram);
             }
             else if (tag == EXPOSURETIME) {
                 checkType  (tag, type, RATIONAL);
                 checkCount (tag, count, 1);
                 _exposureTime = readRational (count, value);
+                _niso.setExposureTime(_exposureTime.toDouble());
             }
             else if (tag == FILESOURCE) {
                 checkType  (tag, type, UNDEFINED);
@@ -750,11 +756,13 @@ public class ExifIFD
                 checkType  (tag, type, RATIONAL);
                 checkCount (tag, count, 1);
                 _fNumber = readRational (count, value);
+                _niso.setFNumber(_fNumber.toDouble());
             }
             else if (tag == FOCALLENGTH) {
                 checkType  (tag, type, RATIONAL);
                 checkCount (tag, count, 1);
                 _focalLength = readRational (count, value);
+                _niso.setFocalLength(_focalLength.toDouble());
             }
             else if (tag == FOCALLENGTHIN35MMFILM) {
                 checkType  (tag, type, SHORT);
@@ -824,11 +832,13 @@ public class ExifIFD
                 checkType  (tag, type, RATIONAL);
                 checkCount (tag, count, 1);
                 _maxApertureValue = readRational (count, value);
+                _niso.setMaxApertureValue(_maxApertureValue);
             }
             else if (tag == METERINGMODE) {
                 checkType  (tag, type, SHORT);
                 checkCount (tag, count, 1);
                 _meteringMode = readShort (type, count, value);
+                _niso.setMeteringMode(_meteringMode);
             }
             else if (tag == OECF) {
                 checkType  (tag, type, SHORT);
@@ -921,6 +931,11 @@ public class ExifIFD
                 checkType  (tag, type, UNDEFINED);
                 _userComment = readByteArray (type, count, value);
             }
+            else if (tag == WHITEBALANCE) {
+                checkType  (tag, type, SHORT);
+                checkCount (tag, count, 1);
+                _whiteBalance = readShort (type, count, value);
+            }
             
             // Here we check for non-EXIF tags, because some documents use
             // standard TIFF tags in an EXIF IFD to provide metadata.
@@ -958,7 +973,7 @@ public class ExifIFD
 
         }
         catch (IOException e) {
-            throw new TiffException ("Read error for tag " + tag, value);
+            throw new TiffException(MessageConstants.ERR_TAG_IO_READ + tag, value);
         }
     }
     

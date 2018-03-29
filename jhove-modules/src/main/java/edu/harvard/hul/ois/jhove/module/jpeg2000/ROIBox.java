@@ -39,7 +39,7 @@ public class ROIBox extends JP2Box {
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
     public boolean readBox() throws IOException {
-        final String baddata = "Invalid data in ROI";
+        final String baddata = MessageConstants.ERR_ROI_BOX_CONTENT_INVALID;
         initBytesRead ();
         int nroi = ModuleBase.readUnsignedByte (_dstrm, _module);
         
@@ -60,7 +60,8 @@ public class ROIBox extends JP2Box {
             int rtyp = ModuleBase.readUnsignedByte (_dstrm, _module);
             if (rtyp > 1) {
                 _repInfo.setMessage (new ErrorMessage 
-                        ("Invalid region type in ROI Box", _module.getFilePos ()));
+                        (MessageConstants.ERR_ROI_BOX_REGION_TYPE_INVALID,
+                         _module.getFilePos ()));
                 _repInfo.setValid (false);
             }
             roiPropList.add (_module.addIntegerProperty("RegionType",

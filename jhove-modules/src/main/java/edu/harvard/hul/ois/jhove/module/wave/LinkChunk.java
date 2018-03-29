@@ -94,13 +94,13 @@ public class LinkChunk extends Chunk {
         }
         catch (SAXException se) {
             info.setMessage (new ErrorMessage
-                ("SAXException in reading Link Chunk"));
+                (MessageConstants.ERR_LINK_CHUNK_SAX_EXCEP));
             info.setValid (false);
             return true;
         }
         catch (ParserConfigurationException pe) {
             info.setMessage (new ErrorMessage
-                ("ParserConfigurationException in reading Link Chunk"));
+                (MessageConstants.ERR_LINK_CHUNK_PARS_EXCEP));
             info.setValid (false);
             return true;
         }

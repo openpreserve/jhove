@@ -90,7 +90,7 @@ public final class Destination
             }
         }
         catch (Exception e) {
-            throw new PdfInvalidException ("Invalid destination object");
+            throw new PdfInvalidException (MessageConstants.ERR_DEST_OBJ_INVALID);
         }
     }
 

@@ -1,37 +1,208 @@
 RELEASE NOTES
 =============
-JHOVE - JSTOR/Harvard Object Validation Environment
-Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.
+JHOVE - JSTOR/Harvard Object Validation Environment  
+Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.  
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details).
 
-Versions 1.7 to 1.11 of JHOVE released independently.
-Versions 1.12 onwards of JHOVE released by the Open Preservation Foundation.
+Versions 1.7 to 1.11 of JHOVE released independently.  
+Versions 1.12 onwards released by the Open Preservation Foundation.
 
-JHOVE 1.16
-----------
-2016-03-16
+JHOVE 1.20
+-------------
+2018-03-29
 
 ### General
 
-- Using string contants for PDF module, XML module, and HTML module error messages
-- Added PDF and WAV test files submitted by community during JHOVE hack day
+- Removed obsolete subsitituion from izpack installer [[#300][]]
+- Improved counting accuracy of skipped bytes, allowing better
+  EOF detection [[#308][]]
+
+### JPEG Module
+
+- Fixed bug causing JHOVE to skip the wrong number of characters in `APP0`
+  segments [[#303][]]
+
+### PDF Module
+
+- Header check for invalid PDF minor version (not > 7) [[#317][]]
+- Unit tests for PDF Header parsing conditions [[#317][]]
+- Check that document catalog dictionary key `\Type` equals `Catalog` [[#318][]]
+- Test that document catalog XRef lookup retrieves the right object
+  number [[#319][]]
+- Unit tests for document catalog issues [[#318][]]
+- Test that page dictionary key `\Type` equals `Pages` [[#322][]]
+- Unit tests for page dictionary issues [[#322][]]
+- Improved handling of XRef lookup errors for document catalog and pages
+  dictonary [[#322][]]
+- Added synthetic test files created by @asciim0 for iPres as unit
+  test resources ([[#317][]-[#319][]])
+- Fixed assignment of `application/pdf` as MIME type for images embedded
+  in a PDF [[#324][]]
+- Added method to derive MIME type from Filters and assign to NISO metatadata
+  and added String constants for Filter names [[#324][]]
+
+### WAVE Module
+
+- Fixed byte skipping issue when parsing Associated Data List chunks [[#309][]]
+- Added support for parsing and validating RF64 files [[#308][]]
+- Made WAVE parser more resilient to unexpected chunk data [[#308][]]
+- Improved reporting of WAVE codecs in WAVEFORMATEXTENSIBLE files [[#308][]]
+- Avoids reporting file format and MIME type until signatures have been verified
+  and reports extended MIME type information, e.g. `audio/vnd.wave; codec=1`,
+  as per RFC 2361 [[#308][]]
+- Subformat GUID's are now reported in their standard format, e.g.
+  `00000001-0000-0010-8000-00AA00389B71`, instead of as an
+  array of byte values [[#308][]]
+- Added checks to verify the existence of Data chunks and their appearance 
+  after Format chunks [[#308][]]
+- Expanded WAVE example corpora to cover more formats and errors [[#308][]]
+- Improved truncation detection and reporting [[#308][]]
+- Fixed erroneous reporting of Cue Point values and renamed "Cue" report
+  property to "CuePoints" [[#308][]]
+
+### Text Handler
+
+- NISO MIX 1.0 output now includes MIME type as `FormatName` [[#323][]]
+
+### XML Handler
+
+- NISO MIX 1.0 output now included mandatory `<FormatDesignation>`
+  element [[#323][]]
+- Image MIME type output as mandatory `<FormatName>` element [[#323][]]
+
+[#300]: https://github.com/openpreserve/jhove/pull/300
+[#303]: https://github.com/openpreserve/jhove/pull/303
+[#308]: https://github.com/openpreserve/jhove/pull/308
+[#309]: https://github.com/openpreserve/jhove/pull/309
+[#317]: https://github.com/openpreserve/jhove/pull/317
+[#318]: https://github.com/openpreserve/jhove/pull/318
+[#319]: https://github.com/openpreserve/jhove/pull/319
+[#322]: https://github.com/openpreserve/jhove/pull/322
+[#323]: https://github.com/openpreserve/jhove/pull/323
+[#324]: https://github.com/openpreserve/jhove/pull/324
+
+
+JHOVE 1.18.1
+-------------
+2017-11-30
+
+### General
+
+- Installation of external modules is now optional [[#292][]]
+- Inaccessible files are now reported as of "Unknown" status instead of
+  "Not well-formed" [[#257][]]
+- Improvements to error handling and uncaught module exceptions,
+  increasing resilience during batch processing [[#257][], [#259][]]
+- Improved path handling, allowing installation locations and file paths to
+  contain spaces, and more exotic characters [[#206][]]
+- Error and informational messages have been consolidated into discrete message
+  classes for easier maintenance and future improvement [[#120][], [#157][],
+  [#283][]–[#285][], [#287][]–[#291][]]
+- Increased the minimum version of Java from 1.5 to 1.6 [[#273][]]
+
+### JPEG Module
+
+- Added validation for ICC profiles [[#249][]]
+- Fixed handling of Exif profiles [[#253][]]
+
+### PDF Module
+
+- Fixed a false invalid result for some types of encrypted document [[#257][]]
+- Fixed incorrect parsing of escaped characters in name objects [[#280][]]
+- More detailed error messages for indirect references to non-existent
+  destinations [[#123][]]
+
+### PNG Module
+
+- Report invalid NISO color types [[#171][]]
+
+### TIFF Module
+
+- Added validation for ICC profiles [[#249][]]
+
+### WAVE Module
+
+- Added support for reporting BWF v2 fields [[#273][]]
+- Simplified BWF profile detection, allowing detection of any future BWF
+  versions. All BWF versions will now be reported as "BWF" instead of
+  "BWF version #", with any unrecognized versions being flagged [[#273][]]
+- Reformatted the BWF UMID field into a hexadecimal string instead of a long
+  sequence of numbers [[#273][]]
+- Changed property label from "Originator Reference" to "OriginatorReference"
+  for consistency and predictability [[#273][]]
+- Fixed incorrectly reported format names and `ArrayIndexOutOfBoundsException`
+  errors when processing certain non-PCM WAVE files [[#118][]]
+- Changed reported MIME type from `audio/x-wave` to `audio/vnd.wave` [[#257][]]
+
+### XML Handler
+
+- Fixed MIX 1.0 and TextMD XML generation for images with certain properties
+  [[#220][]]
+
+[#118]: https://github.com/openpreserve/jhove/pull/118
+[#120]: https://github.com/openpreserve/jhove/pull/120
+[#123]: https://github.com/openpreserve/jhove/pull/123
+[#157]: https://github.com/openpreserve/jhove/pull/157
+[#171]: https://github.com/openpreserve/jhove/pull/171
+[#206]: https://github.com/openpreserve/jhove/pull/206
+[#220]: https://github.com/openpreserve/jhove/pull/220
+[#249]: https://github.com/openpreserve/jhove/pull/249
+[#253]: https://github.com/openpreserve/jhove/pull/253
+[#257]: https://github.com/openpreserve/jhove/pull/257
+[#259]: https://github.com/openpreserve/jhove/pull/259
+[#273]: https://github.com/openpreserve/jhove/pull/273
+[#280]: https://github.com/openpreserve/jhove/pull/280
+[#283]: https://github.com/openpreserve/jhove/pull/283
+[#285]: https://github.com/openpreserve/jhove/pull/285
+[#287]: https://github.com/openpreserve/jhove/pull/287
+[#291]: https://github.com/openpreserve/jhove/pull/291
+[#292]: https://github.com/openpreserve/jhove/pull/292
+
+
+JHOVE 1.16.7
+------------
+2017-07-20
+
+### PDF Module
+
+- Fixed: Some PDFs being reported as "Well-formed and valid" while remaining
+  largely unchecked [[#258](https://github.com/openpreserve/jhove/pull/258)]
+
+JHOVE 1.16.5
+------------
+2017-03-20
+
+### General
+
+- Fixed: Core method causing modules to skip more bytes than expected
+  [[#194](https://github.com/openpreserve/jhove/pull/194)]
+
+JHOVE 1.16.0
+------------
+2017-03-16
+
+### General
+
+- Added PDF and WAVE test files submitted by community during JHOVE hack day
 - JHOVE Maven artefacts made available on Maven Central in addition to OPF Artifactory
 - Improved error reporting for Travis test failures
 - Improvements to GitHub pages website
-- Consistency and formatting improvments for README.md, RELEASENOTES.md and pom.xml
+- Formatting improvements to README.md, RELEASENOTES.md and pom.xml
 
-### PDF module
+### PDF Module
 
-- Fixed: CrossRefStream incorrectly assumes /Index value is a 2 element array
-- Fixed: Bug in skipIISBytes and PdfModule.getObject
-- Better handling Pdf-files where image heigth and width are PdfIndirectObjects
-- Better handling of Pdf-files with "empty" hex strings
-- Better handling of Pdf-files where form-fields are PdfIndirectObjects
+- Fixed: CrossRefStream incorrectly assumes Index value is a two-element array
+- Fixed: Bug in `skipIISBytes` and `PdfModule.getObject`
+- Better handling where image heights and widths are PdfIndirectObjects
+- Better handling of "empty" hex strings
+- Better handling where form-fields are PdfIndirectObjects
 
-### WAV module
-- Fixed: validation of WAV files larger than 2 GB
-- Fixed: Skip Bytes issue for WAV files larger than 100 MB
+### WAVE Module
+
+- Fixed: Validation of WAVE files larger than 2 GB
+- Fixed: Skip Bytes issue for WAVE files larger than 100 MB
+
 
 JHOVE 1.14
 ----------
@@ -42,23 +213,23 @@ JHOVE 1.14
 
 ### General
 
- - Ant build replaced with Maven
- - Modularised project structure with "fat" JAR packaging
- - Java 5 support
- - Cross-platform installer
- - Travis CI builds
- - Maven distribution through OPF Artefactory server
- - Updated JHOVE site pages
+- Ant build replaced with Maven
+- Modularised project structure with "fat" JAR packaging
+- Java 5 support
+- Cross-platform installer
+- Travis CI builds
+- Maven distribution through OPF Artefactory server
+- Updated JHOVE site pages
 
 ### New Format Modules
 
- - GZIP Module, ported from JHOVE2 via JWAT by KB
- - WARC Module, ported from JHOVE2 via JWAT by KB
- - PNG Module, developed by Gary McGath
+- GZIP Module, ported from JHOVE2 via JWAT by KB
+- WARC Module, ported from JHOVE2 via JWAT by KB
+- PNG Module, developed by Gary McGath
 
 ### UTF-8 Module
 
- - Support for Unicode 7.0.0
+- Support for Unicode 7.0.0
 
 
 JHOVE 1.11

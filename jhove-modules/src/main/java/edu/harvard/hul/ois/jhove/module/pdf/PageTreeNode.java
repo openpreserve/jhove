@@ -58,7 +58,7 @@ public class PageTreeNode extends DocNode
     {
         /* Guard against infinite recursion */
         if (recGuard <= 0) {
-            throw new PdfMalformedException ("Excessive depth or infinite recursion in page tree structure");
+            throw new PdfMalformedException (MessageConstants.ERR_PAGE_TREE_DEPTH_EXCEEDED);
         }
         PdfArray kids = null;
         try {
@@ -134,8 +134,11 @@ public class PageTreeNode extends DocNode
         catch (PdfException ee) {
             throw ee;
         }
+        catch (ArrayIndexOutOfBoundsException excep) {
+            throw new PdfInvalidException(MessageConstants.ERR_PAGE_TREE_NODE_NOT_FOUND);
+        }
         catch (Exception e) {
-            throw new PdfInvalidException ("Invalid page tree node");
+            throw new PdfInvalidException(MessageConstants.ERR_PAGE_TREE_NODE_INVALID);
         }
 	
     }
@@ -194,7 +197,7 @@ public class PageTreeNode extends DocNode
         if (retval != null) {
             int objnum = retval.getDict().getObjNumber();
             if (_visitedNodes.contains((Integer) objnum)) {
-                throw new PdfMalformedException("Improperly constructed page tree");
+                throw new PdfMalformedException(MessageConstants.ERR_PAGE_TREE_IMPROPERLY_CONSTRUCTED);
             }
             _visitedNodes.add(objnum);
         }
@@ -252,7 +255,7 @@ public class PageTreeNode extends DocNode
         if (retval != null) {
             int objnum = retval.getDict().getObjNumber();
             if (_visitedNodes.contains((Integer) objnum)) {
-                throw new PdfMalformedException("Improperly constructed page tree");
+                throw new PdfMalformedException(MessageConstants.ERR_PAGE_TREE_IMPROPERLY_CONSTRUCTED);
             }
             _visitedNodes.add(objnum);
         }

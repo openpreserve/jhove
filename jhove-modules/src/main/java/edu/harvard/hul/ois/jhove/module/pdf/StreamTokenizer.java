@@ -25,8 +25,6 @@ public class StreamTokenizer extends Tokenizer {
      *  is true. */
     private int _lastChar;
     
-    private static final String NO_STREAM = 
-        "Streams may not be embedded in object streams";
 
     public StreamTokenizer (RandomAccessFile file, Stream stream)
     {
@@ -42,7 +40,7 @@ public class StreamTokenizer extends Tokenizer {
     protected void initStream (Stream token) 
         throws IOException, PdfException
     {
-        throw new PdfMalformedException (NO_STREAM);
+        throw new PdfMalformedException (MessageConstants.ERR_STREAM_EMBEDDED_IN_OBJ_STREAM);
     }
 
     /** Gets a character from the file, using a buffer. */
@@ -80,7 +78,7 @@ public class StreamTokenizer extends Tokenizer {
     protected void setStreamOffset (Stream token) 
         throws IOException, PdfException
     {
-        throw new PdfMalformedException (NO_STREAM);
+        throw new PdfMalformedException (MessageConstants.ERR_STREAM_EMBEDDED_IN_OBJ_STREAM);
     }
 
 

@@ -20,7 +20,7 @@ import edu.harvard.hul.ois.jhove.module.Utf8BlockMarker;
 /**
  * This is an abstract class for processing an HTML document that has
  * been parsed into a List of HtmlElements.  It defines common behavior
- * for all supported versions of HTML except XHTML.  Subclasses 
+ * for all supported versions of HTML except XHTML.  Subclasses
  * modify this base as needed.
  *
  * @author Gary McGath
@@ -30,19 +30,19 @@ public abstract class HtmlDocDesc {
 
     /** Metadata for this document. */
     private HtmlMetadata metadata;
-    
+
     /** Generic list of supported tags.  For efficiency, this is
      * generated only once.  Subclasses will need to get a copy
      * of this list and make additions or deletions as necessary.
      * They must not modify any of the existing
      * members of the list. */
     protected static HashMap commonTags;
-    
+
     /** List of supported tags for this version of HTML.  The subclass
      * is responsible for generating this, typically using commonTags
      * as a starting point. */
     protected Map supportedElements;
-    
+
     /** A representation of the HTML element. */
     protected HtmlTagDesc htmlElement;
     /** A representation of the HEAD element. */
@@ -51,42 +51,42 @@ public abstract class HtmlDocDesc {
     protected HtmlTagDesc bodyElement;
     /** A representation of the FRAMESET element. */
     protected HtmlTagDesc framesetElement;
-    
-    
-    
+
+
+
     private HtmlStack elementStack;
-    
+
     /** Header tags, which are invariant for all HTML versions. */
-    protected static String[] headings = 
+    protected static String[] headings =
             { "h1", "h2", "h3", "h4", "h5", "h6" };
 
-    
+
     /** Consructor.   */
     public HtmlDocDesc ()
     {
     }
-    
+
     /** Validates the document and puts interesting properties into the
      *  RepInfo.
-     * 
+     *
      *  @param  elements    The element list constructed by the parser
      *  @param  info        The RepInfo object which will be populated
      *                      with properties
      */
     public boolean validate (List elements, RepInfo info) {
-        // As we get to each open tag, we 
+        // As we get to each open tag, we
         // check it against the corresponding HtmlTagDesc.  If there isn't one, we
         // mark the document as invalid but continue anyway; we create a temporary
         // HtmlTagDesc object for the tag that we find, with the closing tag indicated
         // as optional.
         // For each open tag, we push the HtmlTagDesc object onto the stack.  We check
         // if it's in the allowed content of the enclosing element.  If not, we report it
-        // as an error but continue with it anyway.  
+        // as an error but continue with it anyway.
         //
         // We special-case HTML, HEAD and BODY, which can be implied.
         // If a tag is found which requires the content model for one of
-        // these, and it isn't on the stack, we just push it. 
-        
+        // these, and it isn't on the stack, we just push it.
+
         metadata = new HtmlMetadata ();
         elementStack = new HtmlStack ();
         elementStack.setHeadElement (headElement);
@@ -117,7 +117,7 @@ public abstract class HtmlDocDesc {
         // and thus an implicit or explicit HEAD element.
         if (!elementStack.isHeadSeen ()) {
             info.setMessage(new ErrorMessage 
-                ("Document must have implicit or explicit HEAD element"));
+                (MessageConstants.ERR_HEAD_ELE_MISS));
             info.setValid (false);
         }
         return true;
@@ -138,26 +138,26 @@ public abstract class HtmlDocDesc {
         headElement = (HtmlTagDesc) supportedElements.get ("head");
         bodyElement = (HtmlTagDesc) supportedElements.get ("body");
     }
-    
-    
-        
+
+
+
     /* Break out open tag code */
     private void doOpenTag (JHOpenTag tag, RepInfo info)
     {
         String name = tag.getName ().toLowerCase ();
         boolean unknownTag = false;
-        
+
         String msg = tag.getErrorMessage ();
         if (msg != null) {
             info.setMessage (new ErrorMessage
-                (msg, 
-                 "Name = " + name + ", Line = " + 
+                (msg,
+                 "Name = " + name + ", Line = " +
                      tag.getLine () + ", Column = " +
                      tag.getColumn () ));
             info.setWellFormed (false);
             // But keep going anyway!
         }
-        
+
         /* If it's anything but an HTML tag, and the stack is empty,
          * push an "HTML" element. */
         if (elementStack.isEmpty ()) {
@@ -167,7 +167,7 @@ public abstract class HtmlDocDesc {
                 elementStack.push (fakeTag);
             }
         }
-        HtmlTagDesc tagDesc = 
+        HtmlTagDesc tagDesc =
             (HtmlTagDesc) supportedElements.get (name);
         if (tagDesc == null) {
             unknownTag = true;
@@ -181,17 +181,17 @@ public abstract class HtmlDocDesc {
                 toptag = top.getName();
             }
             info.setMessage (new ErrorMessage
-                    ("Tag illegal in context",
-                     "Name = " + name + ", " + 
+                    (MessageConstants.ERR_HTML_ILLEGAL_TAG,
+                     "Name = " + name + ", " +
                      (toptag != null ? "Container = " + toptag + ", " : "") +
                      "Line = " + tag.getLine () + ", Column = " +
                      tag.getColumn () ));
             info.setValid (false);
         }
         if (unknownTag) {
-            info.setMessage (new ErrorMessage 
-                    ("Unknown tag",
-                     "Name = " + name + ", Line = " + 
+            info.setMessage (new ErrorMessage
+                    (MessageConstants.ERR_HTML_UNKNOWN_TAG,
+                     "Name = " + name + ", Line = " +
                      tag.getLine () + ", Column = " +
                      tag.getColumn ()));
             info.setValid (false);
@@ -209,12 +209,12 @@ public abstract class HtmlDocDesc {
                 String attName = att.getName();
                 attNames.add (attName);
                 String attVal = att.getValue();
-                HtmlAttributeDesc attDesc = 
+                HtmlAttributeDesc attDesc =
                     tagDesc.namedAttDesc (attName);
                 if (attDesc == null) {
                     info.setMessage ( new ErrorMessage
-                        ("Undefined attribute for element",
-                         "Name = " + name + ", Attribute = " + 
+                        (MessageConstants.ERR_HTML_UNDEFINED_ATTRIBUTE,
+                         "Name = " + name + ", Attribute = " +
                          attName + ", Line = " + att.getLine () +
                           ", Column = " + att.getColumn ()));
                     info.setValid (false);
@@ -223,10 +223,10 @@ public abstract class HtmlDocDesc {
                     /* Check if value is legit */
                     if (!attDesc.valueOK (attName, attVal)) {
                         info.setMessage (new ErrorMessage
-                            ("Improper value for attribute",
-                             "Element = " + name + ", Attribute = " + 
-                             attName + ", Value = " + attVal + 
-                             ", Line = " + att.getLine () + 
+                            (MessageConstants.ERR_HTML_BAD_VALUE_IN_ATTRIBUTE,
+                             "Element = " + name + ", Attribute = " +
+                             attName + ", Value = " + attVal +
+                             ", Line = " + att.getLine () +
                              ", Column = " + att.getColumn ()));
                         info.setValid (false);
                     }
@@ -260,8 +260,8 @@ public abstract class HtmlDocDesc {
                 while (miter.hasNext ()) {
                     String matt = (String) miter.next ();
                     info.setMessage (new ErrorMessage
-                        ("Missing required attribute",
-                         "Tag = " + name + ", Attribute = " + matt + 
+                        (MessageConstants.ERR_HTML_MISSING_ATTRIBUTE,
+                         "Tag = " + name + ", Attribute = " + matt +
                          ", Line = " + tag.getLine () +
                          ", Column = " + tag.getColumn ()));
                 }
@@ -277,7 +277,7 @@ public abstract class HtmlDocDesc {
             elementStack.push (tag);
         }
     }
-    
+
     private void doCloseTag (JHCloseTag tag, RepInfo info)
     {
         String name = tag.getName ();
@@ -288,7 +288,7 @@ public abstract class HtmlDocDesc {
         int idx = elementStack.search (name);
         if (idx == -1) {
             info.setMessage (new ErrorMessage
-                ("Close tag without matching open tag",
+                (MessageConstants.ERR_HTML_CLOSED_TAG_NO_OPEN,
                  "Name = " + name + ", Line = " + tag.getLine () +
                     ", Column = " + tag.getColumn ()));
             info.setValid (false);
@@ -299,7 +299,7 @@ public abstract class HtmlDocDesc {
         }
 
     }
-    
+
     private void doErrorElement (JHErrorElement elem, RepInfo info)
     {
         elem.reportError (info);
@@ -314,8 +314,8 @@ public abstract class HtmlDocDesc {
             // html and body if they haven't already been seen.
             // It also means the document isn't valid, since the title
             // should precede any PCData.
-            info.setMessage(new ErrorMessage 
-                ("Document must have implicit or explicit HEAD element"));
+            info.setMessage(new ErrorMessage
+                (MessageConstants.ERR_HEAD_ELE_MISS));
             info.setValid (false);
             return;
         }
@@ -340,8 +340,8 @@ public abstract class HtmlDocDesc {
                 return;
             }
         }
-        info.setMessage (new ErrorMessage ("PCData illegal in context",
-             "Line = " + 
+        info.setMessage (new ErrorMessage (MessageConstants.ERR_HTML_BAD_PC_DATA,
+             "Line = " +
              elem.getLine () + ", Column = " +
              elem.getColumn () ));
         info.setValid (false);
@@ -377,7 +377,7 @@ public abstract class HtmlDocDesc {
             }
             top.advanceIndex ();
         }
-        
+
         /* Kludgy special-case code for optional tags */
         HtmlTagDesc topElem = top.getElement ();
         if (topElem == htmlElement) {
@@ -387,7 +387,7 @@ public abstract class HtmlDocDesc {
                 elementStack.push (fakeTag);
                 return true;
             }
-            if (!elementStack.isBodySeen () && 
+            if (!elementStack.isBodySeen () &&
                     bodyElement != null &&
                     bodyElement.allowsTag (name, this)) {
                 JHOpenTag fakeTag = new JHOpenTag ("body");
@@ -405,7 +405,7 @@ public abstract class HtmlDocDesc {
                 elementStack.push (elem);
                 return  true;
             }
-            else if (!elementStack.isBodySeen () && 
+            else if (!elementStack.isBodySeen () &&
                     bodyElement != null &&
                     bodyElement.allowsTag (name, this)) {
                 // Similar to above case except that the head is
@@ -420,7 +420,7 @@ public abstract class HtmlDocDesc {
                 return false;
             }
         }
-        
+
         // Pop elements till we find a valid context.  If
         // the enclosing element doesn't have an optional close
         // tag, report an error but pop it anyway.  But first
@@ -448,8 +448,8 @@ public abstract class HtmlDocDesc {
                     if (topElem.isCloseTagRequired()) {
                         info.setValid (false);
                         info.setMessage (new ErrorMessage
-                           ("Tag illegal in context",
-                            "Name = " + name + ", " + 
+                           (MessageConstants.ERR_HTML_ILLEGAL_TAG,
+                            "Name = " + name + ", " +
                             "Container = " + top.getName() + ", " +
                             "Line = " + elem.getLine() + ", Column = " +
                             elem.getColumn ()));
@@ -476,22 +476,22 @@ public abstract class HtmlDocDesc {
             lst.add (names[i]);
         }
     }
-    
-    
+
+
     /** Adds an attribute to a List, with unrestricted values and
      *  type IMPLIED. */
     protected static void addSimpleAttribute (List atts, String name)
     {
         atts.add (new HtmlAttributeDesc (name));
     }
-    
+
     /** Adds an attribute to a List, with unrestricted values and
      *  type REQUIRED. */
     protected static void addRequiredAttribute (List atts, String name)
     {
         atts.add (new HtmlAttributeDesc (name, null, HtmlAttributeDesc.REQUIRED));
     }
-    
+
     /** Adds an attribute to a List, with the only permitted value being
      *  the name of the attribute.  This kind of attribute is normally
      *  represented in HTML without an explicit value; in fact, some (most?)
@@ -502,7 +502,7 @@ public abstract class HtmlDocDesc {
             new String[] { name },
             HtmlAttributeDesc.IMPLIED));
     }
-    
+
     /** Removes excluded strings from a List. */
     protected static void removeStringsFromList (List lst, String [] strs)
     {
@@ -510,13 +510,13 @@ public abstract class HtmlDocDesc {
             lst.remove(strs[i]);
         }
     }
-    
-    
+
+
     /** Pushes an element onto the element stack. */
     protected void pushElementStack (JHOpenTag tag)
     {
         elementStack.push (tag);
     }
-    
+
 
 }

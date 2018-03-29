@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import edu.harvard.hul.ois.jhove.CoreMessageConstants;
+
 /**
  * Immutable class that reads a properties file containing JHOVE release
  * details. The version number, build date and format are kept up to date by
@@ -33,7 +35,7 @@ public final class ReleaseDetails {
     private final Date buildDate;
 
     private ReleaseDetails() {
-        throw new AssertionError("Should never enter JhoveReleaseDetails().");
+        throw new AssertionError(CoreMessageConstants.EXC_PRV_CNSTRCT + this.getClass().getName());
     }
 
     private ReleaseDetails(final String version, final Date buildDate) {
@@ -122,7 +124,7 @@ public final class ReleaseDetails {
         InputStream is = ReleaseDetails.class.getClassLoader()
                 .getResourceAsStream(propertyResourceName);
         if (is == null) {
-            throw new IllegalStateException("No application properties found: "
+            throw new IllegalStateException(CoreMessageConstants.ERR_APP_PROP_MISS
                     + propertyResourceName);
         }
         Properties props = new Properties();
@@ -132,7 +134,7 @@ public final class ReleaseDetails {
             } catch (IOException e) {
                 is.close();
                 throw new IllegalStateException(
-                        "No application properties found: "
+                        CoreMessageConstants.ERR_APP_PROP_MISS
                                 + propertyResourceName, e);
             }
             is.close();

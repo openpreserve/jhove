@@ -53,10 +53,10 @@ public class AssocDataListChunk extends Superchunk {
         // this was intended to allow other list structures (don't ask
         // why), but any others will be considered non-conforming.
         String typeID = module.read4Chars(_dstream);
+        bytesLeft -= 4;
         if (!"adtl".equals (typeID)) {
-            info.setMessage (new ErrorMessage ("Unknown list type " +
-                    "in Associated Data List Chunk", 
-                    "Type = " + typeID,
+            info.setMessage (new ErrorMessage (MessageConstants.ERR_LIST_TYPE_UNK, 
+                    MessageConstants.SUB_MESS_TYPE + typeID,
                     _module.getNByte()));
             info.setWellFormed (false);
             return false;
@@ -84,20 +84,12 @@ public class AssocDataListChunk extends Superchunk {
             if (chunk == null) {
                 _module.skipBytes (_dstream, (int) chunkSize, _module);
                 info.setMessage (new InfoMessage
-                    ("Chunk type '" + id + "' in Associated Data Chunk ignored"));
+                    (MessageConstants.INF_DATA_CHUNK_TYPE_IGN + id));
             }
             else {
-                try {
-                    if (!chunk.readChunk (info)) {
-                        return false;
-                    }
-                }
-                catch (JhoveException e) {
-                    info.setMessage(new ErrorMessage (e.getMessage()));
-                    info.setWellFormed (false);
+                if (!chunk.readChunk (info)) {
                     return false;
                 }
-
             }
         }
         return true;

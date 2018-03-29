@@ -200,7 +200,7 @@ private final int jjMoveStringLiteralDfa1_0(long active0)
 private final int jjMoveStringLiteralDfa2_0(long old0, long active0)
 {
    if (((active0 &= old0)) == 0L)
-      return jjStartNfa_0(0, old0); 
+      return jjStartNfa_0(0, old0);
    try { curChar = input_stream.readChar(); }
    catch(java.io.IOException e) {
       jjStopStringLiteralDfa_0(1, active0);
@@ -218,7 +218,7 @@ private final int jjMoveStringLiteralDfa2_0(long old0, long active0)
 private final int jjMoveStringLiteralDfa3_0(long old0, long active0)
 {
    if (((active0 &= old0)) == 0L)
-      return jjStartNfa_0(1, old0); 
+      return jjStartNfa_0(1, old0);
    try { curChar = input_stream.readChar(); }
    catch(java.io.IOException e) {
       jjStopStringLiteralDfa_0(2, active0);
@@ -919,37 +919,37 @@ private final int jjMoveNfa_2(int startState, int curPos)
    }
 }
 static final int[] jjnextStates = {
-   2, 3, 5, 6, 
+   2, 3, 5, 6,
 };
 public static final String[] jjstrLiteralImages = {
 "", "\74\41", "\74", null, null, null, null, null, null, null, "\77", "\57", 
-"\72", "\76", null, null, null, null, null, null, null, null, null, null, null, null, 
+"\72", "\76", null, null, null, null, null, null, null, null, null, null, null, null,
 null, };
 public static final String[] lexStateNames = {
-   "DEFAULT", 
-   "IN_PCDATA", 
-   "IN_TAG", 
-   "IN_ATTVALUE", 
-   "IN_DOCTYPE", 
-   "IN_DOCTYPE2", 
-   "IN_COMMENT", 
-   "ENDING_COMMENT", 
+   "DEFAULT",
+   "IN_PCDATA",
+   "IN_TAG",
+   "IN_ATTVALUE",
+   "IN_DOCTYPE",
+   "IN_DOCTYPE2",
+   "IN_COMMENT",
+   "ENDING_COMMENT",
 };
 public static final int[] jjnewLexState = {
-   -1, 4, 2, 1, 0, -1, 3, 2, 2, 2, -1, -1, -1, 0, 5, -1, -1, -1, -1, -1, -1, -1, 6, 7, -1, 
-   0, 6, 
+   -1, 4, 2, 1, 0, -1, 3, 2, 2, 2, -1, -1, -1, 0, 5, -1, -1, -1, -1, -1, -1, -1, 6, 7, -1,
+   0, 6,
 };
 static final long[] jjtoToken = {
-   0x1fff7L, 
+   0x1fff7L,
 };
 static final long[] jjtoSkip = {
-   0x6be0000L, 
+   0x6be0000L,
 };
 static final long[] jjtoSpecial = {
-   0x6800000L, 
+   0x6800000L,
 };
 static final long[] jjtoMore = {
-   0x1400008L, 
+   0x1400008L,
 };
 protected CharStream input_stream;
 private final int[] jjrounds = new int[7];
@@ -989,7 +989,7 @@ public void ReInit(CharStream stream, int lexState)
 public void SwitchTo(int lexState)
 {
    if (lexState >= 8 || lexState < 0)
-      throw new TokenMgrError("Error: Ignoring invalid lexical state : " + lexState + ". State unchanged.", TokenMgrError.INVALID_LEXICAL_STATE);
+      throw new TokenMgrError(MessageConstants.ERR_LEX_STATE_INV + lexState, TokenMgrError.INVALID_LEXICAL_STATE);
    curLexState = lexState;
 }
 
@@ -1025,7 +1025,7 @@ int jjround;
 int jjmatchedPos;
 int jjmatchedKind;
 
-public Token getNextToken() 
+public Token getNextToken()
 {
   int kind;
   Token specialToken = null;
@@ -1034,13 +1034,13 @@ public Token getNextToken()
 
   EOFLoop :
   for (;;)
-  {   
-   try   
-   {     
+  {
+   try
+   {
       curChar = input_stream.BeginToken();
-   }     
+   }
    catch(java.io.IOException e)
-   {        
+   {
       jjmatchedKind = 0;
       matchedToken = jjFillToken();
       matchedToken.specialToken = specialToken;
@@ -1146,7 +1146,7 @@ public Token getNextToken()
               }
               SkipLexicalActions(matchedToken);
            }
-           else 
+           else
               SkipLexicalActions(null);
          if (jjnewLexState[jjmatchedKind] != -1)
            curLexState = jjnewLexState[jjmatchedKind];
@@ -1199,7 +1199,7 @@ void TokenLexicalActions(Token matchedToken)
 {
    switch(jjmatchedKind)
    {
-      default : 
+      default :
          break;
    }
 }

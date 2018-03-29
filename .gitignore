@@ -1,12 +1,3 @@
-# Ignore Eclipse files
-.project
-.classpath
-.settings
-
-# Ignore IntelliJ files
-.idea
-**/*.iml
-
 # Ignore Maven artefacts
 target/
 pom.xml.tag
@@ -19,4 +10,9 @@ release.properties
 Gemfile.lock
 
 # Ignore Test Root
-test-root
+/test-root/
+
+# Ignore Eclipse artefacts
+**/.settings
+**/.project
+**/.classpath

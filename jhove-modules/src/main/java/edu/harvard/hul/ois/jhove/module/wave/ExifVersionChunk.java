@@ -45,7 +45,7 @@ public class ExifVersionChunk extends Chunk {
         WaveModule module = (WaveModule) _module;
         if (bytesLeft != 4) {
             info.setMessage (new ErrorMessage
-                ("Incorrect length for Exif Version Chunk"));
+                (MessageConstants.ERR_EXIF_VER_CHUNK_LEN_WRNG));
             info.setWellFormed (false);
             return false;
         }

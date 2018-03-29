@@ -59,13 +59,29 @@ installJhoveFromFile() {
 	then
 		return;
 	fi;
+	# First param should be the jhove installer jar
 	jhoveFile=$1;
-	installDest=$2;
-	if [[ -e $installDest ]]
+	# Param 2 is the installation directory
+	installDestParam=$2
+	echo "Checking for installation directory: ${installDestParam}"
+
+	# Remove any existing installation at the location
+	if [[ -e $installDestParam ]]
 	then
-		rm -rf "${installDest}"
+		echo " - removing existing installation directory: ${installDestParam}"
+		rm -rf "${installDestParam}"
 	fi;
+
+	echo " - creating fresh install directory: ${installDestParam}."
+	mkdir -p "${installDestParam}"
+
+	# need full path of installation directory for auto installer
+	installDest=`realpath $installDestParam`;
+
+	# Overwrite the auto-install configured installation directory using sed.
 	autoInstallConfig="${SCRIPT_DIR}/auto-vagrant-install.xml"
 	sed -i "s%^<installpath>.*%<installpath>${installDest}</installpath>%" "${autoInstallConfig}"
+
+	# run the installer
 	java -jar "${jhoveFile}" "${autoInstallConfig}"
 }

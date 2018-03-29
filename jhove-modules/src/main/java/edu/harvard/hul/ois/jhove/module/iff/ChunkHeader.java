@@ -50,8 +50,8 @@ public class ChunkHeader {
                     hx = "0" + hx;
                 }
                 _repInfo.setMessage (new ErrorMessage
-                    ("Invalid character in Chunk ID",
-                     "Character = 0x" + hx,
+                    (MessageConstants.ERR_CHUNK_ID_CHAR_INV,
+                     MessageConstants.ERR_CHUNK_ID_CHAR_SUB + hx,
                      _module.getNByte ()));
                 _repInfo.setWellFormed (false);
                 return false;
@@ -75,7 +75,13 @@ public class ChunkHeader {
     {
         return _chunkID;
     }
-    
+
+    /** Sets the chunk size */
+    public void setSize(long size)
+    {
+        _size = size;
+    }
+
     /** Returns the chunk size (excluding the first 8 bytes) */
     public long getSize ()
     {

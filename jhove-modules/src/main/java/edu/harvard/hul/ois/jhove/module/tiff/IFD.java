@@ -126,7 +126,7 @@ public abstract class IFD
      * @param raf TIFF file
      * @param bigEndian True if big-endian file
      */
-    public IFD (long offset, RepInfo info, RandomAccessFile raf,
+    public IFD(long offset, RepInfo info, RandomAccessFile raf,
                 boolean bigEndian)
     {
         _offset    = offset;
@@ -139,11 +139,11 @@ public abstract class IFD
         _next    = 0L;
         _version = 4;
 
-        _errors = new LinkedList<String> ();
+        _errors = new LinkedList<String>();
 
-        _format = NumberFormat.getInstance ();
-        _format.setGroupingUsed (false);
-        _format.setMinimumFractionDigits (0);
+        _format = NumberFormat.getInstance();
+        _format.setGroupingUsed(false);
+        _format.setMinimumFractionDigits(0);
     }
 
     /******************************************************************
@@ -151,48 +151,48 @@ public abstract class IFD
      ******************************************************************/
 
     /** Get any errors discovered during parsing. */
-    public List<String> getErrors ()
+    public List<String> getErrors()
     {
         return _errors;
     }
 
     /** Get the offset of the next IFD. */
-    public long getNext ()
+    public long getNext()
     {
         return _next;
     }
 
     /** Get the IFD offset. */
-    public long getOffset ()
+    public long getOffset()
     {
         return _offset;
     }
 
     /** Get the IFD properties. */
-    public abstract Property getProperty (boolean rawOutput)
+    public abstract Property getProperty(boolean rawOutput)
                         throws TiffException;
 
     /** Get the TIFF version. */
-    public int getVersion ()
+    public int getVersion()
     {
         return _version;
     }
 
     /** Return true if this is the first IFD. */
-    public boolean isFirst ()
+    public boolean isFirst()
     {
         return _first;
     }
     
     /** Return true if this is the thumbnail IFD. */
-    public boolean isThumbnail ()
+    public boolean isThumbnail()
     {
         return _thumbnail;
     }
     
 
     /** Lookup IFD tag. */
-    public abstract void lookupTag (int tag, int type, long count, long value)
+    public abstract void lookupTag(int tag, int type, long count, long value)
         throws TiffException;
 
     /** Parse the IFD. Errors are not suppressed, and odd byte offsets for
@@ -200,10 +200,10 @@ public abstract class IFD
      *  
      * @return The offset of the next IFD
      */
-    public long parse ()
+    public long parse()
         throws TiffException
     {
-	return parse (false, false);
+	return parse(false, false);
     }
 
     /** Parse the IFD.
@@ -211,11 +211,11 @@ public abstract class IFD
      * @param suppressErrors      If true, return IFD even with errors
      * @return The offset of the next IFD
      */
-    public long parse (boolean byteOffsetIsValid, boolean suppressErrors)
+    public long parse(boolean byteOffsetIsValid, boolean suppressErrors)
         throws TiffException
     {
         try {
-            return parse (byteOffsetIsValid);
+            return parse(byteOffsetIsValid);
         }
         catch (TiffException e) {
             // If we got a TiffException and we're suppressing errors,
@@ -223,7 +223,7 @@ public abstract class IFD
             // but we can't follow the IFD chain further.
             if (suppressErrors) {
                 _info.setMessage
-                     (new InfoMessage (e.getMessage(), e.getOffset()));
+                    (new InfoMessage(e.getMessage(), e.getOffset()));
                 return 0;
             }
             throw e;
@@ -236,7 +236,7 @@ public abstract class IFD
      * @param byteOffsetIsValid   If true, allow offsets on odd byte boundaries
      * @return The offset of the next IFD
      */
-    public long parse (boolean byteOffsetIsValid)
+    public long parse(boolean byteOffsetIsValid)
         throws TiffException
     {
         /* Start at the IFD offset, read the number of entries, then
@@ -247,44 +247,47 @@ public abstract class IFD
         byte [] buffer;
         int nFields = 0;
         try {
-            _raf.seek (offset);
-            nFields = ModuleBase.readUnsignedShort (_raf, _bigEndian);
+            _raf.seek(offset);
+            nFields = ModuleBase.readUnsignedShort(_raf, _bigEndian);
             offset += 2;
 
             int len = 12*nFields;
             buffer = new byte[len];
-            _raf.read (buffer, 0, len);
+            _raf.read(buffer, 0, len);
 
             /* Read the offset of the next IFD (or 0 if none). */
             offset += len;
-            _next = ModuleBase.readUnsignedInt (_raf, _bigEndian);
+            _next = ModuleBase.readUnsignedInt(_raf, _bigEndian);
         }
         catch (Exception e) {
-            throw new TiffException ("Premature EOF", offset);
+            throw new TiffException(MessageConstants.ERR_TIFF_PREM_EOF, offset);
         }
 
         DataInputStream ifdStream =
-            new DataInputStream (new ByteArrayInputStream (buffer));
+            new DataInputStream(new ByteArrayInputStream(buffer));
 
         try {
             int prevTag = 0;
             for (int i=0; i<nFields; i++) {
-                int tag = ModuleBase.readUnsignedShort (ifdStream, _bigEndian,
+                int tag = ModuleBase.readUnsignedShort(ifdStream, _bigEndian,
                                                         null);
                 /* Tags must be in ascending numerical order. */
                 if (!debug_allowoutofsequence && tag < prevTag) {
-                    _info.setMessage (new ErrorMessage ("Tag " + tag + " out of sequence",
-                                             _offset + 2 + 12*i));
-                    _info.setWellFormed (false);
+                    _info.setMessage(new ErrorMessage(MessageConstants.ERR_TAG_OUT_OF_SEQ_1 + tag + 
+                    				 				      MessageConstants.ERR_TAG_OUT_OF_SEQ_2,
+                                                      _offset + 2 + 12*i));
+                    _info.setWellFormed(false);
                 }
                 prevTag = tag;
 
-                int type = ModuleBase.readUnsignedShort (ifdStream,
-                                                         _bigEndian, null);
+                int type = ModuleBase.readUnsignedShort(ifdStream,
+                                                        _bigEndian, null);
                 /* Skip over tags with unknown type. */
                 if (type < BYTE || type > IFD) {
-                    _info.setMessage (new ErrorMessage ("Unknown data type",
-                            "Type = " + type + ", Tag = " + tag, _offset + 4 + 12*i));
+                    _info.setMessage(new ErrorMessage(MessageConstants.ERR_UNK_DATA_TYPE,
+                    		                          MessageConstants.ERR_UNK_DATA_TYPE_SUB_1 + type +
+                    		                          MessageConstants.ERR_UNK_DATA_TYPE_SUB_2 + tag,
+                    		                          _offset + 4 + 12*i));
                 }
                 else {
                     /* Type gives indication of the TIFF version. */
@@ -296,19 +299,16 @@ public abstract class IFD
                                                             _bigEndian, null);
                     long value = ModuleBase.readUnsignedInt(ifdStream,
                                                             _bigEndian, null);
-                    if (calcValueSize (type, count) > 4) {
+                    if (calcValueSize(type, count) > 4) {
                         /* Value is the word-aligned offset of the actual
                          * value. */
 			if ((value & 1) != 0) {
+				final String message = MessageConstants.INF_VALOFF_NOT_WORD_ALIGN + value;
 			    if (byteOffsetIsValid) {
-				_info.setMessage (new InfoMessage (
-				   "Value offset not word-aligned: " + value,
-				   _offset + 10 + 12*i));
+				_info.setMessage(new InfoMessage(message, _offset + 10 + 12*i));
 			    }
 			    else {
-				throw new TiffException ("Value offset not " +
-                                                     "word-aligned: " + value,
-                                                     _offset + 10 + 12*i);
+				throw new TiffException(message,_offset + 10 + 12*i);
 			    }
                         }
                     }
@@ -317,20 +317,20 @@ public abstract class IFD
                          * the value. */
                         value = _offset + 10 + 12*i;
                     }
-                    lookupTag (tag, type, count, value);
+                    lookupTag(tag, type, count, value);
                 }
             }
         }
         catch (IOException e) {
-            throw new TiffException ("Read error", _offset + 2);
+            throw new TiffException(MessageConstants.ERR_IO_READ, _offset + 2);
         }
-        postParseInitialization ();
+        postParseInitialization();
 
         return _next;
     }
 
     /** Sets flag indicating whether this is the first IFD. */
-    public void setFirst (boolean first)
+    public void setFirst(boolean first)
     {
         _first = first;
     }
@@ -338,7 +338,7 @@ public abstract class IFD
     /** Sets flag indicating whether this is the "thumbnail" IFD.
      *  The second IFD in the top-level chain is assumed to be
      *  the Thumbnail IFD. */
-    public void setThumbnail (boolean thumbnail)
+    public void setThumbnail(boolean thumbnail)
     {
         _thumbnail = thumbnail;
     }
@@ -354,27 +354,27 @@ public abstract class IFD
      *  if <code>rawOutput</code> is false, returns a LONG
      *  property whose numeric value is <code>value</code>.
      */
-    protected Property addBitmaskProperty (String name, long value,
-                                           String [] labels, boolean rawOutput)
+    protected Property addBitmaskProperty(String name, long value,
+                                          String [] labels, boolean rawOutput)
     {
         Property prop = null;
         if (!rawOutput) {
-            List<String> list = new LinkedList<String> ();
+            List<String> list = new LinkedList<String>();
             try {
                 for (int i=0; i<labels.length; i++) {
                     if ((value & (1 << i)) != 0) {
-                        list.add (labels[i]);
+                        list.add(labels[i]);
                     }
                 }
             }
             catch (Exception e) {
-                _errors.add (name + " value out of range: " + value);
+                _errors.add(name + MessageConstants.ERR_VAL_OUT_OF_RANGE + value);
             }
-            prop = new Property (name, PropertyType.STRING,
-                                 PropertyArity.LIST, list);
+            prop = new Property(name, PropertyType.STRING,
+                                PropertyArity.LIST, list);
         }
         if (prop == null) {
-            prop = new Property (name, PropertyType.LONG, new Long (value));
+            prop = new Property(name, PropertyType.LONG, new Long(value));
         }
 
         return prop;
@@ -389,21 +389,21 @@ public abstract class IFD
      *  string being the element of <code>labels</code>
      *  whose index is <code>value</code>.
      */
-    protected Property addIntegerProperty (String name, int value,
+    protected Property addIntegerProperty(String name, int value,
                                            String [] labels, boolean rawOutput)
     {
         Property prop = null;
         if (!rawOutput) {
             try {
-                prop = new Property (name, PropertyType.STRING, labels[value]);
+                prop = new Property(name, PropertyType.STRING, labels[value]);
             }
-            catch (Exception e) {
-                _errors.add (name + " value out of range: " + value);
+            catch (ArrayIndexOutOfBoundsException aioobe) {
+                _errors.add(name + MessageConstants.ERR_VAL_OUT_OF_RANGE + value);
             }
         }
         if (prop == null) {
-            prop = new Property (name, PropertyType.INTEGER,
-                                 new Integer (value));
+            prop = new Property(name, PropertyType.INTEGER,
+                                 new Integer(value));
         }
 
         return prop;
@@ -419,29 +419,29 @@ public abstract class IFD
      *  whose index is the index of
      *  <code>value</code> in <code>index</code>.
      */
-    protected Property addIntegerProperty (String name, int value,
-                                           String [] labels, int [] index,
-                                           boolean rawOutput)
+    protected Property addIntegerProperty(String name, int value,
+                                          String [] labels, int [] index,
+                                          boolean rawOutput)
     {
         Property prop = null;
         if (!rawOutput) {
             int n = -1;
-            for (int i=0; i<index.length; i++) {
+            for (int i = 0; i < index.length; i++) {
                 if (value == index[i]) {
                     n = i;
                     break;
                 }
             }
             if (n > -1) {
-                prop = new Property (name, PropertyType.STRING, labels[n]);
+                prop = new Property(name, PropertyType.STRING, labels[n]);
             }
             else {
-                _errors.add (name + " value out of range: " + value);
+                _errors.add(name + MessageConstants.ERR_VAL_OUT_OF_RANGE + value);
             }
         }
         if (prop == null) {
-            prop = new Property (name, PropertyType.INTEGER,
-                                 new Integer (value));
+            prop = new Property(name, PropertyType.INTEGER,
+                                 new Integer(value));
         }
 
         return prop;
@@ -455,7 +455,7 @@ public abstract class IFD
      *  elements of <code>value</code> used as indices into
      *  <code>labels</code>.
      */
-    protected Property addIntegerArrayProperty (String name, int [] value,
+    protected Property addIntegerArrayProperty(String name, int [] value,
                                                 String [] labels,
                                                 boolean rawOutput)
     {
@@ -466,16 +466,16 @@ public abstract class IFD
                 try {
                     s[i] = labels[value[i]];
                 }
-                catch (Exception e) {
-                    _errors.add (name + " value out of range: " + value[i]);
+                catch (ArrayIndexOutOfBoundsException aioobe) {
+                    _errors.add(name + MessageConstants.ERR_VAL_OUT_OF_RANGE + value[i]);
                 }
             }
-            prop = new Property (name, PropertyType.STRING,
-                                 PropertyArity.ARRAY, s);
+            prop = new Property(name, PropertyType.STRING,
+                                PropertyArity.ARRAY, s);
         }
         if (prop == null) {
-            prop = new Property (name, PropertyType.INTEGER,
-                                 PropertyArity.ARRAY, value);
+            prop = new Property(name, PropertyType.INTEGER,
+                                PropertyArity.ARRAY, value);
         }
 
         return prop;
@@ -487,36 +487,36 @@ public abstract class IFD
      * RATIONAL.  Otherwise, returns a property with type
      * STRING, and the text representation of the Rational
      * value as a floating-point ratio. */
-    protected Property addRationalProperty (String name, Rational r,
+    protected Property addRationalProperty(String name, Rational r,
                                             boolean rawOutput)
     {
         Property prop = null;
         if (!rawOutput) {
-            prop = new Property (name, PropertyType.STRING,
-                                 _format.format (r.toDouble ()));
+            prop = new Property(name, PropertyType.STRING,
+                                 _format.format(r.toDouble()));
         }
         if (prop == null) {
-            prop = new Property (name, PropertyType.RATIONAL, r);
+            prop = new Property(name, PropertyType.RATIONAL, r);
         }
 
         return prop;
     }
 
-    protected Property addRationalArrayProperty (String name, Rational [] r,
+    protected Property addRationalArrayProperty(String name, Rational [] r,
                                                  boolean rawOutput)
     {
         Property prop = null;
         if (!rawOutput) {
             String [] s = new String[r.length];
             for (int i=0; i<r.length; i++) {
-                s[i] =  _format.format (r[i].toDouble ());
+                s[i] =  _format.format(r[i].toDouble());
             }
-            prop = new Property (name, PropertyType.STRING,
-                                 PropertyArity.ARRAY, s);
+            prop = new Property(name, PropertyType.STRING,
+                                PropertyArity.ARRAY, s);
         }
         if (prop == null) {
-            prop = new Property (name, PropertyType.RATIONAL,
-                                 PropertyArity.ARRAY, r);
+            prop = new Property(name, PropertyType.RATIONAL,
+                                PropertyArity.ARRAY, r);
         }
 
         return prop;
@@ -525,21 +525,21 @@ public abstract class IFD
     /** Perform initializations that have to wait until after the
      * IFD has been parsed.
      */
-    protected void postParseInitialization ()
+    protected void postParseInitialization()
     {
     }
 
     /** Standard IFD property header. */
-    protected Property propertyHeader (String type, List entries)
+    protected Property propertyHeader(String type, List entries)
     {
         Property [] array = new Property [3];
-        array[0] = new Property ("Offset", PropertyType.LONG,
-                                 new Long (_offset));
-        array[1] = new Property ("Type", PropertyType.STRING, type);
-        array[2] = new Property ("Entries", PropertyType.PROPERTY,
+        array[0] = new Property("Offset", PropertyType.LONG,
+                                 new Long(_offset));
+        array[1] = new Property("Type", PropertyType.STRING, type);
+        array[2] = new Property("Entries", PropertyType.PROPERTY,
                                  PropertyArity.LIST, entries);
 
-        return new Property ("IFD", PropertyType.PROPERTY, PropertyArity.ARRAY,
+        return new Property("IFD", PropertyType.PROPERTY, PropertyArity.ARRAY,
                              array);
     }
 
@@ -549,15 +549,15 @@ public abstract class IFD
      * @param count Length of string
      * @param value Offset of string
      */
-    protected String readASCII (long count, long value)
+    protected String readASCII(long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
         byte [] buffer = new byte [(int) count];
-        _raf.read (buffer);
+        _raf.read(buffer);
 
-        StringBuffer sb = new StringBuffer ();
+        StringBuffer sb = new StringBuffer();
         for (int i=0; i<count; i++) {
             byte c = buffer[i];
             if (c == 0) {
@@ -566,13 +566,13 @@ public abstract class IFD
             // Escape characters that aren't ASCII. There really shouldn't
             // be any, and if there are, we don't know how they're encoded.
             if (c < 32 || c > 127) {
-                sb.append (byteToHex (c));
+                sb.append(byteToHex(c));
             }
             else {
-                sb.append ((char) c);
+                sb.append((char) c);
             }
         }
-        return sb.toString ();
+        return sb.toString();
     }
 
     /** Reads an array of strings from the TIFF file.
@@ -581,39 +581,39 @@ public abstract class IFD
      *  @param  value  Offset from which to read
      *  
      */
-    protected String [] readASCIIArray (long count, long value)
+    protected String [] readASCIIArray(long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
         int nstrs = 0;
-        List<String> list = new LinkedList<String> ();
+        List<String> list = new LinkedList<String>();
         byte[] buf = new byte[(int) count];
-        _raf.read (buf);
-        StringBuffer strbuf = new StringBuffer ();
+        _raf.read(buf);
+        StringBuffer strbuf = new StringBuffer();
         for (int i=0; i<count; i++) {
             int b = buf[i];
             if (b == 0) {
-                list.add (strbuf.toString());
-                strbuf.setLength (0);
+                list.add(strbuf.toString());
+                strbuf.setLength(0);
             }
             else {
                 // Escape characters that aren't ASCII. There really shouldn't
                 // be any, and if there are, we don't know how they're encoded.
                 if (b < 32 || b > 127) {
-                    strbuf.append (byteToHex ((byte) b));
+                    strbuf.append(byteToHex((byte) b));
                 }
                 else {
-                    strbuf.append ((char) b);
+                    strbuf.append((char) b);
                 }
             }
         }
         /* We can't use ArrayList.toArray because that returns an 
            Object[], not a String[] ... sigh. */
         String [] strs = new String[nstrs];
-        ListIterator<String> iter = list.listIterator ();
+        ListIterator<String> iter = list.listIterator();
         for (int i=0; i<nstrs; i++) {
-            strs[i] =  iter.next ();
+            strs[i] =  iter.next();
         }
         return strs;
     }
@@ -625,12 +625,12 @@ public abstract class IFD
      *  @param  value  Offset from which to read
      *  
      */
-    protected int readByte (int type, long count, long value)
+    protected int readByte(int type, long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
-        return (int) readUnsigned (type);
+        return (int) readUnsigned(type);
     }
 
     /** Reads an array of bytes and returns it as an int array.
@@ -639,14 +639,14 @@ public abstract class IFD
      *  @param  count  Number of bytes to read
      *  @param  value  Offset from which to read
      */  
-    protected int [] readByteArray (int type, long count, long value)
+    protected int [] readByteArray(int type, long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
         int [] array = new int [(int) count];
         for (int i=0; i<count; i++) {
-            array[i] = (int) readUnsigned (type);
+            array[i] = (int) readUnsigned(type);
         }
 
         return array;
@@ -659,12 +659,12 @@ public abstract class IFD
      *  @param  count  Number of bytes to read
      *  @param  value  Offset from which to read
      */  
-    protected byte [] readTrueByteArray (int type, long count, long value)
+    protected byte [] readTrueByteArray(int type, long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
         byte [] array = new byte [(int) count];
-        _raf.read (array);
+        _raf.read(array);
         return array;
     }
 
@@ -675,14 +675,14 @@ public abstract class IFD
      *  @param  count  Number of values to read
      *  @param  value  Offset from which to read
      */
-    protected double [] readDoubleArray (long count, long value)
+    protected double [] readDoubleArray(long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
         double [] darray = new double [(int) count];
         for (int i=0; i<count; i++) {
-            darray[i] = ModuleBase.readDouble (_raf, _bigEndian);
+            darray[i] = ModuleBase.readDouble(_raf, _bigEndian);
         }
 
         return darray;
@@ -695,12 +695,12 @@ public abstract class IFD
      *  @param  value  Offset from which to read
      *  
      */
-    protected long readLong (int type, long count, long value)
+    protected long readLong(int type, long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
-        return readUnsigned (type);
+        return readUnsigned(type);
     }
 
 
@@ -713,14 +713,14 @@ public abstract class IFD
      *  @param  count  Number of values to read
      *  @param  value  Offset from which to read
      */
-    protected long [] readLongArray (int type, long count, long value)
+    protected long [] readLongArray(int type, long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
         long [] array = new long [(int) count];
         for (int i=0; i<count; i++) {
-            array[i] = readUnsigned (type);
+            array[i] = readUnsigned(type);
         }
         return array;
     }
@@ -728,7 +728,7 @@ public abstract class IFD
     /** Reads an unsigned number of any type.
      *  @param  type   TIFF type to read
      */
-    public long readUnsigned (int type) 
+    public long readUnsigned(int type) 
         throws IOException 
     {
         long u = 0L;
@@ -736,14 +736,14 @@ public abstract class IFD
         switch (type) {
         case BYTE:
         case UNDEFINED:
-            u = ModuleBase.readUnsignedByte (_raf);
+            u = ModuleBase.readUnsignedByte(_raf);
             break;
         case SHORT:
-            u = ModuleBase.readUnsignedShort (_raf, _bigEndian);
+            u = ModuleBase.readUnsignedShort(_raf, _bigEndian);
             break;
         case LONG:
         case IFD:
-            u = ModuleBase.readUnsignedInt (_raf, _bigEndian);
+            u = ModuleBase.readUnsignedInt(_raf, _bigEndian);
             break;
         }
 
@@ -753,36 +753,36 @@ public abstract class IFD
 
     /** Reads a RATIONAL value and returns it as a Rational.
      */
-    protected Rational readRational (long count, long value)
+    protected Rational readRational(long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
         
-        long numer = ModuleBase.readUnsignedInt (_raf, _bigEndian);
-        long denom = ModuleBase.readUnsignedInt (_raf, _bigEndian);
-        return new Rational (numer, denom);
+        long numer = ModuleBase.readUnsignedInt(_raf, _bigEndian);
+        long denom = ModuleBase.readUnsignedInt(_raf, _bigEndian);
+        return new Rational(numer, denom);
     }
 
     /** Reads an array of RATIONAL values and returns it as an
      *  array of Rational.
      */
-    protected Rational [] readRationalArray (long count, long value)
+    protected Rational [] readRationalArray(long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
-        byte [] buffer = new byte [(int) calcValueSize (RATIONAL, count)];
-        _raf.read (buffer);
+        byte [] buffer = new byte [(int) calcValueSize(RATIONAL, count)];
+        _raf.read(buffer);
         DataInputStream stream =
-            new DataInputStream (new ByteArrayInputStream (buffer));
+            new DataInputStream(new ByteArrayInputStream(buffer));
         
         Rational [] rarray = new Rational [(int) count];
         for (int i=0; i<count; i++) {
            long numer = ModuleBase.readUnsignedInt 
-                            (stream, _bigEndian, null);
+                           (stream, _bigEndian, null);
            long denom = ModuleBase.readUnsignedInt 
-                            (stream, _bigEndian, null);
-           rarray[i] = new Rational (numer, denom);
+                           (stream, _bigEndian, null);
+           rarray[i] = new Rational(numer, denom);
         }
 
         return rarray;
@@ -790,36 +790,36 @@ public abstract class IFD
 
     /** Reads an SRATIONAL value and returns it as a Rational.
      */
-    protected Rational readSignedRational (long count, long value)
+    protected Rational readSignedRational(long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
         
-        long numer = ModuleBase.readSignedInt (_raf, _bigEndian);
-        long denom = ModuleBase.readSignedInt (_raf, _bigEndian);
-        return new Rational (numer, denom);
+        long numer = ModuleBase.readSignedInt(_raf, _bigEndian);
+        long denom = ModuleBase.readSignedInt(_raf, _bigEndian);
+        return new Rational(numer, denom);
     }
 
     /** Reads an array of SRATIONAL values and returns it as an
      *  array of Rational.
      */
-    protected Rational [] readSignedRationalArray (long count, long value)
+    protected Rational [] readSignedRationalArray(long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
-        byte [] buffer = new byte [(int) calcValueSize (SRATIONAL, count)];
-        _raf.read (buffer);
+        byte [] buffer = new byte [(int) calcValueSize(SRATIONAL, count)];
+        _raf.read(buffer);
         DataInputStream stream =
-            new DataInputStream (new ByteArrayInputStream (buffer));
+            new DataInputStream(new ByteArrayInputStream(buffer));
         
         Rational [] rarray = new Rational [(int) count];
         for (int i=0; i<count; i++) {
            long numer = ModuleBase.readSignedInt 
-                            (stream, _bigEndian, null);
+                           (stream, _bigEndian, null);
            long denom = ModuleBase.readSignedInt 
-                            (stream, _bigEndian, null);
-           rarray[i] = new Rational (numer, denom);
+                           (stream, _bigEndian, null);
+           rarray[i] = new Rational(numer, denom);
         }
 
         return rarray;
@@ -827,26 +827,26 @@ public abstract class IFD
 
 
     /** Reads and returns a single unsigned 16-bit value. */
-    protected int readShort (int type, long count, long value)
+    protected int readShort(int type, long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
-        return (int) readUnsigned (type);
+        return (int) readUnsigned(type);
     }
 
     /**
      *  Reads a TIFF array of unsigned 16-bit values and returns 
      *  it as an int array.
      */
-    protected int [] readShortArray (int type, long count, long value)
+    protected int [] readShortArray(int type, long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
         int [] iarray = new int [(int) count];
         for (int i=0; i<count; i++) {
-            iarray[i] = (int) readUnsigned (type);
+            iarray[i] = (int) readUnsigned(type);
         }
         return iarray;
     }
@@ -855,14 +855,14 @@ public abstract class IFD
      *  Reads a TIFF array of signed 16-bit values and returns 
      *  it as an int array.
      */
-    protected int [] readSShortArray (int type, long count, long value)
+    protected int [] readSShortArray(int type, long count, long value)
         throws IOException
     {
-        _raf.seek (value);
+        _raf.seek(value);
 
         int [] iarray = new int [(int) count];
         for (int i=0; i<count; i++) {
-            iarray[i] = ModuleBase.readSignedShort (_raf, _bigEndian);
+            iarray[i] = ModuleBase.readSignedShort(_raf, _bigEndian);
         }
         return iarray;
     }
@@ -873,7 +873,7 @@ public abstract class IFD
      * @param type Field type
      * @param count Field count
      */
-    public static long calcValueSize (int type, long count)
+    public static long calcValueSize(int type, long count)
     {
         int fieldSize = 0;
         switch (type) {
@@ -906,7 +906,7 @@ public abstract class IFD
      *  Returns <code>true</code> if file is big-endian, 
      *  <code>false</code> if little-endian.
      */
-    public boolean isBigEndian ()
+    public boolean isBigEndian()
     {
         return _bigEndian;
     }
@@ -923,13 +923,13 @@ public abstract class IFD
      * @param count Tag entry count
      * @param minCount Tag count
      */
-    protected static void checkCount (int tag, long count, int minCount)
+    protected static void checkCount(int tag, long count, int minCount)
         throws TiffException
     {
         if (count < minCount) {
-            throw new TiffException ("Count mismatch for tag " + tag +
-                                     "; expecting " + minCount + ", saw " +
-                                     count);
+            throw new TiffException(MessageConstants.ERR_TAG_COUNT_MISMATCH + tag +
+            						MessageConstants.MISMATCH_SUB_1 + minCount +
+            						MessageConstants.MISMATCH_SUB_2 + count);
         }
     }
 
@@ -939,7 +939,7 @@ public abstract class IFD
      * @param type Tag entry type
      * @param expected Tag type
      */
-    protected static void checkType (int tag, int type, int expected)
+    protected static void checkType(int tag, int type, int expected)
         throws TiffException
     {
         /* Readers are supposed to accept BYTE, SHORT or LONG for any
@@ -951,9 +951,9 @@ public abstract class IFD
             }
         }
         if (type != expected) {
-            throw new TiffException ("Type mismatch for tag " + tag +
-                                     "; expecting " + expected + ", saw " +
-                                     type);
+            throw new TiffException(MessageConstants.ERR_TAG_TYPE_MISMATCH + tag +
+            						MessageConstants.MISMATCH_SUB_1 + expected +
+            						MessageConstants.MISMATCH_SUB_2 + type);
         }
     }
 
@@ -964,28 +964,29 @@ public abstract class IFD
      * @param type1 Tag type
      * @param type2 Alternate tag type
      */
-    protected static void checkType (int tag, int type, int type1, int type2)
+    protected static void checkType(int tag, int type, int type1, int type2)
         throws TiffException
     {
         if (type != type1 && type != type2) {
-            throw new TiffException ("Type mismatch for tag " + tag +
-                                     "; expecting " + type1 + " or " +
-                                     type2 + ", saw " + type);
+            throw new TiffException(MessageConstants.ERR_TAG_TYPE_MISMATCH + tag +
+            						MessageConstants.MISMATCH_SUB_1 + type1 +
+            						MessageConstants.MISMATCH_SUB_3 + type2 +
+            						MessageConstants.MISMATCH_SUB_2 + type);
         }
     }
 
-    protected static Rational average (Rational r1, Rational r2)
+    protected static Rational average(Rational r1, Rational r2)
     {
-        long d1 = r1.getDenominator ();
-        long d2 = r2.getDenominator ();
+        long d1 = r1.getDenominator();
+        long d2 = r2.getDenominator();
 
-        Rational f1 = new Rational (r1.getNumerator ()*d2,
-                                    r1.getDenominator ()*d2);
-        Rational f2 = new Rational (r2.getNumerator ()*d1,
-                                    r2.getDenominator ()*d1);
+        Rational f1 = new Rational(r1.getNumerator()*d2,
+                                   r1.getDenominator()*d2);
+        Rational f2 = new Rational(r2.getNumerator()*d1,
+                                   r2.getDenominator()*d1);
 
-        return new Rational ((f1.getNumerator () + f2.getNumerator ())/2,
-                             f1.getDenominator ());
+        return new Rational((f1.getNumerator() + f2.getNumerator())/2,
+                             f1.getDenominator());
     }
 
 
@@ -994,11 +995,11 @@ public abstract class IFD
      ******************************************************************/
 
     /** Represent a byte value as %XX */
-    private String byteToHex (byte c) {
+    private String byteToHex(byte c) {
         int[] nibbles = new int[2];
         nibbles[0] = ((int) c & 0XF0) >> 4;
         nibbles[1] = (int) c & 0X0F;
-        StringBuffer retval = new StringBuffer ("%");
+        StringBuffer retval = new StringBuffer("%");
         for (int i = 0; i <= 1; i++) {
             int b = nibbles[i];
             if (b >= 10) {
@@ -1007,7 +1008,7 @@ public abstract class IFD
             else {
                 b += (int) '0';
             }
-            retval.append ((char) b);
+            retval.append((char) b);
         }
         return retval.toString();
     }

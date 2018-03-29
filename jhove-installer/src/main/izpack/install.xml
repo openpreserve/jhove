@@ -8,7 +8,7 @@
     <url>http://jhove.openpreservation.org</url>
     <javaversion>${java.target.version}</javaversion>
     <authors>
-      <author name="Carl Wilson" email="carl@openpreserve.org" />
+      <author name="Carl Wilson" email="carl@openpreservation.org" />
     </authors>
   </info>
 
@@ -31,8 +31,9 @@
   </locale>
 
   <resources>
-    <res id="HTMLHelloPanel.welcome" src="welcome.html"/>
+    <res id="customicons.xml" src="customicons.xml" />
     <res id="HTMLInfoPanel.welcome" src="welcome.html"/>
+    <res id="JFrameIcon" src="icon.png"/>
     <res id="OPFLogo" src="jhovelogo.png"/>
   </resources>
 
@@ -52,29 +53,40 @@
     <panel classname="FinishPanel" id="finish"/>
   </panels>
 
+
   <packs>
     <pack name="JHOVE Application" required="yes">
-      <description>JHOVE application JARs and configuration files.</description>
+      <description>JHOVE application JARs including the internal modules and configuration files.</description>
       <file targetdir="$INSTALL_PATH/bin" src="bin/jhove-apps-${project.version}.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/jhove-apps-${project.version}.jar"/>
-      <file targetdir="$INSTALL_PATH/conf" src="config/jhove.conf"/>
-      <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="plain"/>
+      <file targetdir="$INSTALL_PATH/conf"  override="true" src="config/jhove.conf"/>
+      <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="xml"/>
+      <updatecheck>
+        <include name="bin/**" />
+      </updatecheck>
     </pack>
-    <pack name="JHOVE Shell Scripts" required="yes" os="unix" executable="yes">
-      <description>Bash execution scripts for command line and GUI apps.</description>
-      <file targetdir="$INSTALL_PATH" src="scripts/jhove"/>
-      <parsable targetfile="$INSTALL_PATH/jhove" type="shell"/>
+    <pack name="JHOVE Shell Scripts" required="yes">
+      <os family="unix"/>
+      <description>Bash execution scripts for command-line and GUI apps.</description>
+      <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove"/>
       <executable targetfile="$INSTALL_PATH/jhove"/>
-      <file targetdir="$INSTALL_PATH" src="scripts/jhove-gui"/>
-      <parsable targetfile="$INSTALL_PATH/jhove-gui" type="shell"/>
+      <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove-gui"/>
       <executable targetfile="$INSTALL_PATH/jhove-gui"/>
     </pack>
-    <pack name="JHOVE Batch Script" required="yes" os="windows">
-      <description>DOS batch execution scripts for command line and GUI apps.</description>
-      <file targetdir="$INSTALL_PATH" src="scripts/jhove.bat"/>
-      <parsable targetfile="$INSTALL_PATH/jhove.bat" type="plain"/>
-      <file targetdir="$INSTALL_PATH" src="scripts/jhove-gui.bat"/>
-      <parsable targetfile="$INSTALL_PATH/jhove-gui.bat" type="plain"/>
+    <pack name="JHOVE Batch Scripts" required="yes">
+      <os family="windows"/>
+      <description>DOS batch execution scripts for command-line and GUI apps.</description>
+      <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove.bat"/>
+      <executable targetfile="$INSTALL_PATH/jhove.bat"/>
+      <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove-gui.bat"/>
+      <executable targetfile="$INSTALL_PATH/jhove-gui.bat"/>
+    </pack>
+    <pack name="JHOVE External Modules" required="no">
+      <description>Third-party validation modules developed for JHOVE, currently GZIP, PNG and WARC.</description>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/jhove-ext-modules-${project.version}.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/jhove-ext-modules-${project.version}.jar"/>
+      <file targetdir="$INSTALL_PATH/conf" override="true" src="config/ext-modules/jhove.conf"/>
+      <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="xml"/>
     </pack>
   </packs>
 </izpack:installation>

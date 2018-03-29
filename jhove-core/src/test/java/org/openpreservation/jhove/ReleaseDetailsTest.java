@@ -60,14 +60,4 @@ public class ReleaseDetailsTest {
     public void testEqualsContract() {
         EqualsVerifier.forClass(ReleaseDetails.class).verify();
     }
-
-    /**
-     * Test method for {@link java.lang.Object#toString()}.
-     */
-    @Test
-    public final void testToString() {
-        ReleaseDetails instance = ReleaseDetails.getInstance();
-        assertEquals("ReleaseDetails [version=0.1.2-TESTER, buildDate=Sun Jul 31 00:00:00 " + TimeZone.getDefault().getDisplayName(true, TimeZone.SHORT) + " 2011]", instance.toString());
-    }
-
 }

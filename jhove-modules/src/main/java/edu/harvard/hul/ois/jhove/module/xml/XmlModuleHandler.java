@@ -13,6 +13,7 @@ import edu.harvard.hul.ois.jhove.module.html.DTDMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.MessageFormat;
 import java.util.*;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.InputSource;
@@ -335,18 +336,18 @@ public class XmlModuleHandler extends DefaultHandler {
         }
         InputSource ent = DTDMapper.publicIDToFile(publicId);
         if (ent == null) {
-        	try {
-	            ent = super.resolveEntity(publicId, systemId);
-        	}
-        	catch (SAXException ee) {
-        		throw ee;
-        	}
-        	catch (Exception e) {
-        		// Depending on the JDK version, super.resolveEntity
-        		// may or may not be formally capable of throwing an IOException.
-        		// This hack allows compatibility in either case.
-        		throw new SAXException (e);
-        	}
+            try {
+                ent = super.resolveEntity(publicId, systemId);
+            }
+            catch (SAXException ee) {
+                throw ee;
+            }
+            catch (Exception e) {
+                // Depending on the JDK version, super.resolveEntity
+                // may or may not be formally capable of throwing an IOException.
+                // This hack allows compatibility in either case.
+                throw new SAXException (e);
+            }
         }
         else {
             // A little magic so SAX won't give up in advance on
@@ -397,7 +398,8 @@ public class XmlModuleHandler extends DefaultHandler {
      */
     public void warning (SAXParseException e)
     {
-        _messages.add (new InfoMessage (e.getMessage()));
+        _messages.add (new InfoMessage (
+            MessageFormat.format(MessageConstants.ERR_SAX_EXCEPTION,e.getMessage ().toString ())));
     }
     
     
@@ -411,17 +413,16 @@ public class XmlModuleHandler extends DefaultHandler {
     {
        _valid = false;
         if (_nErrors == MAXERRORS) {
-            _messages.add (new InfoMessage
-                ("Error messages in excess of " + MAXERRORS +
-                 " not reported"));
+            _messages.add (new InfoMessage (
+                MessageFormat.format(MessageConstants.WRN_TOO_MANY_MESSAGES, MAXERRORS)));
         }
         else if (_nErrors < MAXERRORS) {
             int line = e.getLineNumber();
             int col = e.getColumnNumber();
-            _messages.add (new ErrorMessage 
-                (e.getMessage ().toString (), 
-                 "Line = " + line +
-                 ", Column = " + col));
+            _messages.add (new ErrorMessage (
+                MessageFormat.format(MessageConstants.ERR_SAX_EXCEPTION,e.getMessage ().toString ()), 
+                "Line = " + line +
+                ", Column = " + col));
         }
         ++_nErrors;
      }

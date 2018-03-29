@@ -160,19 +160,18 @@ public class StructureTree
     /* See if the root is valid.  If not, throw a PDFException. */
     private void validateRoot () throws PdfException
     {
-        final String badRoot = "Invalid document structure root";
         try {
             PdfSimpleObject typ = 
         	(PdfSimpleObject)_rootDict.get ("Type");
             if (!"StructTreeRoot".equals (typ.getStringValue ())) {
-                throw new PdfInvalidException (badRoot);
+                throw new PdfInvalidException (MessageConstants.ERR_DOC_STRUCT_ROOT_INVALID);
             }
         }
         catch (PdfException e) {
             throw e;
         }
         catch (Exception e) {
-            throw new PdfInvalidException (badRoot);
+            throw new PdfInvalidException (MessageConstants.ERR_DOC_STRUCT_ROOT_INVALID);
         }
     }
 
@@ -186,7 +185,6 @@ public class StructureTree
        Returns null if there are none. */
     private List<StructureElement> getChildren () throws PdfException
     {
-	final String invdata = "Invalid data in document structure root";
 	List<StructureElement> kidsList = null;
 	PdfObject kids = null;
 	try {
@@ -219,7 +217,7 @@ public class StructureTree
 			((PdfObject) kidsVec.elementAt (i));
 		}
 		catch (IOException e) {
-		    throw new PdfMalformedException (invdata);
+		    throw new PdfMalformedException (MessageConstants.ERR_DOC_STRUCT_ROOT_CONTAINS_INVALID_DATA);
 		}
 		StructureElement se = new StructureElement 
 			((PdfDictionary) kid, this);
@@ -230,7 +228,7 @@ public class StructureTree
 	    return kidsList;
 	}
 	else {
-	    throw new PdfInvalidException (invdata);
+	    throw new PdfInvalidException (MessageConstants.ERR_DOC_STRUCT_ROOT_CONTAINS_INVALID_DATA);
 	}
     }
 

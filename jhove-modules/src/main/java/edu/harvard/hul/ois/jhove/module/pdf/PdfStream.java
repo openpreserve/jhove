@@ -108,7 +108,7 @@ public class PdfStream extends PdfObject
      *  this Stream.  The elements of the array are Filter
      *  objects.
      */
-    public Filter[] getFilters () throws PdfException
+    public Filter[] getFilters ()
     {
         return _filters;
     }
@@ -201,7 +201,7 @@ public class PdfStream extends PdfObject
             }
         }
         catch (Exception e) {
-            throw new PdfMalformedException ("Malformed filter");
+            throw new PdfMalformedException (MessageConstants.ERR_FILTER_MALFORMED);
         }
     }
 
