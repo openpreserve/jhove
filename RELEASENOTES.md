@@ -54,7 +54,7 @@ JHOVE 1.20
 - Subformat GUID's are now reported in their standard format, e.g.
   `00000001-0000-0010-8000-00AA00389B71`, instead of as an
   array of byte values [[#308][]]
-- Added checks to verify the existence of Data chunks and their apperance 
+- Added checks to verify the existence of Data chunks and their appearance 
   after Format chunks [[#308][]]
 - Expanded WAVE example corpora to cover more formats and errors [[#308][]]
 - Improved truncation detection and reporting [[#308][]]
