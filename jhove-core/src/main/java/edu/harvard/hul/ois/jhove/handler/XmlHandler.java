@@ -4346,13 +4346,13 @@ public class XmlHandler
         };
         _writer.println (margn1 + elementStart ("tcf:startTime", attrs));
 	_writer.println (margn2 + element ("tcf:hours",
-				   Integer.toString (start.getHours ())));
+				   Long.toString (start.getHours ())));
 	_writer.println (margn2 + element ("tcf:minutes",
-				   Integer.toString (start.getMinutes ())));
+				   Long.toString (start.getMinutes ())));
 	_writer.println (margn2 + element ("tcf:seconds",
-				   Integer.toString (start.getSeconds ())));
+				   Long.toString (start.getSeconds ())));
 	_writer.println (margn2 + element ("tcf:frames",
-				   Integer.toString (start.getFrames ()) ));
+				   Long.toString (start.getFrames ()) ));
 	String[] [] sampleAttrs = {
 	    {"tcf:sampleRate", ""}
 	};
@@ -4363,7 +4363,7 @@ public class XmlHandler
 	sampleAttrs[0][1] = "S" + Integer.toString ((int) sr);
 	_writer.println (margn2 + elementStart ("tcf:samples", sampleAttrs));
 	_writer.println (margn3 + element ("tcf:numberOfSamples",
-				   Integer.toString (start.getSamples ())));
+				   Long.toString (start.getSamples ())));
 	_writer.println (margn2 + elementEnd("tcf:samples"));
 	_writer.println (margn2 + element ("tcf:filmFraming", ffAttrs));
 	_writer.println (margn1 + elementEnd ("tcf:startTime"));
@@ -4371,13 +4371,13 @@ public class XmlHandler
 	if (duration != null) {
 	    _writer.println (margn1 + elementStart ("tcf:duration", attrs));
 	    _writer.println (margn2 + element ("tcf:hours",
-			       Integer.toString (duration.getHours ())));
+			       Long.toString (duration.getHours ())));
 	    _writer.println (margn2 + element ("tcf:minutes",
-			       Integer.toString (duration.getMinutes ())));
-	    _writer.println (margn2 + element ("tcf:seconds",
-			       Integer.toString (duration.getSeconds ())));
-	    _writer.println (margn2 + element
-                    ("tcf:frames", Integer.toString (duration.getFrames ())));
+			       Long.toString (duration.getMinutes ())));
+	    _writer.println (margn2 + element ("tcf:seconds", 
+			       Long.toString (duration.getSeconds ())));
+	    _writer.println (margn2 + element ("tcf:frames",
+			       Long.toString (duration.getFrames ())));
 	    sr = duration.getSampleRate ();
 	    if (sr == 1.0) {
 		sr = _sampleRate;
@@ -4386,7 +4386,7 @@ public class XmlHandler
 	    _writer.println (margn2 + elementStart ("tcf:samples",
 						    sampleAttrs));
 	    _writer.println (margn3 + element ("tcf:numberOfSamples",
-			       Integer.toString (duration.getSamples ()) ));
+			       Long.toString (duration.getSamples ()) ));
 	    _writer.println (margn2 + elementEnd("tcf:samples"));
 	    _writer.println (margn2 + element ("tcf:filmFraming", ffAttrs));
 	    _writer.println (margn1 + elementEnd ("tcf:duration"));

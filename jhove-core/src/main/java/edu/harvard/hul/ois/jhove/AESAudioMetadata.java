@@ -161,17 +161,17 @@ public class AESAudioMetadata
      */
     public static interface TimeDesc {
         /** Returns the hours component. */
-        public int getHours ();
+        public long getHours ();
         /** Returns the minutes component. */
-        public int getMinutes ();
+        public long getMinutes ();
         /** Returns the seconds component. */
-        public int getSeconds ();
+        public long getSeconds ();
         /** Returns the frames component of the fraction of a second.
          *  We always consider frames to be thirtieths of a second. */
-        public int getFrames ();
+        public long getFrames ();
         /** Returns the samples remaining after the frames part of
          *  the fractional second. */
-        public int getSamples ();
+        public long getSamples ();
         /** Returns the sample rate on which the samples remainder
          *  is based. */
         public double getSampleRate ();
@@ -361,13 +361,13 @@ public class AESAudioMetadata
      */
     class TimeDescImpl implements TimeDesc
     {
-        private int _hours;
-        private int _minutes;
-        private int _seconds;
-        private int _frames;
-        private int _samples;
+        private long _hours;
+        private long _minutes;
+        private long _seconds;
+        private long _frames;
+        private long _samples;
         private double _sampleRate;
-	private int _frameCount;
+        private long _frameCount;
         
 	/* Constructor rewritten to avoid rounding errors when converting to
 	 * TCF. Now uses integer remainder math instead of floating point.
@@ -405,15 +405,15 @@ public class AESAudioMetadata
 		_sample_count = (_sample_count % sample_in_1_day);
 	    }
 		
-	    _hours = (int)(_sample_count / sample_in_1_hour);
-	    _sample_count -= (_hours * sample_in_1_hour);
-	    _minutes = (int)(_sample_count / sample_in_1_minute);
-	    _sample_count -= (_minutes * sample_in_1_minute);
-	    _seconds = (int)(_sample_count / sample_in_1_second);
-	    _sample_count -= (_seconds * sample_in_1_second);
-	    _frames = (int)(_sample_count / sample_in_1_frame);
-	    _sample_count -= (_frames * sample_in_1_frame);
-	    _samples = (int)_sample_count;
+	    _hours = _sample_count / sample_in_1_hour;
+	    _sample_count -= _hours * sample_in_1_hour;
+	    _minutes = _sample_count / sample_in_1_minute;
+	    _sample_count -= _minutes * sample_in_1_minute;
+	    _seconds = _sample_count / sample_in_1_second;
+	    _sample_count -= _seconds * sample_in_1_second;
+	    _frames = _sample_count / sample_in_1_frame;
+	    _sample_count -= _frames * sample_in_1_frame;
+	    _samples = _sample_count;
 			
 	    /* At present TCF does not have the ability to handle time stamps
 	     * > midnight. Industry practice is to roll the clock forward to
@@ -424,29 +424,29 @@ public class AESAudioMetadata
         }
         
         /** Returns the hours component. */
-        public int getHours () {
+        public long getHours () {
             return _hours;
         }
 
         /** Returns the minutes component. */
-        public int getMinutes () {
+        public long getMinutes () {
             return _minutes;
         }
 
         /** Returns the seconds component. */
-        public int getSeconds () {
+        public long getSeconds () {
             return _seconds;
         }
 
         /** Returns the frames component of the fraction of a second.
          *  We always consider frames to be thirtieths of a second. */
-        public int getFrames () {
+        public long getFrames () {
             return _frames;
         }
 
         /** Returns the samples remaining after the frames part of
          *  the fractional second. */
-        public int getSamples () {
+        public long getSamples () {
             return _samples;
         }
         
