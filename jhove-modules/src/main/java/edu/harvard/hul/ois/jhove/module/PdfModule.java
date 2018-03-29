@@ -108,14 +108,11 @@ import edu.harvard.hul.ois.jhove.module.pdf.X3Profile;
 /**
  *  Module for identification and validation of PDF files.
  */
-public class PdfModule
-    extends ModuleBase
-{
+public class PdfModule extends ModuleBase {
 	public static final String MIME_TYPE = "application/pdf";
 	public static final String EXT = ".pdf";
-	
-	private static final String ENCODING_PREFIX = "ENC=";
-//	private static final String NO_HEADER = "No PDF header";
+
+  private static final String ENCODING_PREFIX = "ENC=";
 
 	private static final String DEFAULT_PAGE_LAYOUT = "SinglePage";
 	private static final String DEFAULT_MODE = "UseNone";
@@ -256,7 +253,6 @@ public class PdfModule
 	private static final String DICT_KEY_FLAGS = "Flags";
 	private static final String KEY_VAL_CATALOG = "Catalog";
 	
-	
 	private static final String PROP_NAME_BASE_FONT = DICT_KEY_BASE_FONT;
 	private static final String PROP_NAME_CALLOUT_LINE = "CalloutLine";
 	private static final String PROP_NAME_CMAP_DICT = "CMapDictionary";
@@ -364,7 +360,7 @@ public class PdfModule
 	private static final String PROP_VAL_NO_FLAGS_SET = "No flags set";
 	private static final String XOBJ_SUBTYPE_IMAGE = PROP_NAME_IMAGE;
 	private static final String EMPTY_LABEL_PROPERTY = "[empty]";
-	
+
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
@@ -706,9 +702,7 @@ public class PdfModule
      *  Returns to a default state without any parameters.
      */
     @Override
-    public void resetParams()
-        throws Exception
-    {
+    public void resetParams() throws Exception {
         _showAnnotations = true;
         _showFonts = true;
         _showOutlines = true;
@@ -837,7 +831,7 @@ public class PdfModule
             }
             // Beware infinite loop on badly broken file
             if (_startxref == _prevxref) {
-				info.setMessage(new ErrorMessage(MessageConstants.ERR_XREF_TABLES_BROKEN, 
+				info.setMessage(new ErrorMessage(MessageConstants.ERR_XREF_TABLES_BROKEN,
 												 _parser.getOffset()));
                 info.setWellFormed(false);
                 return;
@@ -1367,7 +1361,7 @@ public class PdfModule
                 _pdfACompliant = false;
             }
         }
-        else 
+        else
         	throw new PdfInvalidException(MessageConstants.ERR_SIZE_ENTRY_TRAILER_DICT_MISSING,
         								  _parser.getOffset());
 
@@ -1600,11 +1594,17 @@ public class PdfModule
             e.printStackTrace();
         }
         if (_docCatDict == null) {
-            // If it fails here, it's ill-formed, not
-            // just invalid
+            // If no object was returned, the PDF's not well-formed
             info.setWellFormed(false);
             info.setMessage(new ErrorMessage
                        (MessageConstants.ERR_DOC_CAT_DICT_MISSING, 0));
+            return false;
+        } else if (_docCatDict.getObjNumber() != _docCatDictRef.getObjNumber()) {
+            // If the returned object nmumber is not the same as that requested
+            _logger.warning(String.format("Inconsistent Document Catalog Object Number"));
+            _logger.warning(String.format(" - /Root indirect reference number: %d, returned object ID: %d.", _docCatDictRef.getObjNumber(), _docCatDict.getObjNumber()));
+            info.setWellFormed(false);
+            info.setMessage(new ErrorMessage(MessageConstants.ERR_DOC_CAT_OBJ_NUM_INCNSTNT, 0));
             return false;
         }
         try {
@@ -1621,11 +1621,10 @@ public class PdfModule
                 }
             } else {
                 // There's no type key or it's not a simple object
-                info.setWellFormed(false);
-                // Choose message depending on whether the value is null or of the wrong type
-                String message = (type == null) ?
-                    MessageConstants.ERR_DOC_CAT_NO_TYPE :
-                        MessageConstants.ERR_DOC_CAT_NOT_SIMPLE;
+                // Choose message depending on whether the value is null or of
+                // the wrong type
+                String message = (type == null) ? MessageConstants.ERR_DOC_CAT_NO_TYPE
+                                                : MessageConstants.ERR_DOC_CAT_NOT_SIMPLE;
                 info.setMessage(new ErrorMessage(message, 0));
                 return false;
             }
@@ -2698,7 +2697,27 @@ public class PdfModule
         }
         _parser.seek(offset);
         PdfObject obj = _parser.readObjectDef();
-        obj.setObjNumber(objIndex);
+        //
+        // Experimental carl@openpreservation.org 2018-03-14
+        //
+        // Previously all object numbers (ids) were overwritten even if they'd
+        // previously been assigned.
+        //
+        // This is caused by a little confusion where the object ID and the
+        // index of the _xref array are used interchangeably when they're not
+        // the same thing. There's an assumption when for the _xref array
+        // that the objects will have continuous numeric object numbers. This
+        // means that the object number and array position will always be the
+        // same. The setting of the object number meant that the wrong object could
+        // be returned with the id changed to match the id requested.
+        //
+        // My guess is that the assignment was put in to ensure that an
+        // object that escaped initialisation had an object number. If that's
+        // the case then the code below will still allow that to happen but
+        // will prevent assigned numbers from been overwritten by the xref array position.
+        if (obj.getObjNumber() == -1) {
+           obj.setObjNumber(objIndex);
+        }
         return obj;
     }
 
