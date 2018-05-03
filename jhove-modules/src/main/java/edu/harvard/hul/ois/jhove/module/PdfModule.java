@@ -34,11 +34,11 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipException;
 
 import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
@@ -500,25 +500,6 @@ public class PdfModule extends ModuleBase {
 
     /** Number of fonts reported so far. */
     protected int _nFonts;
-
-    /* These are the message texts to post in case of omitted
-       information. */
-    private final static String fontsSkippedString =
-        "Fonts exist, but are not displayed; to display " +
-        "remove param value of f from the config file";
-    private final static String outlinesSkippedString =
-        "Outlines exist, but are not displayed; to display " +
-        "remove param value of o from the config file";
-    private final static String annotationsSkippedString =
-        "Annotations exist, but are not displayed; to display " +
-        "remove param value of a from the config file";
-    private final static String pagesSkippedString =
-        "Page information is not displayed; to display " +
-        "remove param value of p from the config file";
-
-    /* Warning messages. */
-    protected final static String outlinesRecursiveString =
-        "Outlines contain recursive references.";
 
     /* Name-to-value array pairs for NISO metadata */
     private final static String[] compressionStrings =
@@ -2480,7 +2461,7 @@ public class PdfModule extends ModuleBase {
                             !_showFonts &&
                             _verbosity != Module.MAXIMUM_VERBOSITY) {
                             info.setMessage(new InfoMessage
-                               (fontsSkippedString));
+                               (MessageConstants.INF_FONTS_SKIPPED));
                             _skippedFontsReported = true;
                         }
                     }
@@ -2495,7 +2476,7 @@ public class PdfModule extends ModuleBase {
         }
         catch (Exception e) {
             // Unexpected exception.
-        	_logger.warning(MessageConstants.WRN_FIND_FONTS + e.toString());
+            _logger.log(Level.WARNING, MessageConstants.ERR_FIND_FONTS_ERR, e);
             info.setWellFormed(false);
             info.setMessage(new ErrorMessage(MessageConstants.ERR_FIND_FONTS_ERR,
             								 e.toString(), _parser.getOffset()));
@@ -2943,7 +2924,7 @@ public class PdfModule extends ModuleBase {
             else {
                 if (!_skippedPagesReported) {
                     info.setMessage(new InfoMessage
-                       (pagesSkippedString));
+                       (MessageConstants.INF_PAGES_SKIPPED));
                 }
                 _skippedPagesReported = true;
             }
@@ -3021,7 +3002,7 @@ public class PdfModule extends ModuleBase {
                         // but we do report that we don't report them.
                         if (!_skippedAnnotationsReported) {
                             info.setMessage(new InfoMessage
-                                (annotationsSkippedString));
+                                (MessageConstants.INF_ANNOTATIONS_SKIPPED));
                             _skippedAnnotationsReported = true;
                         }
                     }
@@ -4074,7 +4055,7 @@ public class PdfModule extends ModuleBase {
                 if (item.getObjNumber() == onum.intValue()) {
                     if (!_recursionWarned) {
                         info.setMessage(new InfoMessage
-                               (outlinesRecursiveString));
+                               (MessageConstants.INF_OUTLINES_RECURSIVE));
                         _recursionWarned = true;
                     }
                     break;
@@ -4186,7 +4167,7 @@ public class PdfModule extends ModuleBase {
                         if (!_recursionWarned) {
                             // Warn of recursion
                             info.setMessage(new InfoMessage
-                                   (outlinesRecursiveString));
+                                   (MessageConstants.INF_OUTLINES_RECURSIVE));
                             _recursionWarned = true;
                         }
                     }
@@ -4204,7 +4185,7 @@ public class PdfModule extends ModuleBase {
                     if (child.getObjNumber() == onum.intValue()) {
                         if (!_recursionWarned) {
                             info.setMessage(new InfoMessage
-                                   (outlinesRecursiveString));
+                                   (MessageConstants.INF_OUTLINES_RECURSIVE));
                             _recursionWarned = true;
                         }
                         break;
@@ -4245,7 +4226,7 @@ public class PdfModule extends ModuleBase {
                 else if (!_skippedOutlinesReported) {
                     // We report that we aren't reporting skipped outlines
                     info.setMessage(new InfoMessage
-                               (outlinesSkippedString));
+                               (MessageConstants.INF_OUTLINES_SKIPPED));
                     _skippedOutlinesReported = true;
                 }
             }
@@ -4355,7 +4336,7 @@ public class PdfModule extends ModuleBase {
                                 propDate));
                 }
                 else {
-                    throw new PdfInvalidException(MessageConstants.ERR_DATE_MALFORMEED, 0);
+                    throw new PdfInvalidException(MessageConstants.ERR_DATE_MALFORMED, 0);
                 }
             }
         }
