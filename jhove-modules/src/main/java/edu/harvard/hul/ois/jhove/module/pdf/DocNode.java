@@ -39,13 +39,14 @@ public abstract class DocNode
      */
     public DocNode (PdfModule module,
                 PageTreeNode parent, 
-                PdfDictionary dict)
+                PdfDictionary dict) throws PdfMalformedException
     {
+         if (dict == null) {
+             throw new PdfMalformedException (MessageConstants.ERR_DOC_NODE_DICT_MISSING); // PDF-HUL-3
+         }
         _module = module;
         _parent = parent;
         _dict = dict;
-        // Debug code
-        PdfIndirectObj parentRef = (PdfIndirectObj) _dict.get ("Parent");
     }
     
     /**
@@ -99,19 +100,13 @@ public abstract class DocNode
      */
     public PdfDictionary getResources () throws PdfException
     {
-        if (_dict == null) {
-            throw new PdfMalformedException (MessageConstants.ERR_DOC_NODE_DICT_MISSING);
-        }
+        PdfObject resdict = _dict.get ("Resources");
         try {
-            PdfObject resdict = _dict.get ("Resources");
             resdict = _module.resolveIndirectObject (resdict);
             return (PdfDictionary) resdict;
         }
-        catch (ClassCastException e) {
-            throw new PdfInvalidException (MessageConstants.ERR_RESOURCES_ENTRY_INVALID);
-        }
         catch (IOException f) {
-            throw new PdfInvalidException (MessageConstants.ERR_RESOURCES_ENTRY_INVALID);
+            throw new PdfInvalidException (MessageConstants.ERR_RESOURCES_ENTRY_INVALID); // PDF-HUL-4
         }
     }
 
@@ -126,18 +121,18 @@ public abstract class DocNode
     public PdfDictionary getFontResources () throws PdfException
     {
         PdfDictionary resdict = getResources ();
-        if (resdict != null) {
-            try {
-                PdfObject fontdict = (PdfObject) resdict.get("Font");
-                fontdict = _module.resolveIndirectObject (fontdict);
-                return (PdfDictionary) fontdict;
-            }
-            catch (Exception e) {
-                throw new PdfMalformedException 
-                        (MessageConstants.ERR_RESOURCES_FONT_ENTRY_INVALID);
-            }
+        if (resdict == null) {
+            return null;
         }
-        return null;
+        PdfObject fontdict = resdict.get("Font");
+        try {
+            fontdict = _module.resolveIndirectObject (fontdict);
+        }
+        catch (IOException e) {
+            throw new PdfMalformedException
+                    (MessageConstants.ERR_RESOURCES_FONT_ENTRY_INVALID); // PDF-HUL-5
+        }
+        return (PdfDictionary) fontdict;
     }
     
     /**
@@ -148,17 +143,15 @@ public abstract class DocNode
      */
     public PdfArray getMediaBox () throws PdfInvalidException
     {
-        try {
-	    PdfArray mbox = (PdfArray) get ("MediaBox", true);
-            if (mbox.toRectangle () != null) {
-                return mbox;
-            }
-            // There's a MediaBox, but it's not a rectangle
-            throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_MEDIA_BOX_MALFORMED);
+        PdfArray mbox = (PdfArray) get ("MediaBox", true);
+        if (mbox == null) {
+            return null;
         }
-        catch (Exception e) {
-            throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_MEDIA_BOX_MALFORMED);
+        if (mbox.toRectangle () != null) {
+            return mbox;
         }
+        // There's a MediaBox, but it's not a rectangle
+        throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_MEDIA_BOX_MALFORMED); // PDF-HUL-6
     }
 
     /**

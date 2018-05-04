@@ -87,7 +87,7 @@ public enum MessageConstants {
 	public static final String ERR_DOC_CAT_NO_TYPE = "Document catalog has no Type key or it has a null value."; // PDF-HUL-156
 	public static final String ERR_DOC_CAT_NOT_SIMPLE = "Document catalog Type key does not have a simple String value."; // PDF-HUL-157
 	public static final String ERR_DOC_CAT_VERSION_INVALID = "Invalid Version in document catalog"; // PDF-HUL-90
-	public static final String ERR_DOC_NODE_DICT_MISSING = "Missing dictionary in document node"; // PDF-HUL-2
+	public static final String ERR_DOC_NODE_DICT_MISSING = "Missing dictionary in document node"; // PDF-HUL-3
 	public static final String ERR_DOC_STRUCT_ATT_INVALID = "Invalid attribute in document structure"; // PDF-HUL-54
 	public static final String ERR_DOC_STRUCT_ROOT_CONTAINS_INVALID_DATA = "Invalid data in document structure root";  // PDF-HUL-59, PDF-HUL-60
 	public static final String ERR_DOC_STRUCT_ROOT_INVALID = "Invalid document structure root"; // PDF-HUL-57, PDF-HUL-58
@@ -132,7 +132,7 @@ public enum MessageConstants {
 	public static final String ERR_PAGE_TREE_BLEEDBOX_MALFORMED = "Malformed BleedBox in page tree"; // PDF-HUL-24
 	public static final String ERR_PAGE_TREE_DEPTH_EXCEEDED = "Excessive depth or infinite recursion in page tree structure"; // PDF-HUL-31
 	public static final String ERR_PAGE_TREE_IMPROPERLY_CONSTRUCTED = "Improperly constructed page tree"; // PDF-HUL-30
-	public static final String ERR_PAGE_TREE_MEDIA_BOX_MALFORMED = "Malformed MediaBox in page tree"; // PDF-HUL-6, PDF-HUL-7
+	public static final String ERR_PAGE_TREE_MEDIA_BOX_MALFORMED = "Malformed MediaBox in page tree"; // PDF-HUL-6
 	public static final String ERR_PAGE_TREE_MISSING = "Document page tree not found"; // PDF-HUL-101
 	public static final String ERR_PAGE_TREE_NODE_INVALID = "Invalid page tree node"; // PDF-HUL-29
 	public static final String ERR_PAGE_TREE_NODE_NOT_FOUND = "Page tree node not found."; // PDF-HUL-161
@@ -141,7 +141,7 @@ public enum MessageConstants {
 	public static final String ERR_PDF_MINOR_INVALID = "PDF minor version number is greater than 7."; // PDF-HUL-162
 	public static final String ERR_PDF_TRAILER_MISSING = "No PDF trailer"; // PDF-HUL-152
 	public static final String ERR_PREV_OFFSET_TRAILER_DICT_INVALID = "Invalid Prev offset in trailer dictionary"; // PDF-HUL-70
-	public static final String ERR_RESOURCES_ENTRY_INVALID = "Invalid Resources Entry in document"; // PDF-HUL-3, PDF-HUL-4
+	public static final String ERR_RESOURCES_ENTRY_INVALID = "Invalid Resources Entry in document"; // PDF-HUL-4
 	public static final String ERR_RESOURCES_FONT_ENTRY_INVALID = "Invalid Font entry in Resources"; // PDF-HUL-5
 	public static final String ERR_INVALID_ROLE_MAP = "Invalid RoleMap"; // PDF-HUL-61
 	public static final String ERR_SIZE_ENTRY_TRAILER_DICT_INVALID = "Invalid Size entry in trailer dictionary"; // PDF-HUL-71
