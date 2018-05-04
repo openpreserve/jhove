@@ -102,6 +102,8 @@ public enum MessageConstants {
 	public static final String ERR_HEX_STRING_CHAR_INVALID = "Invalid character in hex string"; // PDF-HUL-10, PDF-HUL-65
 	public static final String ERR_INDIRECT_OBJ_REF_MALFORMED = "Malformed indirect object reference"; // PDF-HUL-43
 	public static final String ERR_INLINE_STRUCT_ELE_CONTAINS_BLOCK_ATTS = "Block-level attributes in inline structure element"; // PDF-HUL-53
+	public static final String ERR_IOEXCEP_READING = "An IOException was thrown reading";
+	public static final String ERR_IOEXCEP_READING_DEST = ERR_IOEXCEP_READING + " destination array id: %d"; // PDF-HUL-2
 	public static final String ERR_LITERAL_UNTERMINATED = "Unterminated literal in PDF file"; // PDF-HUL-9
 	public static final String ERR_NAME_TREE_INVALID = "Invalid name tree"; // PDF-HUL-11, PDF-HUL-12, PDF-HUL-13, PDF-HUL-14, PDF-HUL-15
 	public static final String ERR_NAMES_DICT_INVALID = "Invalid Names dictionary"; // PDF-HUL-91, PDF-HUL-92
