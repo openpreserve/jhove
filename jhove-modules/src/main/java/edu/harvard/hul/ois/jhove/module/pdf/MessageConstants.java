@@ -76,7 +76,7 @@ public enum MessageConstants {
 	public static final String ERR_ARRAY_IMPROPERLY_NESTED = "Improperly nested array delimiters"; // PDF-HUL-33
 	public static final String ERR_COMPRESSION_INVALID_OR_UNKNOWN = "Compression method is invalid or unknown to JHOVE"; // PDF-HUL-121
 	public static final String ERR_DATE_MALFORMED = "Improperly formed date"; // PDF-HUL-147
-	public static final String ERR_DEST_OBJ_INVALID = "Invalid destination object"; // PDF-HUL-1
+	public static final String ERR_DEST_OBJ_INVALID = "Invalid destination object"; // PDF-HUL-1, PDF-HUL-2
 	public static final String ERR_DESTS_DICT_INVALID = "Invalid destinations dictionary"; // PDF-HUL-93, PDF-HUL-94
 	public static final String ERR_DICT_CONTAINS_UNEXPECTED_TOKEN = "Unexpected token in dictionary"; // PDF-HUL-42
 	public static final String ERR_DICT_DELIMITERS_IMPROPERLY_NESTED = "Improperly nested dictionary delimiters"; // PDF-HUL-32
@@ -94,7 +94,7 @@ public enum MessageConstants {
 	public static final String ERR_DOC_STRUCT_TREE_DATA_INVALID = "Invalid data in document structure tree"; // PDF-HUL-56
 	public static final String ERR_ENCRYPT_DICT_ALG_INVALID = "Invalid algorithm value in encryption dictionary"; // PDF-HUL-97
 	public static final String ERR_EOF_UNEXPECTED = "Unexpected EOF"; // PDF-HUL-62
-	public static final String ERR_FILE_SPEC_INVALID = "Invalid file specification"; // PDF-HUL-8
+	public static final String ERR_FILE_SPEC_INVALID = "Invalid file specification"; // PDF-HUL-7
 	public static final String ERR_FILE_TRAILER_MISSING = "No file trailer"; // PDF-HUL-69
 	public static final String ERR_FILTER_MALFORMED = "Malformed filter"; // PDF-HUL-44
 	public static final String ERR_FIND_FONTS_ERR = "Unexpected error in findFonts"; // PDF-HUL-118
@@ -103,7 +103,7 @@ public enum MessageConstants {
 	public static final String ERR_INDIRECT_OBJ_REF_MALFORMED = "Malformed indirect object reference"; // PDF-HUL-43
 	public static final String ERR_INLINE_STRUCT_ELE_CONTAINS_BLOCK_ATTS = "Block-level attributes in inline structure element"; // PDF-HUL-53
 	public static final String ERR_IOEXCEP_READING = "An IOException was thrown reading";
-	public static final String ERR_IOEXCEP_READING_DEST = ERR_IOEXCEP_READING + " destination array id: %d"; // PDF-HUL-2
+	public static final String ERR_IOEXCEP_READING_DEST = ERR_IOEXCEP_READING + " destination array id: %d"; // PDF-HUL-3
 	public static final String ERR_LITERAL_UNTERMINATED = "Unterminated literal in PDF file"; // PDF-HUL-9
 	public static final String ERR_NAME_TREE_INVALID = "Invalid name tree"; // PDF-HUL-11, PDF-HUL-12, PDF-HUL-13, PDF-HUL-14, PDF-HUL-15
 	public static final String ERR_NAMES_DICT_INVALID = "Invalid Names dictionary"; // PDF-HUL-91, PDF-HUL-92

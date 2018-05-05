@@ -63,15 +63,17 @@ public final class Destination
      *  @param  named        Flag indicating whether this object came
      *                       from a named destination.
      */
-    public Destination (PdfObject destObj, PdfModule module, boolean named)
+    public Destination (final PdfObject destObj, final PdfModule module, final boolean named)
                          throws PdfException
     {
+        if (!named && destObj instanceof PdfSimpleObject) {
+            _indirect = true;
+            _indirectDest = (PdfSimpleObject) destObj;
+            return;
+        }
         PdfArray destArray = null;
         try {
-            if (!named && destObj instanceof PdfSimpleObject) {
-                _indirect = true;
-                _indirectDest = (PdfSimpleObject) destObj;
-            } else if (destObj instanceof PdfArray) {
+            if (destObj instanceof PdfArray) {
                 destArray =  (PdfArray) destObj;
                 // We extract only the page reference, not the view.
                 _pageDest = findDirectDest(module, destArray);
@@ -84,8 +86,11 @@ public final class Destination
                 throw new PdfInvalidException (MessageConstants.ERR_DEST_OBJ_INVALID); // PDF-HUL-1
             }
         }
+        catch (ClassCastException e) {
+            throw new PdfInvalidException (MessageConstants.ERR_DEST_OBJ_INVALID); // PDF-HUL-2
+        }
         catch (IOException e) {
-            throw new PdfInvalidException (String.format(MessageConstants.ERR_IOEXCEP_READING_DEST, // PDF-HUL-2
+            throw new PdfInvalidException (String.format(MessageConstants.ERR_IOEXCEP_READING_DEST, // PDF-HUL-3
                     Integer.valueOf(destArray._objNumber)));
         }
     }
