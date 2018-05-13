@@ -1302,6 +1302,7 @@ public class PdfModule extends ModuleBase {
                 throw new PdfInvalidException 
                         ("Root entry missing in cross-ref stream dictionary",
                          _parser.getOffset ());
+            }
             return true;
         }
 
