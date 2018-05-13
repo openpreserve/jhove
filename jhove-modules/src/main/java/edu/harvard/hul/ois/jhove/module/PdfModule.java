@@ -1449,8 +1449,10 @@ public class PdfModule extends ModuleBase {
         while (_startxref > 0) {
             try {
                 _parser.seek(_startxref);
-                PdfStream pstream =
-                   (PdfStream) _parser.readObjectDef();
+                Object defObj = _parser.readObjectDef ();
+                if (!(defObj instanceof PdfStream)) 
+                    return false; //invalid
+                PdfStream pstream = (PdfStream) defObj;
                 int sObjNum = pstream.getObjNumber();
                 CrossRefStream xstream = new CrossRefStream(pstream);
                 if (!xstream.isValid()) {
