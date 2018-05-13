@@ -1286,15 +1286,22 @@ public class PdfModule extends ModuleBase {
             _prevxref = -1;
             /* But I do need to read the dictionary at this point, to get
              * essential stuff out of it. */
-            PdfStream str = (PdfStream) _parser.readObjectDef((Numeric) xref);
-            PdfDictionary dict = str.getDict();
-            _docCatDictRef = (PdfIndirectObj) dict.get(DICT_KEY_ROOT);
-            if (_docCatDictRef == null) {
-				throw new PdfInvalidException(MessageConstants.ERR_XREF_STRM_DICT_ROOT_MISSING,
-											  _parser.getOffset());
-            }
-            /* We don't need to see a trailer dictionary.
-             * Move along, move along.  */
+            Object defObj  = _parser.readObjectDef((Numeric) xref);
+            if (defObj instanceof PdfStream) {
+                PdfStream str = (PdfStream) defObj;
+                PdfDictionary dict = str.getDict();
+                _docCatDictRef = (PdfIndirectObj) dict.get ("Root");
+                if (_docCatDictRef == null) {
+                    throw new PdfInvalidException 
+                        ("Root entry missing in cross-ref stream dictionary",
+                         _parser.getOffset ());
+                }
+                /* We don't need to see a trailer dictionary.
+                 * Move along, move along.  */
+            } else {
+                throw new PdfInvalidException 
+                        ("Root entry missing in cross-ref stream dictionary",
+                         _parser.getOffset ());
             return true;
         }
 
