@@ -1292,9 +1292,8 @@ public class PdfModule extends ModuleBase {
                 PdfDictionary dict = str.getDict();
                 _docCatDictRef = (PdfIndirectObj) dict.get ("Root");
                 if (_docCatDictRef == null) {
-                    throw new PdfInvalidException 
-                        ("Root entry missing in cross-ref stream dictionary",
-                         _parser.getOffset ());
+                    throw new PdfInvalidException(MessageConstants.ERR_XREF_STRM_DICT_ROOT_MISSING, 
+                    _parser.getOffset());
                 }
                 /* We don't need to see a trailer dictionary.
                  * Move along, move along.  */
