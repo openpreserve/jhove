@@ -6,6 +6,8 @@
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import edu.harvard.hul.ois.jhove.module.PdfModule;
+
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -23,13 +25,11 @@ public class NameTreeNode
     protected PdfModule _module;
     protected NameTreeNode _parent;
     protected PdfDictionary _dict;  // dictionary which defines this node
-    //private int _prevKey;        // Key previously obtained in traversing tree
-    //private PdfObject _prevValue; // Value previously obtained in traversing tree
-    //private NameTreeNode _currentDescendant;
-    private Vector _kids;
-    private Vector _names;
-    private Vector _lowerLimit;     // Lower limit of keys for this node -- null for root
-    private Vector _upperLimit;     // Upper limit of keys for this node -- null for root
+
+    private Vector _kids = null;
+    private Vector _names = null;
+    private Vector _lowerLimit = null;     // Lower limit of keys for this node -- null for root
+    private Vector _upperLimit = null;     // Upper limit of keys for this node -- null for root
     
 
     /**
@@ -53,50 +53,41 @@ public class NameTreeNode
             // must be the root node.
             PdfArray limitsDict = (PdfArray) module.resolveIndirectObject
                 (dict.get ("Limits"));
-            if (limitsDict == null) {
-                _lowerLimit = null;
-                _upperLimit = null;
-            }
-            else {
+            if (limitsDict != null) {
                 Vector vec = limitsDict.getContent ();
                 PdfSimpleObject limobj = (PdfSimpleObject) vec.elementAt (0);
                 _lowerLimit = limobj.getRawBytes ();
-                //dumpKey (_lowerLimit, "Lower limit: ");
                 limobj = (PdfSimpleObject) vec.elementAt (1);
                 _upperLimit = limobj.getRawBytes ();
-                //dumpKey (_upperLimit, "Upper limit: ");
             }
-            
             // Get the Kids and Names arrays.  Normally only one will
             // be present.
+            // carl@openpreservation.org : The PDF 1.6 spec is more specific:
+            // Root Node: Single entry, either Kids or Names, not both
+            // Intermediate Node: MUST have Kids and Limits
+            // Leaf Node: MUST have Names and Limits
             PdfArray kidsVec = (PdfArray) module.resolveIndirectObject
                 (dict.get ("Kids"));
             if (kidsVec != null) {
                 _kids = kidsVec.getContent ();
-            }
-            else {
-                _kids = null;
             }
             PdfArray namesVec = (PdfArray) module.resolveIndirectObject
                 (dict.get ("Names"));
             if (namesVec != null) {
                 _names = namesVec.getContent ();
             }
-            else {
-                _names = null;
-            }
         }
         catch (ClassCastException ce) {
-            throw new PdfInvalidException (MessageConstants.ERR_NAME_TREE_INVALID);
+            throw new PdfInvalidException (MessageConstants.ERR_NAME_TREE_INVALID); // PDF-HUL-12
         }
-        catch (NullPointerException ce) {
-            throw new PdfInvalidException (MessageConstants.ERR_NAME_TREE_INVALID);
+        catch (ArrayIndexOutOfBoundsException | NullPointerException ce) {
+            throw new PdfInvalidException (MessageConstants.ERR_NAME_TREE_INVALID); // PDF-HUL-13
         }
-        catch (Exception e) {
-            throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID);
+        catch (IOException e) {
+            throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID); // PDF-HUL-14
         }
     }
-    
+
     /**
      * See if a key is within the bounds of this node.  All keys
      * are within the bounds of the root node.
@@ -161,13 +152,10 @@ public class NameTreeNode
                 }
                 return null;    // Not in any subnode
             }
-            else throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID);
+            else throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID); // PDF-HUL-15
         }
-        catch (PdfException e1) {
-            throw e1;
-        }
-        catch (Exception e) {
-            throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID);
+        catch (IOException | ArrayIndexOutOfBoundsException | NullPointerException | ClassCastException e) {
+            throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID); // PDF-HUL-16
         }
     }
 
