@@ -93,7 +93,7 @@ public class PageTreeTests {
 	public final void testDiffPageTreeKids() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, diffPageTreeKidsPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_DICT_DELIMETERS_IMPROPERLY_NESTED);
+				MessageConstants.ERR_DICT_DELIMITERS_IMPROPERLY_NESTED);
 	}
 
 	/**
