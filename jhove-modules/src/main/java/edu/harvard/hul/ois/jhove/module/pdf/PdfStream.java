@@ -80,20 +80,14 @@ public class PdfStream extends PdfObject
      *  If the stream is external, returns the file specification
      *  for it, otherwise returns null.
      */
-    public String getFileSpecification () 
+    public String getFileSpecification () throws PdfInvalidException
     {
         PdfObject spec = _dict.get ("F");
         if (spec == null) {
             return null;
         }
-        try {
-            pdfaCompliant = false;          // not allowed with PDF/A
-            FileSpecification fs = new FileSpecification (spec);
-            return fs.getSpecString ();
-        }
-        catch (PdfException e) {
-            return null;
-        }
+        pdfaCompliant = false;          // not allowed with PDF/A
+        return FileSpecification.getFileSpecString(spec);
     }
     
     /** Returns true if no PDF/A compliance problems have been found, false if
@@ -165,10 +159,10 @@ public class PdfStream extends PdfObject
          */
         try {
             if (filter instanceof PdfArray) {
-                Vector vec = ((PdfArray) filter).getContent();
+                Vector<PdfObject> vec = ((PdfArray) filter).getContent();
                 int size = vec.size ();
                 Filter[] val = new Filter[size];
-                Vector parmVec = null;
+                Vector<PdfObject> parmVec = null;
                 if (parms != null) {
                     parmVec = ((PdfArray) parms).getContent ();
                 }
@@ -176,7 +170,7 @@ public class PdfStream extends PdfObject
                     PdfSimpleObject f = (PdfSimpleObject) vec.get(i);
                     val[i] = new Filter (f.getStringValue());
                     if (parmVec != null) {
-                        PdfObject parm = (PdfObject) parmVec.get(i);
+                        PdfObject parm = parmVec.get(i);
                         // Parameter may be the null object.
                         if (parm instanceof PdfSimpleObject) {
                             PdfSimpleObject sParm = (PdfSimpleObject) parm;
@@ -201,24 +195,9 @@ public class PdfStream extends PdfObject
             }
         }
         catch (Exception e) {
-            throw new PdfMalformedException (MessageConstants.ERR_FILTER_MALFORMED);
+            throw new PdfMalformedException (MessageConstants.ERR_FILTER_MALFORMED); // PDF-HUL-45
         }
     }
-
-
-    protected List makeFilterList () throws PdfException
-    {
-        Filter[] filters = getFilters ();
-        if (filters.length == 0) {
-            return null;
-        }
-        List lst = new ArrayList (filters.length);
-        for (int i = 0; i < filters.length; i++) {
-            lst.add (filters[i].getFilterName());
-        }
-        return lst;
-    }
-
 
     /**
      *  Returns <code>true</code> if this is an image stream.
