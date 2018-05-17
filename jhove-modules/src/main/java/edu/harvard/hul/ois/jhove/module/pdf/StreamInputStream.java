@@ -41,6 +41,7 @@ public class StreamInputStream extends InputStream {
      *  Return one byte from the stream.
      *  When the end of the stream is reached, returns -1.
      */   
+    @Override
     public int read () throws IOException
     {
         if (_curPos - _startPos >= _length) {

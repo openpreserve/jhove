@@ -42,7 +42,7 @@ public abstract class DocNode
                 PdfDictionary dict) throws PdfMalformedException
     {
          if (dict == null) {
-             throw new PdfMalformedException (MessageConstants.ERR_DOC_NODE_DICT_MISSING); // PDF-HUL-3
+             throw new PdfMalformedException (MessageConstants.ERR_DOC_NODE_DICT_MISSING); // PDF-HUL-4
          }
         _module = module;
         _parent = parent;
@@ -105,8 +105,8 @@ public abstract class DocNode
             resdict = _module.resolveIndirectObject (resdict);
             return (PdfDictionary) resdict;
         }
-        catch (IOException f) {
-            throw new PdfInvalidException (MessageConstants.ERR_RESOURCES_ENTRY_INVALID); // PDF-HUL-4
+        catch (ClassCastException | IOException f) {
+            throw new PdfInvalidException(MessageConstants.ERR_RESOURCES_ENTRY_INVALID); // PDF-HUL-5
         }
     }
 
@@ -127,12 +127,12 @@ public abstract class DocNode
         PdfObject fontdict = resdict.get("Font");
         try {
             fontdict = _module.resolveIndirectObject (fontdict);
+            return (PdfDictionary) fontdict;
         }
-        catch (IOException e) {
+        catch (ClassCastException | IOException e) {
             throw new PdfMalformedException
-                    (MessageConstants.ERR_RESOURCES_FONT_ENTRY_INVALID); // PDF-HUL-5
+                    (MessageConstants.ERR_RESOURCES_FONT_ENTRY_INVALID); // PDF-HUL-6
         }
-        return (PdfDictionary) fontdict;
     }
     
     /**
@@ -143,15 +143,18 @@ public abstract class DocNode
      */
     public PdfArray getMediaBox () throws PdfInvalidException
     {
-        PdfArray mbox = (PdfArray) get ("MediaBox", true);
-        if (mbox == null) {
-            return null;
+        PdfArray mbox = null;
+        try {
+            mbox = (PdfArray) get ("MediaBox", true);
         }
-        if (mbox.toRectangle () != null) {
-            return mbox;
+        catch (ClassCastException e) {
+            throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_MEDIA_BOX_MALFORMED); // PDF-HUL-7
         }
-        // There's a MediaBox, but it's not a rectangle
-        throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_MEDIA_BOX_MALFORMED); // PDF-HUL-6
+        if (mbox != null && mbox.toRectangle () == null) {
+            // There's a MediaBox, but it's not a rectangle
+            throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_MEDIA_BOX_MALFORMED); // PDF-HUL-8
+        }
+        return mbox;
     }
 
     /**

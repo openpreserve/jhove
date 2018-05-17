@@ -37,13 +37,15 @@ public class StreamTokenizer extends Tokenizer {
     /** Streams can occur only in files, not in streams,
      *  so this should never be called.
      */
-    protected void initStream (Stream token) 
-        throws IOException, PdfException
+    @Override
+    protected void initStream (Stream token)
+        throws PdfException
     {
-        throw new PdfMalformedException (MessageConstants.ERR_STREAM_EMBEDDED_IN_OBJ_STREAM);
+        throw new PdfMalformedException (MessageConstants.ERR_STREAM_EMBEDDED_IN_OBJ_STREAM); // PDF-HUL-47
     }
 
     /** Gets a character from the file, using a buffer. */
+    @Override
     public int readChar () throws IOException
     {
         if (_backupFlag) {
@@ -59,8 +61,9 @@ public class StreamTokenizer extends Tokenizer {
      *
      *  @param  offset  The offset in bytes from the start of the stream.
      */
+    @Override
     public void seek (long offset)
-        throws IOException, PdfException
+        throws IOException
     {
         // Advancing in the stream is easy.  Backing up requires starting
         // the stream over.
@@ -75,16 +78,18 @@ public class StreamTokenizer extends Tokenizer {
      *  Only the file-based tokenizer can do this, so this should never
      *  be called. 
      */
-    protected void setStreamOffset (Stream token) 
-        throws IOException, PdfException
+    @Override
+    protected void setStreamOffset (Stream token)
+        throws PdfException
     {
-        throw new PdfMalformedException (MessageConstants.ERR_STREAM_EMBEDDED_IN_OBJ_STREAM);
+        throw new PdfMalformedException (MessageConstants.ERR_STREAM_EMBEDDED_IN_OBJ_STREAM); // PDF-HUL-48
     }
 
 
     /**
      *   Back up a byte so it will be read again.
      */
+    @Override
     public void backupChar ()
     {
         _backupFlag = true;

@@ -53,6 +53,7 @@ public final class X1aProfile extends XProfileBase
      * to determine the X-1/a compliance status.
      *
      */
+    @Override
     public boolean satisfiesThisProfile ()
     {
         _logger.info("Checking X1A profile");

@@ -35,8 +35,7 @@ public final class PdfXMPSource
      * @param raf      The RandomAccessFile object underlying the PDF
      */
     public PdfXMPSource(PdfStream stream, 
-            RandomAccessFile raf)
-            throws UnsupportedEncodingException {
+            RandomAccessFile raf) {
         super (new InputStreamReader 
                 (new XMLWrapperStream 
                  (new StreamInputStream (stream, raf),
@@ -75,6 +74,7 @@ public final class PdfXMPSource
      * 
      * @see edu.harvard.hul.ois.jhove.XMPSource#resetReader()
      */
+    @Override
     protected void resetReader() {
         try {
             if (_encoding == null) {

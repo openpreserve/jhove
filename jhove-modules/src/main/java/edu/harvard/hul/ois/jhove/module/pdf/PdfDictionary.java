@@ -13,7 +13,7 @@ import java.util.*;
 public class PdfDictionary extends PdfObject
 {
     public static final int PDFA_IMPLEMENTATION_LIMIT = 4095;
-    private final Map<String, PdfObject> _entries = new HashMap<String, PdfObject> ();
+    private final Map<String, PdfObject> _entries = new HashMap<> ();
 
     /** 
      *  Creates a PdfDictionary object.

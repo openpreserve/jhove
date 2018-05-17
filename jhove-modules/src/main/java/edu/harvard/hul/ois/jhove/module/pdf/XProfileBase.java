@@ -253,7 +253,7 @@ public abstract class XProfileBase extends PdfProfile
      *   and formObjectOK for profile-specific functionality.
      */
     @Override
-	protected boolean xObjectOK (PdfDictionary xo) 
+    protected boolean xObjectOK (PdfDictionary xo) 
     {
         if (xo == null) {
             // no XObject means no problem

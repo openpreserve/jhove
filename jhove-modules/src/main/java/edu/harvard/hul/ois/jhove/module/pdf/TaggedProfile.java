@@ -2,7 +2,6 @@
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import edu.harvard.hul.ois.jhove.module.*;
-import java.util.logging.*;
 
 /**
  *  PDF profile checker for Tagged PDF documents.
@@ -15,8 +14,6 @@ public final class TaggedProfile extends PdfProfile
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
 
-    private Logger _logger;
-
     /** 
      *   Constructor.
      *   Creates a TaggedProfile object for subsequent testing.
@@ -27,7 +24,6 @@ public final class TaggedProfile extends PdfProfile
     public TaggedProfile (PdfModule module) 
     {
         super (module);
-        _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.module");
         _profileText = "Tagged PDF";
     }
 
@@ -36,6 +32,7 @@ public final class TaggedProfile extends PdfProfile
      * We check only the dictionaries, not the stream contents.
      *
      */
+    @Override
     public boolean satisfiesThisProfile ()
     {
         try {
@@ -46,7 +43,7 @@ public final class TaggedProfile extends PdfProfile
             // of true.
             PdfDictionary markInfo = (PdfDictionary)
                 _module.resolveIndirectObject
-                    ((PdfObject) docCatDict.get ("MarkInfo"));
+                    (docCatDict.get ("MarkInfo"));
             if (markInfo == null) {
                 return false;
             }
@@ -58,8 +55,7 @@ public final class TaggedProfile extends PdfProfile
 
             // So much for MarkInfo.  Now see if there is a
             // valid structure tree.
-            StructureTree stree = new StructureTree (_module,
-                        _raf, _parser, true);
+            StructureTree stree = new StructureTree (_module, true);
             if (!stree.isPresent () || !stree.isValid ()) {
                 return false;
             }

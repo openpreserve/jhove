@@ -46,6 +46,7 @@ public class PdfMalformedException extends PdfException {
      *  object.  For a PdfInvalidException, this is to call 
      *  <code>setValid (false)</code>.
      */
+    @Override
     public void disparage (RepInfo info) 
     {
         info.setWellFormed (false);

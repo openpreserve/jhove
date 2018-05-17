@@ -41,7 +41,7 @@ public class PdfIndirectObj extends PdfObject
 	        return _cachedObject;
         }
         long key = ((long) _objNumber << 32) +
-            ((long) _genNumber & 0XFFFFFFFFL);
+            (_genNumber & 0XFFFFFFFFL);
         _cachedObject = _objectMap.get (new Long (key));
         return _cachedObject;
     }

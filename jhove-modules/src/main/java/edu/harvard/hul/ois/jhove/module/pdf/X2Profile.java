@@ -33,6 +33,7 @@ public final class X2Profile extends XProfileBase
      * Returns <code>true</code> if the document satisfies the profile.
      *
      */
+    @Override
     public boolean satisfiesThisProfile ()
     {
         try {
@@ -133,12 +134,12 @@ public final class X2Profile extends XProfileBase
                 
                 // Check content streams for  resources
                 if (docNode instanceof PageObject) {
-                    List streams = 
+                    List<PdfStream> streams = 
                         ((PageObject) docNode).getContentStreams ();
                     if (streams != null) {
-                        Iterator iter = streams.listIterator ();
+                        Iterator<PdfStream> iter = streams.listIterator ();
                         while (iter.hasNext ()) {
-                            PdfStream stream = (PdfStream) iter.next ();
+                            PdfStream stream = iter.next ();
                             PdfDictionary dict = stream.getDict ();
                             PdfDictionary rs = 
                                 (PdfDictionary) dict.get ("Resources");
@@ -173,17 +174,17 @@ public final class X2Profile extends XProfileBase
                     // in particular, TrapNet annotations.
                     PdfArray annots = ((PageObject) docNode).getAnnotations ();
                     if (annots != null) {
-                        Vector annVec = annots.getContent ();
+                        Vector<PdfObject> annVec = annots.getContent ();
                         for (int i = 0; i < annVec.size (); i++) {
                             PdfDictionary annDict = (PdfDictionary)
                                 _module.resolveIndirectObject
-                                    ((PdfObject) annVec.elementAt (i));
+                                    (annVec.elementAt (i));
                             PdfSimpleObject subtypeObj = (PdfSimpleObject) annDict.get ("Subtype");
                             if ("TrapNet".equals (subtypeObj.getStringValue ())) {
                                 // FontFauxing must be absent or 0-length
                                 PdfArray ff = (PdfArray) annDict.get ("FontFauxing");
                                 if (ff != null) {
-                                    Vector ffVec = ff.getContent ();
+                                    Vector<PdfObject> ffVec = ff.getContent ();
                                     if (ffVec.size() > 0) {
                                         return false;   // a faux pas
                                     }
@@ -202,6 +203,7 @@ public final class X2Profile extends XProfileBase
 
     /** Checks if a Form xobject is valid.  This overrides the method in
        XProfileBase. */
+    @Override
     protected boolean formObjectOK (PdfDictionary xo)
     {
         // PDF-X/2 elements can't have an OPI key in Form

@@ -90,7 +90,7 @@ public final class Destination
             throw new PdfInvalidException (MessageConstants.ERR_DEST_OBJ_INVALID); // PDF-HUL-2
         }
         catch (IOException e) {
-            throw new PdfInvalidException (String.format(MessageConstants.ERR_IOEXCEP_READING_DEST, // PDF-HUL-3
+            throw new PdfInvalidException (String.format(MessageConstants.ERR_DEST_IOEXCEP_READING, // PDF-HUL-3
                     Integer.valueOf(destArray._objNumber)));
         }
     }
