@@ -57,10 +57,10 @@ public class AESAudioMetadata
     private String _audioDataEncoding;
     private int _byteOrder;
     private String _disposition;
-    private List _faceList;
+    private List<Face> _faceList;
     private long _firstSampleOffset;
     private String _format;
-    private List _formatList;
+    private List<FormatRegion> _formatList;
     private int _numChannels;
     private String _primaryIdentifier;
     private String _primaryIdentifierType;
@@ -95,8 +95,8 @@ public class AESAudioMetadata
         // We add one format region to get started.  In practice,
         // that one is all we're likely to need. but more can be
         // added if necessary.
-        _formatList = new LinkedList ();
-        _faceList = new LinkedList ();
+        _formatList = new LinkedList<> ();
+        _faceList = new LinkedList<> ();
         addFormatRegion ();
         addFace ();
         _numChannels = NULL;
@@ -264,6 +264,7 @@ public class AESAudioMetadata
         }
         
         /** Returns bit depth. */
+        @Override
         public int getBitDepth ()
         {
             return _bitDepth;
@@ -282,18 +283,21 @@ public class AESAudioMetadata
          *  <li>6: dataRateMode
          *  </ul> 
          */
+        @Override
         public String[] getBitrateReduction ()
         {
             return _bitrateReduction;
         }
         
         /** Returns sample rate. */
+        @Override
         public double getSampleRate ()
         {
             return _sampleRate;
         }
         
         /** Returns word size. */
+        @Override
         public int getWordSize ()
         {
             return _wordSize;
@@ -301,6 +305,7 @@ public class AESAudioMetadata
         
         /** Returns true if the FormatRegion contains only
          *  default values. */
+        @Override
         public boolean isEmpty ()
         {
             return _bitDepth == NULL &&
@@ -309,18 +314,21 @@ public class AESAudioMetadata
         }
 
         /** Sets bit depth. */
+        @Override
         public void setBitDepth (int bitDepth)
         {
             _bitDepth = bitDepth;
         }
 
         /** Sets the bitrate reduction information to null (no compression). */
+        @Override
         public void clearBitrateReduction ()
         {
             _bitrateReduction = null;
         }
 
         /** Sets the bitrate reduction (compression type). */
+        @Override
         public void setBitrateReduction (String codecName,
                 String codecNameVersion,
                 String codecCreatorApplication,
@@ -340,6 +348,7 @@ public class AESAudioMetadata
         }
 
         /** Sets sample rate. */
+        @Override
         public void setSampleRate (double sampleRate)
         {
             _sampleRate = sampleRate;
@@ -347,6 +356,7 @@ public class AESAudioMetadata
         
         
         /** Sets word size. */
+        @Override
         public void setWordSize (int wordSize)
         {
             _wordSize = wordSize;
@@ -424,34 +434,40 @@ public class AESAudioMetadata
         }
         
         /** Returns the hours component. */
+        @Override
         public long getHours () {
             return _hours;
         }
 
         /** Returns the minutes component. */
+        @Override
         public long getMinutes () {
             return _minutes;
         }
 
         /** Returns the seconds component. */
+        @Override
         public long getSeconds () {
             return _seconds;
         }
 
         /** Returns the frames component of the fraction of a second.
          *  We always consider frames to be thirtieths of a second. */
+        @Override
         public long getFrames () {
             return _frames;
         }
 
         /** Returns the samples remaining after the frames part of
          *  the fractional second. */
+        @Override
         public long getSamples () {
             return _samples;
         }
         
         /** Returns the sample rate on which the samples remainder
          *  is based. */
+        @Override
         public double getSampleRate () {
             return _sampleRate;
         }
@@ -462,7 +478,7 @@ public class AESAudioMetadata
      *  in _Java in a Nutshell_.
      */
     class FaceImpl implements Face {
-        List _regionList;
+        List<FaceRegion> _regionList;
         TimeDesc _startTime;
         TimeDesc _duration;
         String _direction;
@@ -472,36 +488,41 @@ public class AESAudioMetadata
          *  to null, indicating unknown value. */
         public FaceImpl ()
         {
-            _regionList = new ArrayList ();
+            _regionList = new ArrayList<>();
             _startTime = new TimeDescImpl (0);
             _duration = null;
         }
 
 
         /** Returns an indexed FaceRegion. */
+        @Override
         public FaceRegion getFaceRegion (int i) {
-            return (FaceRegion) _regionList.get (i);
+            return _regionList.get (i);
         }
         
         /** Adds a FaceRegion. This may be called repeatedly to
          *  add multiple FaceRegions. */
+        @Override
         public void addFaceRegion () {
             _regionList.add (new FaceRegionImpl ());
         }
         
         /** Returns the starting time. Will be zero if not
          *  explicitly specified. */
+        @Override
         public TimeDesc getStartTime () {
             return _startTime;
         }
         
         /** Returns the duration. May be null if the duration
          *  is unspecified. */
+        @Override
         public TimeDesc getDuration () {
             return _duration;
         }
 
         /** Returns the direction. */
+        @Override
         public String getDirection ()
         {
             return _direction;
@@ -509,6 +530,7 @@ public class AESAudioMetadata
 
         /** Sets the starting time.  This will be converted
          *  into a TimeDesc. */
+        @Override
         public void setStartTime (long samples)
         {
             _startTime = new TimeDescImpl (samples);
@@ -516,6 +538,7 @@ public class AESAudioMetadata
         
         /** Sets the duration. This will be converted
          *  into a TimeDesc. */
+        @Override
         public void setDuration (long samples)
         {
             _duration = new TimeDescImpl (samples);
@@ -525,6 +548,7 @@ public class AESAudioMetadata
          *  directionTypes.  FORWARD is recommended for most
          *  or all cases. 
          */
+        @Override
         public void setDirection (String direction)
         {
             _direction = direction;
@@ -550,17 +574,20 @@ public class AESAudioMetadata
         }
         
         /** Returns the starting time. */
+        @Override
         public TimeDesc getStartTime () {
             return _startTime;
         }
         
         /** Returns the duration. */
+        @Override
         public TimeDesc getDuration () {
             return _duration;
         }
         
         /** Returns the channel map locations.  The array length
          *  will equal the number of channels. */
+        @Override
         public String[] getMapLocations ()
         {
             return _mapLocations;
@@ -568,12 +595,14 @@ public class AESAudioMetadata
 
         /** Sets the duration. This will be converted
          *  into a TimeDesc. */
+        @Override
         public void setStartTime (long samples) {
             _startTime = new TimeDescImpl (samples);
         }
         
         /** Sets the duration. This will be converted
          *  into a TimeDesc. */
+        @Override
         public void setDuration (long samples)
         {
             _duration = new TimeDescImpl (samples);
@@ -581,6 +610,7 @@ public class AESAudioMetadata
 
         /** Sets the channel map locations.  The array length must
          *  equal the number of channels. */
+        @Override
         public void setMapLocations (String[] locations)
         {
             _mapLocations = locations;

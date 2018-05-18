@@ -67,13 +67,13 @@ public class AuditHandler
     protected String _home;
 
     /** Number of files processed by MIME type. */
-    protected Map _mimeType;
+    protected Map<String, AuditCount> _mimeType;
 
     /** State map. */
-    protected Map _stateMap;
+    protected Map<String, AuditState> _stateMap;
 
     /** State stack. */
-    protected Stack _stateStack;
+    protected Stack<AuditState> _stateStack;
 
     /** Initial time. */
     protected long _t0;
@@ -104,9 +104,9 @@ public class AuditHandler
 
 	/* Initialize the handler. */
 
-	_mimeType   = new TreeMap ();
-	_stateMap   = new TreeMap ();
-	_stateStack = new Stack ();
+	_mimeType   = new TreeMap<> ();
+	_stateMap   = new TreeMap<> ();
+	_stateStack = new Stack<> ();
 	_nAudit     = 0;
     }
 
@@ -119,12 +119,13 @@ public class AuditHandler
      * Prop the state stack and place the current directory file count
      * into the directory hash.
      */
+    @Override
     public final void endDirectory ()
     {
-	AuditState state = (AuditState) _stateStack.pop ();
+	AuditState state = _stateStack.pop ();
 	_stateMap.put (state.getDirectory (), state);
 
-	endDirectoryImpl (state);
+	endDirectoryImpl ();
     }
 
     /**
@@ -132,7 +133,7 @@ public class AuditHandler
      * finished being processed.
      * @param state Audit handler state
      */
-    public void endDirectoryImpl (AuditState state)
+    public void endDirectoryImpl ()
     {
     }
 
@@ -140,11 +141,12 @@ public class AuditHandler
      * Determine whether or not to process the file.
      * @param filepath File pathname 
      */
+    @Override
     public final boolean okToProcess (String filepath)
     {
-	AuditState state = (AuditState) _stateStack.peek ();
+	AuditState state = _stateStack.peek ();
 
-	boolean ok = okToProcessImpl (filepath, state);
+	boolean ok = true;
 	if (!ok) {
 	    state.setNotProcessed (state.getNotProcessed () + 1);
 	}
@@ -153,23 +155,13 @@ public class AuditHandler
     }
 
     /**
-     * Local extension to standard callback that determines whether or not
-     * to process the file.
-     * @param filepath File pathname 
-     * @param state Audit handler state
-     */
-    public boolean okToProcessImpl (String filepath, AuditState state)
-    {
-	return true;
-    }
-
-    /**
      *  Outputs the information contained in a RepInfo object
      * @param info Object representation information
      */
+    @Override
     public void show (RepInfo info)
     {
-	AuditState state = (AuditState) _stateStack.peek ();
+	AuditState state = _stateStack.peek ();
 
 	/* If the file is not found, then no module is assigned in the
 	 * RepInfo object.
@@ -182,7 +174,7 @@ public class AuditHandler
 	}
 	else {
 	    String mime = info.getMimeType ();
-	    AuditCount count = (AuditCount) _mimeType.get (mime);
+	    AuditCount count = _mimeType.get (mime);
 	    if (count == null) {
 		count = new AuditCount ();
 	    }
@@ -199,7 +191,7 @@ public class AuditHandler
 	    _mimeType.put (mime, count);
 	}
 
-	showImpl (info, state);
+	showImpl (info);
     }
 
     /**
@@ -208,7 +200,7 @@ public class AuditHandler
      * @param info Object representation information
      * @param state Audit handler state
      */
-    public void showImpl (RepInfo info, AuditState state)
+    public void showImpl (RepInfo info)
     {
 	String status = null;
 	String mime = info.getMimeType ();
@@ -232,7 +224,7 @@ public class AuditHandler
 	/* Retrieve the MD5 checksum, if available. */
 
 	String md5 = null;
-	List list = info.getChecksum ();
+	List<?> list = info.getChecksum ();
 	int len = list.size ();
 	for (int i=0; i<len; i++) {
 	    Checksum checksum = (Checksum) list.get (i);
@@ -271,25 +263,26 @@ public class AuditHandler
      * including multiple files between the header and the footer, and
      * the XML of the header and footer must balance out.
      */
+    @Override
     public void showFooter ()
     {
-	AuditState state = (AuditState) _stateStack.pop ();
+	AuditState state = _stateStack.pop ();
 	if (state.getTotal () > 0 || state.getNotFound () > 0) {
 	    _stateMap.put (state.getDirectory (), state);
 	}
 
-	showFooterImpl (state);
+	showFooterImpl ();
 	//	super.showFooter ();
 
 	_writer.println ("<!-- Summary by MIME type:");
 	int nTotal      = 0;
 	int nValid      = 0;
 	int nWellFormed = 0;
-	Set keys = _mimeType.keySet ();
-	Iterator iter = keys.iterator ();
+	Set<String> keys = _mimeType.keySet ();
+	Iterator<String> iter = keys.iterator ();
 	while (iter.hasNext ()) {
-	    String mime = (String) iter.next ();
-	    AuditCount count = (AuditCount) _mimeType.get (mime);
+	    String mime = iter.next ();
+	    AuditCount count = _mimeType.get (mime);
 	    int total      = count.getTotal ();
 	    int valid      = count.getValid ();
 	    int wellFormed = count.getWellFormed ();
@@ -314,8 +307,8 @@ public class AuditHandler
 	keys = _stateMap.keySet ();
 	iter = keys.iterator ();
 	while (iter.hasNext ()) {
-	    String directory = (String) iter.next ();
-	    state = (AuditState) _stateMap.get (directory);
+	    String directory = iter.next ();
+	    state = _stateMap.get (directory);
 
 	    int total        = state.getTotal ();
 	    int valid        = state.getValid ();
@@ -358,7 +351,7 @@ public class AuditHandler
      * the XML of the header and footer must balance out.
      * @param state Audit handler state
      */
-    public void showFooterImpl (AuditState state)
+    public void showFooterImpl ()
     {
 	if (_nAudit > 0) {
 	    String margin = getIndent (_level--);
@@ -372,13 +365,14 @@ public class AuditHandler
      * including multiple files between the header and the footer, and
      * the XML of the header and footer must balance out.
      */
+    @Override
     public void showHeader ()
     {
         /* Initialize the handler. */
 
-        _mimeType   = new TreeMap ();
-        _stateMap   = new TreeMap ();
-        _stateStack = new Stack ();
+        _mimeType   = new TreeMap<> ();
+        _stateMap   = new TreeMap<> ();
+        _stateStack = new Stack<> ();
         _nAudit     = 0;
 
         _t0 = System.currentTimeMillis ();
@@ -412,11 +406,12 @@ public class AuditHandler
      * Additional state information can be added to the AuditState object
      * in the showHeaderImpl() method before it is pushed onto the stack.
      */
+    @Override
     public void startDirectory (String directory)
     {
 	try {
 	    AuditState state = (AuditState)
-		((AuditState) _stateStack.peek ()).clone (directory);
+		_stateStack.peek ().clone (directory);
 
 	    startDirectoryImpl (state);
 	    _stateStack.push (state);

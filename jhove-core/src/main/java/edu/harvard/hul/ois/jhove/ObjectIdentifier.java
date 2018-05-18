@@ -20,12 +20,12 @@ public class ObjectIdentifier
      * PRIVATE INSTANCE FIELDS.
      ******************************************************************/
 
-    private List _moduleList;
+    private List<Module> _moduleList;
 
     /******************************************************************
      * CLASS CONSTRUCTOR.
      ******************************************************************/
-    public ObjectIdentifier (List moduleList) 
+    public ObjectIdentifier (List<Module> moduleList)
     {
 	_moduleList = moduleList;
     }
@@ -48,7 +48,6 @@ public class ObjectIdentifier
     public void identify (File file, RepInfo info, 
 			  String parm, boolean verbose,
 			  boolean shortCheck) 
-	                 throws IOException 
     {
 	/******************************************************
 	 *  Go through all modules, in the order in the config
@@ -56,63 +55,64 @@ public class ObjectIdentifier
          *  which matches.
 	 ******************************************************/
 
-	ListIterator modIter = _moduleList.listIterator();
+	ListIterator<Module> modIter = _moduleList.listIterator();
 	while (modIter.hasNext ()) {
-	    /* We need clean RepInfo for each run */
-	    RepInfo info1;
-	    info1 = (RepInfo) info.clone ();
+        /* We need clean RepInfo for each run */
+        RepInfo info1;
+       info1 = (RepInfo) info.clone ();
 
-	    Module mod = (Module) modIter.next ();
-	    try {
-                if (!mod.hasFeature("edu.harvard.hul.ois.jhove.canValidate")) {
-                    continue;
-                }
-		if (mod.isRandomAccess ()) {
-                    RandomAccessFile raf = 
+        Module mod = modIter.next ();
+        try {
+            if (!mod.hasFeature("edu.harvard.hul.ois.jhove.canValidate")) {
+                continue;
+            }
+            if (mod.isRandomAccess ()) {
+                RandomAccessFile raf = 
                         new RandomAccessFile (file, "r");
-                    mod.param (parm);
-                    if (verbose) {
-                        mod.setVerbosity (Module.MAXIMUM_VERBOSITY);
-                    }
-                    if (shortCheck) {
-                        mod.checkSignatures (file, raf, info1);
-                    }
-                    else {
-                        mod.parse (raf, info1);
-                    }
-                    raf.close ();
+                mod.param (parm);
+                if (verbose) {
+                    mod.setVerbosity (Module.MAXIMUM_VERBOSITY);
                 }
-		else {
-		    InputStream stream = new FileInputStream (file);
-		    mod.param (parm);
-		    if (shortCheck) {
-		        mod.checkSignatures (file, stream, info1);
-		    }
-		    else {
-                        int parseIndex = mod.parse (stream, info1, 0);
-                        while (parseIndex != 0) {
-                            stream.close ();
-                            stream = new FileInputStream (file);
+                if (shortCheck) {
+                    mod.checkSignatures (file, raf, info1);
+                }
+                else {
+                    mod.parse (raf, info1);
+                }
+                raf.close ();
+            }
+            else {
+                mod.param (parm);
+                if (shortCheck) {
+                    try (InputStream stream = new FileInputStream (file)) {
+                        mod.checkSignatures (file, stream, info1);
+                     }
+                }
+                else {
+                    int parseIndex = 0;
+                    try (InputStream stream = new FileInputStream (file)) {
+                        parseIndex = mod.parse (stream, info1, 0);
+                    }
+                    while (parseIndex != 0) {
+                        try (InputStream stream = new FileInputStream (file)) {
                             parseIndex = mod.parse (stream, info1, parseIndex);
                         }
-		    }
-		    stream.close ();
-		}
-	    }
-            catch (Exception e) {
-		/*  The assumption is that in trying to analyze
-		    the wrong type of file, the module may go
-		    off its track and throw an exception, so we
-		    just continue on to the next module.
-		*/
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+            /*  The assumption is that in trying to analyze
+            the wrong type of file, the module may go
+            off its track and throw an exception, so we
+            just continue on to the next module.
+            */
             continue;
-	    }
+        }
 	    if (info1.getWellFormed () == RepInfo.TRUE) {
-               info.copy (info1);
-               break;
+            info.copy (info1);
+            break;
 	    }
-	}
     }
-
-    
+    }
 }

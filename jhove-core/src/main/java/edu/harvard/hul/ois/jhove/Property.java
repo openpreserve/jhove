@@ -153,29 +153,29 @@ public class Property
 		}
 	    }
 	    else if (_arity.equals (PropertyArity.LIST)) {
-		List list = (List) _value;
+		List<Property> list = (List<Property>) _value;
 		int len = list.size ();
 		for (int i=0; i<len; i++) {
-		    Property prop = ((Property) list.get (i)).getByName (name);
+		    Property prop = list.get (i).getByName (name);
 		    if (prop != null) {
 			return prop;
 		    }
 		}
 	    }
 	    else if (_arity.equals (PropertyArity.MAP)) {
-		Collection coll = ((Map) _value).values ();
-		Iterator iter = coll.iterator ();
+		Collection<Property> coll = ((Map<?, Property>) _value).values ();
+		Iterator<Property> iter = coll.iterator ();
 		while (iter.hasNext ()) {
-		    Property prop = ((Property) iter.next ()).getByName (name);
+		    Property prop = iter.next ().getByName (name);
 		    if (prop != null) {
 			return prop;
 		    }
 		}
 	    }
 	    else if (_arity.equals (PropertyArity.SET)) {
-		Iterator iter = ((Set) _value).iterator ();
+		Iterator<Property> iter = ((Set<Property>) _value).iterator ();
 		while (iter.hasNext ()) {
-		    Property prop = ((Property) iter.next ()).getByName (name);
+		    Property prop = iter.next ().getByName (name);
 		    if (prop != null) {
 			return prop;
 		    }

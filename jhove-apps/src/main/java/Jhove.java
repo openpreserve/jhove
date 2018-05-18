@@ -114,7 +114,7 @@ public class Jhove
             boolean checksum    = false;
             boolean showRaw     = false;
             boolean signature   = false;
-            List<String> list   = new ArrayList<String> ();
+            List<String> list   = new ArrayList<> ();
     
     	 
                 /**********************************************************

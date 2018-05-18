@@ -40,7 +40,7 @@ public class XmlHandler
      ******************************************************************/
 
 	/** Thread safe formatter for doubles */
-	private static final ThreadLocal<NumberFormat> formatters = new ThreadLocal<NumberFormat>(){
+    private static final ThreadLocal<NumberFormat> formatters = new ThreadLocal<NumberFormat>(){
 		@Override
 		protected NumberFormat initialValue()
 		{
@@ -115,9 +115,9 @@ public class XmlHandler
     /**
      *  Outputs minimal information about the application
      */
+    @Override
     public void show ()
     {
-        String margin = getIndent (++_level);
         _level--;
     }
 
@@ -126,6 +126,7 @@ public class XmlHandler
      *  including configuration, available modules and handlers,
      *  etc.
      */
+    @Override
     public void show (App app)
     {
         String margin = getIndent (++_level);
@@ -159,9 +160,9 @@ public class XmlHandler
 	    _writer.println (margn2 + element ("bufferSize",
 				     Integer.toString (_je.getBufferSize ())));
 	    _writer.println (margn2 + elementStart ("modules"));
-        Iterator iter = _je.getModuleMap ().keySet ().iterator ();
+        Iterator<String> iter = _je.getModuleMap ().keySet ().iterator ();
         while (iter.hasNext ()) {
-            Module module = _je.getModule ((String) iter.next ());
+            Module module = _je.getModule (iter.next ());
 	        String [][] attr2 = { {"release", module.getRelease ()} };
             _writer.println (margn3 + element ("module", attr2,
 					       module.getName ()));
@@ -170,7 +171,7 @@ public class XmlHandler
         _writer.println (margn2 + elementStart ("outputHandlers"));
         iter = _je.getHandlerMap ().keySet ().iterator ();
         while (iter.hasNext ()) {
-            OutputHandler handler = _je.getHandler ((String) iter.next ());
+            OutputHandler handler = _je.getHandler (iter.next ());
 	        String [][] attr2 = { {"release", handler.getRelease ()} };
             _writer.println (margn3 + element ("outputHandler", attr2,
                                                handler.getName ()));
@@ -186,6 +187,7 @@ public class XmlHandler
      *  Outputs information about the OutputHandler specified
      *  in the parameter
      */
+    @Override
     public void show (OutputHandler handler)
     {
         String margin = getIndent (++_level);
@@ -195,13 +197,13 @@ public class XmlHandler
         _writer.println (margn2 + element ("release", handler.getRelease ()));
         _writer.println (margn2 + element ("date",
 					   date.format (handler.getDate ())));
-        List list = handler.getSpecification ();
+        List<Document> list = handler.getSpecification ();
         int n = list.size ();
         if (n > 0) {
             _writer.println (margn2 + elementStart ("specifications"));
             ++_level;
             for (int i=0; i<n; i++) {
-                showDocument ((Document) list.get (i));
+                showDocument (list.get (i));
             }
             --_level;
             _writer.println (margn2 + elementEnd ("specifications"));
@@ -224,6 +226,7 @@ public class XmlHandler
     /**
      *  Outputs information about a Module
      */
+    @Override
     public void show (Module module)
     {
         String margin = getIndent (++_level);
@@ -316,6 +319,7 @@ public class XmlHandler
     /**
      *  Outputs the information contained in a RepInfo object
      */
+    @Override
     public void show (RepInfo info)
     {
         String margin = getIndent (++_level);
@@ -596,6 +600,7 @@ public class XmlHandler
     /** Do the final output.  This should be in a suitable format
      *  for including multiple files between the header and the footer,
      *  and the XML of the header and footer must balance out. */
+    @Override
     public void showFooter ()
     {
         String margin = getIndent (_level--);
@@ -607,6 +612,7 @@ public class XmlHandler
     /** Do the initial output.  This should be in a suitable format
      *  for including multiple files between the header and the footer,
      *  and the XML of the header and footer must balance out. */
+    @Override
     public void showHeader ()
     {
         String margin = getIndent (++_level);
@@ -4069,7 +4075,7 @@ public class XmlHandler
 
  	/** Convert the metering mode value to one of the suggested
 	  *  values for MIX 2.0 */
-	private String meteringModeToString(int n) {
+    private String meteringModeToString(int n) {
 		String s = NisoImageMetadata.METERING_MODE[1];
 		if (n >= 1 && n <= 6) {
 			s = NisoImageMetadata.METERING_MODE[n];
@@ -4409,15 +4415,15 @@ public class XmlHandler
                 sb.append (c);
             }
             else {
-                int cval = (int) c;
+                int cval = c;
 
                 // More significant hex digit
                 int mshd = (cval >> 4);
                 if (mshd >= 10) {
-                    mshd += (int) 'A' - 10;
+                    mshd += 'A' - 10;
                 }
                 else {
-                    mshd += (int) '0';
+                    mshd += '0';
                 }
                 sb.append ('%');
                 sb.append ((char) mshd);
@@ -4425,10 +4431,10 @@ public class XmlHandler
                 // Less significant hex digit
                 int lshd = (cval & 0X0F);
                 if (lshd >= 10) {
-                    lshd += (int) 'A' - 10;
+                    lshd += 'A' - 10;
                 }
                 else {
-                    lshd += (int) '0';
+                    lshd += '0';
                 }
                 sb.append ((char) lshd);
                 change = true;

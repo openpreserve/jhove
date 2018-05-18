@@ -80,10 +80,6 @@ public class JhoveBase {
     private static final String TEMPDIR_PROPERTY = JHOVE_PROPERTY_PREFIX
             + "tempDirectory";
 
-    /** MIX schema version property. */
-    private static final String MIXVSN_PROPERTY = JHOVE_PROPERTY_PREFIX
-            + "mixvsn";
-
     /** Flag for aborting activity. */
     protected boolean _abort;
     /** Buffer size for buffered I/O. */
@@ -157,11 +153,11 @@ public class JhoveBase {
                 new NaiveHostnameVerifier());
 
         // Initialize the engine.
-        _moduleList = new ArrayList<Module>(20);
-        _moduleMap = new TreeMap<String, Module>();
+        _moduleList = new ArrayList<>(20);
+        _moduleMap = new TreeMap<>();
 
-        _handlerList = new ArrayList<OutputHandler>();
-        _handlerMap = new TreeMap<String, OutputHandler>();
+        _handlerList = new ArrayList<>();
+        _handlerMap = new TreeMap<>();
 
         _abort = false;
         _bufferSize = -1;

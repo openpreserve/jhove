@@ -79,10 +79,9 @@ public class TextHandler
     /**
      *  Outputs minimal information about the application
      */
+    @Override
     public void show ()
     {
-        String margin = getIndent (++_level);
-
         _level--;
     }
 
@@ -91,6 +90,7 @@ public class TextHandler
      *  including configuration, available modules and handlers,
      *  etc.
      */
+    @Override
     public void show (App app)
     {
         String margin = getIndent (++_level);
@@ -119,15 +119,15 @@ public class TextHandler
 	    _writer.println (margin + " TempDirectory: " + s);
 	}
 	_writer.println (margin + " BufferSize: " + _je.getBufferSize ());
-        Iterator iter = _je.getModuleMap ().keySet ().iterator ();
+        Iterator<String> iter = _je.getModuleMap ().keySet ().iterator ();
         while (iter.hasNext ()) {
-            Module module = _je.getModule ((String) iter.next ());
+            Module module = _je.getModule (iter.next ());
             _writer.println (margin + " Module: " + module.getName () + " " +
 			     module.getRelease ());
         }
         iter = _je.getHandlerMap ().keySet ().iterator ();
         while (iter.hasNext ()) {
-            OutputHandler handler = _je.getHandler ((String) iter.next ());
+            OutputHandler handler = _je.getHandler (iter.next ());
             _writer.println (margin + " OutputHandler: " +
                              handler.getName () + " " +
 			     handler.getRelease ());
@@ -143,6 +143,7 @@ public class TextHandler
      *  Outputs information about the OutputHandler specified
      *  in the parameter
      */
+    @Override
     public void show (OutputHandler handler)
     {
         String margin = getIndent (++_level);
@@ -173,6 +174,7 @@ public class TextHandler
     /**
      *  Outputs information about a Module
      */
+    @Override
     public void show (Module module)
     {
         String margin = getIndent (++_level);
@@ -201,23 +203,14 @@ public class TextHandler
             };
             _writer.println ();
         }
-        List list = module.getSignature ();
-        int n = list.size ();
-        for (int i=0; i<n; i++) {
-            showSignature ((Signature) list.get (i));
+        for (Signature sig : module.getSignature ()) {
+            showSignature (sig);
         }
-        list = module.getSpecification ();
-        n = list.size ();
-        for (int i=0; i<n; i++) {
-            showDocument ((Document) list.get (i), "Specification");
+        for (Document spec : module.getSpecification()) {
+            showDocument (spec, "Specification");
         }
-        List<String> ftr = module.getFeatures ();
-        if (ftr != null) {
-            Iterator<String> iter = ftr.iterator();
-            while (iter.hasNext ()) {
-                s = iter.next ();
-                _writer.println (margin + "  Feature: " + s);
-            }
+        for (String feature : module.getFeatures ()) {
+           _writer.println (margin + "  Feature: " + feature);
         }
 
         _writer.println (margin + " Methodology:");
@@ -247,6 +240,7 @@ public class TextHandler
     /**
      *  Outputs the information contained in a RepInfo object
      */
+    @Override
     public void show (RepInfo info)
     {
         String margin = getIndent (++_level);
@@ -456,6 +450,7 @@ public class TextHandler
 
     /** Do the final output.  This should be in a suitable format
      *  for including multiple files between the header and the footer. */
+    @Override
     public void showFooter ()
     {
         _level--;
@@ -465,6 +460,7 @@ public class TextHandler
 
     /** Do the initial output.  This should be in a suitable format
      *  for including multiple files between the header and the footer. */
+    @Override
     public void showHeader ()
     {
         String margin = getIndent (++_level);

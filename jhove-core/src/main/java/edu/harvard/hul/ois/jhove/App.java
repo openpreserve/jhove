@@ -5,16 +5,9 @@
 
 package edu.harvard.hul.ois.jhove;
 
-// import java.io.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Properties;
-
 import org.openpreservation.jhove.ReleaseDetails;
 
 /**

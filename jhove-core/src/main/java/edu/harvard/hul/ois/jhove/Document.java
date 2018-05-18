@@ -14,14 +14,14 @@ import java.util.*;
  */
 public class Document
 {
-    private List _author;
+    private List<Agent> _author;
     private String _date;
     private String _edition;
     private String _enum;
-    private List _identifier;
+    private List<Identifier> _identifier;
     private String _note;
     private String _pages;
-    private List _publisher;
+    private List<Agent> _publisher;
     private String _title;
     private DocumentType _type;
 
@@ -34,9 +34,9 @@ public class Document
     _title = title;
     _type  = type;
 
-    _author     = new ArrayList ();
-    _identifier = new ArrayList ();
-    _publisher  = new ArrayList ();
+    _author     = new ArrayList<> ();
+    _identifier = new ArrayList<> ();
+    _publisher  = new ArrayList<> ();
     }
 
     /**
@@ -46,7 +46,7 @@ public class Document
      *
      *  @see Agent
      */
-    public List getAuthor ()
+    public List<Agent> getAuthor ()
     {
     return _author;
     }
@@ -80,7 +80,7 @@ public class Document
      *  Returns the list of formal Identifiers for this Document.
      *  If no Identifiers are given, returns an empty list.
      */
-    public List getIdentifier ()
+    public List<Identifier> getIdentifier ()
     {
     return _identifier;
     }
@@ -105,7 +105,7 @@ public class Document
      *  Returns a List of Agents, each representing a publisher of this
      *  Document.  If no publishers are listed, returns an empty list.
      */
-    public List getPublisher ()
+    public List<Agent> getPublisher ()
     {
     return _publisher;
     }

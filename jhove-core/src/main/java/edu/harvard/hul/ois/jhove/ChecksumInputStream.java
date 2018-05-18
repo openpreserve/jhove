@@ -43,6 +43,7 @@ public class ChecksumInputStream extends FilterInputStream {
      *  Reads a byte from the subsumed stream, updating
      *  the byte count and the checksums.
      */
+    @Override
     public int read() throws IOException {
         int ch = subsumedStream.read ();
         if (ch >= 0) {
@@ -61,6 +62,7 @@ public class ChecksumInputStream extends FilterInputStream {
      * 
      * All bytes read are fed through the checksummer.
      */
+    @Override
     public int read(byte[] b) throws IOException 
     {
         int len = subsumedStream.read (b);
@@ -83,6 +85,7 @@ public class ChecksumInputStream extends FilterInputStream {
      * 
      * All bytes read are fed through the checksummer.
      */
+    @Override
     public int read(byte[] b, int off, int len) throws IOException 
     {
         len = subsumedStream.read (b, off, len);
@@ -100,6 +103,7 @@ public class ChecksumInputStream extends FilterInputStream {
      *  Skips n bytes.
      *  Reads them and feeds them through the checksummer.
      */
+    @Override
     public long skip (long n) throws IOException {
         long nret = 0;
         while (n > 0) {
@@ -119,6 +123,7 @@ public class ChecksumInputStream extends FilterInputStream {
     /**
      *  Closes the subsumed stream.
      */
+    @Override
     public void close () throws IOException
     {
         subsumedStream.close();
