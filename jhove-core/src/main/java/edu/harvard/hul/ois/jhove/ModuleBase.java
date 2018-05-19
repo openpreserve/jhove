@@ -203,7 +203,7 @@ public abstract class ModuleBase
      *  Calling this clears any prior parameters.
      */
     @Override
-    public void applyDefaultParams () throws IOException
+    public void applyDefaultParams () throws Exception
     {
         resetParams ();
         Iterator<String> iter = _defaultParams.iterator ();
@@ -218,7 +218,7 @@ public abstract class ModuleBase
      *  The default method clears the saved parameter.
      */
     @Override
-    public void resetParams () throws IOException
+    public void resetParams () throws Exception
     {
         _param = null;
     }
