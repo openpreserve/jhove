@@ -60,7 +60,7 @@ public enum MessageConstants {
 			"remove param value of f from the config file";
 	public static final String INF_OUTLINES_SKIPPED = "Outlines exist, but are not displayed; to display " + // PDF-HUL-132
 			"remove param value of o from the config file";
-	public static final String INF_ANNOTATIONS_SKIPPED = "Annotations exist, but are not displayed; to display " + // PDF-HUL-128
+	public static final String INF_ANNOTATIONS_SKIPPED = "Annotations exist, but are not displayed; to display " + // PDF-HUL-115
 			"remove param value of a from the config file";
 	public static final String INF_PAGES_SKIPPED = "Page information is not displayed; to display " + // PDF-HUL-112
 		 	"remove param value of p from the config file";

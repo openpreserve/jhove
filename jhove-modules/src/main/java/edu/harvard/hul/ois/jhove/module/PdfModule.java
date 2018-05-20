@@ -815,7 +815,7 @@ public class PdfModule extends ModuleBase {
             }
             // Beware infinite loop on badly broken file
             if (_startxref == _prevxref) {
-				info.setMessage(new ErrorMessage(MessageConstants.ERR_XREF_TABLES_BROKEN, // {PDF-HUL-134
+				info.setMessage(new ErrorMessage(MessageConstants.ERR_XREF_TABLES_BROKEN, // PDF-HUL-134
 												 _parser.getOffset()));
                 info.setWellFormed(false);
                 return;
@@ -1533,7 +1533,7 @@ public class PdfModule extends ModuleBase {
                         }
                         else {
                             throw new PdfMalformedException
-                                   (MessageConstants.ERR_XREF_TABLE_OPERATOR_ILLEGAL, // PDF-HUL-83
+                                   (MessageConstants.ERR_XREF_TABLE_OPERATOR_ILLEGAL, // PDF-HUL-84
                                     _parser.getOffset());
                         }
                     }
@@ -1595,7 +1595,7 @@ public class PdfModule extends ModuleBase {
             if (!checkTypeKey(_docCatDict, info, KEY_VAL_CATALOG,
                               MessageConstants.ERR_DOC_CAT_TYPE_INVALID, // PDF-HUL-141
                               MessageConstants.ERR_DOC_CAT_NO_TYPE, // PDF-HUL-142
-                              MessageConstants.ERR_DOC_CAT_NOT_SIMPLE)) { // PDF-HUL-142
+                              MessageConstants.ERR_DOC_CAT_NOT_SIMPLE)) { // PDF-HUL-143
                 return false;
             }
 
@@ -2884,7 +2884,7 @@ public class PdfModule extends ModuleBase {
             else {
                 if (!_skippedPagesReported) {
                     info.setMessage(new InfoMessage
-                       (MessageConstants.INF_PAGES_SKIPPED));
+                       (MessageConstants.INF_PAGES_SKIPPED)); // PDF-HUL-112
                 }
                 _skippedPagesReported = true;
             }
@@ -2962,7 +2962,7 @@ public class PdfModule extends ModuleBase {
                         // but we do report that we don't report them.
                         if (!_skippedAnnotationsReported) {
                             info.setMessage(new InfoMessage
-                                (MessageConstants.INF_ANNOTATIONS_SKIPPED));
+                                (MessageConstants.INF_ANNOTATIONS_SKIPPED)); // PDF-HUL-115
                             _skippedAnnotationsReported = true;
                         }
                     }

@@ -94,7 +94,7 @@ public class Parser
         else if (tok instanceof DictionaryEnd) {
             --_dictDepth;
             if (_dictDepth < 0) {
-                throw new PdfMalformedException (MessageConstants.ERR_DICT_DELIMITERS_IMPROPERLY_NESTED);
+                throw new PdfMalformedException (MessageConstants.ERR_DICT_DELIMITERS_IMPROPERLY_NESTED); // PDF-HUL-33
             }
         }
         if (tok instanceof ArrayStart) {
@@ -103,7 +103,7 @@ public class Parser
         else if (tok instanceof ArrayEnd) {
             --_arrayDepth;
             if (_arrayDepth < 0) {
-                throw new PdfMalformedException (MessageConstants.ERR_ARRAY_IMPROPERLY_NESTED);
+                throw new PdfMalformedException (MessageConstants.ERR_ARRAY_IMPROPERLY_NESTED); // PDF-HUL-34
             }
         }
         return tok;
