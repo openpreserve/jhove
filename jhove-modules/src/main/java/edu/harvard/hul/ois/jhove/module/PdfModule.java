@@ -1286,15 +1286,22 @@ public class PdfModule extends ModuleBase {
             _prevxref = -1;
             /* But I do need to read the dictionary at this point, to get
              * essential stuff out of it. */
-            PdfStream str = (PdfStream) _parser.readObjectDef((Numeric) xref);
-            PdfDictionary dict = str.getDict();
-            _docCatDictRef = (PdfIndirectObj) dict.get(DICT_KEY_ROOT);
-            if (_docCatDictRef == null) {
-				throw new PdfInvalidException(MessageConstants.ERR_XREF_STRM_DICT_ROOT_MISSING,
-											  _parser.getOffset());
+            Object defObj  = _parser.readObjectDef((Numeric) xref);
+            if (defObj instanceof PdfStream) {
+                PdfStream str = (PdfStream) defObj;
+                PdfDictionary dict = str.getDict();
+                _docCatDictRef = (PdfIndirectObj) dict.get ("Root");
+                if (_docCatDictRef == null) {
+                    throw new PdfInvalidException(MessageConstants.ERR_XREF_STRM_DICT_ROOT_MISSING, 
+                    _parser.getOffset());
+                }
+                /* We don't need to see a trailer dictionary.
+                 * Move along, move along.  */
+            } else {
+                throw new PdfInvalidException 
+                        ("Root entry missing in cross-ref stream dictionary",
+                         _parser.getOffset ());
             }
-            /* We don't need to see a trailer dictionary.
-             * Move along, move along.  */
             return true;
         }
 
@@ -1442,8 +1449,10 @@ public class PdfModule extends ModuleBase {
         while (_startxref > 0) {
             try {
                 _parser.seek(_startxref);
-                PdfStream pstream =
-                   (PdfStream) _parser.readObjectDef();
+                Object defObj = _parser.readObjectDef ();
+                if (!(defObj instanceof PdfStream)) 
+                    return false; //invalid
+                PdfStream pstream = (PdfStream) defObj;
                 int sObjNum = pstream.getObjNumber();
                 CrossRefStream xstream = new CrossRefStream(pstream);
                 if (!xstream.isValid()) {

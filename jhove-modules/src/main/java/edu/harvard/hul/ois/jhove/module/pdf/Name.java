@@ -19,6 +19,12 @@ public class Name
     
     /** Returns true if it's within the PDF/A implementation limit */
     public boolean isPdfACompliant () {
-        return _value.getBytes().length <= 127; 
+        boolean compliant = false;
+        try {
+            compliant = _value.getBytes().length <= 127;
+        } catch (StackOverflowError e)  {
+            compliant = false;
+        }
+        return compliant; 
     }
 }

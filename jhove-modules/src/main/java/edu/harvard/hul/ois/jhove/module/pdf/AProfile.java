@@ -892,6 +892,8 @@ public final class AProfile extends PdfProfile
         }
         catch (Exception e) {
             return false;
+        }  catch (StackOverflowError e)  {
+             return false;
         }
         return true;
     }
