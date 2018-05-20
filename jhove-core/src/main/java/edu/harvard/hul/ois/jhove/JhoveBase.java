@@ -134,7 +134,7 @@ public class JhoveBase {
      * Instantiates a <code>JhoveBase</code> object.
      * 
      * @throws JhoveException
-     *             if invoked with a JVM lower than 1.6
+     *             if invoked with a JVM lower than 1.8
      */
     public JhoveBase() throws JhoveException {
 
@@ -143,7 +143,7 @@ public class JhoveBase {
 
         // Make sure we have a satisfactory version of Java.
         String version = System.getProperty("java.vm.version");
-        if (version.compareTo("1.6.0") < 0) {
+        if (version.compareTo("1.8.0") < 0) {
             _logger.severe(CoreMessageConstants.EXC_JAVA_VER_INCMPT);
             throw new JhoveException(CoreMessageConstants.EXC_JAVA_VER_INCMPT);
         }
