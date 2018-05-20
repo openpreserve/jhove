@@ -379,7 +379,7 @@ public class WaveModule extends ModuleBase {
                     if (riffSize == LOOKUP_EXTENDED_DATA_SIZE) {
                         // Even though RF64 can support files larger than
                         // Long.MAX_VALUE, this module currently does not.
-                        if (compareUnsignedLongs(extendedRiffSize, Long.MAX_VALUE) > 0) {
+                        if (Long.compareUnsigned(extendedRiffSize, Long.MAX_VALUE) > 0) {
                             info.setMessage(new InfoMessage(
                                     MessageConstants.INF_FILE_TOO_LARGE));
                             info.setWellFormed(RepInfo.UNDETERMINED);
@@ -580,21 +580,6 @@ public class WaveModule extends ModuleBase {
     }
 
     /**
-     * A copy of Java 8's <code>Long.compareUnsigned</code> method to preserve
-     * compatibility with Java 6. This should be replaced once Java 8 is supported.
-     *
-     * @param  x  the first <code>long</code> to compare
-     * @param  y  the second <code>long</code> to compare
-     * @return    the value <code>0</code> if <code>x == y</code>;
-     *            a value less than <code>0</code> if <code>x < y</code>; and
-     *            a value greater than <code>0</code> if <code>x > y</code>
-     */
-    private int compareUnsignedLongs(long x, long y) {
-        x += Long.MIN_VALUE; y += Long.MIN_VALUE;
-        return (x < y) ? -1 : ((x == y) ? 0 : 1);
-    }
-
-    /**
      * One-argument version of <code>readSignedLong</code>. WAVE is always
      * little-endian, so we can unambiguously drop its endian argument.
      */
@@ -755,7 +740,7 @@ public class WaveModule extends ModuleBase {
         bytesRemaining -= CHUNK_HEADER_LENGTH;
 
         // Check if the chunk size is greater than the RIFF's remaining length
-        if (compareUnsignedLongs(bytesRemaining, chunkSize) < 0) {
+        if (Long.compareUnsigned(bytesRemaining, chunkSize) < 0) {
             info.setMessage(new ErrorMessage(MessageConstants.ERR_CHUNK_SIZE_INVAL, _nByte));
             return false;
         }
