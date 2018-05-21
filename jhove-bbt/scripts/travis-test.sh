@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Grab the execution directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT_DIR="$( dirname "$( readlink -f "${BASH_SOURCE[0]}" )")"
 export SCRIPT_DIR
 
 # Include utils script
