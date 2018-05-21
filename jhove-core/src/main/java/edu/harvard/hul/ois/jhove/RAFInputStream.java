@@ -111,6 +111,7 @@ public class RAFInputStream extends InputStream {
     /**
      * Reads a single byte from the file.
      */
+    @Override
     public int read() throws IOException
     {
         if (eof) {
@@ -123,7 +124,7 @@ public class RAFInputStream extends InputStream {
                 return -1;
             }
         }
-        return ((int) fileBuf[fileBufPos++] & 0xFF);
+        return (fileBuf[fileBufPos++] & 0xFF);
     }
 
     /**
@@ -131,6 +132,7 @@ public class RAFInputStream extends InputStream {
      * stores them into the buffer array b. The number of
      * bytes actually read is returned as an integer.
      */
+    @Override
     public int read(byte[] b) throws IOException
     {
         int bytesToRead = b.length;
@@ -168,6 +170,7 @@ public class RAFInputStream extends InputStream {
      * possibly zero. The number of bytes actually read is
      * returned as an integer.
      */
+    @Override
     public int read(byte[] b, int off, int len) throws IOException 
     {
         int bytesToRead = len;
@@ -203,6 +206,7 @@ public class RAFInputStream extends InputStream {
      *
      * @return  the number of bytes actually skipped.
      */
+    @Override
     public long skip(long n) throws IOException
     {
         // If the range of the skip lies within the current buffer,
@@ -234,6 +238,7 @@ public class RAFInputStream extends InputStream {
      *          over) from this input stream without blocking, or <code>0</code>
      *          when it reaches the end of the input stream.
      */
+    @Override
     public int available() throws IOException
     {
         if (eof) return 0;

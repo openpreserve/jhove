@@ -43,10 +43,9 @@ public class JDump
 	    System.exit (-1);
 	}
 
-	try {
-	    FileInputStream file = new FileInputStream (args[0]);
-	    BufferedInputStream buffer = new BufferedInputStream (file);
-	    DataInputStream stream = new DataInputStream (buffer);
+	try (FileInputStream file = new FileInputStream (args[0]);
+	     BufferedInputStream buffer = new BufferedInputStream (file);
+	     DataInputStream stream = new DataInputStream (buffer)) {
 	    boolean bigEndian = true;
 
 	    long os = 0;
@@ -60,9 +59,7 @@ public class JDump
 		if (!readingECS) {
 		    if (!haveCode) {
 			code = stream.readUnsignedByte ();
-			for (int i=0;
-			     (code = stream.readUnsignedByte ()) == 0xff;
-			     i++) {
+			while(stream.readUnsignedByte () == 0xff) {
 			    System.out.println (leading (os, 8) + os +
 						": fill 0xff");
 			    os++;
@@ -115,7 +112,6 @@ public class JDump
 		    int Nf = stream.readUnsignedByte ();
 		    int [] Ci  = new int [Nf];
 		    int [] Hi  = new int [Nf];
-		    int [] Vi  = new int [Nf];
 		    int [] Tqi = new int [Nf];
 		    for (int i=0; i<Nf; i++) {
 			Ci[i]  = stream.readUnsignedByte ();

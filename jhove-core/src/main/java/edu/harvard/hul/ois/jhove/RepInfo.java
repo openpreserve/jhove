@@ -122,11 +122,11 @@ public class RepInfo implements Cloneable
         _urlFlag = false;
         _valid = TRUE;
         
-        _checksum = new ArrayList<Checksum> ();
-        _message  = new ArrayList<Message> ();
-        _profile  = new ArrayList<String> ();
-        _property = new TreeMap<String, Property> ();
-        _sigMatch = new ArrayList<String> ();
+        _checksum = new ArrayList<> ();
+        _message  = new ArrayList<> ();
+        _profile  = new ArrayList<> ();
+        _property = new TreeMap<> ();
+        _sigMatch = new ArrayList<> ();
     }
 
     /******************************************************************
@@ -140,6 +140,7 @@ public class RepInfo implements Cloneable
      *  The external RepInfo (if any) is not cloned, but
      *  is attached directly to the clone.
      */
+    @Override
     public Object clone () 
     {
 	RepInfo newri;
@@ -150,13 +151,13 @@ public class RepInfo implements Cloneable
 	    return null;   // should never happen
 	}
 
-        newri._checksum = new ArrayList<Checksum> (_checksum);
-        newri._message = new ArrayList<Message>(_message);
-        newri._profile = new ArrayList<String> (_profile);
-        newri._sigMatch = new ArrayList<String> (_sigMatch);
-        newri._property = new TreeMap<String, Property> (_property);
+        newri._checksum = new ArrayList<> (_checksum);
+        newri._message = new ArrayList<>(_message);
+        newri._profile = new ArrayList<> (_profile);
+        newri._sigMatch = new ArrayList<> (_sigMatch);
+        newri._property = new TreeMap<> (_property);
         
-        return (Object) newri;
+        return newri;
     }
 
     /**
@@ -279,7 +280,7 @@ public class RepInfo implements Cloneable
     {
         Property property = null;
         if (_property.size () > 0) {
-            property = (Property) _property.get (name);
+            property = _property.get (name);
         }
 
 	return property;
@@ -377,7 +378,7 @@ public class RepInfo implements Cloneable
         Collection<Property> coll = _property.values ();
         Iterator<Property> iter = coll.iterator ();
         while (iter.hasNext ()) {
-            prop = (Property) iter.next ();
+            prop = iter.next ();
             if ((prop = prop.getByName (name)) != null) {
                 break;
             }

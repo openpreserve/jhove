@@ -63,6 +63,7 @@ public abstract class EnumerationType
      * Return enumeration value.
      * @return Value
      */
+    @Override
     public String toString ()
     {
     return _value;

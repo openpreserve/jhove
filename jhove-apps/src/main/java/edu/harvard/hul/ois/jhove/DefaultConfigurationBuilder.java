@@ -47,28 +47,15 @@ public class DefaultConfigurationBuilder {
     
     
     public void writeDefaultConfigFile () throws IOException {
-//        if (TEMP_DEBUG) {
-//            String configFileName = "null";
-//            if (configFile != null) 
-//                configFileName = configFile.getAbsolutePath();
-//            System.out.println ("writeDefaultConfigFile: path is " + configFileName);
-//        }
         ConfigWriter cw = new ConfigWriter (configFile, null);
         List<ModuleInfo> modules = getModules();
         // TextHandler, XmlHandler, and AuditHandler are loaded by
         // default, so there are no handlers to put in the config file.
-        List<String[]> handlers = new ArrayList<String[]> ();
+        List<String[]> handlers = new ArrayList<> ();
         File homeDir = new File (JHOVE_DIR);
         File tempDir = new File (TEMP_DIR);
-        try {
-            cw.writeFile(modules, handlers, homeDir, tempDir, 
-                DEFAULT_ENCODING, DEFAULT_BUFFER_SIZE);
-        }
-        catch (IOException e) {
-//            if (TEMP_DEBUG)
-//                e.printStackTrace();
-            throw e;
-        }
+        cw.writeFile(modules, handlers, homeDir, tempDir,
+            DEFAULT_ENCODING, DEFAULT_BUFFER_SIZE);
     }
 
 //    public void writeDefaultConfigFile () throws IOException {
@@ -90,7 +77,7 @@ public class DefaultConfigurationBuilder {
     
     protected List<ModuleInfo> getModules () {
         int nModules = builtInModules.length;
-        ArrayList<ModuleInfo> mods = new ArrayList<ModuleInfo> (nModules);
+        ArrayList<ModuleInfo> mods = new ArrayList<> (nModules);
         try {
             for (int i = 0; i < nModules; i++) {
                 Class<?> cls = builtInModules[i];

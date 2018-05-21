@@ -27,7 +27,6 @@ public class ByteArrayXMPSource extends XMPSource {
      * @param instrm   ByteArrayInputStream containing the XMP
      */
     public ByteArrayXMPSource (ByteArrayInputStream instrm)
-            throws IOException
     {
         super (new InputStreamReader
                (new XMLWrapperStream (instrm)));
@@ -58,6 +57,7 @@ public class ByteArrayXMPSource extends XMPSource {
     /* (non-Javadoc)
      * @see edu.harvard.hul.ois.jhove.XMPSource#resetReader()
      */
+    @Override
     protected void resetReader() {
         _instrm.reset ();
         _reader = new InputStreamReader (_instrm);

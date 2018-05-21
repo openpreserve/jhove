@@ -36,7 +36,7 @@ public class TDump
     /** Count of IFDs. */
     private static int _nIFDs;
     /** Sorted associative map of tags. */
-    private static Map _tags;
+    private static Map<String, String> _tags;
 
     /******************************************************************
      * MAIN ENTRY POINT.
@@ -70,14 +70,11 @@ public class TDump
 
 	/* Accumlate all tag definitions in a sorted map. */
 
-	_tags = new TreeMap ();
+	_tags = new TreeMap<> ();
 
 	int err = 0;
-	try {
-
-	    /* Read TIFF header. */
-
-	    RandomAccessFile file = new RandomAccessFile (tiff, "r");
+	try (/* Read TIFF header. */
+	     RandomAccessFile file = new RandomAccessFile (tiff, "r")) {
 	    boolean bigEndian = true;
 	    int b1 = ModuleBase.readUnsignedByte (file);
 	    int b2 = ModuleBase.readUnsignedByte (file);
@@ -106,10 +103,10 @@ public class TDump
 
 	    /* Display all tags in offset-sorted order. */
 
-	    Iterator iter = _tags.keySet ().iterator ();
+	    Iterator<String> iter = _tags.keySet ().iterator ();
 	    while (iter.hasNext ()) {
-		String os = (String) iter.next ();
-		System.out.println (os + ": " + (String) _tags.get (os));
+		String os = iter.next ();
+		System.out.println (os + ": " + _tags.get (os));
 	    }
 	    if (err != 0) {
 		System.exit (err);
@@ -131,16 +128,15 @@ public class TDump
 	throws Exception
     {
 	int nIFD = ++_nIFDs;
-	List subIFDs = new ArrayList ();
-	List stripByteCounts = new ArrayList ();
-	List stripOffsets    = new ArrayList ();
+	List<Long> subIFDs = new ArrayList<> ();
+	List<Long> stripByteCounts = new ArrayList<> ();
+	List<Long> stripOffsets    = new ArrayList<> ();
 
 	file.seek (offset);
 	int nEntries = ModuleBase.readUnsignedShort (file, bigEndian);
 	_tags.put (leading (offset, 8) + offset, "IFD " + nIFD + " with " +
 	       nEntries + " entries");
 
-	String name = null;
 	for (int i=0; i<nEntries; i++) {
 	    long os = offset + 2 + i*12;
 	    file.seek (os);
@@ -283,10 +279,10 @@ public class TDump
 		    buffer.append (" " + sh);
 
 		    if (tag == 273) {
-			stripOffsets.add (new Long ((long) sh));
+			stripOffsets.add (new Long (sh));
 		    }
 		    else if (tag == 279) {
-			stripByteCounts.add (new Long ((long) sh));
+			stripByteCounts.add (new Long (sh));
 		    }
 
 		}
@@ -333,7 +329,7 @@ public class TDump
 
 	if (!nosub) {
 	    for (int i=0; i<subIFDs.size (); i++) {
-		long os = ((Long) subIFDs.get (i)).longValue ();
+		long os = subIFDs.get (i).longValue ();
 		while ((os = readIFD (file, bigEndian, os, nobyte, nosub)) > 0) {
 		}
 	    }
@@ -347,8 +343,8 @@ public class TDump
 	int len = stripOffsets.size ();
 	if (len > 0) {
 	    for (int j=0; j<len; j++) {
-		long start = ((Long) stripOffsets.get (j)).longValue ();
-		long count = ((Long) stripByteCounts.get (j)).longValue ();
+		long start = stripOffsets.get (j).longValue ();
+		long count = stripByteCounts.get (j).longValue ();
 		long finish= start + count - 1;
 		_tags.put (leading (start, 8) + start, "(Image " + nIFD +
 			   ",strip " + (j+1) + ") IMAGEDATA " + count +
