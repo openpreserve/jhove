@@ -33,7 +33,7 @@ public final class LinearizedProfile extends PdfProfile
      */
     public boolean satisfiesThisProfile ()
     {
-        _logger.info(MessageConstants.INF_LIN_PROF_CHK);
+        _logger.info(MessageConstants.LOG_LIN_PROF_CHK);
         long fileLength;
         try {
             fileLength = _raf.length ();
@@ -80,7 +80,7 @@ public final class LinearizedProfile extends PdfProfile
             // whose values is an array of 2 or 4 integers.
             PdfArray hintArray = (PdfArray) lindict.get ("H");
             if (hintArray != null) {
-                _logger.info(MessageConstants.INF_HINT_ARRY_CHK);
+                _logger.info(MessageConstants.LOG_HINT_ARRY_CHK);
                 Vector hintVec = hintArray.getContent ();
                 int vecSize = hintVec.size ();
                 if (vecSize != 2 && vecSize != 4) {
@@ -210,7 +210,7 @@ public final class LinearizedProfile extends PdfProfile
     private boolean verifyXRef (long xrefOffset)
     {
         try {
-            _logger.info (MessageConstants.INF_XREF_TABLE_VERIFYING);
+            _logger.info (MessageConstants.LOG_XREF_TABLE_VERIFYING);
             _parser.seek (xrefOffset);
             _parser.getNext (Numeric.class, "");  // Object number
             _parser.getNext (Numeric.class, "");  // Generation number

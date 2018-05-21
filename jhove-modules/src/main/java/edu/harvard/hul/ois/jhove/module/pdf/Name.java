@@ -18,6 +18,7 @@ public class Name
     }
     
     /** Returns true if it's within the PDF/A implementation limit */
+    @Override
     public boolean isPdfACompliant () {
         return _value.getBytes().length <= 127; 
     }

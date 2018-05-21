@@ -22,9 +22,6 @@ public class Literal
     /** True if literal is in PDFDocEncoding; false if UTF-16. */
     private boolean _pdfDocEncoding;
 
-    /** Used for accumulating a hex string */
-    private StringBuffer rawHex;
-    
     /** Used for accommodating the literal */
     private StringBuffer buffer;
 
@@ -36,7 +33,7 @@ public class Literal
     private int hi;
     
     /** First byte of a UTF-16 character. */
-    int b1;
+    int firstByte;
 
     /** First digit of a hexadecimal string value. */
     //int h1;
@@ -106,7 +103,6 @@ public class Literal
     {
         super ();
         _pdfDocEncoding = true;
-        rawHex = new StringBuffer ();
         buffer = new StringBuffer ();
         haveHi = false;
     }
@@ -120,7 +116,7 @@ public class Literal
     public void appendHex (int ch) throws PdfException
     {
         if (_rawBytes == null) {
-            _rawBytes = new Vector (32);
+            _rawBytes = new Vector<> (32);
         }
         if (haveHi) {
             _rawBytes.add(new Integer (hexToInt (hi, ch)));
@@ -152,7 +148,7 @@ public class Literal
         /*  Character read from tokenizer. */
         int ch;
         _parenLevel = 0;
-        _rawBytes = new Vector (32);
+        _rawBytes = new Vector<> (32);
         _state = State.LITERAL;
 
 	long offset = 0;
@@ -161,7 +157,7 @@ public class Literal
             // If we get -1, then we've hit an EOF without proper termination of
             // the literal. Throw an exception.
             if (ch < 0) {
-                throw new EOFException (MessageConstants.ERR_LITERAL_UNTERMINATED);
+                throw new EOFException (MessageConstants.ERR_LITERAL_UNTERMINATED); // PDF-HUL-10
             }
             offset++;
             _rawBytes.add (new Integer (ch));
@@ -310,7 +306,7 @@ public class Literal
     {
         if (_rawBytes != null) {
             boolean utf = false;
-            StringBuffer buffer = new StringBuffer();
+            StringBuffer localBuffer = new StringBuffer();
             // If a high byte is left hanging, complete it with a '0'
             if (haveHi) {
                 _rawBytes.add(new Integer(hexToInt(hi, '0')));
@@ -322,16 +318,16 @@ public class Literal
             if (utf) {
                 // Gather pairs of bytes into characters without conversion
                 for (int i = 2; i < _rawBytes.size(); i += 2) {
-                    buffer.append
+                    localBuffer.append
                             ((char) (rawByte(i) * 256 + rawByte(i + 1)));
                 }
             } else {
                 // Convert single bytes to PDF encoded characters.
                 for (int i = 0; i < _rawBytes.size(); i++) {
-                    buffer.append(Tokenizer.PDFDOCENCODING[rawByte(i)]);
+                    localBuffer.append(Tokenizer.PDFDOCENCODING[rawByte(i)]);
                 }
             }
-            _value = buffer.toString();
+            _value = localBuffer.toString();
         }
     }
     
@@ -356,7 +352,7 @@ public class Literal
             d = h - 0x57;
         }
         else {
-            throw new PdfMalformedException (MessageConstants.ERR_HEX_STRING_CHAR_INVALID);
+            throw new PdfMalformedException (MessageConstants.ERR_HEX_STRING_CHAR_INVALID); // PDF-HUL-11
         }
         return d;
     }
@@ -369,7 +365,7 @@ public class Literal
         if (idx >= _rawBytes.size ()) {
             return 0;
         }
-        return ((Integer) _rawBytes.elementAt (idx)).intValue();
+        return _rawBytes.elementAt (idx).intValue();
     }
 
 
@@ -646,7 +642,7 @@ public class Literal
         Save all character up to and exclusive of the next ESC
         as a language code. 
      */
-    private void readUTFLanguageCode (Tokenizer tok) throws IOException
+    private static void readUTFLanguageCode (Tokenizer tok) throws IOException
     {
         StringBuffer sb = new StringBuffer ();
         for (;;) {

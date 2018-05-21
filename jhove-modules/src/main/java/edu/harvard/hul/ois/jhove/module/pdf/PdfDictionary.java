@@ -12,8 +12,8 @@ import java.util.*;
  */
 public class PdfDictionary extends PdfObject
 {
-
-    private Map _entries;
+    public static final int PDFA_IMPLEMENTATION_LIMIT = 4095;
+    private final Map<String, PdfObject> _entries = new HashMap<> ();
 
     /** 
      *  Creates a PdfDictionary object.
@@ -24,7 +24,6 @@ public class PdfDictionary extends PdfObject
     public PdfDictionary (int objNumber, int genNumber)
     {
         super (objNumber, genNumber);
-        _entries = new HashMap ();
     }
 
     /** 
@@ -33,8 +32,7 @@ public class PdfDictionary extends PdfObject
      */
     public PdfDictionary ()
     {
-        super ();
-        _entries = new HashMap ();
+        super();
     }
 
     /**
@@ -55,20 +53,20 @@ public class PdfDictionary extends PdfObject
      */
     public PdfObject get (String key)
     {
-        return (PdfObject) _entries.get (key);
+        return _entries.get (key);
     }
-    
+
     /** Return true if it's within the PDF/A implementation limit. */
     public boolean isPdfACompliant () 
     {
-        return _entries.size() <= 4095;
+        return _entries.size() <= PDFA_IMPLEMENTATION_LIMIT;
     }
 
     /**
      *  Returns an iterator which will successively return
      *  all the values in the dictionary.
      */
-    public Iterator iterator ()
+    public Iterator<PdfObject> iterator ()
     {
         return _entries.values ().iterator ();
     }

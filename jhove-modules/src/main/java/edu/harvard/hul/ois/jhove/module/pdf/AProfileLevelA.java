@@ -42,6 +42,7 @@ public class AProfileLevelA extends PdfProfile {
      * been called on the profile assigned by <code>setAProfile</code>.
      *
      */
+    @Override
     public boolean satisfiesThisProfile() {
         return _aProfile.satisfiesLevelA();
     }

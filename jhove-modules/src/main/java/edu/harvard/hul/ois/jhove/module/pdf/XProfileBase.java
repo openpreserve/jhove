@@ -97,13 +97,13 @@ public abstract class XProfileBase extends PdfProfile
      */
     protected boolean outputIntentsOK (PdfArray intents) 
     {
-        Vector intVec = intents.getContent ();
+        Vector<PdfObject> intVec = intents.getContent ();
         int matchCount = 0;
         try {
             for (int i = 0; i < intVec.size (); i++) {
                 PdfDictionary intent = 
                         (PdfDictionary) _module.resolveIndirectObject
-                            ((PdfObject)intVec.elementAt (i));
+                            (intVec.elementAt (i));
                 PdfSimpleObject sval = (PdfSimpleObject) 
                     _module.resolveIndirectObject (intent.get ("S"));
                 if (sval != null) {
@@ -252,6 +252,7 @@ public abstract class XProfileBase extends PdfProfile
      *   Checks a single XObject for xObjectsOK.  Calls imageObjectOK
      *   and formObjectOK for profile-specific functionality.
      */
+    @Override
     protected boolean xObjectOK (PdfDictionary xo) 
     {
         if (xo == null) {
@@ -296,7 +297,7 @@ public abstract class XProfileBase extends PdfProfile
                 // No alternates means we're fine
                 return true;
             }
-            Vector altVec = alternates.getContent ();
+            Vector<PdfObject> altVec = alternates.getContent ();
             for (int i = 0; i < altVec.size (); i++) {
                 PdfDictionary alt = (PdfDictionary) altVec.elementAt (i);
                 // No alternate may have DefaultForPrinting = true
@@ -454,7 +455,7 @@ public abstract class XProfileBase extends PdfProfile
             }
             else {
                 // If it's not a name, it must be an array
-                Vector filterVec = ((PdfArray) filters).getContent ();
+                Vector<PdfObject> filterVec = ((PdfArray) filters).getContent ();
                 for (int i = 0; i < filterVec.size (); i++) {
                     PdfSimpleObject filter = 
                         (PdfSimpleObject) filterVec.elementAt (i);

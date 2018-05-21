@@ -6,8 +6,10 @@
 
 package edu.harvard.hul.ois.jhove.module.pdf;
 
-import java.io.*;
-import java.util.zip.*;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.InflaterInputStream;
 
 /**
  * An enhancement of InflaterInputStream to support Predictor and Columns.
@@ -20,7 +22,6 @@ import java.util.zip.*;
 public class PdfFlateInputStream extends FilterInputStream {
 
     private InflaterInputStream iis;
-    private PdfDictionary decodeParms;
     private int predictor;
     private int columns;
     /* bits per component */
@@ -78,7 +79,6 @@ public class PdfFlateInputStream extends FilterInputStream {
         bpc = 8;
         colors = 1;
 
-        decodeParms = parms;
         iisBuf = new byte [IISBUF_SIZE];
         iisBufLen = 0;
         iisBufOff = 0;
@@ -121,7 +121,8 @@ public class PdfFlateInputStream extends FilterInputStream {
     /** Reads one byte from the stream.
      *  Returns -1 if end of file is reached.
      */
-    public int read() throws IOException 
+    @Override
+    public int read() throws IOException
     {
         if (eof) {
             return -1;
@@ -142,6 +143,7 @@ public class PdfFlateInputStream extends FilterInputStream {
     /** Reads the specified number of bytes into a buffer.
      *  Returns the number of bytes actually read, or -1 if
      *  end of file has been reached. */
+    @Override
     public int read (byte[] b) throws IOException
     {
         /* Need to read a byte at a time till we have something to expand */
@@ -154,6 +156,7 @@ public class PdfFlateInputStream extends FilterInputStream {
      *  No matter how much is requested, this will only return one
      *  row's worth of data at most. 
      */
+    @Override
     public int read (byte[] b, int off, int len) throws IOException
     {
         if (eof) {
@@ -182,18 +185,9 @@ public class PdfFlateInputStream extends FilterInputStream {
         return len;
     }
     
+    @Override
     public long skip (long n) throws IOException {
         return skipIISBytes(n);
-    }
-    
-    /* Takes bytes from the input buffer and turn them into bytes in the output buffer.
-     * Returns the number of bytes available.
-     */
-    private int processBytes ()
-    {
-        int avail = 0;
-        
-        return avail;
     }
     
     /* Reads a row's worth of data and stores in rowBuf. */
