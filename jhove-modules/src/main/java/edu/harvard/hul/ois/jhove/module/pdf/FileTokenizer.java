@@ -50,13 +50,14 @@ public class FileTokenizer extends Tokenizer {
 
     /** Gets the current position in the file.  This method is
      *  aware of buffering. */
-    public long getFilePos () throws IOException
+    public long getFilePos ()
     {
         return _fileBufferPositionOffset + _fileBufferOffset;
     }
 
 
     /** Gets a character from the file, using a buffer. */
+    @Override
     public int readChar () throws IOException
     {
         if (_fileBufferOffset >= _fileBufferBytes) {
@@ -73,7 +74,7 @@ public class FileTokenizer extends Tokenizer {
             }
             _fileBufferOffset = 0;
         }
-        return (int) (_fileBuffer[_fileBufferOffset++] & 0XFF);
+        return (_fileBuffer[_fileBufferOffset++] & 0XFF);
     }
 
     /**
@@ -81,6 +82,7 @@ public class FileTokenizer extends Tokenizer {
      *
      *  @param  offset  The offset in bytes from the start of the file.
      */
+    @Override
     public void seek (long offset)
         throws IOException
     {
@@ -102,6 +104,7 @@ public class FileTokenizer extends Tokenizer {
     /**
      *   Back up a byte so it will be read again.
      */
+    @Override
     public void backupChar ()
     {
         _fileBufferOffset--;
@@ -111,7 +114,8 @@ public class FileTokenizer extends Tokenizer {
      *  so some of the initialization of a stream object 
      *  goes here.
      */
-    protected void initStream (Stream token) throws IOException
+    @Override
+    protected void initStream (Stream token)
     {
         token.setOffset (getFilePos ());
     }
@@ -121,7 +125,8 @@ public class FileTokenizer extends Tokenizer {
      *  Only the file-based tokenizer can do this, which is why this
      *  overrides the Tokenizer method. 
      */
-    protected void setStreamOffset (Stream token) throws IOException
+    @Override
+    protected void setStreamOffset (Stream token)
     {
         if (token.getOffset() < 0) {
             token.setOffset (getFilePos ());

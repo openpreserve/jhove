@@ -52,12 +52,12 @@ public final class AProfile extends PdfProfile
     
     /* The following are the annotation types which are considered
        non-text annotations. */
-    private String[] nonTextAnnotTypes = {
-        "Link", "Line", "Square", "Circle",
-        "Polygon", "Polyline", "Stamp", "Caret",
-        "Ink", "Popup", "Widget", "Screen",
-        "PrinterMark", "TrapNet"
-    };
+//    private String[] nonTextAnnotTypes = {
+//        "Link", "Line", "Square", "Circle",
+//        "Polygon", "Polyline", "Stamp", "Caret",
+//        "Ink", "Popup", "Widget", "Screen",
+//        "PrinterMark", "TrapNet"
+//    };
     
     private String[] excludedActions = {
         "Launch", "Sound", "Movie", "ResetForm",
@@ -100,6 +100,7 @@ public final class AProfile extends PdfProfile
      * be called.
      *
      */
+    @Override
     public boolean satisfiesThisProfile ()
     {
         // Assume level A compliance.
@@ -234,7 +235,7 @@ public final class AProfile extends PdfProfile
         Iterator<Map<Integer, PdfObject>> iter = lst.listIterator ();
         try {
             while (iter.hasNext ()) {
-                Map<Integer, PdfObject> fmap = (Map<Integer, PdfObject>) iter.next ();
+                Map<Integer, PdfObject> fmap = iter.next ();
                 Iterator<PdfObject> iter1 = fmap.values ().iterator ();
                 while (iter1.hasNext ()) {
                     PdfDictionary font = (PdfDictionary) iter1.next ();
@@ -318,7 +319,7 @@ public final class AProfile extends PdfProfile
 	     *
 	     * PdfStream toUni = (PdfStream) font.get ("ToUnicode");
 	     */
-            PdfObject toUni = (PdfObject) font.get ("ToUnicode");
+            PdfObject toUni = font.get ("ToUnicode");
             if (toUni == null) {
                 _levelA = false;
             }
@@ -368,7 +369,7 @@ public final class AProfile extends PdfProfile
                 // While Adobe warns that this may change in a
                 // previous version, we require here that the
                 // first descendant be a CIDFont, and ignore any others.
-                Vector subfonts = descendants.getContent ();
+                Vector<PdfObject> subfonts = descendants.getContent ();
 
 		/*
 		 * Fix contributed by FCLA, 2007-05-30, to permit the
@@ -380,7 +381,7 @@ public final class AProfile extends PdfProfile
 		 * subfont = (PdfDictionary)
 		 *                  _module.resolveIndirectObject (subfont);
 		 */
-                PdfObject objFont = (PdfObject) subfonts.elementAt (0);
+                PdfObject objFont = subfonts.elementAt (0);
                 PdfDictionary subfont = (PdfDictionary)
                         _module.resolveIndirectObject (objFont);
                 PdfSimpleObject subtype = 

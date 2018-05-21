@@ -26,8 +26,6 @@ public class Parser
     private int _arrayDepth;
     /** The file's object map. */
     private Map<Long, PdfObject> _objectMap;
-    /** True if the document is encrypted. */
-    private boolean _encrypted;
     /** PDF/A compliance flag. */
     private boolean _pdfACompliant;
 
@@ -96,7 +94,7 @@ public class Parser
         else if (tok instanceof DictionaryEnd) {
             --_dictDepth;
             if (_dictDepth < 0) {
-                throw new PdfMalformedException (MessageConstants.ERR_DICT_DELIMETERS_IMPROPERLY_NESTED);
+                throw new PdfMalformedException (MessageConstants.ERR_DICT_DELIMITERS_IMPROPERLY_NESTED); // PDF-HUL-33
             }
         }
         if (tok instanceof ArrayStart) {
@@ -105,7 +103,7 @@ public class Parser
         else if (tok instanceof ArrayEnd) {
             --_arrayDepth;
             if (_arrayDepth < 0) {
-                throw new PdfMalformedException (MessageConstants.ERR_ARRAY_IMPROPERLY_NESTED);
+                throw new PdfMalformedException (MessageConstants.ERR_ARRAY_IMPROPERLY_NESTED); // PDF-HUL-34
             }
         }
         return tok;
@@ -137,15 +135,6 @@ public class Parser
     public int getDictDepth ()
     {
         return _dictDepth;
-    }
-
-    /**
-     * Tells this Parser, and its Tokenizer, whether the file is encrypted.
-     */
-    public void setEncrypted (boolean encrypted)
-    {
-        _encrypted = encrypted;
-        _tokenizer.setEncrypted (encrypted);
     }
 
     /**
@@ -201,7 +190,7 @@ public class Parser
     public PdfObject readObjectDef () throws IOException, PdfException
     {
         Numeric objNumTok = (Numeric) getNext 
-            (Numeric.class, MessageConstants.ERR_OBJ_DEF_INVALID);
+            (Numeric.class, MessageConstants.ERR_OBJ_DEF_INVALID); // PDF-HUL-35
         return readObjectDef (objNumTok);
     }
 
@@ -218,10 +207,10 @@ public class Parser
         reset ();
         // The start of an object must be <num> <num> obj
         //Numeric objNumTok = (Numeric) getNext (Numeric.class, invDef);
-        Numeric genNumTok = (Numeric) getNext (Numeric.class, MessageConstants.ERR_OBJ_DEF_INVALID);
-        Keyword objKey = (Keyword) getNext (Keyword.class, MessageConstants.ERR_OBJ_DEF_INVALID);
+        Numeric genNumTok = (Numeric) getNext (Numeric.class, MessageConstants.ERR_OBJ_DEF_INVALID); // PDF-HUL-36
+        Keyword objKey = (Keyword) getNext (Keyword.class, MessageConstants.ERR_OBJ_DEF_INVALID); // PDF-HUL-37
         if (!"obj".equals (objKey.getValue ())) {
-            throw new PdfMalformedException (MessageConstants.ERR_OBJ_DEF_INVALID);
+            throw new PdfMalformedException (MessageConstants.ERR_OBJ_DEF_INVALID); // PDF-HUL-38
         }
         if (_tokenizer.getWSString ().length () > 1) {
             _pdfACompliant = false;
@@ -289,7 +278,7 @@ public class Parser
         }
         else {
             throw new PdfMalformedException 
-              (MessageConstants.ERR_OBJ_NOT_PARSABLE, getOffset(), tok);
+              (MessageConstants.ERR_OBJ_NOT_PARSABLE, getOffset(), tok); // PDF-HUL-39
         }
     }
 
@@ -319,7 +308,7 @@ public class Parser
                     return arr;
                 }
                 throw new PdfMalformedException
-                    (MessageConstants.ERR_ARRAY_CONTAINS_UMEXPECTED_TOKEN, getOffset());
+                    (MessageConstants.ERR_ARRAY_CONTAINS_UNEXPECTED_TOKEN, getOffset()); // PDF-HUL-40
             }
         }
     }
@@ -334,7 +323,7 @@ public class Parser
     {
         PdfDictionary dict = new PdfDictionary ();
         // Create a vector as a temporary holding place for the objects
-        Vector<PdfObject> vec = new Vector<PdfObject> ();
+        Vector<PdfObject> vec = new Vector<> ();
 
         for (;;) {
             PdfObject obj = readObject (true);
@@ -356,7 +345,7 @@ public class Parser
                     // The collapsed vector must contain an even number of objects
                     int vecSize = vec.size ();
                     if ((vecSize % 2) != 0) {
-                        throw new PdfMalformedException (MessageConstants.ERR_VECTOR_OBJ_COUNT_NOT_EVEN + vecSize, getOffset ());
+                        throw new PdfMalformedException (MessageConstants.ERR_VECTOR_OBJ_COUNT_NOT_EVEN + vecSize, getOffset ()); // PDF-HUL-41
                     }
                     for (int i = 0; i < vecSize; i += 2) {
                         try {
@@ -366,7 +355,7 @@ public class Parser
                             dict.add (key.getValue (), value);
                         }
                         catch (Exception f) {
-                            throw new PdfMalformedException (MessageConstants.ERR_DICT_MALFORMED, getOffset ());
+                            throw new PdfMalformedException (MessageConstants.ERR_DICT_MALFORMED, getOffset ()); // PDF-HUL-42
                         }
                     }
                     if (!dict.isPdfACompliant()) {
@@ -375,7 +364,7 @@ public class Parser
                     return dict;
                 }
                 throw new PdfMalformedException
-                (MessageConstants.ERR_DICT_CONTAINS_UNEXPECTED_TOKEN, getOffset());
+                (MessageConstants.ERR_DICT_CONTAINS_UNEXPECTED_TOKEN, getOffset()); // PDF-HUL-43
             }
         }
     }
@@ -437,7 +426,7 @@ public class Parser
                         }
                         catch (Exception e) {
                             throw new PdfMalformedException 
-                                (MessageConstants.ERR_INDIRECT_OBJ_REF_MALFORMED);
+                                (MessageConstants.ERR_INDIRECT_OBJ_REF_MALFORMED); // PDF-HUL-44
                         }
                     }
                 }

@@ -44,6 +44,7 @@ public final class X1Profile extends XProfileBase
      * <code>isX1aCompliant</code>.
      *
      */
+    @Override
     public boolean satisfiesThisProfile ()
     {
         _x1aCompliant = false;    // guilty till proven innocent
@@ -189,12 +190,12 @@ public final class X1Profile extends XProfileBase
                 
                 // Check content streams for  resources
                 if (docNode instanceof PageObject) {
-                    List streams = 
+                    List<PdfStream> streams = 
                         ((PageObject) docNode).getContentStreams ();
                     if (streams != null) {
-                        Iterator iter = streams.listIterator ();
+                        Iterator<PdfStream> iter = streams.listIterator ();
                         while (iter.hasNext ()) {
-                            PdfStream stream = (PdfStream) iter.next ();
+                            PdfStream stream = iter.next ();
                             PdfDictionary dict = stream.getDict ();
                             PdfDictionary rs = 
                                 (PdfDictionary) dict.get ("Resources");
@@ -233,7 +234,7 @@ public final class X1Profile extends XProfileBase
                     // in particular, TrapNet annotations.
                     PdfArray annots = ((PageObject) docNode).getAnnotations ();
                     if (annots != null) {
-                        Vector annVec = annots.getContent ();
+                        Vector<PdfObject> annVec = annots.getContent ();
                         for (int i = 0; i < annVec.size (); i++) {
                             PdfDictionary annDict = (PdfDictionary)
                                 annVec.elementAt (i);
@@ -242,7 +243,7 @@ public final class X1Profile extends XProfileBase
                                 // FontFauxing must be absent or 0-length
                                 PdfArray ff = (PdfArray) annDict.get ("FontFauxing");
                                 if (ff != null) {
-                                    Vector ffVec = ff.getContent ();
+                                    Vector<PdfObject> ffVec = ff.getContent ();
                                     if (ffVec.size() > 0) {
                                         return false;   // a faux pas
                                     }
@@ -276,7 +277,7 @@ public final class X1Profile extends XProfileBase
 
 
     /* Check if a color space dictionary is conformant */
-    private boolean colorSpaceOK (PdfDictionary cs)
+    private static boolean colorSpaceOK (PdfDictionary cs)
     {
         // If it's null, that's fine.
         if (cs == null) {
@@ -284,11 +285,11 @@ public final class X1Profile extends XProfileBase
         }
         // Walk through the color space dictionary,
         // checking Separation and DeviceN resources
-        Iterator iter = cs.iterator ();
+        Iterator<PdfObject> iter = cs.iterator ();
         while (iter.hasNext ()) {
-            PdfObject res = (PdfObject) iter.next ();
+            PdfObject res = iter.next ();
             if (res instanceof PdfArray) {
-                Vector resv = ((PdfArray) res).getContent ();
+                Vector<PdfObject> resv = ((PdfArray) res).getContent ();
                 PdfSimpleObject snameobj = (PdfSimpleObject) resv.elementAt (0);
                 String sname = snameobj.getStringValue ();
                 if ("Separation".equals (sname) || "DeviceN".equals (sname)) {
@@ -322,6 +323,7 @@ public final class X1Profile extends XProfileBase
 
 
     /* Checks a single XObject. */
+    @Override
     protected boolean xObjectOK (PdfDictionary xo) 
     {
         if (xo == null) {
@@ -367,7 +369,7 @@ public final class X1Profile extends XProfileBase
                 }
             }
             else if (inks instanceof PdfArray) {
-                Vector inkvec = ((PdfArray) inks).getContent ();
+                Vector<PdfObject> inkvec = ((PdfArray) inks).getContent ();
                 PdfSimpleObject inkobj = (PdfSimpleObject)
                         inkvec.elementAt (0);
                 if (!("monochrome".equals (inkobj.getStringValue ()))) {
@@ -436,7 +438,8 @@ public final class X1Profile extends XProfileBase
 
     /** Checks if a Form xobject is valid.  This overrides the method in
        XProfileBase. */
-    protected boolean formObjectOK (PdfDictionary xo)
+    @Override
+	protected boolean formObjectOK (PdfDictionary xo)
     {
         // PDF-X/1-a elements can't have a Ref key in the
         // Form dictionary.

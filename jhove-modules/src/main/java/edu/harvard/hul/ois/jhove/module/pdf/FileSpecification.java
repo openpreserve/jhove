@@ -21,11 +21,10 @@ package edu.harvard.hul.ois.jhove.module.pdf;
  *    <LI>The Macintosh file specification string
  *  </UL>
  */
-public class FileSpecification 
+public enum FileSpecification 
 {
-    String _specString;
-    PdfObject _sourceObject;
-    
+    INSTANCE;
+    private static final String[] dictKeys = {"F", "Unix", "DOS", "Mac"};
     /**
      *  Constructor.
      * 
@@ -37,50 +36,25 @@ public class FileSpecification
      *               then the first of the keys F, Unix, DOS, and Mac
      *               to be found is used.
      */
-    public FileSpecification (PdfObject obj) throws PdfException
+    public static String getFileSpecString (PdfObject obj) throws PdfInvalidException
     {
+        if (obj instanceof PdfSimpleObject) {
+            return ((PdfSimpleObject) obj).getStringValue ();
+        }
         try {
-            _sourceObject = obj;
             if (obj instanceof PdfDictionary) {
                 PdfDictionary dictObj = (PdfDictionary) obj;
-                PdfSimpleObject pathObj;
-                pathObj = (PdfSimpleObject) dictObj.get ("F");
-                if (pathObj == null) {
-                    pathObj = (PdfSimpleObject) dictObj.get ("Unix");
+                for (final String dictKey : dictKeys) {
+                    PdfSimpleObject pathObj = (PdfSimpleObject) dictObj.get(dictKey);
+                    if (pathObj != null) {
+                        return pathObj.getStringValue();
+                    }
                 }
-                if (pathObj == null) {
-                    pathObj = (PdfSimpleObject) dictObj.get ("DOS");
-                }
-                if (pathObj == null) {
-                    pathObj = (PdfSimpleObject) dictObj.get ("Mac");
-                }
-                if (pathObj != null) {
-                    _specString = pathObj.getStringValue ();
-                }
-            }
-            else if (obj instanceof PdfSimpleObject) {
-                _specString = ((PdfSimpleObject) obj).getStringValue ();
             }
         }
         catch (ClassCastException e) {
-            throw new PdfInvalidException (MessageConstants.ERR_FILE_SPEC_INVALID);
+            throw new PdfInvalidException(MessageConstants.ERR_FILE_SPEC_INVALID); // PDF-HUL-9
         }
-    }
-    
-    /**
-     *  Returns the file specification as a string.  
-     */
-    public String getSpecString ()
-    {
-        return _specString;
-    }
-    
-    
-    /**
-     *   Returns the PdfObject from which the file specification was created.
-     */
-    public PdfObject getSourceObject ()
-    {
-	return _sourceObject;
+        return null;
     }
 }

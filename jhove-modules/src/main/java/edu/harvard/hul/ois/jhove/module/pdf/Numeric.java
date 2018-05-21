@@ -54,7 +54,7 @@ public class Numeric
         if (_real) {
             return _realValue;
         }
-        return (double) _intValue;
+        return _intValue;
     }
 
     /** 
@@ -86,6 +86,7 @@ public class Numeric
     }
     
     /** Returns true if this is within PDF/A implementation limits. */
+    @Override
     public boolean isPdfACompliant () {
         if (_real) {
             double absRealValue = (_realValue < 0 ? -_realValue : _realValue);
