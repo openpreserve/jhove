@@ -31,15 +31,6 @@ import java.io.*;
 public final class BytestreamModule
     extends ModuleBase
 {
-    /******************************************************************
-     * PRIVATE INSTANCE FIELDS.
-     ******************************************************************/
-
-    /* Input stream wrapper which handles checksums */
-    protected ChecksumInputStream _cstream;
-    
-    /* Data input stream wrapped around _cstream */
-    protected DataInputStream _dstream;
 
     /******************************************************************
      * PRIVATE CLASS FIELDS.
@@ -96,18 +87,7 @@ public final class BytestreamModule
 
 	/* We may have already done the checksums while converting a
 	   temporary file. */
-	Checksummer ckSummer = null;
-	if (_je != null && _je.getChecksumFlag () &&
-	    info.getChecksum ().size () == 0) {
-	    ckSummer = new Checksummer ();
-            _cstream = new ChecksumInputStream (stream, ckSummer);
-            _dstream = getBufferedDataStream (_cstream, _je != null ?
-                        _je.getBufferSize () : 0);
-	}
-        else {
-            _dstream = getBufferedDataStream (stream, _je != null ?
-                                _je.getBufferSize () : 0);
-        }
+        setupDataStream(stream, info);
 
         boolean eof = false;
         _nByte = 0;
@@ -129,14 +109,14 @@ public final class BytestreamModule
 	if (_nByte == 0) {
 	    info.setMessage (new InfoMessage (CoreMessageConstants.INF_FILE_EMPTY));
 	}
-        if (ckSummer != null) {
-	    info.setChecksum (new Checksum (ckSummer.getCRC32 (), 
+        if (_ckSummer != null) {
+	    info.setChecksum (new Checksum (_ckSummer.getCRC32 (), 
 					ChecksumType.CRC32));
-	    String value = ckSummer.getMD5 ();
+	    String value = _ckSummer.getMD5 ();
 	    if (value != null) {
 		info.setChecksum (new Checksum (value, ChecksumType.MD5));
 	    }
-	    if ((value = ckSummer.getSHA1 ()) != null) {
+	    if ((value = _ckSummer.getSHA1 ()) != null) {
 		info.setChecksum (new Checksum (value, ChecksumType.SHA1));
 	    }
         }

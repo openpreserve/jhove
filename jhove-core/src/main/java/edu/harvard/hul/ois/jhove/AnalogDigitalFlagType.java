@@ -15,26 +15,19 @@ package edu.harvard.hul.ois.jhove;
  * @author Gary McGath
  *
  */
-public class AnalogDigitalFlagType extends EnumerationType {
+public enum AnalogDigitalFlagType {
 
     /** Enumeration instance for analog data */
-    public static final AnalogDigitalFlagType ANALOG = 
-        new AnalogDigitalFlagType ("ANALOG");
-
-    /** Enumeration instance for physical digital data */
-    public static final AnalogDigitalFlagType PHYS_DIGITAL = 
-        new AnalogDigitalFlagType ("PHYS_DIGITAL");
-
-    /** Enumeration instance for FILE digital data */
-    public static final AnalogDigitalFlagType FILE_DIGITAL = 
-        new AnalogDigitalFlagType ("FILE_DIGITAL");
-
+    ANALOG("ANALOG"),
+    PHYS_DIGITAL("PHYS_DIGITAL"),
+    FILE_DIGITAL("FILE_DIGITAL");
+	public final String value;
     /** 
      *  Applications will never create PropertyTypes directly.
      **/
-    private AnalogDigitalFlagType (String value)
+    private AnalogDigitalFlagType (final String value)
     {
-        super (value);
+        this.value = value;
     }
 
 }

@@ -39,7 +39,7 @@ public abstract class ModuleBase
     /** Initialization value. */
     protected String _init;
     /** List of default parameters. */
-    protected List<String> _defaultParams;
+    protected final List<String> _defaultParams = new ArrayList<>();
     /** JHOVE engine. */
     protected JhoveBase _je;
     /**  MIME types supported by this Module */
@@ -88,6 +88,14 @@ public abstract class ModuleBase
     protected List<String> _features;
     /** Logger for a module class. */
     protected Logger _logger;
+    /* Checksummer object */
+    protected Checksummer _ckSummer;
+
+    /* Input stream wrapper which handles checksums */
+    protected ChecksumInputStream _cstream;
+
+    /* Data input stream wrapped around _cstream */
+    protected DataInputStream _dstream;
 
     /******************************************************************
      * CLASS CONSTRUCTOR.
@@ -195,7 +203,8 @@ public abstract class ModuleBase
     @Override
     public void setDefaultParams (List<String> params)
     {
-        _defaultParams = params;
+        _defaultParams.clear();
+        _defaultParams.addAll(params);
     }
 
     /**
@@ -206,10 +215,8 @@ public abstract class ModuleBase
     public void applyDefaultParams () throws Exception
     {
         resetParams ();
-        Iterator<String> iter = _defaultParams.iterator ();
-        while (iter.hasNext ()) {
-            String parm =  iter.next ();
-            param (parm);
+        for (String parm : _defaultParams) {
+            param(parm);
         }
     }
 
@@ -469,7 +476,7 @@ public abstract class ModuleBase
     @Override
     public List<String> getDefaultParams ()
     {
-        return _defaultParams;
+        return Collections.unmodifiableList(_defaultParams);
     }
 
 
@@ -1456,5 +1463,18 @@ public abstract class ModuleBase
             prop[i] = (Property) vec.elementAt (i);
         }
         return prop;
+    }
+
+    protected void setupDataStream(final InputStream stream, final RepInfo info) {
+        if (_je.getChecksumFlag() &&
+                info.getChecksum().isEmpty()) {
+            _ckSummer = new Checksummer ();
+            _cstream = new ChecksumInputStream (stream, _ckSummer);
+            _dstream = getBufferedDataStream (_cstream,
+                    _app != null ? _je.getBufferSize () : 0);
+        } else {
+            _dstream = getBufferedDataStream (stream, _app != null ?
+                        _je.getBufferSize () : 0);
+        }
     }
 }
