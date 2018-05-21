@@ -224,13 +224,10 @@ public class AuditHandler
 	/* Retrieve the MD5 checksum, if available. */
 
 	String md5 = null;
-	List<?> list = info.getChecksum ();
-	int len = list.size ();
-	for (int i=0; i<len; i++) {
-	    Checksum checksum = (Checksum) list.get (i);
+	for (Checksum checksum : info.getChecksum()) {
 	    if (checksum.getType ().equals (ChecksumType.MD5)) {
-		md5 = checksum.getValue ();
-		break;
+	        md5 = checksum.getValue ();
+	        break;
 	    }
 	}
 	 

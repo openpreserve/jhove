@@ -133,10 +133,7 @@ public abstract class InfoWindow extends JFrame
         
         // Build list of handlers into a popup menu
         Vector<String> handlerItems = new Vector<> (10);
-        java.util.List<?> handlerList = _base.getHandlerList ();
-        Iterator<?> iter = handlerList.iterator ();
-        while (iter.hasNext ()) {
-            OutputHandler han = (OutputHandler) iter.next ();
+        for (OutputHandler han : _base.getHandlerList()) {
             handlerItems.add (han.getName ());
         }
         _handlerBox = new JComboBox<>(handlerItems);

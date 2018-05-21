@@ -375,22 +375,19 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         
         List<Checksum> cksumList = _info.getChecksum();
-        if (cksumList != null && cksumList.size () > 0) {
+        if (cksumList != null && !cksumList.isEmpty()) {
             DefaultMutableTreeNode ckNode = 
                 new DefaultMutableTreeNode ("Checksums");
             infoNode.add (ckNode);
-            int n = cksumList.size ();
             //List cPropList = new LinkedList ();
-            for (int i = 0; i < n; i++) {
-                Checksum cksum = cksumList.get (i);
-                String val = cksum.getValue ();
+            for (Checksum cksum : cksumList) {
                 DefaultMutableTreeNode csNode =
                     new DefaultMutableTreeNode ("Checksum");
                 ckNode.add (csNode);
                 csNode.add (new DefaultMutableTreeNode
                     ("Type:" + cksum.getType ().toString (), false));
                 csNode.add (new DefaultMutableTreeNode
-                    ("Checksum: " + val, false));
+                    ("Checksum: " + cksum.getValue (), false));
             }
         }
         
@@ -644,10 +641,10 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         // Add the face information, which is mostly filler.
         // In the general case, it can contain multiple Faces;
         // this isn't supported yet.
-        List<?> facelist = aes.getFaceList ();
+        List<AESAudioMetadata.Face> facelist = aes.getFaceList ();
         if (!facelist.isEmpty ()) {
             AESAudioMetadata.Face f = 
-                (AESAudioMetadata.Face) facelist.get(0);
+                facelist.get(0);
 
             DefaultMutableTreeNode face =
                     new DefaultMutableTreeNode ("Face", true);
@@ -672,13 +669,13 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 String[] locs = aes.getMapLocations ();
                 region.add (new DefaultMutableTreeNode
                         ("NumChannels: " + Integer.toString (nchan), false));
-                for (int ch = 0; ch < nchan; ch++) {
+                for (String loc : locs) {
                     // write a stream element for each channel
                     DefaultMutableTreeNode stream =
                             new DefaultMutableTreeNode ("Stream", true);
                     region.add (stream);
                     stream.add (new DefaultMutableTreeNode 
-                        ("ChannelAssignment: " + locs[ch], false));
+                        ("ChannelAssignment: " + loc, false));
                 }
             }
             face.add (region);         
@@ -688,10 +685,10 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         // FormatRegions.  This doesn't happen with any of the current
         // modules; if it's needed in the future, simply set up an
         // iteration loop on formatList.
-        List<?> flist = aes.getFormatList ();
+        List<AESAudioMetadata.FormatRegion> flist = aes.getFormatList ();
         if (!flist.isEmpty ()) {
             AESAudioMetadata.FormatRegion rgn = 
-                (AESAudioMetadata.FormatRegion) flist.get(0);
+                flist.get(0);
             int bitDepth = rgn.getBitDepth ();
             double sampleRate = rgn.getSampleRate ();
             int wordSize = rgn.getWordSize ();

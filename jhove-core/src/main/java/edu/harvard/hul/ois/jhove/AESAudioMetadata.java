@@ -685,7 +685,7 @@ public class AESAudioMetadata
     
     /** Gets the list of Faces. Normally there will be only one face
      *  in a digital file. */
-    public List getFaceList ()
+    public List<Face> getFaceList ()
     {
         return _faceList;
     }
@@ -707,7 +707,7 @@ public class AESAudioMetadata
      *  list will contain a Format Region with only default values.
      *  This should be checked with isEmpty ().
      */
-    public List getFormatList ()
+    public List<FormatRegion> getFormatList ()
     {
         return _formatList;
     }
