@@ -85,10 +85,10 @@ public class ConfigHandler
      */
     public ConfigHandler ()
     {
-        _module  = new ArrayList<ModuleInfo> ();
-        _handler = new ArrayList<String[]> ();
-        _modParams = new ArrayList<List<String>> ();
-        _handlerParams = new ArrayList<List<String>> ();
+        _module  = new ArrayList<> ();
+        _handler = new ArrayList<> ();
+        _modParams = new ArrayList<> ();
+        _handlerParams = new ArrayList<> ();
 
         _isModule  = false;
         _isHandler = false;
@@ -100,7 +100,7 @@ public class ConfigHandler
 
         _bufferSize = -1;
         _encoding   = null;
-        _extension  = new Hashtable<String, String> ();
+        _extension  = new Hashtable<> ();
         _tempDir    = null;
         _mixVsn     = null;
         _sigBytes   = 1024;
@@ -238,43 +238,43 @@ public class ConfigHandler
     /** 
      *  SAX parser callback method.
      */
+    @Override
     public void startElement (String namespaceURI, String localName,
 			      String rawName, Attributes atts)
-	throws SAXException
     {
         _content = new StringBuffer ();
         
-        if (rawName.equals ("module")) {
+        if ("module".equals (rawName)) {
             _isModule  = true;
             _init = null;
-            _param = new ArrayList<String> (1);
+            _param = new ArrayList<> (1);
             _class = null;
         }
-        else if (rawName.equals ("outputHandler")) {
+        else if ("outputHandler".equals (rawName)) {
             _isHandler = true;
             _init = null;
-            _param = new ArrayList<String> (1);
+            _param = new ArrayList<> (1);
             _class = null;
         }
-        else if (rawName.equals ("tempDirectory")) {
+        else if ("tempDirectory".equals (rawName)) {
             _isTempDir = true;
         }
-        else if (rawName.equals ("mixVersion")) {
+        else if ("mixVersion".equals (rawName)) {
             _isMixVsn = true;
         }
-        else if (rawName.equals ("defaultEncoding")) {
+        else if ("defaultEncoding".equals (rawName)) {
             _isEncoding = true;
         }
-        else if (rawName.equals ("bufferSize")) {
+        else if ("bufferSize".equals (rawName)) {
             _isBufferSize = true;
         }
-        else if (rawName.equals ("jhoveHome")) {
+        else if ("jhoveHome".equals (rawName)) {
             _isJhoveHome = true;
         }
-        else if (rawName.equals ("logLevel")) {
+        else if ("logLevel".equals (rawName)) {
             _isLogLevel = true;
         }
-        else if (rawName.equals ("sigBytes")) {
+        else if ("sigBytes".equals (rawName)) {
             _isSigBytes = true;
         }
     }
@@ -282,8 +282,8 @@ public class ConfigHandler
     /** 
      *  SAX parser callback method.
      */
+    @Override
     public void characters (char [] ch, int start, int length)
-	throws SAXException
     {
 	_content.append (ch, start, length);
     }
@@ -291,21 +291,21 @@ public class ConfigHandler
     /** 
      *  SAX parser callback method.
      */
+    @Override
     public void endElement (String namespaceURI, String localName,
 			    String rawName)
-	throws SAXException
     {
         if (_isModule) {
-            if (rawName.equals ("class")) {
+            if ("class".equals (rawName)) {
                 _class = _content.toString ();
         }
-        else if (rawName.equals ("init")) {
+        else if ("init".equals (rawName)) {
             _init = _content.toString ();
         }
-        else if (rawName.equals ("param")) {
+        else if ("param".equals (rawName)) {
             _param.add (_content.toString ());
         }
-	    else if (rawName.equals ("module")) {
+	    else if ("module".equals (rawName)) {
             ModuleInfo modInfo = new ModuleInfo( _class, _init);
             _module.add (modInfo);
             _modParams.add (_param);
@@ -313,16 +313,16 @@ public class ConfigHandler
 	    }
 	}
 	else if (_isHandler) {
-	    if (rawName.equals ("class")) {
+	    if ("class".equals (rawName)) {
 		_class = _content.toString ();
 	    }
-	    else if (rawName.equals ("init")) {
+	    else if ("init".equals (rawName)) {
 		_init = _content.toString ();
 	    }
-            else if (rawName.equals ("param")) {
+            else if ("param".equals (rawName)) {
                 _param.add (_content.toString ());
             }
-	    else if (rawName.equals ("outputHandler")) {
+	    else if ("outputHandler".equals (rawName)) {
 		String [] tuple = { _class, _init };
 		_handler.add (tuple);
                 _handlerParams.add (_param);
@@ -365,7 +365,7 @@ public class ConfigHandler
 	    }
 	    _isBufferSize = false;
 	}
-	else if (!rawName.equals ("jhoveConfig")) {
+	else if (!"jhoveConfig".equals (rawName)) {
 	    _extension.put (rawName, _content.toString ().trim ());
 	}
     }
@@ -379,6 +379,7 @@ public class ConfigHandler
      *  it will cut down on the burden on the server with the official
      *  schema copy.
      */
+    @Override
     public InputSource resolveEntity (String publicId, String systemId)
                     throws SAXException, IOException {
         if (systemId.endsWith (configSchemaName)) {

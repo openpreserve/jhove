@@ -99,8 +99,8 @@ public class ConfigWindow extends JDialog {
         }
         else {
             // Set up defaults
-            _modules = new ArrayList<ModuleInfo> (10);
-            _handlers = new ArrayList<String[]> (5);
+            _modules = new ArrayList<> (10);
+            _handlers = new ArrayList<> (5);
             _bufferSize = -1;
             _homeDir = null;
             _tempDir = null;
@@ -147,24 +147,29 @@ public class ConfigWindow extends JDialog {
         _mainBox.add (panel);
         // Use an anonymous class to implement the TableModel
         _modTableModel = new AbstractTableModel () {
+            @Override
             public int getRowCount () 
             {
                 return _modules.size ();
             }
+            @Override
             public int getColumnCount ()
             {
                 return 2;
             }
+            @Override
             public boolean isCellEditable(int row, int col)
             { 
                 return true;
             }
+            @Override
             public Object getValueAt (int row, int column)
             {
                 ModuleInfo modInfo  = _modules.get (row);
                 String[] tuple = { modInfo.clas, modInfo.init};
                 return tuple[column];
             }
+            @Override
             public void setValueAt (Object obj, int row, int column)
             {
                 ModuleInfo modInfo = _modules.get(row);
@@ -199,6 +204,7 @@ public class ConfigWindow extends JDialog {
         JButton addButton = new JButton ("Add");
         addButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     addModule ();
@@ -209,6 +215,7 @@ public class ConfigWindow extends JDialog {
         JButton delButton = new JButton ("Delete");
         delButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     deleteModule ();
@@ -239,26 +246,31 @@ public class ConfigWindow extends JDialog {
         _mainBox.add (panel);
         // Use an anonymous class to implement the TableModel
         _hanTableModel = new AbstractTableModel () {
+            @Override
             public int getRowCount () 
             {
                 return _handlers.size ();
             }
+            @Override
             public int getColumnCount ()
             {
                 return 1;
             }
+            @Override
             public boolean isCellEditable(int row, int col)
             { 
                 return true;
             }
+            @Override
             public Object getValueAt (int row, int column)
             {
-                String[] tuple = (String[]) _handlers.get (row);
+                String[] tuple = _handlers.get (row);
                 if (tuple != null) {
                     return tuple[0];
                 }
                 return "";
             }
+            @Override
             public void setValueAt (Object obj, int row, int column)
             {
                 if (obj instanceof String) {
@@ -288,6 +300,7 @@ public class ConfigWindow extends JDialog {
         JButton addButton = new JButton ("Add");
         addButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     addHandler ();
@@ -298,6 +311,7 @@ public class ConfigWindow extends JDialog {
         JButton delButton = new JButton ("Delete");
         delButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     deleteHandler ();
@@ -362,6 +376,7 @@ public class ConfigWindow extends JDialog {
         bpan.add (homeButton);
         homeButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     chooseHomeDir ();
@@ -393,6 +408,7 @@ public class ConfigWindow extends JDialog {
         bpan.add (tempDirButton);
         tempDirButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     chooseTempDir ();
@@ -429,6 +445,7 @@ public class ConfigWindow extends JDialog {
         getRootPane().setDefaultButton (saveButton);
         saveButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     doSave ();
@@ -443,6 +460,7 @@ public class ConfigWindow extends JDialog {
         JButton cancelButton = new JButton ("Cancel");
         cancelButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     thiscw.dispose ();
@@ -525,6 +543,7 @@ public class ConfigWindow extends JDialog {
         JButton defaultButton = new JButton ("System Default");
         defaultButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     // Exit the dialog and clear _tempDir

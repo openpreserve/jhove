@@ -43,10 +43,9 @@ public class GDump
 	    System.exit (-1);
 	}
 
-	try {
-	    FileInputStream file = new FileInputStream (args[0]);
-	    BufferedInputStream buffer = new BufferedInputStream (file);
-	    DataInputStream stream = new DataInputStream (buffer);
+	try (FileInputStream file = new FileInputStream (args[0]);
+	     BufferedInputStream buffer = new BufferedInputStream (file);
+	     DataInputStream stream = new DataInputStream (buffer)) {
 	    boolean bigEndian = false;
 
 	    String signature = readChars (stream, 3);

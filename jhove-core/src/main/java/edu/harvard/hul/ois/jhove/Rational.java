@@ -92,6 +92,7 @@ public class Rational
      *	Represents the Rational as a String in the form of 
      *  "numerator/denominator".
      */	
+    @Override
     public String toString ()
     {
 	return Long.toString (_numerator) + "/" +

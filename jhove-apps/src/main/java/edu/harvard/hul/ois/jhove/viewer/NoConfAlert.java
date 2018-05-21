@@ -48,6 +48,7 @@ public class NoConfAlert extends JDialog
 	bottomPanel.add (exitButton);
         exitButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     dispose ();

@@ -53,12 +53,13 @@ public class ViewWindow extends InfoWindow {
         super ("RepInfo", app, base);
         setSaveActionListener ( 
             new ActionListener() {
+                @Override
                 public void actionPerformed (ActionEvent e) {
                     saveInfo ();
                 }
             });
 
-        _info = new LinkedList<RepInfo> ();        
+        _info = new LinkedList<> ();
         // The root element should no longer be a 
         // RepTreeRoot, but some other flavor of 
         // DefaultMutableTreeNode.  It will have RepTreeRoots
@@ -96,6 +97,7 @@ public class ViewWindow extends InfoWindow {
         if (jhwin != null) {
             _closeAllItem = jhwin.getCloseAllItem ();
             _closeAllListener = new ActionListener() {
+                @Override
                 public void actionPerformed (ActionEvent e) {
                     closeFromMenu ();
                 }
@@ -109,10 +111,10 @@ public class ViewWindow extends InfoWindow {
      *  tree.  The RepInfo object is saved into a list so that 
      *  the window contents can be saved to a file later.
      */
-    public void addRepInfo (RepInfo info, App app, JhoveBase base)
+    public void addRepInfo (RepInfo info, JhoveBase base)
     {
         _info.add (info);
-        RepTreeRoot node = new RepTreeRoot (info, app, base);
+        RepTreeRoot node = new RepTreeRoot (info, base);
         _rootNode.add (node);
     }
     
@@ -143,7 +145,7 @@ public class ViewWindow extends InfoWindow {
             handler.showHeader ();
             Iterator<RepInfo> iter =  _info.iterator ();
             while (iter.hasNext ()) {
-                RepInfo info = (RepInfo) iter.next ();
+                RepInfo info = iter.next ();
                 handler.show (info);
             }
             handler.showFooter ();
@@ -161,6 +163,7 @@ public class ViewWindow extends InfoWindow {
     /** Invoked when the "Close" menu item is selected.
      *  Overrides the parent class's method to delete
      *  the window rather than hiding it. */
+    @Override
     protected void closeFromMenu ()
     {
         super.closeFromMenu ();

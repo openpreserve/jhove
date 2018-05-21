@@ -51,7 +51,6 @@ public class ADump extends Dump {
             FileInputStream file = new FileInputStream (args[0]);
             BufferedInputStream buffer = new BufferedInputStream (file);
             DataInputStream stream = new DataInputStream (buffer);
-            ADump dump = new ADump ();   // Just to access contained classes
             long os = 0;
             for (int i=0; i<4; i++) {
                 int ch;
