@@ -5,40 +5,41 @@ package edu.harvard.hul.ois.jhove.module.ascii;
  *          <a href="https://github.com/carlwilson">carlwilson AT github</a>
  */
 
+@SuppressWarnings("nls")
 public enum ControlChar {
-	NUL("NUL", 0x00),
-	SOH("SOH", 0x01),
-	STX("STX", 0x02),
-	ETX("ETX", 0x03),
-	EOT("EOT", 0x04),
-	ENQ("ENQ", 0x05),
-	ACK("ACK", 0x06),
-	BEL("BEL", 0x07),
-	BS("BS", 0x08),
-	TAB("TAB", 0x09),
-	LF("LF", 0x0A),
-	VT("VT", 0x0B),
-	FF("FF", 0x0C),
-	CR("CR", 0x0D),
-	SO("SO", 0x0E),
-	SI("SI", 0x0F),
-	DLE("DLE", 0x10),
-	DC1("DC1", 0x11),
-	DC2("DC2", 0x12),
-	DC3("DC3", 0x13),
-	DC4("DC4", 0x14),
-	NAK("NAK", 0x15),
-	SYN("SYN", 0x16),
-	ETB("ETB", 0x17),
-	CAN("CAN", 0x18),
-	EM("EM", 0x19),
-	SUB("SUB", 0x1A),
-	ESC("ESC", 0x1B),
-	FS("FS", 0x1C),
-	GS("GS", 0x1D),
-	RS("RS", 0x1E),
-	US("US", 0x1F),
-	DEL("DEL", 0x7F);
+	NUL("NUL", 0x00, "NULL"),
+	SOH("SOH", 0x01, "START OF HEADING"),
+	STX("STX", 0x02, "START OF TEXT"),
+	ETX("ETX", 0x03, "END OF TEXT"),
+	EOT("EOT", 0x04, "END OF TRANSMISSION"),
+	ENQ("ENQ", 0x05, "ENQUIRY"),
+	ACK("ACK", 0x06, "ACKNOWLEDGE"),
+	BEL("BEL", 0x07, "BELL"),
+	BS("BS", 0x08, "BACKSPACE"),
+	HT("HT", 0x09, "HORIZONTAL TABULATION"),
+	LF("LF", 0x0A, "LINE FEED"),
+	VT("VT", 0x0B, "VERTICAL TABULATION"),
+	FF("FF", 0x0C, "FORM FEED"),
+	CR("CR", 0x0D, "CARRIAGE RETURN"),
+	SO("SO", 0x0E, "SHIFT-OUT"),
+	SI("SI", 0x0F, "SHIFT-IN"),
+	DLE("DLE", 0x10, "DATA LINK ESCAPE"),
+	DC1("DC1", 0x11, "DEVICE CONTROL ONE"),
+	DC2("DC2", 0x12, "DEVICE CONTROL TWO"),
+	DC3("DC3", 0x13, "DEVICE CONTROL THREE"),
+	DC4("DC4", 0x14, "DEVICE CONTROL FOUR"),
+	NAK("NAK", 0x15, "NEGATIVE ACKNOWLEDGE"),
+	SYN("SYN", 0x16, "SYNCHRONOUS IDLE"),
+	ETB("ETB", 0x17, "END OF TRANSMISSION BLOCK"),
+	CAN("CAN", 0x18, "CANCEL"),
+	EM("EM", 0x19, "END OF MEDIUM"),
+	SUB("SUB", 0x1A, "SUBSTITUTE CHARACTER"),
+	ESC("ESC", 0x1B, "ESCAPE"),
+	FS("FS", 0x1C, "FILE SEPARATOR (INFORMATION SEPARATOR FOUR"),
+	GS("GS", 0x1D, "GROUP SEPARATOR (INFORMATION SEPARATOR THREE"),
+	RS("RS", 0x1E, "RECORD SEPARATOR (INFORMATION SEPARATOR TWO"),
+	US("US", 0x1F, "UNIT SEPARATOR (INFORMATION SEPARATOR ONE"),
+	DEL("DEL", 0x7F, "DELETE");
 
 	/** JHOVE reporting property name */
 	public final static String PROP_NAME = "ControlCharacters";
@@ -47,14 +48,17 @@ public enum ControlChar {
 	public final String code;
 	/** The byte value of the character. **/
 	public final int value;
+	/** The control character's ANSI name **/
+	public final String ansiName;
 	/**
-	 * JHOVE's reporting mnemonic, the code followed by the int value in hex.
+	 * JHOVE's reporting mnemonic, the code followed by the in value in hex.
 	 **/
 	public final String mnemonic;
 
-	private ControlChar(final String code, final int value) {
+	private ControlChar(final String code, final int value, final String ansiName) {
 		this.code = code;
 		this.value = value;
+		this.ansiName = ansiName;
 		this.mnemonic = String.format("%s (0x%02X)", code, Integer.valueOf(value));
 	}
 
