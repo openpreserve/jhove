@@ -39,7 +39,7 @@ public class Utf8BlockMarker {
      *  returns null. */
     public Property getBlocksUsedProperty (String name)
     {  
-        List<String> block = new ArrayList<String> (blocksUsed.length);
+        List<String> block = new ArrayList<> (blocksUsed.length);
         for (int i=0; i<blocksUsed.length; i++) {
             if (blocksUsed[i]) {
             block.add (Utf8Block.unicodeBlock[i].getName ());
