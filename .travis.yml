@@ -38,7 +38,7 @@ before_install:
 
 script:
   - mvn clean install -DjacocoAgg
-  - "./jhove-bbt/scripts/travis-test.sh"
+  - "./bbt-jhove"
   - mvn verify -DjacocoAgg
 
 after_success:
