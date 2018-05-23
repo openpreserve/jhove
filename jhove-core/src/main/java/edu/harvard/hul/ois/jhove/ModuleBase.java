@@ -1479,4 +1479,14 @@ public abstract class ModuleBase
                         _je.getBufferSize () : 0);
         }
     }
+
+    protected boolean isParamInDefaults(final String paramVal) {
+        if (paramVal == null) return false;
+        for (String param : _defaultParams) {
+            if (paramVal.equalsIgnoreCase(param)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

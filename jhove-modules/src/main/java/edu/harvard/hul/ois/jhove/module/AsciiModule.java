@@ -44,8 +44,8 @@ public class AsciiModule extends ModuleBase {
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
     private static final String NAME = "ASCII-hul";
-    private static final String RELEASE = "1.3";
-    private static final int[] DATE = { 2006, 9, 5 };
+    private static final String RELEASE = "1.4";
+    private static final int[] DATE = { 2018, 10, 1 };
     private static final String[] FORMAT = { "ASCII", "US-ASCII", "ANSI X3.4",
             "ISO 646" };
     private static final String COVERAGE = null;
@@ -136,7 +136,7 @@ public class AsciiModule extends ModuleBase {
     public final int parse(InputStream stream, RepInfo info, int parseIndex)
             throws IOException {
         // Test if textMD is to be generated
-        _withTextMD = _defaultParams.contains("withtextmd=true");
+        _withTextMD = isParamInDefaults("withtextmd=true");
 
         initParse();
         info.setModule(this);
@@ -151,11 +151,9 @@ public class AsciiModule extends ModuleBase {
         info.setFormat(_format[0]);
         info.setMimeType(_mimeType[0]);
 
-        /*
-         * We may have already done the checksums while converting a temporary
-         * file.
-         */
+        // Setup the data stream, will determine if we use checksum stream
         setupDataStream(stream, info);
+
         boolean eof = false;
         _nByte = 0;
         while (!eof) {
@@ -201,18 +199,8 @@ public class AsciiModule extends ModuleBase {
 
         /* The object is well-formed ASCII. */
 
-        if (_ckSummer != null) {
-            info.setSize(_cstream.getNBytes());
-            info.setChecksum(new Checksum(_ckSummer.getCRC32(),
-                    ChecksumType.CRC32));
-            String value = _ckSummer.getMD5();
-            if (value != null) {
-                info.setChecksum(new Checksum(value, ChecksumType.MD5));
-            }
-            if ((value = _ckSummer.getSHA1()) != null) {
-                info.setChecksum(new Checksum(value, ChecksumType.SHA1));
-            }
-        }
+        // Set the checksums in the report if they're calculated
+        setChecksums(this._ckSummer, info);
 
         /*
          * Only non-zero-length files are well-formed ASCII.
