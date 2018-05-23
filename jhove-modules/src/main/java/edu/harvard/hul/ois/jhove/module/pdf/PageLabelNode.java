@@ -199,7 +199,6 @@ public class PageLabelNode
             throw e;
         }
         catch (Exception e) {
-            e.printStackTrace();
             throw new PdfInvalidException (MessageConstants.ERR_PAGE_NUMBER_TREE_DATE_INVALID); // PDF-HUL-19
         }
     }

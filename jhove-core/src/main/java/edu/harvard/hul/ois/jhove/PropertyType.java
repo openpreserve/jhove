@@ -90,14 +90,9 @@ public enum PropertyType {
 	 */
 	RATIONAL("Rational");
 
-	/******************************************************************
-	 * CLASS CONSTRUCTOR.
-	 ******************************************************************/
+	/** A String name for the type, used for reporting. */
 	public final String name;
 
-	/**
-	 * Applications will never create PropertyTypes directly.
-	 **/
 	private PropertyType(final String name) {
 		this.name = name;
 	}

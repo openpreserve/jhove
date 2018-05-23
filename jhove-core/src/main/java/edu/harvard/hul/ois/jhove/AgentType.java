@@ -14,21 +14,21 @@ package edu.harvard.hul.ois.jhove;
  * @see Agent
  */
 public enum AgentType {
-	/******************************************************************
-	 * PUBLIC STATIC INSTANCES.
-	 ******************************************************************/
+	/** Commercial organisation **/
 	COMMERCIAL("Commercial"),
+	/** Commercial organisation **/
 	GOVERNMENT("Government"),
+	/** Educational Institution **/
 	EDUCATIONAL("Educational"),
+	/** Not for profit organisation **/
 	NONPROFIT("Non-profit"),
+	/** Standardisation body, e.g ANSI, ISO **/
 	STANDARD("Standards body"),
+	/** None of the above categories **/
 	OTHER("Other");
-
+	/** A String name for the type, used for reporting. */
 	public final String name;
 
-	/******************************************************************
-	 * CLASS CONSTRUCTOR.
-	 ******************************************************************/
 	private AgentType(final String name) {
 		this.name = name;
 	}
