@@ -21,10 +21,9 @@ public enum ChecksumType {
 	MD5("MD5"),
 	/** 160-bit Secure Hash Algorithm. */
 	SHA1("SHA-1");
+	/** A String name for the type, used for reporting. */
 	public final String name;
-	/**
-	 * Applications will never create ChecksumTypes directly.
-	 **/
+
 	private ChecksumType(final String name) {
 		this.name = name;
 	}

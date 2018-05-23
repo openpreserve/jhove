@@ -817,7 +817,7 @@ public abstract class ModuleBase
      * @param ckSummer Checksummer object
      * @param info     RepInfo object
      */
-    protected void setChecksums (Checksummer ckSummer, RepInfo info)
+    protected static void setChecksums (Checksummer ckSummer, RepInfo info)
     {
         if (ckSummer != null){
             info.setChecksum (new Checksum (ckSummer.getCRC32 (), 
@@ -1466,6 +1466,8 @@ public abstract class ModuleBase
     }
 
     protected void setupDataStream(final InputStream stream, final RepInfo info) {
+        /* Are checksums requested and ensure they're not already calculated
+         * when handling a temp file. */
         if (_je.getChecksumFlag() &&
                 info.getChecksum().isEmpty()) {
             _ckSummer = new Checksummer ();

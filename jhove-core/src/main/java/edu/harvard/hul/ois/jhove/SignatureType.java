@@ -14,10 +14,6 @@ package edu.harvard.hul.ois.jhove;
  * @see Signature
  */
 public enum SignatureType {
-	/******************************************************************
-	 * PUBLIC STATIC INSTANCES.
-	 ******************************************************************/
-
 	/**
 	 * Signature type for a file extension, i.e., a sequence of
 	 * characters following a period character in a file name.
@@ -32,15 +28,9 @@ public enum SignatureType {
 	 * Signature type for a "magic number" stored in the file.
 	 */
 	MAGIC("Magic number");
+	/** A String name for the type, used for reporting. */
 	public final String name;
 
-	/******************************************************************
-	 * CLASS CONSTRUCTOR.
-	 ******************************************************************/
-
-	/**
-	 * Applications will never create SignatureTypes directly.
-	 **/
 	private SignatureType(final String name) {
 		this.name = name;
 	}

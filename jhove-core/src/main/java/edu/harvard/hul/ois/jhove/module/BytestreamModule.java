@@ -22,6 +22,7 @@ package edu.harvard.hul.ois.jhove.module;
 
 import edu.harvard.hul.ois.jhove.*;
 import java.io.*;
+import java.util.logging.Level;
 
 /**
  *  Module for analysis of content as a byte stream.
@@ -62,7 +63,7 @@ public final class BytestreamModule
 	super (NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
 	       VALIDITY, REPINFO, NOTE, RIGHTS, false);
 
-	_vendor = Agent.harvardInstance();
+	this._vendor = Agent.harvardInstance();
     }
 
     /******************************************************************
@@ -82,45 +83,34 @@ public final class BytestreamModule
     {
         initParse ();
         info.setModule (this);
-        info.setFormat (_format[0]);
-        info.setMimeType (_mimeType[0]);
+        info.setFormat (this._format[0]);
+        info.setMimeType (this._mimeType[0]);
 
-	/* We may have already done the checksums while converting a
-	   temporary file. */
+        // Setup the data stream, will determine if we use checksum stream
         setupDataStream(stream, info);
 
         boolean eof = false;
-        _nByte = 0;
+        this._nByte = 0;
         byte[] byteBuf = new byte[4096];
         while (!eof) {
             try {
-//                int ch = readUnsignedByte (_dstream, this);
                 // All the calculations are done down in ChecksumInputStream
-                int n = readByteBuf (_dstream, byteBuf, this);
+                int n = readByteBuf (this._dstream, byteBuf, this);
                 if (n <= 0) {
                     break;
                 }
-	    }
+            }
             catch (EOFException e) {
+                _logger.log(Level.FINEST, "End of file exception when parsing.", e);
                 eof = true;
             }
         }
-        info.setSize (_nByte);
-	if (_nByte == 0) {
-	    info.setMessage (new InfoMessage (CoreMessageConstants.INF_FILE_EMPTY));
-	}
-        if (_ckSummer != null) {
-	    info.setChecksum (new Checksum (_ckSummer.getCRC32 (), 
-					ChecksumType.CRC32));
-	    String value = _ckSummer.getMD5 ();
-	    if (value != null) {
-		info.setChecksum (new Checksum (value, ChecksumType.MD5));
-	    }
-	    if ((value = _ckSummer.getSHA1 ()) != null) {
-		info.setChecksum (new Checksum (value, ChecksumType.SHA1));
-	    }
+        info.setSize (this._nByte);
+        if (this._nByte == 0) {
+            info.setMessage (new InfoMessage (CoreMessageConstants.INF_FILE_EMPTY));
         }
-
+        // Set the checksums in the report if they're calculated
+        setChecksums(this._ckSummer, info);
         return 0;
     }
 
@@ -133,9 +123,9 @@ public final class BytestreamModule
     public void checkSignatures (File file, InputStream stream,
 				 RepInfo info)
     {
-            info.setFormat (_format[0]);
-            info.setMimeType (_mimeType[0]);
+            info.setFormat (this._format[0]);
+            info.setMimeType (this._mimeType[0]);
             info.setModule (this);
-            info.setSigMatch(_name);
+            info.setSigMatch(this._name);
     }
 }

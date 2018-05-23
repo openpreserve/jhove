@@ -478,10 +478,10 @@ public class AESAudioMetadata
      *  in _Java in a Nutshell_.
      */
     class FaceImpl implements Face {
-        List<FaceRegion> _regionList;
-        TimeDesc _startTime;
-        TimeDesc _duration;
-        String _direction;
+        private List<FaceRegion> _regionList;
+        private TimeDesc _startTime;
+        private TimeDesc _duration;
+        private String _direction;
         
         
         /** Constructor.  Initially the duration is set
