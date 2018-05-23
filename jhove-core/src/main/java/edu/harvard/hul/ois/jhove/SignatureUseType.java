@@ -16,19 +16,15 @@ package edu.harvard.hul.ois.jhove;
  * @see Signature
  */
 public enum SignatureUseType {
-	/******************************************************************
-	 * PRIVATE CLASS FIELDS.
-	 ******************************************************************/
+	/** Use type for a required signature */
 	MANDATORY("Mandatory"),
+	/** Use type for a conditionally required signature. */
 	MANDATORY_IF_APPLICABLE("Mandatory if applicable"),
+	/** Use type for an optional signature. */
 	OPTIONAL("Optional");
+	/** A String name for the type, used for reporting. */
 	public final String name;
-	/******************************************************************
-	 * CLASS CONSTRUCTOR.
-	 ******************************************************************/
-	/**
-	 * Applications will never create SignatureUseTypes directly.
-	 **/
+
 	private SignatureUseType(final String name) {
 		this.name = name;
 	}

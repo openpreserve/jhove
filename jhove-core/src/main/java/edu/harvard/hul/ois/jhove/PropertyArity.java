@@ -46,11 +46,9 @@ public enum PropertyArity {
 	 * An Arity corresponding to java.util.Set or any of its derived classes.
 	 */
 	SET("Set");
+	/** A String name for the Arity, used for reporting. */
 	public final String name;
 
-	/**
-	 * Applications will never create PropertyArities directly.
-	 **/
 	private PropertyArity(final String name) {
 		this.name = name;
 	}

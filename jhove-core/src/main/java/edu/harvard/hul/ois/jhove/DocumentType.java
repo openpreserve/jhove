@@ -15,43 +15,23 @@ package edu.harvard.hul.ois.jhove;
  * 
  */
 public enum DocumentType {
-	/**
-	 * Document type for a printed article.
-	 */
+	/** Document type for a printed article. */
 	ARTICLE("Article"),
-	/**
-	 * Document type for an book.
-	 */
+	/** Document type for an book. */
 	BOOK("Book"),
-	/**
-	 * Document type for a report.
-	 */
+	/** Document type for a report. */
 	REPORT("Report"),
-	/**
-	 * Document type for an IETF Request for Comment.
-	 */
+	/** Document type for an IETF Request for Comment. */
 	RFC("RFC"),
-	/**
-	 * Document type for a standards body publication.
-	 */
+	/** Document type for a standards body publication. */
 	STANDARD("Standard"),
-	/**
-	 * Document type for a Web page.
-	 */
+	/** Document type for a Web page. */
 	WEB("Web"),
-	/**
-	 * Document type that doesn't fit the other categories.
-	 */
+	/** Document type that doesn't fit the other categories. */
 	OTHER("Other");
+	/** A String name for the type, used for reporting. */
 	public final String name;
 
-	/******************************************************************
-	 * CLASS CONSTRUCTOR.
-	 ******************************************************************/
-
-	/**
-	 * Applications will never create DocumentTypes directly.
-	 **/
 	private DocumentType(final String name) {
 		this.name = name;
 	}
