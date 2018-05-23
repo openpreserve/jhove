@@ -51,7 +51,7 @@ public enum ControlChar {
 	/** The control character's ANSI name **/
 	public final String ansiName;
 	/**
-	 * JHOVE's reporting mnemonic, the code followed by the in value in hex.
+	 * JHOVE's reporting mnemonic, the code followed by the int value in hex.
 	 **/
 	public final String mnemonic;
 
