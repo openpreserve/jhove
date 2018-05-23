@@ -22,6 +22,7 @@ package edu.harvard.hul.ois.jhove.module;
 
 import edu.harvard.hul.ois.jhove.*;
 import java.io.*;
+import java.util.logging.Level;
 
 /**
  *  Module for analysis of content as a byte stream.
@@ -31,15 +32,6 @@ import java.io.*;
 public final class BytestreamModule
     extends ModuleBase
 {
-    /******************************************************************
-     * PRIVATE INSTANCE FIELDS.
-     ******************************************************************/
-
-    /* Input stream wrapper which handles checksums */
-    protected ChecksumInputStream _cstream;
-    
-    /* Data input stream wrapped around _cstream */
-    protected DataInputStream _dstream;
 
     /******************************************************************
      * PRIVATE CLASS FIELDS.
@@ -71,7 +63,7 @@ public final class BytestreamModule
 	super (NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
 	       VALIDITY, REPINFO, NOTE, RIGHTS, false);
 
-	_vendor = Agent.harvardInstance();
+	this._vendor = Agent.harvardInstance();
     }
 
     /******************************************************************
@@ -91,56 +83,34 @@ public final class BytestreamModule
     {
         initParse ();
         info.setModule (this);
-        info.setFormat (_format[0]);
-        info.setMimeType (_mimeType[0]);
+        info.setFormat (this._format[0]);
+        info.setMimeType (this._mimeType[0]);
 
-	/* We may have already done the checksums while converting a
-	   temporary file. */
-	Checksummer ckSummer = null;
-	if (_je != null && _je.getChecksumFlag () &&
-	    info.getChecksum ().size () == 0) {
-	    ckSummer = new Checksummer ();
-            _cstream = new ChecksumInputStream (stream, ckSummer);
-            _dstream = getBufferedDataStream (_cstream, _je != null ?
-                        _je.getBufferSize () : 0);
-	}
-        else {
-            _dstream = getBufferedDataStream (stream, _je != null ?
-                                _je.getBufferSize () : 0);
-        }
+        // Setup the data stream, will determine if we use checksum stream
+        setupDataStream(stream, info);
 
         boolean eof = false;
-        _nByte = 0;
+        this._nByte = 0;
         byte[] byteBuf = new byte[4096];
         while (!eof) {
             try {
-//                int ch = readUnsignedByte (_dstream, this);
                 // All the calculations are done down in ChecksumInputStream
-                int n = readByteBuf (_dstream, byteBuf, this);
+                int n = readByteBuf (this._dstream, byteBuf, this);
                 if (n <= 0) {
                     break;
                 }
-	    }
+            }
             catch (EOFException e) {
+                _logger.log(Level.FINEST, "End of file exception when parsing.", e);
                 eof = true;
             }
         }
-        info.setSize (_nByte);
-	if (_nByte == 0) {
-	    info.setMessage (new InfoMessage (CoreMessageConstants.INF_FILE_EMPTY));
-	}
-        if (ckSummer != null) {
-	    info.setChecksum (new Checksum (ckSummer.getCRC32 (), 
-					ChecksumType.CRC32));
-	    String value = ckSummer.getMD5 ();
-	    if (value != null) {
-		info.setChecksum (new Checksum (value, ChecksumType.MD5));
-	    }
-	    if ((value = ckSummer.getSHA1 ()) != null) {
-		info.setChecksum (new Checksum (value, ChecksumType.SHA1));
-	    }
+        info.setSize (this._nByte);
+        if (this._nByte == 0) {
+            info.setMessage (new InfoMessage (CoreMessageConstants.INF_FILE_EMPTY));
         }
-
+        // Set the checksums in the report if they're calculated
+        setChecksums(this._ckSummer, info);
         return 0;
     }
 
@@ -153,9 +123,9 @@ public final class BytestreamModule
     public void checkSignatures (File file, InputStream stream,
 				 RepInfo info)
     {
-            info.setFormat (_format[0]);
-            info.setMimeType (_mimeType[0]);
+            info.setFormat (this._format[0]);
+            info.setMimeType (this._mimeType[0]);
             info.setModule (this);
-            info.setSigMatch(_name);
+            info.setSigMatch(this._name);
     }
 }

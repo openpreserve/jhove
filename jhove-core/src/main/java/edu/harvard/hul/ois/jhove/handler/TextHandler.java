@@ -526,11 +526,10 @@ public class TextHandler
         }
         _writer.println (margin + signature.getType ().toString () + ": " +
                          sigValue);
-        if (signature.getType ().equals (SignatureType.MAGIC)) {
-            if (((InternalSignature) signature).hasFixedOffset ()) {
-                _writer.println (margin + " Offset: " +
-                                 ((InternalSignature) signature).getOffset ());
-            }
+        if ((signature.getType ().equals (SignatureType.MAGIC)) &&
+                (((InternalSignature) signature).hasFixedOffset ())) {
+            _writer.println (margin + " Offset: " +
+                    ((InternalSignature) signature).getOffset ());
         }
         String note = signature.getNote ();
         if (note != null) {
