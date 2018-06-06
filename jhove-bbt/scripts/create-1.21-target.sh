@@ -89,3 +89,16 @@ find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/>1.
 find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.11" date="2018-03-29">PDF%<reportingModule release="1.12" date="2018-10-01">PDF%' {} \;
 # In the README file
 find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.11" date="2018-03-29">PDF%<reportingModule release="1.12" date="2018-10-01">PDF%' {} \;
+
+# UTF-8 Module
+#
+# New version details
+# In the JHOVE Audit file
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.6">UTF8-hul<\/module>$/   <module release="1.7">UTF8-hul<\/module>/' {} \;
+# In the ASCII Module Audit file
+find "${targetRoot}" -type f -name "audit-UTF8-hul.jhove.xml" -exec sed -i 's%>2014-07-18</date>%>2018-10-01</date>%' {} \;
+find "${targetRoot}" -type f -name "audit-UTF8-hul.jhove.xml" -exec sed -i 's/>1.6<\/release>$/>1.7<\/release>/' {} \;
+# In the README file
+find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.6" date="2014-07-18">UTF8%<reportingModule release="1.7" date="2018-10-01">UTF8%' {} \;
+# Replace in the results files
+find "${targetRoot}" -type f -name "*.txt.jhove.xml" -exec sed -i 's%<reportingModule release="1.6" date="2014-07-18">UTF8%<reportingModule release="1.7" date="2018-10-01">UTF8%' {} \;

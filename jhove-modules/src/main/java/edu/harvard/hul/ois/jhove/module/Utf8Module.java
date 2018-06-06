@@ -37,8 +37,8 @@ public class Utf8Module extends ModuleBase {
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
     private static final String NAME = "UTF8-hul";
-    private static final String RELEASE = "1.6";
-    private static final int[] DATE = { 2014, 7, 18 };
+    private static final String RELEASE = "1.7";
+    private static final int[] DATE = { 2018, 10, 1 };
     private static final String[] FORMAT = { "UTF-8" };
     private static final String COVERAGE = "Unicode 7.0.0";
     private static final String[] MIMETYPE = { "text/plain; charset=UTF-8" };
@@ -79,7 +79,7 @@ public class Utf8Module extends ModuleBase {
         super(NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
                 VALIDITY, REPINFO, NOTE, RIGHTS, false);
 
-        _vendor = Agent.harvardInstance();
+        this._vendor = Agent.harvardInstance();
 
         Document doc = new Document("The Unicode Standard, Version 6.0",
                 DocumentType.BOOK);
@@ -93,7 +93,7 @@ public class Utf8Module extends ModuleBase {
         doc.setDate("2011");
         doc.setIdentifier(new Identifier("978-1-936213-01-6",
                 IdentifierType.ISBN));
-        _specification.add(doc);
+        this._specification.add(doc);
 
         doc = new Document("Information technology -- Universal "
                 + "Multiple-Octet Coded Character Set (UCS) -- "
@@ -103,7 +103,7 @@ public class Utf8Module extends ModuleBase {
         doc.setDate("1991");
         doc.setIdentifier(new Identifier("ISO/IEC 10646-1 Amendment 2",
                 IdentifierType.ISO));
-        _specification.add(doc);
+        this._specification.add(doc);
 
         doc = new Document("UTF-8, a transformation format of ISO 10646",
                 DocumentType.RFC);
@@ -115,7 +115,7 @@ public class Utf8Module extends ModuleBase {
         doc.setIdentifier(new Identifier("RFC 2279", IdentifierType.RFC));
         doc.setIdentifier(new Identifier("http://www.ietf.org/rfc/rfc2279.txt",
                 IdentifierType.URL));
-        _specification.add(doc);
+        this._specification.add(doc);
 
     }
 
@@ -152,32 +152,29 @@ public class Utf8Module extends ModuleBase {
     public final int parse(InputStream stream, RepInfo info, int parseIndex)
             throws IOException {
         // Test if textMD is to be generated
-        _withTextMD = _defaultParams.contains("withtextmd=true");
+        _withTextMD = isParamInDefaults("withtextmd=true");
 
         initParse();
-        info.setFormat(_format[0]);
-        info.setMimeType(_mimeType[0]);
-        info.setModule(this);
-        initialBytes = new int[4];
+        initInfo(info);
+        this.initialBytes = new int[4];
 
         // No line end types have been discovered.
         ControlChar prevChar = null;
-        usedCtrlChars = new HashSet<>();
-        usedLineEndings = new HashSet<>();
-        _textMD = new TextMDMetadata();
+        this.usedCtrlChars = new HashSet<>();
+        this.usedLineEndings = new HashSet<>();
+        this._textMD = new TextMDMetadata();
 
         boolean printableChars = false;
 
+        // TODO: Why here and not ASCII
         info.setNote("Additional representation information includes "
                 + "the line endings: CR, LF, or CRLF");
-        _nByte = 0;
+        this._nByte = 0;
         long nChar = 0;
-        /*
-         * We may have already done the checksums while converting a temporary
-         * file.
-         */
+
+        // Setup the data stream, will determine if we use checksum stream
         setupDataStream(stream, info);
-        blockMarker = new Utf8BlockMarker();
+        this.blockMarker = new Utf8BlockMarker();
 
         boolean eof = false;
         while (!eof) {
@@ -193,8 +190,8 @@ public class Utf8Module extends ModuleBase {
                 /* zzzzyyyyyyxxxxxx 1110zzzz 10yyyyyy 10yyyyyy */
                 /* uuuuuzzzzyyyyyyxxxxxx 11110uuu 10uuzzzz 10yyyyyy 10xxxxxx */
 
-                b[0] = readUnsignedByte(_dstream, this);
-                if (_nByte < 4) {
+                b[0] = readUnsignedByte(this._dstream, this);
+                if (this._nByte < 4) {
                     isMark = checkMark(b[0], info);
                     if (info.getWellFormed() == RepInfo.FALSE) {
                         return 0;
@@ -215,15 +212,15 @@ public class Utf8Module extends ModuleBase {
                         || (0xf8 <= b[0] && b[0] <= 0xff)) {
                     ErrorMessage error = new ErrorMessage(Utf8MessageConstants.ERR_INVALID_FIRST_BYTE_ENCODING,
                             "Value = " + ((char) b[0]) + " (0x"
-                                    + Integer.toHexString(b[0]) + ")", _nByte);
+                                    + Integer.toHexString(b[0]) + ")", this._nByte);
                     info.setMessage(error);
                     info.setWellFormed(false);
                     return 0;
                 }
 
                 for (int i = 1; i < nBytes; i++) {
-                    b[i] = readUnsignedByte(_dstream, this);
-                    if (_nByte < 4) {
+                    b[i] = readUnsignedByte(this._dstream, this);
+                    if (this._nByte < 4) {
                         isMark = checkMark(b[i], info);
                     }
                     if (info.getWellFormed() == RepInfo.FALSE) {
@@ -239,7 +236,7 @@ public class Utf8Module extends ModuleBase {
                             case 3: errMessage = Utf8MessageConstants.ERR_INVALID_FOURTH_BYTE_ENCODING; break;
                             default: break;
                         }
-                        ErrorMessage error = new ErrorMessage(errMessage, subMessage , _nByte);
+                        ErrorMessage error = new ErrorMessage(errMessage, subMessage , this._nByte);
                         info.setMessage(error);
                         info.setWellFormed(false);
                         return 0;
@@ -259,7 +256,7 @@ public class Utf8Module extends ModuleBase {
                 }
 
                 if (!isMark) {
-                    blockMarker.markBlock(ch);
+                    this.blockMarker.markBlock(ch);
                 }
 
                 /* Character values U+000..U+001f,U+007f aren't printable. */
@@ -269,7 +266,7 @@ public class Utf8Module extends ModuleBase {
                 }
 
                 /* Determine the line ending type(s). */
-                ControlChar ctrlChar = ControlChar.fromIntValue(ch);
+                ControlChar ctrlChar = ControlChar.asciiFromInt(ch);
                 if (ControlChar.isLineEndChar(ctrlChar)) {
                     // Carry out the line endings test
                     LineEnding le = LineEnding.fromControlChars(ctrlChar, prevChar);
@@ -299,34 +296,24 @@ public class Utf8Module extends ModuleBase {
 
         /* Object is well-formed UTF-8. */
 
-        if (_ckSummer != null) {
-            info.setSize(_cstream.getNBytes());
-            info.setChecksum(new Checksum(_ckSummer.getCRC32(),
-                    ChecksumType.CRC32));
-            String value = _ckSummer.getMD5();
-            if (value != null) {
-                info.setChecksum(new Checksum(value, ChecksumType.MD5));
-            }
-            if ((value = _ckSummer.getSHA1()) != null) {
-                info.setChecksum(new Checksum(value, ChecksumType.SHA1));
-            }
-        }
+        // Set the checksums in the report if they're calculated
+        setChecksums(this._ckSummer, info);
 
         /*
          * Only non-zero-length files are well-formed UTF-8.
          */
-        if (_nByte == 0) {
+        if (this._nByte == 0) {
             info.setMessage(new ErrorMessage(Utf8MessageConstants.ERR_ZERO_LENGTH_FILE));
             info.setWellFormed(RepInfo.FALSE);
             return 0;
         }
 
         /* Add the textMD information */
-        _textMD.setCharset(TextMDMetadata.CHARSET_UTF8);
-        _textMD.setByte_order(_bigEndian ? TextMDMetadata.BYTE_ORDER_BIG
+        this._textMD.setCharset(TextMDMetadata.CHARSET_UTF8);
+        this._textMD.setByte_order(this._bigEndian ? TextMDMetadata.BYTE_ORDER_BIG
                 : TextMDMetadata.BYTE_ORDER_LITTLE);
-        _textMD.setByte_size("8");
-        _textMD.setCharacter_size("variable");
+        this._textMD.setByte_size("8");
+        this._textMD.setCharacter_size("variable");
 
         /*
          * Create a metadata property for the module-specific info. (4-Feb-04)
@@ -339,7 +326,7 @@ public class Utf8Module extends ModuleBase {
                 new Long(nChar));
         metadataList.add(property);
 
-        property = blockMarker.getBlocksUsedProperty("UnicodeBlocks");
+        property = this.blockMarker.getBlocksUsedProperty("UnicodeBlocks");
         if (property != null) {
             metadataList.add(property);
         }
@@ -352,7 +339,7 @@ public class Utf8Module extends ModuleBase {
             metadataList.add(property);
         }
         /* Set property reporting control characters used */
-        if (!usedCtrlChars.isEmpty()) {
+        if (!this.usedCtrlChars.isEmpty()) {
             LinkedList<String> propList = new LinkedList<>();
             for (ControlChar ctrlChar : EnumSet.copyOf(this.usedCtrlChars)) {
                 propList.add(ctrlChar.mnemonic);
@@ -362,9 +349,9 @@ public class Utf8Module extends ModuleBase {
             metadataList.add(property);
         }
 
-        if (_withTextMD) {
+        if (this._withTextMD) {
             property = new Property("TextMDMetadata",
-                    PropertyType.TEXTMDMETADATA, PropertyArity.SCALAR, _textMD);
+                    PropertyType.TEXTMDMETADATA, PropertyArity.SCALAR, this._textMD);
             metadataList.add(property);
         }
 
@@ -392,23 +379,23 @@ public class Utf8Module extends ModuleBase {
     @Override
     public void checkSignatures(File file, InputStream stream, RepInfo info)
             throws IOException {
-        info.setFormat(_format[0]);
-        info.setMimeType(_mimeType[0]);
+        info.setFormat(this._format[0]);
+        info.setMimeType(this._mimeType[0]);
         info.setModule(this);
-        initialBytes = new int[4];
+        this.initialBytes = new int[4];
         JhoveBase jb = getBase();
         int sigBytes = jb.getSigBytes();
         int bytesRead = 0;
-        blockMarker = new Utf8BlockMarker();
+        this.blockMarker = new Utf8BlockMarker();
         boolean eof = false;
-        _nByte = 0;
+        this._nByte = 0;
         DataInputStream dstream = new DataInputStream(stream);
         while (!eof && bytesRead < sigBytes) {
             int[] b = new int[4];
             try {
                 b[0] = readUnsignedByte(dstream, this);
                 ++bytesRead;
-                if (_nByte < 4) {
+                if (this._nByte < 4) {
                     checkMark(b[0], info);
                     if (info.getWellFormed() == RepInfo.FALSE) {
                         return;
@@ -428,7 +415,7 @@ public class Utf8Module extends ModuleBase {
                 }
                 for (int i = 1; i < nBytes; i++) {
                     b[i] = readUnsignedByte(dstream, this);
-                    if (_nByte < 4) {
+                    if (this._nByte < 4) {
                         checkMark(b[i], info);
                     }
                     if (info.getWellFormed() == RepInfo.FALSE) {
@@ -447,7 +434,7 @@ public class Utf8Module extends ModuleBase {
             }
         }
         if (bytesRead > 0) {
-            info.setSigMatch(_name);
+            info.setSigMatch(this._name);
         } else {
             // Don't match an empty file
             info.setWellFormed(false);
@@ -460,21 +447,21 @@ public class Utf8Module extends ModuleBase {
 
     protected boolean checkMark(int byt, RepInfo info) {
         ErrorMessage msg;
-        initialBytes[(int) _nByte - 1] = byt;
-        if (_nByte == 3) {
+        this.initialBytes[(int) this._nByte - 1] = byt;
+        if (this._nByte == 3) {
             // Check for UTF-8 byte order mark in 1st 3 bytes
-            if (initialBytes[0] == 0xEF && initialBytes[1] == 0xBB
-                    && initialBytes[2] == 0xBF) {
-                InfoMessage im = new InfoMessage(Utf8MessageConstants.INF_BOM_MARK_PRESENT, 0);
+            if (this.initialBytes[0] == 0xEF && this.initialBytes[1] == 0xBB
+                    && this.initialBytes[2] == 0xBF) {
+                InfoMessage im = new InfoMessage(Utf8MessageConstants.INF_BOM_MARK_PRESENT, 0); // UTF8-HUL-1
                 info.setMessage(im);
                 // If we've found a non-character header, clear
                 // all usage blocks
-                blockMarker.reset();
+                this.blockMarker.reset();
                 return true;
             }
 
-            if (initialBytes[0] == 0xFF && initialBytes[1] == 0xFE) {
-                if (initialBytes[2] == 0 && initialBytes[3] == 0) {
+            if (this.initialBytes[0] == 0xFF && this.initialBytes[1] == 0xFE) {
+                if (this.initialBytes[2] == 0 && this.initialBytes[3] == 0) {
                     msg = new ErrorMessage(Utf8MessageConstants.ERR_UCS4_NOT_UTF8);
                 } else {
                     msg = new ErrorMessage(Utf8MessageConstants.ERR_UTF16LE_NOT_UTF8);
@@ -482,7 +469,7 @@ public class Utf8Module extends ModuleBase {
                 info.setMessage(msg);
                 info.setWellFormed(false);
                 return false;
-            } else if (initialBytes[0] == 0xFE && initialBytes[1] == 0xFF) {
+            } else if (this.initialBytes[0] == 0xFE && this.initialBytes[1] == 0xFF) {
                 msg = new ErrorMessage(Utf8MessageConstants.ERR_UTF16BE_NOT_UTF8);
                 info.setMessage(msg);
                 info.setWellFormed(false);
@@ -495,9 +482,11 @@ public class Utf8Module extends ModuleBase {
     /* Set property reporting line ending type */
     private List<String> reportLineEndings() {
         List<String> retVal = new ArrayList<>();
-        for (LineEnding le : EnumSet.copyOf(this.usedLineEndings)) {
-            retVal.add(le.toString());
-            _textMD.setLinebreak(le.textMdVal);
+        if (!this.usedLineEndings.isEmpty()) {
+            for (LineEnding le : EnumSet.copyOf(this.usedLineEndings)) {
+                retVal.add(le.toString());
+                this._textMD.setLinebreak(le.textMdVal);
+            }
         }
         return retVal;
     }
