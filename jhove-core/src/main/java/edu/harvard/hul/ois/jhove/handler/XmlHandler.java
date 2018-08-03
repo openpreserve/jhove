@@ -4133,15 +4133,14 @@ public class XmlHandler
 	_sampleRate = aes.getSampleRate ();
 
         final String [][] attrs = {{"xmlns:aes", "http://www.aes.org/audioObject"},
-                             {"xmlns:tcf", "http://www.aes.org/tcf"},
- 			     {"xmlns:xsi",
- 			      "http://www.w3.org/2001/XMLSchema-instance"},
+                             {"xmlns:xsi",
+                             "http://www.w3.org/2001/XMLSchema-instance"},
                              {"ID", audioObjectID },
-			     {"analogDigitalFlag",
+                             {"analogDigitalFlag",
                               aes.getAnalogDigitalFlag ()},
                              {"disposition",
                               "Validated by JHOVE"},
-                             {"schemaVersion","1.02b"}};
+                             {"schemaVersion",aes.getSchemaVersion()}};
         _writer.println (margin + elementStart ("aes:audioObject", attrs));
         String  s = aes.getFormat ();
         if (s != null) {
@@ -4235,16 +4234,15 @@ public class XmlHandler
             AESAudioMetadata.FaceRegion facergn = f.getFaceRegion (0);
              _writer.println (margn3 + elementStart ("aes:region", faceRegionAttrs));
               _writer.println (margn4 + elementStart ("aes:timeRange"));
-              writeAESTimeRange (margn3,
+              writeAESTimeRange (margn4,
                     facergn.getStartTime (), facergn.getDuration ());
               _writer.println (margn4 + elementEnd ("aes:timeRange"));
               int nchan = aes.getNumChannels ();
               if (nchan != AESAudioMetadata.NULL) {
                 _writer.println (margn4 + element ("aes:numChannels",
                                 Integer.toString (nchan)));
-              }
-              String[] locs = aes.getMapLocations ();
-              for (int ch = 0; ch < nchan; ch++) {
+            }
+            for (int ch = 0; ch < nchan; ch++) {
                 // write a stream element for each channel
                 String [] [] streamAttrs = {
                     { "ID", streamIDBase + Integer.toString (ch) },
@@ -4254,8 +4252,7 @@ public class XmlHandler
                 };
                 _writer.println (margn4 + elementStart ("aes:stream", streamAttrs));
                 String [] [] chanAttrs = {
-                    { "channelNum", Integer.toString(ch) },
-                    { "mapLocation", locs[ch] }
+                    { "channelNum", Integer.toString(ch) }
                 };
                 _writer.println (margn5 + element ("aes:channelAssignment", chanAttrs));
                 _writer.println (margn4 + elementEnd ("aes:stream"));
@@ -4282,7 +4279,10 @@ public class XmlHandler
                     sampleRate != AESAudioMetadata.NILL ||
                     wordSize != AESAudioMetadata.NULL) {
                 _writer.println (margn2 + elementStart ("aes:formatList"));
-                String[] [] frAttr = { { "ID", formatRegionID } };
+                String[] [] frAttr = { { "ID", formatRegionID }, 
+                        {"xsi:type", "aes:formatRegionType"}, 
+                        {"ownerRef", faceRegionID},
+                        {"label", "JHOVE"}};
                 _writer.println (margn3 + elementStart ("aes:formatRegion", frAttr));
                 if (bitDepth != AESAudioMetadata.NULL) {
                     _writer.println (margn4 + element ("aes:bitDepth",
@@ -4330,75 +4330,35 @@ public class XmlHandler
         _level -= 3;
     }
 
-    /* Break out the writing of a timeRangeType element.
-     * This always gives a start time of 0.  This is all
-     * FAKE DATA for the moment. */
     private void writeAESTimeRange (String baseIndent,
         AESAudioMetadata.TimeDesc start,
         AESAudioMetadata.TimeDesc duration)
     {
         final String margn1 = baseIndent + " ";
-        final String margn2 = margn1 + " ";
-        final String margn3 = margn2 + " ";
-        final String [] [] attrs = {
-            { "tcf:frameCount", "30" },
-            { "tcf:timeBase", "1000" },
-            { "tcf:videoField", "FIELD_1" },
-            { "tcf:countingMode", "NTSC_NON_DROP_FRAME" }
-        };
-        final String [] [] ffAttrs = {
-            { "tcf:framing", "NOT_APPLICABLE" },
-            { "xsi:type", "tcf:ntscFilmFramingType" }
-        };
-        _writer.println (margn1 + elementStart ("tcf:startTime", attrs));
-	_writer.println (margn2 + element ("tcf:hours",
-				   Long.toString (start.getHours ())));
-	_writer.println (margn2 + element ("tcf:minutes",
-				   Long.toString (start.getMinutes ())));
-	_writer.println (margn2 + element ("tcf:seconds",
-				   Long.toString (start.getSeconds ())));
-	_writer.println (margn2 + element ("tcf:frames",
-				   Long.toString (start.getFrames ()) ));
-	String[] [] sampleAttrs = {
-	    {"tcf:sampleRate", ""}
-	};
-	double sr = start.getSampleRate ();
-	if (sr == 1.0) {
-	    sr = _sampleRate;
-	}
-	sampleAttrs[0][1] = "S" + Integer.toString ((int) sr);
-	_writer.println (margn2 + elementStart ("tcf:samples", sampleAttrs));
-	_writer.println (margn3 + element ("tcf:numberOfSamples",
-				   Long.toString (start.getSamples ())));
-	_writer.println (margn2 + elementEnd("tcf:samples"));
-	_writer.println (margn2 + element ("tcf:filmFraming", ffAttrs));
-	_writer.println (margn1 + elementEnd ("tcf:startTime"));
 
-	if (duration != null) {
-	    _writer.println (margn1 + elementStart ("tcf:duration", attrs));
-	    _writer.println (margn2 + element ("tcf:hours",
-			       Long.toString (duration.getHours ())));
-	    _writer.println (margn2 + element ("tcf:minutes",
-			       Long.toString (duration.getMinutes ())));
-	    _writer.println (margn2 + element ("tcf:seconds", 
-			       Long.toString (duration.getSeconds ())));
-	    _writer.println (margn2 + element ("tcf:frames",
-			       Long.toString (duration.getFrames ())));
-	    sr = duration.getSampleRate ();
-	    if (sr == 1.0) {
-		sr = _sampleRate;
-	    }
-	    sampleAttrs[0][1] = "S" + Integer.toString ((int) sr);
-	    _writer.println (margn2 + elementStart ("tcf:samples",
-						    sampleAttrs));
-	    _writer.println (margn3 + element ("tcf:numberOfSamples",
-			       Long.toString (duration.getSamples ()) ));
-	    _writer.println (margn2 + elementEnd("tcf:samples"));
-	    _writer.println (margn2 + element ("tcf:filmFraming", ffAttrs));
-	    _writer.println (margn1 + elementEnd ("tcf:duration"));
-	}
+        writeAESTimeRangePart(margn1, "aes:startTime", start);
+        
+        if (duration != null) {
+            writeAESTimeRangePart(margn1, "aes:duration", duration);
+        }
     }
 
+    private void writeAESTimeRangePart(String indent, String elementName, AESAudioMetadata.TimeDesc timeDesc) {
+        double sampleRate = timeDesc.getSampleRate();
+        if (sampleRate == 1.0) {
+            sampleRate = _sampleRate;
+        }
+        
+        String[][] attributes = {
+                {"editRate", formatters.get().format(sampleRate)},
+                {"factorNumerator", "1"},
+                {"factorDenominator", "1"}
+            };
+
+        _writer.println(indent +
+                element(elementName, attributes, String.valueOf(timeDesc.getSamples())));
+    }
+    
     /* Clean up a URI string by escaping forbidden characters.
      * We assume (perhaps dangerously) that a % is the start of
      * an already escaped hexadecimal sequence. */

@@ -21,6 +21,7 @@
 package edu.harvard.hul.ois.jhove.handler;
 
 import edu.harvard.hul.ois.jhove.*;
+
 import java.text.*;
 import java.util.*;
 
@@ -994,17 +995,22 @@ public class TextHandler
             if (startTime != null) {
                 writeAESTimeRange (margn3, startTime, f.getDuration());
             }
+            
+            // For the present, assume just one face region
+            AESAudioMetadata.FaceRegion facergn = f.getFaceRegion(0);
+            _writer.println(margn3 + "Region: ");
+            _writer.println (margn4 + "TimeRange: ");
+            writeAESTimeRange(margn4, facergn.getStartTime(), facergn.getDuration());
+            
             int nchan = aes.getNumChannels ();
             if (nchan != AESAudioMetadata.NULL) {
                 _writer.println (margn4 + "NumChannels: " +
                             Integer.toString (nchan));
             }
-            String[] locs = aes.getMapLocations ();
             for (int ch = 0; ch < nchan; ch++) {
                 // write a stream description for each channel
                 _writer.println (margn4 + "Stream:");
                 _writer.println (margn5 + "ChannelNum: " + Integer.toString (ch));
-                _writer.println (margn5 + "ChannelAssignment: " + locs[ch]);
             }
         }
 
@@ -1062,62 +1068,29 @@ public class TextHandler
         AESAudioMetadata.TimeDesc start,
         AESAudioMetadata.TimeDesc duration)
     {
-        final String margn1 = baseIndent + " ";
-        final String margn2 = margn1 + " ";
-        final String margn3 = margn2 + " ";
-        _writer.println (margn1 + "StartTime:");
-        _writer.println (margn2 + "FrameCount: 30");
-        _writer.println (margn2 + "TimeBase: 1000");
-        _writer.println (margn2 + "VideoField: FIELD_1");
-        _writer.println (margn2 + "CountingMode: NTSC_NON_DROP_FRAME");
-        _writer.println (margn2 + "Hours: " +
-                Long.toString (start.getHours ()));
-        _writer.println (margn2 + "Minutes: " +
-                Long.toString (start.getMinutes ()));
-        _writer.println (margn2 + "Seconds: " +
-                Long.toString (start.getSeconds ()));
-        _writer.println (margn2 + "Frames: " +
-                Long.toString (start.getFrames ()));
-        _writer.println (margn2 + "Samples: ");
-	double sr = start.getSampleRate ();
-	if (sr == 1.0) {
-	    sr = _sampleRate;
-	}
-	_writer.println (margn3 + "SampleRate: S" +
-			 Integer.toString ((int) sr));
-        _writer.println (margn3 + "NumberOfSamples: " +
-                Long.toString (start.getSamples ()));
-        _writer.println (margn2 + "FilmFraming: NOT_APPLICABLE");
-        _writer.println (margn3 + "Type: ntscFilmFramingType");
-
+        writeAESTimeRangePart(baseIndent, "StartTime", start);
+        
         if (duration != null) {
-           _writer.println (margn1 + "Duration:");
-           _writer.println (margn2 + "FrameCount: 30");
-           _writer.println (margn2 + "TimeBase: 1000");
-           _writer.println (margn2 + "VideoField: FIELD_1");
-           _writer.println (margn2 + "CountingMode: NTSC_NON_DROP_FRAME");
-           _writer.println (margn2 + "Hours: " +
-                    Long.toString (duration.getHours ()));
-           _writer.println (margn2 + "Minutes: " +
-                    Long.toString (duration.getMinutes ()));
-           _writer.println (margn2 + "Seconds: " +
-                    Long.toString (duration.getSeconds ()));
-           _writer.println (margn2 + "Frames: " +
-                    Long.toString (duration.getFrames ()));
-           _writer.println (margn2 + "Samples: ");
-	   sr = duration.getSampleRate ();
-	   if (sr == 1.0) {
-	       sr = _sampleRate;
-	   }
-	   _writer.println (margn3 + "SampleRate: S" +
-			    Integer.toString ((int) sr));
-	   _writer.println (margn3 + "NumberOfSamples: " + 
-			    Long.toString (duration.getSamples ()));
-     _writer.println (margn2 + "FilmFraming: NOT_APPLICABLE");
-	   _writer.println (margn3 + "Type: ntscFilmFramingType");
+            writeAESTimeRangePart(baseIndent, "Duration", duration);
         }
     }
 
+    private void writeAESTimeRangePart(String baseIndent, String name, AESAudioMetadata.TimeDesc timeDesc) {
+        String margn1 = baseIndent + " ";
+        String margn2 = margn1 + " ";
+
+        _writer.println (margn1 + name + ": ");
+        
+        double sampleRate = timeDesc.getSampleRate();
+        if (sampleRate == 1.0) {
+            sampleRate = _sampleRate;
+        }
+        
+        _writer.println (margn2 + "Value: " + String.valueOf(timeDesc.getSamples()));
+        _writer.println (margn2 + "EditRate: " + Integer.toString ((int) sampleRate));
+        _writer.println (margn2 + "FactorNumerator: 1");
+        _writer.println (margn2 + "FactorDenominator: 1");
+    }
 
     /**
      * Display the NISO image metadata formatted according to

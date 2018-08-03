@@ -666,16 +666,15 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             region.add (timeline);
             int nchan = aes.getNumChannels ();
             if (nchan != AESAudioMetadata.NULL) {
-                String[] locs = aes.getMapLocations ();
                 region.add (new DefaultMutableTreeNode
                         ("NumChannels: " + Integer.toString (nchan), false));
-                for (String loc : locs) {
+                for (int ch = 0; ch < nchan; ch++) {
                     // write a stream element for each channel
                     DefaultMutableTreeNode stream =
                             new DefaultMutableTreeNode ("Stream", true);
                     region.add (stream);
                     stream.add (new DefaultMutableTreeNode 
-                        ("ChannelAssignment: " + loc, false));
+                        ("ChannelNum: " + Integer.toString (ch), false));
                 }
             }
             face.add (region);         
@@ -745,94 +744,33 @@ public class RepTreeRoot extends DefaultMutableTreeNode
 				  AESAudioMetadata.TimeDesc start,
 				  AESAudioMetadata.TimeDesc duration)
     {
-        // Put the start time in
-        DefaultMutableTreeNode node =
-                new DefaultMutableTreeNode ("Start", true);
-        // Put in boilerplate to match the AES schema
-        node.add (new DefaultMutableTreeNode
-                ("FrameCount: 30", false));
-        node.add (new DefaultMutableTreeNode
-                ("TimeBase: 1000"));
-        node.add (new DefaultMutableTreeNode
-                ("VideoField: FIELD_1"));
-        node.add (new DefaultMutableTreeNode
-                ("CountingMode: NTSC_NON_DROP_FRAME", false));
-        node.add (new DefaultMutableTreeNode
-                ("Hours: " + start.getHours(), false));
-        node.add (new DefaultMutableTreeNode
-                ("Minutes: " + start.getMinutes(), false));
-        node.add (new DefaultMutableTreeNode
-                ("Seconds: " + start.getSeconds(), false));
-        node.add (new DefaultMutableTreeNode
-                ("Frames: " + start.getFrames(), false));
-
-        // Do samples a bit more elaborately than is really necessary,
-        // to maintain parallelism with the xml schema.
-        DefaultMutableTreeNode snode = new DefaultMutableTreeNode ("Samples",
-								   true);
-	double sr = start.getSampleRate ();
-	if (sr == 1.0) {
-	    sr = _sampleRate;
-	}
-	snode.add (new DefaultMutableTreeNode ("SampleRate: S" +
-					       Integer.toString ((int) sr),
-					       false));
-        snode.add (new DefaultMutableTreeNode ("NumberOfSamples: " +
-					       start.getSamples (), false ));
-        node.add (snode);
-
-	snode = new DefaultMutableTreeNode ("FilmFraming", true);
-	snode.add (new DefaultMutableTreeNode ("Framing: NOT_APPLICABLE",
-					       false));
-	snode.add (new DefaultMutableTreeNode ("Type: ntscFilmFramingType",
-					       false));
-	node.add (snode);
-        parent.add (node);
+        writeAESTimeRangePart(parent, "StartTime", start);
 
         // Duration is optional.  
         if (duration != null) {
-            node =  new DefaultMutableTreeNode ("Duration", true);
-            // Put in boilerplate to match the AES schema
-            node.add (new DefaultMutableTreeNode
-                    ("FrameCount: 30", false));
-            node.add (new DefaultMutableTreeNode
-                    ("TimeBase: 1000"));
-            node.add (new DefaultMutableTreeNode
-                    ("VideoField: FIELD_1"));
-            node.add (new DefaultMutableTreeNode
-                    ("CountingMode: NTSC_NON_DROP_FRAME", false));
-            node.add (new DefaultMutableTreeNode
-                    ("Hours: " + duration.getHours(), false));
-            node.add (new DefaultMutableTreeNode
-                    ("Minutes: " + duration.getMinutes(), false));
-            node.add (new DefaultMutableTreeNode
-                    ("Seconds: " + duration.getSeconds(), false));
-            node.add (new DefaultMutableTreeNode
-                    ("Frames: " + duration.getFrames(), false));
-            
-            // Do samples a bit more elaborately than is really necessary,
-            // to maintain parallelism with the xml schema.
-            snode = new DefaultMutableTreeNode ("Samples", true);
-	    sr = duration.getSampleRate ();
-	    if (sr == 1.0) {
-		sr = _sampleRate;
-	    }
-            snode.add (new DefaultMutableTreeNode ("SamplesRate S" +
-						   Integer.toString ((int) sr),
-						   false));
-            snode.add (new DefaultMutableTreeNode ("NumberOfSamples: " +
-						   duration.getSamples (),
-						   false ));
-            node.add (snode);
-
-            snode = new DefaultMutableTreeNode ("FilmFraming", true);
-            snode.add (new DefaultMutableTreeNode ("Framing: NOT_APPLICABLE",
-						   false));
-            snode.add (new DefaultMutableTreeNode ("Type: ntscFilmFramingType",
-						   false));
-	    node.add (snode);
-            parent.add (node);
+            writeAESTimeRangePart(parent, "Duration", duration);
         }
+    }
+    
+    private void writeAESTimeRangePart(DefaultMutableTreeNode parent,
+            String name, AESAudioMetadata.TimeDesc timeDesc) {
+        double sampleRate = timeDesc.getSampleRate ();
+        if (sampleRate == 1.0) {
+            sampleRate = _sampleRate;
+        }
+        
+        DefaultMutableTreeNode node =
+                new DefaultMutableTreeNode (name, true);
+        node.add(new DefaultMutableTreeNode(
+                "Value: " + String.valueOf(timeDesc.getSamples()), false));
+        node.add(new DefaultMutableTreeNode(
+                "EditRate: " + sampleRate, false));
+        node.add(new DefaultMutableTreeNode(
+                "FactorNumerator: 1", false));
+        node.add(new DefaultMutableTreeNode(
+                "FactorDenominator: 1", false));
+
+        parent.add (node);
     }
 
     /* Function for turning the textMD metadata into a subtree. */
