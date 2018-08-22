@@ -1666,12 +1666,12 @@ public class XmlHandler
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
-        d = niso.getExposureBias ();
-        if (d != NisoImageMetadata.NILL) {
-            ccsBuf.append (margn4 + element ("mix:ExposureBias",
-                                       formatters.get().format (d)) + EOL);
+        Rational r = niso.getExposureBias();
+        if (r != null) {
+            rationalToString (ccsBuf, "mix:exposureBiasValue", margn6, r);
             useCCSBuf = true;
         }
+        
         double [] darray = niso.getSubjectDistance ();
         if (darray != null) {
             ccsBuf.append (margn4 + element ("mix:SubjectDistance",
@@ -2625,13 +2625,12 @@ public class XmlHandler
 					       formatters.get().format (d)) + EOL);
             useCcSetBuf = true;
         }
-        d = niso.getExposureBias();
-        if (d != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:exposureBiasValue",
-					       formatters.get().format (d)) + EOL);
+        Rational r = niso.getExposureBias();
+        if (r != null) {
+            rationalToString (ccSetBuf, "mix:exposureBiasValue", margn6, r);
             useCcSetBuf = true;
         }
-        Rational r = niso.getMaxApertureValue();
+        r = niso.getMaxApertureValue();
         if (r != null) {
         	rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
             useCcSetBuf = true;
@@ -3593,13 +3592,14 @@ public class XmlHandler
                             formatters.get().format (d)) + EOL);
              useCcSetBuf = true;
          }
-         d = niso.getExposureBias();
-         if (d != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:exposureBiasValue",
-                            formatters.get().format (d)) + EOL);
-             useCcSetBuf = true;
-         }
-         Rational r = niso.getMaxApertureValue();
+         
+         Rational r = niso.getExposureBias();
+        if (r != null) {
+            rationalToString (ccSetBuf, "mix:exposureBiasValue", margn6, r);
+            useCcSetBuf = true;
+        }
+
+         r = niso.getMaxApertureValue();
          if (r != null) {
          	rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
              useCcSetBuf = true;

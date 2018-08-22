@@ -702,7 +702,7 @@ public class ExifIFD
                 checkType  (tag, type, SRATIONAL);
                 checkCount (tag, count, 1);
                 _exposureBiasValue = readRational (count, value);
-                _niso.setExposureBias(_exposureBiasValue.toDouble());
+                _niso.setExposureBias(_exposureBiasValue);
             }
             else if (tag == EXPOSUREINDEX) {
                 checkType  (tag, type, RATIONAL);

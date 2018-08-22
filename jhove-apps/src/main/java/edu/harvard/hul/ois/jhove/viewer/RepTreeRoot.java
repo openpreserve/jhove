@@ -264,7 +264,8 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         String wfStr;
         switch (_info.getWellFormed ()) {
             case RepInfo.TRUE:
-                wfStr = "Well-Formed";                break;
+                wfStr = "Well-Formed";
+                break;
             case RepInfo.FALSE:
                 wfStr = "Not well-formed";
                 break;
@@ -1193,9 +1194,10 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             val.add (new DefaultMutableTreeNode
                 ("Brightness: " + Double.toString (d), false));
         }
-        if ((d = niso.getExposureBias ()) != NisoImageMetadata.NILL) {
+        Rational r;
+        if ((r = niso.getExposureBias ()) != null) {
             val.add (new DefaultMutableTreeNode
-                ("ExposureBias: " + Double.toString (d), false));
+                ("ExposureBias: " + r.toString (), false));
         }
         
         double [] darray = niso.getSubjectDistance ();
@@ -1398,7 +1400,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             val.add (new DefaultMutableTreeNode
                 ("GrayResponseUnit: " + Integer.toString (n), false));
         }
-        Rational r = niso.getWhitePointXValue ();
+        r = niso.getWhitePointXValue ();
         if (r != null) {
             val.add (new DefaultMutableTreeNode
                 ("WhitePointXValue: " + r.toString (), false));

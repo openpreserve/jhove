@@ -371,7 +371,7 @@ public class NisoImageMetadata
     /** 7.7.3.3 Brightness */
     private double _brightness;
     /** 7.7.3.4 Exposure bias */
-    private double _exposureBias;
+    private Rational _exposureBias;
     /** 7.7.3.5 Subject distance */
     private double [] _subjectDistance;
     /** 7.7.3.6 Metering mode */
@@ -534,7 +534,7 @@ public class NisoImageMetadata
 	_digitalCameraModelSerialNo = null;
 	_displayOrientation = NULL;
 	_exifVersion = null;
-	_exposureBias = NILL;
+	_exposureBias = null;
 	_exposureIndex = NILL;
 	_exposureProgram = NULL;
 	_exposureTime = NILL;
@@ -746,7 +746,7 @@ public class NisoImageMetadata
     }
 
     /** Get 7.7.3.4 exposure bias. */
-    public double getExposureBias ()
+    public Rational getExposureBias ()
     {
 	return _exposureBias;
     }
@@ -1468,7 +1468,7 @@ public class NisoImageMetadata
     /** Set 7.2.3.4 exposure bias.
      * @param bias Exposure bias
      */
-    public void setExposureBias (double bias)
+    public void setExposureBias (Rational bias)
     {
 	_exposureBias = bias;
     }

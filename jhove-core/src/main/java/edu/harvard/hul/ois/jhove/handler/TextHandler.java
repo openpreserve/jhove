@@ -1362,8 +1362,9 @@ public class TextHandler
         if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "Brightness: " + d);
         }
-        if ((d = niso.getExposureBias ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "ExposureBias: " + d);
+        Rational r;
+        if ((r= niso.getExposureBias ()) != null) {
+            _writer.println (margn2 + "ExposureBiasValue: " + addRationalValue (r, rawOutput));
         }
 
         double [] darray = niso.getSubjectDistance ();
@@ -1444,7 +1445,7 @@ public class TextHandler
              addIntegerValue (n, NisoImageMetadata.SAMPLING_FREQUENCY_UNIT,
                               rawOutput));
         }
-        Rational r = niso.getXSamplingFrequency ();
+         r = niso.getXSamplingFrequency ();
         if (r != null) {
             _writer.println (margn2 + "XSamplingFrequency: " +
                              addRationalValue (r, rawOutput));
@@ -1805,8 +1806,9 @@ public class TextHandler
         if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "BrightnessValue: " + d);
         }
-        if ((d = niso.getExposureBias ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "ExposureBiasValue: " + d);
+        if ((r = niso.getExposureBias ()) != null) {
+            _writer.println (margn2 + "ExposureBiasValue: " +
+                    addRationalValue (r, rawOutput));
         }
         double [] darray = niso.getSubjectDistance ();
         if (darray != null) {

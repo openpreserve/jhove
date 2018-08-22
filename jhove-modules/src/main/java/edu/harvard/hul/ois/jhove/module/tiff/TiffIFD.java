@@ -2743,14 +2743,15 @@ public class TiffIFD
                 _exifIFD = readLong (type, count, value);
             }
             else if (tag == EXPOSUREBIASVALUE) {
+
                 checkType  (tag, type, SRATIONAL);
                 if (count == 1) {
                     _niso.setExposureBias (readSignedRational (count,
-							 value).toDouble ());
+							 value));
                 }
                 else {
                     Rational [] r = readSignedRationalArray (count, value);
-                    _niso.setExposureBias (average (r[0], r[1]).toDouble ());
+                    _niso.setExposureBias (average (r[0], r[1]));
                 }
             }
             else if (tag == EXPOSUREPROGRAM) {
