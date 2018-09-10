@@ -1359,10 +1359,10 @@ public class TextHandler
         if ((d = niso.getExposureTime ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "ExposureTime: " + d);
         }
-        if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "Brightness: " + d);
-        }
         Rational r;
+        if ((r = niso.getBrightness ()) != null) {
+            _writer.println (margn2 + "Brightness: " + addRationalValue (r, rawOutput));
+        }
         if ((r= niso.getExposureBias ()) != null) {
             _writer.println (margn2 + "ExposureBiasValue: " + addRationalValue (r, rawOutput));
         }
@@ -1803,8 +1803,9 @@ public class TextHandler
             		addIntegerValue (n, NisoImageMetadata.EXPOSURE_PROGRAM,
             				rawOutput));
         }
-        if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "BrightnessValue: " + d);
+        if ((r = niso.getBrightness ()) != null) {
+            _writer.println (margn2 + "BrightnessValue: " + 
+                    addRationalValue (r, rawOutput));
         }
         if ((r = niso.getExposureBias ()) != null) {
             _writer.println (margn2 + "ExposureBiasValue: " +

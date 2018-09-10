@@ -1660,13 +1660,12 @@ public class XmlHandler
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
-        d = niso.getBrightness ();
-        if (d != NisoImageMetadata.NILL) {
-            ccsBuf.append (margn4 + element ("mix:Brightness",
-                                       formatters.get().format (d)) + EOL);
+        Rational r  = niso.getBrightness ();
+        if (r != null) {
+            rationalToString (ccsBuf, "mix:Brightness", margn6, r);
             useCCSBuf = true;
         }
-        Rational r = niso.getExposureBias();
+        r = niso.getExposureBias();
         if (r != null) {
             rationalToString (ccsBuf, "mix:exposureBiasValue", margn6, r);
             useCCSBuf = true;
@@ -2619,13 +2618,12 @@ public class XmlHandler
             ccSetBuf.append (margn6 + element ("mix:exifVersion", s) + EOL);
             useCcSetBuf = true;
         }
-        d = niso.getBrightness();
-        if (d != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:brightnessValue",
-					       formatters.get().format (d)) + EOL);
+        Rational r  = niso.getBrightness();
+        if (r != null)  {
+            rationalToString (ccSetBuf, "mix:brightnessValue", margn6, r);
             useCcSetBuf = true;
         }
-        Rational r = niso.getExposureBias();
+        r = niso.getExposureBias();
         if (r != null) {
             rationalToString (ccSetBuf, "mix:exposureBiasValue", margn6, r);
             useCcSetBuf = true;
@@ -3586,14 +3584,13 @@ public class XmlHandler
              		niso.getExifVersion()) + EOL);
              useCcSetBuf = true;
          }
-         d = niso.getBrightness();
+         Rational r = niso.getBrightness();
          if (d != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:brightnessValue",
-                            formatters.get().format (d)) + EOL);
+            rationalToString (ccSetBuf, "mix:brightnessValue", margn6, r);      
              useCcSetBuf = true;
          }
          
-         Rational r = niso.getExposureBias();
+        r = niso.getExposureBias();
         if (r != null) {
             rationalToString (ccSetBuf, "mix:exposureBiasValue", margn6, r);
             useCcSetBuf = true;

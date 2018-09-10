@@ -1698,7 +1698,7 @@ public class JpegModule extends ModuleBase {
         if (exifData.getBackLight() != NULL) {
             _niso.setBackLight(exifData.getBackLight());
         }
-        if (exifData.getBrightness() != NULL) {
+        if (exifData.getBrightness() != null) {
             _niso.setBrightness(exifData.getBrightness());
         }
         if (exifData.getColorTemp() != NULL) {

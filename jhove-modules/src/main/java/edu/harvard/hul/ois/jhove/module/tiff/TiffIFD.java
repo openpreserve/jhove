@@ -2592,11 +2592,11 @@ public class TiffIFD
                 checkType  (tag, type, SRATIONAL);
                 if (count == 1) {
                     _niso.setBrightness (readSignedRational (count,
-						       value).toDouble ());
+						       value));
                 }
                 else {
                     Rational [] r = readSignedRationalArray (count, value);
-                    _niso.setBrightness (average (r[0], r[1]).toDouble ());
+                    _niso.setBrightness (average (r[0], r[1]));
                 }
             }
             else if (tag == CELLLENGTH) {

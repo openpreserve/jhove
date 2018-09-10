@@ -369,7 +369,7 @@ public class NisoImageMetadata
     private Rational _maxApertureValue;
     
     /** 7.7.3.3 Brightness */
-    private double _brightness;
+    private Rational _brightness;
     /** 7.7.3.4 Exposure bias */
     private Rational _exposureBias;
     /** 7.7.3.5 Subject distance */
@@ -521,7 +521,7 @@ public class NisoImageMetadata
     {
 	_autoFocus = NULL;
 	_backLight = NULL;
-	_brightness = NILL;
+	_brightness = null;
 	_checksumMethod = NULL;
 	_colorSpace = NULL;
 	_colorTemp = NILL;
@@ -619,7 +619,7 @@ public class NisoImageMetadata
     }
 
     /** Get 7.7.3.3 Brightness. */
-    public double getBrightness ()
+    public Rational getBrightness ()
     {
 	return _brightness;
     }
@@ -1317,7 +1317,7 @@ public class NisoImageMetadata
     /** Set 7.7.3.3 brightness.
      * @param brightness Brightness
      */
-    public void setBrightness (double brightness)
+    public void setBrightness (Rational brightness)
     {
 	_brightness = brightness;
     }

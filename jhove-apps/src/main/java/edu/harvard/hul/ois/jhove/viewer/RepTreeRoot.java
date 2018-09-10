@@ -1190,11 +1190,12 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             val.add (new DefaultMutableTreeNode
                 ("ExifVersion: " + s, false));
         }
-        if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
-            val.add (new DefaultMutableTreeNode
-                ("Brightness: " + Double.toString (d), false));
-        }
         Rational r;
+        if ((r= niso.getBrightness ()) != null) {
+            val.add (new DefaultMutableTreeNode
+                ("Brightness: " +  r.toString (), false));
+        }
+        
         if ((r = niso.getExposureBias ()) != null) {
             val.add (new DefaultMutableTreeNode
                 ("ExposureBias: " + r.toString (), false));

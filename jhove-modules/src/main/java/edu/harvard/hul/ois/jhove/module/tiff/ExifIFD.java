@@ -637,7 +637,7 @@ public class ExifIFD
                 checkType  (tag, type, SRATIONAL);
                 checkCount (tag, count, 1);
                 _brightnessValue = readRational (count, value);
-                _niso.setBrightness(_brightnessValue.toDouble());
+                _niso.setBrightness(_brightnessValue);
             }
             else if (tag == CFAPATTERN) {
                 checkType  (tag, type, UNDEFINED);
