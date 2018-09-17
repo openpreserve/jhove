@@ -3585,7 +3585,7 @@ public class XmlHandler
              useCcSetBuf = true;
          }
          Rational r = niso.getBrightness();
-         if (d != NisoImageMetadata.NULL) {
+         if (r != null) {
             rationalToString (ccSetBuf, "mix:brightnessValue", margn6, r);      
              useCcSetBuf = true;
          }
