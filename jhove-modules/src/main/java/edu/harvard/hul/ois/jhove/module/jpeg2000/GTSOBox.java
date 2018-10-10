@@ -49,7 +49,7 @@ public class GTSOBox extends JP2Box {
         long propSize = _boxHeader.getDataLength ();
         Property sizeProp = new Property ("ProfileLength",
                 PropertyType.LONG,
-                new Long (propSize));
+                Long.valueOf(propSize));
         _module.addProperty (new Property 
                 ("GraphicsTechnologyStandardOutput",
                  PropertyType.PROPERTY,

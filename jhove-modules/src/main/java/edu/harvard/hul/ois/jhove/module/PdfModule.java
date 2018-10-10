@@ -863,13 +863,13 @@ public class PdfModule extends ModuleBase {
         info.setVersion(_version);
         metadataList.add(new Property(PROP_NAME_OBJECTS,
                                         PropertyType.INTEGER,
-                                        new Integer(_numObjects)));
+                                        Integer.valueOf(_numObjects)));
         metadataList.add(new Property(PROP_NAME_FREE_OBJECTS,
                                         PropertyType.INTEGER,
-                                        new Integer(_numFreeObjects)));
+                                        Integer.valueOf(_numFreeObjects)));
         metadataList.add(new Property(PROP_NAME_INC_UPDATES,
                                         PropertyType.INTEGER,
-                                        new Integer(_numTrailers)));
+                                        Integer.valueOf(_numTrailers)));
         if (_docCatalogList != null) {
             metadataList.add(new Property(PROP_NAME_DOC_CATALOG,
                                         PropertyType.PROPERTY,
@@ -1783,7 +1783,7 @@ public class PdfModule extends ModuleBase {
                     if (_je != null && _je.getShowRawFlag()) {
                         p = new Property(PROP_NAME_ALGORITHM,
                                 PropertyType.INTEGER,
-                                new Integer(algValue));
+                                Integer.valueOf(algValue));
                     }
                     else {
                         try {
@@ -1813,7 +1813,7 @@ public class PdfModule extends ModuleBase {
                 if (_je != null) {
                         p = new Property(PROP_NAME_KEY_LENGTH,
                                 PropertyType.INTEGER,
-                                new Integer(keyLen));
+                                Integer.valueOf(keyLen));
                         _encryptList.add(p);
                     }
             }
@@ -1843,7 +1843,7 @@ public class PdfModule extends ModuleBase {
 
                     stdList.add(new Property(PROP_NAME_REVISION,
                         PropertyType.INTEGER,
-                        new Integer(rev)));
+                        Integer.valueOf(rev)));
                 }
                 PdfObject oObj = dict.get("O");
                 if (oObj != null) {
@@ -2343,7 +2343,7 @@ public class PdfModule extends ModuleBase {
                                         Iterator<PdfObject> diter = dcdvec.iterator();
                                         while (diter.hasNext()) {
                                             PdfSimpleObject d = (PdfSimpleObject) diter.next();
-                                            dcdlst.add(new Integer(d.getIntValue()));
+                                            dcdlst.add(Integer.valueOf(d.getIntValue()));
                                         }
                                         imgList.add(new Property(PROP_NAME_DECODE,
                                             PropertyType.INTEGER,
@@ -2499,7 +2499,7 @@ public class PdfModule extends ModuleBase {
             subtypeStr = subtype.getStringValue();
             if (FONT_TYPE0.equals(subtypeStr)) {
                 _type0FontsMap.put(
-                    new Integer(font.getObjNumber()),
+                    Integer.valueOf(font.getObjNumber()),
                     font);
                 // If the font is Type 0, we must go
                 // through its descendant fonts
@@ -2516,32 +2516,32 @@ public class PdfModule extends ModuleBase {
             }
             else if (FONT_TYPE1.equals(subtypeStr)) {
                 _type1FontsMap.put(
-                    new Integer(font.getObjNumber()),
+                    Integer.valueOf(font.getObjNumber()),
                     font);
             }
             else if (FONT_MM_TYPE1.equals(subtypeStr)) {
                 _mmFontsMap.put(
-                    new Integer(font.getObjNumber()),
+                    Integer.valueOf(font.getObjNumber()),
                     font);
             }
             else if (FONT_TYPE3.equals(subtypeStr)) {
                 _type3FontsMap.put(
-                    new Integer(font.getObjNumber()),
+                    Integer.valueOf(font.getObjNumber()),
                     font);
             }
             else if (FONT_TRUE_TYPE.equals(subtypeStr)) {
                 _trueTypeFontsMap.put(
-                    new Integer(font.getObjNumber()),
+                    Integer.valueOf(font.getObjNumber()),
                     font);
             }
             else if (FONT_CID_TYPE0.equals(subtypeStr)) {
                 _cid0FontsMap.put(
-                    new Integer(font.getObjNumber()),
+                    Integer.valueOf(font.getObjNumber()),
                     font);
             }
             else if (FONT_CID_TYPE2.equals(subtypeStr)) {
                 _cid2FontsMap.put(
-                    new Integer(font.getObjNumber()),
+                    Integer.valueOf(font.getObjNumber()),
                     font);
             }
             return subtypeStr;
@@ -2862,8 +2862,8 @@ public class PdfModule extends ModuleBase {
                     break;
                 }
                 _pageSeqMap.put(
-                        new Integer(page.getDict().getObjNumber()),
-                        new Integer(pageIndex + 1));
+                        Integer.valueOf(page.getDict().getObjNumber()),
+                        Integer.valueOf(pageIndex + 1));
             }
             _docTreeRoot.startWalk();
             for (;;) {
@@ -2920,7 +2920,7 @@ public class PdfModule extends ModuleBase {
                 // there is no label.  Make it 1-based.
                 pagePropList.add(new Property(PROP_NAME_SEQUENCE,
                                 PropertyType.INTEGER,
-                                new Integer(idx + 1)));
+                                Integer.valueOf(idx + 1)));
 
             }
         }
@@ -2982,7 +2982,7 @@ public class PdfModule extends ModuleBase {
             if (rot != null && rot.getIntValue() != 0) {
                 pagePropList.add(new Property(PROP_NAME_ROTATE,
                         PropertyType.INTEGER,
-                        new Integer(rot.getIntValue())));
+                        Integer.valueOf(rot.getIntValue())));
             }
 
             // UserUnit property (1.6), not inheritable
@@ -2990,7 +2990,7 @@ public class PdfModule extends ModuleBase {
             if (uu != null) {
                 pagePropList.add(new Property(PROP_NAME_USER_UNIT,
                         PropertyType.DOUBLE,
-                        new Double(rot.getDoubleValue())));
+                        Double.valueOf(rot.getDoubleValue())));
             }
             // Viewport dictionaries (1.6), not inheritable
             PdfArray vp = (PdfArray) page.get(DICT_KEY_VIEWPORT, false);
@@ -3330,7 +3330,7 @@ public class PdfModule extends ModuleBase {
                 List<Double> clList = new ArrayList<Double>(6);
                 while (iter.hasNext()) {
                     PdfSimpleObject clItem = (PdfSimpleObject) iter.next();
-                    clList.add(new Double(clItem.getDoubleValue()));
+                    clList.add(Double.valueOf(clItem.getDoubleValue()));
                 }
                 propList.add(new Property(PROP_NAME_CALLOUT_LINE,
                         PropertyType.DOUBLE,
@@ -3373,7 +3373,7 @@ public class PdfModule extends ModuleBase {
                     else {
                         propList.add(new Property(propName,
                                     PropertyType.INTEGER,
-                                    new Integer(pageObjNum)));
+                                    Integer.valueOf(pageObjNum)));
                     }
                 }
             }
@@ -3382,7 +3382,7 @@ public class PdfModule extends ModuleBase {
     	            return;      // can't get the page object number
     	        }
         		int pageObjNum = dest.getPageDestObjNumber();
-        		Integer destPg = _pageSeqMap.get(new Integer(pageObjNum));
+        		Integer destPg = _pageSeqMap.get(Integer.valueOf(pageObjNum));
         		if (destPg != null) {
         		    propList.add(new Property(propName,
         						PropertyType.INTEGER,
@@ -3503,7 +3503,7 @@ public class PdfModule extends ModuleBase {
             try {
                 int firstChar = ((PdfSimpleObject) firstCharObj).getIntValue();
                 prop = new Property(PROP_NAME_FIRST_CHAR, PropertyType.INTEGER,
-				     new Integer(firstChar));
+				     Integer.valueOf(firstChar));
                 fontPropList.add(prop);
             }
             catch (Exception e) {}
@@ -3515,7 +3515,7 @@ public class PdfModule extends ModuleBase {
             try {
                 int lastChar = ((PdfSimpleObject) lastCharObj).getIntValue();
                 prop = new Property(PROP_NAME_LAST_CHAR, PropertyType.INTEGER,
-				     new Integer(lastChar));
+				     Integer.valueOf(lastChar));
                 fontPropList.add(prop);
             }
             catch (Exception e) {}
@@ -3707,7 +3707,7 @@ public class PdfModule extends ModuleBase {
             int suppvalue = ((PdfSimpleObject) supp).getIntValue();
             subprop = new Property(PROP_NAME_SUPPLEMENT,
                 PropertyType.INTEGER,
-                new Integer(suppvalue));
+                Integer.valueOf(suppvalue));
             propList.add(subprop);
             }
             catch (Exception e) {}
@@ -3999,7 +3999,7 @@ public class PdfModule extends ModuleBase {
 //            }
             int listCount = 0;          // Guard against looping
             while (item != null) {
-                Integer onum = new Integer(item.getObjNumber());
+                Integer onum = Integer.valueOf(item.getObjNumber());
                 Property p = buildOutlineItemProperty((PdfDictionary) item, info);
                 itemList.add(p);
                 item = resolveIndirectObject(((PdfDictionary) item).get(DICT_KEY_NEXT));
@@ -4095,7 +4095,7 @@ public class PdfModule extends ModuleBase {
                 }
                 else {
                     int pageObjNum = dest.getPageDestObjNumber();
-                    Integer destPg = _pageSeqMap.get(new Integer(pageObjNum));
+                    Integer destPg = _pageSeqMap.get(Integer.valueOf(pageObjNum));
                     if (destPg != null) {
                         itemList.add(new Property(PROP_NAME_DESTINATION,
                             PropertyType.INTEGER,
@@ -4116,7 +4116,7 @@ public class PdfModule extends ModuleBase {
                 // on the list just to be safe.
                 int listCount = 0;
                 while (child != null) {
-                    Integer onum = new Integer(child.getObjNumber());
+                    Integer onum = Integer.valueOf(child.getObjNumber());
                     if (_visitedOutlineNodes.contains(onum)) {
                         /* We have recursion! */
                         if (!_recursionWarned) {
@@ -4307,7 +4307,7 @@ public class PdfModule extends ModuleBase {
         if (_je != null && _je.getShowRawFlag()) {
             return new Property(name,
                         PropertyType.INTEGER,
-                        new Integer(val));
+                        Integer.valueOf(val));
         }
         List<String> slist = new LinkedList<String>();
            try {

@@ -59,7 +59,7 @@ public class NumberListBox extends JP2Box {
                         JP2Strings.numberListTypeStr);
                 p[1] = new Property ("Value",
                         PropertyType.INTEGER,
-                        new Integer (numValue));
+                        Integer.valueOf(numValue));
                 propArray[i] = new Property ("Number",
                         PropertyType.PROPERTY,
                         PropertyArity.ARRAY,

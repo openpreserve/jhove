@@ -63,7 +63,7 @@ public class FileTypeBox extends JP2Box {
         long minv = _module.readUnsignedInt(_dstrm);
         _module.addProperty (new Property ("MinorVersion",
                 PropertyType.LONG,
-                new Long (minv)));
+                Long.valueOf(minv)));
         // 16 bytes have been read
         
         // Read the compatibility list.  It takes up the rest

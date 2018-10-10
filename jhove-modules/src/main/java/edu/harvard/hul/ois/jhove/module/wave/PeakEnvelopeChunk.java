@@ -146,28 +146,28 @@ public class PeakEnvelopeChunk extends Chunk {
         List plist = new ArrayList (20);
         plist.add (new Property ("Version",
                 PropertyType.LONG,
-                new Long (version)));
+                Long.valueOf(version)));
         plist.add (new Property ("Format",
                 PropertyType.LONG,
-                new Long (format)));
+                Long.valueOf(format)));
         plist.add (new Property ("PointsPerValue",
                 PropertyType.LONG,
-                new Long (pointsPerValue)));
+                Long.valueOf(pointsPerValue)));
         plist.add (new Property ("BlockSize",
                 PropertyType.LONG,
-                new Long (blockSize)));
+                Long.valueOf(blockSize)));
         plist.add (new Property ("PeakChannels",
                 PropertyType.LONG,
-                new Long (peakChannels)));
+                Long.valueOf(peakChannels)));
         plist.add (new Property ("NumPeakFrames",
                 PropertyType.LONG,
-                new Long (numPeakFrames)));
+                Long.valueOf(numPeakFrames)));
         plist.add (new Property ("PosPeakOfPeaks",
                 PropertyType.LONG,
-                new Long (posPeakOfPeaks)));
+                Long.valueOf(posPeakOfPeaks)));
         plist.add (new Property ("OffsetToPeaks",
                 PropertyType.LONG,
-                new Long (offsetToPeaks)));
+                Long.valueOf(offsetToPeaks)));
         if (timestamp.length () > 0) {
             plist.add (new Property ("Timestamp",
                 PropertyType.STRING,

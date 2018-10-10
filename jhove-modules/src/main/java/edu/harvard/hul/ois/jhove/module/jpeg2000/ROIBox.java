@@ -70,24 +70,24 @@ public class ROIBox extends JP2Box {
             int rcp = ModuleBase.readUnsignedByte (_dstrm, _module);
             roiPropList.add (new Property ("CodingPriority",
                         PropertyType.INTEGER,
-                        new Integer (rcp)));
+                        Integer.valueOf(rcp)));
             
             long lcx = _module.readUnsignedInt (_dstrm);
             roiPropList.add (new Property ("HorizontalLocation",
                         PropertyType.LONG,
-                        new Long (lcx)));
+                        Long.valueOf(lcx)));
             long lcy = _module.readUnsignedInt (_dstrm);
             roiPropList.add (new Property ("HorizontalLocation",
                         PropertyType.LONG,
-                        new Long (lcy)));
+                        Long.valueOf(lcy)));
             long wdt = _module.readUnsignedInt (_dstrm);
             roiPropList.add (new Property ("Width",
                         PropertyType.LONG,
-                        new Long (wdt)));
+                        Long.valueOf(wdt)));
             long hth = _module.readUnsignedInt (_dstrm);
             roiPropList.add (new Property ("Height",
                         PropertyType.LONG,
-                        new Long (hth)));
+                        Long.valueOf(hth)));
 
             propList.add (new Property ("ROI",
                     PropertyType.PROPERTY,

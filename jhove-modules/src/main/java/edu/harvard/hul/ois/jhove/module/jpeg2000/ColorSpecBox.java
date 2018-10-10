@@ -63,7 +63,7 @@ public class ColorSpecBox extends JP2Box {
         int prec = ModuleBase.readUnsignedByte (_dstrm, _module);
         subProps.add (new Property ("Precedence",
                     PropertyType.INTEGER,
-                    new Integer (prec)));
+                    Integer.valueOf(prec)));
         
         // The approx field provides a litmus test for distinguishing
         // a JP2 file from a JPX.  JP2 may have only 0 for this value;
@@ -73,7 +73,7 @@ public class ColorSpecBox extends JP2Box {
             _module.setJPXCompliant (false);
             subProps.add (new Property ("Approx",
                     PropertyType.INTEGER,
-                    new Integer (0)));
+                    Integer.valueOf(0)));
         }
         else {
             _module.setJP2Compliant (false);

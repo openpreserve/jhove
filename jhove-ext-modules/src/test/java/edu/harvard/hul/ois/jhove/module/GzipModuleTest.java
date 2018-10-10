@@ -1,30 +1,29 @@
 package edu.harvard.hul.ois.jhove.module;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import edu.harvard.hul.ois.jhove.Message;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+import org.jwat.common.DiagnosisType;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.jwat.common.DiagnosisType;
-
-import edu.harvard.hul.ois.jhove.Message;
-import edu.harvard.hul.ois.jhove.Property;
-import edu.harvard.hul.ois.jhove.PropertyArity;
-import edu.harvard.hul.ois.jhove.PropertyType;
-import edu.harvard.hul.ois.jhove.RepInfo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public class GzipModuleTest {
@@ -39,7 +38,7 @@ public class GzipModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
-        assertEquals(Arrays.asList(gzm.getName()), info.getSigMatch());
+        assertEquals(Collections.singletonList(gzm.getName()), info.getSigMatch());
         
         assertEquals(0, info.getMessage().size());
         
@@ -61,7 +60,7 @@ public class GzipModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(GzipModule.class, info.getModule().getClass());
-        assertEquals(Arrays.asList(gzm.getName()), info.getSigMatch());
+        assertEquals(Collections.singletonList(gzm.getName()), info.getSigMatch());
     }
     
     @Test
@@ -75,7 +74,7 @@ public class GzipModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
-        assertEquals(Arrays.asList(gzm.getName()), info.getSigMatch());
+        assertEquals(Collections.singletonList(gzm.getName()), info.getSigMatch());
         
         assertEquals(0, info.getMessage().size());
         
@@ -95,7 +94,7 @@ public class GzipModuleTest {
         
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(GzipModule.class, info.getModule().getClass());
-        assertEquals(Arrays.asList(gzm.getName()), info.getSigMatch());
+        assertEquals(Collections.singletonList(gzm.getName()), info.getSigMatch());
     }
     
     @Test
@@ -209,7 +208,7 @@ public class GzipModuleTest {
     }
     
     private Map<String, Integer> extractMessages(Collection<Message> messages) {
-		Map<String, Integer> res = new HashMap<String, Integer>();
+		Map<String, Integer> res = new HashMap<>();
 		for(Message m : messages) {
 			if(res.containsKey(m.getMessage())) {
 				res.put(m.getMessage(), res.get(m.getMessage()) + 1);

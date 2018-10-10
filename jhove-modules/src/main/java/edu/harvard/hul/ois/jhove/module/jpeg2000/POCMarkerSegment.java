@@ -79,19 +79,19 @@ public class POCMarkerSegment extends MarkerSegment {
             Property[] propArr = new Property[5];
             propArr[0] = new Property ("StartResolutionLevelIndex",
                         PropertyType.INTEGER,
-                        new Integer (rspoc));
+                        Integer.valueOf(rspoc));
             propArr[1] = new Property ("ComponentIndex",
                         PropertyType.INTEGER,
-                        new Integer (cspoc));
+                        Integer.valueOf(cspoc));
             propArr[2] = new Property ("LayerIndex",
                         PropertyType.INTEGER,
-                        new Integer (lyepoc));
+                        Integer.valueOf(lyepoc));
             propArr[3] = new Property ("EndResolutionLevelIndex",
                         PropertyType.INTEGER,
-                        new Integer (cepoc));
+                        Integer.valueOf(cepoc));
             propArr[4] = new Property ("ProgressionOrder",
                         PropertyType.INTEGER,
-                        new Integer (ppoc));
+                        Integer.valueOf(ppoc));
             changes[i] = new Property ("Change",
                         PropertyType.PROPERTY,
                         PropertyArity.ARRAY,

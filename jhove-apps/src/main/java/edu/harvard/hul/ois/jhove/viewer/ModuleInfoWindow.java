@@ -5,21 +5,27 @@
 
 package edu.harvard.hul.ois.jhove.viewer;
 
-import java.awt.Font;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.io.*;
+import edu.harvard.hul.ois.jhove.Agent;
+import edu.harvard.hul.ois.jhove.App;
+import edu.harvard.hul.ois.jhove.Document;
+import edu.harvard.hul.ois.jhove.Identifier;
+import edu.harvard.hul.ois.jhove.InternalSignature;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.Module;
+import edu.harvard.hul.ois.jhove.OutputHandler;
+import edu.harvard.hul.ois.jhove.Signature;
+import edu.harvard.hul.ois.jhove.SignatureType;
+
 import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import edu.harvard.hul.ois.jhove.*;
+import java.awt.*;
+import java.io.PrintWriter;
 
 /**
  *   This window is for presenting information about the selected
  *   module.  If no module is selected, a brief message is
  *   put into the window.
  */
-public class ModuleInfoWindow extends InfoWindow{
+public class ModuleInfoWindow extends InfoWindow {
 
     private JTextArea texta;
     private int _level;
@@ -36,13 +42,7 @@ public class ModuleInfoWindow extends InfoWindow{
     {
         super ("Module Info", app, base);
         _module = module;
-        setSaveActionListener ( 
-            new ActionListener() {
-                @Override
-                public void actionPerformed (ActionEvent e) {
-                    saveInfo ();
-                }
-            });
+        setSaveActionListener (e -> saveInfo ());
         
         texta = new JTextArea ();
 	texta.setColumns (72);
@@ -104,7 +104,7 @@ public class ModuleInfoWindow extends InfoWindow{
                 texta.append (margin + "MIMEtype: " + ss[0]);
                 for (int i=1; i<ss.length; i++) {
                     texta.append (", " + ss[i]);
-                };
+                }
                 texta.append (eol);
             }
             for (Signature sig : module.getSignature()) {

@@ -374,7 +374,7 @@ public abstract class IFD
                                 PropertyArity.LIST, list);
         }
         if (prop == null) {
-            prop = new Property(name, PropertyType.LONG, new Long(value));
+            prop = new Property(name, PropertyType.LONG, Long.valueOf(value));
         }
 
         return prop;
@@ -403,7 +403,7 @@ public abstract class IFD
         }
         if (prop == null) {
             prop = new Property(name, PropertyType.INTEGER,
-                                 new Integer(value));
+                                 Integer.valueOf(value));
         }
 
         return prop;
@@ -441,7 +441,7 @@ public abstract class IFD
         }
         if (prop == null) {
             prop = new Property(name, PropertyType.INTEGER,
-                                 new Integer(value));
+                                 Integer.valueOf(value));
         }
 
         return prop;
@@ -534,7 +534,7 @@ public abstract class IFD
     {
         Property [] array = new Property [3];
         array[0] = new Property("Offset", PropertyType.LONG,
-                                 new Long(_offset));
+                                 Long.valueOf(_offset));
         array[1] = new Property("Type", PropertyType.STRING, type);
         array[2] = new Property("Entries", PropertyType.PROPERTY,
                                  PropertyArity.LIST, entries);

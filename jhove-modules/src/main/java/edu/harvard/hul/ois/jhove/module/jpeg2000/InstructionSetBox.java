@@ -5,9 +5,14 @@
 
 package edu.harvard.hul.ois.jhove.module.jpeg2000;
 
-import edu.harvard.hul.ois.jhove.*;
-import java.io.*;
-import java.util.*;
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyType;
+
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Instruction Set Box (JPX).
@@ -81,19 +86,19 @@ public class InstructionSetBox extends JP2Box {
                 if (hasXO_YO) {
                     long xo = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("HorizontalOffset",
-                            PropertyType.LONG, new Long (xo)));
+                            PropertyType.LONG, Long.valueOf(xo)));
                     long yo = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("VerticalOffset",
-                            PropertyType.LONG, new Long (yo)));
+                            PropertyType.LONG, Long.valueOf(yo)));
                     sizeLeft -= 8;
                 }
                 if (hasWid_Ht) {
                     long width = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("Width",
-                            PropertyType.LONG, new Long (width)));
+                            PropertyType.LONG, Long.valueOf(width)));
                     long height = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("Height",
-                            PropertyType.LONG, new Long (height)));
+                            PropertyType.LONG, Long.valueOf(height)));
                     sizeLeft -= 8;
                 }
                 if (hasAnimation) {
@@ -101,31 +106,31 @@ public class InstructionSetBox extends JP2Box {
                     // The high bit of life is the persistence flag
                     boolean persist = ((life & 0X80000000) != 0);
                     instProps.add (new Property ("Persist",
-                            PropertyType.BOOLEAN, new Boolean (persist)));
+                            PropertyType.BOOLEAN, Boolean.valueOf(persist)));
                     life &= 0X7FFFFFFF;
                     instProps.add (new Property ("Life",
-                            PropertyType.LONG, new Long (life)));
+                            PropertyType.LONG, Long.valueOf(life)));
 
                     // Sloppy documentation: I'm assuming that N
                     // and NEXT-USE are the same thing.
                     long nextuse = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("NextUse",
-                            PropertyType.LONG, new Long (nextuse)));
+                            PropertyType.LONG, Long.valueOf(nextuse)));
                     sizeLeft -= 8;
                 }
                 if (hasCrop) {
                     long xc = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("HorizontalCropOffset",
-                            PropertyType.LONG, new Long (xc)));
+                            PropertyType.LONG, Long.valueOf(xc)));
                     long yc = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("VerticalCropOffset",
-                            PropertyType.LONG, new Long (yc)));
+                            PropertyType.LONG, Long.valueOf(yc)));
                     long wc = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("CroppedWidth",
-                            PropertyType.LONG, new Long (wc)));
+                            PropertyType.LONG, Long.valueOf(wc)));
                     long hc = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("CroppedHeight",
-                            PropertyType.LONG, new Long (hc)));
+                            PropertyType.LONG, Long.valueOf(hc)));
                     sizeLeft -= 16;
                 }
                 if (sizeLeft < 0) {

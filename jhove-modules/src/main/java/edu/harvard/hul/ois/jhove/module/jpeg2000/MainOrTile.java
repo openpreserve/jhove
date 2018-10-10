@@ -117,6 +117,6 @@ public abstract class MainOrTile {
         if (_packetLengthList == null) {
             _packetLengthList = new LinkedList<Long> ();
         }
-        _packetLengthList.add (new Long (len));
+        _packetLengthList.add (Long.valueOf(len));
     }
 }

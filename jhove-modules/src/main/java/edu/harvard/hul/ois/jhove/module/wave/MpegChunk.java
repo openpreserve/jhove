@@ -58,10 +58,10 @@ public class MpegChunk extends Chunk {
                 WaveStrings.SOUND_INFORMATION_0));
         propList.add (new Property ("FrameSize",
                 PropertyType.INTEGER,
-                new Integer (frameSize)));
+                Integer.valueOf(frameSize)));
         propList.add (new Property ("AncillaryDataLength",
                 PropertyType.INTEGER,
-                new Integer (ancillaryDataLength)));
+                Integer.valueOf(ancillaryDataLength)));
         propList.add (module.buildBitmaskProperty(ancillaryDataDef,
                 "AncillaryDataDef",
                 WaveStrings.ANCILLARY_DEF_1,

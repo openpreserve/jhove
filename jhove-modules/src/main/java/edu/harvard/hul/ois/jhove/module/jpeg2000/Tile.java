@@ -48,7 +48,7 @@ public class Tile extends MainOrTile {
     /** Adds a PPM tilepart header length to the list of lengths */
     public void addPPTLength (long len)
     {
-        _pptLengthList.add (new Long (len));
+        _pptLengthList.add (Long.valueOf(len));
     }
 
     /** Returns a Property describing the tile.

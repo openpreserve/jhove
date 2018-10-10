@@ -304,10 +304,10 @@ public class Utf8Module extends ModuleBase {
 
                 /* Track what control characters are used. */
                 if (ch < 0x20 && ch != 0x0D && ch != 0x0A) {
-                    _controlCharMap.put(new Integer(ch),
+                    _controlCharMap.put(Integer.valueOf(ch),
                             controlCharMnemonics[ch]);
                 } else if (ch == 0x7F) {
-                    _controlCharMap.put(new Integer(ch), "DEL (0x7F)");
+                    _controlCharMap.put(Integer.valueOf(ch), "DEL (0x7F)");
                 }
 
                 /* Character values U+000..U+001f,U+007f aren't printable. */
@@ -366,7 +366,7 @@ public class Utf8Module extends ModuleBase {
                 PropertyArity.LIST, metadataList));
 
         Property property = new Property("Characters", PropertyType.LONG,
-                new Long(nChar));
+                Long.valueOf(nChar));
         metadataList.add(property);
 
         property = blockMarker.getBlocksUsedProperty("UnicodeBlocks");
@@ -398,13 +398,13 @@ public class Utf8Module extends ModuleBase {
             LinkedList<String> propList = new LinkedList<String>();
             String mnem;
             for (int i = 0; i < 0x20; i++) {
-                mnem = _controlCharMap.get(new Integer(i));
+                mnem = _controlCharMap.get(Integer.valueOf(i));
                 if (mnem != null) {
                     propList.add(mnem);
                 }
             }
             /* need to check separately for DEL */
-            mnem = _controlCharMap.get(new Integer(0x7F));
+            mnem = _controlCharMap.get(Integer.valueOf(0x7F));
             if (mnem != null) {
                 propList.add(mnem);
             }

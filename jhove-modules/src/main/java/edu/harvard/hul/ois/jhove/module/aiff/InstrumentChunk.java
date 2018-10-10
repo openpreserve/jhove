@@ -57,25 +57,25 @@ public class InstrumentChunk extends Chunk {
         List propList = new ArrayList (9);
         propList.add (new Property ("BaseNote",
                 PropertyType.INTEGER,
-                new Integer (baseNote)));
+                Integer.valueOf(baseNote)));
         propList.add (new Property ("Detune",
                 PropertyType.INTEGER,
-                new Integer (detune)));
+                Integer.valueOf(detune)));
         propList.add (new Property ("LowNote",
                 PropertyType.INTEGER,
-                new Integer (lowNote)));
+                Integer.valueOf(lowNote)));
         propList.add (new Property ("HighNote",
                 PropertyType.INTEGER,
-                new Integer (highNote)));
+                Integer.valueOf(highNote)));
         propList.add (new Property ("LowVelocity",
                 PropertyType.INTEGER,
-                new Integer (lowVelocity)));
+                Integer.valueOf(lowVelocity)));
         propList.add (new Property ("HighVelocity",
                 PropertyType.INTEGER,
-                new Integer (highVelocity)));
+                Integer.valueOf(highVelocity)));
         propList.add (new Property ("Gain",
                 PropertyType.INTEGER,
-                new Integer (gain)));
+                Integer.valueOf(gain)));
         propList.add (sustainLoop.loopProp("SustainLoop"));
         propList.add (releaseLoop.loopProp("ReleaseLoop"));
         module.addAiffProperty(new Property ("Instrument",
@@ -115,10 +115,10 @@ public class InstrumentChunk extends Chunk {
                     AiffStrings.LOOP_TYPE);
             propArr[1] = new Property ("BeginLoop",
                     PropertyType.INTEGER,
-                    new Integer (beginLoop));
+                    Integer.valueOf(beginLoop));
             propArr[2] = new Property ("EndLoop",
                     PropertyType.INTEGER,
-                    new Integer (endLoop));
+                    Integer.valueOf(endLoop));
             return new Property (name,
                     PropertyType.PROPERTY,
                     PropertyArity.ARRAY,

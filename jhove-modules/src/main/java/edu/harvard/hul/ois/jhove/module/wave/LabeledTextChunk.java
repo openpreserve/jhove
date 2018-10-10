@@ -62,19 +62,19 @@ public class LabeledTextChunk extends Chunk {
         // Make the information into a Property.
         List plist = new ArrayList (10);
         plist.add (new Property ("CuePointID", PropertyType.LONG,
-                new Long (cuePointID)));
+                Long.valueOf(cuePointID)));
         plist.add (new Property ("SampleLength", PropertyType.LONG,
-                new Long (sampleLength)));
+                Long.valueOf(sampleLength)));
         plist.add (new Property ("PurposeID", PropertyType.LONG,
-                new Long (purposeID)));
+                Long.valueOf(purposeID)));
         plist.add (new Property ("Country", PropertyType.INTEGER,
-                new Integer (country)));
+                Integer.valueOf(country)));
         plist.add (new Property ("Language", PropertyType.INTEGER,
-                new Integer (language)));
+                Integer.valueOf(language)));
         plist.add (new Property ("Dialect", PropertyType.INTEGER,
-                new Integer (dialect)));
+                Integer.valueOf(dialect)));
         plist.add (new Property ("CodePage", PropertyType.INTEGER,
-                new Integer (codePage)));
+                Integer.valueOf(codePage)));
         plist.add (new Property ("Text", PropertyType.STRING,
                 text));
         module.addLabeledText(new Property ("LabeledTextItem",

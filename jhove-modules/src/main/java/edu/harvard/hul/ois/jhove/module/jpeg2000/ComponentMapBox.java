@@ -60,14 +60,14 @@ public class ComponentMapBox extends JP2Box {
             int index = _module.readUnsignedShort (_dstrm);
             cprop[0] = new Property ("ComponentIndex",
                         PropertyType.INTEGER,
-                        new Integer (index));
+                        Integer.valueOf(index));
             int mtyp = ModuleBase.readUnsignedByte (_dstrm, _module);
             cprop[1] = _module.addIntegerProperty ("MTyp", mtyp,
                         JP2Strings.mtypStr);
             int pcol = ModuleBase.readUnsignedByte (_dstrm, _module);
             cprop[2] = new Property ("PaletteComponent",
                         PropertyType.INTEGER,
-                        new Integer (pcol));
+                        Integer.valueOf(pcol));
             parray[i] = new Property ("Component",
                         PropertyType.PROPERTY,
                         PropertyArity.ARRAY,

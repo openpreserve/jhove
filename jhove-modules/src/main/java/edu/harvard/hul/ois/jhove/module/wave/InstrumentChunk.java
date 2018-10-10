@@ -5,12 +5,17 @@
 
 package edu.harvard.hul.ois.jhove.module.wave;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.module.WaveModule;
 import edu.harvard.hul.ois.jhove.module.iff.Chunk;
 import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
+
+import java.io.DataInputStream;
+import java.io.IOException;
 
 /**
  * Implementation of the WAVE Instrument Chunk, which
@@ -57,19 +62,19 @@ public class InstrumentChunk extends Chunk {
         
         Property[] propArr = new Property[7];
         propArr[0] = new Property ("UnshiftedNote", PropertyType.INTEGER,
-                    new Integer (unshiftedNote));
+                    Integer.valueOf(unshiftedNote));
         propArr[1] = new Property ("FineTune", PropertyType.INTEGER,
-                    new Integer (fineTune));
+                    Integer.valueOf(fineTune));
         propArr[2] = new Property ("Gain", PropertyType.INTEGER,
-                    new Integer (gain));
+                    Integer.valueOf(gain));
         propArr[3] = new Property ("LowNote", PropertyType.INTEGER,
-                    new Integer (lowNote));
+                    Integer.valueOf(lowNote));
         propArr[4] = new Property ("HighNote", PropertyType.INTEGER,
-                    new Integer (highNote));
+                    Integer.valueOf(highNote));
         propArr[5] = new Property ("LowVelocity", PropertyType.INTEGER,
-                    new Integer (lowVelocity));
+                    Integer.valueOf(lowVelocity));
         propArr[6] = new Property ("HighVelocity", PropertyType.INTEGER,
-                    new Integer (highVelocity));
+                    Integer.valueOf(highVelocity));
         module.addWaveProperty (new Property ("Instrument",
                     PropertyType.PROPERTY,
                     PropertyArity.ARRAY,

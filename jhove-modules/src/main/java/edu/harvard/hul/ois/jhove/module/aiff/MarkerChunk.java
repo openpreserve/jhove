@@ -55,10 +55,10 @@ public class MarkerChunk extends Chunk {
             Property[] mArr = new Property[3];
             mArr[0] = new Property ("ID",
                     PropertyType.INTEGER,
-                    new Integer (id));
+                    Integer.valueOf(id));
             mArr[1] = new Property ("Position",
                     PropertyType.LONG,
-                    new Long (position));
+                    Long.valueOf(position));
             mArr[2] = new Property ("Name",
                     PropertyType.STRING,
                     markerName);

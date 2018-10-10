@@ -84,7 +84,7 @@ public class CommonChunk extends Chunk {
         aes.setDuration (numSampleFrames);
         module.addAiffProperty (new Property ("SampleFrames",
                 PropertyType.LONG,
-                new Long (numSampleFrames)));
+                Long.valueOf(numSampleFrames)));
         // Proper handling of compression type should depend
         // on whether raw output is set
         if (compressionType != null) {

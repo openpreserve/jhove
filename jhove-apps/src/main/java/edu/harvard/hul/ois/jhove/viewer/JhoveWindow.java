@@ -20,22 +20,39 @@
 
 package edu.harvard.hul.ois.jhove.viewer;
 
-import java.awt.Container;
-import java.awt.Color;
-//import java.awt.Cursor;
-import java.awt.Toolkit;
-import java.awt.event.*;
-import java.awt.dnd.*;
-import java.awt.datatransfer.*;
-import java.io.*;
-import java.util.*;
-import java.net.*;
-import java.util.logging.*;
+import edu.harvard.hul.ois.jhove.App;
+import edu.harvard.hul.ois.jhove.Callback;
+import edu.harvard.hul.ois.jhove.ConfigHandler;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.MacStuff;
+import edu.harvard.hul.ois.jhove.Module;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+
 import javax.swing.*;
-import edu.harvard.hul.ois.jhove.*;
-import javax.xml.parsers.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Logger;
 
 /**
  *  Main window of JHoveViewer application.
@@ -52,7 +69,7 @@ public class JhoveWindow extends JFrame
     private JMenuItem _openURLItem;
     private JMenuItem _closeAllItem;
     private ButtonGroup _moduleGroup;
-    private String syncStr = "";   // object just for synchronizing
+    private final String syncStr = "";   // object just for synchronizing
     private boolean _rawOutput;
     private boolean _doChecksum;
 
@@ -81,7 +98,7 @@ public class JhoveWindow extends JFrame
     private static final int moduleInfoWinYPos = 90;
 
     /** Logger for a module class. */
-    protected Logger _logger;
+    private Logger _logger;
    
     /* Static instance of InvisibleFilenameFilter */
     private final  InvisibleFilenameFilter invisibleFilter =
@@ -93,12 +110,7 @@ public class JhoveWindow extends JFrame
         _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.viewer");
         _app = app;
         _base = base;
-        _moduleMenuListener = new ActionListener () {
-            @Override
-            public void actionPerformed (ActionEvent e) {
-                _selectedModule = e.getActionCommand ();
-            }
-        };
+        _moduleMenuListener = e -> _selectedModule = e.getActionCommand ();
 
         _lastDir = null;
         _moduleGroup = new ButtonGroup ();
@@ -108,15 +120,10 @@ public class JhoveWindow extends JFrame
         setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         
         // Define a Comparator function for Modules
-        Comparator<Module> modListComparator = new Comparator<Module> () {
-            @Override
-            public int compare (Module o1, Module o2) {
-                Module m1 = o1;
-                Module m2 = o2;
-                String name1 = m1.getName ();
-                String name2 = m2.getName ();
-                return String.CASE_INSENSITIVE_ORDER.compare (name1, name2);
-            }
+        Comparator<Module> modListComparator = (o1, o2) -> {
+            String name1 = o1.getName ();
+            String name2 = o2.getName ();
+            return String.CASE_INSENSITIVE_ORDER.compare (name1, name2);
         };
 
         // Build combo box of available modules
@@ -126,11 +133,11 @@ public class JhoveWindow extends JFrame
         // without munging the app's preferred order
         java.util.List<Module> menuModuleList = new ArrayList<> (moduleList.size ());
         menuModuleList.addAll(moduleList);
-        Collections.sort (menuModuleList, modListComparator);
+        menuModuleList.sort(modListComparator);
         Iterator<Module> iter = menuModuleList.iterator ();
         moduleItems.add ("(None selected)");
-        JRadioButtonMenuItem modItem = null;
-        String itemName = null;
+        JRadioButtonMenuItem modItem;
+        String itemName;
         
         while (iter.hasNext ()) {
             Module mod = iter.next ();
@@ -165,12 +172,7 @@ public class JhoveWindow extends JFrame
 
         // Set up a companion progress window. This will
         // be hidden and displayed as needed.
-        ActionListener listener = new ActionListener () {
-                @Override
-                public void actionPerformed (ActionEvent e) {
-                    _base.abort ();
-                }
-        };
+        ActionListener listener = e -> _base.abort ();
         _progWind = new ProgressWindow (listener);
         
         // Set up a Handler which is tailored to this application.
@@ -181,7 +183,7 @@ public class JhoveWindow extends JFrame
     /**
      * Set up the menu bar and menus.
      */
-    final private void addMenus ()
+    private void addMenus ()
     {
         final JhoveWindow jthis = this;
         JMenuBar menuBar = new JMenuBar ();
@@ -196,24 +198,12 @@ public class JhoveWindow extends JFrame
 
 
         _openFileItem.addActionListener (
-            new ActionListener () {
-                @Override
-                public void actionPerformed (ActionEvent e)
-                {
-                    pickAndAnalyzeFile ();
-                }
-            }
+                e -> pickAndAnalyzeFile ()
         );
         _openURLItem = new JMenuItem ("Open URL...");
         fileMenu.add (_openURLItem);
         _openURLItem.addActionListener (
-            new ActionListener () {
-                @Override
-                public void actionPerformed (ActionEvent e)
-                {
-                    pickAndAnalyzeURL ();
-                }
-            }
+                e -> pickAndAnalyzeURL ()
         );
         
         _closeAllItem = new JMenuItem ("Close all document windows");
@@ -228,13 +218,7 @@ public class JhoveWindow extends JFrame
             quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
                 Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             quitItem.addActionListener (
-                new ActionListener () {
-                    @Override
-                    public void actionPerformed (ActionEvent e)
-                    {
-                        System.exit (0);
-                    }
-                }
+                    e -> System.exit (0)
             );
         }
         
@@ -255,22 +239,13 @@ public class JhoveWindow extends JFrame
         JMenuItem editConfigItem = new JMenuItem ("Edit configuration...");
         editMenu.add (editConfigItem);
         editConfigItem.addActionListener (
-            new ActionListener () {
-                @Override
-                public void actionPerformed (ActionEvent e) 
-                {
-                    openConfigWindow ();
-                }
-            }
+                e -> openConfigWindow ()
         );
         
         JMenuItem prefItem = new JMenuItem ("Preferences...");
         editMenu.add (prefItem);
         prefItem.addActionListener (
-            new ActionListener () {
-                @Override
-                public void actionPerformed (ActionEvent e) 
-                {
+                e -> {
                     if (_prefsWindow == null) {
                         _prefsWindow = new PrefsWindow (jthis);
                         _prefsWindow.setLocation (180, 160);
@@ -278,7 +253,6 @@ public class JhoveWindow extends JFrame
                     }
                     _prefsWindow.saveAndShow ();
                 }
-            }
         );
         
         JMenu helpMenu = new JMenu ("Help");
@@ -286,24 +260,12 @@ public class JhoveWindow extends JFrame
         JMenuItem aboutModuleItem = new JMenuItem ("About module...");
         helpMenu.add (aboutModuleItem);
         aboutModuleItem.addActionListener (
-            new ActionListener () {
-                @Override
-                public void actionPerformed (ActionEvent e) 
-                {
-                    showModuleInfo ();
-                }
-            }
+                e -> showModuleInfo ()
         );
         JMenuItem aboutAppItem = new JMenuItem ("About Jhove...");
         helpMenu.add (aboutAppItem);
         aboutAppItem.addActionListener (
-            new ActionListener () {
-                @Override
-                public void actionPerformed (ActionEvent e) 
-                {
-                    showAppInfo ();
-                }
-            }
+                e -> showAppInfo ()
         );
 
         setJMenuBar (menuBar);        
@@ -325,13 +287,13 @@ public class JhoveWindow extends JFrame
     /**
      * Here we let the user pick a file, then analyze it.
      */
-    public void pickAndAnalyzeFile ()
+    private void pickAndAnalyzeFile()
     {
         // Only one thread can be associated with a JhoveBase.
         // Make sure we can't have concurrent threads.
         _openFileItem.setEnabled (false);
         _openURLItem.setEnabled (false);        
-        File file = null;
+        File file;
         synchronized (syncStr) {
             JFileChooser chooser = new JFileChooser ();
             makeChooserOpaque (chooser);
@@ -361,7 +323,7 @@ public class JhoveWindow extends JFrame
      *  Makes a JFileChooser dialog treat packages and applications
      *  as opaque entities.  Has no effect on other platforms.
      */
-    public static void makeChooserOpaque (JFileChooser chooser)
+    static void makeChooserOpaque(JFileChooser chooser)
     {
         // Apple TN 2042 LIES; we need to set both properties.
         chooser.putClientProperty
@@ -400,7 +362,7 @@ public class JhoveWindow extends JFrame
     }
     
     /** This is called to analyze a List of files. */
-    public void pickAndAnalyzeFileList1 (List<File> files, Module module)
+    private void pickAndAnalyzeFileList1(List<File> files, Module module)
     {
         if (files.isEmpty ()) {
             return;
@@ -431,21 +393,20 @@ public class JhoveWindow extends JFrame
      *  levels if possible, and feeding individual files to 
      *  pickAndAnalyzeFile1.
      */
-    public void analyzeDirectory (File file, Module module)
+    private void analyzeDirectory(File file, Module module)
     {
         // Construct list, excluding files that start with "."
         String[] subfiles = file.list (invisibleFilter);
         if (subfiles != null) {
             // Walk through the directory
-            for (int i = 0; i < subfiles.length; i++) {
-                File subfile = new File (file, subfiles[i]);
+            for (String subfile1 : subfiles) {
+                File subfile = new File(file, subfile1);
                 if (subfile != null) {
-                    if (subfile.isDirectory ()) {
+                    if (subfile.isDirectory()) {
                         // Recurse through subdirectories
-                        analyzeDirectory (subfile, module);
-                    }
-                    else {
-                        pickAndAnalyzeFile1 (subfile, module);
+                        analyzeDirectory(subfile, module);
+                    } else {
+                        pickAndAnalyzeFile1(subfile, module);
                     }
                 }
             }
@@ -464,7 +425,7 @@ public class JhoveWindow extends JFrame
         _openFileItem.setEnabled (false);
         _openURLItem.setEnabled (false);        
 
-        String uri = null;
+        String uri;
         synchronized (syncStr) {
             String urlStr = (String)JOptionPane.showInputDialog(
                         this,
@@ -493,9 +454,9 @@ public class JhoveWindow extends JFrame
      *  This method does the actual work of pickAndAnalyzeURL,
      *  called from a thread so it can run asynchronously. 
      */
-    public void pickAndAnalyzeURL1 (String uri, Module module)
+    private void pickAndAnalyzeURL1(String uri, Module module)
     {
-        _progWind.setDocName (uri.toString (), false);
+        _progWind.setDocName (uri, false);
         _progWind.setProgressState (ProgressWindow.DOWNLOADING, false);
         _progWind.setContentLength (0, false);
         _progWind.setByteCount (0, true);
@@ -537,14 +498,14 @@ public class JhoveWindow extends JFrame
     {
         switch (selector) {
             case 1:
-                long bytecnt = ((Long)parm).longValue ();
+                long bytecnt = (Long) parm;
                 _progWind.setByteCount (bytecnt, true);
                 break;
             case 2:
                 String name = (String) parm;
                 if (name.length() > 48) {
                     name = "..." + 
-                        name.substring (name.length() - 48, name.length());
+                        name.substring (name.length() - 48);
                 }
                 _progWind.setDocName(name, true);
                 break;
@@ -560,7 +521,7 @@ public class JhoveWindow extends JFrame
      *  numeric values are displayed; if false, explanatory
      *  text may be substituted.
      */
-    public void setRawOutput (boolean rawOutput) 
+    void setRawOutput(boolean rawOutput)
     {
         _rawOutput = rawOutput;
     }
@@ -568,7 +529,7 @@ public class JhoveWindow extends JFrame
     /**
      *  Sets the checksum flag. If set to true, checksums are reported.
      */
-    public void setDoChecksum (boolean checksum) 
+    void setDoChecksum(boolean checksum)
     {
         _doChecksum = checksum;
     }
@@ -635,7 +596,7 @@ public class JhoveWindow extends JFrame
     {
         String configFile = _base.getConfigFile ();
         ConfigHandler configHandler = new ConfigHandler ();
-        XMLReader parser = null;
+        XMLReader parser;
         String saxClass = _base.getSaxClass ();
         try {
             if (saxClass != null) {
@@ -710,7 +671,7 @@ public class JhoveWindow extends JFrame
         if (_selectedModule.equals ("")) {
             return null;
         }
-        return (Module) _base.getModuleMap().get (_selectedModule.toLowerCase ());
+        return _base.getModuleMap().get (_selectedModule.toLowerCase ());
     }
 
     private void reportError (String title, String msg)
@@ -819,7 +780,7 @@ public class JhoveWindow extends JFrame
      *  This allows document windows to add themselves as 
      *  listeners.
      */
-    protected JMenuItem getCloseAllItem ()
+    JMenuItem getCloseAllItem()
     {
         return _closeAllItem;
     }
@@ -829,8 +790,8 @@ public class JhoveWindow extends JFrame
     private boolean dataFlavorOK (DataFlavor[] flavors)
     {
         //boolean haveFileFlavor = false;
-        for (int i = 0; i < flavors.length; i++) {
-            if (flavors[i].isFlavorJavaFileListType()) {
+        for (DataFlavor flavor : flavors) {
+            if (flavor.isFlavorJavaFileListType()) {
                 return true;
             }
         }
@@ -851,7 +812,7 @@ public class JhoveWindow extends JFrame
 
 
         /** Constructor. */
-        protected ParseThread (JhoveWindow win)
+        ParseThread(JhoveWindow win)
         {
             _win = win;
         }
@@ -893,7 +854,7 @@ public class JhoveWindow extends JFrame
         /** Designates a URI to parse. 
          *  Only one of setURI, setFile, and setFileList should
          *  be called for a given thread. */
-        protected void setURI (String uri) 
+        void setURI(String uri)
         {
             _uri = uri;
         }
@@ -910,7 +871,7 @@ public class JhoveWindow extends JFrame
         /** Designates a list of files to parse sequentially. 
         *  Only one of setURI, setFile, and setFileList should
         *  be called for a given thread. */
-        protected void setFileList (List<File> fileList)
+        void setFileList(List<File> fileList)
         {
             _fileList = fileList;
         }

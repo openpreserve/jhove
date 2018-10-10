@@ -20,9 +20,19 @@
 
 package edu.harvard.hul.ois.jhove.handler;
 
-import edu.harvard.hul.ois.jhove.*;
-import edu.harvard.hul.ois.jhove.handler.audit.*;
-import java.util.*;
+import edu.harvard.hul.ois.jhove.Checksum;
+import edu.harvard.hul.ois.jhove.ChecksumType;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.handler.audit.AuditCount;
+import edu.harvard.hul.ois.jhove.handler.audit.AuditState;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+import java.util.TreeMap;
 
 /**
  * JHOVE audit output handler, derived from the standard JHOVE XML
@@ -131,8 +141,7 @@ public class AuditHandler
     /**
      * Local extension to the standard callback indicating a directory is
      * finished being processed.
-     * @param state Audit handler state
-     */
+	 */
     public void endDirectoryImpl ()
     {
     }
@@ -198,8 +207,7 @@ public class AuditHandler
      * Local extension to the standard callback that outputs the
      * information contained in a RepInfo object
      * @param info Object representation information
-     * @param state Audit handler state
-     */
+	 */
     public void showImpl (RepInfo info)
     {
 	String status = null;
@@ -346,8 +354,7 @@ public class AuditHandler
      * This should be in a suitable format for
      * including multiple files between the header and the footer, and
      * the XML of the header and footer must balance out.
-     * @param state Audit handler state
-     */
+	 */
     public void showFooterImpl ()
     {
 	if (_nAudit > 0) {

@@ -328,11 +328,11 @@ public class ExifIFD
         }
         if (_pixelXDimension != NULL) {
             entries.add (new Property ("PixelXDimension", PropertyType.LONG,
-                                       new Long (_pixelXDimension)));
+                                       Long.valueOf(_pixelXDimension)));
         }
         if (_pixelYDimension != NULL) {
             entries.add (new Property ("PixelYDimension", PropertyType.LONG,
-                                       new Long (_pixelYDimension)));
+                                       Long.valueOf(_pixelYDimension)));
         }
         if (_makerNote != null) {
             entries.add (new Property ("MakerNote", PropertyType.INTEGER,
@@ -516,7 +516,7 @@ public class ExifIFD
         if (_focalLengthIn35mmFilm != NULL) {
             entries.add (new Property ("FocalLengthIn35mmFilm",
                                        PropertyType.INTEGER,
-                                       new Integer (_focalLengthIn35mmFilm)));
+                                       Integer.valueOf(_focalLengthIn35mmFilm)));
         }
         if (_sceneCaptureType != NULL) {
             entries.add (addIntegerProperty ("SceneCaptureType",

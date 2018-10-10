@@ -73,7 +73,7 @@ public class QCDMarkerSegment extends MarkerSegment {
         List propList = new ArrayList (2);
         propList.add (new Property ("QuantizationStyle",
                     PropertyType.INTEGER,
-                    new Integer (sqcd)));
+                    Integer.valueOf(sqcd)));
         propList.add (new Property ("StepValue",
                     PropertyType.INTEGER,
                     PropertyArity.ARRAY,

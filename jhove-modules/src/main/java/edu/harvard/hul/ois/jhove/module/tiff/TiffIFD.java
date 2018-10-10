@@ -1380,7 +1380,7 @@ public class TiffIFD
         else {
             // if 0, always report as a raw number
             entries.add (new Property ("NewSubfileType", PropertyType.LONG,
-                                    new Long (_newSubfileType)));
+                                    Long.valueOf (_newSubfileType)));
         }
         if (_subfileType != NULL && (_subfileType != 0 || rawOutput)) {
             entries.add (addIntegerProperty ("SubfileType", _subfileType - 1,
@@ -1389,7 +1389,7 @@ public class TiffIFD
         else if (_subfileType != NULL) {
             // if 0, always report as a raw number
             entries.add (new Property ("SubfileType", PropertyType.LONG,
-                                    new Long (_subfileType)));
+                                    Long.valueOf (_subfileType)));
         }
         if (_documentName != null) {
             entries.add (new Property ("DocmentName", PropertyType.STRING,
@@ -1435,7 +1435,7 @@ public class TiffIFD
         }
         if (_numberOfInks != NULL) {
             entries.add (new Property ("NumberOfInks", PropertyType.INTEGER,
-                                   new Integer (_numberOfInks)));
+                                   Integer.valueOf (_numberOfInks)));
         }
         if (_inkNames != null) {
             entries.add (new Property ("InkNames", PropertyType.STRING,
@@ -1455,33 +1455,33 @@ public class TiffIFD
         }
         if (_cellLength != NULL) {
             entries.add (new Property ("CellLength", PropertyType.INTEGER,
-                                   new Integer (_cellLength)));
+                                   Integer.valueOf(_cellLength)));
         }
         if (_cellWidth != NULL) {
             entries.add (new Property ("CellWidth", PropertyType.INTEGER,
-                                   new Integer (_cellWidth)));
+                                   Integer.valueOf(_cellWidth)));
         }
         if (_transferFunction) {
             entries.add (new Property ("TransferFunction", PropertyType.BOOLEAN,
-                                   new Boolean (true)));
+                                   Boolean.valueOf(true)));
         }
         if (_transferRange != null) {
             entries.add (new Property ("TransferRange", PropertyType.INTEGER,
                                    PropertyArity.ARRAY, _transferRange));
         }
         entries.add (new Property ("Threshholding", PropertyType.INTEGER,
-                                   new Integer (_threshholding)));
+                                   Integer.valueOf(_threshholding)));
         if (_predictor != NULL) {
             entries.add (addIntegerProperty ("Predictor", _predictor,
                                          PREDICTOR_L, rawOutput));
         }
         if (_t4Options != NULL) {
             entries.add (new Property ("T4Options", PropertyType.LONG,
-                                   new Long (_t4Options)));
+                                   Long.valueOf(_t4Options)));
         }
         if (_t6Options != NULL) {
             entries.add (new Property ("T6Options", PropertyType.LONG,
-                                   new Long (_t6Options)));
+                                   Long.valueOf(_t6Options)));
         }
         if (_jpegProc != NULL) {
             entries.add (addIntegerProperty ("JPEGProc", _jpegProc,
@@ -1491,17 +1491,17 @@ public class TiffIFD
         if (_jpegInterchangeFormat != NULL) {
             entries.add (new Property ("JPEGInterchangeFormat",
                                        PropertyType.LONG,
-                                       new Long (_jpegInterchangeFormat)));
+                                       Long.valueOf(_jpegInterchangeFormat)));
         }
         if (_jpegInterchangeFormatLength != NULL) {
             entries.add (new Property ("JPEGInterchangeFormatLength",
                                        PropertyType.LONG,
-                                       new Long (_jpegInterchangeFormatLength)));
+                                       Long.valueOf(_jpegInterchangeFormatLength)));
         }
         if (_jpegRestartInterval != NULL) {
             entries.add (new Property ("JPEGRestartInterval",
                                        PropertyType.INTEGER,
-                                       new Integer (_jpegRestartInterval)));
+                                       Integer.valueOf(_jpegRestartInterval)));
         }
         if (_jpegLosslessPredictors != null) {
             entries.add (addIntegerArrayProperty ("JPEGLosslessPredictors",
@@ -1549,24 +1549,24 @@ public class TiffIFD
         }
         if (_xClipPathUnits != NULL) {
             entries.add (new Property ("XClipPathUnits", PropertyType.LONG,
-                                       new Long (_xClipPathUnits)));
+                                       Long.valueOf(_xClipPathUnits)));
         }
         if (_yClipPathUnits != NULL) {
             entries.add (new Property ("YClipPathUnits", PropertyType.LONG,
-                                       new Long (_yClipPathUnits)));
+                                       Long.valueOf(_yClipPathUnits)));
         }
         if (_cleanFaxData != NULL) {
             entries.add (new Property ("CleanFaxData", PropertyType.LONG,
-                                       new Long (_cleanFaxData)));
+                                       Long.valueOf(_cleanFaxData)));
         }
         if (_badFaxLines != NULL) {
             entries.add (new Property ("BadFaxLines", PropertyType.LONG,
-                                       new Long (_badFaxLines)));
+                                       Long.valueOf(_badFaxLines)));
         }
         if (_consecutiveBadFaxLines != NULL) {
             entries.add (new Property ("ConsecutiveBadFaxLines",
                                        PropertyType.LONG,
-                                       new Long (_consecutiveBadFaxLines)));
+                                       Long.valueOf(_consecutiveBadFaxLines)));
         }
         if (_freeByteCounts != null) {
             entries.add (new Property ("FreeByteCounts", PropertyType.LONG,
@@ -1597,7 +1597,7 @@ public class TiffIFD
         if (_backgroundColorValue != NULL) {
             itList.add (new Property ("BackgroundColorValue",
                                       PropertyType.INTEGER,
-                                      new Integer (_backgroundColorValue)));
+                                      Integer.valueOf(_backgroundColorValue)));
         }
         itList.add (addIntegerProperty ("ImageColorIndicator",
                                         _imageColorIndicator,
@@ -1607,7 +1607,7 @@ public class TiffIFD
                                         TRANSPARENCYINDICATOR_L, rawOutput));
         if (_imageColorValue != NULL) {
             itList.add (new Property ("ImageColorValue", PropertyType.INTEGER,
-                                      new Integer (_imageColorValue)));
+                                      Integer.valueOf(_imageColorValue)));
         }
         if (_colorCharacterization != null) {
             itList.add (new Property ("ColorCharacterization",
@@ -1635,10 +1635,10 @@ public class TiffIFD
         itList.add (addIntegerProperty ("RasterPadding", _rasterPadding,
                                         RASTERPADDING_L, rawOutput));
         itList.add (new Property ("BitsPerRunLength", PropertyType.INTEGER,
-                                  new Integer (_bitsPerRunLength)));
+                                  Integer.valueOf(_bitsPerRunLength)));
         itList.add (new Property ("BitsPerExtendedRunLength",
                                   PropertyType.INTEGER,
-                                  new Integer (_bitsPerExtendedRunLength)));
+                                  Integer.valueOf(_bitsPerExtendedRunLength)));
         entries.add (new Property ("TIFFITProperties", PropertyType.PROPERTY,
                                    PropertyArity.LIST, itList));
     }
@@ -1692,7 +1692,7 @@ public class TiffIFD
         }
         if (_interlace != NULL)  {
             epList.add (new Property ("Interlace", PropertyType.INTEGER,
-                                      new Integer (_interlace)));
+                                      Integer.valueOf(_interlace)));
         }
         if (_timeZoneOffset != null)  {
             epList.add (new Property ("TimeZoneOffset", PropertyType.INTEGER,
@@ -1700,7 +1700,7 @@ public class TiffIFD
         }
         if (_selfTimerMode != NULL)  {
             epList.add (new Property ("SelfTimerMode", PropertyType.INTEGER,
-                                      new Integer (_selfTimerMode)));
+                                      Integer.valueOf(_selfTimerMode)));
         }
         if (_compressedBitsPerPixel != null)  {
             epList.add (addRationalProperty ("CompressedBitsPerPixel",
@@ -1751,7 +1751,7 @@ public class TiffIFD
         }
         if (_imageNumber != NULL) {
             epList.add (new Property ("ImageNumber", PropertyType.LONG,
-                                      new Long (_imageNumber)));
+                                      Long.valueOf(_imageNumber)));
         }
         if (_securityClassification != null) {
             epList.add (new Property ("SecurityClassification",
@@ -1791,12 +1791,12 @@ public class TiffIFD
         List<Property> dirList = new LinkedList<Property> ();
         if (_geoKeyDirectoryTag != null) {
             dirList.add (new Property ("Version", PropertyType.INTEGER,
-                                       new Integer (_geoKeyDirectoryTag[0])));
+                                       Integer.valueOf(_geoKeyDirectoryTag[0])));
             dirList.add (new Property ("Revision", PropertyType.STRING,
                                Integer.toString (_geoKeyDirectoryTag[1]) + "."+
                                Integer.toString (_geoKeyDirectoryTag[2])));
             dirList.add (new Property ("NumberOfKeys", PropertyType.INTEGER,
-                                       new Integer (_geoKeyDirectoryTag[3])));
+                                       Integer.valueOf(_geoKeyDirectoryTag[3])));
             for (int i=0; i<_geoKeyDirectoryTag[3]; i++) {
                 int j = i*4 + 4;
                 int key      = _geoKeyDirectoryTag[j];
@@ -1863,7 +1863,7 @@ public class TiffIFD
                 else if (key == GEOGPRIMEMERIDIANLONGGEOKEY) {
                     dirList.add (new Property ("GeogPrimeMeridianLong",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == GEOGLINEARUNITSGEOKEY) {
                     dirList.add (addIntegerProperty ("GeogLinearUnits", ival,
@@ -1874,7 +1874,7 @@ public class TiffIFD
                 else if (key == GEOGLINEARUNITSIZEGEOKEY) {
                     dirList.add (new Property ("GeogLinearUnitSize",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == GEOGANGULARUNITSGEOKEY) {
                     dirList.add (addIntegerProperty ("GeogAngularUnits", ival,
@@ -1885,7 +1885,7 @@ public class TiffIFD
                 else if (key == GEOGANGULARUNITSIZEGEOKEY) {
                     dirList.add (new Property ("GeogAngularUnitSize",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == GEOGELLIPSOIDGEOKEY) {
                     dirList.add (addIntegerProperty ("GeogEllipsoid", ival,
@@ -1896,17 +1896,17 @@ public class TiffIFD
                 else if (key == GEOGSEMIMAJORAXISGEOKEY) {
                     dirList.add (new Property ("GeogSemiMajorAxis",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == GEOGSEMIMINORAXISGEOKEY) {
                     dirList.add (new Property ("GeogSemiMinorAxis",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == GEOGINVFLATTENINGGEOKEY) {
                     dirList.add (new Property ("GeogInvFlattening",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == GEOGAZIMUTHUNITSGEOKEY) {
                     dirList.add (addIntegerProperty ("GeogAzimuthUnits", ival,
@@ -1945,93 +1945,93 @@ public class TiffIFD
                 else if (key == PROJLINEARUNITSIZEGEOKEY) {
                     dirList.add (new Property ("ProjLinearUnitSize",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJSTDPARALLEL1GEOKEY) {
                     dirList.add (new Property ("ProjStdParallel1",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJSTDPARALLEL2GEOKEY) {
                     dirList.add (new Property ("ProjStdParallel2",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJNATORIGINLONGGEOKEY) {
                     dirList.add (new Property ("ProjNatOriginLong",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJNATORIGINLATGEOKEY) {
                     dirList.add (new Property ("ProjNatOriginLat",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJFALSEEASTINGGEOKEY) {
                     dirList.add (new Property ("ProjFalseEasting",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJFALSENORTHINGGEOKEY) {
                     dirList.add (new Property ("ProjFalseNorthing",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJFALSEORIGINLONGGEOKEY) {
                     dirList.add (new Property ("ProjFalseOriginLong",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJFALSEORIGINLATGEOKEY) {
                     dirList.add (new Property ("ProjFalseOriginLat",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJFALSEORIGINEASTINGGEOKEY) {
                     dirList.add (new Property ("ProjFalseOriginEasting",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJFALSEORIGINNORTHINGGEOKEY ||
                          key == PROJFALSEORIGINNORTHINGGEOKEY_2) {
                     dirList.add (new Property ("ProjFalseOriginNorthing",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJCENTERLONGGEOKEY) {
                     dirList.add (new Property ("ProjCenterLong",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJCENTERLATGEOKEY) {
                     dirList.add (new Property ("ProjCenterLat",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJCENTEREASTINGGEOKEY) {
                     dirList.add (new Property ("ProjCenterEasting",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJSCALEATNATORIGINGEOKEY) {
                     dirList.add (new Property ("ProjScaleAtNatOrigin",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJSCALEATCENTERGEOKEY) {
                     dirList.add (new Property ("ProjScaleAtCenter",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJAZIMUTHANGLEGEOKEY) {
                     dirList.add (new Property ("ProjAzimuthAngle",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == PROJSTRAIGHTVERTPOLELONGEOKEY) {
                     dirList.add (new Property ("ProjStraightVertPoleLong",
                                                PropertyType.DOUBLE,
-                                               new Double (dval)));
+                                               Double.valueOf(dval)));
                 }
                 else if (key == VERTICALCSTYPEGEOKEY) {
                     dirList.add (addIntegerProperty ("VerticalCSType", ival,
@@ -2106,7 +2106,7 @@ public class TiffIFD
                                 rawOutput);
                 layerProps[1] = new Property ("OrdinalNumber",
                                 PropertyType.INTEGER,
-                                new Integer (_imageLayer[1]));
+                                Integer.valueOf(_imageLayer[1]));
 
                 entries.add (new Property ("ImageLayer",
                                            PropertyType.PROPERTY,
@@ -2217,12 +2217,12 @@ public class TiffIFD
         if (_calibrationIlluminant1 != NULL) {
             dngList.add (new Property ("CalibrationIlluminant1",
                     PropertyType.INTEGER,
-                    new Integer (_calibrationIlluminant1)));
+                    Integer.valueOf(_calibrationIlluminant1)));
         }
         if (_calibrationIlluminant2 != NULL) {
             dngList.add (new Property ("CalibrationIlluminant2",
                     PropertyType.INTEGER,
-                    new Integer (_calibrationIlluminant2)));
+                    Integer.valueOf(_calibrationIlluminant2)));
         }
         if (_colorMatrix1 != null) {
             dngList.add (new Property ("ColorMatrix1",
@@ -2296,7 +2296,7 @@ public class TiffIFD
         if (_bayerGreenSplit != NULL) {
             dngList.add (new Property ("BayerGreenSplit",
                     PropertyType.INTEGER,
-                    new Integer (_bayerGreenSplit)));
+                    Integer.valueOf(_bayerGreenSplit)));
         }
         if (_linearResponseLimit != null) {
             dngList.add (new Property ("LinearResponseLimit",

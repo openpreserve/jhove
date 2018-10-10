@@ -113,7 +113,7 @@ public class GlobalParametersIFD extends IFD {
         if (_modeNumber != NULL) {
             entries.add (new Property ("ModeNumber",
                             PropertyType.INTEGER,
-                            new Integer (_modeNumber)));
+                            Integer.valueOf(_modeNumber)));
         }
         return propertyHeader ("GlobalParameterIFD", entries);
     }

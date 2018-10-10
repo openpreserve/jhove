@@ -5,10 +5,28 @@
 
 package edu.harvard.hul.ois.jhove.viewer;
 
-import java.util.*;
+import edu.harvard.hul.ois.jhove.AESAudioMetadata;
+import edu.harvard.hul.ois.jhove.Checksum;
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.InfoMessage;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.Message;
+import edu.harvard.hul.ois.jhove.Module;
+import edu.harvard.hul.ois.jhove.NisoImageMetadata;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.Rational;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.TextMDMetadata;
+
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.text.DateFormat;
-import javax.swing.tree.*;
-import edu.harvard.hul.ois.jhove.*;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *  This subclass of DefaultMutableTreeNode simply adds a
@@ -261,7 +279,8 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         String wfStr;
         switch (_info.getWellFormed ()) {
             case RepInfo.TRUE:
-                wfStr = "Well-Formed";                break;
+                wfStr = "Well-Formed";
+                break;
             case RepInfo.FALSE:
                 wfStr = "Not well-formed";
                 break;

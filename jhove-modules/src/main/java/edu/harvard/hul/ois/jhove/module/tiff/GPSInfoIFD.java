@@ -390,7 +390,7 @@ public class GPSInfoIFD
 				       PropertyArity.ARRAY, _gpsLongitude));
 	}
 	entries.add(new Property("GPSAltitudeRef", PropertyType.INTEGER,
-				   new Integer(_gpsAltitudeRef)));
+				   Integer.valueOf(_gpsAltitudeRef)));
 	if (_gpsAltitude != null) {
 	    entries.add(new Property("GPSAltitude", PropertyType.RATIONAL,
 				       _gpsAltitude));
@@ -496,7 +496,7 @@ public class GPSInfoIFD
 				       _gpsDateStamp));
 	}
 	entries.add(new Property("GPSDifferential", PropertyType.INTEGER,
-				   new Integer(_gpsDifferential)));
+				   Integer.valueOf(_gpsDifferential)));
 
 	return propertyHeader("GPSInfo", entries);
     }

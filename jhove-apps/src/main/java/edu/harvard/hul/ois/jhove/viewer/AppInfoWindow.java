@@ -5,13 +5,19 @@
 
 package edu.harvard.hul.ois.jhove.viewer;
 
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.util.*;
+import edu.harvard.hul.ois.jhove.App;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.Module;
+import edu.harvard.hul.ois.jhove.OutputHandler;
+
 import javax.swing.*;
-import java.io.*;
-import edu.harvard.hul.ois.jhove.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  *   This window is for presenting information about the JHOVE
@@ -25,13 +31,7 @@ public class AppInfoWindow extends InfoWindow
     public AppInfoWindow (App app, JhoveBase jbase)
     {
         super ("Application Info", app, jbase);
-        setSaveActionListener ( 
-            new ActionListener() {
-                @Override
-                public void actionPerformed (ActionEvent e) {
-                    saveInfo ();
-                }
-            });
+        setSaveActionListener (e -> saveInfo ());
         
         texta = new JTextArea ();
 	texta.setColumns (72);
@@ -87,13 +87,11 @@ public class AppInfoWindow extends InfoWindow
 	if (saxClass != null) {
 	    texta.append ("SAX parser: " + saxClass + eol);
 	}
-	Iterator<String> iter = jbase.getModuleMap ().keySet ().iterator ();
-	while (iter.hasNext ()) {
-	    //Module module = jbase.getModuleMap ((String) iter.next ());
-            Map<String, Module> moduleMap = jbase.getModuleMap ();
-            Module module = moduleMap.get (iter.next ());
-	    texta.append (" Module: " + module.getName () + " " +
-			  module.getRelease () + eol);
+	for (String s : jbase.getModuleMap().keySet()) {
+		Map<String, Module> moduleMap = jbase.getModuleMap();
+		Module module = moduleMap.get(s);
+		texta.append(" Module: " + module.getName() + " " +
+				module.getRelease() + eol);
 	}
 	// Reporting Handlers makes no sense in the viewer app; skip
 	String rights = app.getRights ();

@@ -890,7 +890,7 @@ public abstract class ModuleBase
             }
         }
         if (prop == null) {
-            prop = new Property(name, PropertyType.INTEGER, new Integer(value));
+            prop = new Property(name, PropertyType.INTEGER, Integer.valueOf(value));
         }
 
         return prop;
@@ -918,7 +918,7 @@ public abstract class ModuleBase
             }
         }
         return new Property (name, PropertyType.INTEGER,
-                 new Integer (value));
+                 Integer.valueOf(value));
     }
 
     /**

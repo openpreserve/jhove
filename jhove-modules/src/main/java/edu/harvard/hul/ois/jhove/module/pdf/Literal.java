@@ -119,7 +119,7 @@ public class Literal
             _rawBytes = new Vector<> (32);
         }
         if (haveHi) {
-            _rawBytes.add(new Integer (hexToInt (hi, ch)));
+            _rawBytes.add(Integer.valueOf(hexToInt (hi, ch)));
             haveHi = false;
         }
         else {
@@ -160,7 +160,7 @@ public class Literal
                 throw new EOFException (MessageConstants.ERR_LITERAL_UNTERMINATED); // PDF-HUL-10
             }
             offset++;
-            _rawBytes.add (new Integer (ch));
+            _rawBytes.add (Integer.valueOf(ch));
 
             if (_state == State.LITERAL) {
                 // We are still in a state of flux, determining the encoding
@@ -309,7 +309,7 @@ public class Literal
             StringBuffer localBuffer = new StringBuffer();
             // If a high byte is left hanging, complete it with a '0'
             if (haveHi) {
-                _rawBytes.add(new Integer(hexToInt(hi, '0')));
+                _rawBytes.add(Integer.valueOf(hexToInt(hi, '0')));
             }
             if (_rawBytes.size() >= 2 && rawByte(0) == 0XFE &&
                     rawByte(1) == 0XFF) {

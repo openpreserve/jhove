@@ -193,7 +193,7 @@ public class Codestream extends MainOrTile {
     /** Add a PPM tilepart header length to the list of lengths */
     public void addPPMLength (long len)
     {
-        _ppmLengthList.add (new Long (len));
+        _ppmLengthList.add (Long.valueOf(len));
     }
 
     

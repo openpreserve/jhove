@@ -258,7 +258,7 @@ public class XmlDeclStream extends FilterInputStream {
                 }
             }
         }
-        _charRefs.add (new Integer (val));
+        _charRefs.add (Integer.valueOf(val));
     }
     
     

@@ -70,10 +70,10 @@ public class SaxelChunk extends Chunk {
             // Build the property to add to the saxel list.
             propArr[0] = new Property ("ID",
                     PropertyType.INTEGER,
-                    new Integer (id));
+                    Integer.valueOf(id));
             propArr[1] = new Property ("Size",
                     PropertyType.INTEGER,
-                    new Integer (size));
+                    Integer.valueOf(size));
             module.addSaxel (new Property ("Saxel",
                     PropertyType.PROPERTY,
                     PropertyArity.ARRAY,

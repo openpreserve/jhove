@@ -16,3 +16,6 @@ Gemfile.lock
 **/.settings
 **/.project
 **/.classpath
+
+.idea
+*.iml

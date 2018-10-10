@@ -38,7 +38,7 @@ public class ArithConditioning {
         if (raw) {
             parray[0] = new Property ("TableClass",
                     PropertyType.INTEGER,
-                    new Integer (_tableClass));
+                    Integer.valueOf(_tableClass));
         }
         else {
             String prec = "Undefined";
@@ -52,7 +52,7 @@ public class ArithConditioning {
         }
         parray[1] = new Property ("DestinationIdentifier",
                 PropertyType.INTEGER,
-                new Integer (_destIdentifier));
+                Integer.valueOf(_destIdentifier));
         return new Property ("ArithmeticConditioning",
                 PropertyType.PROPERTY,
                 PropertyArity.ARRAY,

@@ -48,11 +48,11 @@ public class SoundDataChunk extends Chunk {
         long offset = module.readUnsignedInt (_dstream);
         long blockSize = module.readUnsignedInt (_dstream);
         propArray[0] = new Property ("Offset", PropertyType.LONG,
-				     new Long (offset));
+				     Long.valueOf(offset));
         propArray[1] = new Property ("BlockSize", PropertyType.LONG,
-				     new Long (blockSize));
+				     Long.valueOf(blockSize));
         propArray[2] = new Property ("DataLength", PropertyType.LONG,
-				     new Long (bytesLeft - 8));
+				     Long.valueOf(bytesLeft - 8));
         module.addAiffProperty(new Property ("SoundData",
 					     PropertyType.PROPERTY,
 					     PropertyArity.ARRAY,

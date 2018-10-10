@@ -343,7 +343,7 @@ public class GifModule extends ModuleBase
                                  // which we can't calculate yet
         metaArray[0] = new Property ("GraphicRenderingBlocks",
                 PropertyType.INTEGER,
-                new Integer (_numGraphicBlocks));
+                Integer.valueOf(_numGraphicBlocks));
         if (_xmpProp != null) {
             metaArray[2] = _xmpProp;
         }
@@ -412,17 +412,17 @@ public class GifModule extends ModuleBase
         int width = readUnsignedShort (_dstream);
         propVec.add (new Property ("LogicalScreenWidth",
                 PropertyType.INTEGER,
-                new Integer (width)));
+                Integer.valueOf(width)));
         int height = readUnsignedShort (_dstream);
         propVec.add (new Property ("LogicalScreenHeight",
                 PropertyType.INTEGER,
-                new Integer (height)));
+                Integer.valueOf(height)));
         int packedFields = readUnsignedByte (_dstream, this);
         _globalColorTableFlag = (packedFields & 0X80) != 0;
         int bitsPerColor = ((packedFields & 0X70) >> 4) + 1;
         propVec.add (new Property ("ColorResolution",
                 PropertyType.INTEGER,
-                new Integer (bitsPerColor)));
+                Integer.valueOf(bitsPerColor)));
         boolean sortFlag = (packedFields & 0X8) != 0;
         int rawGlobalColorTableSize = packedFields & 0X7;
         if (_globalColorTableFlag) {
@@ -433,13 +433,13 @@ public class GifModule extends ModuleBase
         int bgColorIndex = readUnsignedByte (_dstream, this);
         propVec.add (new Property ("BackgroundColorIndex",
                 PropertyType.INTEGER,
-                new Integer (bgColorIndex)));
+                Integer.valueOf(bgColorIndex)));
         int pixAspectRatio = readUnsignedByte (_dstream, this);
         // The pixel aspect ratio is turned into a real aspect
         // ratio by a formula, but we just report the raw number.
         propVec.add (new Property ("PixelAspectRatio",
                 PropertyType.SHORT,
-                new Short ((short) pixAspectRatio)));
+                Short.valueOf((short) pixAspectRatio)));
         propVec.add (addByteProperty ("GlobalColorTableFlag",
                 _globalColorTableFlag ? 1 : 0,
                 GifStrings.GLOBAL_COLOR_TABLE_FLAG));
@@ -448,7 +448,7 @@ public class GifModule extends ModuleBase
                 GifStrings.COLOR_TABLE_SORT_FLAG));
         propVec.add (new Property ("GlobalColorTableSize",
                 PropertyType.SHORT,
-                new Short ((short) rawGlobalColorTableSize)));
+                Short.valueOf((short) rawGlobalColorTableSize)));
         Property prop = new Property ("LogicalScreenDescriptor",
                 PropertyType.PROPERTY,
                 PropertyArity.ARRAY,
@@ -561,11 +561,11 @@ public class GifModule extends ModuleBase
         int leftPos = readUnsignedShort (_dstream);
         propVec.add (new Property ("ImageLeftPosition",
                 PropertyType.INTEGER,
-                new Integer (leftPos)));
+                Integer.valueOf(leftPos)));
         int topPos = readUnsignedShort (_dstream);
         propVec.add (new Property ("ImageTopPosition",
                 PropertyType.INTEGER,
-                new Integer (topPos)));
+                Integer.valueOf(topPos)));
         int width = readUnsignedShort (_dstream);
         niso.setImageWidth (width);
         int height = readUnsignedShort (_dstream);
@@ -587,7 +587,7 @@ public class GifModule extends ModuleBase
         int rawLocalColorTableSize = packedFields & 0X7;
         propVec.add (new Property ("LocalColorTableSize",
                 PropertyType.SHORT,
-                new Short ((short) rawLocalColorTableSize)));
+                Short.valueOf((short) rawLocalColorTableSize)));
         propVec.add (nisoProp);
         if (localColorTableFlag != 0) {
             localColorTableSize =
@@ -668,7 +668,7 @@ public class GifModule extends ModuleBase
         }
         propVec.add (new Property ("ApplicationDataSize",
                 PropertyType.INTEGER,
-                new Integer (appDataSize)));
+                Integer.valueOf(appDataSize)));
 
         Property prop = new Property ("ApplicationExtension",
                 PropertyType.PROPERTY,
@@ -731,42 +731,42 @@ public class GifModule extends ModuleBase
         int textLeft = readUnsignedShort (_dstream);
         propVec.add (new Property ("TextGridLeftPosition",
                 PropertyType.INTEGER,
-                new Integer (textLeft)));
+                Integer.valueOf(textLeft)));
 
         int textTop = readUnsignedShort (_dstream);
         propVec.add (new Property ("TextGridTopPosition",
                 PropertyType.INTEGER,
-                new Integer (textTop)));
+                Integer.valueOf(textTop)));
 
         int textGWidth = readUnsignedShort (_dstream);
         propVec.add (new Property ("TextGridWidth",
                 PropertyType.INTEGER,
-                new Integer (textGWidth)));
+                Integer.valueOf(textGWidth)));
 
         int textGHeight = readUnsignedShort (_dstream);
         propVec.add (new Property ("TextGridHeight",
                 PropertyType.INTEGER,
-                new Integer (textGHeight)));
+                Integer.valueOf(textGHeight)));
 
         int charCWidth = readUnsignedByte (_dstream, this);
         propVec.add (new Property ("CharacterCellWidth",
                 PropertyType.SHORT,
-                new Short ((short) charCWidth)));
+                Short.valueOf((short) charCWidth)));
 
         int charCHeight = readUnsignedByte (_dstream, this);
         propVec.add (new Property ("CharacterCellHeight",
                 PropertyType.SHORT,
-                new Short ((short) charCHeight)));
+                Short.valueOf((short) charCHeight)));
 
         int textFgIdx = readUnsignedByte (_dstream, this);
         propVec.add (new Property ("TextForegroundColorIndex",
                 PropertyType.SHORT,
-                new Short ((short) textFgIdx)));
+                Short.valueOf((short) textFgIdx)));
 
         int textBgIdx = readUnsignedByte (_dstream, this);
         propVec.add (new Property ("TextBackgroundColorIndex",
                 PropertyType.SHORT,
-                new Short ((short) textBgIdx)));
+                Short.valueOf((short) textBgIdx)));
 
         // Read the text data.  The GIF recommendation states that
         // characters less than 0X20 or greater than 0XF7 (why F7?
@@ -837,11 +837,11 @@ public class GifModule extends ModuleBase
         int delayTime = readUnsignedShort(_dstream);
         propVec.add (new Property ("DelayTime",
                 PropertyType.INTEGER,
-                new Integer (delayTime)));
+                Integer.valueOf(delayTime)));
         int transIndex = readUnsignedByte (_dstream, this);
         propVec.add (new Property ("TransparentColorIndex",
                 PropertyType.SHORT,
-                new Short ((short) transIndex)));
+                Short.valueOf((short) transIndex)));
         // Skip the block terminator.
         readUnsignedByte (_dstream, this);
 
@@ -973,7 +973,7 @@ public class GifModule extends ModuleBase
                 // fall through
             }
         }
-        return new Property (name, PropertyType.BYTE, new Byte ((byte) value));
+        return new Property (name, PropertyType.BYTE, Byte.valueOf((byte) value));
     }
 
 

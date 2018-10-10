@@ -31,7 +31,7 @@ public class Tiling {
      *  Constructor.
      */
     public Tiling() {
-        tileList = new LinkedList<long[]> ();
+        tileList = new LinkedList<>();
     }
     
     /**
@@ -64,16 +64,16 @@ public class Tiling {
             Property[] tProp = new Property[4];
             tProp[0] = new Property ("VerticalScale",
                         PropertyType.LONG,
-                        new Long (tile[0]));
+                        Long.valueOf(tile[0]));
             tProp[1] = new Property ("HorizontalScale",
                         PropertyType.LONG,
-                        new Long (tile[1]));
+                        Long.valueOf(tile[1]));
             tProp[2] = new Property ("VerticalOffsret",
                         PropertyType.LONG,
-                        new Long (tile[2]));
+                        Long.valueOf(tile[2]));
             tProp[3] = new Property ("HorizontalOffset",
                         PropertyType.LONG,
-                        new Long (tile[3]));
+                        Long.valueOf(tile[3]));
             tpList.add (new Property ("Tile",
                         PropertyType.PROPERTY,
                         PropertyArity.ARRAY,

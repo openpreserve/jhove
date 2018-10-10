@@ -5,12 +5,16 @@
 
 package edu.harvard.hul.ois.jhove.module.wave;
 
-import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.AESAudioMetadata;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.module.WaveModule;
 import edu.harvard.hul.ois.jhove.module.iff.Chunk;
 import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -258,23 +262,23 @@ public class FormatChunk extends Chunk {
         StringBuilder guid = new StringBuilder(36);
 
         byte[] doubleWord = reverseBytes(Arrays.copyOf(guidBytes, 4));
-        guid.append(DatatypeConverter.printHexBinary(doubleWord));
+        guid.append(HexPrinter.printHexBinary(doubleWord));
         guid.append("-");
 
         byte[] word = reverseBytes(Arrays.copyOfRange(guidBytes, 4, 6));
-        guid.append(DatatypeConverter.printHexBinary(word));
+        guid.append(HexPrinter.printHexBinary(word));
         guid.append("-");
 
         word = reverseBytes(Arrays.copyOfRange(guidBytes, 6, 8));
-        guid.append(DatatypeConverter.printHexBinary(word));
+        guid.append(HexPrinter.printHexBinary(word));
         guid.append("-");
 
         byte[] bytes = Arrays.copyOfRange(guidBytes, 8, 10);
-        guid.append(DatatypeConverter.printHexBinary(bytes));
+        guid.append(HexPrinter.printHexBinary(bytes));
         guid.append("-");
 
         bytes = Arrays.copyOfRange(guidBytes, 10, 16);
-        guid.append(DatatypeConverter.printHexBinary(bytes));
+        guid.append(HexPrinter.printHexBinary(bytes));
 
         return guid.toString();
     }

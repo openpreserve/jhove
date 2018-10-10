@@ -5,9 +5,15 @@
 
 package edu.harvard.hul.ois.jhove.module.jpeg2000;
 
-import java.io.*;
-import java.util.*;
-import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Default Display Resolution Box.
@@ -53,22 +59,22 @@ public class DDResolutionBox extends JP2Box {
         List hresList = new ArrayList(3);
         vresList.add (new Property ("Numerator",
                 PropertyType.INTEGER,
-                new Integer (_module.readUnsignedShort (_dstrm))));
+                Integer.valueOf(_module.readUnsignedShort (_dstrm))));
         vresList.add (new Property ("Denominator",
                 PropertyType.INTEGER,
-                new Integer (_module.readUnsignedShort (_dstrm))));
+                Integer.valueOf(_module.readUnsignedShort (_dstrm))));
         hresList.add (new Property ("Numerator",
                 PropertyType.INTEGER,
-                new Integer (_module.readUnsignedShort (_dstrm))));
+                Integer.valueOf(_module.readUnsignedShort (_dstrm))));
         hresList.add (new Property ("Denominator",
                 PropertyType.INTEGER,
-                new Integer (_module.readUnsignedShort (_dstrm))));
+                Integer.valueOf(_module.readUnsignedShort (_dstrm))));
         vresList.add (new Property ("Exponent",
                 PropertyType.INTEGER,
-                new Integer (ModuleBase.readSignedByte (_dstrm, _module))));
+                Integer.valueOf(ModuleBase.readSignedByte (_dstrm, _module))));
         hresList.add (new Property ("Exponent",
                 PropertyType.INTEGER,
-                new Integer (ModuleBase.readSignedByte (_dstrm, _module))));
+                Integer.valueOf(ModuleBase.readSignedByte (_dstrm, _module))));
         // The three properties for each direction are subsumed into
         // a property.
         Property hres = new Property ("HorizResolution",

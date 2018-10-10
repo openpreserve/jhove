@@ -47,25 +47,17 @@ public class PrefsWindow extends JDialog
         getContentPane ().add (bottomPanel, BorderLayout.SOUTH);
         JButton okButton = new JButton ("OK");
         okButton.addActionListener (
-            new ActionListener () {
-                @Override
-                public void actionPerformed (ActionEvent e) 
-                {
+                e -> {
                     setPrefsFromDialog ();
-                    hide ();
+                    setVisible (false);
                 }
-            }
         );
         JButton cancelButton = new JButton ("Cancel");
         cancelButton.addActionListener (
-            new ActionListener () {
-                @Override
-                public void actionPerformed (ActionEvent e) 
-                {
-                    hide ();
+                e -> {
+                    setVisible (false);
                     restore ();
                 }
-            }
         );
         bottomPanel.add (new JLabel (""));
         bottomPanel.add (cancelButton);
@@ -84,7 +76,7 @@ public class PrefsWindow extends JDialog
     {
         saveRawOutput = rawCheckBox.isSelected ();
         saveChecksum = checksumCheckBox.isSelected ();
-        show ();
+        setVisible(true);
     }
     
     private void restore ()

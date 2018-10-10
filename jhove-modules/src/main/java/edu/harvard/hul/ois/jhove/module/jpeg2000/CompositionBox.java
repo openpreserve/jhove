@@ -111,13 +111,13 @@ public class CompositionBox extends JP2Box {
         List<Property> propList = new ArrayList<Property> (4);
         propList.add (new Property ("Width",
                 PropertyType.LONG,
-                new Long (_width)));
+                Long.valueOf(_width)));
         propList.add (new Property ("Height",
                 PropertyType.LONG,
-                new Long (_height)));
+                Long.valueOf(_height)));
         propList.add (new Property ("Loop",
                 PropertyType.INTEGER,
-                new Integer (_loop)));
+                Integer.valueOf(_loop)));
         if (!instSets.isEmpty ()) {
             propList.add (new Property ("InstructionSets",
                 PropertyType.PROPERTY,

@@ -47,10 +47,10 @@ public class TilePart {
     {
         Property indexProp = new Property ("Index",
                 PropertyType.INTEGER,
-                new Integer (_index));
+                Integer.valueOf(_index));
         Property lengthProp = new Property ("Length",
                 PropertyType.LONG,
-                new Long (_length));
+                Long.valueOf(_length));
         List propList = new ArrayList (2);
         propList.add (indexProp);
         propList.add (lengthProp);

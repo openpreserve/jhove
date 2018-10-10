@@ -97,7 +97,7 @@ public class QCCMarkerSegment extends MarkerSegment {
         List propList = new ArrayList (2);
         propList.add (new Property ("QuantizationStyle",
                     PropertyType.INTEGER,
-                    new Integer (sqcc)));
+                    Integer.valueOf(sqcc)));
         propList.add (new Property ("StepValue",
                     PropertyType.INTEGER,
                     PropertyArity.ARRAY,

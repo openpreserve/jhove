@@ -100,7 +100,7 @@ public class CartChunk extends Chunk {
                         timerTagUsage);
                 ttprop[1] = new Property ("Value",
                         PropertyType.LONG,
-                        new Long (timerTagValue));
+                        Long.valueOf(timerTagValue));
                 
                 timerTags.add (new Property ("PostTimer",
                         PropertyType.PROPERTY,
@@ -173,7 +173,7 @@ public class CartChunk extends Chunk {
             plist.add (new Property ("UserDef", PropertyType.STRING, userDef));
         }
         plist.add (new Property ("LevelReference", PropertyType.INTEGER,
-                new Integer (levelReference)));
+                Integer.valueOf(levelReference)));
         if (timerTags.size() > 0) {
             plist.add (new Property ("PostTimers", PropertyType.PROPERTY,
                 PropertyArity.LIST,

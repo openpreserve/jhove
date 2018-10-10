@@ -107,8 +107,8 @@ public class ObjectStream {
              * I don't know what the restrictions, if any, are on
              * the white space.
              */
-            Integer onum = new Integer (strm.readAsciiInt ());
-            Integer offset = new Integer (strm.readAsciiInt ());
+            Integer onum = Integer.valueOf(strm.readAsciiInt ());
+            Integer offset = Integer.valueOf(strm.readAsciiInt ());
             _index.put (onum, offset);
         }
     }

@@ -226,7 +226,7 @@ public class HtmlCharStream implements CharStream
    * @deprecated 
    * @see #getEndColumn
    */
-
+  @Deprecated
   public int getColumn() {
      return bufcolumn[bufpos];
   }
@@ -235,7 +235,7 @@ public class HtmlCharStream implements CharStream
    * @deprecated 
    * @see #getEndLine
    */
-
+  @Deprecated
   public int getLine() {
      return bufline[bufpos];
   }

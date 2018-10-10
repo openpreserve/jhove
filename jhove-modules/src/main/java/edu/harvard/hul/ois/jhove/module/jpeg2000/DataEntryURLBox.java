@@ -58,7 +58,7 @@ public class DataEntryURLBox extends JP2Box {
             if (b == 0) {
                 break;
             }
-            byteList.add (new Byte ((byte) b));
+            byteList.add (Byte.valueOf((byte) b));
         }
         // Turn the Byte List into a byte array.  (Is there a better
         // way to do this?)

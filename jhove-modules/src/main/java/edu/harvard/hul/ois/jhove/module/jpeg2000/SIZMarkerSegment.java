@@ -87,34 +87,34 @@ public class SIZMarkerSegment extends MarkerSegment {
         List plist = new ArrayList (13);
         plist.add (new Property ("Capabilities",
                 PropertyType.INTEGER,
-                new Integer (rsiz)));
+                Integer.valueOf(rsiz)));
         plist.add (new Property ("XSize",
                 PropertyType.INTEGER,
-                new Integer (xsiz)));
+                Integer.valueOf(xsiz)));
         plist.add (new Property ("YSize",
                 PropertyType.INTEGER,
-                new Integer (ysiz)));
+                Integer.valueOf(ysiz)));
         plist.add (new Property ("XOSize",
                 PropertyType.INTEGER,
-                new Integer (xosiz)));
+                Integer.valueOf(xosiz)));
         plist.add (new Property ("YOSize",
                 PropertyType.INTEGER,
-                new Integer (yosiz)));
+                Integer.valueOf(yosiz)));
         plist.add (new Property ("XTSize",
                 PropertyType.INTEGER,
-                new Integer (xtsiz)));
+                Integer.valueOf(xtsiz)));
         plist.add (new Property ("YTSize",
                 PropertyType.INTEGER,
-                new Integer (ytsiz)));
+                Integer.valueOf(ytsiz)));
         plist.add (new Property ("XTOSize",
                 PropertyType.INTEGER,
-                new Integer (xtosiz)));
+                Integer.valueOf(xtosiz)));
         plist.add (new Property ("YTOSize",
                 PropertyType.INTEGER,
-                new Integer (ytosiz)));
+                Integer.valueOf(ytosiz)));
         plist.add (new Property ("CSize",
                 PropertyType.INTEGER,
-                new Integer (csiz)));
+                Integer.valueOf(csiz)));
         plist.add (new Property ("SSize",
                 PropertyType.INTEGER,
                 PropertyArity.ARRAY,

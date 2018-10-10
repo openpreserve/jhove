@@ -38,7 +38,7 @@ public class QuantizationTable {
         if (raw) {
             parray[0] = new Property ("Precision",
                     PropertyType.INTEGER,
-                    new Integer (_precision));
+                    Integer.valueOf(_precision));
         }
         else {
             String prec = "Undefined";
@@ -52,7 +52,7 @@ public class QuantizationTable {
         }
         parray[1] = new Property ("DestinationIdentifier",
                 PropertyType.INTEGER,
-                new Integer (_destIdentifier));
+                Integer.valueOf(_destIdentifier));
         return new Property ("QuantizationTable",
                 PropertyType.PROPERTY,
                 PropertyArity.ARRAY,

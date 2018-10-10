@@ -44,10 +44,10 @@ public class CodestreamRegBox extends JP2Box {
         Property[] propArray = new Property[3];
         propArray[0] = new Property ("HorizontalGridSize",
                     PropertyType.INTEGER,
-                    new Integer (_module.readUnsignedShort (_dstrm)));
+                    Integer.valueOf(_module.readUnsignedShort (_dstrm)));
         propArray[1] = new Property ("VerticalGridSize",
                     PropertyType.INTEGER,
-                    new Integer (_module.readUnsignedShort (_dstrm)));
+                    Integer.valueOf(_module.readUnsignedShort (_dstrm)));
         int bytesLeft = (int) _boxHeader.getDataLength() - 4;
         
         // Each codestream entry is 6 bytes long (a short and 4 bytes)
@@ -58,19 +58,19 @@ public class CodestreamRegBox extends JP2Box {
             Property[] csProp = new Property[5];
             csProp[0] = new Property ("CodestreamNumber",
                     PropertyType.INTEGER,
-                    new Integer (_module.readUnsignedShort (_dstrm)));
+                    Integer.valueOf(_module.readUnsignedShort (_dstrm)));
             csProp[1] = new Property ("HorizontalResolution",
                     PropertyType.INTEGER,
-                    new Integer (ModuleBase.readUnsignedByte (_dstrm, _module)));
+                    Integer.valueOf(ModuleBase.readUnsignedByte (_dstrm, _module)));
             csProp[2] = new Property ("VerticalResolution",
                     PropertyType.INTEGER,
-                    new Integer (ModuleBase.readUnsignedByte (_dstrm, _module)));
+                    Integer.valueOf(ModuleBase.readUnsignedByte (_dstrm, _module)));
             csProp[3] = new Property ("HorizontalOffset",
                     PropertyType.INTEGER,
-                    new Integer (ModuleBase.readUnsignedByte (_dstrm, _module)));
+                    Integer.valueOf(ModuleBase.readUnsignedByte (_dstrm, _module)));
             csProp[4] = new Property ("VerticalOffset",
                     PropertyType.INTEGER,
-                    new Integer (ModuleBase.readUnsignedByte (_dstrm, _module)));
+                    Integer.valueOf(ModuleBase.readUnsignedByte (_dstrm, _module)));
 
             streamsProp[i] = new Property ("Codestreams",
                     PropertyType.PROPERTY,

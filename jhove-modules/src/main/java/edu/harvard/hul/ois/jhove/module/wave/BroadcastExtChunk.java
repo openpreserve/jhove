@@ -5,12 +5,17 @@
 
 package edu.harvard.hul.ois.jhove.module.wave;
 
-import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.AESAudioMetadata;
+import edu.harvard.hul.ois.jhove.InfoMessage;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.module.WaveModule;
 import edu.harvard.hul.ois.jhove.module.iff.Chunk;
 import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -213,10 +218,10 @@ public class BroadcastExtChunk extends Chunk {
         }
 
         if (extendedUmidExists) {
-            formattedUmid = DatatypeConverter.printHexBinary(umid);
+            formattedUmid = HexPrinter.printHexBinary(umid);
         }
         else if (basicUmidExists) {
-            formattedUmid = DatatypeConverter.printHexBinary(basicUmid);
+            formattedUmid = HexPrinter.printHexBinary(basicUmid);
         }
 
         return formattedUmid;

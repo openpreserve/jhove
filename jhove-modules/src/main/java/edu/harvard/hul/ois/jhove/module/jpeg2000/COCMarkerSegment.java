@@ -6,9 +6,15 @@
 
 package edu.harvard.hul.ois.jhove.module.jpeg2000;
 
-import java.io.*;
-import java.util.*;
-import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 //import edu.harvard.hul.ois.jhove.module.Jpeg2000Module;
 
 /**
@@ -91,22 +97,22 @@ public class COCMarkerSegment extends MarkerSegment {
         List<Property> propList = new ArrayList<Property> (10);
         propList.add (new Property ("CodingStyle",
                     PropertyType.INTEGER,
-                    new Integer (codeStyle)));
+                    Integer.valueOf(codeStyle)));
         propList.add (new Property ("NumberDecompositionLevels",
                     PropertyType.INTEGER,
-                    new Integer (nDecomp)));
+                    Integer.valueOf(nDecomp)));
         propList.add (new Property ("CodeBlockWidth",
                     PropertyType.INTEGER,
-                    new Integer (codeBlockWid)));
+                    Integer.valueOf(codeBlockWid)));
         propList.add (new Property ("CodeBlockHeight",
                     PropertyType.INTEGER,
-                    new Integer (codeBlockHt)));
+                    Integer.valueOf(codeBlockHt)));
         propList.add (new Property ("CodeBlockStyle",
                     PropertyType.INTEGER,
-                    new Integer (codeBlockStyle)));
+                    Integer.valueOf(codeBlockStyle)));
         propList.add (new Property ("Transformation",
                     PropertyType.INTEGER,
-                    new Integer (xform)));
+                    Integer.valueOf(xform)));
         propList.add (new Property ("PrecinctSize",
                     PropertyType.INTEGER,
                     PropertyArity.ARRAY,

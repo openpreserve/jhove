@@ -49,7 +49,7 @@ public abstract class SimpleTextChunk extends Chunk {
         Property[] propArr = new Property[2];
         propArr[0] = new Property ("CuePointID",
                 PropertyType.LONG,
-                new Long (cueID));
+                Long.valueOf(cueID));
         propArr[1] = new Property ("Text",
                 PropertyType.STRING,
                 txt);

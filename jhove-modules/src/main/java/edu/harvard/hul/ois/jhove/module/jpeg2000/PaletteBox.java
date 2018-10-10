@@ -60,13 +60,13 @@ public class PaletteBox extends JP2Box {
         }
         Property[] subProp = new Property[4];
         subProp[0] = new Property ("Entries", PropertyType.INTEGER,
-                new Integer (ne));
+                Integer.valueOf(ne));
         
         int nc = ModuleBase.readUnsignedByte (_dstrm, _module);
         // 3 bytes have been read
         int bytesRead = 3;
         subProp[1] = new Property ("Components", PropertyType.INTEGER,
-                new Integer (nc));
+                Integer.valueOf(nc));
 
         // Each component can, in principle, have a different bit depth,
         // and each can separately be signed or unsigned.

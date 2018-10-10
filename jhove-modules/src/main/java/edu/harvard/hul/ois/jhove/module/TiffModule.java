@@ -467,7 +467,7 @@ public class TiffModule extends ModuleBase {
             Property ifdsProp = new Property("IFDs", PropertyType.PROPERTY,
                     PropertyArity.LIST, ifdsList);
             ifdsList.add(new Property("Number", PropertyType.INTEGER,
-                    new Integer(ifds.size())));
+                    Integer.valueOf(ifds.size())));
 
             /* Build the IFD property list, for each of the IFDs. */
             ListIterator<IFD> iter = ifds.listIterator();

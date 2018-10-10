@@ -53,7 +53,7 @@ public class ChannelDefBox extends JP2Box {
             int cidx = _module.readUnsignedShort (_dstrm);
             cprop[0] = new Property ("ChannelIndex",
                         PropertyType.INTEGER,
-                        new Integer (cidx));
+                        Integer.valueOf(cidx));
             int typ = _module.readUnsignedShort (_dstrm);
             cprop[1] = _module.addIntegerProperty ("ChannelType", typ,
                     JP2Strings.ctypStr,
@@ -66,7 +66,7 @@ public class ChannelDefBox extends JP2Box {
             // an integer.
             cprop[2] = new Property ("ChannelAssociation",
                         PropertyType.INTEGER,
-                        new Integer (assoc));
+                        Integer.valueOf(assoc));
             chans[i] = new Property ("Channel",
                         PropertyType.PROPERTY,
                         PropertyArity.ARRAY,

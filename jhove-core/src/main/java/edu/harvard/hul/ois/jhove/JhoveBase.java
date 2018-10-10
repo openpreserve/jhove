@@ -311,7 +311,7 @@ public class JhoveBase {
             List<String> param = params.get(i);
             try {
                 Class<?> cl = Class.forName(modInfo.clas);
-                Module module = (Module) cl.newInstance();
+                Module module = (Module) cl.getDeclaredConstructor().newInstance();
                 module.init(modInfo.init);
                 module.setDefaultParams(param);
 
@@ -331,7 +331,7 @@ public class JhoveBase {
             List<String> param = params.get(i);
             try {
                 Class<?> cl = Class.forName(tuple[0]);
-                OutputHandler handler = (OutputHandler) cl.newInstance();
+                OutputHandler handler = (OutputHandler) cl.getDeclaredConstructor().newInstance();
                 handler.setDefaultParams(param);
 
                 _handlerList.add(handler);

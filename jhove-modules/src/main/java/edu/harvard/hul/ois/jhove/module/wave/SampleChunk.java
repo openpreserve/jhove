@@ -5,12 +5,17 @@
 
 package edu.harvard.hul.ois.jhove.module.wave;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.module.WaveModule;
 import edu.harvard.hul.ois.jhove.module.iff.Chunk;
 import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
+
+import java.io.DataInputStream;
+import java.io.IOException;
 
 /**
  * Implementation of the WAVE Sample (or Sampler) Chunk, which
@@ -72,13 +77,13 @@ public class SampleChunk extends Chunk {
                      // Or should it be unsigned??
         Property[] smpteArr = new Property[4];
         smpteArr[0] = new Property ("Hour", PropertyType.INTEGER,
-                new Integer (sampleOffsetHour));
+                Integer.valueOf(sampleOffsetHour));
         smpteArr[1] = new Property ("Minute", PropertyType.INTEGER,
-                new Integer (sampleOffsetMinute));
+                Integer.valueOf(sampleOffsetMinute));
         smpteArr[2] = new Property ("Second", PropertyType.INTEGER,
-                new Integer (sampleOffsetSecond));
+                Integer.valueOf(sampleOffsetSecond));
         smpteArr[3] = new Property ("Frames", PropertyType.INTEGER,
-                new Integer (sampleOffsetFrames));
+                Integer.valueOf(sampleOffsetFrames));
 
         int nLoops = (int) module.readUnsignedInt (_dstream);
         long extraBytes = module.readUnsignedInt (_dstream);  // no. of extra bytes after loops
@@ -96,17 +101,17 @@ public class SampleChunk extends Chunk {
             // Build the loop property.
             Property[] lp = new Property[6];
             lp[0] = new Property ("CuePointID", PropertyType.LONG,
-                    new Long (cuePoint));
+                    Long.valueOf(cuePoint));
             lp[1] = new Property ("Type", PropertyType.INTEGER,
-                    new Integer (type));
+                    Integer.valueOf(type));
             lp[2] = new Property ("Start", PropertyType.INTEGER,
-                    new Integer (start));
+                    Integer.valueOf(start));
             lp[3] = new Property ("End", PropertyType.INTEGER,
-                    new Integer (end));
+                    Integer.valueOf(end));
             lp[4] = new Property ("Fraction", PropertyType.LONG,
-                    new Long (fraction));
+                    Long.valueOf(fraction));
             lp[5] = new Property ("PlayCount", PropertyType.LONG,
-                    new Long (playCount));
+                    Long.valueOf(playCount));
             loopProps[i] = new Property ("Loop",
                     PropertyType.PROPERTY,
                     PropertyArity.ARRAY,
@@ -115,17 +120,17 @@ public class SampleChunk extends Chunk {
         
         Property[] propArr = new Property[9];
         propArr[0] = new Property ("Manufacturer", PropertyType.LONG,
-                    new Long (manufacturer));
+                    Long.valueOf(manufacturer));
         propArr[1] = new Property ("Product", PropertyType.LONG,
-                    new Long (product));
+                    Long.valueOf(product));
         propArr[2] = new Property ("SamplePeriod", PropertyType.LONG,
-                    new Long (samplePeriod));
+                    Long.valueOf(samplePeriod));
         propArr[3] = new Property ("UnityNote", PropertyType.LONG,
-                    new Long (unityNote));
+                    Long.valueOf(unityNote));
         propArr[4] = new Property ("PitchFraction", PropertyType.LONG,
-                    new Long (pitchFraction));
+                    Long.valueOf(pitchFraction));
         propArr[5] = new Property ("SMPTEFormat", PropertyType.LONG,
-                    new Long (smpteFormat));
+                    Long.valueOf(smpteFormat));
         propArr[6] = new Property ("SMPTEOffset", PropertyType.PROPERTY,
                     PropertyArity.ARRAY,
                     smpteArr);
@@ -133,7 +138,7 @@ public class SampleChunk extends Chunk {
                     PropertyArity.ARRAY,
                     loopProps);
         propArr[8] = new Property ("ExtraDataBytes", PropertyType.LONG,
-                    new Long (extraBytes));
+                    Long.valueOf(extraBytes));
         module.addSample (new Property ("Sample",
                     PropertyType.PROPERTY,
                     PropertyArity.ARRAY,

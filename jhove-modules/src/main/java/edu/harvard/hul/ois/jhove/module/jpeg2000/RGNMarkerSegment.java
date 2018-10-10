@@ -59,10 +59,10 @@ public class RGNMarkerSegment extends MarkerSegment {
         List propList = new ArrayList (2);
         propList.add (new Property ("ROIStyle", 
                     PropertyType.INTEGER,
-                    new Integer (srgn)));
+                    Integer.valueOf(srgn)));
         propList.add (new Property ("ROIParameter",
                     PropertyType.INTEGER,
-                    new Integer (sprgn)));
+                    Integer.valueOf(sprgn)));
         cs.setCompProperty (compIdx,
                     new Property ("RegionOfInterest",
                             PropertyType.PROPERTY,

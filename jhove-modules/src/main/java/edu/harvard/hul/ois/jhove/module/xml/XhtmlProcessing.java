@@ -196,12 +196,12 @@ public final class XhtmlProcessing {
         if (height >= 0) {
             plist.add (new Property ("Height",
                     PropertyType.INTEGER,
-                    new Integer (height)));
+                    Integer.valueOf(height)));
         }
         if (width >= 0) {
             plist.add (new Property ("Width",
                     PropertyType.INTEGER,
-                    new Integer (width)));
+                    Integer.valueOf(width)));
         }
         if (!plist.isEmpty ()) {
             mdata.addImage(new Property ("Image",

@@ -78,7 +78,7 @@ public class TLMMarkerSegment extends MarkerSegment {
                 }
                 tpList.add (new Property ("Index",
                             PropertyType.INTEGER,
-                            new Integer (ttlm)));
+                            Integer.valueOf(ttlm)));
             }
             int length;
             if (sp == 1) {
@@ -89,7 +89,7 @@ public class TLMMarkerSegment extends MarkerSegment {
             }
             tpList.add (new Property ("Length",
                             PropertyType.INTEGER,
-                            new Integer (length)));
+                            Integer.valueOf(length)));
             _cs.addTileLength (new Property ("TilePartLength",
                             PropertyType.PROPERTY,
                             PropertyArity.LIST,

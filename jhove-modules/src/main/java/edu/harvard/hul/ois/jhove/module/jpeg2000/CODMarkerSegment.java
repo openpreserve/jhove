@@ -5,9 +5,14 @@
 
 package edu.harvard.hul.ois.jhove.module.jpeg2000;
 
-import java.io.*;
-import java.util.*;
-import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 //import edu.harvard.hul.ois.jhove.module.Jpeg2000Module;
 
 /**
@@ -24,9 +29,6 @@ public class CODMarkerSegment extends MarkerSegment {
     public CODMarkerSegment ()
     {
     }
-
-
-
 
     /**
      * Processes the marker segment.  The DataInputStream
@@ -75,31 +77,31 @@ public class CODMarkerSegment extends MarkerSegment {
         List propList = new ArrayList (12);
         propList.add (new Property ("CodingStyle",
                     PropertyType.INTEGER,
-                    new Integer (codeStyle)));
+                    Integer.valueOf(codeStyle)));
         propList.add (new Property ("ProgressionOrder",
                     PropertyType.INTEGER,
-                    new Integer (progOrder)));
+                    Integer.valueOf(progOrder)));
         propList.add (new Property ("NumberOfLayers",
                     PropertyType.INTEGER,
-                    new Integer (nLayers)));
+                    Integer.valueOf(nLayers)));
         propList.add (new Property ("MultipleComponentTransformation",
                     PropertyType.INTEGER,
-                    new Integer (mcTrans)));
+                    Integer.valueOf(mcTrans)));
         propList.add (new Property ("NumberDecompositionLevels",
                     PropertyType.INTEGER,
-                    new Integer (nDecomp)));
+                    Integer.valueOf(nDecomp)));
         propList.add (new Property ("CodeBlockWidth",
                     PropertyType.INTEGER,
-                    new Integer (codeBlockWid)));
+                    Integer.valueOf(codeBlockWid)));
         propList.add (new Property ("CodeBlockHeight",
                     PropertyType.INTEGER,
-                    new Integer (codeBlockHt)));
+                    Integer.valueOf(codeBlockHt)));
         propList.add (new Property ("CodeBlockStyle",
                     PropertyType.INTEGER,
-                    new Integer (codeBlockStyle)));
+                    Integer.valueOf(codeBlockStyle)));
         propList.add (new Property ("Transformation",
                     PropertyType.INTEGER,
-                    new Integer (xform)));
+                    Integer.valueOf(xform)));
         if (precSize != null) {
             propList.add (new Property ("PrecinctSize",
                     PropertyType.INTEGER,

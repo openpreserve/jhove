@@ -52,7 +52,7 @@ public class DataChunk extends Chunk {
         WaveModule module = (WaveModule) _module;
         Property lenProp = new Property ("DataLength",
                 PropertyType.LONG,
-                new Long (bytesLeft));
+                Long.valueOf(bytesLeft));
         // The behavior will be different if we are reading this under
         // a 'wavl' chunk.
         

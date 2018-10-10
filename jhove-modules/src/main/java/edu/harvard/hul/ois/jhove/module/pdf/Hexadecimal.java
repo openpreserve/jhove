@@ -13,7 +13,8 @@ package edu.harvard.hul.ois.jhove.module.pdf;
  *
  *  @deprecated
  */
- public class Hexadecimal
+@Deprecated
+public class Hexadecimal
     extends Literal
 {
     /** Creates an instance of a hexadecimal string literal */

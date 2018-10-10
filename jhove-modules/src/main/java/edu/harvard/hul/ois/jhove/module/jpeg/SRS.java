@@ -6,7 +6,9 @@
 
 package edu.harvard.hul.ois.jhove.module.jpeg;
 
-import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
 
 /**
  * Encapsulation of an SRS (selectively refined scan) entry for a JPEG image.
@@ -43,16 +45,16 @@ public class SRS {
         Property[] parray = new Property[4];
         parray[0] = new Property ("VerticalOffset",
                 PropertyType.INTEGER,
-                new Integer (_vertOffset));
+                Integer.valueOf(_vertOffset));
         parray[1] = new Property ("HorizontalOffset",
                 PropertyType.INTEGER,
-                new Integer (_horOffset));
+                Integer.valueOf(_horOffset));
         parray[2] = new Property ("VerticalSize",
                 PropertyType.INTEGER,
-                new Integer (_vertSize));
+                Integer.valueOf(_vertSize));
         parray[3] = new Property ("HorizontalSize",
                 PropertyType.INTEGER,
-                new Integer (_horSize));
+                Integer.valueOf(_horSize));
         return new Property ("SelectivelyRefinedScan",
                 PropertyType.PROPERTY,
                 PropertyArity.ARRAY,
