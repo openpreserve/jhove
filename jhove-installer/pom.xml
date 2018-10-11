@@ -110,6 +110,31 @@
         </executions>
       </plugin>
 
+      <!-- force maven to ignore the dependency that java11 can't retrieve from the maven repo -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.0.0-M2</version>
+        <executions>
+          <execution>
+            <id>enforce-exclusions</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <bannedDependencies>
+                  <excludes>
+                    <exclude>javax.media:jai-core</exclude>
+                  </excludes>
+                </bannedDependencies>
+              </rules>
+              <fail>true</fail>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <!--
       We need to tell the izpack-maven-plugin what to use as the base
       directory (this is our staging area), and also tell it the install
