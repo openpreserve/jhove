@@ -110,31 +110,6 @@
         </executions>
       </plugin>
 
-      <!-- force maven to ignore the dependency that java11 can't retrieve from the maven repo -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0-M2</version>
-        <executions>
-          <execution>
-            <id>enforce-exclusions</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <bannedDependencies>
-                  <excludes>
-                    <exclude>javax.media:jai-core</exclude>
-                  </excludes>
-                </bannedDependencies>
-              </rules>
-              <fail>true</fail>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
       <!--
       We need to tell the izpack-maven-plugin what to use as the base
       directory (this is our staging area), and also tell it the install
@@ -171,18 +146,6 @@
             <groupId>org.codehaus.izpack</groupId>
             <artifactId>izpack-panel</artifactId>
             <version>${izpack.version}</version>
-            <exclusions>
-              <!-- this is excluded in the izpack pom file (but the artifactId is jai_core)
-                   maven tries to download the dependency but the server replies with a response
-                   that java11 does not like: "extension (10) should not be presented in server_hello"
-                   see https://bugs.openjdk.java.net/browse/JDK-8210005
-                   this will be fixed in the Jan2019 release of java11
-               -->
-              <exclusion>
-                <groupId>javax.media</groupId>
-                <artifactId>jai-core</artifactId>
-              </exclusion>
-            </exclusions>
           </dependency>
         </dependencies>
       </plugin>
