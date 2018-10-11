@@ -124,7 +124,7 @@ showHelp() {
 checkParams "$@";
 candidate="${paramOutputLoc:?}/${paramKey}"
 tempInstallLoc="/tmp/to-test";
-sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.9\/org\.jacoco.agent-0\.7\.9-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
+sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.8.2\/org\.jacoco.agent-0\.8\.2-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
 bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${paramCorpusLoc}" -o "${candidate}"
 
 if [ "$paramIgnoreRelease" =  true ] ;
