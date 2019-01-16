@@ -33,11 +33,8 @@ coverage:
 before_install:
   - sudo apt-get install -y realpath
   - sudo apt-get install jq
-  - curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest > codacy_rep_dets.txt
-  - cat codacy_rep_dets.txt
-  - export CODACY_REP_URL=$(cat codacy_rep_dets.txt | jq -r .assets[0].browser_download_url)
-  - echo $CODACY_REP_URL
-  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $CODACY_REP_URL
+  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl -u carlwilson:$GITHUB_API_TOKEN https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest
+    | jq -r .assets[0].browser_download_url)
 
 script:
   - mvn clean install -DjacocoAgg
