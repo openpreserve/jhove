@@ -76,13 +76,13 @@ public class StructureElement
      */
     public void buildSubtree () throws PdfException
     {
-        _logger.info(MessageConstants.INF_SUBTREE_BUILDING);
+        _logger.info(MessageConstants.LOG_SUBTREE_BUILDING);
         PdfObject k = null;
         try {
             k = _module.resolveIndirectObject (_dict.get ("K"));
         }
         catch (IOException e) {
-            throw new PdfInvalidException(MessageConstants.ERR_DOC_STRUCT_TREE_DATA_INVALID);
+            throw new PdfInvalidException(MessageConstants.ERR_DOC_STRUCT_TREE_DATA_INVALID); // PDF-HUL-58
         }
         children = null;
         
@@ -97,10 +97,10 @@ public class StructureElement
                 // - A PDF object reference dictionary
             // - A structure element reference dictionary
             // The only one we check seriously is a structure element.
-            _logger.info (MessageConstants.INF_K_ELEM_IS_DICT);
+            _logger.info (MessageConstants.LOG_K_ELEM_IS_DICT);
             PdfDictionary kdict = (PdfDictionary) k;
             if (isStructElem (kdict)) {
-                PdfObject kidsObject = (PdfObject)kdict.get("K");
+                PdfObject kidsObject = kdict.get("K");
                 if(kidsObject instanceof PdfSimpleObject) {
                     PdfSimpleObject kids = (PdfSimpleObject)kidsObject;
                     Token tok = kids.getToken();
@@ -116,20 +116,20 @@ public class StructureElement
                     new StructureElement (kdict, _tree);
                 se.buildSubtree ();
                 se.checkAttributes ();
-                children = new ArrayList<StructureElement> (1);
+                children = new ArrayList<> (1);
                 children.add (se);
             }
             else if (!isMarkedContent (kdict) && !isObjectRef (kdict)) {
                 throw new PdfInvalidException 
-                       (MessageConstants.ERR_STRUCT_TREE_ELEMENT_UNKNOWN);
+                       (MessageConstants.ERR_STRUCT_TREE_ELEMENT_UNKNOWN); // PDF-HUL-49
             }
         }
         else if (k instanceof PdfArray) {
-            _logger.info (MessageConstants.INF_K_ELEM_IS_ARRY);
+            _logger.info (MessageConstants.LOG_K_ELEM_IS_ARRY);
             Vector<PdfObject> kvec = ((PdfArray) k).getContent ();
-            children = new LinkedList<StructureElement> ();
+            children = new LinkedList<> ();
             for (int i = 0; i < kvec.size (); i++) {
-                PdfObject kelem = (PdfObject) kvec.elementAt (i);
+                PdfObject kelem = kvec.elementAt (i);
                 try {
                     kelem = _module.resolveIndirectObject (kelem);
                 }
@@ -137,19 +137,19 @@ public class StructureElement
                 if (kelem instanceof PdfDictionary) {
                     PdfDictionary kdict = (PdfDictionary) kelem;
                     if (isStructElem (kdict)) {
-                                _logger.info (MessageConstants.INF_SUBTREE_BUILDING);
+                                _logger.info (MessageConstants.LOG_SUBTREE_BUILDING);
 
                                 //check for non-zero before creating a new StructureElement
                                 //cf. Govdocs file http://digitalcorpora.org/corp/nps/files/govdocs1/000/000153.pdf
                                 //object 717 that has "/K 0" enters infinite(?) loop without this check
-                                PdfObject kidsObject = (PdfObject)kdict.get("K");
+                                PdfObject kidsObject = kdict.get("K");
                                 if(kidsObject instanceof PdfSimpleObject) {
                                     PdfSimpleObject kids = (PdfSimpleObject)kidsObject;
                                     Token tok = kids.getToken();
                                     if(tok instanceof Numeric) {
                                         //if the kids value is zero then there are no child objects; exit method
                                         if(((Numeric)tok).getValue()==0) {
-                                            _logger.info(MessageConstants.INF_NO_CHILD_OBJS);
+                                            _logger.info(MessageConstants.LOG_NO_CHILD_OBJS);
                                             children = null;
                                             return;
                                         }
@@ -167,7 +167,7 @@ public class StructureElement
             // children to null rather than have to check for an
             // empty vector.
             if (children.isEmpty ()) {
-                _logger.info (MessageConstants.INF_NO_CHILD_STRUCT_ELEM);
+                _logger.info (MessageConstants.LOG_NO_CHILD_STRUCT_ELEM);
                 children = null;
             }
         }
@@ -205,7 +205,7 @@ public class StructureElement
             attr = _module.resolveIndirectObject (_dict.get ("A"));
         }
         catch (Exception e) {
-            throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_REF_INVALID);
+            throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_REF_INVALID); // PDF-HUL-50
         }
         if (attr == null) {
             // no attributes is fine
@@ -223,8 +223,8 @@ public class StructureElement
                             (attrVec.elementAt (i));
                 }
                 catch (IOException e) {
-                    _logger.info (MessageConstants.INF_ATT_IO_EXCEPT);
-                    throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_INVALID);
+                    _logger.log(Level.INFO, MessageConstants.ERR_STRUCT_ATT_INVALID, e);
+                    throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_INVALID); // PDF-HUL-51
                 }
                 if (attrElem instanceof PdfDictionary) {
                     checkAttribute ((PdfDictionary) attrElem);
@@ -235,12 +235,12 @@ public class StructureElement
                             ((PdfSimpleObject)attrElem).getToken ();
                     }
                     catch (Exception e) {
-                        _logger.info(MessageConstants.INF_REVISION_NUM_RETRIEVAL_EXCEP + e.getClass().getName());
-                        throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_INVALID);
+                        _logger.log(Level.INFO, MessageConstants.LOG_REVISION_NUM_RETRIEVAL_EXCEP, e);
+                        throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_INVALID); // PDF-HUL-52
                     }
                 }
                 else {
-                    throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_INVALID);
+                    throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_INVALID); // PDF-HUL-53
                 }
             }
         }
@@ -248,10 +248,10 @@ public class StructureElement
             checkAttribute ((PdfDictionary) attr);
         }
         else {
-            throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_TYPE_ILLEGAL);
+            throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_TYPE_ILLEGAL); // PDF-HUL-54
         }
         if (_structIsInline && _attrIsBlock) {
-            throw new PdfInvalidException (MessageConstants.ERR_INLINE_STRUCT_ELE_CONTAINS_BLOCK_ATTS);
+            throw new PdfInvalidException (MessageConstants.ERR_INLINE_STRUCT_ELE_CONTAINS_BLOCK_ATTS); // PDF-HUL-55
         }
     }
 
@@ -283,7 +283,7 @@ public class StructureElement
             }
         }
         catch (Exception e) {
-            throw new PdfInvalidException (MessageConstants.ERR_DOC_STRUCT_ATT_INVALID);
+            throw new PdfInvalidException (MessageConstants.ERR_DOC_STRUCT_ATT_INVALID); // PDF-HUL-56
         }
     }
 
@@ -295,7 +295,6 @@ public class StructureElement
        if present, has a value of "StructElem".
     */
     private boolean isStructElem (PdfDictionary elem)
-                throws PdfException
     {
         try {
             PdfObject typ = elem.get ("Type");
@@ -321,12 +320,13 @@ public class StructureElement
             // It appears that there really isn't a requirement
             // to have structure types belong to the standard types.
             // Conditionalize this code out, pending more info.
-            boolean checkStandardTypes = false;
             String st = ((Name) tok).getValue ();
             st = _tree.dereferenceStructType (st);
-            if (!StdStructTypes.includes (st)) {
-                if (checkStandardTypes) {
-                    throw new PdfInvalidException (MessageConstants.ERR_STRUCT_TYPE_NAME_NON_STANDARD);
+            // TODO: This check is indeed wrong and should be removed altogether
+            boolean checkStandardTypes = false;
+            if (checkStandardTypes) {
+                if (!StdStructTypes.includes (st)) {
+                    throw new PdfInvalidException (MessageConstants.DEP_STRUCT_TYPE_NAME_NON_STANDARD);
                 }
             }
             else {
@@ -363,7 +363,7 @@ public class StructureElement
 
     /* See if an attribute dictionary has attributes which
        are permitted only at block level. */
-    private boolean attrIsBlockLevel (PdfDictionary attrDict)
+    private static boolean attrIsBlockLevel (PdfDictionary attrDict)
     {
         for (int i = 0; i < blockLevelAttrs.length; i++) {
             if (attrDict.get (blockLevelAttrs[i]) != null) {

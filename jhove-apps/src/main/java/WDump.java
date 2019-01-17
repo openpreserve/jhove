@@ -53,7 +53,6 @@ public class WDump extends Dump {
             FileInputStream file = new FileInputStream (args[0]);
             BufferedInputStream buffer = new BufferedInputStream (file);
             DataInputStream stream = new DataInputStream (buffer);
-            ADump dump = new ADump ();   // Just to access contained classes
             long os = 0;
             for (int i=0; i<4; i++) {
                 int ch;
@@ -84,13 +83,13 @@ public class WDump extends Dump {
                     System.out.print (leading (os, 8) + os + ": " + ckID +
 				      " " + ckSize);
 		    long alreadyRead = 0;
-		    if (ckID.equals ("fact")) {
+		    if ("fact".equals (ckID)) {
 			long sampleLength =
 			    ModuleBase.readUnsignedInt (stream, ENDIAN);
 			System.out.print (": " + sampleLength);
 			alreadyRead = 4;
 		    }
-		    else if (ckID.equals ("fmt ")) {
+		    else if ("fmt ".equals (ckID)) {
 			int formatTag = ModuleBase.readUnsignedShort (stream,
 								      ENDIAN);
 			int channels = ModuleBase.readUnsignedShort (stream,
@@ -147,7 +146,7 @@ public class WDump extends Dump {
 		    }
 		    System.out.println ();
 
-                    if (ckID.equals ("list") || ckID.equals ("LIST")) {
+                    if ("list".equals (ckID) || "LIST".equals (ckID)) {
                         readNestedChunks (ckID, stream, ckSize, os + 8);
                     }
                     else {

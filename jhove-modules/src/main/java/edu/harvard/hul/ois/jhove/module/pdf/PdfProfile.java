@@ -133,7 +133,7 @@ public abstract class PdfProfile
             }
             else {
                 // If it's not a name, it must be an array
-                Vector filterVec = ((PdfArray) filter).getContent ();
+                Vector<PdfObject> filterVec = ((PdfArray) filter).getContent ();
                 for (int i = 0; i < filterVec.size (); i++) {
                     PdfSimpleObject filt = 
                         (PdfSimpleObject) filterVec.elementAt (i);
@@ -164,10 +164,10 @@ public abstract class PdfProfile
             return true;   // nothing to fail
         }
         try {
-            Iterator iter = xos.iterator ();
+            Iterator<PdfObject> iter = xos.iterator ();
             while (iter.hasNext ()) {
                 PdfObject obj = _module.resolveIndirectObject
-            ((PdfObject) iter.next ());
+            (iter.next ());
         if (obj instanceof PdfStream) {
             obj = ((PdfStream) obj).getDict ();
         }

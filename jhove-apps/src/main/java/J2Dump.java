@@ -65,7 +65,6 @@ public class J2Dump extends Dump {
             DataInputStream stream = new DataInputStream (buffer);
             J2Dump dump = new J2Dump ();   // Just to access contained classes
             long os = 0;
-            boolean bigEndian = true;
             int i;
             for (i = 0; i < 12; i++) {
                 int ch;
@@ -78,7 +77,7 @@ public class J2Dump extends Dump {
             os += 12;
             
             boolean endOfFile = false;
-            Stack boxStack = new Stack ();
+            Stack<Box> boxStack = new Stack<>();
             while (!endOfFile) {
                 //If there are boxes on the stack, see if there's space
                 //left in the top one.
@@ -88,7 +87,7 @@ public class J2Dump extends Dump {
                     if (boxStack.isEmpty ()) {
                         break;
                     }
-                    boxtop = (Box) boxStack.peek ();
+                    boxtop = boxStack.peek ();
                     if (boxtop.bytesLeft > 0) {
                         break;
                     }
@@ -135,13 +134,13 @@ public class J2Dump extends Dump {
 
 
     /* Constructs a qualifying prefix to indicate nested boxes. */
-    private static String stackPrefix (Stack boxStack)
+    private static String stackPrefix (Stack<Box> boxStack)
     {
         StringBuffer retval = new StringBuffer ();
         // In defiance of gravity, we rummage through the stack
         // of boxes starting at the bottom.
         for (int i = 0; i < boxStack.size(); i++) {
-            Box box = (Box) boxStack.elementAt (i);
+            Box box = boxStack.elementAt (i);
             // Remove trailing spaces from types for better readability
             retval.append (box.type.trim() + "/");
         }

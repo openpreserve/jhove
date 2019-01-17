@@ -24,7 +24,7 @@ public class PdfArray extends PdfObject
     public PdfArray (int objNumber, int genNumber)
     {
         super (objNumber, genNumber);
-        _content = new Vector<PdfObject> ();
+        _content = new Vector<> ();
     }
 
     /** 
@@ -34,7 +34,7 @@ public class PdfArray extends PdfObject
     public PdfArray ()
     {
         super ();
-        _content = new Vector<PdfObject> ();
+        _content = new Vector<> ();
     }
 
     /**
@@ -68,7 +68,7 @@ public class PdfArray extends PdfObject
     {
         StringBuffer sb = new StringBuffer ();
         for (int i = 0; i < _content.size (); i++) {
-            PdfObject elem = (PdfObject) _content.elementAt (i);
+            PdfObject elem = _content.elementAt (i);
             if (elem instanceof PdfSimpleObject) {
                 String elemval = ((PdfSimpleObject) elem).getStringValue ();
                 // separate items with a space
@@ -95,7 +95,7 @@ public class PdfArray extends PdfObject
         double[] retval = new double[4];
         try {
             for (int i = 0; i < 4; i++) {
-                PdfObject elem = (PdfObject) _content.elementAt (i);
+                PdfObject elem = _content.elementAt (i);
                 if (elem instanceof PdfSimpleObject) {
                     double d = ((PdfSimpleObject) elem).getDoubleValue ();
                     retval[i] = d;

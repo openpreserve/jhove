@@ -5,33 +5,31 @@
 
 package edu.harvard.hul.ois.jhove;
 
-
 /**
- *  This class defines enumerated types for a Checksum on a content
- *  stream or file. 
- *  Applications will not create or modify ChecksumTypes, but will
- *  use one of the predefined ChecksumType instances 
- *  CRC32, MD5, or SHA1.
+ * This class defines enumerated types for a Checksum on a content
+ * stream or file.
+ * Applications will not create or modify ChecksumTypes, but will
+ * use one of the predefined ChecksumType instances
+ * CRC32, MD5, or SHA1.
  *
- *  @see Checksum
+ * @see Checksum
  */
-public final class ChecksumType
-    extends EnumerationType
-{
-    /** 32-bit Cyclical Redundancy Checksum. */
-    public static final ChecksumType CRC32 = new ChecksumType ("CRC32");
+public enum ChecksumType {
+	/** 32-bit Cyclical Redundancy Checksum. */
+	CRC32("CRC32"),
+	/** 128-bit Message Digest 5. */
+	MD5("MD5"),
+	/** 160-bit Secure Hash Algorithm. */
+	SHA1("SHA-1");
+	/** A String name for the type, used for reporting. */
+	public final String name;
 
-    /** 128-bit Message Digest 5. */
-    public static final ChecksumType MD5 = new ChecksumType ("MD5");
+	private ChecksumType(final String name) {
+		this.name = name;
+	}
 
-    /** 160-bit Secure Hash Algorithm. */
-    public static final ChecksumType SHA1 = new ChecksumType ("SHA-1");
-
-    /** 
-     *  Applications will never create ChecksumTypes directly.
-     **/
-    private ChecksumType (String value)
-    {
-	super (value);
-    }
+	@Override
+	public String toString() {
+		return this.name;
+	}
 }

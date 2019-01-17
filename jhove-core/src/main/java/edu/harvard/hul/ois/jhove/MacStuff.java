@@ -77,8 +77,8 @@ public class MacStuff {
             if (type == null) {
                 return false;
             }
-            Class fmclass = Class.forName ("com.apple.eio.FileManager");
-            Class[] params = new Class[1];
+            Class<?> fmclass = Class.forName ("com.apple.eio.FileManager");
+            Class<?>[] params = new Class[1];
             params[0] = Class.forName ("java.io.File");
             Object[] args = new Object[1];
             args[0] = file; 

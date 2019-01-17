@@ -34,7 +34,7 @@ public class PageLabelNode
     private PdfObject _prevValue; // Value previously obtained in traversing tree
     private int _currentNumsIndex;  // Current index into Nums entry
     private int _currentNumsLength; // Length of current Nums entry
-    private Vector _currentNumsVec; // Vector from the Nums entry
+    private Vector<PdfObject> _currentNumsVec; // Vector from the Nums entry
     private PageLabelNode _currentDescendant;
     private PageLabelNode _currentLeaf;
 
@@ -68,11 +68,11 @@ public class PageLabelNode
             kids = (PdfArray) _dict.get("Kids");
             if (kids != null) {
                 Vector<PdfObject> kidsVec = kids.getContent ();
-                _descendants = new ArrayList<PageLabelNode> (kidsVec.size ());
+                _descendants = new ArrayList<> (kidsVec.size ());
                 for (int i = 0; i < kidsVec.size (); i++) {
                     PdfDictionary kid = (PdfDictionary)
                             _module.resolveIndirectObject 
-                                ((PdfObject) kidsVec.elementAt (i));
+                                (kidsVec.elementAt (i));
                     PageLabelNode nodeObj = 
                         new PageLabelNode (_module, this, kid);
                     nodeObj.buildSubtree ();
@@ -85,7 +85,7 @@ public class PageLabelNode
 	    throw pe;
 	}
         catch (Exception e) {
-            throw new PdfInvalidException (MessageConstants.ERR_PAGE_LABEL_NODE_INVALID);
+            throw new PdfInvalidException (MessageConstants.ERR_PAGE_LABEL_NODE_INVALID); // PDF-HUL-20
         }
            
     }
@@ -134,14 +134,14 @@ public class PageLabelNode
                 return this;
             }
             // Get first descendant
-            _currentDescendant = (PageLabelNode) _descendantsIter.next ();
+            _currentDescendant = _descendantsIter.next ();
             _currentDescendant.startWalk ();
         }
         
         PageLabelNode retval = _currentDescendant.nextLeafObject ();
         if (retval == null) {
             if (_descendantsIter.hasNext ()) {
-                _currentDescendant = (PageLabelNode) _descendantsIter.next ();
+                _currentDescendant = _descendantsIter.next ();
                 _currentDescendant.startWalk ();
                 return _currentDescendant.nextLeafObject ();
             }
@@ -175,7 +175,7 @@ public class PageLabelNode
                 PdfArray pairArray = (PdfArray) 
                     _module.resolveIndirectObject (_currentLeaf._dict.get ("Nums"));
                 if (pairArray == null) {
-                    throw new PdfInvalidException(MessageConstants.ERR_PAGE_NUMBER_DICT_ELEMENT_MISSING);
+                    throw new PdfInvalidException(MessageConstants.ERR_PAGE_NUMBER_DICT_ELEMENT_MISSING); // PDF-HUL-18
                 }
                 _currentNumsVec = pairArray.getContent ();
                 _currentNumsLength = _currentNumsVec.size ();
@@ -190,8 +190,7 @@ public class PageLabelNode
             _prevValue = _currentValue;
             _currentKey = keyObj.getIntValue ();
             
-            _currentValue = (PdfObject) 
-                    _currentNumsVec.elementAt (_currentNumsIndex + 1);
+            _currentValue = _currentNumsVec.elementAt (_currentNumsIndex + 1);
             _currentNumsIndex += 2;
             
             return true;
@@ -200,8 +199,7 @@ public class PageLabelNode
             throw e;
         }
         catch (Exception e) {
-            e.printStackTrace();
-            throw new PdfInvalidException (MessageConstants.ERR_PAGE_NUMBER_TREE_DATE_INVALID);
+            throw new PdfInvalidException (MessageConstants.ERR_PAGE_NUMBER_TREE_DATE_INVALID); // PDF-HUL-19
         }
     }
     

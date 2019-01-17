@@ -6,6 +6,8 @@
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import edu.harvard.hul.ois.jhove.module.PdfModule;
+
+import java.io.IOException;
 import java.util.*;
 
 /** 
@@ -42,7 +44,7 @@ public final class Destination
      ******************************************************************/
 
     /* Flag indicating destination is indirect. */
-    private boolean _indirect;
+    private boolean _indirect = false;
 
     /* Name of indirect destination. */
     private PdfSimpleObject _indirectDest;
@@ -61,36 +63,35 @@ public final class Destination
      *  @param  named        Flag indicating whether this object came
      *                       from a named destination.
      */
-    public Destination (PdfObject destObj, PdfModule module, boolean named)
+    public Destination (final PdfObject destObj, final PdfModule module, final boolean named)
                          throws PdfException
     {
+        if (!named && destObj instanceof PdfSimpleObject) {
+            _indirect = true;
+            _indirectDest = (PdfSimpleObject) destObj;
+            return;
+        }
+        PdfArray destArray = null;
         try {
-            if (!named && destObj instanceof PdfSimpleObject) {
-                _indirect = true;
-                _indirectDest = (PdfSimpleObject) destObj;
-            }
-            else if (destObj instanceof PdfArray) {
+            if (destObj instanceof PdfArray) {
+                destArray =  (PdfArray) destObj;
                 // We extract only the page reference, not the view.
-                _indirect = false;
-                Vector v = ((PdfArray) destObj).getContent ();
-                _pageDest = (PdfDictionary) module.resolveIndirectObject
-                        ((PdfObject) v.elementAt (0));
-            }
-            else if (named && destObj instanceof PdfDictionary) {
-                PdfArray destArray = (PdfArray)
+                _pageDest = findDirectDest(module, destArray);
+            } else if (named && destObj instanceof PdfDictionary) {
+                destArray = (PdfArray)
                         ((PdfDictionary) destObj).get ("D");
                 // The D entry is just like the array above.
-                _indirect = false;
-                Vector v = destArray.getContent ();
-                _pageDest = (PdfDictionary) module.resolveIndirectObject
-                        ((PdfObject) v.elementAt (0));
-            }
-            else {
-                throw new Exception ("");
+                _pageDest = findDirectDest(module, destArray);
+            } else {
+                throw new PdfInvalidException (MessageConstants.ERR_DEST_OBJ_INVALID); // PDF-HUL-1
             }
         }
-        catch (Exception e) {
-            throw new PdfInvalidException (MessageConstants.ERR_DEST_OBJ_INVALID);
+        catch (ClassCastException e) {
+            throw new PdfInvalidException (MessageConstants.ERR_DEST_OBJ_INVALID); // PDF-HUL-2
+        }
+        catch (IOException e) {
+            throw new PdfInvalidException (String.format(MessageConstants.ERR_DEST_IOEXCEP_READING, // PDF-HUL-3
+                    Integer.valueOf(destArray._objNumber)));
         }
     }
 
@@ -130,5 +131,10 @@ public final class Destination
     public int getPageDestObjNumber () throws NullPointerException
     {
         return _pageDest.getObjNumber ();
+    }
+
+    private static PdfDictionary findDirectDest(final PdfModule module, final PdfArray destObj)
+            throws PdfException, IOException {
+        return (PdfDictionary) module.resolveIndirectObject(destObj.getContent().elementAt(0));
     }
 }

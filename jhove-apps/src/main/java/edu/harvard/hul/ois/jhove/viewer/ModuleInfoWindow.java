@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.io.*;
-import java.util.*;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -39,6 +38,7 @@ public class ModuleInfoWindow extends InfoWindow{
         _module = module;
         setSaveActionListener ( 
             new ActionListener() {
+                @Override
                 public void actionPerformed (ActionEvent e) {
                     saveInfo ();
                 }
@@ -107,24 +107,15 @@ public class ModuleInfoWindow extends InfoWindow{
                 };
                 texta.append (eol);
             }
-            java.util.List list = module.getSignature ();
-            int n = list.size ();
-            for (int i=0; i<n; i++) {
-                showSignature ((Signature) list.get (i));
+            for (Signature sig : module.getSignature()) {
+                showSignature (sig);
             }
-            list = module.getSpecification ();
-            n = list.size ();
-            for (int i=0; i<n; i++) {
-                showDocument ((Document) list.get (i), "Specification");
+            for (Document spec : module.getSpecification ()) {
+                showDocument (spec, "Specification");
             }
             texta.append (margin + " Features:\n");
-            List ftr = module.getFeatures ();
-            if (ftr != null) {
-                Iterator iter = ftr.iterator();
-                while (iter.hasNext ()) {
-                    s = (String) iter.next ();
-                    texta.append (margin + "  " + s + "\n");
-                }
+            for (String feature : module.getFeatures ()) {
+                    texta.append (margin + "  " + feature + "\n");
             }
             texta.append (margin + "Methodology:\n");
             if ((s = module.getWellFormedNote ()) != null) {
@@ -193,15 +184,11 @@ public class ModuleInfoWindow extends InfoWindow{
 
         texta.append (margin + label + ": " + document.getTitle () + eol);
         texta.append (margin + "Type: " + document.getType () + eol);
-        java.util.List list = document.getAuthor ();
-        int n = list.size ();
-        for (int i=0; i<n; i++) {
-            showAgent ((Agent) list.get (i), "Author");
+        for (Agent agent: document.getAuthor ()) {
+            showAgent (agent, "Author");
         }
-        list = document.getPublisher ();
-        n = list.size ();
-        for (int i=0; i<n; i++) {
-            showAgent ((Agent) list.get (i), "Publisher");
+        for (Agent publisher : document.getPublisher ()) {
+            showAgent (publisher, "Publisher");
         }
         String s = document.getEdition ();
         if (s != null) {
@@ -216,10 +203,8 @@ public class ModuleInfoWindow extends InfoWindow{
         if ((s = document.getPages ()) != null) {
             texta.append (margin + "Pages: " + s + eol);
         }
-        list = document.getIdentifier ();
-        n = list.size ();
-        for (int i=0; i<n; i++) {
-            showIdentifier ((Identifier) list.get (i));
+        for (Identifier id : document.getIdentifier ()) {
+            showIdentifier (id);
         }
         if ((s = document.getNote ()) != null) {
             texta.append (margin + "Note: " + s + eol);

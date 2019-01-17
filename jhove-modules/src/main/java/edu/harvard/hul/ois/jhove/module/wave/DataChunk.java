@@ -59,8 +59,8 @@ public class DataChunk extends Chunk {
         // If we have PCM compression, the number of samples is given
         // by the number of bytes divided by the sample blocking; otherwise
         // we use the Fact chunk to count samples.
-        if (module.getCompressionCode() == FormatChunk.WAVE_FORMAT_PCM) {
-            module.addSamples (bytesLeft / module.getBlockAlign ());
+        if (module.getWaveCodec() == FormatChunk.WAVE_FORMAT_PCM) {
+            module.addSamples (bytesLeft / module.getBlockAlign());
         }
         module.addWaveProperty(new Property ("Data",
                 PropertyType.PROPERTY,

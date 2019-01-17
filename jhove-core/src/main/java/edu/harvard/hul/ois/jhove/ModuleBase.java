@@ -39,7 +39,7 @@ public abstract class ModuleBase
     /** Initialization value. */
     protected String _init;
     /** List of default parameters. */
-    protected List<String> _defaultParams;
+    protected final List<String> _defaultParams = new ArrayList<>();
     /** JHOVE engine. */
     protected JhoveBase _je;
     /**  MIME types supported by this Module */
@@ -88,6 +88,14 @@ public abstract class ModuleBase
     protected List<String> _features;
     /** Logger for a module class. */
     protected Logger _logger;
+    /* Checksummer object */
+    protected Checksummer _ckSummer;
+
+    /* Input stream wrapper which handles checksums */
+    protected ChecksumInputStream _cstream;
+
+    /* Data input stream wrapped around _cstream */
+    protected DataInputStream _dstream;
 
     /******************************************************************
      * CLASS CONSTRUCTOR.
@@ -142,8 +150,8 @@ public abstract class ModuleBase
         _format = format;
         _coverage = coverage;
         _mimeType = mimeType;
-        _signature = new ArrayList<Signature> ();
-        _specification = new ArrayList<Document> ();
+        _signature = new ArrayList<> ();
+        _specification = new ArrayList<> ();
         _wellFormedNote = wellFormedNote;
         _repInfoNote = repInfoNote;
         _validityNote = validityNote;
@@ -170,7 +178,7 @@ public abstract class ModuleBase
      */
     public void initFeatures ()
     {
-        _features = new ArrayList<String> (2);
+        _features = new ArrayList<> (2);
         _features.add ("edu.harvard.hul.ois.jhove.canValidate");
         _features.add ("edu.harvard.hul.ois.jhove.canCharacterize");
     }
@@ -180,8 +188,8 @@ public abstract class ModuleBase
      * Per-instantiation initialization.
      * The default method does nothing but save its parameter.
      */
+    @Override
     public void init (String init)
-        throws Exception
     {
 	_init = init;
     }
@@ -192,23 +200,23 @@ public abstract class ModuleBase
      * @param   params     A List whose elements are Strings.
      *                     May be empty.
      */
+    @Override
     public void setDefaultParams (List<String> params)
     {
-        _defaultParams = params;
+        _defaultParams.clear();
+        _defaultParams.addAll(params);
     }
 
     /**
      *  Applies the default parameters.
      *  Calling this clears any prior parameters.
      */
-    public void applyDefaultParams ()
-        throws Exception
+    @Override
+    public void applyDefaultParams () throws Exception
     {
         resetParams ();
-        Iterator<String> iter = _defaultParams.iterator ();
-        while (iter.hasNext ()) {
-            String parm =  iter.next ();
-            param (parm);
+        for (String parm : _defaultParams) {
+            param(parm);
         }
     }
 
@@ -216,8 +224,8 @@ public abstract class ModuleBase
      *  Returns to a default state without any parameters.
      *  The default method clears the saved parameter.
      */
-    public void resetParams ()
-        throws Exception
+    @Override
+    public void resetParams () throws Exception
     {
         _param = null;
     }
@@ -226,8 +234,8 @@ public abstract class ModuleBase
      * Per-action initialization.  May be called multiple times.
      * The default method does nothing but save its parameter.
      */
+    @Override
     public void param (String param)
-        throws Exception
     {
 	_param = param;
     }
@@ -282,6 +290,7 @@ public abstract class ModuleBase
      *  Return details as to the specific format versions or 
      *  variants that are supported by this module
      */
+    @Override
     public final String getCoverage ()
     {
         return _coverage;
@@ -291,6 +300,7 @@ public abstract class ModuleBase
      *  Return the last modification date of this Module, as a
      *  Java Date object
      */
+    @Override
     public final Date getDate ()
     {
         return _date;
@@ -299,6 +309,7 @@ public abstract class ModuleBase
     /**
      *   Return the array of format names supported by this Module
      */
+    @Override
     public final String [] getFormat ()
     {
         return _format;
@@ -308,6 +319,7 @@ public abstract class ModuleBase
      *   Return the array of MIME type strings for formats supported
      *   by this Module
      */
+    @Override
     public final String [] getMimeType ()
     {
         return _mimeType;
@@ -316,6 +328,7 @@ public abstract class ModuleBase
     /**
      *   Return the module name
      */
+    @Override
     public final String getName ()
     {
         return _name;
@@ -324,6 +337,7 @@ public abstract class ModuleBase
     /**
      *   Return the module note
      */
+    @Override
     public final String getNote ()
     {
         return _note;
@@ -332,6 +346,7 @@ public abstract class ModuleBase
     /**
      *   Return the release identifier
      */
+    @Override
     public final String getRelease ()
     {
         return _release;
@@ -340,6 +355,7 @@ public abstract class ModuleBase
     /**
      *   Return the RepInfo note
      */
+    @Override
     public final String getRepInfoNote ()
     {
         return _repInfoNote;
@@ -348,6 +364,7 @@ public abstract class ModuleBase
     /**
      *   Return the copyright information string
      */
+    @Override
     public final String getRights ()
     {
         return _rights;
@@ -356,6 +373,7 @@ public abstract class ModuleBase
     /**
      *   Return the List of Signatures recognized by this Module
      */
+    @Override
     public final List<Signature> getSignature ()
     {
         return _signature;
@@ -369,6 +387,7 @@ public abstract class ModuleBase
      *
      *  @see Document
      */
+    @Override
     public final List<Document> getSpecification ()
     {
         return _specification;
@@ -377,6 +396,7 @@ public abstract class ModuleBase
     /**
      *  Return the vendor information
      */
+    @Override
     public final Agent getVendor ()
     {
         return _vendor;
@@ -385,6 +405,7 @@ public abstract class ModuleBase
     /**
      *   Return the string describing well-formedness criteria
      */
+    @Override
     public final String getWellFormedNote ()
     {
         return _wellFormedNote;
@@ -393,6 +414,7 @@ public abstract class ModuleBase
     /**
      *   Return the string describing validity criteria
      */
+    @Override
     public final String getValidityNote ()
     {
         return _validityNote;
@@ -402,6 +424,7 @@ public abstract class ModuleBase
      *  Return the random access flag (true if the module operates
      *  on random access files, false if it operates on streams)
      */
+    @Override
     public final boolean isRandomAccess () 
     {
         return _isRandomAccess;
@@ -421,6 +444,7 @@ public abstract class ModuleBase
      *    <li>edu.harvard.hul.ois.canIdentify
      *  </ul>
      */
+    @Override
     public boolean hasFeature (String feature)
     {
         if (_features == null) {
@@ -440,6 +464,7 @@ public abstract class ModuleBase
     /**
      *  Returns the full list of features.
      */
+    @Override
     public List<String> getFeatures ()
     {
         return _features;
@@ -448,9 +473,10 @@ public abstract class ModuleBase
     /**
      *  Returns the list of default parameters. 
      */
+    @Override
     public List<String> getDefaultParams ()
     {
-        return _defaultParams;
+        return Collections.unmodifiableList(_defaultParams);
     }
 
 
@@ -462,6 +488,7 @@ public abstract class ModuleBase
      *  Pass the associated App object to this Module.
      *  The App makes various services available.
      */
+    @Override
     public final void setApp (App app)
     {
         _app = app;
@@ -470,6 +497,7 @@ public abstract class ModuleBase
     /**
      *  Pass the JHOVE engine object to this Module.
      */
+    @Override
     public final void setBase (JhoveBase je)
     {
         _je = je;
@@ -512,6 +540,7 @@ public abstract class ModuleBase
      *          modules should treat MAXIMUM_VERBOSITY as a request for
      *          all the data available from the module.
      */
+    @Override
     public void setVerbosity (int verbosity)
     {
         _verbosity = verbosity;
@@ -576,8 +605,8 @@ public abstract class ModuleBase
      *                    called again with <code>parseIndex</code> 
      *                    equal to that return value.
      */
-    public int parse (InputStream stream, RepInfo info, int parseIndex)
-        throws IOException
+    @Override
+    public int parse (InputStream stream, RepInfo info, int parseIndex) throws IOException
     {
         return 0;
     }
@@ -593,8 +622,8 @@ public abstract class ModuleBase
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the parsing
      */
-    public void parse (RandomAccessFile file, RepInfo info)
-        throws IOException
+    @Override
+    public void parse (RandomAccessFile file, RepInfo info) throws IOException
     {
     }
 
@@ -614,6 +643,7 @@ public abstract class ModuleBase
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
+    @Override
     public void checkSignatures (File file,
                 InputStream stream, 
                 RepInfo info) 
@@ -632,7 +662,7 @@ public abstract class ModuleBase
             stream.close();
             ListIterator<Signature> iter = _signature.listIterator();
             while (iter.hasNext ()) {
-                Signature sig = ((Signature) iter.next ());
+                Signature sig = (iter.next ());
                 if (sig instanceof InternalSignature) {
                     InternalSignature isig = (InternalSignature) sig;
                     int[] sigValue = isig.getValue ();
@@ -686,10 +716,10 @@ public abstract class ModuleBase
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
+    @Override
     public void checkSignatures (File file,
             RandomAccessFile raf, 
-            RepInfo info)
-        throws IOException
+            RepInfo info) throws IOException
     {
         info.setFormat (_format[0]);
         info.setMimeType (_mimeType[0]);
@@ -700,7 +730,7 @@ public abstract class ModuleBase
         ListIterator<Signature> iter = _signature.listIterator();
         try {
             while (iter.hasNext ()) {
-                Signature sig = ((Signature) iter.next ());
+                Signature sig = (iter.next ());
                 if (sig instanceof InternalSignature) {
                     InternalSignature isig = (InternalSignature) sig;
                     /* What about non-fixed offset? */
@@ -787,7 +817,7 @@ public abstract class ModuleBase
      * @param ckSummer Checksummer object
      * @param info     RepInfo object
      */
-    protected void setChecksums (Checksummer ckSummer, RepInfo info)
+    protected static void setChecksums (Checksummer ckSummer, RepInfo info)
     {
         if (ckSummer != null){
             info.setChecksum (new Checksum (ckSummer.getCRC32 (), 
@@ -806,6 +836,7 @@ public abstract class ModuleBase
      *  Generates information about this Module.
      *  The format of the output depends on the OutputHandler.
      */
+    @Override
     public void show (OutputHandler handler)
     {
         handler.show (this);
@@ -1046,7 +1077,7 @@ public abstract class ModuleBase
             n = stream.readInt();         /* This is a signed value. */
             if (n < 0) {
                 //n = 2147483648L + n;
-                n = (long) n & 0XFFFFFFFFL;
+                n = n & 0XFFFFFFFFL;
             }
         }
         else {
@@ -1080,7 +1111,7 @@ public abstract class ModuleBase
             n = file.readInt();         /* This is a signed value. */
             if (n < 0) {
                 //n = 2147483648L + n;
-                n = (long) n & 0XFFFFFFFFL;
+                n = n & 0XFFFFFFFFL;
             }
         }
         else {
@@ -1099,9 +1130,7 @@ public abstract class ModuleBase
 
 
     /**
-     *  Reads eight bytes as a signed 64-bit value from a
-     *  DataInputStream.  (There is no way in Java to have
-     *  an unsigned long.)
+     *  Reads eight bytes as a signed 64-bit value from a DataInputStream.
      *
      *  @param stream     The stream to read from.
      *  @param bigEndian  If true, interpret the first byte as the high
@@ -1340,14 +1369,14 @@ public abstract class ModuleBase
             f = stream.readDouble ();
         }
         else {
-            long b7 = (long) stream.readUnsignedByte ();
-            long b6 = (long) stream.readUnsignedByte ();
-            long b5 = (long) stream.readUnsignedByte ();
-            long b4 = (long) stream.readUnsignedByte ();
-            long b3 = (long) stream.readUnsignedByte ();
-            long b2 = (long) stream.readUnsignedByte ();
-            long b1 = (long) stream.readUnsignedByte ();
-            long b0 = (long) stream.readUnsignedByte ();
+            long b7 = stream.readUnsignedByte ();
+            long b6 = stream.readUnsignedByte ();
+            long b5 = stream.readUnsignedByte ();
+            long b4 = stream.readUnsignedByte ();
+            long b3 = stream.readUnsignedByte ();
+            long b2 = stream.readUnsignedByte ();
+            long b1 = stream.readUnsignedByte ();
+            long b0 = stream.readUnsignedByte ();
             f = Double.longBitsToDouble (b0<<56 | b1<<48 | b2<<40 | 
                                          b3<<32 | b4<<24 | b5<<16 |
                                          b6<< 8 | b7);
@@ -1372,12 +1401,28 @@ public abstract class ModuleBase
     {
         long totalBytesSkipped = 0;
         while (bytesToSkip > 0) {
-            long bytesSkipped = stream.skip(bytesToSkip);
+            long bytesSkipped;
+            long availableBytes = stream.available();
+            if (availableBytes == 0) break;
+            // The count of skipped bytes returned by FileInputStream's 'skip'
+            // method is unreliable and may be greater than what was available
+            // to skip. So we need to monitor and correct any discrepancies
+            // ourselves. Luckily the 'available' method seems to accurately
+            // report the number of bytes available to be skipped, but because
+            // it returns an int, we're limited to skipping Integer.MAX_VALUE
+            // each call lest we skip more bytes than we can verify.
+            if (bytesToSkip > availableBytes) {
+                bytesSkipped = stream.skip(availableBytes);
+            } else {
+                bytesSkipped = stream.skip(bytesToSkip);
+            }
+            // If it reports skipping more bytes than were available,
+            // correct it to the most it could have skipped.
+            if (bytesSkipped > availableBytes) {
+                bytesSkipped = availableBytes;
+            }
             totalBytesSkipped += bytesSkipped;
             bytesToSkip -= bytesSkipped;
-            // Cease skipping if end of stream reached before
-            // requested number of bytes have been skipped.
-            if (stream.available() == 0) break;
         }
         if (counted != null) {
             counted._nByte += totalBytesSkipped;
@@ -1418,5 +1463,20 @@ public abstract class ModuleBase
             prop[i] = (Property) vec.elementAt (i);
         }
         return prop;
+    }
+
+    protected void setupDataStream(final InputStream stream, final RepInfo info) {
+        /* Are checksums requested and ensure they're not already calculated
+         * when handling a temp file. */
+        if (_je.getChecksumFlag() &&
+                info.getChecksum().isEmpty()) {
+            _ckSummer = new Checksummer ();
+            _cstream = new ChecksumInputStream (stream, _ckSummer);
+            _dstream = getBufferedDataStream (_cstream,
+                    _app != null ? _je.getBufferSize () : 0);
+        } else {
+            _dstream = getBufferedDataStream (stream, _app != null ?
+                        _je.getBufferSize () : 0);
+        }
     }
 }

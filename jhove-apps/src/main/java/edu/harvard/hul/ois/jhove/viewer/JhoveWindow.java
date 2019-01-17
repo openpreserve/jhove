@@ -94,6 +94,7 @@ public class JhoveWindow extends JFrame
         _app = app;
         _base = base;
         _moduleMenuListener = new ActionListener () {
+            @Override
             public void actionPerformed (ActionEvent e) {
                 _selectedModule = e.getActionCommand ();
             }
@@ -108,9 +109,10 @@ public class JhoveWindow extends JFrame
         
         // Define a Comparator function for Modules
         Comparator<Module> modListComparator = new Comparator<Module> () {
+            @Override
             public int compare (Module o1, Module o2) {
-                Module m1 = (Module) o1;
-                Module m2 = (Module) o2;
+                Module m1 = o1;
+                Module m2 = o2;
                 String name1 = m1.getName ();
                 String name2 = m2.getName ();
                 return String.CASE_INSENSITIVE_ORDER.compare (name1, name2);
@@ -118,11 +120,11 @@ public class JhoveWindow extends JFrame
         };
 
         // Build combo box of available modules
-        Vector<String> moduleItems = new Vector<String> (10);
+        Vector<String> moduleItems = new Vector<> (10);
         java.util.List<Module> moduleList = base.getModuleList ();
         // Clone the list so we can display it in sorted order
         // without munging the app's preferred order
-        java.util.List<Module> menuModuleList = new ArrayList<Module> (moduleList.size ());
+        java.util.List<Module> menuModuleList = new ArrayList<> (moduleList.size ());
         menuModuleList.addAll(moduleList);
         Collections.sort (menuModuleList, modListComparator);
         Iterator<Module> iter = menuModuleList.iterator ();
@@ -164,6 +166,7 @@ public class JhoveWindow extends JFrame
         // Set up a companion progress window. This will
         // be hidden and displayed as needed.
         ActionListener listener = new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) {
                     _base.abort ();
                 }
@@ -194,7 +197,8 @@ public class JhoveWindow extends JFrame
 
         _openFileItem.addActionListener (
             new ActionListener () {
-                public void actionPerformed (ActionEvent e) 
+                @Override
+                public void actionPerformed (ActionEvent e)
                 {
                     pickAndAnalyzeFile ();
                 }
@@ -204,7 +208,8 @@ public class JhoveWindow extends JFrame
         fileMenu.add (_openURLItem);
         _openURLItem.addActionListener (
             new ActionListener () {
-                public void actionPerformed (ActionEvent e) 
+                @Override
+                public void actionPerformed (ActionEvent e)
                 {
                     pickAndAnalyzeURL ();
                 }
@@ -224,7 +229,8 @@ public class JhoveWindow extends JFrame
                 Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             quitItem.addActionListener (
                 new ActionListener () {
-                    public void actionPerformed (ActionEvent e) 
+                    @Override
+                    public void actionPerformed (ActionEvent e)
                     {
                         System.exit (0);
                     }
@@ -250,6 +256,7 @@ public class JhoveWindow extends JFrame
         editMenu.add (editConfigItem);
         editConfigItem.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     openConfigWindow ();
@@ -261,6 +268,7 @@ public class JhoveWindow extends JFrame
         editMenu.add (prefItem);
         prefItem.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     if (_prefsWindow == null) {
@@ -279,6 +287,7 @@ public class JhoveWindow extends JFrame
         helpMenu.add (aboutModuleItem);
         aboutModuleItem.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     showModuleInfo ();
@@ -289,6 +298,7 @@ public class JhoveWindow extends JFrame
         helpMenu.add (aboutAppItem);
         aboutAppItem.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     showAppInfo ();
@@ -376,7 +386,7 @@ public class JhoveWindow extends JFrame
 
 //        RepInfo info = new RepInfo (name);
         try {
-            List<File> files = new ArrayList<File>(1);
+            List<File> files = new ArrayList<>(1);
             files.add (file);
             openAndParse (files, module);
         }
@@ -396,7 +406,7 @@ public class JhoveWindow extends JFrame
             return;
         }
         // Set up progress window for the first file
-        File file = (File) files.get (0);
+        File file = files.get (0);
         String name = file.getName ();
         _base.resetAbort ();
         _progWind.setDocName (name, false);
@@ -522,6 +532,7 @@ public class JhoveWindow extends JFrame
      *                    the object being processed.  Will be truncated
      *                    at the left if longer than 64 characters.
      */
+    @Override
     public int callback (int selector, Object parm)
     {
         switch (selector) {
@@ -719,6 +730,7 @@ public class JhoveWindow extends JFrame
      *  dragged, and changes the background color to give
      *  visual feedback.
      */
+    @Override
     public void dragEnter (DropTargetDragEvent dtde)
     {
         DataFlavor[] flavors = dtde.getCurrentDataFlavors ();
@@ -736,6 +748,7 @@ public class JhoveWindow extends JFrame
      *  Invoked when the drag leaves the component.
      *  Restores the default background color.
      */
+    @Override
     public void dragExit (DropTargetEvent dte)
     {
         setNormalBackground ();
@@ -745,6 +758,7 @@ public class JhoveWindow extends JFrame
     /**
      *  Does nothing.
      */
+    @Override
     public void dragOver (DropTargetDragEvent dtde)
     {
     }
@@ -757,6 +771,7 @@ public class JhoveWindow extends JFrame
      *  have happened, but Windows appears to require it be
      *  done here.
      */
+    @Override
     public void drop (DropTargetDropEvent dtde)
     {
         DataFlavor[] flavors = dtde.getCurrentDataFlavors ();
@@ -793,6 +808,7 @@ public class JhoveWindow extends JFrame
      *  (e.g., by changing the modifier keys).  Does nothing,
      *  as we treat copy and move identically.
      */
+    @Override
     public void dropActionChanged (DropTargetDragEvent dtde)
     {
         
@@ -845,6 +861,7 @@ public class JhoveWindow extends JFrame
          *  Analyzes the URI, file, or file list provided
          *  to this thread object.
          */
+        @Override
         public void run ()
         {
             _base.resetAbort();
@@ -921,6 +938,7 @@ public class JhoveWindow extends JFrame
      */
     protected class InvisibleFilenameFilter implements FilenameFilter
     {
+        @Override
         public boolean accept (File dir, String name)
         {
             return  (!name.startsWith ("."));

@@ -31,6 +31,7 @@ public class CountedInputStream extends FilterInputStream {
     /** Reads a single byte from the stream and decrements
      *  the count of remaining bytes.  If the count
      *  is exhausted, returns -1 to signify end of file. */
+    @Override
     public int read() throws IOException {
         if (bytesLeft <= 0) {
             return -1;
@@ -52,6 +53,7 @@ public class CountedInputStream extends FilterInputStream {
      * of bytes remaining in the count.  The count is
      * decremented by the number of bytes actually read.
      */
+    @Override
     public int read(byte[] b) throws IOException 
     {
         int len = b.length;
@@ -80,6 +82,7 @@ public class CountedInputStream extends FilterInputStream {
      * of bytes remaining in the count.  The count is
      * decremented by the number of bytes actually read.
      */
+    @Override
     public int read(byte[] b, int off, int len) throws IOException 
     {
         int bytesRead;
@@ -99,6 +102,7 @@ public class CountedInputStream extends FilterInputStream {
      *  Decrements the count by the number of bytes
      *  actually skipped.
      */
+    @Override
     public long skip (long n) throws IOException {
         long bytesRead = super.skip (n);
         if (bytesLeft < bytesRead) {

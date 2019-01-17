@@ -87,6 +87,7 @@ public class State
      *  Convert to String representation.
      *  A State object's String representation is its name.
      */
+    @Override
     public String toString ()
     {
 	return _name;

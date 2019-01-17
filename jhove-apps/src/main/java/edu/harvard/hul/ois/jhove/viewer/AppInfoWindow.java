@@ -27,6 +27,7 @@ public class AppInfoWindow extends InfoWindow
         super ("Application Info", app, jbase);
         setSaveActionListener ( 
             new ActionListener() {
+                @Override
                 public void actionPerformed (ActionEvent e) {
                     saveInfo ();
                 }
@@ -86,11 +87,11 @@ public class AppInfoWindow extends InfoWindow
 	if (saxClass != null) {
 	    texta.append ("SAX parser: " + saxClass + eol);
 	}
-	Iterator iter = jbase.getModuleMap ().keySet ().iterator ();
+	Iterator<String> iter = jbase.getModuleMap ().keySet ().iterator ();
 	while (iter.hasNext ()) {
 	    //Module module = jbase.getModuleMap ((String) iter.next ());
-            Map moduleMap = jbase.getModuleMap ();
-            Module module = (Module) moduleMap.get ((String) iter.next ());
+            Map<String, Module> moduleMap = jbase.getModuleMap ();
+            Module module = moduleMap.get (iter.next ());
 	    texta.append (" Module: " + module.getName () + " " +
 			  module.getRelease () + eol);
 	}

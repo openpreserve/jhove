@@ -33,32 +33,22 @@ public class PageTreeNode extends DocNode
      */
     public PageTreeNode (PdfModule module,
 		PageTreeNode parent, 
-		PdfDictionary dict)
+		PdfDictionary dict) throws PdfMalformedException
     {
         super (module, parent, dict);
         _pageObjectFlag = false;
-        _descendants = new ArrayList<DocNode> (1);  // Empty list in case it doesn't get built
+        _descendants = new ArrayList<> (1);  // Empty list in case it doesn't get built
     }
 
     /**
      *  Builds the subtree of descendants of this node, using
      *  the Kids entry in the dictionary.
      */
-    public void buildSubtree (boolean toplevel, int recGuard)
-	throws PdfException
-    {
-        buildSubtree (toplevel, recGuard, -1, -1);
-    }
-    
-    /**
-     *  Builds the subtree of descendants of this node, using
-     *  the Kids entry in the dictionary.
-     */
-    public void buildSubtree (boolean toplevel, int recGuard, int objNumber, int genNumber) throws PdfException
+    public void buildSubtree (boolean toplevel, int recGuard) throws PdfException
     {
         /* Guard against infinite recursion */
         if (recGuard <= 0) {
-            throw new PdfMalformedException (MessageConstants.ERR_PAGE_TREE_DEPTH_EXCEEDED);
+            throw new PdfMalformedException (MessageConstants.ERR_PAGE_TREE_DEPTH_EXCEEDED); // PDF-HUL-32
         }
         PdfArray kids = null;
         try {
@@ -87,13 +77,13 @@ public class PageTreeNode extends DocNode
                         "Page".equals (type.getStringValue())) {
                     PageObject pageObj = new PageObject
                         (_module, this, _dict);
-                    _descendants = new ArrayList<DocNode> (1);
+                    _descendants = new ArrayList<> (1);
                     _descendants.add (pageObj);
                 }
             }
             else {
                 Vector<PdfObject> kidsVec = kids.getContent ();
-                _descendants = new ArrayList<DocNode> (kidsVec.size ());
+                _descendants = new ArrayList<> (kidsVec.size ());
                 for (int i = 0; i < kidsVec.size (); i++) {
                     PdfIndirectObj kidRef = 
                             (PdfIndirectObj) kidsVec.elementAt (i);
@@ -134,8 +124,11 @@ public class PageTreeNode extends DocNode
         catch (PdfException ee) {
             throw ee;
         }
+        catch (ArrayIndexOutOfBoundsException excep) {
+            throw new PdfInvalidException(MessageConstants.ERR_PAGE_TREE_NODE_NOT_FOUND); // PDF-HUL-147
+        }
         catch (Exception e) {
-            throw new PdfInvalidException(MessageConstants.ERR_PAGE_TREE_NODE_INVALID);
+            throw new PdfInvalidException(MessageConstants.ERR_PAGE_TREE_NODE_INVALID); // PDF-HUL-29
         }
 	
     }
@@ -143,13 +136,14 @@ public class PageTreeNode extends DocNode
     /**
      *  Initialize an iterator through the descendants of this node.
      */
+    @Override
     public void startWalk ()
     {
         _descendantsIter = _descendants.listIterator ();
         _currentDescendant = null;
         _walkFirst = true;
         _walkFinished = false;
-        _visitedNodes = new HashSet<Integer> ();   // Track self-recursion
+        _visitedNodes = new HashSet<> ();   // Track self-recursion
     }
     
     /**
@@ -158,6 +152,7 @@ public class PageTreeNode extends DocNode
      *   calling nextPageObject() will return all the PageObjects in the tree
      *   under this node, and finally will return null when there are no more.
      */
+    @Override
     public PageObject nextPageObject () throws PdfMalformedException
     {
         if (_walkFinished) {
@@ -172,7 +167,7 @@ public class PageTreeNode extends DocNode
            }
 
            // Get first descendant
-           _currentDescendant = (DocNode) _descendantsIter.next ();
+           _currentDescendant = _descendantsIter.next ();
            _currentDescendant.startWalk ();
         }
         
@@ -181,20 +176,19 @@ public class PageTreeNode extends DocNode
             if (_descendantsIter.hasNext ()) {
                 // Every node is a page object or 
                 // has at least one page object below it, right?
-                _currentDescendant = (DocNode) _descendantsIter.next ();
+                _currentDescendant = _descendantsIter.next ();
                 _currentDescendant.startWalk ();
                 retval = _currentDescendant.nextPageObject ();
             }
             else {
                 // We've gone through all our descendants.
                 _walkFinished = true;
-                retval = null;
             } 
         }
         if (retval != null) {
-            int objnum = retval.getDict().getObjNumber();
-            if (_visitedNodes.contains((Integer) objnum)) {
-                throw new PdfMalformedException(MessageConstants.ERR_PAGE_TREE_IMPROPERLY_CONSTRUCTED);
+            Integer objnum = Integer.valueOf(retval.getDict().getObjNumber());
+            if (_visitedNodes.contains(objnum)) {
+                throw new PdfMalformedException(MessageConstants.ERR_PAGE_TREE_IMPROPERLY_CONSTRUCTED); // PDF-HUL-30
             }
             _visitedNodes.add(objnum);
         }
@@ -209,6 +203,7 @@ public class PageTreeNode extends DocNode
      *   under this node. It finally will return null when there 
      *   are no more.
      */
+    @Override
     public DocNode nextDocNode () throws PdfMalformedException
     {
         if (_walkFinished) {
@@ -230,7 +225,7 @@ public class PageTreeNode extends DocNode
             }
 
             // Get first descendant
-            _currentDescendant = (DocNode) _descendantsIter.next ();
+            _currentDescendant = _descendantsIter.next ();
             _currentDescendant.startWalk ();
         }
         
@@ -239,20 +234,19 @@ public class PageTreeNode extends DocNode
             if (_descendantsIter.hasNext ()) {
                 // Every node is a page object or 
                 // has at least one page object below it, right?
-                _currentDescendant = (DocNode) _descendantsIter.next ();
+                _currentDescendant = _descendantsIter.next ();
                 _currentDescendant.startWalk ();
                 retval = _currentDescendant.nextDocNode ();
             }
             else {
                 // We've gone through all our descendants.
                 _walkFinished = true;
-                retval = null;
             } 
         }
         if (retval != null) {
-            int objnum = retval.getDict().getObjNumber();
-            if (_visitedNodes.contains((Integer) objnum)) {
-                throw new PdfMalformedException(MessageConstants.ERR_PAGE_TREE_IMPROPERLY_CONSTRUCTED);
+            Integer objnum = Integer.valueOf(retval.getDict().getObjNumber());
+            if (_visitedNodes.contains(objnum)) {
+                throw new PdfMalformedException(MessageConstants.ERR_PAGE_TREE_IMPROPERLY_CONSTRUCTED); // PDF-HUL-31
             }
             _visitedNodes.add(objnum);
         }

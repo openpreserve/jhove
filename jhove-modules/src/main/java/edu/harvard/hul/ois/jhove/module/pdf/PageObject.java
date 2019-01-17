@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class PageObject extends DocNode 
 {
-    private List _contentStreams;  // contents of the page; may be null
+    private List<PdfStream> _contentStreams = null;  // contents of the page; may be null
 
     /**
      *  Superclass constructor.
@@ -26,10 +26,9 @@ public class PageObject extends DocNode
      */
     public PageObject (PdfModule module,
                 PageTreeNode parent, 
-                PdfDictionary dict)
+                PdfDictionary dict) throws PdfMalformedException
     {
         super (module, parent, dict);
-        _contentStreams = null;
         _pageObjectFlag = true;
     }
 
@@ -41,55 +40,25 @@ public class PageObject extends DocNode
      */
     public void loadContent (PdfModule module) throws PdfException
     {
+        PdfObject contents = _dict.get("Contents");
+        // Contents object can be null, the page is empty.
+        if (contents == null) {
+            return;
+        }
         try {
-            PdfObject contents = _dict.get("Contents");
-            // the Contents entry in the dictionary may be either
-            // a stream or an array of streams.  It may also
-            // be null, indicating no content.
-            if (contents != null) {
-                contents = module.resolveIndirectObject (contents);
-                if (contents instanceof PdfStream) {
-                    _contentStreams = new ArrayList(1);
-                    _contentStreams.add(contents);
-                    return;
-                }
-                else if (contents instanceof PdfArray) {
-                    Vector contentVec = 
-                        ((PdfArray) contents).getContent ();
-                    if (contentVec.size () == 0) {
-                        return;
-                    }
-                    _contentStreams = new ArrayList 
-                                        (contentVec.size ());
-                    for (int i = 0; i < contentVec.size (); i++) {
-                        PdfObject streamElement = (PdfObject)
-                                contentVec.elementAt (i);
-                        streamElement = module.resolveIndirectObject
-                                (streamElement);
-                        _contentStreams.add ((PdfStream) streamElement);
-                    }
-                }
-                else {
-                    throw new PdfInvalidException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0);
-                }
-            }
-        }
-        catch (NullPointerException e) {
-            throw new PdfInvalidException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0);
-        }
-        catch (ClassCastException e) {
-            throw new PdfInvalidException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0);
+            contents = module.resolveIndirectObject (contents);
+            processContents(module, contents);
         }
         catch (IOException e) {
-            throw new PdfMalformedException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0);
+            throw new PdfMalformedException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0); // PDF-HUL-26
         }
     }
-    
+
     /**
      *   Returns the List of content streams.  The list elements are
      *   of type PdfStream.
      */
-    public List getContentStreams ()
+    public List<PdfStream> getContentStreams ()
     {
         return _contentStreams;
     }
@@ -103,10 +72,10 @@ public class PageObject extends DocNode
             return (PdfArray) _module.resolveIndirectObject (_dict.get ("Annots"));
         }
         catch (ClassCastException e) {
-            throw new PdfInvalidException (MessageConstants.ERR_ANNOT_INVALID);
+            throw new PdfInvalidException (MessageConstants.ERR_ANNOT_INVALID); // PDF-HUL-21
         }
         catch (IOException e) {
-            throw new PdfMalformedException (MessageConstants.ERR_ANNOT_INVALID);
+            throw new PdfMalformedException (MessageConstants.ERR_ANNOT_INVALID); // PDF-HUL-22
         }
     }
 
@@ -116,6 +85,7 @@ public class PageObject extends DocNode
      *  tree.  This allows nextPageObject () to be return this object
      *  exactly once.
      */
+    @Override
     public void startWalk ()
     {
         _walkFinished = false;
@@ -126,6 +96,7 @@ public class PageObject extends DocNode
      *  is called, then null when called again.  This allows a recursive
      *  walk through a document tree to work properly.
      */
+    @Override
     public PageObject nextPageObject ()
     {
         if (_walkFinished)
@@ -138,6 +109,7 @@ public class PageObject extends DocNode
      *  Called to walk through all page tree nodes and page objects.
      *  Functionally identical with nextPageObject.
      */
+    @Override
     public DocNode nextDocNode ()
     {
         return nextPageObject ();
@@ -149,22 +121,8 @@ public class PageObject extends DocNode
      */
     public PdfArray getArtBox () throws PdfException
     {
-        try {
-            PdfArray mbox = (PdfArray) _dict.get ("ArtBox");
-            if (mbox == null) {
-                return null;
-            }
-            else if (mbox.toRectangle () != null) {
-                return mbox;
-            }
-            else {
-                // There's an ArtBox, but it's not a rectangle
-                throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_ARTBOX_MALFORMED);
-            }
-        }
-        catch (Exception e) {
-            throw new PdfMalformedException (MessageConstants.ERR_PAGE_TREE_ARTBOX_MALFORMED);
-        }
+        return retrieveAndCheckRectangle(this._dict, "ArtBox",
+                MessageConstants.ERR_PAGE_TREE_ARTBOX_MALFORMED); // PDF-HUL-23
     }
 
     /**
@@ -173,22 +131,8 @@ public class PageObject extends DocNode
      */
     public PdfArray getTrimBox () throws PdfException
     {
-        try {
-            PdfArray mbox = (PdfArray) _dict.get ("TrimBox");
-            if (mbox == null) {
-                return null;
-            }
-            else if (mbox.toRectangle () != null) {
-                return mbox;
-            }
-            else {
-                // There's an TrimBox, but it's not a rectangle
-                throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_TRIMBOX_MALFORMED);
-            }
-        }
-        catch (Exception e) {
-            throw new PdfMalformedException (MessageConstants.ERR_PAGE_TREE_TRIMBOX_MALFORMED);
-        }
+        return retrieveAndCheckRectangle(this._dict, "TrimBox",
+                MessageConstants.ERR_PAGE_TREE_TRIMBOX_MALFORMED); // PDF-HUL-24
     }
 
     /**
@@ -197,21 +141,65 @@ public class PageObject extends DocNode
      */
     public PdfArray getBleedBox () throws PdfException
     {
+        return retrieveAndCheckRectangle(this._dict, "BleedBox",
+                MessageConstants.ERR_PAGE_TREE_BLEEDBOX_MALFORMED); // PDF-HUL-25
+    }
+
+    private static PdfArray retrieveAndCheckRectangle(final PdfDictionary dict,
+            final String dictKey, final String invalidMessage) throws PdfInvalidException {
+        PdfArray mbox = null;
         try {
-            PdfArray mbox = (PdfArray) _dict.get ("BleedBox");
-            if (mbox == null) {
-                return null;
-            }
-            else if (mbox.toRectangle () != null) {
-                return mbox;
+        // Retrieve the object from the passed dictionary
+            mbox = (PdfArray) dict.get (dictKey);
+        } catch (ClassCastException e) {
+            throw new PdfInvalidException(invalidMessage);
+        }
+        if (mbox == null) {
+            // If it's null it doesn't exist so return null
+            return null;
+        }
+        else if (mbox.toRectangle () != null) {
+            // If the returned array is a rectangle the return it
+            return mbox;
+        }
+        else {
+            // The retrieved object isn't a rectangle throw the exception
+            throw new PdfInvalidException (invalidMessage);
+        }
+    }
+
+    private void processContents(PdfModule module, final PdfObject contents) throws PdfException, IOException {
+        // The Contents entry in the dictionary may be either
+        // a stream or an array of streams.
+        if (contents instanceof PdfStream) {
+            _contentStreams = new ArrayList<>(1);
+            _contentStreams.add((PdfStream) contents);
+            return;
+        }
+        else if (contents instanceof PdfArray) {
+            loadContentFromArray(module, (PdfArray) contents);
+        }
+        else {
+            throw new PdfInvalidException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0); // PDF-HUL-27
+        }
+    }
+
+    private void loadContentFromArray(PdfModule module, final PdfArray contents) throws PdfException, IOException {
+        Vector<PdfObject> contentVec =
+            contents.getContent ();
+        if (contentVec.size () == 0) {
+            return;
+        }
+        _contentStreams = new ArrayList<>(contentVec.size ());
+        for (int i = 0; i < contentVec.size (); i++) {
+            PdfObject streamElement = contentVec.elementAt (i);
+            streamElement = module.resolveIndirectObject(streamElement);
+            if (streamElement instanceof PdfStream) {
+                _contentStreams.add ((PdfStream) streamElement);
             }
             else {
-                // There's an BleedBox, but it's not a rectangle
-                throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_BLEEDBOX_MALFORMED);
+                throw new PdfInvalidException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0); // PDF-HUL-28
             }
-        }
-        catch (Exception e) {
-            throw new PdfMalformedException (MessageConstants.ERR_PAGE_TREE_BLEEDBOX_MALFORMED);
         }
     }
 }

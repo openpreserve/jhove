@@ -39,14 +39,6 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
 //    private final static String photoshopSchema =
 //        "http://ns.adobe.com/photoshop/1.0/";
 
-    private int curStructType;
-    /* Values which may be assigned to curStructType */
-    private final static int
-        UNASSIGNED = 0,
-        BAG = 1,
-        ALT = 2,
-        SEQ = 3;
-        
     private boolean pdfaCompliant;
         
     public XMPHandler ()
@@ -63,6 +55,7 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
     }
     
     
+    @Override
     public void processingInstruction (String target, String data)
                         throws SAXException
     {
@@ -77,8 +70,8 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
             int idx = data.indexOf ("begin=");
             idx = data.indexOf ('"', idx + 1);
             if (data.length () >= idx + 2) {
-                int char1 = (int) data.charAt (idx + 1);
-                int char2 = (int) data.charAt (idx + 2);
+                int char1 = data.charAt (idx + 1);
+                int char2 = data.charAt (idx + 2);
                 if (char1 == 0XFF && char2 == 0XFE) {
                     noEndian = false;
                     bigEndian = false;
@@ -125,41 +118,17 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
     
     
     /**
-     *  Catches the start of an element and, if it's one we care
-     *  about, sets state information.
-     */
-    public void startElement (String namespaceURI, String localName,
-                  String rawName, Attributes atts)
-    throws SAXException
-    {
-        //System.out.println (namespaceURI);   // Just for debugging and placeholding
-        if (xmpBasicSchema.equals (namespaceURI)) {
-            if ("Bag".equals (rawName)) {
-                curStructType = BAG;
-            }
-            else if ("Seq".equals (rawName)) {
-                curStructType = SEQ;
-            }
-            else if ("Alt".equals (rawName)) {
-                curStructType = ALT;
-            }
-        }
-    }
-    
-    
-    /**
      *  Catches the end of an element.
      */
+    @Override
     public void endElement (String namespaceURI, String localName,
                 String rawName)
-    throws SAXException
     {
         if (xmpBasicSchema.equals (namespaceURI)) {
             // Check for the end of an XMP structure
             if ("Bag".equals (rawName)||
                     "Seq".equals (rawName) ||
                     "Alt".equals (rawName)) {
-                curStructType = UNASSIGNED;
             }
         }
     }
@@ -168,8 +137,8 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
      *  behavior is to report a "fatal error" to standard output,
      *  which is harmless but scary.  
      */
+    @Override
     public void fatalError(SAXParseException exception)
-                throws SAXException
     {
     }
 }

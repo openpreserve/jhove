@@ -64,8 +64,8 @@ public class JpegModule extends ModuleBase {
      ******************************************************************/
     private static final String NISO_IMAGE_MD = "NisoImageMetadata";
     private static final String NAME = "JPEG-hul";
-    private static final String RELEASE = "1.3";
-    private static final int[] DATE = { 2017, 5, 11 };
+    private static final String RELEASE = "1.4";
+    private static final int[] DATE = { 2018, 03, 29 };
     private static final String[] FORMAT = { "JPEG", "ISO/IEC 10918-1:1994",
             "Joint Photographic Experts Group", "JFIF",
             "JPEG File Interchange Format", "SPIFF", "ISO/IEC 10918-3:1997",
@@ -1025,7 +1025,7 @@ public class JpegModule extends ModuleBase {
                 // width and height. We just grab those and skip the rest.
                 int xThumbPix = readUnsignedByte(_dstream, this);
                 int yThumbPix = readUnsignedByte(_dstream, this);
-                skipBytes(_dstream, length - 4, this);
+                skipBytes(_dstream, length - 10, this);
                 NisoImageMetadata thumbNiso = new NisoImageMetadata();
                 thumbNiso.setImageWidth(xThumbPix);
                 thumbNiso.setImageLength(yThumbPix);
@@ -1039,15 +1039,16 @@ public class JpegModule extends ModuleBase {
                         PropertyType.PROPERTY, PropertyArity.LIST,
                         thumbPropList);
                 _imageList.add(thumbProp);
+                break;
 
             default:
-                skipBytes(_dstream, length - 2, this);
+                skipBytes(_dstream, length - 8, this);
                 break;
 
             // we may want to do stuff with the JFXX APP0
             }
         } else {
-            skipBytes(_dstream, length - 2, this);
+            skipBytes(_dstream, length - 7, this);
         }
     }
 

@@ -99,17 +99,8 @@ public abstract class Tokenizer
     /** PDF/A compliance flag. */
     private boolean _pdfACompliant;
 
-    /** Encryption flag. */
-    private boolean _encrypted;
-
     /** Set of language codes used in UTF strings. */
     private Set<String> _languageCodes;
-
-    /**
-     * Level of nesting of parentheses in a literal;
-     * zero is the base level.
-     */
-    private int _parenLevel;
 
     /**
      * If <code>true</code>, do not attempt to parse non-whitespace
@@ -124,7 +115,7 @@ public abstract class Tokenizer
         _lookAhead = false;
         _ch = 0;
         _offset = 0;
-        _languageCodes = new TreeSet<String> ();
+        _languageCodes = new TreeSet<> ();
         _pdfACompliant = true;
         _scanMode = false;
     }
@@ -200,7 +191,7 @@ public abstract class Tokenizer
                     _ch = readChar ();
                     if (_ch < 0) {
                         _state = State.WHITESPACE;
-                        throw new PdfMalformedException(MessageConstants.ERR_EOF_UNEXPECTED,
+                        throw new PdfMalformedException(MessageConstants.ERR_EOF_UNEXPECTED, // PDF-HUL-64
 							_offset);
                     }
                     _offset++;
@@ -260,7 +251,6 @@ public abstract class Tokenizer
                     else if (_ch == '(') {
                         if (!_scanMode) {
                             _state = State.LITERAL;
-                            _parenLevel = 0;
                             token = new Literal ();
                             buffer = new StringBuilder ();
                         }
@@ -322,7 +312,7 @@ public abstract class Tokenizer
                         // Invalid character in a number
                         _state = State.WHITESPACE;
                         _wsString = EMPTY;
-                        throw new PdfMalformedException (MessageConstants.ERR_TOKEN_LEXICAL, _offset);
+                        throw new PdfMalformedException (MessageConstants.ERR_TOKEN_LEXICAL, _offset); // PDF-HUL-65
                     }
                 }
                 else if (_state == (State.GREATER_THAN)) {
@@ -334,7 +324,7 @@ public abstract class Tokenizer
                     }
                     _state = State.WHITESPACE;
                     _wsString = EMPTY;
-                    throw new PdfMalformedException (MessageConstants.ERR_TOKEN_LEXICAL, _offset);
+                    throw new PdfMalformedException (MessageConstants.ERR_TOKEN_LEXICAL, _offset); // PDF-HUL-66
                 }
                 else if (_state == (State.HEXADECIMAL)) {
                     // We're in a hexadecimal string. We will
@@ -656,12 +646,6 @@ public abstract class Tokenizer
         return _languageCodes;
     }
 
-    /** Tells this object that the file is or isn't encrypted. */
-    public void setEncrypted (boolean encrypted)
-    {
-        _encrypted = encrypted;
-    }
-
     /**
      * Returns the value of the pdfACompliant flag, which indicates that
      * the tokenizer hasn't detected non-compliance. A value of
@@ -752,7 +736,7 @@ public abstract class Tokenizer
             d = h - 0x57;
         }
         else {
-            throw new PdfMalformedException(MessageConstants.ERR_HEX_STRING_CHAR_INVALID);
+            throw new PdfMalformedException(MessageConstants.ERR_HEX_STRING_CHAR_INVALID); // PDF-HUL-65
         }
 
         return d;

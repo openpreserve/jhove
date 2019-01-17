@@ -67,26 +67,22 @@
     </pack>
     <pack name="JHOVE Shell Scripts" required="yes">
       <os family="unix"/>
-      <description>Bash execution scripts for command line and GUI apps.</description>
+      <description>Bash execution scripts for command-line and GUI apps.</description>
       <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove"/>
-      <parsable targetfile="$INSTALL_PATH/jhove" type="shell"/>
       <executable targetfile="$INSTALL_PATH/jhove"/>
       <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove-gui"/>
-      <parsable targetfile="$INSTALL_PATH/jhove-gui" type="shell"/>
       <executable targetfile="$INSTALL_PATH/jhove-gui"/>
     </pack>
-    <pack name="JHOVE Batch Script" required="yes">
+    <pack name="JHOVE Batch Scripts" required="yes">
       <os family="windows"/>
-      <description>DOS batch execution scripts for command line and GUI apps.</description>
+      <description>DOS batch execution scripts for command-line and GUI apps.</description>
       <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove.bat"/>
-      <parsable targetfile="$INSTALL_PATH/jhove.bat" type="plain"/>
       <executable targetfile="$INSTALL_PATH/jhove.bat"/>
       <file targetdir="$INSTALL_PATH" override="true" src="scripts/jhove-gui.bat"/>
-      <parsable targetfile="$INSTALL_PATH/jhove-gui.bat" type="plain"/>
       <executable targetfile="$INSTALL_PATH/jhove-gui.bat"/>
     </pack>
     <pack name="JHOVE External Modules" required="no">
-      <description>Third party validation modules developed for JHOVE, currently GZIP, PNG and WARC.</description>
+      <description>Third-party validation modules developed for JHOVE, currently GZIP, PNG and WARC.</description>
       <file targetdir="$INSTALL_PATH/bin" src="bin/jhove-ext-modules-${project.version}.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/jhove-ext-modules-${project.version}.jar"/>
       <file targetdir="$INSTALL_PATH/conf" override="true" src="config/ext-modules/jhove.conf"/>

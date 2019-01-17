@@ -19,7 +19,7 @@ public enum CoreMessageConstants {
 	public static final String EXC_CONF_FILE_UNPRS = "Error parsing configuration file: ";
 	public static final String EXC_FILE_OPEN = "Cannot open output file: ";
 	public static final String EXC_HNDL_INST_FAIL = "Cannot instantiate handler: ";
-	public static final String EXC_JAVA_VER_INCMPT = "Java 1.6 or higher is required";
+	public static final String EXC_JAVA_VER_INCMPT = "Java 1.8 or higher is required";
 	public static final String EXC_MODL_INST_FAIL = "Cannot instantiate module: ";
 	public static final String EXC_PRV_CNSTRCT = "Entered private constructor for: ";
 	public static final String EXC_PROP_VAL_NULL = "Null value not permitted or property: ";

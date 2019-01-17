@@ -43,6 +43,7 @@ public class Checksummer implements java.util.zip.Checksum
     /** Resets all checksums and the byte count to their
      *  initial values.
      */
+    @Override
     public void reset ()
     {
         _nByte = 0;
@@ -60,6 +61,7 @@ public class Checksummer implements java.util.zip.Checksum
      *  return the CRC32 value, since that's the one which
      *  is guaranteed to be available.
      */
+    @Override
     public long getValue ()
     {
         return _crc32.getValue ();
@@ -84,6 +86,7 @@ public class Checksummer implements java.util.zip.Checksum
      *  Updates the checksum with the argument.
      *  Called when an unsigned byte is available.
      */
+    @Override
     public void update (int b)
     {
 	byte sb;
@@ -115,6 +118,7 @@ public class Checksummer implements java.util.zip.Checksum
      *  Updates the checksum with the argument.
      *  Called when a byte array is available.
      */
+    @Override
     public void update (byte[] b, int off, int len)
     {
 	_crc32.update (b, off, len);
@@ -181,7 +185,7 @@ public class Checksummer implements java.util.zip.Checksum
     
     /** Pad a hexadecimal (or other numeric) string out to
      *  the specified length with leading zeroes. */
-    private String padLeadingZeroes (String str, int len)
+    private static String padLeadingZeroes (String str, int len)
     {
         // This is optimized for adding just one leading zero
         // or none, which will be the usual case.

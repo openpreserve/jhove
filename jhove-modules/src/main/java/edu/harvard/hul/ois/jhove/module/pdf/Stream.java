@@ -96,7 +96,7 @@ public class Stream
      *  PdfException.  This supports the abbreviated filter names
      *  in Appendix H of the PDF spec. */
     public void initRead (RandomAccessFile raf) 
-            throws IOException, PdfException 
+            throws IOException
     {
         _bytesRead = 0;
         raf.seek(_offset);
@@ -120,7 +120,7 @@ public class Stream
         }
         InputStream is = new ByteArrayInputStream (_sdata);
         for (int i = 0; i < _filters.length; i++) {
-            Filter filt = (Filter) _filters[i];
+            Filter filt = _filters[i];
             String filtName = filt.getFilterName ();
 
             /* ASCIIHex-, ASCII85- and RunLengthDecode are currently
@@ -199,7 +199,7 @@ public class Stream
             }
             else if (!Character.isWhitespace(c)) {
                 throw new PdfMalformedException 
-                    (MessageConstants.ERR_STREAM_CONTAINS_MALFORMED_ASCII_NUMBER);
+                    (MessageConstants.ERR_STREAM_ASCII_INTEGER_INVALID); // PDF-HUL-46
             }
         }
         return val;

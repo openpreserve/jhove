@@ -35,7 +35,7 @@ public class ObjectStream {
     /* Index of the object stream.  Each element is an int[2],
      * consisting of an object number and an offset.
      */
-    private Map _index;
+    private Map<Integer, Integer> _index;
 
     /**
      *  Constructor.
@@ -100,7 +100,7 @@ public class ObjectStream {
         Stream strm = _ostrm.getStream ();
         strm.setFilters (_ostrm.getFilters ());
         strm.initRead (_raf);
-        _index = new HashMap (_numObjects);
+        _index = new HashMap<> (_numObjects);
         for (int i = 0; i < _numObjects; i++) {
             /* If I'm reading it correctly, the numbers are
              * encoded as ASCII strings separated by white space.
@@ -117,8 +117,8 @@ public class ObjectStream {
     public PdfObject getObject (int objnum)
         throws PdfException
     {
-        Integer onum = new Integer (objnum);
-        Integer off = (Integer) _index.get (onum);
+        Integer onum = Integer.valueOf(objnum);
+        Integer off = _index.get (onum);
         try {
             if (off != null) {
                 int offset = off.intValue ();
@@ -132,7 +132,7 @@ public class ObjectStream {
         }
         catch (IOException e) {
             throw new PdfMalformedException 
-                    (MessageConstants.ERR_OBJ_STREAM_OFFSET_OUT_OF_BOUNDS);
+                    (MessageConstants.ERR_OBJ_STREAM_OFFSET_OUT_OF_BOUNDS); // PDF-HUL-16
         }
     }
 

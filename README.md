@@ -19,7 +19,7 @@ Copyright 2003-2012 by JSTOR and the President and Fellows of Harvard College,
 JHOVE is made available under the
 [GNU Lesser General Public License (LGPL)](http://www.gnu.org/licenses/lgpl.html).
 
-Rev. 1.18.1, 2017-11-30
+Rev. 1.20.1, 2018-03-29
 
 JHOVE Homepage
 --------------
@@ -60,9 +60,9 @@ JHOVE is currently being maintained by the
 
 Pre-requisites
 --------------
- 1. Java JRE 1.6  
-    Version 1.18 of JHOVE is built and tested against Oracle JDK 8,
-    and OpenJDK 7 & 8 on Travis. Releases are built using Oracle JDK 7
+ 1. Java JRE 1.8  
+    Version 1.20 of JHOVE is built and tested against Oracle JDK 8,
+    and OpenJDK 8 on Travis. Releases are built using Oracle JDK 8
     from the [OPF's Jenkins server](http://jenkins.openpreservation.org/).
 
  2. If you would like to build JHOVE from source, then life will be easiest if
@@ -81,7 +81,7 @@ POM:
 ```xml
 <properties>
   ...
-  <jhove.version>1.18.1</jhove.version>
+  <jhove.version>1.20.1</jhove.version>
 </properties>
 ```
 Use this dependency for the core classes Maven module (e.g. `JhoveBase`,
@@ -147,17 +147,17 @@ following property:
 ```xml
 <properties>
   ...
-  <jhove.version>1.19.1</jhove.version>
+  <jhove.version>1.21.1</jhove.version>
 </properties>
 ```
 or even:
 ```xml
 <properties>
   ...
-  <jhove.version>[1.19.0,1.20.0]</jhove.version>
+  <jhove.version>[1.21.0,1.22.0]</jhove.version>
 </properties>
 ```
-to always use the latest 1.19 build.
+to always use the latest 1.21 build.
 
 ### For Developers: Building JHOVE from Source
 Clone this project, checkout the integration branch, and use Maven, e.g.:
@@ -241,16 +241,6 @@ For now we're producing:
  * a simple cross-platform installer that installs the application JAR, support
    scripts, etc.
 
-Currently all options, including the installer, require Java 1.6 or above to be
-pre-installed. Supporting 1.5 is no longer realistic, Oracle ceased support for
-its own 1.6 distribution in 2012. We've kept to 1.6 as a transition towards
-moving to 1.7. If you really need a 1.5-compatible build then you can override
-the target version for the Maven build, e.g.:
-
-    mvn clean install -Djava.target.version=1.5
-
-This also produces an installer that will work on 1.5 JREs.
-
 Usage
 -----
 
@@ -325,7 +315,7 @@ broken into three Maven modules with an additional installer module added.
       |-jhove-modules/
 All Maven artifacts are produced in versioned form,
 i.e. `${artifactId}-${project.version}.jar`, where `${project.version}` defaults
-to `1.18.0` unless you explicitly set the version number.
+to `1.20.0` unless you explicitly set the version number.
 
 ### jhove
 The `jhove` project root acts as a Maven parent and reactor for the sub-modules.
