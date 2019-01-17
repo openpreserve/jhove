@@ -742,6 +742,7 @@ public class WaveModule extends ModuleBase {
         // Check if the chunk size is greater than the RIFF's remaining length
         if (Long.compareUnsigned(bytesRemaining, chunkSize) < 0) {
             info.setMessage(new ErrorMessage(MessageConstants.ERR_CHUNK_SIZE_INVAL, _nByte));
+            info.setWellFormed(false);
             return false;
         }
 
