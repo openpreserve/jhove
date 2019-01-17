@@ -65,7 +65,8 @@ public class DTDMapper {
             filename = "xhtml-symbol.ent";
         }
         if (filename != null) {
-            URL dtdURL = DTDMapper.class.getResource(filename);
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+            URL dtdURL = classLoader.getResource(filename);
             if (dtdURL != null) {
                 try {
                     InputStream strm = dtdURL.openStream();
