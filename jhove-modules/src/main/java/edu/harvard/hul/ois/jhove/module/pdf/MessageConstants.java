@@ -168,6 +168,7 @@ public enum MessageConstants {
 	public static final String ERR_XREF_STRM_DICT_ROOT_MISSING = "Root entry missing in cross-ref stream dictionary"; // PDF-HUL-70
 	public static final String ERR_XREF_STRM_OBJ_NUM_INVALID = "Invalid object number in cross-reference stream"; // PDF-HUL-80
 	public static final String ERR_XREF_STRM_MALFORMED = "Malformed cross-reference stream"; // PDF-HUL-81
+	public static final String ERR_XREF_STRM_TYPE_INVALID = "Cross-reference stream must be a stream";
 	public static final String ERR_XREF_TABLE_INVALID = "Invalid cross-reference table"; // PDF-HUL-68, PDF-HUL-69
 	public static final String ERR_XREF_TABLE_MALFORMED = "Malformed cross-reference table"; // PDF-HUL-82, PDF-HUL-83
 	public static final String ERR_XREF_TABLE_OPERATOR_ILLEGAL = "Illegal operator in cross-reference table"; // PDF-HUL-84
