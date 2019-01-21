@@ -4,6 +4,8 @@ SCRIPT_DIR="$( dirname "$( readlink -f "${BASH_SOURCE[0]}" )")"
 export SCRIPT_DIR
 
 # Include utils script
+# shellcheck source=inc/bb-utils.sh
+# shellcheck disable=SC1091
 . "${SCRIPT_DIR}/inc/bb-utils.sh"
 # TEST_ROOT directory default
 TEST_ROOT="./test-root"

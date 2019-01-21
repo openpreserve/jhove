@@ -50,6 +50,7 @@ if [[ -d "${targetRoot}" ]]; then
 	rm -rf "${targetRoot}"
 fi
 
+echo "Executing baseline update"
 # Simply copy baseline for now we're not making any changes
 cp -R "${baselineRoot}" "${targetRoot}"
 
@@ -89,3 +90,9 @@ find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/>1.
 find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's%<reportingModule release="1.11" date="2018-03-29">PDF%<reportingModule release="1.12" date="2018-10-01">PDF%' {} \;
 # In the README file
 find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.11" date="2018-03-29">PDF%<reportingModule release="1.12" date="2018-10-01">PDF%' {} \;
+
+# Fix Class Cast Error in PDF Module see https://github.com/openpreserve/jhove/issues/173
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/class-cast.pdf.jhove.xml" ]]; then
+	echo "Copying #173 fix"
+	cp "${candidateRoot}/regression/modules/PDF-hul/class-cast.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/"
+fi
