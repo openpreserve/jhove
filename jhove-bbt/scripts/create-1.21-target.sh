@@ -50,5 +50,12 @@ if [[ -d "${targetRoot}" ]]; then
 	rm -rf "${targetRoot}"
 fi
 
+echo "Executing baseline update"
 # Simply copy baseline for now we're not making any changes
 cp -R "${baselineRoot}" "${targetRoot}"
+
+# Fix Class Cast Error in PDF Module see https://github.com/openpreserve/jhove/issues/173
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/class-cast.pdf.jhove.xml" ]]; then
+	echo "Copying #173 fix"
+	cp "${candidateRoot}/regression/modules/PDF-hul/class-cast.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/"
+fi

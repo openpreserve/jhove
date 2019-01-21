@@ -26,7 +26,7 @@ installLegacyJhove() {
 		return;
 	fi;
 	minorVersion=$1;
-	installDest=$( realpath $2 );
+	installDest=$( realpath "$2" );
 	wget "https://github.com/openpreserve/jhove/releases/download/v1.${minorVersion}/jhove-1_${minorVersion}.tar.gz" -O - | tar -xz  -C "${installDest}"
 	jhoveHome="${installDest}/1.${minorVersion}";
 	if [[ -e $jhoveHome ]]
@@ -76,7 +76,7 @@ installJhoveFromFile() {
 	mkdir -p "${installDestParam}"
 
 	# need full path of installation directory for auto installer
-	installDest=`realpath $installDestParam`;
+	installDest=$(realpath "$installDestParam");
 
 	# Overwrite the auto-install configured installation directory using sed.
 	autoInstallConfig="${SCRIPT_DIR}/auto-vagrant-install.xml"
