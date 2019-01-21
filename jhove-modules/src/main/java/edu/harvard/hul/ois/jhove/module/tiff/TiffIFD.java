@@ -1392,7 +1392,7 @@ public class TiffIFD
                                     new Long (_subfileType)));
         }
         if (_documentName != null) {
-            entries.add (new Property ("DocmentName", PropertyType.STRING,
+            entries.add (new Property ("DocumentName", PropertyType.STRING,
                                        _documentName));
         }
         if (_pageName != null) {
