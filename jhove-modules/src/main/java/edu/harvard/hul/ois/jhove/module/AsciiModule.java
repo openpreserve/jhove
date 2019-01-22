@@ -55,9 +55,10 @@ public class AsciiModule extends ModuleBase {
     private static final String VALIDITY = null;
     private static final String REPINFO = "Additional representation information includes: line ending and control characters";
     private static final String NOTE = null;
-    // TODO: Update rights
-    private static final String RIGHTS = "Copyright 2003-2007 by JSTOR and "
+    private static final String RIGHTS = "Copyright 2003-2015 by JSTOR and "
             + "the President and Fellows of Harvard College. "
+            + "Copyright 2015-2019 by the Open Preservation Foundation. "
+            + "Version 1.4 onwards developed by Open Preservation Foundation. "
             + "Released under the GNU Lesser General Public License.";
 
     /******************************************************************

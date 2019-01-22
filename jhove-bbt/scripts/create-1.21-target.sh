@@ -70,6 +70,8 @@ find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module
 # In the ASCII Module Audit file
 find "${targetRoot}" -type f -name "audit-ASCII-hul.jhove.xml" -exec sed -i 's%>2006-09-05</date>%>2018-10-01</date>%' {} \;
 find "${targetRoot}" -type f -name "audit-ASCII-hul.jhove.xml" -exec sed -i 's/>1.3<\/release>$/>1.4<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-ASCII-hul.jhove.xml" -exec sed -i 's/2003-2007/2003-2015/' {} \;
+find "${targetRoot}" -type f -name "audit-ASCII-hul.jhove.xml" -exec sed -i 's/College. Released under/College. Copyright 2015-2019 by the Open Preservation Foundation. Version 1.4 onwards developed by Open Preservation Foundation. Released under/' {} \;
 # In the README file
 find "${targetRoot}" -type f -name "README.jhove.xml" -exec sed -i 's%<reportingModule release="1.3" date="2006-09-05">ASCII%<reportingModule release="1.4" date="2018-10-01">ASCII%' {} \;
 # Replace in the results files
