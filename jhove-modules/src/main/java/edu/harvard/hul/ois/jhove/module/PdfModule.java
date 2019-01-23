@@ -1268,8 +1268,13 @@ public class PdfModule extends ModuleBase {
             _prevxref = -1;
             /* But I do need to read the dictionary at this point, to get
              * essential stuff out of it. */
-            PdfStream str = (PdfStream) _parser.readObjectDef((Numeric) xref);
-            PdfDictionary dict = str.getDict();
+            PdfObject pdfStreamObj = _parser.readObjectDef((Numeric) xref);
+            // the retrieved object should be stream
+            if (!(pdfStreamObj instanceof PdfStream)) {
+                throw new PdfInvalidException(MessageConstants.ERR_XREF_STRM_TYPE_INVALID,
+                        _parser.getOffset());
+            }
+            PdfDictionary dict = ((PdfStream) pdfStreamObj).getDict();
             _docCatDictRef = (PdfIndirectObj) dict.get(DICT_KEY_ROOT);
             if (_docCatDictRef == null) {
 				throw new PdfInvalidException(MessageConstants.ERR_XREF_STRM_DICT_ROOT_MISSING, // PDF-HUL-70
@@ -1423,8 +1428,13 @@ public class PdfModule extends ModuleBase {
         while (_startxref > 0) {
             try {
                 _parser.seek(_startxref);
-                PdfStream pstream =
-                   (PdfStream) _parser.readObjectDef();
+                PdfObject pdfStreamObj = _parser.readObjectDef();
+                // the retrieved object should be stream
+                if (!(pdfStreamObj instanceof PdfStream)) {
+                    throw new PdfInvalidException(MessageConstants.ERR_XREF_STRM_TYPE_INVALID,
+                            _parser.getOffset());
+                }
+                PdfStream pstream = (PdfStream) pdfStreamObj;
                 int sObjNum = pstream.getObjNumber();
                 CrossRefStream xstream = new CrossRefStream(pstream);
                 if (!xstream.isValid()) {

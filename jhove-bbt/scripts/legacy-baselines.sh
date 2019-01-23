@@ -26,6 +26,8 @@ export SCRIPT_DIR
 glbCleanedBackRet=""
 
 # Include utils script
+# shellcheck source=inc/bb-utils.sh
+# shellcheck disable=SC1091
 . "$SCRIPT_DIR/inc/bb-utils.sh"
 
 # Globals to hold the checked param vals, default to JHOVE version 11
