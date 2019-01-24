@@ -101,10 +101,18 @@ public class GeoTiffStringsTest {
     @Test /* PROJECTEDCSTYPE */
     public void pickPROJECTEDCSTYPE() {
         //assertMappingMatch(profile.PROJECTEDCSTYPE_INDEX, profile.PROJECTEDCSTYPE, 2100, "GGRS87 Greek Grid");
-        /* https://sno.phy.queensu.ca/~phil/exiftool/TagNames/GeoTiff.html */
-        /* keys 2100 - 3300 not found in spec, therefore no test for exists ( TODO: (discuss) should or should not exist? )*/
+        /* https://sno.phy.queensu.ca/~phil/exiftool/TagNames/GeoTiff.html 
+         * keys 2100 - 3300 out of range, compare with http://geotiff.maptools.org/spec/geotiff6.html
+         * Open for Discussion: should this data be collected at all?
+         * Changed Decission from YES to NO, since there is a lot of new key-value-pairs from the latest source
+         * that have no way of conformation
+         * The only hint we currently have are the ranges defined in geotiff-spec 1.0
+         */
+
         assertMappingMatch(profile.PROJECTEDCSTYPE_INDEX, profile.PROJECTEDCSTYPE, 20137, "Adindan UTM zone 37N");
         assertMappingMatch(profile.PROJECTEDCSTYPE_INDEX, profile.PROJECTEDCSTYPE, 20255, "AGD66 AMG zone 55");
+        // Test for the latest Key-Value-Pairs from csv-source of libgeotiff-database
+        assertMappingMatch(profile.PROJECTEDCSTYPE_INDEX, profile.PROJECTEDCSTYPE, 25833, "ETRF89 / UTM zone 33N"); 
         assertMappingMatch(profile.PROJECTEDCSTYPE_INDEX, profile.PROJECTEDCSTYPE, 26730, "NAD27 Alabama West");
         assertMappingMatch(profile.PROJECTEDCSTYPE_INDEX, profile.PROJECTEDCSTYPE, 32009, "NAD27 Nevada West");
         assertMappingMatch(profile.PROJECTEDCSTYPE_INDEX, profile.PROJECTEDCSTYPE, 32548, "WGS72BE UTM zone 48S");
