@@ -340,6 +340,9 @@ public class Utf8Module extends ModuleBase {
             if ((value = ckSummer.getSHA1()) != null) {
                 info.setChecksum(new Checksum(value, ChecksumType.SHA1));
             }
+            if ((value = ckSummer.getSHA256()) != null) {
+                info.setChecksum(new Checksum(value, ChecksumType.SHA256));
+            }
         }
 
         /*

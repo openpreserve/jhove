@@ -718,6 +718,10 @@ public class JhoveBase {
             if (value != null) {
                 info.setChecksum(new Checksum(value, ChecksumType.SHA1));
             }
+            value = ckSummer.getSHA256();
+            if (value != null) {
+                info.setChecksum(new Checksum(value, ChecksumType.SHA256));
+            }
         }
         return tempFile;
     }

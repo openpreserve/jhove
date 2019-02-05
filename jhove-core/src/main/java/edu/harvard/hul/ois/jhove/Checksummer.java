@@ -25,6 +25,8 @@ public class Checksummer implements java.util.zip.Checksum
     private MessageDigest _md5;
     /** SHA-1 message digest. */
     private MessageDigest _sha1;
+    /** SHA-256 message digest. */
+    private MessageDigest _sha256;
 
     /**
      *  Creates a Checksummer, with instances of each of 
@@ -51,6 +53,7 @@ public class Checksummer implements java.util.zip.Checksum
         try {
             _md5  = MessageDigest.getInstance ("MD5");
             _sha1 = MessageDigest.getInstance ("SHA-1");
+            _sha256 = MessageDigest.getInstance ("SHA-256");
         }
         catch (NoSuchAlgorithmException e) {
         }
@@ -79,6 +82,9 @@ public class Checksummer implements java.util.zip.Checksum
 	}
 	if (_sha1 != null) {
        	    _sha1.update (b);
+	}
+	if (_sha256 != null) {
+            _sha256.update (b);
 	}
     }
 
@@ -112,6 +118,9 @@ public class Checksummer implements java.util.zip.Checksum
 	if (_sha1 != null) {
 	    _sha1.update (b);
 	}
+	if (_sha256 != null) {
+	    _sha256.update (b);
+	}
     }
     
     /**
@@ -128,6 +137,9 @@ public class Checksummer implements java.util.zip.Checksum
 	if (_sha1 != null) {
 	    _sha1.update (b, off, len);
 	}
+	if (_sha256 != null) {
+	    _sha256.update (b, off, len);
+	}
     }
 
     /**
@@ -135,7 +147,7 @@ public class Checksummer implements java.util.zip.Checksum
      */
     public String getCRC32 ()
     {
-	return padLeadingZeroes 
+	return padLeadingZeroes
             (Long.toHexString (_crc32.getValue ()), 8);
     }
 
@@ -175,6 +187,28 @@ public class Checksummer implements java.util.zip.Checksum
 	    for (int i=0; i<digest.length; i++) {
 		int un = (digest[i] >= 0) ? digest[i] : 256+digest[i];
 		buffer.append (padLeadingZeroes 
+                                (Integer.toHexString (un), 2));
+	    }
+	    value = buffer.toString ();
+	}
+
+	return value;
+    }
+
+    /**
+     *  Returns the value of the SHA-256 digest as a hex string.
+     *  Returns null if the digest is not available.
+     */
+    public String getSHA256 ()
+    {
+	String value = null;
+
+	if (_sha256 != null) {
+	    StringBuffer buffer = new StringBuffer ();
+	    byte [] digest = _sha256.digest ();
+	    for (int i=0; i<digest.length; i++) {
+		int un = (digest[i] >= 0) ? digest[i] : 256+digest[i];
+		buffer.append (padLeadingZeroes
                                 (Integer.toHexString (un), 2));
 	    }
 	    value = buffer.toString ();

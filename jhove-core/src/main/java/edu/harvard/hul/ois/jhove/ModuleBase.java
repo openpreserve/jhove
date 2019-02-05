@@ -76,6 +76,8 @@ public abstract class ModuleBase
     protected MessageDigest _md5;
     /**  SHA-1 digest calculated on content object */
     protected MessageDigest _sha1;
+    /**  SHA-256 digest calculate on content object */
+    protected MessageDigest _sha256;
         /**  Flag indicating valid checksum information set */
     protected boolean _checksumFinished;
     /**  Indicator of how much data to report */
@@ -576,6 +578,16 @@ public abstract class ModuleBase
         _checksumFinished = true;
     }
 
+    /**
+     *  Sets the SHA-256 calculated digest for the content object, and sets
+     *  the checksumFinished flag.
+     */
+    public final void setSHA256 (MessageDigest sha256)
+    {
+        _sha256 = sha256;
+        _checksumFinished = true;
+    }
+
     /******************************************************************
      * Parsing methods.
      ******************************************************************/
@@ -783,6 +795,7 @@ public abstract class ModuleBase
         try {
             _md5  = MessageDigest.getInstance ("MD5");
             _sha1 = MessageDigest.getInstance ("SHA-1");
+            _sha256 = MessageDigest.getInstance ("SHA-256");
         }
         catch (NoSuchAlgorithmException e) {
         }    
@@ -828,6 +841,9 @@ public abstract class ModuleBase
             }
             if ((value = ckSummer.getSHA1 ()) != null) {
                 info.setChecksum (new Checksum (value, ChecksumType.SHA1));
+            }
+            if ((value = ckSummer.getSHA256 ()) != null) {
+                info.setChecksum (new Checksum (value, ChecksumType.SHA256));
             }
         }
     }

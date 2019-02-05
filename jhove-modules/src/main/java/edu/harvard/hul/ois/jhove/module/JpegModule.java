@@ -766,6 +766,9 @@ public class JpegModule extends ModuleBase {
             if ((value = _ckSummer.getSHA1()) != null) {
                 info.setChecksum(new Checksum(value, ChecksumType.SHA1));
             }
+            if ((value = _ckSummer.getSHA256()) != null) {
+                info.setChecksum(new Checksum(value, ChecksumType.SHA256));
+            }
         }
 
         // Put the primary image in the image list.
