@@ -6,7 +6,6 @@
 package edu.harvard.hul.ois.jhove.module.xml;
 
 import edu.harvard.hul.ois.jhove.*;
-import edu.harvard.hul.ois.jhove.module.html.HtmlMetadata;
 import java.util.*;
 import org.xml.sax.Attributes;
 

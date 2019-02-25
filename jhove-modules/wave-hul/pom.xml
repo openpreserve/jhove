@@ -8,4 +8,13 @@
   <artifactId>wave-hul</artifactId>
   <name>JHOVE WAVE Module HUL</name>
   <description>WAVE module developed by Harvard University Library</description>
+
+  <dependencies>
+      <dependency>
+        <groupId>org.openpreservation.jhove.modules</groupId>
+        <artifactId>aiff-hul</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+  </dependencies>
+
 </project>

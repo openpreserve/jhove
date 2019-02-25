@@ -4,7 +4,7 @@
  *
  **********************************************************************/
 
-package edu.harvard.hul.ois.jhove.module.html;
+package edu.harvard.hul.ois.jhove.module.xml;
 
 import java.io.InputStream;
 import java.net.URL;

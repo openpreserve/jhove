@@ -7,6 +7,8 @@
 package edu.harvard.hul.ois.jhove.module.html;
 
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.module.xml.HtmlMetadata;
+
 import java.util.*;
 
 /** Representation of a parsed HTML open tag, including its attributes.

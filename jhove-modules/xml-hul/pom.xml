@@ -8,4 +8,13 @@
   <artifactId>xml-hul</artifactId>
   <name>JHOVE XML Module HUL</name>
   <description>XML module developed by Harvard University Library</description>
+
+  <dependencies>
+      <dependency>
+        <groupId>org.openpreservation.jhove.modules</groupId>
+        <artifactId>utf8-hul</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+  </dependencies>
+
 </project>

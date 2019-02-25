@@ -7,8 +7,6 @@ package edu.harvard.hul.ois.jhove.module.xml;
 
 //import java.io.*;
 import edu.harvard.hul.ois.jhove.*;
-import edu.harvard.hul.ois.jhove.module.html.HtmlMetadata;
-import edu.harvard.hul.ois.jhove.module.html.DTDMapper;
 
 import java.io.File;
 import java.io.FileInputStream;

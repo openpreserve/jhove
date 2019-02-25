@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import edu.harvard.hul.ois.jhove.module.utf8.Utf8Block;
+
 public class Utf8BlockTest {
 
 	/** This test makes sure that the code blocks are declared in monotonically

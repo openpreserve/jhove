@@ -13,7 +13,8 @@ import java.util.Map;
 
 import edu.harvard.hul.ois.jhove.ErrorMessage;
 import edu.harvard.hul.ois.jhove.RepInfo;
-import edu.harvard.hul.ois.jhove.module.Utf8BlockMarker;
+import edu.harvard.hul.ois.jhove.module.utf8.Utf8BlockMarker;
+import edu.harvard.hul.ois.jhove.module.xml.HtmlMetadata;
 
 
 

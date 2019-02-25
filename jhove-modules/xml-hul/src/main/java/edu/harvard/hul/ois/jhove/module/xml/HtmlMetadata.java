@@ -3,7 +3,7 @@
  * Copyright 2004-2009 by JSTOR and the President and Fellows of Harvard College
  **********************************************************************/
 
-package edu.harvard.hul.ois.jhove.module.html;
+package edu.harvard.hul.ois.jhove.module.xml;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +13,7 @@ import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyArity;
 import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.TextMDMetadata;
-import edu.harvard.hul.ois.jhove.module.Utf8BlockMarker;
+import edu.harvard.hul.ois.jhove.module.utf8.Utf8BlockMarker;
 
 /**
  * Repository for an HTML document's metadata.

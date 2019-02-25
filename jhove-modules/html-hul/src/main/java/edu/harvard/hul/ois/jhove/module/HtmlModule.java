@@ -23,6 +23,7 @@ import java.io.*;
 import java.util.*;
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.module.html.*;
+import edu.harvard.hul.ois.jhove.module.xml.HtmlMetadata;
 
 /**
  * Module for identification and validation of HTML files.

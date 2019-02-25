@@ -13,7 +13,8 @@ import java.util.List;
 import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyArity;
 import edu.harvard.hul.ois.jhove.PropertyType;
-import edu.harvard.hul.ois.jhove.module.Utf8BlockMarker;
+import edu.harvard.hul.ois.jhove.module.utf8.Utf8BlockMarker;
+import edu.harvard.hul.ois.jhove.module.xml.HtmlMetadata;
 
 /** Representation of parsed HTML PCDATA.
  * 

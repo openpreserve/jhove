@@ -8,4 +8,13 @@
   <artifactId>html-hul</artifactId>
   <name>JHOVE HTML Module HUL</name>
   <description>HTML module developed by Harvard University Library</description>
+
+  <dependencies>
+      <dependency>
+        <groupId>org.openpreservation.jhove.modules</groupId>
+        <artifactId>xml-hul</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+  </dependencies>
+
 </project>

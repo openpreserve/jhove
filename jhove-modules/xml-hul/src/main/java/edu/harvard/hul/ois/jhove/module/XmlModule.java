@@ -24,9 +24,8 @@ package edu.harvard.hul.ois.jhove.module;
 import java.io.*;
 import java.util.*;
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.module.utf8.Utf8BlockMarker;
 import edu.harvard.hul.ois.jhove.module.xml.*;
-import edu.harvard.hul.ois.jhove.module.html.HtmlMetadata;
-import edu.harvard.hul.ois.jhove.module.html.DTDMapper;
 
 import org.xml.sax.XMLReader;
 import javax.xml.parsers.SAXParserFactory;
