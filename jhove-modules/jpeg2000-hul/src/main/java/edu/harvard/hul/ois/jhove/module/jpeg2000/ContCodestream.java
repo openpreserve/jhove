@@ -205,7 +205,7 @@ public class ContCodestream {
         while (_tiles.size () <= idx) {
             _tiles.add (new Tile ());
         }
-        return (Tile) _tiles.get (idx);
+        return _tiles.get (idx);
     }
     
     /** Sets the value of curTile. */

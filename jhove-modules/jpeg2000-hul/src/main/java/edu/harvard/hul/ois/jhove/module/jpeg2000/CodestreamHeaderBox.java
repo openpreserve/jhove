@@ -41,7 +41,8 @@ public class CodestreamHeaderBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         if (_parentBox != null) {
             wrongBoxContext();
             return false;
@@ -53,8 +54,6 @@ public class CodestreamHeaderBox extends JP2Box {
         _module.setNCodestreams (nch);
         curCodestream = _module.getCodestream (nch);
 
-        int sizeLeft = (int) _boxHeader.getDataLength() ;
-        BoxHeader subhdr = new BoxHeader (_module, _dstrm);
         int state = 0;        // state variable for checking progress of boxes
         JP2Box box = null;
         while (hasNext ()) {
@@ -117,7 +116,8 @@ public class CodestreamHeaderBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Codestream Header Box";
     }

@@ -69,8 +69,8 @@ public class GzipEntryProperties {
      */
     public Map<String, String> getProperties() {
         properties = new LinkedHashMap<String, String>();
-        setProperty(data.isNonCompliant, "Is non compliant.");
-        setProperty(data.offset, "Offset value.");
+        setProperty(Boolean.valueOf(data.isNonCompliant), "Is non compliant.");
+        setProperty(Long.valueOf(data.offset), "Offset value.");
         setProperty(data.fileName, "GZip entry name.");
         setProperty(data.comment, "GZip entry comment.");
         setProperty(data.date, "GZip entry date.");
@@ -78,9 +78,9 @@ public class GzipEntryProperties {
         setProperty(data.os.label, "GZip entry operating system.");
         setProperty(getCrc16(), "GZip entry header crc16.");
         setProperty("0x" + Integer.toHexString(data.readCrc32), "GZip entry crc32.");
-        setProperty(data.readISize, "GZip entry extracted size (ISIZE) value.");
-        setProperty(data.size, "GZip entry (computed) uncompressed size, in bytes.");
-        setProperty(data.csize, "GZip entry (computed) compressed size, in bytes.");
+        setProperty(Long.valueOf(data.readISize), "GZip entry extracted size (ISIZE) value.");
+        setProperty(Long.valueOf(data.size), "GZip entry (computed) uncompressed size, in bytes.");
+        setProperty(Long.valueOf(data.csize), "GZip entry (computed) compressed size, in bytes.");
         setProperty(getCompressionRatio(), "GZip entry (computed) compression ratio.");
         return properties;
     }
@@ -91,7 +91,7 @@ public class GzipEntryProperties {
     private String getCrc16() {
     	String crc16;
     	if (data.readCrc16 != null) {
-            crc16 = "0x" + Integer.toHexString(data.readCrc16 & 0xffff);
+            crc16 = "0x" + Integer.toHexString(data.readCrc16.intValue() & 0xffff);
     	} else {
     		crc16 = null;
     	}
@@ -102,13 +102,13 @@ public class GzipEntryProperties {
      * @return The calculated compressionRatio.
      */
     private String getCompressionRatio() {
-        Double ratio = -1.0;
+        Double ratio = Double.valueOf(-1.0);
         long size  = data.size;
         long csize = data.csize;
         if ((size > 0L) && (csize > 0L)) {
             // Compute compression ratio with 2 decimals only.
             long l = ((size - csize) * 10000L) / size;
-            ratio = l / 100.00;
+            ratio = Double.valueOf(l / 100.00);
         }
         return ratio.toString();
     }

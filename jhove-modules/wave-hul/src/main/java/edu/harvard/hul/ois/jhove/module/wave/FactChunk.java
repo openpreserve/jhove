@@ -47,7 +47,8 @@ public class FactChunk extends Chunk {
      * @return   <code>false</code> if the chunk is structurally invalid,
      *           otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
 
         WaveModule module = (WaveModule) _module;
 
@@ -63,7 +64,7 @@ public class FactChunk extends Chunk {
         module.skipBytes(_dstream, bytesLeft, module);
 
         Property sizeProp = new Property("Size",
-                PropertyType.LONG, chunkSize);
+                PropertyType.LONG, Long.valueOf(chunkSize));
         module.addWaveProperty(new Property("Fact",
                 PropertyType.PROPERTY, sizeProp));
 

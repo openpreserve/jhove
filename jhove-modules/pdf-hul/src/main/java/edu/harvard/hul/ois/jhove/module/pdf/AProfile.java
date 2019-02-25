@@ -8,7 +8,6 @@ package edu.harvard.hul.ois.jhove.module.pdf;
 
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.module.*;
-import java.io.*;
 import java.util.*;
 import org.xml.sax.*;
 import javax.xml.parsers.*;

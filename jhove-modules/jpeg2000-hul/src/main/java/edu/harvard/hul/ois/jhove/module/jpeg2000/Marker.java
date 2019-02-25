@@ -25,14 +25,16 @@ public class Marker extends MarkerSegment {
     /** Overrides the superclass to return 0 without consuming
      *  any bytes from the DataInputStream.
      */
-    protected int readMarkLen () throws IOException
+    @Override
+	protected int readMarkLen () throws IOException
     {
         return 0;
     }
     
     
     /**  Default processing.  Does nothing, and always returns true. */
-    protected boolean process (int bytesToEat)
+    @Override
+	protected boolean process (int bytesToEat)
     {
         return true;
     }

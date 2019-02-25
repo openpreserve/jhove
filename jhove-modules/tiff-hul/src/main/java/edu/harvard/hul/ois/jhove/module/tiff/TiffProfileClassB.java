@@ -23,7 +23,8 @@ public final class TiffProfileClassB extends TiffProfile
      *  Class B profile.  See the TIFF 6.0 specification for
      *  details.
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
 	if (!(ifd instanceof TiffIFD)) {
 	    return false;

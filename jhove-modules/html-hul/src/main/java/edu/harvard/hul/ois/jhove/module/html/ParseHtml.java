@@ -90,7 +90,6 @@ public class ParseHtml implements ParseHtmlConstants {
     List attrs = new LinkedList ();
     Token name;
     String slasher;
-    boolean complete;
     jj_consume_token(LABRACKET);
     name = Name();
     label_2:

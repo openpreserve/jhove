@@ -40,7 +40,8 @@ public class ContCodestreamBox extends JP2Box {
      *  The reading and interpretation of the actual codestream 
      *  occurs within the execution of readBox.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         initBytesRead ();
         
         // Must come after the JP2 header
@@ -63,7 +64,8 @@ public class ContCodestreamBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Contiguous Codestream Box";
     }

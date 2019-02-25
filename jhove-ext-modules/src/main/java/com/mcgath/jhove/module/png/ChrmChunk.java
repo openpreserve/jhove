@@ -30,6 +30,7 @@ public class ChrmChunk extends PNGChunk {
 	/** The IHDR chunk contains image information in a fixed format.
 	 *  I don't think the spec says it can't have extra bytes
 	 *  which would just be padding. */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		String badChunk = "Bad cHRM chunk";
 		processChunkCommon(info);

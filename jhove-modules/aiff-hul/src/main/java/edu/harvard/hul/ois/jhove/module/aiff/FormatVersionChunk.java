@@ -44,7 +44,8 @@ public class FormatVersionChunk extends Chunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk (RepInfo info) throws IOException
+    @Override
+	public boolean readChunk (RepInfo info) throws IOException
     {
         AiffModule module = (AiffModule) _module;
         long timestamp = module.readUnsignedInt (_dstream);

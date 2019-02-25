@@ -352,7 +352,6 @@ public class HtmlTagDesc {
         List val = new ArrayList (_attributes.size ());
         // Build a list of required attributes, which will
         // be whittled away by comparison with the parameter list
-        List reqNames = new ArrayList (_attributes.size ());
         Iterator iter = _attributes.iterator ();
         while (iter.hasNext ()) {
             HtmlAttributeDesc desc = (HtmlAttributeDesc) iter.next ();

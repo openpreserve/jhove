@@ -24,7 +24,8 @@ public abstract class TiffProfileDLF extends TiffProfile
      *  first, then do additional checking if it returns true.
      *  details.
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
         if (!(ifd instanceof TiffIFD)) {
             return false;

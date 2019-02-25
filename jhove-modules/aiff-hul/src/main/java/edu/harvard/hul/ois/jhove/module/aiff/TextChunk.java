@@ -45,7 +45,8 @@ public abstract class TextChunk extends Chunk {
      *  AuthorChunk.  AnnotationChunk overrides it, since there
      *  can be multiple annotations.
      */
-    public boolean readChunk (RepInfo info)
+    @Override
+	public boolean readChunk (RepInfo info)
 	throws IOException
     {
         AiffModule module = (AiffModule) _module;

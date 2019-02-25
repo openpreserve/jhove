@@ -26,7 +26,8 @@ public final class TiffProfileDLFGray extends TiffProfileDLF
      *  of the profile.  See the documentation for
      *  details.
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
 	if (!(ifd instanceof TiffIFD)) {
 	    return false;

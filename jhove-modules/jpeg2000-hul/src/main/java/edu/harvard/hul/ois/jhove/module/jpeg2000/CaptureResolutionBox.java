@@ -36,13 +36,13 @@ public class CaptureResolutionBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         if (!(_parentBox instanceof ResolutionBox)) {
             wrongBoxContext ();
             return false;
         }
         initBytesRead ();
-        ResolutionBox resBox = (ResolutionBox) _parentBox;
 
         // Vertical Capture grid resolution num & denom
         int vrcNum = _module.readUnsignedShort (_dstrm);
@@ -79,7 +79,8 @@ public class CaptureResolutionBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Capture Resolution Box";
     }

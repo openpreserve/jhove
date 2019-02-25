@@ -2,7 +2,6 @@ package com.mcgath.jhove.module;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -137,7 +136,8 @@ public class PngModule extends ModuleBase {
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
-    public void checkSignatures (File file, InputStream stream, RepInfo info) 
+    @Override
+	public void checkSignatures (File file, InputStream stream, RepInfo info) 
         throws IOException
     {
         int i;
@@ -181,7 +181,8 @@ public class PngModule extends ModuleBase {
      *                    called again with <code>parseIndex</code> 
      *                    equal to that return value.
      */
-    public int parse (InputStream stream, RepInfo info, int parseIndex)
+    @Override
+	public int parse (InputStream stream, RepInfo info, int parseIndex)
         throws IOException
     {
         initParse ();
@@ -389,10 +390,10 @@ public class PngModule extends ModuleBase {
 				name));
 		props.add (new Property ("Sample depth",
 				PropertyType.INTEGER,
-				sampleDepth));
+				Integer.valueOf(sampleDepth)));
 		props.add (new Property ("Number of samples",
 				PropertyType.INTEGER,
-				numSamples));
+				Integer.valueOf(numSamples)));
 		_spltList.add (prop);
 	}
 	
@@ -400,7 +401,8 @@ public class PngModule extends ModuleBase {
     /**
      *   Initializes the state of the module for parsing.
      */
-    protected void initParse ()
+    @Override
+	protected void initParse ()
     {
         super.initParse ();
         ihdrSeen = false;

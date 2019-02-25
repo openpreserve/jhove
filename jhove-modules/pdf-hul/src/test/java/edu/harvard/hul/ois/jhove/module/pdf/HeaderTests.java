@@ -18,7 +18,6 @@ import edu.harvard.hul.ois.jhove.module.TestUtils;
  *         <a href="https://github.com/carlwilson">carlwilson AT github</a>
  * @version 0.1 Created 13 Mar 2018:11:28:10
  */
-@SuppressWarnings("static-method")
 public class HeaderTests {
 	private static final String pdfResourcePath = "/edu/harvard/hul/ois/jhove/module/pdf/";
 	private static final String headerResourcePath = pdfResourcePath + "header/";

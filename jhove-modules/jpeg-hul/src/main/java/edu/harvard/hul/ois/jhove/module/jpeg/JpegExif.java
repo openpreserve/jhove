@@ -57,9 +57,7 @@ public final class JpegExif {
     public RepInfo readExifData (DataInputStream dstream, JhoveBase je, 
 				 int length)
     {
-        RandomAccessFile tiffRaf = null;
         File tiffFile = null;
-        FileOutputStream fos = null;
         RepInfo info = new RepInfo ("tempfile");
         /* We're now at the beginning of the TIFF data.
 	 * Copy it into a temporary file, then parse that
@@ -74,8 +72,7 @@ public final class JpegExif {
                      e.getMessage ()));
             return info;
         }
-        try {
-            fos = new FileOutputStream (tiffFile);
+        try (FileOutputStream fos = new FileOutputStream (tiffFile)) {
             int bufSize = je.getBufferSize ();
             int tiffLen = length - 8;
             /* Set a default buffer size if the app doesn't specify one. */
@@ -86,20 +83,21 @@ public final class JpegExif {
                 // can buffer whole file in one buffer
                 bufSize = tiffLen;
             }
-            BufferedOutputStream bos = new BufferedOutputStream (fos, bufSize);
-            byte[] buf = new byte[bufSize]; 
-            while (tiffLen > 0) {
-                //int len;
-                int sz;
-                if (tiffLen < bufSize) {
-                    sz = tiffLen;
-                }
-                else {
-                    sz = bufSize;
-                }
-                sz = dstream.read (buf, 0, sz);
-                bos.write(buf, 0, sz);
-                tiffLen -= sz;
+            try (BufferedOutputStream bos = new BufferedOutputStream (fos, bufSize)) {
+	            byte[] buf = new byte[bufSize]; 
+	            while (tiffLen > 0) {
+	                //int len;
+	                int sz;
+	                if (tiffLen < bufSize) {
+	                    sz = tiffLen;
+	                }
+	                else {
+	                    sz = bufSize;
+	                }
+	                sz = dstream.read (buf, 0, sz);
+	                bos.write(buf, 0, sz);
+	                tiffLen -= sz;
+	            }
             }
             fos.flush ();
             edu.harvard.hul.ois.jhove.module.TiffModule tiffMod = 
@@ -107,8 +105,10 @@ public final class JpegExif {
             tiffMod.setByteOffsetValid(true);
             // Now parse the file, using a special parsing method.
             // Close only after we're all done.
-            tiffRaf = new RandomAccessFile (tiffFile, "r");
-            List ifds = tiffMod.exifParse (tiffRaf, info);
+            List ifds = null;
+            try (RandomAccessFile tiffRaf = new RandomAccessFile (tiffFile, "r")) {
+	            ifds = tiffMod.exifParse (tiffRaf, info);
+            }
             if (ifds == null) {
                 return info;
             }
@@ -186,18 +186,6 @@ public final class JpegExif {
             // RepInfo, otherwise I have to copy the message afterwards.
         }
         finally {
-            if (tiffRaf != null) {
-                try {
-                    tiffRaf.close();
-                }
-                catch (Exception e) {}
-            }
-            if (fos != null) {
-                try {
-                    fos.close();
-                }
-                catch (Exception e) {}
-            }
             if (tiffFile != null) {
                 try {
                     tiffFile.delete();

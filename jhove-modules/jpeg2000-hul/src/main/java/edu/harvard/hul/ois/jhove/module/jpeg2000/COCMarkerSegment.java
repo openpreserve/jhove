@@ -42,7 +42,8 @@ public class COCMarkerSegment extends MarkerSegment {
      *  @return                <code>true</code> if segment is well-formed,
      *                         <code>false</code> otherwise.
      */
-    protected boolean process(int bytesToEat) throws IOException {
+    @Override
+	protected boolean process(int bytesToEat) throws IOException {
         int compIdxBytes =  nCompBytes();
         if (compIdxBytes == 0) {
             // COC found before SIZ

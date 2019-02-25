@@ -218,8 +218,6 @@ public final class XhtmlProcessing {
         String title = null;
         String src = null;
         String longdesc = null;
-        int height = -1;
-        int width = -1;
         for (int i = 0; i < atts.getLength (); i++) {
             String attname = atts.getLocalName (i);
             String attval = atts.getValue (i);

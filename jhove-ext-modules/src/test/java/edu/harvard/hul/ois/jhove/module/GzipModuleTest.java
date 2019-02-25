@@ -208,13 +208,13 @@ public class GzipModuleTest {
         assertFalse(messageKeyIterator.hasNext());
     }
     
-    private Map<String, Integer> extractMessages(Collection<Message> messages) {
+    private static Map<String, Integer> extractMessages(Collection<Message> messages) {
 		Map<String, Integer> res = new HashMap<String, Integer>();
 		for(Message m : messages) {
 			if(res.containsKey(m.getMessage())) {
-				res.put(m.getMessage(), res.get(m.getMessage()) + 1);
+				res.put(m.getMessage(), Integer.valueOf(res.get(m.getMessage()).intValue() + 1));
 			} else {
-				res.put(m.getMessage(), 1);
+				res.put(m.getMessage(), Integer.valueOf(1));
 			}
 		}
 		return res;

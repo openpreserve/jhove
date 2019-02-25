@@ -414,7 +414,8 @@ public abstract class JP2Box extends BoxHolder {
 
     /** Returns the name of the Box. All Boxes should
      *  override this. */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return null;
     }

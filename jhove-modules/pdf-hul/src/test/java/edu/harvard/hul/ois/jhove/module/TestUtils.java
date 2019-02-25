@@ -101,9 +101,8 @@ public final class TestUtils {
 	private static RepInfo parseTestFile(final PdfModule pdfModule,
 			final File toTest) {
 		RepInfo info = new RepInfo(toTest.getName());
-		RandomAccessFile raf = null;
-		try {
-			raf = new RandomAccessFile(toTest, "r");
+		try (RandomAccessFile raf = new RandomAccessFile(toTest, "r")) {
+			
 			pdfModule.parse(raf, info);
 		} catch (FileNotFoundException excep) {
 			excep.printStackTrace();
@@ -111,13 +110,6 @@ public final class TestUtils {
 		} catch (IOException excep) {
 			excep.printStackTrace();
 			fail("IOException Reading: " + toTest.getName());
-		}
-		try {
-			if (raf != null) {
-				raf.close();
-			}
-		} catch (@SuppressWarnings("unused") IOException excep) {
-			// We don't care about this..
 		}
 		return info;
 	}

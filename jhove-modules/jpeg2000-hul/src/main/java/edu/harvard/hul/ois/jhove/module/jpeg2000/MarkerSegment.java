@@ -191,7 +191,6 @@ public abstract class MarkerSegment {
         if (nComp == 0) {
             return 0;        // indicates an error condition
         }
-        int compIdx;
         // size of Ccoc field depends on number of components
         return (nComp < 257 ? 1 : 2);   
     }

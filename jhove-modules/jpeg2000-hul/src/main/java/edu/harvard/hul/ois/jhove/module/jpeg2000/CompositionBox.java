@@ -42,7 +42,8 @@ public class CompositionBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         JP2Box box;
         if (_parentBox != null) {
             // May not occur in a superbox

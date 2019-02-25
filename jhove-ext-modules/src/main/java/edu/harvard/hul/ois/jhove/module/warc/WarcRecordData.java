@@ -140,8 +140,8 @@ public class WarcRecordData {
     		throw new IllegalArgumentException(MessageConstants.ERR_RECORD_DATA_NULL);
     	}
     	WarcHeader header = record.header;
-        startOffset = record.getStartOffset();
-        consumed = record.getConsumed();
+        startOffset = Long.valueOf(record.getStartOffset());
+        consumed = Long.valueOf(record.getConsumed());
         if (header.bValidVersionFormat) {
             this.warcVersionStr = header.versionStr;
         }
@@ -257,13 +257,13 @@ public class WarcRecordData {
         /*
          * Compliance.
          */
-        bIsNonCompliant = !record.isCompliant();
+        bIsNonCompliant = Boolean.valueOf(!record.isCompliant());
         isValidBlockDigest = record.isValidBlockDigest;
         isValidPayloadDigest = record.isValidPayloadDigest;
         /*
          * Payload.
          */
-        bHasPayload = record.hasPayload();
+        bHasPayload = Boolean.valueOf(record.hasPayload());
         Payload payload = record.getPayload();
         HeaderLine headerLine;
         if (payload != null) {

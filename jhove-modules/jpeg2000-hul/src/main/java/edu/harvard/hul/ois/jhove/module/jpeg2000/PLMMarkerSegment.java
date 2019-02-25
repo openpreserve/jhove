@@ -40,7 +40,8 @@ public class PLMMarkerSegment extends MarkerSegment {
      *                         If it is 0 for a MarkerSegment, the
      *                         number of bytes to consume is unknown.
      */
-    protected boolean process(int bytesToEat) throws IOException {
+    @Override
+	protected boolean process(int bytesToEat) throws IOException {
         int zplm = ModuleBase.readUnsignedByte (_dstream, _module);
         --bytesToEat;
         if (zplm == 0) {

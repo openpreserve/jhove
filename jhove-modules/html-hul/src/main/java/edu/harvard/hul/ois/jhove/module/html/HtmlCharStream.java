@@ -137,7 +137,8 @@ public class HtmlCharStream implements CharStream
      }
   }
 
-  public char BeginToken() throws java.io.IOException
+  @Override
+public char BeginToken() throws java.io.IOException
   {
      tokenBegin = -1;
      char c = readChar();

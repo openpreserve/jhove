@@ -88,8 +88,9 @@ public class SpiffDir {
     {
         NisoImageMetadata niso = new NisoImageMetadata();
         _module.skipBytes (dstream, 4, _module);   // tndata
-        int height = _module.readUnsignedShort (dstream);
-        int width = _module.readUnsignedShort (dstream);
+        // Read Unsigned shorts for height and width, we don't need the values
+        _module.readUnsignedShort (dstream);
+        _module.readUnsignedShort (dstream);
         int tns = ModuleBase.readUnsignedByte (dstream, _module);
         int tnbps = ModuleBase.readUnsignedByte (dstream, _module);
         int tnc = ModuleBase.readUnsignedByte (dstream, _module);

@@ -16,6 +16,7 @@ public class ZtxtChunk extends GeneralTextChunk {
 		duplicateAllowed = true;
 	}
 	
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		final String badchunk = "Bad zTXt chunk";
 		processChunkCommon(info);

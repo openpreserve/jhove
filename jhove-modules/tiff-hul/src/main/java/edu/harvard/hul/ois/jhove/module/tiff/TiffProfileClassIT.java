@@ -26,7 +26,8 @@ public abstract class TiffProfileClassIT
      *  Subclasses will call this, then apply additional
      *  tests if it returns <code>true</code>.
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
 	if (!(ifd instanceof TiffIFD)) {
 	    return false;

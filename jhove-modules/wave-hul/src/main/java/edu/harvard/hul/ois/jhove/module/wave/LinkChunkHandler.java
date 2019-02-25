@@ -61,7 +61,8 @@ public class LinkChunkHandler extends DefaultHandler {
      *  qualified name by preference, local name if the
      *  qualified name isn't available.
      */
-    public void startElement (String namespaceURI,
+    @Override
+	public void startElement (String namespaceURI,
                 String localName,
                 String qualifiedName,
                 Attributes atts) throws SAXException
@@ -78,7 +79,8 @@ public class LinkChunkHandler extends DefaultHandler {
     /** 
      *  SAX parser callback method for PC text.
      */
-    public void characters (char [] ch, int start, int length)
+    @Override
+	public void characters (char [] ch, int start, int length)
     throws SAXException
     {
         _content.append (ch, start, length);
@@ -88,7 +90,8 @@ public class LinkChunkHandler extends DefaultHandler {
     /** 
      *  SAX parser callback method.
      */
-    public void endElement (String namespaceURI, String localName,
+    @Override
+	public void endElement (String namespaceURI, String localName,
                 String rawName)
     throws SAXException
     {

@@ -37,7 +37,8 @@ public class InstructionSetBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         
         // Flags indicating which parameters are in instructions
 
@@ -57,11 +58,11 @@ public class InstructionSetBox extends JP2Box {
         boolean hasCrop = ((ityp & 0X20) != 0);
         
         // Get the repeat count
-        int rept = _module.readUnsignedShort (_dstrm);
+        _module.readUnsignedShort (_dstrm);
         
         // Get the tick duration.  Ignored (but still takes up
         // space) if hasAnimation is false.
-        long tick = _module.readUnsignedInt (_dstrm);
+        _module.readUnsignedInt (_dstrm);
         
         int sizeLeft = (int) _boxHeader.getDataLength () - 8;
         // If all significant bits of ityp are 0, there are no instructions

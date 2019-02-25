@@ -25,7 +25,8 @@ public final class TiffProfileClassR extends TiffProfile
      *  Class R profile.  See the TIFF 6.0 specification for
      *  details.
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
 	if (!(ifd instanceof TiffIFD)) {
 	    return false;

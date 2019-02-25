@@ -21,6 +21,7 @@ public class GamaChunk extends PNGChunk {
 		duplicateAllowed = false;
 	}
 	
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
 		final String badChunk = "Bad gAMA chunk";

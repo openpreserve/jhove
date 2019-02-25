@@ -35,7 +35,8 @@ public class ReaderRequirementsBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         final String badRR =
             MessageConstants.ERR_READER_REQUIREMENTS_BOX_CONTENT_INVALID;
         if (_parentBox != null) {
@@ -50,27 +51,25 @@ public class ReaderRequirementsBox extends JP2Box {
         int maskLength = ModuleBase.readUnsignedByte (_dstrm, _module);
         // maskLength specifies the size of FUAM and DCM, and may be
         // 1, 2, 4 or 8
-        long fuam;     // fully understand aspects mask
-        long dcm;      // decode completely mask
         switch (maskLength) {
             case 1:
-            fuam = ModuleBase.readUnsignedByte (_dstrm, _module);
-            dcm = ModuleBase.readUnsignedByte (_dstrm, _module);
+            ModuleBase.readUnsignedByte (_dstrm, _module);
+            ModuleBase.readUnsignedByte (_dstrm, _module);
             break;
             
             case 2:
-            fuam = _module.readUnsignedShort (_dstrm);
-            dcm = _module.readUnsignedShort (_dstrm);
+            _module.readUnsignedShort (_dstrm);
+            _module.readUnsignedShort (_dstrm);
             break;
             
             case 4:
-            fuam = _module.readUnsignedInt (_dstrm);
-            dcm = _module.readUnsignedInt (_dstrm);
+            _module.readUnsignedInt (_dstrm);
+            _module.readUnsignedInt (_dstrm);
             break;
             
             case 8:
-            fuam = _module.readSignedLong (_dstrm);
-            dcm = _module.readSignedLong (_dstrm);
+            _module.readSignedLong (_dstrm);
+            _module.readSignedLong (_dstrm);
             break;
             
             default:
@@ -84,7 +83,7 @@ public class ReaderRequirementsBox extends JP2Box {
         // nsf (number of standard flags)
         int nsf = _module.readUnsignedShort (_dstrm);
         for (int i = 0; i < nsf; i++) {
-            int sf = _module.readUnsignedShort (_dstrm);
+            _module.readUnsignedShort (_dstrm);
         }
         // Table L-13, which gives legal values of the 
         // SF field, has a completely blank "value" column!
@@ -100,7 +99,8 @@ public class ReaderRequirementsBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Reader Requirements Box";
     }

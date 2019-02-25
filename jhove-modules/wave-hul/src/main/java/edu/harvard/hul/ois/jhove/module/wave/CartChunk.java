@@ -45,7 +45,8 @@ public class CartChunk extends Chunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
         WaveModule module = (WaveModule) _module;
         byte[] buf4 = new byte[4];
         ModuleBase.readByteBuf (_dstream, buf4, module);

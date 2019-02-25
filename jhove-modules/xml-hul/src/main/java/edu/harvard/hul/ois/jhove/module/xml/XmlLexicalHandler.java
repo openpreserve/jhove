@@ -37,7 +37,8 @@ public class XmlLexicalHandler implements LexicalHandler {
      * Does nothing.
      * @see org.xml.sax.ext.LexicalHandler#endCDATA()
      */
-    public void endCDATA() throws SAXException {
+    @Override
+	public void endCDATA() throws SAXException {
         // no action necessary
     }
 
@@ -46,7 +47,8 @@ public class XmlLexicalHandler implements LexicalHandler {
      * Does nothing.
      * @see org.xml.sax.ext.LexicalHandler#endDTD()
      */
-    public void endDTD() throws SAXException {
+    @Override
+	public void endDTD() throws SAXException {
 
     }
 
@@ -55,7 +57,8 @@ public class XmlLexicalHandler implements LexicalHandler {
      * Does nothing.
      * @see org.xml.sax.ext.LexicalHandler#startCDATA()
      */
-    public void startCDATA() throws SAXException {
+    @Override
+	public void startCDATA() throws SAXException {
         // no action necessary
     }
 
@@ -64,7 +67,8 @@ public class XmlLexicalHandler implements LexicalHandler {
      * 
      * @see org.xml.sax.ext.LexicalHandler#comment(char[], int, int)
      */
-    public void comment(char[] text, int start, int length) throws SAXException {
+    @Override
+	public void comment(char[] text, int start, int length) throws SAXException {
         _comments.add (String.copyValueOf (text, start, length));
     }
 
@@ -74,7 +78,8 @@ public class XmlLexicalHandler implements LexicalHandler {
      * 
      * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
      */
-    public void startEntity(String name) throws SAXException 
+    @Override
+	public void startEntity(String name) throws SAXException 
     {
         _entityNames.add (name);
     }
@@ -85,7 +90,8 @@ public class XmlLexicalHandler implements LexicalHandler {
      * 
      * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
      */
-    public void endEntity(String name) throws SAXException 
+    @Override
+	public void endEntity(String name) throws SAXException 
     {
         // No action necessary
     }
@@ -96,7 +102,8 @@ public class XmlLexicalHandler implements LexicalHandler {
      * Does nothing.
      * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String, java.lang.String, java.lang.String)
      */
-    public void startDTD(String arg0, String arg1, String arg2)
+    @Override
+	public void startDTD(String arg0, String arg1, String arg2)
         throws SAXException 
     {
 

@@ -6,31 +6,11 @@ public class ParseHtmlTokenManager implements ParseHtmlConstants
 {
   public  java.io.PrintStream debugStream = System.out;
   public  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
-private final int jjStopStringLiteralDfa_7(int pos, long active0)
-{
-   switch (pos)
-   {
-      default :
-         return -1;
-   }
-}
-private final int jjStartNfa_7(int pos, long active0)
-{
-   return jjMoveNfa_7(jjStopStringLiteralDfa_7(pos, active0), pos + 1);
-}
 private final int jjStopAtPos(int pos, int kind)
 {
    jjmatchedKind = kind;
    jjmatchedPos = pos;
    return pos + 1;
-}
-private final int jjStartNfaWithStates_7(int pos, int kind, int state)
-{
-   jjmatchedKind = kind;
-   jjmatchedPos = pos;
-   try { curChar = input_stream.readChar(); }
-   catch(java.io.IOException e) { return pos + 1; }
-   return jjMoveNfa_7(state, pos + 1);
 }
 private final int jjMoveStringLiteralDfa0_7()
 {
@@ -61,28 +41,16 @@ private final void jjCheckNAddTwoStates(int state1, int state2)
    jjCheckNAdd(state1);
    jjCheckNAdd(state2);
 }
-private final void jjCheckNAddStates(int start, int end)
-{
-   do {
-      jjCheckNAdd(jjnextStates[start]);
-   } while (start++ != end);
-}
-private final void jjCheckNAddStates(int start)
-{
-   jjCheckNAdd(jjnextStates[start]);
-   jjCheckNAdd(jjnextStates[start + 1]);
-}
 static final long[] jjbitVec0 = {
    0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
 };
 private final int jjMoveNfa_7(int startState, int curPos)
 {
-   int[] nextStates;
    int startsAt = 0;
    jjnewStateCnt = 1;
    int i = 1;
    jjstateSet[0] = startState;
-   int j, kind = 0x7fffffff;
+   int kind = 0x7fffffff;
    for (;;)
    {
       if (++jjround == 0x7fffffff)
@@ -104,7 +72,6 @@ private final int jjMoveNfa_7(int startState, int curPos)
       }
       else if (curChar < 128)
       {
-         long l = 1L << (curChar & 077);
          MatchLoop: do
          {
             switch(jjstateSet[--i])
@@ -145,7 +112,7 @@ private final int jjMoveNfa_7(int startState, int curPos)
       catch(java.io.IOException e) { return curPos; }
    }
 }
-private final int jjStopStringLiteralDfa_0(int pos, long active0)
+private final static int jjStopStringLiteralDfa_0(int pos, long active0)
 {
    switch (pos)
    {
@@ -156,14 +123,6 @@ private final int jjStopStringLiteralDfa_0(int pos, long active0)
 private final int jjStartNfa_0(int pos, long active0)
 {
    return jjMoveNfa_0(jjStopStringLiteralDfa_0(pos, active0), pos + 1);
-}
-private final int jjStartNfaWithStates_0(int pos, int kind, int state)
-{
-   jjmatchedKind = kind;
-   jjmatchedPos = pos;
-   try { curChar = input_stream.readChar(); }
-   catch(java.io.IOException e) { return pos + 1; }
-   return jjMoveNfa_0(state, pos + 1);
 }
 private final int jjMoveStringLiteralDfa0_0()
 {
@@ -237,12 +196,11 @@ private final int jjMoveStringLiteralDfa3_0(long old0, long active0)
 }
 private final int jjMoveNfa_0(int startState, int curPos)
 {
-   int[] nextStates;
    int startsAt = 0;
    jjnewStateCnt = 1;
    int i = 1;
    jjstateSet[0] = startState;
-   int j, kind = 0x7fffffff;
+   int kind = 0x7fffffff;
    for (;;)
    {
       if (++jjround == 0x7fffffff)
@@ -264,7 +222,6 @@ private final int jjMoveNfa_0(int startState, int curPos)
       }
       else if (curChar < 128)
       {
-         long l = 1L << (curChar & 077);
          MatchLoop: do
          {
             switch(jjstateSet[--i])
@@ -425,7 +382,7 @@ private final int jjMoveStringLiteralDfa6_4(long old0, long active0)
    }
    return 7;
 }
-private final int jjStopStringLiteralDfa_5(int pos, long active0)
+private final static int jjStopStringLiteralDfa_5(int pos, long active0)
 {
    switch (pos)
    {

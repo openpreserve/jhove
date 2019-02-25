@@ -40,7 +40,8 @@ public class QCCMarkerSegment extends MarkerSegment {
      *  @return                <code>true</code> if segment is well-formed,
      *                         <code>false</code> otherwise.
      */
-    protected boolean process(int bytesToEat)
+    @Override
+	protected boolean process(int bytesToEat)
 	throws IOException
     {
         int compIdxBytes =  nCompBytes();

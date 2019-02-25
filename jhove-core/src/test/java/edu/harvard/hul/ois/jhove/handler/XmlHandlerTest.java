@@ -273,15 +273,12 @@ public class XmlHandlerTest {
 	 */
 	private static String readXmlFile(File f) throws IOException {
 		StringBuilder sb = new StringBuilder();
-		BufferedReader br = new BufferedReader(new FileReader(f));
-		try {
+		try (BufferedReader br = new BufferedReader(new FileReader(f))) {
 			String line = br.readLine();
 			while (line != null) {
 				sb.append(line);
 				line = br.readLine();
 			}
-		} finally {
-			br.close();
 		}
 		return sb.toString().replaceAll("\\s+", " ");
 	}

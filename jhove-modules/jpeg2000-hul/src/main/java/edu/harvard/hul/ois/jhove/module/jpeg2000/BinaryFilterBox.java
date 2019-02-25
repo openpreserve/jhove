@@ -59,7 +59,8 @@ public class BinaryFilterBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         // Compare the filter type with the GZIP type.
         // If it's anything else, just report a property
         // and ignore the contents.
@@ -67,7 +68,7 @@ public class BinaryFilterBox extends JP2Box {
         ModuleBase.readByteBuf (_dstrm, uuidbuf, _module);
         boolean isGzip = true;
         for (int i = 0; i < 16; i++) {
-            if ((int) uuidbuf[i] != gzipuuid[i]) {
+            if (uuidbuf[i] != gzipuuid[i]) {
                 isGzip = false;
             }
         }
@@ -106,7 +107,8 @@ public class BinaryFilterBox extends JP2Box {
         return true;
     }
 
-    public Object next ()
+    @Override
+	public Object next ()
     {
         BoxHeader hdr = new BoxHeader (_module, boxStream);
         try {
@@ -134,7 +136,8 @@ public class BinaryFilterBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Binary Filter Box";
     }

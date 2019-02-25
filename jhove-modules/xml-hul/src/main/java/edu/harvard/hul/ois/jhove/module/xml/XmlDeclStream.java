@@ -58,7 +58,8 @@ public class XmlDeclStream extends FilterInputStream {
      * Reads the next byte of data from this input stream.
      * Processes bytes as it reads them.
      */
-    public int read () throws IOException 
+    @Override
+	public int read () throws IOException 
     {
         int retval = super.read ();
         if (retval > 0) {
@@ -73,11 +74,12 @@ public class XmlDeclStream extends FilterInputStream {
      * input stream into an array of bytes.
      * Processes bytes as it reads them.
      */
-    public int read (byte[] b) throws IOException 
+    @Override
+	public int read (byte[] b) throws IOException 
     {
         int nbytes = super.read (b);
         for (int i = 0; i < nbytes; i++) {
-            process ((int) b[i]);
+            process (b[i]);
         }
         return nbytes;
     }
@@ -88,11 +90,12 @@ public class XmlDeclStream extends FilterInputStream {
      * input stream into an array of bytes.
      * Processes bytes as it reads them.
      */
-    public int read (byte[] b, int off, int len) throws IOException 
+    @Override
+	public int read (byte[] b, int off, int len) throws IOException 
     {
         int nbytes = super.read (b, off, len);
         for (int i = off; i < off + nbytes; i++) {
-            process ((int) b[i]);
+            process (b[i]);
         }
         
         return nbytes;
@@ -149,7 +152,7 @@ public class XmlDeclStream extends FilterInputStream {
         _prevChar = b;
         
         if (!seenChars || declBuf != null) {
-            if (declBuf == null && b == (int) '<') {
+            if (declBuf == null && b == '<') {
                 declBuf = new StringBuffer ("<");
             }
             else if (declBuf != null) {
@@ -160,11 +163,11 @@ public class XmlDeclStream extends FilterInputStream {
                 } 
             }
         }
-        if (refBuf == null && b == (int) '&') {
+        if (refBuf == null && b == '&') {
             refBuf = new StringBuffer ("&");
         }
         else if (refBuf != null) {
-            if (refBuf.length() == 1 && b != (int) '#') {
+            if (refBuf.length() == 1 && b != '#') {
                 // If & isn't followed by #, it's not a character
                 // reference.
                 refBuf = null;
@@ -236,10 +239,10 @@ public class XmlDeclStream extends FilterInputStream {
             for (int i = 3; i < refBuf1.length (); i++) {
                 char ch = Character.toUpperCase (refBuf1.charAt (i));
                 if (ch >= 'A' && ch <= 'F') {
-                    val = 16 * val + ((int) ch - 'A' + 10);
+                    val = 16 * val + (ch - 'A' + 10);
                 }
                 else if (ch >= '0' && ch <= '9') {
-                    val = 16 * val + ((int) ch - '0');
+                    val = 16 * val + (ch - '0');
                 }
                 else {
                     return;        // invalid character in hex ref
@@ -251,7 +254,7 @@ public class XmlDeclStream extends FilterInputStream {
             for (int i = 2; i < refBuf1.length (); i++) {
                 char ch = refBuf1.charAt (i);
                 if (ch >= '0' && ch <= '9') {
-                    val = 10 * val + ((int) ch - '0');
+                    val = 10 * val + (ch - '0');
                 }
                 else {
                     return;        // invalid character in hex ref
@@ -265,7 +268,7 @@ public class XmlDeclStream extends FilterInputStream {
     
     /* extract a parameter (after an equal sign)
      * from a string, after the offset off. */
-    private String extractParam (String str, int off)
+    private static String extractParam (String str, int off)
     {
         int equIdx = str.indexOf ('=', off);
         if (equIdx == -1) {

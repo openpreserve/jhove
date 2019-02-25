@@ -27,11 +27,9 @@ public class NisoImageMetadataTest {
 
 	@Test
 	public void testExtractIccProfileDescriptionGoodv2() throws IOException {
-		InputStream is = this.getClass().getResourceAsStream("sRGB2014.icc");
-		byte[] iccData = toByteArray(is);
-		is.close();
 
-		try {
+		try (InputStream is = this.getClass().getResourceAsStream("sRGB2014.icc")) {
+			byte[] iccData = toByteArray(is);
 			String profileName = NisoImageMetadata
 					.extractIccProfileDescription(iccData);
 			assertEquals("sRGB2014", profileName);
@@ -42,12 +40,11 @@ public class NisoImageMetadataTest {
 
 	@Test
 	public void testExtractIccProfileDescriptionGoodv4() throws IOException {
-		InputStream is = this.getClass().getResourceAsStream(
-				"sRGB_v4_ICC_preference.icc");
-		byte[] iccData = toByteArray(is);
-		is.close();
 
-		try {
+
+		try (InputStream is = this.getClass().getResourceAsStream(
+				"sRGB_v4_ICC_preference.icc")) {
+			byte[] iccData = toByteArray(is);
 			String profileName = NisoImageMetadata
 					.extractIccProfileDescription(iccData);
 			assertEquals("sRGB v4 ICC preference perceptual intent beta",
@@ -57,7 +54,7 @@ public class NisoImageMetadataTest {
 		}
 	}
 
-	private byte[] toByteArray(InputStream is) throws IOException {
+	private static byte[] toByteArray(InputStream is) throws IOException {
 		final int NB_READ = 16384;
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 

@@ -56,8 +56,8 @@ public class CompressionType {
      * Initializes the valid values.
      */
     static {
-        values.put(MAXIMUM_COMPRESSION.value, MAXIMUM_COMPRESSION);
-        values.put(FASTEST_ALGORITHM.value, FASTEST_ALGORITHM);
+        values.put(Integer.valueOf(MAXIMUM_COMPRESSION.value), MAXIMUM_COMPRESSION);
+        values.put(Integer.valueOf(FASTEST_ALGORITHM.value), FASTEST_ALGORITHM);
     }
     
     /** The integer value for the enum instance. */

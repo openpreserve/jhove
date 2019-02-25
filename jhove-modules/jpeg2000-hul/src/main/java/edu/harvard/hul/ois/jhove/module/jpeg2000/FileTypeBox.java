@@ -45,7 +45,8 @@ public class FileTypeBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         String brand = _module.read4Chars(_dstrm);
         _module.addProperty (new Property ("Brand",
                 PropertyType.STRING,
@@ -89,7 +90,7 @@ public class FileTypeBox extends JP2Box {
             char[] cbytes = citem.toCharArray();
             boolean binflag = false;
             for (int j = 0; j < cbytes.length; j++) {
-                int ch = (int) cbytes[j];
+                int ch = cbytes[j];
                 hexcitem.append (Integer.toHexString(ch));
                 if (ch == 0 || ch >= 0X7F) {
                     binflag = true;
@@ -118,13 +119,13 @@ public class FileTypeBox extends JP2Box {
         return true;
     }
     
-    private String hexifyString (String s) 
+    private static String hexifyString (String s) 
     {
         StringBuffer retval = new StringBuffer (2 * s.length () + 2);
         retval.append ("0X");
         char[] chs = s.toCharArray();
         for (int i = 0; i < chs.length; i++) {
-            String hs = Integer.toHexString ((int) chs[i]);
+            String hs = Integer.toHexString (chs[i]);
             // Pad to 2 characters
             if (hs.length () == 1) {
                 retval.append ('0');
@@ -135,7 +136,8 @@ public class FileTypeBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "File Type Box";
     }

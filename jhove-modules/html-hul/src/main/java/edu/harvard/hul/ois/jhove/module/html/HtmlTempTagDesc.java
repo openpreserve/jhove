@@ -31,7 +31,8 @@ public class HtmlTempTagDesc extends HtmlTagDesc {
     /** Reports whether this is a temporary tag descriptor.
      *  Returns <code>true</code>.
      */
-    public boolean isTemp ()
+    @Override
+	public boolean isTemp ()
     {
         return true;
     }
@@ -42,7 +43,8 @@ public class HtmlTempTagDesc extends HtmlTagDesc {
      *  <code>true</code> just to minimize the number of extra error
      *  messages.
      */
-    protected boolean allowsTag (String tag, int index, HtmlDocDesc doc)
+    @Override
+	protected boolean allowsTag (String tag, int index, HtmlDocDesc doc)
     {
         return true;
     }

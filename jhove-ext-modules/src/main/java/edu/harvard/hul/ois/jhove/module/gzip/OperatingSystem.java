@@ -81,21 +81,21 @@ public final class OperatingSystem {
      * Initializes the valid values.
      */
     static {
-        values.put(FAT_FILESYSTEM.value, FAT_FILESYSTEM);
-        values.put(AMIGA.value, AMIGA);
-        values.put(VMS.value, VMS);
-        values.put(UNIX.value, UNIX);
-        values.put(VM_CMS.value, VM_CMS);
-        values.put(ATARI_TOS.value, ATARI_TOS);
-        values.put(HPFS.value, HPFS);
-        values.put(MACINTOSH.value, MACINTOSH);
-        values.put(Z_SYSTEM.value, Z_SYSTEM);
-        values.put(CP_M.value, CP_M);
-        values.put(TOPS_20.value, TOPS_20);
-        values.put(NTFS.value, NTFS);
-        values.put(QDOS.value, QDOS);
-        values.put(ACORN_RISCOS.value, ACORN_RISCOS);
-        values.put(UNKNOWN.value, UNKNOWN);
+        values.put(Integer.valueOf(FAT_FILESYSTEM.value), FAT_FILESYSTEM);
+        values.put(Integer.valueOf(AMIGA.value), AMIGA);
+        values.put(Integer.valueOf(VMS.value), VMS);
+        values.put(Integer.valueOf(UNIX.value), UNIX);
+        values.put(Integer.valueOf(VM_CMS.value), VM_CMS);
+        values.put(Integer.valueOf(ATARI_TOS.value), ATARI_TOS);
+        values.put(Integer.valueOf(HPFS.value), HPFS);
+        values.put(Integer.valueOf(MACINTOSH.value), MACINTOSH);
+        values.put(Integer.valueOf(Z_SYSTEM.value), Z_SYSTEM);
+        values.put(Integer.valueOf(CP_M.value), CP_M);
+        values.put(Integer.valueOf(TOPS_20.value), TOPS_20);
+        values.put(Integer.valueOf(NTFS.value), NTFS);
+        values.put(Integer.valueOf(QDOS.value), QDOS);
+        values.put(Integer.valueOf(ACORN_RISCOS.value), ACORN_RISCOS);
+        values.put(Integer.valueOf(UNKNOWN.value), UNKNOWN);
     }
     
     /** The integer value for the enum instance. */

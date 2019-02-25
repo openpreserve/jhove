@@ -30,7 +30,8 @@ public class TiffProfileEP extends TiffProfile
      *  Returns true if the IFD satisfies the requirements of a
      *  TIFF/EP profile.  See the TIFF/EP specification for details.
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
 	if (!(ifd instanceof TiffIFD)) {
 	    return false;

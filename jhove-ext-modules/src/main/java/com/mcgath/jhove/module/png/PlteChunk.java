@@ -14,6 +14,7 @@ public class PlteChunk extends PNGChunk {
 		ancillary = false;
 	}
 	
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		ErrorMessage msg = null;
 		processChunkCommon(info);

@@ -36,7 +36,8 @@ public class RGNMarkerSegment extends MarkerSegment {
      *                         If it is 0 for a MarkerSegment, the
      *                         number of bytes to consume is unknown.
      */
-    protected boolean process(int bytesToEat) throws IOException {
+    @Override
+	protected boolean process(int bytesToEat) throws IOException {
         int compIdxBytes =  nCompBytes();
         if (compIdxBytes == 0) {
             // RGN found before SIZ

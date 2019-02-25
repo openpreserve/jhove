@@ -55,7 +55,7 @@ public class CompressionMethod {
      * Initializes the valid values.
      */
     static {
-        values.put(DEFLATE.value, DEFLATE);
+        values.put(Integer.valueOf(DEFLATE.value), DEFLATE);
     }
     
     /** The integer value for the enum instance. */

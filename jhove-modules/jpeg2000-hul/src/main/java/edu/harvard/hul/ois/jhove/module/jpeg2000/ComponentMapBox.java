@@ -36,7 +36,8 @@ public class ComponentMapBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         if (!(_parentBox instanceof JP2HeaderBox ||
               _parentBox instanceof CodestreamHeaderBox)) {
             wrongBoxContext();
@@ -47,7 +48,6 @@ public class ComponentMapBox extends JP2Box {
         int len = (int) _boxHeader.getDataLength ();
         int ncomp = len / 4;
         Property[] parray = new Property[ncomp];
-        App app = _module.getApp ();
         
         // Build the array of properties for each component.
         // Components potentially have lots of stuff attached
@@ -91,7 +91,8 @@ public class ComponentMapBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Component Mapping Box";
     }

@@ -37,7 +37,8 @@ public class PaletteBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         if (!(_parentBox instanceof JP2HeaderBox)) {
             _repInfo.setMessage (new ErrorMessage
                 (MessageConstants.ERR_IMAGE_HEADER_BOX_CONTEXT_INVALID,
@@ -63,8 +64,6 @@ public class PaletteBox extends JP2Box {
                 new Integer (ne));
         
         int nc = ModuleBase.readUnsignedByte (_dstrm, _module);
-        // 3 bytes have been read
-        int bytesRead = 3;
         subProp[1] = new Property ("Components", PropertyType.INTEGER,
                 new Integer (nc));
 
@@ -77,7 +76,6 @@ public class PaletteBox extends JP2Box {
             cmpsigned[i] = ((b & 0X80) != 0);
             bpc[i] = (b & 0X7F) + 1;
         }
-        bytesRead += nc;
         
         subProp[2] = new Property ("BitDepth", PropertyType.INTEGER,
                 PropertyArity.ARRAY, bpc);
@@ -103,7 +101,6 @@ public class PaletteBox extends JP2Box {
             subProp[3] = new Property ("Values", PropertyType.PROPERTY,
                         PropertyArity.ARRAY,
                         cprop);
-            bytesRead += nc * ne;
         }
         Property palProp = new Property ("Palette",
                         PropertyType.PROPERTY,
@@ -125,7 +122,8 @@ public class PaletteBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Palette Box";
     }

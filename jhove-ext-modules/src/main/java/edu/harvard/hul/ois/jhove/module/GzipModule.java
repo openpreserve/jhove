@@ -154,9 +154,9 @@ public class GzipModule extends ModuleBase {
     public void checkSignatures (File file,
             RandomAccessFile raf, 
             RepInfo info) throws IOException {
-        InputStream stream = new RandomAccessFileInputStream(raf);
-        checkSignatures(file, stream, info);
-        stream.close();
+        try (InputStream stream = new RandomAccessFileInputStream(raf)) {
+            checkSignatures(file, stream, info);
+        }
     }
     
     @Override
@@ -167,8 +167,8 @@ public class GzipModule extends ModuleBase {
 
     @Override
     public int parse(InputStream stream, RepInfo info, int parseIndex) throws IOException {
-        GzipReader reader = new GzipReader(new InputStreamNoSkip(stream), 8192);
-        try {
+        
+        try (GzipReader reader = new GzipReader(new InputStreamNoSkip(stream), 8192)) {
             info.setFormat(_format[0]);
             info.setVersion("4.3"); // Is it really version 4.3?
             info.setMimeType(_mimeType[0]);
@@ -188,11 +188,6 @@ public class GzipModule extends ModuleBase {
             info.setMessage(new ErrorMessage(e.getMessage()));
             info.setValid(false);
             info.setWellFormed(false);
-        } finally {
-            if(reader != null) {
-                reader.close();
-                reader = null;
-            }
         }
         return 0;
     }
@@ -263,7 +258,7 @@ public class GzipModule extends ModuleBase {
      * @param d The diagnosis whose type should be extracted
      * @return The type of diagnosis
      */
-    private String extractDiagnosisType(Diagnosis d) {
+    private static String extractDiagnosisType(Diagnosis d) {
         return d.type.name();
     }
 
@@ -272,7 +267,7 @@ public class GzipModule extends ModuleBase {
      * @param d The diagnosis
      * @return The message containing entity and information.
      */
-    private String extractDiagnosisMessage(Diagnosis d) {
+    private static String extractDiagnosisMessage(Diagnosis d) {
         StringBuilder res = new StringBuilder();
         res.append("Entity: " + d.entity);
         for(String i : d.information) {

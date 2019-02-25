@@ -384,9 +384,8 @@ public final class X1Profile extends XProfileBase
             // to embedded file streams; but exactly what are the name
             // strings it uses?
             
-            PdfObject fileObj = 
-                _module.resolveIndirectObject (opi20.get ("F"));
-            NameTreeNode embFiles = _module.getEmbeddedFiles ();
+            _module.resolveIndirectObject (opi20.get ("F"));
+            _module.getEmbeddedFiles ();
             // Leave this for now, till I can make some sense of it.
         }
         catch (Exception e) {

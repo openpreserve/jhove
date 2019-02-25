@@ -68,7 +68,8 @@ public class FormatChunk extends Chunk {
      * @return   <code>false</code> if the chunk is structurally invalid,
      *           otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
 
         WaveModule module = (WaveModule) _module;
 
@@ -193,10 +194,10 @@ public class FormatChunk extends Chunk {
 
         module.addWaveProperty(new Property("AverageBytesPerSecond",
                     PropertyType.LONG,
-                    bytesPerSecond));
+                    Long.valueOf(bytesPerSecond)));
         module.addWaveProperty(new Property("BlockAlign",
                     PropertyType.INTEGER,
-                    blockAlign));
+                    Integer.valueOf(blockAlign)));
         if (extraBytes != null) {
             module.addWaveProperty(new Property("ExtraFormatBytes",
                     PropertyType.BYTE,
@@ -208,12 +209,12 @@ public class FormatChunk extends Chunk {
             // ValidBitsPersampleOrSamplesPerBlock?
             module.addWaveProperty(new Property("ValidBitsPerSample",
                     PropertyType.INTEGER,
-                    validBitsPerSample));
+                    Integer.valueOf(validBitsPerSample)));
         }
         if (channelMask != -1) {
             module.addWaveProperty(new Property("ChannelMask",
                     PropertyType.LONG,
-                    channelMask));
+                    Long.valueOf(channelMask)));
         }
         if (subformat != null) {
             module.addWaveProperty(new Property("Subformat",
@@ -229,7 +230,7 @@ public class FormatChunk extends Chunk {
      * but it's helpful to keep the same structure as the equivalent
      * CommonChunk.setChannelLocations function.
      */
-    private void setChannelLocations(AESAudioMetadata aes, int numChannels) {
+    private static void setChannelLocations(AESAudioMetadata aes, int numChannels) {
 
         String[] mapLoc = new String[numChannels];
         switch (numChannels) {
@@ -253,7 +254,7 @@ public class FormatChunk extends Chunk {
      * @param guidBytes  a 16-byte array with GUID values in little-endian order
      * @return           a String of the form 00000001-0000-0010-8000-00AA00389B71
      */
-    private String formatGUID(byte[] guidBytes) {
+    private static String formatGUID(byte[] guidBytes) {
 
         StringBuilder guid = new StringBuilder(36);
 
@@ -280,7 +281,7 @@ public class FormatChunk extends Chunk {
     }
 
     /** Reverses a byte array in place */
-    private byte[] reverseBytes(byte[] bytes) {
+    private static byte[] reverseBytes(byte[] bytes) {
         for (int i = 0; i < bytes.length / 2; i++) {
             byte valueToSwap = bytes[i];
             bytes[i] = bytes[bytes.length - 1 - i];

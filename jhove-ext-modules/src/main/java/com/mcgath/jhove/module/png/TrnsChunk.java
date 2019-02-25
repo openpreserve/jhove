@@ -32,6 +32,7 @@ public class TrnsChunk extends PNGChunk {
 	}
 	
 	/** Process the data in the chunk.  */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		final String badChunk = "Bad tRNS chunk";
 		processChunkCommon(info);
@@ -65,7 +66,7 @@ public class TrnsChunk extends PNGChunk {
 			int transGray = readUnsignedShort();
 			info.setProperty (new Property ("Transparent grey value",
 					PropertyType.INTEGER,
-					transGray));
+					Integer.valueOf(transGray)));
 			lengthLeft = (int) length - 2;
 			break;
 			
@@ -76,13 +77,13 @@ public class TrnsChunk extends PNGChunk {
 			int transBlue = readUnsignedShort();
 			info.setProperty (new Property ("Transparent red value",
 					PropertyType.INTEGER,
-					transRed));
+					Integer.valueOf(transRed)));
 			info.setProperty (new Property ("Transparent green value",
 					PropertyType.INTEGER,
-					transGreen));
+					Integer.valueOf(transGreen)));
 			info.setProperty (new Property ("Transparent blue value",
 					PropertyType.INTEGER,
-					transBlue));
+					Integer.valueOf(transBlue)));
 			lengthLeft = (int) length - 6;
 			break;
 			

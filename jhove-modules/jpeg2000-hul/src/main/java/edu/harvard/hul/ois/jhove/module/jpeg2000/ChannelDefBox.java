@@ -36,7 +36,8 @@ public class ChannelDefBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         if (!(_parentBox instanceof JP2HeaderBox ||
               _parentBox instanceof CodestreamHeaderBox)) {
             wrongBoxContext();
@@ -73,7 +74,7 @@ public class ChannelDefBox extends JP2Box {
                         cprop);
         }
         
-        _module.skipBytes (_dstrm, (int) len, _module);
+        _module.skipBytes (_dstrm, len, _module);
 
         Property prop = new Property ("ChannelDefinition",
                 PropertyType.PROPERTY,
@@ -91,7 +92,8 @@ public class ChannelDefBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Channel Definition Box";
     }

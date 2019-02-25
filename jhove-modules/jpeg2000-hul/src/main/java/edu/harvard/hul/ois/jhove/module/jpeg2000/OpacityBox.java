@@ -38,7 +38,8 @@ public class OpacityBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         if (!(_parentBox instanceof ComposLayerHdrBox)) {
             wrongBoxContext();
             return false;
@@ -47,7 +48,6 @@ public class OpacityBox extends JP2Box {
         
         List propList = new ArrayList (4);
         
-        App app = _module.getApp ();
         int otyp = ModuleBase.readUnsignedByte (_dstrm, _module);
         propList.add (_module.addIntegerProperty ("Type",
                     otyp,
@@ -98,7 +98,8 @@ public class OpacityBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Opacity Box";
     }

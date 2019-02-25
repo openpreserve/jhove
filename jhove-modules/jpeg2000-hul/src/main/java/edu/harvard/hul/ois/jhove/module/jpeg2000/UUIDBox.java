@@ -37,7 +37,8 @@ public class UUIDBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         // The UUID box consists of a 16-byte UUID field
         // and a variable-size data field.  Both are binary
         // data, so we make them byte array properties.
@@ -84,7 +85,8 @@ public class UUIDBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "UUID Box";
     }

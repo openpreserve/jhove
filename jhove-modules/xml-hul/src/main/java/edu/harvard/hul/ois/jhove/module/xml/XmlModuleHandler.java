@@ -147,7 +147,8 @@ public class XmlModuleHandler extends DefaultHandler {
      *  qualified name by preference, local name if the
      *  qualified name isn't available.
      */
-    public void startElement (String namespaceURI,
+    @Override
+	public void startElement (String namespaceURI,
                 String localName,
                 String qualifiedName,
                 Attributes atts) throws SAXException
@@ -232,7 +233,8 @@ public class XmlModuleHandler extends DefaultHandler {
 
     /** The only action taken here is some bookkeeping in connection
      *  with the HTML metadata.*/
-    public void endElement(String namespaceURI, String localName, String qName)
+    @Override
+	public void endElement(String namespaceURI, String localName, String qName)
     {
         if (_htmlMetadata != null) {
             _htmlMetadata.finishPropUnderConstruction ();
@@ -243,7 +245,8 @@ public class XmlModuleHandler extends DefaultHandler {
      *  in connection with properties under construction in
      *  HTML metadata.
      */
-    public void characters(char[] ch, int start, int length)
+    @Override
+	public void characters(char[] ch, int start, int length)
     {
         if (_htmlMetadata != null &&
                  _htmlMetadata.getPropUnderConstruction () != null) {
@@ -256,7 +259,8 @@ public class XmlModuleHandler extends DefaultHandler {
      *  Begin the scope of a prefix-URI Namespace mapping.
      *  Prefixes mappings are stored in _namespaces.
      */
-    public void startPrefixMapping(String prefix,
+    @Override
+	public void startPrefixMapping(String prefix,
                                    String uri)
                             throws SAXException
     {
@@ -273,7 +277,8 @@ public class XmlModuleHandler extends DefaultHandler {
      *   Each element of the list is an array of two Strings.  Element 0 of
      *   the array is the target, and element 1 is the data.
      */
-    public void processingInstruction(String target,
+    @Override
+	public void processingInstruction(String target,
                                       String data)
                                throws SAXException
     {
@@ -293,7 +298,8 @@ public class XmlModuleHandler extends DefaultHandler {
      *  is a String[3], consisting of name, public ID, and system
      *  ID.
      */
-    public void notationDecl (String name, String publicID, String systemID)
+    @Override
+	public void notationDecl (String name, String publicID, String systemID)
             throws SAXException
     {
         String[] notArr = new String[3];
@@ -313,7 +319,8 @@ public class XmlModuleHandler extends DefaultHandler {
      *  an IOException, we just ignore it.
      *
      */
-    public InputSource resolveEntity(String publicId,
+    @Override
+	public InputSource resolveEntity(String publicId,
                                      String systemId)
                               throws SAXException
 
@@ -388,7 +395,8 @@ public class XmlModuleHandler extends DefaultHandler {
      * four strings: [ name, publicId, systemId, notationName].
      * Null values are converted into empty strings.
      */
-    public void unparsedEntityDecl (String name,
+    @Override
+	public void unparsedEntityDecl (String name,
               String publicId,
               String systemId,
               String notationName) throws SAXException
@@ -405,7 +413,8 @@ public class XmlModuleHandler extends DefaultHandler {
     /**
      *  Processes a warning.  We just add an InfoMessage.
      */
-    public void warning (SAXParseException e)
+    @Override
+	public void warning (SAXParseException e)
     {
         _messages.add (new InfoMessage (
             MessageFormat.format(MessageConstants.ERR_SAX_EXCEPTION,e.getMessage ().toString ())));
@@ -418,12 +427,13 @@ public class XmlModuleHandler extends DefaultHandler {
      *  of XML will get a fatalError (I think), so we can assume
      *  that any error here indicates only invalidity.
      */
-    public void error(SAXParseException e)
+    @Override
+	public void error(SAXParseException e)
     {
        _valid = false;
         if (_nErrors == MAXERRORS) {
             _messages.add (new InfoMessage (
-                MessageFormat.format(MessageConstants.WRN_TOO_MANY_MESSAGES, MAXERRORS)));
+                MessageFormat.format(MessageConstants.WRN_TOO_MANY_MESSAGES, Integer.valueOf(MAXERRORS))));
         }
         else if (_nErrors < MAXERRORS) {
             int line = e.getLineNumber();

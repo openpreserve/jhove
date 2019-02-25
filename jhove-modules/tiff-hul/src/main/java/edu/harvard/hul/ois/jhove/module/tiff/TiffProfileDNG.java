@@ -43,12 +43,14 @@ public class TiffProfileDNG extends TiffProfile {
 //    private boolean uniqueCameraModelSeen;
     
     /* AsShotNeutral tag has been seen.  This isn't required,
-     * but is mutually exclusive with AsShotWhiteXY. */
+     * but is mutually exclusive with AsShotWhiteXY.
     private boolean asShotNeutralSeen;
+     */
     
     /* AsShotWhiteXY tag has been seen.  This isn't required,
-     * but is mutually exclusive with AsShotNeutral. */
+     * but is mutually exclusive with AsShotNeutral.
     private boolean asShotWhiteXYSeen;
+    */
     
     /**
      * 
@@ -68,7 +70,8 @@ public class TiffProfileDNG extends TiffProfile {
      *  of the profile.  See the documentation for
      *  details.
      */
-    public boolean satisfiesThisProfile(IFD ifd) {
+    @Override
+	public boolean satisfiesThisProfile(IFD ifd) {
         if (!(ifd instanceof TiffIFD)) {
             return false;
         }
