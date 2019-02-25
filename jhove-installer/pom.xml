@@ -163,6 +163,61 @@
       <artifactId>jhove-ext-modules</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.openpreservation.jhove.modules</groupId>
+      <artifactId>aiff-hul</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openpreservation.jhove.modules</groupId>
+      <artifactId>ascii-hul</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openpreservation.jhove.modules</groupId>
+      <artifactId>gif-hul</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openpreservation.jhove.modules</groupId>
+      <artifactId>html-hul</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openpreservation.jhove.modules</groupId>
+      <artifactId>jpeg2000-hul</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openpreservation.jhove.modules</groupId>
+      <artifactId>jpeg-hul</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openpreservation.jhove.modules</groupId>
+      <artifactId>pdf-hul</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openpreservation.jhove.modules</groupId>
+      <artifactId>tiff-hul</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openpreservation.jhove.modules</groupId>
+      <artifactId>utf8-hul</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openpreservation.jhove.modules</groupId>
+      <artifactId>wave-hul</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openpreservation.jhove.modules</groupId>
+      <artifactId>xml-hul</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
 </project>

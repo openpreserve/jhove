@@ -6,18 +6,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.harvard.hul.ois.jhove.module.AiffModule;
-import edu.harvard.hul.ois.jhove.module.AsciiModule;
-import edu.harvard.hul.ois.jhove.module.GifModule;
-import edu.harvard.hul.ois.jhove.module.HtmlModule;
-import edu.harvard.hul.ois.jhove.module.Jpeg2000Module;
-import edu.harvard.hul.ois.jhove.module.JpegModule;
-import edu.harvard.hul.ois.jhove.module.PdfModule;
-import edu.harvard.hul.ois.jhove.module.TiffModule;
-import edu.harvard.hul.ois.jhove.module.Utf8Module;
-import edu.harvard.hul.ois.jhove.module.WaveModule;
-import edu.harvard.hul.ois.jhove.module.XmlModule;
-
 /** This class creates a default configuration if no valid configuration file
  *  is found. */
 public class DefaultConfigurationBuilder {
@@ -44,53 +32,10 @@ public class DefaultConfigurationBuilder {
                       FILE_SEP + "jhove.conf");
         }
     }
-    
-    
-    public void writeDefaultConfigFile () throws IOException {
-        ConfigWriter cw = new ConfigWriter (configFile, null);
-        List<ModuleInfo> modules = getModules();
-        // TextHandler, XmlHandler, and AuditHandler are loaded by
-        // default, so there are no handlers to put in the config file.
-        List<String[]> handlers = new ArrayList<> ();
-        File homeDir = new File (JHOVE_DIR);
-        File tempDir = new File (TEMP_DIR);
-        cw.writeFile(modules, handlers, homeDir, tempDir,
-            DEFAULT_ENCODING, DEFAULT_BUFFER_SIZE);
-    }
-
-//    public void writeDefaultConfigFile () throws IOException {
-//        ConfigWriter cw = new ConfigWriter (configFile, null);
-//        List<ConfigWriter.ModuleInfo> modules = getModules();
-//        // TextHandler, XmlHandler, and AuditHandler are loaded by
-//        // default, so there are no handlers to put in the config file.
-//        List<String> handlers = new ArrayList<String> ();
-//        File homeDir = new File (JHOVE_DIR);
-//        File tempDir = new File (TEMP_DIR);
-//        cw.writeFile(modules, handlers, homeDir, tempDir, 
-//                DEFAULT_ENCODING, DEFAULT_BUFFER_SIZE);
-//    }
 
     public File getConfigFile () {
         return configFile;
     }
-    
-    
-    protected List<ModuleInfo> getModules () {
-        int nModules = builtInModules.length;
-        ArrayList<ModuleInfo> mods = new ArrayList<> (nModules);
-        try {
-            for (int i = 0; i < nModules; i++) {
-                Class<?> cls = builtInModules[i];
-                ModuleInfo minfo = new ModuleInfo(cls.getName());
-                minfo.init = null;       // Never used at present
-                minfo.params = getDefaultConfigParameters (cls);
-                mods.add(minfo);
-            }
-        }
-        catch (Exception e) {}
-        return mods;
-    }
-    
     
     /** We can't have a static method in an Interface and override it, so we
      *  have to get a bit ugly to fake static inheritance. The advantage of
@@ -105,21 +50,4 @@ public class DefaultConfigurationBuilder {
             return new String [] {};
         }
     }
-    
-    /** The array of build-in modules. If a module is added to or removed from
-     *  the build, this array must be changed. The Bytestream module is
-     *  loaded by default and so is not listed here. */
-    private Class<?>[] builtInModules = {
-        AiffModule.class,
-        AsciiModule.class,
-        GifModule.class,
-        HtmlModule.class,
-        Jpeg2000Module.class,
-        JpegModule.class,
-        PdfModule.class,
-        TiffModule.class,
-        Utf8Module.class,
-        WaveModule.class,
-        XmlModule.class
-    };
 }
