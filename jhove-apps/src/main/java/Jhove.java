@@ -18,23 +18,19 @@
  * USA
  **********************************************************************/
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import edu.harvard.hul.ois.jhove.App;
 import edu.harvard.hul.ois.jhove.CoreMessageConstants;
 import edu.harvard.hul.ois.jhove.JhoveBase;
 import edu.harvard.hul.ois.jhove.Module;
 import edu.harvard.hul.ois.jhove.OutputHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Jhove
 {
-    /******************************************************************
-     * PRIVATE CLASS FIELDS.
-     ******************************************************************/
-
     /** Application name. */
     private static final String NAME = "Jhove";
     /** Logger for this class. */
@@ -45,73 +41,64 @@ public class Jhove
     /** Incompatible Java VM. */
     private static final int INCOMPATIBLE_VM = -2;
 
-    private Jhove() {
+    private Jhove()
+    {
         throw new AssertionError("Should never enter private constructor");
     }
-    /******************************************************************
-     * MAIN ENTRY POINT.
-     ******************************************************************/
 
-    public static void main (String [] args)
+    /**
+     * MAIN ENTRY POINT.
+     */
+    public static void main(String [] args)
     {
-        /* Make sure we have a satisfactory version of Java. */
-        String version = System.getProperty ("java.vm.version");
+        // Make sure we have a satisfactory version of Java.
+        String version = System.getProperty("java.vm.version");
         if (version.compareTo("1.8.0") < 0) {
             LOGGER.log(Level.SEVERE, CoreMessageConstants.EXC_JAVA_VER_INCMPT);
             System.exit(INCOMPATIBLE_VM);
         }
 
         try {
-    
-    	    /**********************************************************
-    	     * Initialize the application state object.
-    	     **********************************************************/
-    
-    	    App app = App.newAppWithName(NAME);
-    
-    	    /**********************************************************
-    	     * Retrieve the configuration file.
-    	     **********************************************************/
-    
-    	    String configFile = JhoveBase.getConfigFileFromProperties ();
-    	    String saxClass   = JhoveBase.getSaxClassFromProperties ();
-    
-    	    /* Pre-parse the command line for -c and -x config options. 
-    	     * With Windows, we have to deal with quote marks on our own. With Unix,
-    	     * the shell takes care of quotes for us. */
-    	    boolean quoted = false;
-    	    for (int i=0; i<args.length; i++) {
-    		if (quoted) {
-    		    int len = args[i].length ();
-                if (args[i].charAt (len-1) == '"') {
-                    quoted = false;
-                }
-    		}
-    		else {
-    		    if ("-c".equals(args[i])) {
-                    if (i < args.length-1) {
-                        configFile = args[++i];
+
+            // Initialize the application state object.
+            App app = App.newAppWithName(NAME);
+
+            // Retrieve configuration.
+            String configFile = JhoveBase.getConfigFileFromProperties();
+            String saxClass = JhoveBase.getSaxClassFromProperties();
+
+            /* Pre-parse the command line for -c and -x config options.
+             * With Windows, we have to deal with quote marks on our own.
+             * With Unix, the shell takes care of quotes for us. */
+            boolean quoted = false;
+            for (int i = 0; i < args.length; i++) {
+                if (quoted) {
+                    int len = args[i].length();
+                    if (args[i].charAt(len - 1) == '"') {
+                        quoted = false;
                     }
                 }
-    		    else if ("-x".equals(args[i])) {
-                    if (i <args.length-1) {
-                        saxClass = args[++i];
+                else {
+                    if ("-c".equals(args[i])) {
+                        if (i < args.length - 1) {
+                            configFile = args[++i];
+                        }
+                    }
+                    else if ("-x".equals(args[i])) {
+                        if (i < args.length - 1) {
+                            saxClass = args[++i];
+                        }
+                    }
+                    else if (args[i].charAt(0) == '"') {
+                        quoted = true;
                     }
                 }
-    		    else if (args[i].charAt (0) == '"') {
-                    quoted = true;
-                }
-    		}
-        }
-    
-    	    /**********************************************************
-    	     * Initialize the JHOVE engine.
-    	     **********************************************************/
-    
-    	    String encoding     = null;
-    	    String tempDir      = null;
-    	    int    bufferSize   = -1;
-    
+            }
+
+            // Initialize the JHOVE engine.
+            String encoding     = null;
+            String tempDir      = null;
+            int    bufferSize   = -1;
             String moduleName   = null;
             String handlerName  = null;
             String aboutHandler = null;
@@ -120,193 +107,187 @@ public class Jhove
             boolean checksum    = false;
             boolean showRaw     = false;
             boolean signature   = false;
-            List<String> list   = new ArrayList<> ();
-    
-    	 
-                /**********************************************************
-                 * Parse command line arguments:
-                 *  -m module    Module name
-                 *  -h handler   Output handler
-    	     *  -e encoding  Output encoding
-                 *  -H handler   About handler
-                 *  -o output    Output file pathname
-                 *  -t tempdir   Directory for temp files
-                 *  -b bufsize   Buffer size for buffered I/O
-                 *  -k           Calculate checksums
-                 *  -r           Display raw numeric flags 
-                 *  -s           Check internal signatures only
-                 *  dirFileOrUri Directories, file pathnames, or URIs
-    	     *
-    	     * The following arguments were defined in previous
-    	     * versions, but are now obsolete
-                 *  -p param     OBSOLETE
-                 *  -P param     OBSOLETE
-    	     **********************************************************/
-    
-    	    quoted = false;
-    	    StringBuffer filename = null;
-    
-            for (int i=0; i<args.length; i++) {
+            List<String> list   = new ArrayList<>();
+
+            /*
+             * Parse command line arguments:
+             *  -m module    Module name
+             *  -h handler   Output handler
+             *  -e encoding  Output encoding
+             *  -H handler   About handler
+             *  -o output    Output file pathname
+             *  -t tempdir   Directory for temp files
+             *  -b bufsize   Buffer size for buffered I/O
+             *  -k           Calculate checksums
+             *  -r           Display raw numeric flags
+             *  -s           Check internal signatures only
+             *  dirFileOrUri Directories, file pathnames, or URIs
+             *
+             * The following arguments were defined in previous
+             * versions, but are now obsolete
+             *  -p param     OBSOLETE
+             *  -P param     OBSOLETE
+             */
+
+            quoted = false;
+            StringBuilder filename = null;
+
+            for (int i = 0; i < args.length; i++) {
                 if (quoted) {
-                    int len = args[i].length ();
-                    if (args[i].charAt (len-1) == '"') {
-                        filename.append (" " + args[i].substring (0, len-1));
-                        list.add (filename.toString ());
+                    filename.append(" ");
+                    int len = args[i].length();
+                    if (args[i].charAt(len - 1) == '"') {
+                        filename.append(args[i].substring(0, len - 1));
+                        list.add(filename.toString());
                         quoted = false;
                     }
                     else {
-                        filename.append (" " + args[i]);
+                        filename.append(args[i]);
                     }
                 }
                 else {
-        		    if ("-c".equals(args[i])) {
+                    if ("-c".equals(args[i])) {
                         i++;
-        		    }
-        		    else if ("-m".equals(args[i])) {
-                        if (i < args.length-1) {
+                    }
+                    else if ("-m".equals(args[i])) {
+                        if (i < args.length - 1) {
                             moduleName = args[++i];
                         }
-        		    }
-        		    else if ("-p".equals(args[i])) {
+                    }
+                    else if ("-p".equals(args[i])) {
                         // Obsolete -- but eat the next arg for compatibility
-                        if (i <args.length-1) {
+                        if (i < args.length - 1) {
                             @SuppressWarnings("unused")
                             String moduleParam = args[++i];
                         }
                     }
-        		    else if ("-h".equals(args[i])) {
-                        if (i < args.length-1) {
+                    else if ("-h".equals(args[i])) {
+                        if (i < args.length - 1) {
                             handlerName = args[++i];
                         }
                     }
-        		    else if ("-P".equals(args[i])) {
+                    else if ("-P".equals(args[i])) {
                         // Obsolete -- but eat the next arg for compatibility
-                        if (i <args.length-1) {
+                        if (i < args.length - 1) {
                             @SuppressWarnings("unused")
                             String handlerParam = args[++i];
                         }
-        		    }
-        		    else if ("-e".equals(args[i])) {
-                        if (i < args.length-1) {
+                    }
+                    else if ("-e".equals(args[i])) {
+                        if (i < args.length - 1) {
                             encoding = args[++i];
                         }
-        		    }
-        		    else if ("-H".equals(args[i])) {
-                        if (i < args.length-1) {
+                    }
+                    else if ("-H".equals(args[i])) {
+                        if (i < args.length - 1) {
                             aboutHandler = args[++i];
                         }
                     }
-        		    else if ("-l".equals(args[i])) {
-                        if (i < args.length-1) {
+                    else if ("-l".equals(args[i])) {
+                        if (i < args.length - 1) {
                             logLevel = args[++i];
                         }
-        		    }
-        		    else if ("-o".equals(args[i])) {
-                        if (i < args.length-1) {
+                    }
+                    else if ("-o".equals(args[i])) {
+                        if (i < args.length - 1) {
                             outputFile = args[++i];
                         }
                     }
-        		    else if ("-x".equals(args[i])) {
+                    else if ("-x".equals(args[i])) {
                         i++;
-        		    }
-        		    else if ("-t".equals(args[i])) {
-                        if (i <args.length-1) {
+                    }
+                    else if ("-t".equals(args[i])) {
+                        if (i < args.length - 1) {
                             tempDir = args[++i];
                         }
                     }
-        		    else if ("-b".equals(args[i])) {
-                        if (i <args.length-1) {
+                    else if ("-b".equals(args[i])) {
+                        if (i < args.length - 1) {
                             try {
-                                bufferSize = Integer.parseInt (args[++i]);
+                                bufferSize = Integer.parseInt(args[++i]);
                             }
-                            catch (NumberFormatException e) {
+                            catch (NumberFormatException nfe) {
                                 LOGGER.log(Level.WARNING, "Invalid buffer size, using default.");
                             }
                         }
-        		    }
-        		    else if ("-k".equals(args[i])) {
+                    }
+                    else if ("-k".equals(args[i])) {
                         checksum = true;
-        		    }
-        		    else if ("-r".equals(args[i])) {
+                    }
+                    else if ("-r".equals(args[i])) {
                         showRaw = true;
-        		    }
-        		    else if ("-s".equals(args[i])) {
+                    }
+                    else if ("-s".equals(args[i])) {
                         signature = true;
                     }
-        		    else if (args[i].charAt (0) != '-') {
-                        if (args[i].charAt (0) == '"') {
-                            filename = new StringBuffer ();
-                            filename.append (args[i].substring (1));
+                    else if (args[i].charAt(0) != '-') {
+                        if (args[i].charAt(0) == '"') {
+                            filename = new StringBuilder();
+                            filename.append(args[i].substring(1));
                             quoted = true;
                         }
                         else {
-                            list.add (args[i]);
+                            list.add(args[i]);
                         }
-        		    }
-        		}
+                    }
+                }
             }
             if (quoted) {
-                list.add (filename.toString ());
-    	    }
+                list.add(filename.toString());
+            }
     
-            JhoveBase je = new JhoveBase ();
+            JhoveBase je = new JhoveBase();
             // Only set the log level if a param value was assigned
             if (logLevel != null) {
-                je.setLogLevel (logLevel);
+                je.setLogLevel(logLevel);
             }
             je.init (configFile, saxClass);
             if (encoding == null) {
-                encoding = je.getEncoding ();
+                encoding = je.getEncoding();
             }
             if (tempDir == null) {
-                tempDir = je.getTempDirectory ();
+                tempDir = je.getTempDirectory();
             }
             if (bufferSize < 0) {
-                bufferSize = je.getBufferSize ();
+                bufferSize = je.getBufferSize();
             }
-            Module module = je.getModule  (moduleName);
+            Module module = je.getModule(moduleName);
             if (module == null && moduleName != null) {
                 LOGGER.log(Level.SEVERE, "Module '" + moduleName + "' not found");
                 System.exit(ERROR);
             }
-            OutputHandler about   = je.getHandler (aboutHandler);
+            OutputHandler about = je.getHandler(aboutHandler);
             if (about == null && aboutHandler != null) {
                 LOGGER.log(Level.SEVERE, "Handler '" + aboutHandler + "' not found");
                 System.exit(ERROR);
             }
-    	    OutputHandler handler = je.getHandler (handlerName);
+            OutputHandler handler = je.getHandler(handlerName);
             if (handler == null && handlerName != null) {
                 LOGGER.log(Level.SEVERE, "Handler '" + handlerName + "' not found");
                 System.exit(ERROR);
             }
-    	    String [] dirFileOrUri = null;
-    	    int len = list.size ();
+            String[] dirFileOrUri = null;
+            int len = list.size();
             if (len > 0) {
-        		dirFileOrUri = new String [len];
-        		for (int i=0; i<len; i++) {
-        		    dirFileOrUri[i] = list.get (i);
-        		}
+                dirFileOrUri = new String[len];
+                for (int i = 0; i < len; i++) {
+                    dirFileOrUri[i] = list.get(i);
+                }
             }
-    
-    	    /**********************************************************
-    	     * Invoke the JHOVE engine.
-    	     **********************************************************/
-                
-            je.setEncoding (encoding);
-            je.setTempDirectory (tempDir);
-            je.setBufferSize (bufferSize);
-            je.setChecksumFlag (checksum);
-            je.setShowRawFlag (showRaw);
-            je.setSignatureFlag (signature);
-    	    je.dispatch (app, module, about, handler, outputFile, 
-    			 dirFileOrUri);
-    	}
+
+            // Invoke the JHOVE engine.
+            je.setEncoding(encoding);
+            je.setTempDirectory(tempDir);
+            je.setBufferSize(bufferSize);
+            je.setChecksumFlag(checksum);
+            je.setShowRawFlag(showRaw);
+            je.setSignatureFlag(signature);
+            je.dispatch(app, module, about, handler, outputFile, dirFileOrUri);
+        }
         catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getMessage());
             e.printStackTrace(System.err);
             System.exit(ERROR);
         }
     }
-    
-
 }
