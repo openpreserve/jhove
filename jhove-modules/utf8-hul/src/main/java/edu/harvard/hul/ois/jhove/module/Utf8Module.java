@@ -20,6 +20,7 @@
 package edu.harvard.hul.ois.jhove.module;
 
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.module.utf8.*;
 
 import java.io.*;
 import java.util.*;

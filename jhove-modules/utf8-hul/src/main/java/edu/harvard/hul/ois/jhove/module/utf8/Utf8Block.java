@@ -3,7 +3,7 @@
  * Copyright 2003 by JSTOR and the President and Fellows of Harvard College
  **********************************************************************/
 
-package edu.harvard.hul.ois.jhove.module;
+package edu.harvard.hul.ois.jhove.module.utf8;
 
 
 /**

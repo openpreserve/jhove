@@ -3,7 +3,7 @@
  * Copyright 2004 by JSTOR and the President and Fellows of Harvard College
  **********************************************************************/
 
-package edu.harvard.hul.ois.jhove.module;
+package edu.harvard.hul.ois.jhove.module.utf8;
 
 import java.util.ArrayList;
 import java.util.List;

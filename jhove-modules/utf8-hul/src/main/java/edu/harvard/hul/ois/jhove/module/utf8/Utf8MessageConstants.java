@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.harvard.hul.ois.jhove.module;
+package edu.harvard.hul.ois.jhove.module.utf8;
 
 /**
  * Enum used to externalise the UTF8 module message Strings. Using an enum
