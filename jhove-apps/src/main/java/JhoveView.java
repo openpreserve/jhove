@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import edu.harvard.hul.ois.jhove.App;
+import edu.harvard.hul.ois.jhove.CoreMessageConstants;
 import edu.harvard.hul.ois.jhove.JhoveBase;
 import edu.harvard.hul.ois.jhove.JhoveException;
 import edu.harvard.hul.ois.jhove.viewer.JhoveWindow;
@@ -81,10 +82,9 @@ public class JhoveView
     {
         /* Make sure we have a satisfactory version of Java. */
         String version = System.getProperty ("java.vm.version"); //$NON-NLS-1$
-        if (version.compareTo ("1.5.0") < 0) { //$NON-NLS-1$
-            final String message = "Java 1.5 or higher is required"; 
-            LOGGER.log(Level.SEVERE, message);
-            errorAlert (message);
+        if (version.compareTo("1.8.0") < 0) { //$NON-NLS-1$
+            LOGGER.log(Level.SEVERE, CoreMessageConstants.EXC_JAVA_VER_INCMPT);
+            errorAlert(CoreMessageConstants.EXC_JAVA_VER_INCMPT);
             System.exit(INCOMPATIBLE_VM);
         }
 
