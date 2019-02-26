@@ -36,7 +36,7 @@ public class WarcRecordProperties {
      * @return A map of the properties of the WARC record.
      */
     public Map<String, String> getProperties() {
-        properties = new LinkedHashMap<String, String>();
+        properties = new LinkedHashMap<>();
         
         setBaseProperties();
         

@@ -137,8 +137,7 @@ public class PngModule extends ModuleBase {
      *                    to reflect the results of the test
      */
     @Override
-	public void checkSignatures (File file, InputStream stream, RepInfo info) 
-        throws IOException
+	public void checkSignatures (File file, InputStream stream, RepInfo info)
     {
         int i;
         int ch;
@@ -203,7 +202,7 @@ public class PngModule extends ModuleBase {
         	_dstream = getBufferedDataStream (stream, _je != null ?
                  _je.getBufferSize () : 0);
         }
-        _propList = new LinkedList<Property> ();
+        _propList = new LinkedList<> ();
         _metadata = new Property ("PNGMetadata",
              PropertyType.PROPERTY,
              PropertyArity.LIST,
@@ -212,8 +211,8 @@ public class PngModule extends ModuleBase {
         Property nisoProp = new Property(NISO_IMAGE_MD,
                 PropertyType.NISOIMAGEMETADATA, _nisoData);
         _propList.add(nisoProp);
-        _keywordPropList = new LinkedList<Property> ();
-        _spltList = new LinkedList<Property> ();
+        _keywordPropList = new LinkedList<> ();
+        _spltList = new LinkedList<> ();
         ErrorMessage msg;
         
         // Check that the file header matching the PNG magic numbers
@@ -354,7 +353,7 @@ public class PngModule extends ModuleBase {
 	/** Add a keyword, value, and language. */
 	public void addKeyword(String keywd, String translatedKeywd, String val, String language) {
 		//HashMap<String, String> map = new HashMap<String, String>();
-		List<Property> props = new ArrayList<Property>();
+		List<Property> props = new ArrayList<>();
 		Property prop = new Property ("Keyword",
 				PropertyType.PROPERTY,
 				PropertyArity.LIST,
@@ -380,7 +379,7 @@ public class PngModule extends ModuleBase {
     
     /** Add a suggested palette */
 	public void addSplt (String name, int sampleDepth, int numSamples) {
-		List<Property> props = new ArrayList<Property>();
+		List<Property> props = new ArrayList<>();
 		Property prop = new Property ("Suggested palette",
 				PropertyType.PROPERTY,
 				PropertyArity.LIST,
@@ -410,7 +409,7 @@ public class PngModule extends ModuleBase {
         idatSeen = false;
         idatFinished = false;
         iendSeen = false;
-        _ancillaryChunks = new HashSet<Integer>();
+        _ancillaryChunks = new HashSet<>();
     }
     
     /* readChunkHead reads the type and length of a chunk and

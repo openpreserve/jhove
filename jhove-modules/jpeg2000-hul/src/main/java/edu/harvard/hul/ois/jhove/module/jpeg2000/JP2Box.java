@@ -64,7 +64,7 @@ public abstract class JP2Box extends BoxHolder {
             _parentBox = null;
         }
         _bytesRead = 0;
-        associations = new LinkedList<Property> ();
+        associations = new LinkedList<> ();
     }
 
 

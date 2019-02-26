@@ -199,7 +199,6 @@ public class GifModule extends ModuleBase
     public void checkSignatures (File file,
                 InputStream stream,
                 RepInfo info)
-        throws IOException
     {
         int[] sigBytes = { 'G', 'I', 'F', '8', '*', 'a' };
         int i;

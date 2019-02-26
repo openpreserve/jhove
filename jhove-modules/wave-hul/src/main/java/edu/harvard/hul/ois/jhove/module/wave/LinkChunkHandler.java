@@ -65,7 +65,7 @@ public class LinkChunkHandler extends DefaultHandler {
 	public void startElement (String namespaceURI,
                 String localName,
                 String qualifiedName,
-                Attributes atts) throws SAXException
+                Attributes atts)
     {
         if ("FILE".equals (qualifiedName)) {
             state = STATE_FILE;
@@ -81,7 +81,6 @@ public class LinkChunkHandler extends DefaultHandler {
      */
     @Override
 	public void characters (char [] ch, int start, int length)
-    throws SAXException
     {
         _content.append (ch, start, length);
     }
@@ -93,7 +92,6 @@ public class LinkChunkHandler extends DefaultHandler {
     @Override
 	public void endElement (String namespaceURI, String localName,
                 String rawName)
-    throws SAXException
     {
         switch (state) {
             case STATE_FILE:

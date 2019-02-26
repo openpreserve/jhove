@@ -68,7 +68,7 @@ public class GzipEntryProperties {
      * @return A map of the properties of the GZIP entry.
      */
     public Map<String, String> getProperties() {
-        properties = new LinkedHashMap<String, String>();
+        properties = new LinkedHashMap<>();
         setProperty(Boolean.valueOf(data.isNonCompliant), "Is non compliant.");
         setProperty(Long.valueOf(data.offset), "Offset value.");
         setProperty(data.fileName, "GZip entry name.");

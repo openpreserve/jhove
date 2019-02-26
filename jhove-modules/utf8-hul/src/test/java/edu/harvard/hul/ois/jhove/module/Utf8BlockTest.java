@@ -18,7 +18,7 @@ public class Utf8BlockTest {
 	@Test
 	public void testBlocks() {
 		int lastEnd = -1;
-		Set<String> names = new HashSet<String>();
+		Set<String> names = new HashSet<>();
 		for (Utf8Block blk : Utf8Block.unicodeBlock) {
 			int start = blk.getStart();
 			int end = blk.getEnd();

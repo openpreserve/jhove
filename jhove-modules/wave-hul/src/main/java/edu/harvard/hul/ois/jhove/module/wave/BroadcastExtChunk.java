@@ -125,7 +125,7 @@ public class BroadcastExtChunk extends Chunk {
 
         // Whew -- we've read the whole thing.  Now make that into a
         // list of Properties.
-        List<Property> plist = new ArrayList<Property>(14);
+        List<Property> plist = new ArrayList<>(14);
 
         if (!description.isEmpty()) {
             plist.add(new Property("Description",

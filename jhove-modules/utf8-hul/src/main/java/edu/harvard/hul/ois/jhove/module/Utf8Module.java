@@ -194,7 +194,7 @@ public class Utf8Module extends ModuleBase {
         _lineEndLF = false;
         _lineEndCRLF = false;
         _prevChar = 0;
-        _controlCharMap = new HashMap<Integer, String>();
+        _controlCharMap = new HashMap<>();
         _textMD = new TextMDMetadata();
 
         boolean printableChars = false;

@@ -52,7 +52,7 @@ public class CompositionBox extends JP2Box {
         }
         initBytesRead ();
         hasBoxes = true;
-        instSets = new LinkedList<Property> ();
+        instSets = new LinkedList<> ();
 
         // A Composition box is a superbox which contains one
         // Composition Options Box followed by 0 (?) or more
@@ -109,7 +109,7 @@ public class CompositionBox extends JP2Box {
         }
         finalizeBytesRead ();
         
-        List<Property> propList = new ArrayList<Property> (4);
+        List<Property> propList = new ArrayList<> (4);
         propList.add (new Property ("Width",
                 PropertyType.LONG,
                 new Long (_width)));

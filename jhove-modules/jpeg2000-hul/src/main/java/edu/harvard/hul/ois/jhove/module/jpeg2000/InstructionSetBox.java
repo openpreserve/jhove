@@ -76,7 +76,7 @@ public class InstructionSetBox extends JP2Box {
             }
         }
         else {
-            List<Property> instProps = new ArrayList<Property> (11);
+            List<Property> instProps = new ArrayList<> (11);
             // Loop to read instructions
             while (sizeLeft >= 0) {
                 if (hasXO_YO) {

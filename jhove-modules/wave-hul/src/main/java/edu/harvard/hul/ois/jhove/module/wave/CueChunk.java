@@ -47,7 +47,7 @@ public class CueChunk extends Chunk {
 	public boolean readChunk(RepInfo info) throws IOException {
         WaveModule module = (WaveModule) _module;
         int nPoints = (int) module.readUnsignedInt(_dstream);
-        List<Property> points = new ArrayList<Property>(nPoints);
+        List<Property> points = new ArrayList<>(nPoints);
         for (int i = 0; i < nPoints; i++) {
             // Get unique ID for cue point
             long dwIdent = module.readUnsignedInt(_dstream);

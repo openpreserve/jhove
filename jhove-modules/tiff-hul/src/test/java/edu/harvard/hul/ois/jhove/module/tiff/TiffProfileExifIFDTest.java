@@ -18,7 +18,7 @@ public class TiffProfileExifIFDTest {
 	private TiffProfileExifIFD profile;
 	
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		profile = new TiffProfileExifIFD();
 	}
 

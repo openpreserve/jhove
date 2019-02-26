@@ -58,7 +58,6 @@ private final int jjMoveNfa_7(int startState, int curPos)
       if (curChar < 64)
       {
          long l = 1L << curChar;
-         MatchLoop: do
          {
             switch(jjstateSet[--i])
             {
@@ -72,7 +71,6 @@ private final int jjMoveNfa_7(int startState, int curPos)
       }
       else if (curChar < 128)
       {
-         MatchLoop: do
          {
             switch(jjstateSet[--i])
             {
@@ -87,7 +85,6 @@ private final int jjMoveNfa_7(int startState, int curPos)
       {
          int i2 = (curChar & 0xff) >> 6;
          long l2 = 1L << (curChar & 077);
-         MatchLoop: do
          {
             switch(jjstateSet[--i])
             {
@@ -208,7 +205,6 @@ private final int jjMoveNfa_0(int startState, int curPos)
       if (curChar < 64)
       {
          long l = 1L << curChar;
-         MatchLoop: do
          {
             switch(jjstateSet[--i])
             {
@@ -222,7 +218,6 @@ private final int jjMoveNfa_0(int startState, int curPos)
       }
       else if (curChar < 128)
       {
-         MatchLoop: do
          {
             switch(jjstateSet[--i])
             {
@@ -237,7 +232,6 @@ private final int jjMoveNfa_0(int startState, int curPos)
       {
          int i2 = (curChar & 0xff) >> 6;
          long l2 = 1L << (curChar & 077);
-         MatchLoop: do
          {
             switch(jjstateSet[--i])
             {

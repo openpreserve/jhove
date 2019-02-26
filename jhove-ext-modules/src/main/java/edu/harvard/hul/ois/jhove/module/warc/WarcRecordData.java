@@ -155,7 +155,7 @@ public class WarcRecordData {
         this.warcIpAddress = header.warcIpAddress;
         // TODO Clone List in WarcRecord's getter at some point.
         if (header.warcConcurrentToList != null && header.warcConcurrentToList.size() > 0) {
-            this.warcConcurrentToList = new LinkedList<String>();
+            this.warcConcurrentToList = new LinkedList<>();
             WarcConcurrentTo warcConcurrentTo;
             for (int i=0; i<header.warcConcurrentToList.size(); ++i) {
             	warcConcurrentTo = header.warcConcurrentToList.get(i);

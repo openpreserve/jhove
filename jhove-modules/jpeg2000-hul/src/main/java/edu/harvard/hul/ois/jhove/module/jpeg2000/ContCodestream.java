@@ -74,7 +74,7 @@ public class ContCodestream {
         _module = module;
         _dstream = dstream;
         _length = length;
-        _tiles = new LinkedList<Tile> ();
+        _tiles = new LinkedList<> ();
         //_tileParts = new LinkedList ();   // Do I want both lists?
         ppmSeen = false;
     }

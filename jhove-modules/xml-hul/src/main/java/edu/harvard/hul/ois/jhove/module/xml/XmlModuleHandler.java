@@ -100,18 +100,18 @@ public class XmlModuleHandler extends DefaultHandler {
     {
         _xhtmlFlag = false;
         _htmlMetadata = null;
-        _entities = new LinkedList<EntityInfo> ();
-        _namespaces = new HashMap<String,String> ();
-        _processingInsts = new LinkedList<ProcessingInstructionInfo> ();
-        _messages = new LinkedList<Message> ();
-        _attributeVals = new HashSet<String> ();
+        _entities = new LinkedList<> ();
+        _namespaces = new HashMap<> ();
+        _processingInsts = new LinkedList<> ();
+        _messages = new LinkedList<> ();
+        _attributeVals = new HashSet<> ();
         _dtdURI = null;
         _root = null;
         _valid = true;
         _nErrors = 0;
-        _schemas = new LinkedList<SchemaInfo> ();
-        _unparsedEntities = new LinkedList<String[]> ();
-        _notations = new LinkedList<String[]> ();
+        _schemas = new LinkedList<> ();
+        _unparsedEntities = new LinkedList<> ();
+        _notations = new LinkedList<> ();
         _sigFlag = false;
     }
 
@@ -151,7 +151,7 @@ public class XmlModuleHandler extends DefaultHandler {
 	public void startElement (String namespaceURI,
                 String localName,
                 String qualifiedName,
-                Attributes atts) throws SAXException
+                Attributes atts)
     {
         // The first element we encounter is the root.
         // Save it.
@@ -262,7 +262,6 @@ public class XmlModuleHandler extends DefaultHandler {
     @Override
 	public void startPrefixMapping(String prefix,
                                    String uri)
-                            throws SAXException
     {
         //THL we want the root namespace even if it declares no prefix !!!
         //if (!"".equals (prefix)) {
@@ -280,7 +279,6 @@ public class XmlModuleHandler extends DefaultHandler {
     @Override
 	public void processingInstruction(String target,
                                       String data)
-                               throws SAXException
     {
         _sigFlag = true;
         if (data == null) {
@@ -300,7 +298,6 @@ public class XmlModuleHandler extends DefaultHandler {
      */
     @Override
 	public void notationDecl (String name, String publicID, String systemID)
-            throws SAXException
     {
         String[] notArr = new String[3];
         notArr[0] = name;

@@ -53,7 +53,7 @@ public class ComposLayerHdrBox extends JP2Box {
         }
         initBytesRead ();
         hasBoxes = true;
-        colorSpecs = new LinkedList<Property> ();
+        colorSpecs = new LinkedList<> ();
         
         // Unlike some other boxes, compositing layer boxes
         // are numbered by their order in the file, starting

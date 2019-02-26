@@ -83,7 +83,7 @@ public class UUIDInfoBox extends JP2Box {
             return false;
             
         }
-        List<Property> propList = new ArrayList<Property> (2);
+        List<Property> propList = new ArrayList<> (2);
         if (_urlProp != null) {
             propList.add (_urlProp);
         }
@@ -114,7 +114,7 @@ public class UUIDInfoBox extends JP2Box {
      */
     protected void setUUIDList (byte[][] uuids)
     {
-       List<Property> propList = new ArrayList<Property> (uuids.length); 
+       List<Property> propList = new ArrayList<> (uuids.length); 
        for (int i = 0; i < uuids.length; i++) {
            propList.add (new Property 
                 ("UUIDList",

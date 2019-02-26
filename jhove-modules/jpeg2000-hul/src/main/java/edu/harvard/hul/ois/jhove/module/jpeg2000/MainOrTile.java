@@ -54,7 +54,7 @@ public abstract class MainOrTile {
         _components = null;
         _qcdProperty = null;
         _codProperty = null;
-        _comments = new LinkedList<Property> ();
+        _comments = new LinkedList<> ();
     }
 
 
@@ -115,7 +115,7 @@ public abstract class MainOrTile {
     public void addPacketLength (long len)
     {
         if (_packetLengthList == null) {
-            _packetLengthList = new LinkedList<Long> ();
+            _packetLengthList = new LinkedList<> ();
         }
         _packetLengthList.add (new Long (len));
     }

@@ -45,7 +45,7 @@ import java.util.Map;
 */
 public class CompressionType {
     /** The list of valid values. */
-    private static Map<Integer, CompressionType> values = new HashMap<Integer, CompressionType>();
+    private static Map<Integer, CompressionType> values = new HashMap<>();
 
     /** GZip extra flag value for maximum compression. */
     public final static CompressionType MAXIMUM_COMPRESSION = new CompressionType(2, "Maximum compression", true);

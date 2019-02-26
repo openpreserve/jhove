@@ -152,7 +152,7 @@ public class XmlModule
        Signature sig = new ExternalSignature (".xml", SignatureType.EXTENSION,
                                     SignatureUseType.OPTIONAL);
        _signature.add (sig);
-       _localSchemas = new HashMap<String, File> ();
+       _localSchemas = new HashMap<> ();
    }
 
    /**  Sets the value of the doctype string, assumed to have been forced
@@ -171,7 +171,6 @@ public class XmlModule
      */
     @Override
     public void resetParams ()
-        throws Exception
     {
         _baseURL = null;
         _sigWantsDecl = false;
@@ -243,7 +242,6 @@ public class XmlModule
     */
     @Override
     public int parse (InputStream stream, RepInfo info, int parseIndex)
-       throws IOException
     {
         // Test if textMD is to be generated
 
@@ -277,7 +275,7 @@ public class XmlModule
         }
         _cstream = new ChecksumInputStream (stream, _ckSummer);
 
-        _propList = new LinkedList<Property> ();
+        _propList = new LinkedList<> ();
         _metadata = new Property ("XMLMetadata",
                 PropertyType.PROPERTY,
                 PropertyArity.LIST,
@@ -592,7 +590,7 @@ public class XmlModule
         if (!schemaList.isEmpty ()) {
             // Build a List of Properties, which will be the value
             // of the Schemas Property.
-            List<Property> schemaPropList = new ArrayList<Property> (schemaList.size());
+            List<Property> schemaPropList = new ArrayList<> (schemaList.size());
             ListIterator<SchemaInfo> iter = schemaList.listIterator();
             // Iterate through all the schemas.
             while (iter.hasNext ()) {
@@ -657,7 +655,7 @@ public class XmlModule
         Map<String, String> ns = handler.getNamespaces ();
         if (!ns.isEmpty ()) {
             Set<String> keys = ns.keySet ();
-            List<Property> nsList = new ArrayList<Property> (keys.size());
+            List<Property> nsList = new ArrayList<> (keys.size());
             Iterator<String> iter = keys.iterator();
             while (iter.hasNext ()) {
                 String key =  iter.next ();
@@ -693,7 +691,7 @@ public class XmlModule
         List<Integer> refs = xds.getCharacterReferences ();
         if (!refs.isEmpty ()) {
             Utf8BlockMarker utf8BM = new Utf8BlockMarker ();
-            List<String> refList = new ArrayList<String> (refs.size ());
+            List<String> refList = new ArrayList<> (refs.size ());
             ListIterator<Integer> iter = refs.listIterator ();
             while (iter.hasNext ()) {
                 Integer refi = iter.next ();
@@ -714,9 +712,9 @@ public class XmlModule
         // External unparsed entities
         Set<String> entNames = lexHandler.getEntityNames ();
         Set<String> attributeVals = handler.getAttributeValues ();
-        List<Property> entProps = new LinkedList<Property> ();
+        List<Property> entProps = new LinkedList<> ();
         List<String[]> uent = handler.getUnparsedEntities ();
-        List<String> unparsedNotationNames = new LinkedList<String> ();
+        List<String> unparsedNotationNames = new LinkedList<> ();
         if (!uent.isEmpty ()) {
              ListIterator<String[]> iter = uent.listIterator ();
             while (iter.hasNext ()) {
@@ -731,7 +729,7 @@ public class XmlModule
                     // unparsedNotationNames, so we can use it
                     // in determining which notations are used.
                     unparsedNotationNames.add (entarr[3]);
-                    List<Property> subPropList = new ArrayList<Property> (6);
+                    List<Property> subPropList = new ArrayList<> (6);
                     subPropList.add( new Property ("Name",
                             PropertyType.STRING,
                             name));
@@ -765,7 +763,7 @@ public class XmlModule
                 String name = entarr[0];
                 // include only if the entity was actually used
                 if (nameInCollection (name, entNames)) {
-                    List<Property> subPropList = new ArrayList<Property> (4);
+                    List<Property> subPropList = new ArrayList<> (4);
                     subPropList.add (new Property ("Name",
                             PropertyType.STRING,
                             name));
@@ -792,7 +790,7 @@ public class XmlModule
                 String name = entarr[0];
                 // include only if the entity was actually used
                 if (nameInCollection (name, entNames)) {
-                    List<Property> subPropList = new ArrayList<Property> (4);
+                    List<Property> subPropList = new ArrayList<> (4);
                     subPropList.add (new Property ("Name",
                             PropertyType.STRING,
                             name));
@@ -826,13 +824,13 @@ public class XmlModule
         }
 
         List<ProcessingInstructionInfo> pi = handler.getProcessingInstructions ();
-        List<String> piTargets = new LinkedList<String> ();
+        List<String> piTargets = new LinkedList<> ();
         if (!pi.isEmpty()) {
             // Build a property, which consists of a list
             // of properties, each of which is an array of
             // two String properties, named Target and
             // Data respectively.
-            List<Property> piPropList = new ArrayList<Property> (pi.size());
+            List<Property> piPropList = new ArrayList<> (pi.size());
             ListIterator<ProcessingInstructionInfo> pii = pi.listIterator ();
             while (pii.hasNext ()) {
                 ProcessingInstructionInfo pistr =  pii.next ();
@@ -864,9 +862,9 @@ public class XmlModule
         // of an unparsed entry which is itself "actually used."
         List<String[]> notations = handler.getNotations ();
         if (!notations.isEmpty ()) {
-            List<Property> notProps = new ArrayList<Property> (notations.size ());
+            List<Property> notProps = new ArrayList<> (notations.size ());
             ListIterator<String[]> iter = notations.listIterator ();
-            List<Property> subPropList = new ArrayList<Property> (3);
+            List<Property> subPropList = new ArrayList<> (3);
             while (iter.hasNext ()) {
                 String[] notArray = iter.next();
                 String notName = notArray[0];

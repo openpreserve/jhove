@@ -150,8 +150,8 @@ public class WarcModule extends ModuleBase {
      * Initializes the variables.
      */
     private void initialiseVariables() {
-        versions = new HashMap<String, Integer>();
-        recordProperties = new ArrayList<Property>();
+        versions = new HashMap<>();
+        recordProperties = new ArrayList<>();
 
         bComputeBlockDigest = DEFAULT_COMPUTE_BLOCK_DIGEST.booleanValue();
         blockDigestAlgorithm = DEFAULT_BLOCK_DIGEST_ALGORITHM;
@@ -169,7 +169,7 @@ public class WarcModule extends ModuleBase {
      *  Returns to a default state without any parameters.
      */
     @Override
-    public void resetParams() throws Exception {
+    public void resetParams() {
         initialiseVariables();
     }
 
@@ -302,7 +302,7 @@ public class WarcModule extends ModuleBase {
      * @throws IOException if an IO error occurs while processing
      * @throws JhoveException if a serious problem needs to be reported
      */
-    protected void processRecord(WarcRecord record) throws IOException, JhoveException {
+    protected void processRecord(WarcRecord record) throws IOException {
         if (record.header.bValidVersionFormat) {
             Integer count = versions.get(record.header.versionStr);
             if (count == null) {
@@ -327,7 +327,7 @@ public class WarcModule extends ModuleBase {
      * @throws JhoveException
      * @throws IOException
      */
-    private void reportResults(WarcReader reader, RepInfo repInfo) throws JhoveException, IOException {
+    private void reportResults(WarcReader reader, RepInfo repInfo) {
         Diagnostics<Diagnosis> diagnostics = reader.diagnostics;
         if (diagnostics.hasErrors()) {
             for (Diagnosis d : diagnostics.getErrors()) {

@@ -61,7 +61,7 @@ public class XmlHandlerTest {
 	private XmlHandler handler;
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws IOException {
+	public static void setUpBeforeClass() {
 		// Define the test instance for NisoImageMetadata to be serialized
 		TEST_NISO_IMAGE_MD = new NisoImageMetadata();
 		TEST_NISO_IMAGE_MD.setByteOrder(NisoImageMetadata.BYTEORDER[1]);

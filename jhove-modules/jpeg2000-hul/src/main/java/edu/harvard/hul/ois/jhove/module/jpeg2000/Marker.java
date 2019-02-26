@@ -5,8 +5,6 @@
 
 package edu.harvard.hul.ois.jhove.module.jpeg2000;
 
-import java.io.*;
-
 /**
  * This is a subclass of MarkerSegment for Markers.
  * Markers are those elements of a codestream which have
@@ -26,7 +24,7 @@ public class Marker extends MarkerSegment {
      *  any bytes from the DataInputStream.
      */
     @Override
-	protected int readMarkLen () throws IOException
+	protected int readMarkLen ()
     {
         return 0;
     }

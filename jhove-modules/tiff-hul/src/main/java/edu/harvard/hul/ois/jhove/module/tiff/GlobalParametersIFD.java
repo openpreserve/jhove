@@ -89,7 +89,7 @@ public class GlobalParametersIFD extends IFD {
 
     /** Get the IFD properties. */
     @Override
-	public Property getProperty(boolean rawOutput) throws TiffException {
+	public Property getProperty(boolean rawOutput) {
         List entries = new LinkedList ();
         if (_profileType != NULL) {
             entries.add (addIntegerProperty ("ProfileType", _profileType,

@@ -47,7 +47,7 @@ public class DigSignatureBox extends JP2Box {
         // mean that all superboxes should check it as a possible
         // subbox?
         
-        List<Property> propList = new ArrayList<Property> (10);
+        List<Property> propList = new ArrayList<> (10);
         int styp = ModuleBase.readUnsignedByte (_dstrm, _module);
         if (styp > 5) {
             // Known signature types are 0-5
@@ -130,8 +130,7 @@ public class DigSignatureBox extends JP2Box {
     private boolean isSigValid (int styp,
                 long off, long len,
                 byte[] data)
-                throws NoSuchAlgorithmException,
-                    IOException
+                throws NoSuchAlgorithmException
     {
         MessageDigest digest;
         if (styp == 0) {

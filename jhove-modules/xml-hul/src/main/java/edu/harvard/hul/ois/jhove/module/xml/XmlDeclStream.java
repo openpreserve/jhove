@@ -45,7 +45,7 @@ public class XmlDeclStream extends FilterInputStream {
         super (strm);
         declBuf = null;
         seenChars = false;
-        _charRefs = new LinkedList<Integer> ();
+        _charRefs = new LinkedList<> ();
         
         // No line end types have been discovered.
         _lineEndCR = false;

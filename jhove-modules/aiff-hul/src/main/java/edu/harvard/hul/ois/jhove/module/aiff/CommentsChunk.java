@@ -50,7 +50,7 @@ public class CommentsChunk extends Chunk {
             return true;     // trivial case
         }
         // Create a List of comment properties
-        List<Property> comments = new ArrayList<Property> (numComments);
+        List<Property> comments = new ArrayList<> (numComments);
         for (int i = 0; i < numComments; i++) {
             long timestamp = module.readUnsignedInt (_dstream);
             Date jTimestamp = module.timestampToDate (timestamp);

@@ -154,7 +154,7 @@ public class CrossRefStream {
      * PdfException.
      */
     public void initRead (RandomAccessFile raf) 
-            throws IOException, PdfException 
+            throws IOException 
     {
         Stream strm = _xstrm.getStream ();
         strm.setFilters (_xstrm.getFilters ());
