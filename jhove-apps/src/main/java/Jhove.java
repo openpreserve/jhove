@@ -19,6 +19,7 @@
  **********************************************************************/
 
 import edu.harvard.hul.ois.jhove.App;
+import edu.harvard.hul.ois.jhove.ExitCode;
 import edu.harvard.hul.ois.jhove.CoreMessageConstants;
 import edu.harvard.hul.ois.jhove.JhoveBase;
 import edu.harvard.hul.ois.jhove.Module;
@@ -36,11 +37,6 @@ public class Jhove
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(Jhove.class.getCanonicalName());
 
-    /** General error. */
-    private static final int ERROR = -1;
-    /** Incompatible Java VM. */
-    private static final int INCOMPATIBLE_VM = -2;
-
     private Jhove()
     {
         throw new AssertionError("Should never enter private constructor");
@@ -55,7 +51,7 @@ public class Jhove
         String version = System.getProperty("java.vm.version");
         if (version.compareTo("1.8.0") < 0) {
             LOGGER.log(Level.SEVERE, CoreMessageConstants.EXC_JAVA_VER_INCMPT);
-            System.exit(INCOMPATIBLE_VM);
+            System.exit(ExitCode.INCOMPATIBLE_VM.getReturnCode());
         }
 
         try {
@@ -254,17 +250,17 @@ public class Jhove
             Module module = je.getModule(moduleName);
             if (module == null && moduleName != null) {
                 LOGGER.log(Level.SEVERE, "Module '" + moduleName + "' not found");
-                System.exit(ERROR);
+                System.exit(ExitCode.ERROR.getReturnCode());
             }
             OutputHandler about = je.getHandler(aboutHandler);
             if (about == null && aboutHandler != null) {
                 LOGGER.log(Level.SEVERE, "Handler '" + aboutHandler + "' not found");
-                System.exit(ERROR);
+                System.exit(ExitCode.ERROR.getReturnCode());
             }
             OutputHandler handler = je.getHandler(handlerName);
             if (handler == null && handlerName != null) {
                 LOGGER.log(Level.SEVERE, "Handler '" + handlerName + "' not found");
-                System.exit(ERROR);
+                System.exit(ExitCode.ERROR.getReturnCode());
             }
             String[] dirFileOrUri = null;
             int len = list.size();
@@ -287,7 +283,7 @@ public class Jhove
         catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getMessage());
             e.printStackTrace(System.err);
-            System.exit(ERROR);
+            System.exit(ExitCode.ERROR.getReturnCode());
         }
     }
 }

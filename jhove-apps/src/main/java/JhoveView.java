@@ -19,6 +19,7 @@
  **********************************************************************/
 
 import edu.harvard.hul.ois.jhove.App;
+import edu.harvard.hul.ois.jhove.ExitCode;
 import edu.harvard.hul.ois.jhove.CoreMessageConstants;
 import edu.harvard.hul.ois.jhove.JhoveBase;
 import edu.harvard.hul.ois.jhove.JhoveException;
@@ -43,11 +44,6 @@ public class JhoveView
     /** Application icon. */
     private static final String ICON_PATH = "org/openpreservation/jhove/icon.png"; //$NON-NLS-1$
 
-    /** General error. */
-    private static final int ERROR = -1;
-    /** Incompatible Java VM. */
-    private static final int INCOMPATIBLE_VM = -2;
-
     /** Stub constructor. */
     private JhoveView()
     {
@@ -65,7 +61,7 @@ public class JhoveView
         if (version.compareTo("1.8.0") < 0) { //$NON-NLS-1$
             LOGGER.log(Level.SEVERE, CoreMessageConstants.EXC_JAVA_VER_INCMPT);
             errorAlert(CoreMessageConstants.EXC_JAVA_VER_INCMPT);
-            System.exit(INCOMPATIBLE_VM);
+            System.exit(ExitCode.INCOMPATIBLE_VM.getReturnCode());
         }
 
         // If we're running on a Macintosh, put the menubar at the top
@@ -126,7 +122,7 @@ public class JhoveView
         catch (Exception e) {
             e.printStackTrace(System.err);
             LOGGER.log(Level.SEVERE, e.getMessage());
-            System.exit(ERROR);
+            System.exit(ExitCode.ERROR.getReturnCode());
         }
     }
 
