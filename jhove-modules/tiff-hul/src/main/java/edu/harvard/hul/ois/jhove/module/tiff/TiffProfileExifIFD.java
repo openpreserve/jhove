@@ -34,7 +34,8 @@ public class TiffProfileExifIFD extends TiffProfile {
      *  Returns true if the IFD satisfies the requirements of an
      *  Exif profile.  See the Exif specification for details.
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
         if (!(ifd instanceof ExifIFD)) {
             return false;

@@ -239,7 +239,8 @@ public class Codestream extends MainOrTile {
      *  If a property for that component doesn't already
      *  exist, it is created.  <code>prop</code> is then
      *  added to the property list of that property. */
-    public void setCompProperty (int idx, Property prop)
+    @Override
+	public void setCompProperty (int idx, Property prop)
     {
         if (_components != null && _components.length > idx) {
             if (_components[idx] == null) {

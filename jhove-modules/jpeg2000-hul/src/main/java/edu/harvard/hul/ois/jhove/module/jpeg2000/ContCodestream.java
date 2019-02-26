@@ -74,7 +74,7 @@ public class ContCodestream {
         _module = module;
         _dstream = dstream;
         _length = length;
-        _tiles = new LinkedList<Tile> ();
+        _tiles = new LinkedList<> ();
         //_tileParts = new LinkedList ();   // Do I want both lists?
         ppmSeen = false;
     }
@@ -205,7 +205,7 @@ public class ContCodestream {
         while (_tiles.size () <= idx) {
             _tiles.add (new Tile ());
         }
-        return (Tile) _tiles.get (idx);
+        return _tiles.get (idx);
     }
     
     /** Sets the value of curTile. */

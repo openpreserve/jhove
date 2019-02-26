@@ -37,7 +37,8 @@ public class GTSOBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         initBytesRead ();
         // Short of pulling out the bytes and somehow
         // analyzing them, about all we can do is report

@@ -31,7 +31,7 @@ public class Tiling {
      *  Constructor.
      */
     public Tiling() {
-        tileList = new LinkedList<long[]> ();
+        tileList = new LinkedList<> ();
     }
     
     /**
@@ -57,7 +57,7 @@ public class Tiling {
      */
     public Property buildTileListProp ()
     {
-        List<Property> tpList = new LinkedList<Property> ();
+        List<Property> tpList = new LinkedList<> ();
         ListIterator<long[]> iter = tileList.listIterator ();
         while (iter.hasNext ()) {
             long[] tile =  iter.next ();

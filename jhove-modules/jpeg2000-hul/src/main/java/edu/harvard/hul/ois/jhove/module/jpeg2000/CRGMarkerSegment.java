@@ -36,7 +36,8 @@ public class CRGMarkerSegment extends MarkerSegment {
      *                         If it is 0 for a MarkerSegment, the
      *                         number of bytes to consume is unknown.
      */
-    protected boolean process(int bytesToEat) throws IOException 
+    @Override
+	protected boolean process(int bytesToEat) throws IOException 
     {
         if (_ccs.getCurTile () != null) {
             _repInfo.setMessage (new ErrorMessage

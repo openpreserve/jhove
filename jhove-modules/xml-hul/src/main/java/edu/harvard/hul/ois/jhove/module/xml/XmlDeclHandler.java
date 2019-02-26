@@ -5,8 +5,9 @@
 
 package edu.harvard.hul.ois.jhove.module.xml;
 
-import java.util.*;
-import org.xml.sax.SAXException;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.xml.sax.ext.DeclHandler;
 
 /**
@@ -24,8 +25,8 @@ public class XmlDeclHandler implements DeclHandler {
     
     public XmlDeclHandler ()
     {
-        _intEntityDeclarations = new LinkedList<String[]> ();
-        _extEntityDeclarations = new LinkedList<String[]> ();
+        _intEntityDeclarations = new LinkedList<> ();
+        _extEntityDeclarations = new LinkedList<> ();
     }
     
     
@@ -35,7 +36,8 @@ public class XmlDeclHandler implements DeclHandler {
      * Does nothing.
      * @see org.xml.sax.ext.DeclHandler#elementDecl(java.lang.String, java.lang.String)
      */
-    public void elementDecl(String arg0, String arg1) throws SAXException 
+    @Override
+	public void elementDecl(String arg0, String arg1) 
     {
     }
 
@@ -44,8 +46,8 @@ public class XmlDeclHandler implements DeclHandler {
      *  list in the form of a String[2], with element 0 being the
      *  name and element 1 being the value. 
      */
-    public void internalEntityDecl(String name, String value)
-        throws SAXException {
+    @Override
+	public void internalEntityDecl(String name, String value) {
         String[] decl = new String[2];
         decl[0] = name;
         decl[1] = value;
@@ -57,8 +59,8 @@ public class XmlDeclHandler implements DeclHandler {
      *  list in the form of a String[3], with element 0 being the
      *  name, element 1 the public ID, and 2 the system ID. 
      */
-    public void externalEntityDecl(String name, String publicID, String systemID)
-        throws SAXException {
+    @Override
+	public void externalEntityDecl(String name, String publicID, String systemID) {
         String[] decl = new String[3];
         decl[0] = name;
         decl[1] = publicID;
@@ -70,13 +72,13 @@ public class XmlDeclHandler implements DeclHandler {
      *  Does nothing.
      *  @see org.xml.sax.ext.DeclHandler#attributeDecl(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
-    public void attributeDecl(
+    @Override
+	public void attributeDecl(
         String arg0,
         String arg1,
         String arg2,
         String arg3,
-        String arg4)
-        throws SAXException 
+        String arg4) 
     {
  
     }

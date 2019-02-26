@@ -37,7 +37,8 @@ public class POCMarkerSegment extends MarkerSegment {
      *  @return                <code>true</code> if segment is well-formed,
      *                         <code>false</code> otherwise.
      */
-    protected boolean process(int bytesToEat) throws IOException {
+    @Override
+	protected boolean process(int bytesToEat) throws IOException {
         int compIdxBytes =  nCompBytes();
         if (compIdxBytes == 0) {
             _repInfo.setMessage (new ErrorMessage
@@ -67,7 +68,8 @@ public class POCMarkerSegment extends MarkerSegment {
                 cspoc = _module.readUnsignedShort (_dstream);
             }
             int lyepoc = _module.readUnsignedShort (_dstream);
-            int repoc = ModuleBase.readUnsignedByte (_dstream, _module);
+            // Skip repoc byte
+            ModuleBase.readUnsignedByte (_dstream, _module);
             int cepoc;
             if (compIdxBytes < 257) {
                 cepoc = ModuleBase.readUnsignedByte (_dstream, _module);

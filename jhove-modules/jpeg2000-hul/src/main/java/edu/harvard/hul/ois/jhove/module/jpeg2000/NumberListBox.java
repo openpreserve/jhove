@@ -40,7 +40,8 @@ public class NumberListBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         initBytesRead ();
 
         int numEntries = (int) _boxHeader.getDataLength () / 4;
@@ -52,7 +53,6 @@ public class NumberListBox extends JP2Box {
                 // number.
                 int typeByte = (int) ((num & 0XFF000000L) >> 24);
                 int numValue = (int) (num & 0XFFFFFF);
-                App app = _module.getApp ();
                 Property[] p = new Property[2];
                 p[0] = _module.addIntegerProperty("Type", 
                         typeByte, 
@@ -73,7 +73,8 @@ public class NumberListBox extends JP2Box {
     /** Returns a Property which describes the Box, for use
      *  by Association boxes and perhaps others.
      */
-    protected Property getSelfPropDesc () 
+    @Override
+	protected Property getSelfPropDesc () 
     {
         if (propArray != null) {
             return new Property (DESCRIPTION_NAME,
@@ -87,7 +88,8 @@ public class NumberListBox extends JP2Box {
 
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Number List Box";
     }

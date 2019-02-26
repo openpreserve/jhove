@@ -40,7 +40,8 @@ public class TiffProfileFXM extends TiffFXBase {
      *  hierarchies.  This could be an enhancement for a future
      *  release.
      */
-    public boolean satisfiesThisProfile(IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile(IFD ifd) 
     {
         if (!(ifd instanceof TiffIFD)) {
             return false;

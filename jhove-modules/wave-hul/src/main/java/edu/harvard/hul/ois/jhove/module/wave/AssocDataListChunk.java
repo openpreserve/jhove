@@ -46,7 +46,8 @@ public class AssocDataListChunk extends Superchunk {
      *            is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
         WaveModule module = (WaveModule) _module;
         
         // The chunk has a type ID, which is always "adtl".  Presumably
@@ -82,7 +83,7 @@ public class AssocDataListChunk extends Superchunk {
             }
             
             if (chunk == null) {
-                _module.skipBytes (_dstream, (int) chunkSize, _module);
+                _module.skipBytes (_dstream, chunkSize, _module);
                 info.setMessage (new InfoMessage
                     (MessageConstants.INF_DATA_CHUNK_TYPE_IGN + id));
             }

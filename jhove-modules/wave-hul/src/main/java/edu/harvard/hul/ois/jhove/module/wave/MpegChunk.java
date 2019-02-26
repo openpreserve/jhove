@@ -43,7 +43,8 @@ public class MpegChunk extends Chunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
         WaveModule module = (WaveModule) _module;
         int soundInformation = module.readUnsignedShort(_dstream);
         int frameSize = module.readUnsignedShort (_dstream);

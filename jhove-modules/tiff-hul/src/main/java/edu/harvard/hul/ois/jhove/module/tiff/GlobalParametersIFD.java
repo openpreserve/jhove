@@ -88,7 +88,8 @@ public class GlobalParametersIFD extends IFD {
      ******************************************************************/
 
     /** Get the IFD properties. */
-    public Property getProperty(boolean rawOutput) throws TiffException {
+    @Override
+	public Property getProperty(boolean rawOutput) {
         List entries = new LinkedList ();
         if (_profileType != NULL) {
             entries.add (addIntegerProperty ("ProfileType", _profileType,
@@ -119,7 +120,8 @@ public class GlobalParametersIFD extends IFD {
     }
 
     /** Lookup an IFD tag. */
-    public void lookupTag (int tag, int type, long count, long value)
+    @Override
+	public void lookupTag (int tag, int type, long count, long value)
         throws TiffException
     {
         try {
@@ -131,7 +133,7 @@ public class GlobalParametersIFD extends IFD {
             else if (tag == FAXPROFILE) {
                 checkType  (tag, type, BYTE);
                 checkCount (tag, count, 1);
-                _faxProfile = (int) readByte(type, count, value);
+                _faxProfile = readByte(type, count, value);
             }
             else if (tag == CODINGMETHODS) {
                 checkType  (tag, type, LONG);
@@ -146,7 +148,7 @@ public class GlobalParametersIFD extends IFD {
             else if (tag == MODENUMBER) {
                 checkType  (tag, type, BYTE);
                 checkCount (tag, count, 1);
-                _modeNumber = (int) readByte(type, count, value);
+                _modeNumber = readByte(type, count, value);
             }
         }
         catch (IOException e) {

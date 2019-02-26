@@ -61,7 +61,7 @@ public class XmlHandlerTest {
 	private XmlHandler handler;
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws IOException {
+	public static void setUpBeforeClass() {
 		// Define the test instance for NisoImageMetadata to be serialized
 		TEST_NISO_IMAGE_MD = new NisoImageMetadata();
 		TEST_NISO_IMAGE_MD.setByteOrder(NisoImageMetadata.BYTEORDER[1]);
@@ -273,15 +273,12 @@ public class XmlHandlerTest {
 	 */
 	private static String readXmlFile(File f) throws IOException {
 		StringBuilder sb = new StringBuilder();
-		BufferedReader br = new BufferedReader(new FileReader(f));
-		try {
+		try (BufferedReader br = new BufferedReader(new FileReader(f))) {
 			String line = br.readLine();
 			while (line != null) {
 				sb.append(line);
 				line = br.readLine();
 			}
-		} finally {
-			br.close();
 		}
 		return sb.toString().replaceAll("\\s+", " ");
 	}

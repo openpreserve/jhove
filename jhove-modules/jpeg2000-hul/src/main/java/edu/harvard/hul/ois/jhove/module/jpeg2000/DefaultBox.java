@@ -36,7 +36,8 @@ public class DefaultBox extends JP2Box {
     /* (non-Javadoc)
      * @see edu.harvard.hul.ois.jhove.module.jpeg2000.JP2Box#readBox()
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         skipBox ();
         return true;                
     }

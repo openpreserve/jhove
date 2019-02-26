@@ -104,10 +104,6 @@ public abstract class Html4_01TFDocDesc extends Html4TFDocDesc {
         addButtonElement (stSupportedElements);
         addTableElement (stSupportedElements);
         
-        HtmlAttributeDesc halignAtt = new HtmlAttributeDesc
-            ("align",
-             new String [] {"left", "center", "right", "justify", "char"},
-             HtmlAttributeDesc.IMPLIED);
         HtmlAttributeDesc valignAtt = 
             new HtmlAttributeDesc ("valign", 
                 new String[] { "top", "middle", "bottom", "baseline" },

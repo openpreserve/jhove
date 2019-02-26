@@ -45,7 +45,8 @@ public class InstrumentChunk extends Chunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
         WaveModule module = (WaveModule) _module;
         int unshiftedNote = ModuleBase.readUnsignedByte (_dstream, _module);
         int fineTune = ModuleBase.readSignedByte (_dstream, _module);

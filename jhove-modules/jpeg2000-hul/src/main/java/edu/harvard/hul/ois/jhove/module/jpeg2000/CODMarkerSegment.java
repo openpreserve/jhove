@@ -38,7 +38,8 @@ public class CODMarkerSegment extends MarkerSegment {
      *                         If it is 0 for a MarkerSegment, the
      *                         number of bytes to consume is unknown.
      */
-    protected boolean process (int bytesToEat) throws IOException
+    @Override
+	protected boolean process (int bytesToEat) throws IOException
     {
         int codeStyle = ModuleBase.readUnsignedByte (_dstream, _module);
         

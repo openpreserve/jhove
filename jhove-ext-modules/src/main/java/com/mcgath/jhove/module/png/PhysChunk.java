@@ -21,6 +21,7 @@ public class PhysChunk extends PNGChunk {
 	/** Process the data in the chunk.
 	 *  
 	 */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		final String badChunk = "Bad pHYS chunk";
 		processChunkCommon(info);
@@ -41,11 +42,11 @@ public class PhysChunk extends PNGChunk {
 		int unit = readUnsignedByte();
 		Property prop = new Property ("X pixels per unit",
 				PropertyType.INTEGER,
-				xPixelsPerUnit);
+				Long.valueOf(xPixelsPerUnit));
 		info.setProperty (prop);
 		prop = new Property ("Y pixels per unit",
 				PropertyType.INTEGER,
-				yPixelsPerUnit);
+				Long.valueOf(yPixelsPerUnit));
 		info.setProperty (prop);
 		String unitStr;
 		switch (unit) {

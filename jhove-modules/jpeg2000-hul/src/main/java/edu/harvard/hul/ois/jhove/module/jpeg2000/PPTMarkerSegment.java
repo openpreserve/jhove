@@ -35,7 +35,8 @@ public class PPTMarkerSegment extends MarkerSegment {
      *                         If it is 0 for a MarkerSegment, the
      *                         number of bytes to consume is unknown.
      */
-    protected boolean process(int bytesToEat) throws IOException 
+    @Override
+	protected boolean process(int bytesToEat) throws IOException 
     {
         if (_ccs.isPPMSeen ()) {
             _repInfo.setMessage (new ErrorMessage
@@ -48,8 +49,9 @@ public class PPTMarkerSegment extends MarkerSegment {
                     (MessageConstants.ERR_PPT_MARKER_POSITION_INVALID));
             return false;
         }
-        
-        int zppt = ModuleBase.readUnsignedByte (_dstream, _module);
+
+        // Skip unsigned byte
+        ModuleBase.readUnsignedByte (_dstream, _module);
         --bytesToEat;
         while (bytesToEat > 0) {
             // Number of bytes of Ippm info in the ith tile part

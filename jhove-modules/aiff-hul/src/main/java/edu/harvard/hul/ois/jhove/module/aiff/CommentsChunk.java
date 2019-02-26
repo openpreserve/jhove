@@ -39,7 +39,8 @@ public class CommentsChunk extends Chunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info)
+    @Override
+	public boolean readChunk(RepInfo info)
 	throws IOException
     {
         AiffModule module = (AiffModule) _module;
@@ -49,11 +50,12 @@ public class CommentsChunk extends Chunk {
             return true;     // trivial case
         }
         // Create a List of comment properties
-        List<Property> comments = new ArrayList<Property> (numComments);
+        List<Property> comments = new ArrayList<> (numComments);
         for (int i = 0; i < numComments; i++) {
             long timestamp = module.readUnsignedInt (_dstream);
             Date jTimestamp = module.timestampToDate (timestamp);
-            int marker = module.readSignedShort (_dstream);
+            // Skip marker short
+            module.readSignedShort (_dstream);
             int count = module.readUnsignedShort (_dstream);
             bytesLeft -= 8;
             byte[] buf = new byte[count];

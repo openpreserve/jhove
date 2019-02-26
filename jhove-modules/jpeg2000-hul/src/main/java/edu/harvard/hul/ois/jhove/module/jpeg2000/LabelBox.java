@@ -42,7 +42,8 @@ public class LabelBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         if (_parentBox == null) {
             wrongBoxContext();
             return false;
@@ -65,7 +66,8 @@ public class LabelBox extends JP2Box {
     /** Returns a Property which describes the Box, for use
      *  by Association boxes and perhaps others.
      */
-    protected Property getSelfPropDesc () 
+    @Override
+	protected Property getSelfPropDesc () 
     {
         return new Property (DESCRIPTION_NAME,
                 PropertyType.STRING,
@@ -75,7 +77,8 @@ public class LabelBox extends JP2Box {
 
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Label Box";
     }

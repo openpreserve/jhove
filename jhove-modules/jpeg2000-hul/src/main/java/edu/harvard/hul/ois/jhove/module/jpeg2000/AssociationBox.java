@@ -44,10 +44,10 @@ public class AssociationBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         initBytesRead ();
         hasBoxes = true;
-        int sizeLeft = (int) _boxHeader.getDataLength ();
 
         // Label and Number List boxes are given as examples, but
         // there is actually no restriction; an Association Box
@@ -101,12 +101,14 @@ public class AssociationBox extends JP2Box {
      *  Association properties to its ancestors, This just
      *  returns null to avoid duplicate reporting.
      */
-    protected Property selfDescProperty () {
+    @Override
+	protected Property selfDescProperty () {
         return null;
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Association Box";
     }

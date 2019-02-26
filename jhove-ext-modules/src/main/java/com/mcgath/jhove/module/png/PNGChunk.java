@@ -196,7 +196,7 @@ public abstract class PNGChunk {
 		for (int i = 0; i < 4; i++) {
 			int b = _dstream.readUnsignedByte();
 			val = (val << 8) | b;
-			crc.update((int) b);
+			crc.update(b);
 		}
 		return val;
 	}
@@ -207,7 +207,7 @@ public abstract class PNGChunk {
 		for (int i = 0; i < 2; i++) {
 			int b = _dstream.readUnsignedByte();
 			val = (val << 8) | b;
-			crc.update((int) b);
+			crc.update(b);
 		}
 		return val;
 	}

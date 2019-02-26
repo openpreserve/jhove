@@ -90,7 +90,7 @@ public class ViewWindow extends InfoWindow {
         panel.setMinimumSize (new Dimension (8, 8));
         getContentPane ().add (panel, "South");
         
-        setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation (WindowConstants.DISPOSE_ON_CLOSE);
         setSize (400, 600);
         
         // Set up to handle "close all documents" from main window

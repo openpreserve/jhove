@@ -41,7 +41,8 @@ public class CommonChunk extends Chunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
         AiffModule module = (AiffModule) _module;
         int numChannels = module.readUnsignedShort (_dstream);
         long numSampleFrames = module.readUnsignedInt (_dstream);
@@ -142,7 +143,7 @@ public class CommonChunk extends Chunk {
     /* Assign channel locationss according to the number of 
      * channels and the standard AIFF assignment. */
     @SuppressWarnings("fallthrough")
-    private void setChannelLocations 
+    private static void setChannelLocations 
         (AESAudioMetadata aes, int numChannels)
     {
         String[] mapLoc = new String[numChannels];

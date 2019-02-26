@@ -1,6 +1,5 @@
 package edu.harvard.hul.ois.jhove.module;
 
-import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -79,14 +78,14 @@ public class WarcModule extends ModuleBase {
             "Released under the GNU Lesser General Public License.";
 
     /* DEFAULT VALUES */
-    private static final Boolean DEFAULT_COMPUTE_BLOCK_DIGEST = true;
+    private static final Boolean DEFAULT_COMPUTE_BLOCK_DIGEST = Boolean.TRUE;
     private static final String DEFAULT_BLOCK_DIGEST_ALGORITHM = "sha1";
     private static final String DEFAULT_BLOCK_DIGEST_ENCODING = "base32";
-    private static final Boolean DEFAULT_COMPUTE_PAYLOAD_DIGEST = true;
+    private static final Boolean DEFAULT_COMPUTE_PAYLOAD_DIGEST = Boolean.TRUE;
     private static final String DEFAULT_PAYLOAD_DIGEST_ALGORITHM = "sha1";
     private static final String DEFAULT_PAYLOAD_DIGEST_ENCODING = "base32";
-    private static final Boolean DEFAULT_STRICT_TARGET_URI_VALIDATION = false;
-    private static final Boolean DEFAULT_STRICT_URI_VALIDATION = false;
+    private static final Boolean DEFAULT_STRICT_TARGET_URI_VALIDATION = Boolean.FALSE;
+    private static final Boolean DEFAULT_STRICT_URI_VALIDATION = Boolean.FALSE;
 
     /*-------------- Local variables --------------*/
 
@@ -151,26 +150,26 @@ public class WarcModule extends ModuleBase {
      * Initializes the variables.
      */
     private void initialiseVariables() {
-        versions = new HashMap<String, Integer>();
-        recordProperties = new ArrayList<Property>();
+        versions = new HashMap<>();
+        recordProperties = new ArrayList<>();
 
-        bComputeBlockDigest = DEFAULT_COMPUTE_BLOCK_DIGEST;
+        bComputeBlockDigest = DEFAULT_COMPUTE_BLOCK_DIGEST.booleanValue();
         blockDigestAlgorithm = DEFAULT_BLOCK_DIGEST_ALGORITHM;
         blockDigestEncoding = DEFAULT_BLOCK_DIGEST_ENCODING;
 
-        bComputePayloadDigest = DEFAULT_COMPUTE_PAYLOAD_DIGEST;
+        bComputePayloadDigest = DEFAULT_COMPUTE_PAYLOAD_DIGEST.booleanValue();
         payloadDigestAlgorithm = DEFAULT_PAYLOAD_DIGEST_ALGORITHM;
         payloadDigestEncoding = DEFAULT_PAYLOAD_DIGEST_ENCODING;
 
-        bStrictTargetUriValidation = DEFAULT_STRICT_TARGET_URI_VALIDATION;
-        bStrictUriValidation = DEFAULT_STRICT_URI_VALIDATION;
+        bStrictTargetUriValidation = DEFAULT_STRICT_TARGET_URI_VALIDATION.booleanValue();
+        bStrictUriValidation = DEFAULT_STRICT_URI_VALIDATION.booleanValue();
     }
 
     /** Reset parameter settings.
      *  Returns to a default state without any parameters.
      */
     @Override
-    public void resetParams() throws Exception {
+    public void resetParams() {
         initialiseVariables();
     }
 
@@ -204,23 +203,16 @@ public class WarcModule extends ModuleBase {
     public void checkSignatures (File file,
             RandomAccessFile raf,
             RepInfo info) throws IOException {
-        InputStream stream = new RandomAccessFileInputStream(raf);
-        checkSignatures(file, stream, info);
-        stream.close();
+        try (InputStream stream = new RandomAccessFileInputStream(raf)) {
+            checkSignatures(file, stream, info);
+        }
     }
 
 
     @Override
     public void parse(RandomAccessFile file, RepInfo info) throws IOException {
-        InputStream stream = null;
-        try {
-            stream = new RandomAccessFileInputStream(file);
+        try (InputStream stream = new RandomAccessFileInputStream(file)) {
             parse(stream, info, 0);
-        } finally {
-            if (stream != null) {
-                stream.close();
-                stream = null;
-            }
         }
     }
 
@@ -310,11 +302,11 @@ public class WarcModule extends ModuleBase {
      * @throws IOException if an IO error occurs while processing
      * @throws JhoveException if a serious problem needs to be reported
      */
-    protected void processRecord(WarcRecord record) throws IOException, JhoveException {
+    protected void processRecord(WarcRecord record) throws IOException {
         if (record.header.bValidVersionFormat) {
             Integer count = versions.get(record.header.versionStr);
             if (count == null) {
-                count = 0;
+                count = Integer.valueOf(0);
             }
             ++count;
             versions.put(record.header.versionStr, count);
@@ -335,7 +327,7 @@ public class WarcModule extends ModuleBase {
      * @throws JhoveException
      * @throws IOException
      */
-    private void reportResults(WarcReader reader, RepInfo repInfo) throws JhoveException, IOException {
+    private void reportResults(WarcReader reader, RepInfo repInfo) {
         Diagnostics<Diagnosis> diagnostics = reader.diagnostics;
         if (diagnostics.hasErrors()) {
             for (Diagnosis d : diagnostics.getErrors()) {
@@ -352,8 +344,8 @@ public class WarcModule extends ModuleBase {
 
         int maxCount = -1;
         for(Entry<String, Integer> e : versions.entrySet()) {
-            if(e.getValue() > maxCount) {
-                maxCount = e.getValue();
+            if(e.getValue().intValue() > maxCount) {
+                maxCount = e.getValue().intValue();
                 repInfo.setVersion(e.getKey());
             }
 
@@ -369,7 +361,7 @@ public class WarcModule extends ModuleBase {
      * @param d The diagnosis whose type should be extracted
      * @return The type of diagnosis
      */
-    private String extractDiagnosisType(Diagnosis d) {
+    private static String extractDiagnosisType(Diagnosis d) {
         return d.type.name();
     }
 
@@ -378,7 +370,7 @@ public class WarcModule extends ModuleBase {
      * @param d The diagnosis
      * @return The message containing entity and informations.
      */
-    private String extractDiagnosisMessage(Diagnosis d) {
+    private static String extractDiagnosisMessage(Diagnosis d) {
         StringBuilder res = new StringBuilder();
         res.append("Entity: " + d.entity);
         for(String i : d.information) {

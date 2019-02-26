@@ -45,7 +45,8 @@ public class LabeledTextChunk extends Chunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException 
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException 
     {
         WaveModule module = (WaveModule) _module;
         long cuePointID = module.readUnsignedInt (_dstream);

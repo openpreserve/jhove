@@ -139,7 +139,7 @@ public abstract class IFD
         _next    = 0L;
         _version = 4;
 
-        _errors = new LinkedList<String>();
+        _errors = new LinkedList<>();
 
         _format = NumberFormat.getInstance();
         _format.setGroupingUsed(false);
@@ -359,7 +359,7 @@ public abstract class IFD
     {
         Property prop = null;
         if (!rawOutput) {
-            List<String> list = new LinkedList<String>();
+            List<String> list = new LinkedList<>();
             try {
                 for (int i=0; i<labels.length; i++) {
                     if ((value & (1 << i)) != 0) {
@@ -587,7 +587,7 @@ public abstract class IFD
         _raf.seek(value);
 
         int nstrs = 0;
-        List<String> list = new LinkedList<String>();
+        List<String> list = new LinkedList<>();
         byte[] buf = new byte[(int) count];
         _raf.read(buf);
         StringBuffer strbuf = new StringBuffer();

@@ -31,7 +31,8 @@ public final class LinearizedProfile extends PdfProfile
      * Returns <code>true</code> if the document satisfies the profile.
      *
      */
-    public boolean satisfiesThisProfile ()
+    @Override
+	public boolean satisfiesThisProfile ()
     {
         _logger.info(MessageConstants.LOG_LIN_PROF_CHK);
         long fileLength;
@@ -225,7 +226,7 @@ public final class LinearizedProfile extends PdfProfile
 
     /* Check that a hint stream dictionary has some semblance 
        of validility. */
-    private boolean validateHintStream (PdfDictionary hDict)
+    private static boolean validateHintStream (PdfDictionary hDict)
     {
         try {
             // An offset to the shared object hint table

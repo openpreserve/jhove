@@ -42,7 +42,8 @@ public class AnnotationChunk extends TextChunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
         String name = readText ();
         ((AiffModule) _module).addAnnotation (new Property (propName, 
                 PropertyType.STRING,

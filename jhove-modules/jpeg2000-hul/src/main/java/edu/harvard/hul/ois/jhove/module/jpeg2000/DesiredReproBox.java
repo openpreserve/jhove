@@ -36,7 +36,8 @@ public class DesiredReproBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         // Oddly enough, this box is NOT required to be
         // at the top level of the file.  However, there
         // can be only one in the file.
@@ -46,8 +47,6 @@ public class DesiredReproBox extends JP2Box {
         // ISO profile.
         
         initBytesRead ();
-        int sizeLeft = (int) _boxHeader.getDataLength() ;
-        BoxHeader subhdr = new BoxHeader (_module, _dstrm);
         JP2Box box = null;
         while (hasNext ()) {
             box = (JP2Box) next ();
@@ -73,7 +72,8 @@ public class DesiredReproBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Desired Reproductions Box";
     }

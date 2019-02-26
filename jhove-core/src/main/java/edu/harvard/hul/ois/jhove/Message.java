@@ -22,13 +22,13 @@ public abstract class Message
      ******************************************************************/
 
     /** Message text. */
-    protected String _message;
+    protected final String _message;
     
     /** Additional information. */
-    protected String _subMessage;
+    protected final String _subMessage;
     
     /** Byte offset to which message applies. */
-    protected long _offset;
+    protected final long _offset;
 
     /******************************************************************
      * CLASS CONSTRUCTOR.
@@ -41,7 +41,7 @@ public abstract class Message
      */
     protected Message (String message)
     {
-	init (message, null, NULL);
+	this(message, null);
     }
 
     /**
@@ -55,7 +55,7 @@ public abstract class Message
      */
     protected Message (String message, String subMessage)
     {
-	init (message, subMessage, NULL);
+        this(message, subMessage, NULL);
     }
 
     /**
@@ -69,7 +69,7 @@ public abstract class Message
      */
     protected Message (String message, long offset)
     {
-	init (message, null, offset);
+        this(message, null, offset);
     }
 
     /**
@@ -84,19 +84,9 @@ public abstract class Message
      */
     protected Message (String message, String subMessage, long offset)
     {
-	init (message, subMessage, offset);
-    }
-
-    /**
-     * Initialize the <tt>Message</tt> object.
-     *  @param  message    Human-readable string.
-     *  @param  subMessage Human-readable additional information.
-     */
-    private void init (String message, String subMessage, long offset)
-    {
-        _message    = message;
-        _subMessage = subMessage;
-	_offset     = offset;
+        this._message = message;
+        this._subMessage = subMessage;
+        this._offset = offset;
     }
 
     /******************************************************************

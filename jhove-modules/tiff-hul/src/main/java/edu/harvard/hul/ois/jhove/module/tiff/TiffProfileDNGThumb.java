@@ -6,9 +6,6 @@
 
 package edu.harvard.hul.ois.jhove.module.tiff;
 
-import edu.harvard.hul.ois.jhove.*;
-//import edu.harvard.hul.ois.jhove.module.TiffModule;
-
 /**
  * IFD 0 of a DNG document must satisfy this profile.  It doesn't
  * actually have to be a "thumbnail" in the sense of containing
@@ -32,7 +29,8 @@ public class TiffProfileDNGThumb extends TiffProfile {
      *  Returns true if the IFD satisfies the requirements of a
      *  DNG thumbnail profile.
      */
-    public boolean satisfiesThisProfile(IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile(IFD ifd) 
     {
         if (!(ifd instanceof TiffIFD)) {
             return false;
@@ -46,7 +44,6 @@ public class TiffProfileDNGThumb extends TiffProfile {
         if (tifd.getNewSubfileType() != 1) {
             return false;
         }
-        NisoImageMetadata niso = tifd.getNisoImageMetadata ();
         
         if (tifd.getAsShotNeutral () != null && 
                 tifd.getAsShotWhiteXY () != null) {

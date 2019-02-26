@@ -34,7 +34,8 @@ public class ImageHeaderBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         if (!(_parentBox instanceof JP2HeaderBox)) {
             _repInfo.setMessage (new ErrorMessage
                 (MessageConstants.ERR_IMAGE_HEADER_BOX_CONTEXT_INVALID,
@@ -95,8 +96,8 @@ public class ImageHeaderBox extends JP2Box {
         _module.addProperty (new Property ("ColorspaceUnknown",
                 PropertyType.BOOLEAN,
                 new Boolean (unk != 0)));
-        
-        int ipr = ModuleBase.readUnsignedByte (_dstrm, _module);
+        // Skip unsigned byte
+        ModuleBase.readUnsignedByte (_dstrm, _module);
         // This just says whether there is an IPR box.
         // Do we need to do anything with it?
         finalizeBytesRead ();
@@ -105,7 +106,8 @@ public class ImageHeaderBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Image Header Box";
     }

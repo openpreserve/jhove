@@ -64,7 +64,7 @@ public abstract class JP2Box extends BoxHolder {
             _parentBox = null;
         }
         _bytesRead = 0;
-        associations = new LinkedList<Property> ();
+        associations = new LinkedList<> ();
     }
 
 
@@ -414,7 +414,8 @@ public abstract class JP2Box extends BoxHolder {
 
     /** Returns the name of the Box. All Boxes should
      *  override this. */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return null;
     }

@@ -39,7 +39,8 @@ public class DataSize64Chunk extends Chunk {
      * @return  <code>false</code> if the chunk is structurally
      *          invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
 
         WaveModule module = (WaveModule) _module;
 
@@ -47,7 +48,7 @@ public class DataSize64Chunk extends Chunk {
         module.setExtendedRiffSize(riffSize);
 
         long dataSize = module.readSignedLong(_dstream);
-        module.addExtendedChunkSize("data", dataSize);
+        module.addExtendedChunkSize("data", Long.valueOf(dataSize));
 
         long sampleCount = module.readSignedLong(_dstream);
         module.setExtendedSampleLength(sampleCount);
@@ -56,7 +57,7 @@ public class DataSize64Chunk extends Chunk {
         for (int i = 0; i < tableSize; i++) {
             String chunkId = module.read4Chars(_dstream);
             long chunkSize = module.readSignedLong(_dstream);
-            module.addExtendedChunkSize(chunkId, chunkSize);
+            module.addExtendedChunkSize(chunkId, Long.valueOf(chunkSize));
         }
 
         return true;

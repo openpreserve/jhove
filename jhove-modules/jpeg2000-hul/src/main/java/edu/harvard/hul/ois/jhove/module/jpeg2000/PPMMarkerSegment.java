@@ -39,10 +39,12 @@ public class PPMMarkerSegment extends MarkerSegment {
      *                         If it is 0 for a MarkerSegment, the
      *                         number of bytes to consume is unknown.
      */
-    protected boolean process(int bytesToEat) throws IOException 
+    @Override
+	protected boolean process(int bytesToEat) throws IOException 
     {
         // Get index of this segment
-        int zppm = ModuleBase.readUnsignedByte (_dstream, _module);
+    	// Skip Unsigned byte
+        ModuleBase.readUnsignedByte (_dstream, _module);
         --bytesToEat;
         
         while (bytesToEat > 0) {

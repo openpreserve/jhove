@@ -38,14 +38,13 @@ public class ROIBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         final String baddata = MessageConstants.ERR_ROI_BOX_CONTENT_INVALID;
         initBytesRead ();
         int nroi = ModuleBase.readUnsignedByte (_dstrm, _module);
         
         List propList = new ArrayList (nroi);
-        JhoveBase je = _module.getBase ();
-        boolean raw = je.getShowRawFlag ();
         for (int i = 0; i < nroi; i++) {
             List roiPropList = new ArrayList (7);
             int incs = ModuleBase.readUnsignedByte (_dstrm, _module);
@@ -115,7 +114,8 @@ public class ROIBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "ROI Description Box";
     }
@@ -124,8 +124,8 @@ public class ROIBox extends JP2Box {
      *  used as a subproperty of the Property returned by
      *  selfDescProperty. 
      */
-    protected Property getSelfPropDesc (){
-        Property descProp;
+    @Override
+	protected Property getSelfPropDesc (){
         if (roiProp != null) {
             return new Property (DESCRIPTION_NAME,
                 PropertyType.PROPERTY,

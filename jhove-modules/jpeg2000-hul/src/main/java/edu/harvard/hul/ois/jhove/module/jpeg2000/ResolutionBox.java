@@ -36,14 +36,11 @@ public class ResolutionBox extends JP2Box {
     /* (non-Javadoc)
      * @see edu.harvard.hul.ois.jhove.module.jpeg2000.JP2Box#readBox()
      */
-    public boolean readBox() throws IOException {
-        boolean seenresc = false;  // flag for Capture Resolution box
-        boolean seenresd = false;  // flog for Default Display Res box
+    @Override
+	public boolean readBox() throws IOException {
         initBytesRead ();
-        hasBoxes = true;
-        int sizeLeft = (int) _boxHeader.getDataLength() ;
+        this.hasBoxes = true;
 
-        BoxHeader subhdr = new BoxHeader (_module, _dstrm);
         //NisoImageMetadata niso = _module.getDefaultNiso ();
         // Later have to implement support for compositing layers,
         // assigning an appropriate value to niso
@@ -56,14 +53,12 @@ public class ResolutionBox extends JP2Box {
             }
             if (box instanceof CaptureResolutionBox) {
                 // Capture resolution box
-                seenresc = true;
                 if (!box.readBox ()) {
                     return false;
                 }
             }
             else if (box instanceof DDResolutionBox) {
                 // Default Display Resolution box
-                seenresd = true;
                 if (!box.readBox ()) {
                     return false;
                 }
@@ -78,7 +73,8 @@ public class ResolutionBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Resolution Box";
     }

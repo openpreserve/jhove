@@ -178,7 +178,7 @@ public abstract class HtmlDocDesc {
         if (!unknownTag && !checkElementContext (tag, info)) {
             String toptag = null;
             if (!elementStack.isEmpty ()) {
-                JHOpenTag top = (JHOpenTag) elementStack.top();
+                JHOpenTag top = elementStack.top();
                 toptag = top.getName();
             }
             info.setMessage (new ErrorMessage
@@ -301,7 +301,7 @@ public abstract class HtmlDocDesc {
 
     }
 
-    private void doErrorElement (JHErrorElement elem, RepInfo info)
+    private static void doErrorElement (JHErrorElement elem, RepInfo info)
     {
         elem.reportError (info);
     }

@@ -36,8 +36,10 @@ public class TLMMarkerSegment extends MarkerSegment {
      *                         If it is 0 for a MarkerSegment, the
      *                         number of bytes to consume is unknown.
      */
-    protected boolean process(int bytesToEat) throws IOException {
-        int ztlm = ModuleBase.readUnsignedByte (_dstream, _module);
+    @Override
+	protected boolean process(int bytesToEat) throws IOException {
+    	// Skip initial unsigned byte
+        ModuleBase.readUnsignedByte (_dstream, _module);
         int stlm = ModuleBase.readUnsignedByte (_dstream, _module);
         int st = (stlm & 0X30) >> 4;
         int sp = (stlm & 0X40) >> 6;
@@ -66,7 +68,7 @@ public class TLMMarkerSegment extends MarkerSegment {
             return false;      // not permitted in a tile
         }
         for (int i = 0; i < nParts; i++) {
-            List<Property> tpList = new ArrayList<Property> (2);
+            List<Property> tpList = new ArrayList<> (2);
             // The TileIndex property is given only if st != 0
             if (st != 0) {
                 int ttlm;
@@ -85,7 +87,7 @@ public class TLMMarkerSegment extends MarkerSegment {
                 length = (int) _module.readUnsignedInt (_dstream);
             }
             else {
-                length = (int) _module.readUnsignedShort (_dstream);
+                length = _module.readUnsignedShort (_dstream);
             }
             tpList.add (new Property ("Length",
                             PropertyType.INTEGER,

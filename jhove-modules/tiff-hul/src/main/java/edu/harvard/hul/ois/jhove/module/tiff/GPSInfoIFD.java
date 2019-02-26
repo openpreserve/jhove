@@ -365,7 +365,8 @@ public class GPSInfoIFD
     }
 
     /** Get the IFD properties. */
-    public Property getProperty(boolean rawOutput)
+    @Override
+	public Property getProperty(boolean rawOutput)
     {
 	List entries = new LinkedList();
 	entries.add(new Property("GPSVersionID", PropertyType.STRING,

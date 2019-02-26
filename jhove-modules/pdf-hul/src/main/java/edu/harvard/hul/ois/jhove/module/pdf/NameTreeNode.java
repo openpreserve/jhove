@@ -163,7 +163,7 @@ public class NameTreeNode
         first argument is less than the second, 1 if the first argument
         is greater, and 0 if they are equal.  Key A is less than key B
         if A is a prefix of B. */
-    private int compareKey (Vector a, Vector b) {
+    private static int compareKey (Vector a, Vector b) {
         int lena = a.size ();
         int lenb = b.size ();
         int len = (lena < lenb ? lena : lenb);
@@ -189,17 +189,6 @@ public class NameTreeNode
         else {
             return 1;
         }
-    }
-    
-    
-    /* Debugging code */
-    private void dumpKey (Vector v, String label) 
-    {
-        System.out.print (label);
-        for (int i = 0; i < v.size (); i++) {
-            System.out.print (v.elementAt (i).toString () + " ");
-        }
-        System.out.println ();
     }
 }
 

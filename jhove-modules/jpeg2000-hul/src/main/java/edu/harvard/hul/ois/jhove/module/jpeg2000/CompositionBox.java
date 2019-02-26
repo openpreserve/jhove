@@ -42,7 +42,8 @@ public class CompositionBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         JP2Box box;
         if (_parentBox != null) {
             // May not occur in a superbox
@@ -51,7 +52,7 @@ public class CompositionBox extends JP2Box {
         }
         initBytesRead ();
         hasBoxes = true;
-        instSets = new LinkedList<Property> ();
+        instSets = new LinkedList<> ();
 
         // A Composition box is a superbox which contains one
         // Composition Options Box followed by 0 (?) or more
@@ -108,7 +109,7 @@ public class CompositionBox extends JP2Box {
         }
         finalizeBytesRead ();
         
-        List<Property> propList = new ArrayList<Property> (4);
+        List<Property> propList = new ArrayList<> (4);
         propList.add (new Property ("Width",
                 PropertyType.LONG,
                 new Long (_width)));

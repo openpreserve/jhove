@@ -51,7 +51,8 @@ public class BroadcastExtChunk extends Chunk {
      * @return  <code>false</code> if the chunk is structurally
      *          invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
 
         WaveModule module = (WaveModule) _module;
 
@@ -124,7 +125,7 @@ public class BroadcastExtChunk extends Chunk {
 
         // Whew -- we've read the whole thing.  Now make that into a
         // list of Properties.
-        List<Property> plist = new ArrayList<Property>(14);
+        List<Property> plist = new ArrayList<>(14);
 
         if (!description.isEmpty()) {
             plist.add(new Property("Description",
@@ -148,9 +149,9 @@ public class BroadcastExtChunk extends Chunk {
         }
 
         plist.add(new Property("TimeReference",
-                PropertyType.LONG, timeReference));
+                PropertyType.LONG, Long.valueOf(timeReference)));
         plist.add(new Property("Version",
-                PropertyType.INTEGER, version));
+                PropertyType.INTEGER, Integer.valueOf(version)));
 
         if (!umid.isEmpty()) {
             plist.add(new Property("UMID",
@@ -247,7 +248,7 @@ public class BroadcastExtChunk extends Chunk {
         String formattedValue = "";
 
         if (value != UNUSED_LOUDNESS_FIELD) {
-            formattedValue = String.format("%.2f", value / 100f);
+            formattedValue = String.format("%.2f", Float.valueOf(value / 100f));
         }
 
         return formattedValue;

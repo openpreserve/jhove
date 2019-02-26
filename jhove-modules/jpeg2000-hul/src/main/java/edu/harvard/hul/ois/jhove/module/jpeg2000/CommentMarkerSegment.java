@@ -37,7 +37,8 @@ public class CommentMarkerSegment extends MarkerSegment {
      *  @return                <code>true</code> if segment is well-formed,
      *                         <code>false</code> otherwise.
      */
-    protected boolean process(int bytesToEat) throws IOException {
+    @Override
+	protected boolean process(int bytesToEat) throws IOException {
         MainOrTile cs = getMainOrTile ();
         int rcom = _module.readUnsignedShort (_dstream);
         Property prop;

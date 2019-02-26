@@ -66,7 +66,7 @@ public class ExtDouble {
         // adding an extra 1 to the exponent above.
         int shifter = 55;
         for (int i = 2; i < 9; i++) {
-            mantissa |= ((long) _rawData[i] & 0XFFL) << shifter;
+            mantissa |= (_rawData[i] & 0XFFL) << shifter;
             shifter -= 8;
         }
         mantissa |= _rawData[9] >>> 1;

@@ -27,9 +27,6 @@ public abstract class Html4TFDocDesc extends Html4DocDesc {
     {
         Html4DocDesc.classInit4(stSupportedElements);
 
-        String name;
-        HtmlTagDesc td;
-
         fontMarkup = new String[]
             { "tt", "i", "b", "u", "s", "strike", "big", "small" };
         listMarkup = new String []

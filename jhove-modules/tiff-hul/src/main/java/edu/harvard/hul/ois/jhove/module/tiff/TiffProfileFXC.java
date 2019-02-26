@@ -35,7 +35,8 @@ public class TiffProfileFXC extends TiffFXBase {
      *  TIFF/FX C profile.  See the TIFF/FX specification for
      *  details.
      */
-    public boolean satisfiesThisProfile(IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile(IFD ifd) 
     {
         if (!(ifd instanceof TiffIFD)) {
             return false;

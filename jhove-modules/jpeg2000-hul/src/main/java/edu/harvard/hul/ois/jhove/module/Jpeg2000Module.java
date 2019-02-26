@@ -319,7 +319,7 @@ public class Jpeg2000Module extends ModuleBase {
         info.setMimeType(_mimeType[0]);
         info.setModule(this);
 
-        _propList = new ArrayList<Property>(12);
+        _propList = new ArrayList<>(12);
         Property metadata = new Property("JPEG2000Metadata",
                 PropertyType.PROPERTY, PropertyArity.LIST, _propList);
 

@@ -61,10 +61,11 @@ public class LinkChunkHandler extends DefaultHandler {
      *  qualified name by preference, local name if the
      *  qualified name isn't available.
      */
-    public void startElement (String namespaceURI,
+    @Override
+	public void startElement (String namespaceURI,
                 String localName,
                 String qualifiedName,
-                Attributes atts) throws SAXException
+                Attributes atts)
     {
         if ("FILE".equals (qualifiedName)) {
             state = STATE_FILE;
@@ -78,8 +79,8 @@ public class LinkChunkHandler extends DefaultHandler {
     /** 
      *  SAX parser callback method for PC text.
      */
-    public void characters (char [] ch, int start, int length)
-    throws SAXException
+    @Override
+	public void characters (char [] ch, int start, int length)
     {
         _content.append (ch, start, length);
     }
@@ -88,9 +89,9 @@ public class LinkChunkHandler extends DefaultHandler {
     /** 
      *  SAX parser callback method.
      */
-    public void endElement (String namespaceURI, String localName,
+    @Override
+	public void endElement (String namespaceURI, String localName,
                 String rawName)
-    throws SAXException
     {
         switch (state) {
             case STATE_FILE:

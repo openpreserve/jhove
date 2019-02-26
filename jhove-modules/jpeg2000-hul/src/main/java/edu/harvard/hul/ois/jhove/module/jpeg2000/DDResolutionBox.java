@@ -37,7 +37,8 @@ public class DDResolutionBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         initBytesRead ();
         if (!(_parentBox instanceof ResolutionBox)) {
             wrongBoxContext();
@@ -48,7 +49,6 @@ public class DDResolutionBox extends JP2Box {
         // in dots per meter.  Not clear whether to present this 
         // as raw data, turn it into a dots/cm rational, or what.
         // I'll put it up as raw data for now.
-        ResolutionBox rb = (ResolutionBox) _parentBox;
         List vresList = new ArrayList(3);
         List hresList = new ArrayList(3);
         vresList.add (new Property ("Numerator",
@@ -93,7 +93,8 @@ public class DDResolutionBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Default Display Resolution Box";
     }

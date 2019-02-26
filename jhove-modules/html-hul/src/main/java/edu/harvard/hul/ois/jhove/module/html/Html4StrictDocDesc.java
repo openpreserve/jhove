@@ -193,7 +193,6 @@ public abstract class Html4StrictDocDesc extends Html4DocDesc {
     protected static void addButtonElement 
         (Map stSupportedElements)
     {
-        String name = "button";
         List content = new ArrayList (formMarkup.length + 3);
         addStringsToList(formMarkup, content);
         content.add ("form");

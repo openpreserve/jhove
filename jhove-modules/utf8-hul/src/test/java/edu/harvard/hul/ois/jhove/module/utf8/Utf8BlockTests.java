@@ -22,8 +22,8 @@ public class Utf8BlockTests {
 			int end = blk.end;
 			String name = blk.name;
 			String note = "Bad block: " + name + ",  " + 
-					String.format ("%05X", start) + " = " +
-					String.format ("%05X", end);
+					String.format ("%05X", Integer.valueOf(start)) + " = " +
+					String.format ("%05X", Integer.valueOf(end));
 			assertTrue (note, end > start);
 			assertTrue (note, start > lastEnd);
 			assertFalse ("Duplicate name " + name, names.contains(name));

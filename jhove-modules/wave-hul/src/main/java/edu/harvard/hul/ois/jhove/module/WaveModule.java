@@ -311,8 +311,7 @@ public class WaveModule extends ModuleBase {
      *            again with <code>parseIndex</code> equal to that return value.
      */
     @Override
-    public int parse(InputStream stream, RepInfo info, int parseIndex)
-            throws IOException {
+    public int parse(InputStream stream, RepInfo info, int parseIndex) {
         initParse();
         info.setModule(this);
 

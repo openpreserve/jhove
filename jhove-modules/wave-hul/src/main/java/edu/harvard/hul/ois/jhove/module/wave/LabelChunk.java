@@ -38,7 +38,8 @@ public class LabelChunk extends SimpleTextChunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
         WaveModule module = (WaveModule) _module;
         Property p = readTextProp (module, "Label");
         module.addLabel (p);

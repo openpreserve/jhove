@@ -31,7 +31,8 @@ public final class TiffProfileClassF extends TiffProfile
      *  Class F profile.  See the Class F specification for
      *  details.
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
         if (!(ifd instanceof TiffIFD)) {
             return false;
@@ -68,7 +69,7 @@ public final class TiffProfileClassF extends TiffProfile
                 return false;
             }
         }
-        else if (cmpr == 4) {            long t4opt = tifd.getT4Options ();
+        else if (cmpr == 4) {
             // T6 options are also known as Group 4 options
             long t6opt = tifd.getT6Options ();
             if (t6opt != 2) {

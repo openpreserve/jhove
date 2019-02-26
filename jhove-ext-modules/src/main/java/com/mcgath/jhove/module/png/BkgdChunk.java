@@ -23,6 +23,7 @@ public class BkgdChunk extends PNGChunk {
 	 *  different kinds of data, so make them three different
 	 *  properties so that processing software doesn't get confused.
 	 */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		final String badChunk = "Bad bKGD chunk";
 		processChunkCommon(info);
@@ -56,7 +57,7 @@ public class BkgdChunk extends PNGChunk {
 				int grayBkgd = readUnsignedShort();
 				Property grayProp = new Property ("Gray background value",
 						PropertyType.INTEGER,
-						grayBkgd);
+						Integer.valueOf(grayBkgd));
 				info.setProperty (grayProp);
 				break;
 			case 2:
@@ -66,22 +67,22 @@ public class BkgdChunk extends PNGChunk {
 				int blueBkgd = readUnsignedShort();
 				Property redProp = new Property ("Red background value",
 						PropertyType.INTEGER,
-						redBkgd);
+						Integer.valueOf(redBkgd));
 				info.setProperty (redProp);
 				Property greenProp = new Property ("Green background value",
 						PropertyType.INTEGER,
-						greenBkgd);
+						Integer.valueOf(greenBkgd));
 				info.setProperty (greenProp);
 				Property blueProp = new Property ("Blue background value",
 						PropertyType.INTEGER,
-						blueBkgd);
+						Integer.valueOf(blueBkgd));
 				info.setProperty (blueProp);
 				break;
 			case 3:
 				int bkgdIndex = readUnsignedByte();
 				Property bkgdProp = new Property ("Background palette index",
 						PropertyType.INTEGER,
-						bkgdIndex);
+						Integer.valueOf(bkgdIndex));
 				info.setProperty (bkgdProp);
 				break;
 			}

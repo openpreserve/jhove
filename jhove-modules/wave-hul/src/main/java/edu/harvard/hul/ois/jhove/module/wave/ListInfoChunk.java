@@ -48,10 +48,9 @@ public class ListInfoChunk extends Superchunk {
      *            invalid, otherwise <code>true</code>
      * 
      */
-    public boolean readChunk(RepInfo info) throws IOException 
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException 
     {
-        boolean isInfo = false;
-        boolean isExif = false;
         String typeID = ((WaveModule) _module).read4Chars(_dstream);
         bytesLeft -= 4;
         if ("INFO".equals (typeID)) {
@@ -85,20 +84,12 @@ public class ListInfoChunk extends Superchunk {
                 break;
             }
             Chunk chunk = null;
-            String id = chunkh.getID();
             int chunkSize = (int) chunkh.getSize ();
             chunk = new ListInfoTextChunk (_module, chunkh, 
                         _dstream, listInfoProps, this);
             
-            if (chunk == null) {
-                _module.skipBytes (_dstream, (int) chunkSize, _module);
-                info.setMessage (new InfoMessage
-                    (MessageConstants.INF_INFO_CHUNK_TYPE_IGN + id));
-            }
-            else {
-                if (!chunk.readChunk (info)) {
-                    return false;
-                }
+            if (!chunk.readChunk (info)) {
+                return false;
             }
             if ((chunkSize & 1) != 0) {
                 // Must come out to an even byte boundary
@@ -116,7 +107,6 @@ public class ListInfoChunk extends Superchunk {
      *  homogeneous.  */
     private boolean readExifChunk (RepInfo info) throws IOException
     {
-        List exifProps = new LinkedList ();
         WaveModule module = (WaveModule) _module;
         module.setExifInfo (new ExifInfo ());
         for (;;) {
@@ -144,7 +134,7 @@ public class ListInfoChunk extends Superchunk {
             
             }
             if (chunk == null) {
-                _module.skipBytes (_dstream, (int) chunkSize, _module);
+                _module.skipBytes (_dstream, chunkSize, _module);
                 info.setMessage (new InfoMessage
                     (MessageConstants.INF_DATA_CHUNK_TYPE_IGN + id));
             }
@@ -167,8 +157,6 @@ public class ListInfoChunk extends Superchunk {
     public boolean readAdtlChunk(RepInfo info)
 	throws IOException
     {
-        WaveModule module = (WaveModule) _module;
-       
         for (;;) {
             ChunkHeader chunkh = getNextChunkHeader ();
             if (chunkh == null) {
@@ -190,7 +178,7 @@ public class ListInfoChunk extends Superchunk {
             }
            
             if (chunk == null) {
-                _module.skipBytes (_dstream, (int) chunkSize, _module);
+                _module.skipBytes (_dstream, chunkSize, _module);
                 info.setMessage (new InfoMessage (MessageConstants.INF_DATA_CHUNK_TYPE_IGN + id));
             }
             else {

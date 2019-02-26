@@ -51,7 +51,8 @@ public class TiffProfileExifThumb extends TiffProfile {
      *  thumbnail IFD for an
      *  Exif profile.  See the Exif specification for details.
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
         if (!(ifd instanceof TiffIFD)) {
             return false;

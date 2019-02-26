@@ -211,7 +211,8 @@ public abstract class ModuleBase
      *  Applies the default parameters.
      *  Calling this clears any prior parameters.
      */
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public void applyDefaultParams () throws Exception
     {
         resetParams ();
@@ -225,7 +226,7 @@ public abstract class ModuleBase
      *  The default method clears the saved parameter.
      */
     @Override
-    public void resetParams () throws Exception
+    public void resetParams ()
     {
         _param = null;
     }
@@ -605,7 +606,8 @@ public abstract class ModuleBase
      *                    called again with <code>parseIndex</code> 
      *                    equal to that return value.
      */
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public int parse (InputStream stream, RepInfo info, int parseIndex) throws IOException
     {
         return 0;
@@ -622,7 +624,8 @@ public abstract class ModuleBase
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the parsing
      */
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public void parse (RandomAccessFile file, RepInfo info) throws IOException
     {
     }
@@ -716,7 +719,8 @@ public abstract class ModuleBase
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public void checkSignatures (File file,
             RandomAccessFile raf, 
             RepInfo info) throws IOException

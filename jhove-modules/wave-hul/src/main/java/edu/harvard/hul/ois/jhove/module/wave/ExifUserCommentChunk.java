@@ -49,7 +49,8 @@ public class ExifUserCommentChunk extends Chunk {
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException 
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException 
     {
         WaveModule module = (WaveModule) _module;
         if (bytesLeft < 8) {
@@ -93,7 +94,6 @@ public class ExifUserCommentChunk extends Chunk {
         if (text == null) {
             text = new String (buf);
         }
-        ExifInfo exif = module.getExifInfo ();
         module.getExifInfo ().setUserComment (text);
         return true;
     }

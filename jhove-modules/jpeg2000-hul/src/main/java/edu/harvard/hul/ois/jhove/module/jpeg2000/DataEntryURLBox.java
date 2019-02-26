@@ -36,7 +36,8 @@ public class DataEntryURLBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         initBytesRead ();
         for (int i = 0; i < 4; i++) {
             // version and flags must be 0.
@@ -79,7 +80,8 @@ public class DataEntryURLBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Data Entry URL Box";
     }

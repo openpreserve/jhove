@@ -43,10 +43,11 @@ public class CueChunk extends Chunk {
      * @return   <code>false</code> if the chunk is structurally invalid,
      *           otherwise <code>true</code>
      */
-    public boolean readChunk(RepInfo info) throws IOException {
+    @Override
+	public boolean readChunk(RepInfo info) throws IOException {
         WaveModule module = (WaveModule) _module;
         int nPoints = (int) module.readUnsignedInt(_dstream);
-        List<Property> points = new ArrayList<Property>(nPoints);
+        List<Property> points = new ArrayList<>(nPoints);
         for (int i = 0; i < nPoints; i++) {
             // Get unique ID for cue point
             long dwIdent = module.readUnsignedInt(_dstream);
@@ -74,22 +75,22 @@ public class CueChunk extends Chunk {
             Property[] cueProps = new Property[6];
             cueProps[0] = new Property("ID",
                     PropertyType.LONG,
-                    dwIdent);
+                    Long.valueOf(dwIdent));
             cueProps[1] = new Property("Position",
                     PropertyType.LONG,
-                    dwPos);
+                    Long.valueOf(dwPos));
             cueProps[2] = new Property("DataChunkID",
                     PropertyType.STRING,
                     fccID);
             cueProps[3] = new Property("ChunkStart",
                     PropertyType.LONG,
-                    dwChunkStart);
+                    Long.valueOf(dwChunkStart));
             cueProps[4] = new Property("BlockStart",
                     PropertyType.LONG,
-                    dwBlockStart);
+                    Long.valueOf(dwBlockStart));
             cueProps[5] = new Property("SampleOffset",
                     PropertyType.LONG,
-                    dwSampleOffset);
+                    Long.valueOf(dwSampleOffset));
             points.add(new Property("CuePoint",
                     PropertyType.PROPERTY,
                     PropertyArity.ARRAY,

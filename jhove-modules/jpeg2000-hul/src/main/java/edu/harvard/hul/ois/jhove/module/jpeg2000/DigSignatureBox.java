@@ -39,16 +39,15 @@ public class DigSignatureBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         initBytesRead ();
         int sizeLeft = (int) _boxHeader.getDataLength ();
         // This may occur "anywhere in the file."  Does that
         // mean that all superboxes should check it as a possible
         // subbox?
         
-        List<Property> propList = new ArrayList<Property> (10);
-        JhoveBase je = _module.getBase ();
-        boolean raw = je.getShowRawFlag ();
+        List<Property> propList = new ArrayList<> (10);
         int styp = ModuleBase.readUnsignedByte (_dstrm, _module);
         if (styp > 5) {
             // Known signature types are 0-5
@@ -118,7 +117,8 @@ public class DigSignatureBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Digital Signature Box";
     }
@@ -130,8 +130,7 @@ public class DigSignatureBox extends JP2Box {
     private boolean isSigValid (int styp,
                 long off, long len,
                 byte[] data)
-                throws NoSuchAlgorithmException,
-                    IOException
+                throws NoSuchAlgorithmException
     {
         MessageDigest digest;
         if (styp == 0) {

@@ -686,7 +686,7 @@ public class PdfModule extends ModuleBase {
      *  Returns to a default state without any parameters.
      */
     @Override
-    public void resetParams() throws Exception {
+    public void resetParams() {
         _showAnnotations = true;
         _showFonts = true;
         _showOutlines = true;

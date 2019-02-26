@@ -32,7 +32,8 @@ public final class TiffProfileClassITSDP2 extends TiffProfileClassIT
      *  of the profile.  See the documentation for
      *  details.
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
         if (!super.satisfiesThisProfile (ifd)) {
             return false;

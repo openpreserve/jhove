@@ -84,7 +84,8 @@ public class FragmentInputStream extends InputStream {
      * @return   The next byte of the stream, or -1 to indicate no
      *           more bytes are available.
      */
-    public int read() throws IOException {
+    @Override
+	public int read() throws IOException {
         if (bufOffset >= bufBytes) {
             // We need a fresh buffer read.
             if (curFragment == null || fragOffset >= curFragment[1]) {

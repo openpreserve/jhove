@@ -15,6 +15,7 @@ public class ItxtChunk extends GeneralTextChunk {
 	}
 	
 	/** Process the data portion of the chunk. */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		final String badchunk = "Bad iTXt chunk";
 		processChunkCommon(info);

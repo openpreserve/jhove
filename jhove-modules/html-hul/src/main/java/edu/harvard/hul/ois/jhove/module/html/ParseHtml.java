@@ -35,7 +35,7 @@ public class ParseHtml implements ParseHtmlConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public JHElement Element(List elements) throws ParseException {
+  final public JHElement Element(List elements) {
     JHElement elem;
     try {
       if (jj_2_1(2)) {
@@ -90,7 +90,6 @@ public class ParseHtml implements ParseHtmlConstants {
     List attrs = new LinkedList ();
     Token name;
     String slasher;
-    boolean complete;
     jj_consume_token(LABRACKET);
     name = Name();
     label_2:
@@ -183,7 +182,7 @@ public class ParseHtml implements ParseHtmlConstants {
     throw new Error("Missing return statement in function");
   }
 
-  JHErrorElement ConsumeError() throws ParseException {
+  JHErrorElement ConsumeError() {
     Token tok = getNextToken();
         return new JHErrorElement (elements, MessageConstants.ERR_HTML_PARSING_ERROR, tok.image, true);
   }

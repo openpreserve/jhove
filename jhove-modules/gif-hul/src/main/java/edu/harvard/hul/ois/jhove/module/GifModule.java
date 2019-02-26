@@ -199,7 +199,6 @@ public class GifModule extends ModuleBase
     public void checkSignatures (File file,
                 InputStream stream,
                 RepInfo info)
-        throws IOException
     {
         int[] sigBytes = { 'G', 'I', 'F', '8', '*', 'a' };
         int i;
@@ -217,7 +216,7 @@ public class GifModule extends ModuleBase
             }
             /* Byte 4 can be either 7 or 9 */
             ch = readUnsignedByte (_dstream, this);
-            if (ch != (int) '7' && ch != (int) '9') {
+            if (ch != '7' && ch != '9') {
                 info.setWellFormed (false);
                 return;
             }
@@ -374,7 +373,7 @@ public class GifModule extends ModuleBase
             try {
                 int ch = readUnsignedByte (_dstream, this);
                 if (nbyt < 6) {
-                    _sig[(int) nbyt] = (byte) ch;
+                    _sig[nbyt] = (byte) ch;
                 }
                 nbyt++;
                 //if (_ckSummer != null) {

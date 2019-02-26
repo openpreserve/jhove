@@ -256,8 +256,7 @@ public class HtmlModule extends ModuleBase {
      *            again with <code>parseIndex</code> equal to that return value.
      */
     @Override
-    public int parse(InputStream stream, RepInfo info, int parseIndex)
-            throws IOException {
+    public int parse(InputStream stream, RepInfo info, int parseIndex) {
         if (parseIndex != 0) {
             // Coming in with parseIndex = 1 indicates that we've determined
             // this is XHTML; so we invoke the XML module to parse it.

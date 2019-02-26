@@ -36,14 +36,16 @@ public class PLTMarkerSegment extends MarkerSegment {
      *                         If it is 0 for a MarkerSegment, the
      *                         number of bytes to consume is unknown.
      */
-    protected boolean process(int bytesToEat) throws IOException {
+    @Override
+	protected boolean process(int bytesToEat) throws IOException {
         Tile tile = _ccs.getCurTile ();
         if (tile == null) {
             _repInfo.setMessage (new ErrorMessage
                     (MessageConstants.ERR_PLT_MARKER_POSITION_INVALID));
             return false;    // a tile (SOT) is required
         }
-        int zplt = ModuleBase.readUnsignedByte (_dstream, _module);
+        // Skip unsigned byte
+        ModuleBase.readUnsignedByte (_dstream, _module);
         --bytesToEat;
         // As with PLM, each iplt can have a different 
         // length.  This allows unlimited packet lengths --

@@ -375,8 +375,6 @@ public class JHOpenTag extends JHElement {
         String title = null;
         String src = null;
         String longdesc = null;
-        int height = -1;
-        int width = -1;
         Iterator iter = _attributes.iterator ();
         while (iter.hasNext ()) {
             JHAttribute attr = (JHAttribute) iter.next ();

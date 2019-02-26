@@ -36,7 +36,8 @@ public class JP2HeaderBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         initBytesRead ();
         hasBoxes = true;
         //int sizeLeft = (int) _boxHeader.getDataLength ();
@@ -152,7 +153,8 @@ public class JP2HeaderBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "JP2 Header Box";
     }

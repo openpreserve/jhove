@@ -37,7 +37,8 @@ public class ColorGroupBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         // A Color Group box consists of 0 or more color specification 
         // boxes.  It is allowed only in a Compositing Layer Header box.
         if (!(_parentBox instanceof ComposLayerHdrBox)) {
@@ -45,9 +46,6 @@ public class ColorGroupBox extends JP2Box {
             return false;
         }
         initBytesRead ();
-        int sizeLeft = (int) _boxHeader.getDataLength() ;
-        BoxHeader subhdr = new BoxHeader (_module, _dstrm);
-        int state = 0;        // state variable for checking progress of boxes
         JP2Box box = null;
         while (hasNext ()) {
             box = (JP2Box) next ();
@@ -76,7 +74,8 @@ public class ColorGroupBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Color Group Box";
     }

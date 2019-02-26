@@ -36,15 +36,16 @@ public class SOTMarkerSegment extends MarkerSegment {
      *                         If it is 0 for a MarkerSegment, the
      *                         number of bytes to consume is unknown.
      */
-    protected boolean process (int bytesToEat) throws IOException
+    @Override
+	protected boolean process (int bytesToEat) throws IOException
     {
         int tileIndex = _module.readUnsignedShort (_dstream);
         long tileLeft = _module.readUnsignedInt (_dstream);
         _ccs.setTileLeft (tileLeft);
         int tilePartIndex = 
                 ModuleBase.readUnsignedByte (_dstream, _module);
-        int numTileParts = 
-                ModuleBase.readUnsignedByte (_dstream, _module);
+        // Skip tile part byte
+        ModuleBase.readUnsignedByte (_dstream, _module);
         
         Tile tile = _ccs.getTile (tileIndex);
         _ccs.setCurTile (tile);

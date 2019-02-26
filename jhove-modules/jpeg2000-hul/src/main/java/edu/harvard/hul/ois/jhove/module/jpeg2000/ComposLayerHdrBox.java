@@ -44,7 +44,8 @@ public class ComposLayerHdrBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         if (_parentBox != null) {
             // Box must be at top level.
             wrongBoxContext();
@@ -52,14 +53,11 @@ public class ComposLayerHdrBox extends JP2Box {
         }
         initBytesRead ();
         hasBoxes = true;
-        colorSpecs = new LinkedList<Property> ();
+        colorSpecs = new LinkedList<> ();
         
         // Unlike some other boxes, compositing layer boxes
         // are numbered by their order in the file, starting
         // with 0.  A definite case of design by committee.
-        int sizeLeft = (int) _boxHeader.getDataLength() ;
-        //BoxHeader subhdr = new BoxHeader (_module, _dstrm);
-        int state = 0;        // state variable for checking progress of boxes
         JP2Box box = null;
         boolean hasOpacity = false;
         boolean hasChannelDef = false;
@@ -155,7 +153,8 @@ public class ComposLayerHdrBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Compositing Layer Header Box";
     }

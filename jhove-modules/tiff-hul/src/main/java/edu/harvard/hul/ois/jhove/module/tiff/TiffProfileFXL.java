@@ -37,7 +37,8 @@ public class TiffProfileFXL extends TiffFXBase {
      *  TIFF/FX L profile.  See the TIFF/FX specification for
      *  details.
      */
-    public boolean satisfiesThisProfile(IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile(IFD ifd) 
     {
         if (!(ifd instanceof TiffIFD)) {
             return false;

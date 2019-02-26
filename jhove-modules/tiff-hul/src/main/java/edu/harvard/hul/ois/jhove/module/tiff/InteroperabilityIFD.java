@@ -56,7 +56,8 @@ public class InteroperabilityIFD
     }
 
     /** Get the IFD properties. */
-    public Property getProperty(boolean rawOutput)
+    @Override
+	public Property getProperty(boolean rawOutput)
     {
 	List entries = new LinkedList();
 	entries.add (new Property("Index", PropertyType.STRING,
@@ -66,7 +67,8 @@ public class InteroperabilityIFD
     }
 
     /** Lookup an IFD tag. */
-    public void lookupTag(int tag, int type, long count, long value)
+    @Override
+	public void lookupTag(int tag, int type, long count, long value)
 	throws TiffException
     {
 	try {

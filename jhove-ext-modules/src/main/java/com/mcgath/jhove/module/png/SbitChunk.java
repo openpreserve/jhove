@@ -20,6 +20,7 @@ public class SbitChunk extends PNGChunk {
 	/** The SBIT chunk contains 1 to 4 bytes of information giving the
 	 *  number of significant bits per color.  Ideally, we should check
 	 *  this against the color model. */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		final String badChunk = "Bad sBIT chunk";
 		processChunkCommon(info);

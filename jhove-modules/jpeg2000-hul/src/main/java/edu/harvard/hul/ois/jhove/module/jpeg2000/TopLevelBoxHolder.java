@@ -39,12 +39,14 @@ public class TopLevelBoxHolder extends BoxHolder {
     }
 
     /** Returns a name for use in messages. */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Top Level";
     }
 
-    public boolean hasNext ()
+    @Override
+	public boolean hasNext ()
     {
         return (!eof);
     }

@@ -23,7 +23,8 @@ public final class TiffProfilePhotoshop extends TiffProfile
      *  Returns true if the IFD satisfies the requirements of the
      *  profile.  See the Photoshop specification for details.
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
 	if (!(ifd instanceof TiffIFD)) {
 	    return false;

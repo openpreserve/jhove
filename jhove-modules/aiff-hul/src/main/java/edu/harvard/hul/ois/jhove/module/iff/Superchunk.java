@@ -49,7 +49,6 @@ public abstract class Superchunk extends Chunk {
         if (bytesLeft <= 0) {
             return null;
         }
-       Chunk chunk = null;
        ChunkHeader chunkh = new ChunkHeader (_module, _repInfo);
        if (!chunkh.readHeader(_dstream)) {
            return null;

@@ -18,6 +18,7 @@ public class TextChunk extends GeneralTextChunk {
 		duplicateAllowed = true;
 	}
 	
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
 		

@@ -42,7 +42,8 @@ public class COCMarkerSegment extends MarkerSegment {
      *  @return                <code>true</code> if segment is well-formed,
      *                         <code>false</code> otherwise.
      */
-    protected boolean process(int bytesToEat) throws IOException {
+    @Override
+	protected boolean process(int bytesToEat) throws IOException {
         int compIdxBytes =  nCompBytes();
         if (compIdxBytes == 0) {
             // COC found before SIZ
@@ -88,7 +89,7 @@ public class COCMarkerSegment extends MarkerSegment {
         // number of components is apparently established only by the SIZ
         // marker segment and never changes for tiles or tile parts.
         MainOrTile cs = getMainOrTile ();
-        List<Property> propList = new ArrayList<Property> (10);
+        List<Property> propList = new ArrayList<> (10);
         propList.add (new Property ("CodingStyle",
                     PropertyType.INTEGER,
                     new Integer (codeStyle)));

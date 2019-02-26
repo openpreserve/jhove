@@ -29,7 +29,8 @@ public final class TiffProfileClassITFPP2 extends TiffProfileClassIT
      *  details.
      *
      */
-    public boolean satisfiesThisProfile (IFD ifd) 
+    @Override
+	public boolean satisfiesThisProfile (IFD ifd) 
     {
         if (!super.satisfiesThisProfile (ifd)) {
             return false;

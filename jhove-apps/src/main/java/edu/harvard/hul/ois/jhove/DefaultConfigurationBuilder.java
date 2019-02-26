@@ -1,10 +1,7 @@
 package edu.harvard.hul.ois.jhove;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 /** This class creates a default configuration if no valid configuration file
  *  is found. */
@@ -13,9 +10,6 @@ public class DefaultConfigurationBuilder {
     private final static String FILE_SEP = System.getProperty ("file.separator");
     private final static String HOME_DIR = System.getProperty ("user.home");
     private final static String JHOVE_DIR = HOME_DIR + FILE_SEP + "jhove";
-    private final static String TEMP_DIR = System.getProperty("java.io.tmpdir");
-    private final static String DEFAULT_ENCODING = "utf-8";
-    private final static int DEFAULT_BUFFER_SIZE = 131072;
     
     private File configFile;
     

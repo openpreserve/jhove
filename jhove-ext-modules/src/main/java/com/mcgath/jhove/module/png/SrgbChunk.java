@@ -24,6 +24,7 @@ public class SrgbChunk extends PNGChunk {
 	}
 	
 	/** Process the data in the chunk.  */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		final String badChunk = "Bad sRGB chunk";
 		processChunkCommon(info);

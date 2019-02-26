@@ -41,7 +41,8 @@ public class FragmentListBox extends JP2Box {
      *  box, so that the next byte to be read by the
      *  DataInputStream is the <code>FF</code> byte of the next Box.
      */
-    public boolean readBox() throws IOException {
+    @Override
+	public boolean readBox() throws IOException {
         if (!_module.isJP2HdrSeen()) {
             _repInfo.setMessage (new ErrorMessage 
                 (noJP2Hdr, _module.getFilePos ()));
@@ -59,7 +60,7 @@ public class FragmentListBox extends JP2Box {
             _repInfo.setWellFormed (false);
             return false;
         }
-        _fragmentList = new ArrayList<long[]> (nFrags);
+        _fragmentList = new ArrayList<> (nFrags);
         for (int i = 0; i < nFrags; i++) {
             long offset = _module.readSignedLong (_dstrm);
             long fragLen = _module.readUnsignedInt (_dstrm);
@@ -98,7 +99,8 @@ public class FragmentListBox extends JP2Box {
     }
 
     /** Returns the name of the Box.  */
-    protected String getSelfPropName ()
+    @Override
+	protected String getSelfPropName ()
     {
         return "Fragment List Box";
     }

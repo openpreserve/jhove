@@ -68,14 +68,16 @@ public class BoxHolder implements Iterator<Object> {
      * test the value returned by <code>next</code> for nullity.
      */
     
-    public boolean hasNext ()
+    @Override
+	public boolean hasNext ()
     {
         return (hasBoxes && bytesLeft >= 8);
     }
     
     
     /* This should return the next Box, if any. */
-    public Object next ()
+    @Override
+	public Object next ()
     {
         if (!hasBoxes) {
             return null;
@@ -150,7 +152,8 @@ public class BoxHolder implements Iterator<Object> {
     }
     
     /** Always throws UnsupportedOperationException. */
-    public void remove () throws UnsupportedOperationException
+    @Override
+	public void remove () throws UnsupportedOperationException
     {
         throw new UnsupportedOperationException();
     }

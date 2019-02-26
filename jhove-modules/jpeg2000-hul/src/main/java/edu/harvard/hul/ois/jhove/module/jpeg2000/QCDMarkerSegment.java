@@ -38,7 +38,8 @@ public class QCDMarkerSegment extends MarkerSegment {
      *  @return                <code>true</code> if segment is well-formed,
      *                         <code>false</code> otherwise.
      */
-    protected boolean process(int bytesToEat) throws IOException {
+    @Override
+	protected boolean process(int bytesToEat) throws IOException {
         int sqcd = ModuleBase.readUnsignedByte (_dstream, _module);
         // What follows depends on the value of sqcd in a messy way
         int sqcdLow = sqcd & 0X1F;

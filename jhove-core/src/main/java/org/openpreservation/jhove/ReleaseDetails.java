@@ -121,14 +121,13 @@ public final class ReleaseDetails {
 
     private static ReleaseDetails fromPropertyResource(
             final String propertyResourceName) {
-        InputStream is = ReleaseDetails.class.getClassLoader()
-                .getResourceAsStream(propertyResourceName);
-        if (is == null) {
-            throw new IllegalStateException(CoreMessageConstants.ERR_APP_PROP_MISS
-                    + propertyResourceName);
-        }
         Properties props = new Properties();
-        try {
+        try (InputStream is = ReleaseDetails.class.getClassLoader()
+                .getResourceAsStream(propertyResourceName)) {
+            if (is == null) {
+                throw new IllegalStateException(CoreMessageConstants.ERR_APP_PROP_MISS
+                        + propertyResourceName);
+            }
             try {
                 props.load(is);
             } catch (IOException e) {
