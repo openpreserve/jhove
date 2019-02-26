@@ -82,9 +82,7 @@ public final class BytestreamModule
 	throws IOException
     {
         initParse ();
-        info.setModule (this);
-        info.setFormat (this._format[0]);
-        info.setMimeType (this._mimeType[0]);
+        initInfo(info);
 
         // Setup the data stream, will determine if we use checksum stream
         setupDataStream(stream, info);

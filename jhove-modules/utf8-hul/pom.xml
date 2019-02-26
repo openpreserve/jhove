@@ -8,4 +8,19 @@
   <artifactId>utf8-hul</artifactId>
   <name>JHOVE UTF8 Module HUL</name>
   <description>UTF8 module developed by Harvard University Library</description>
+
+  <dependencies>
+      <dependency>
+        <groupId>org.openpreservation.jhove.modules</groupId>
+        <artifactId>ascii-hul</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openpreservation.jhove.modules</groupId>
+        <artifactId>pdf-hul</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+  </dependencies>
+
 </project>

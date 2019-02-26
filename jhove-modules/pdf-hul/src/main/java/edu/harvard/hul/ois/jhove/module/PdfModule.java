@@ -767,9 +767,7 @@ public class PdfModule extends ModuleBase {
         throws IOException
     {
         initParse();
-        info.setFormat(_format[0]);
-        info.setMimeType(_mimeType[0]);
-        info.setModule(this);
+        initInfo(info);
         _objects = new HashMap();
         _raf = raf;
 

@@ -791,7 +791,13 @@ public abstract class ModuleBase
         catch (NoSuchAlgorithmException e) {
         }    
     }
-    
+
+    protected void initInfo(final RepInfo info) {
+        info.setModule (this);
+        info.setFormat (this._format[0]);
+        info.setMimeType (this._mimeType[0]);
+    }
+
     /**
      *  Calculates the checksums for a module that uses a
      *  random access file.
