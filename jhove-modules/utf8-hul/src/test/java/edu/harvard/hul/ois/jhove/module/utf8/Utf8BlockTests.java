@@ -1,4 +1,4 @@
-package edu.harvard.hul.ois.jhove.module;
+package edu.harvard.hul.ois.jhove.module.utf8;
 
 import static org.junit.Assert.*;
 
@@ -7,9 +7,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import edu.harvard.hul.ois.jhove.module.utf8.Utf8Block;
-
-public class Utf8BlockTest {
+public class Utf8BlockTests {
 
 	/** This test makes sure that the code blocks are declared in monotonically
 	 *  increasing order without overlap, each one has a positive range,
@@ -19,10 +17,10 @@ public class Utf8BlockTest {
 	public void testBlocks() {
 		int lastEnd = -1;
 		Set<String> names = new HashSet<>();
-		for (Utf8Block blk : Utf8Block.unicodeBlock) {
-			int start = blk.getStart();
-			int end = blk.getEnd();
-			String name = blk.getName();
+		for (Utf8Block blk : Utf8Block.values()) {
+			int start = blk.start;
+			int end = blk.end;
+			String name = blk.name;
 			String note = "Bad block: " + name + ",  " + 
 					String.format ("%05X", Integer.valueOf(start)) + " = " +
 					String.format ("%05X", Integer.valueOf(end));

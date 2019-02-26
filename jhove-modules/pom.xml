@@ -29,6 +29,7 @@
       <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
+
   <modules>
     <module>ascii-hul</module>
     <module>aiff-hul</module>

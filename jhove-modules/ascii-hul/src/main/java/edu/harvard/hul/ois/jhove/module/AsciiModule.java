@@ -140,7 +140,7 @@ public class AsciiModule extends ModuleBase {
         _withTextMD = isParamInDefaults("withtextmd=true");
 
         initParse();
-        info.setModule(this);
+        initInfo(info);
 
         ControlChar prevChar = null;
         usedCtrlChars = new HashSet<>();
@@ -149,8 +149,6 @@ public class AsciiModule extends ModuleBase {
 
         boolean printableChars = false;
 
-        info.setFormat(_format[0]);
-        info.setMimeType(_mimeType[0]);
 
         // Setup the data stream, will determine if we use checksum stream
         setupDataStream(stream, info);
@@ -172,7 +170,7 @@ public class AsciiModule extends ModuleBase {
                     info.setWellFormed(RepInfo.FALSE);
                     return 0;
                 }
-                ControlChar ctrlChar = ControlChar.fromIntValue(ch);
+                ControlChar ctrlChar = ControlChar.asciiFromInt(ch);
                 if (ControlChar.isLineEndChar(ctrlChar)) {
                     // Carry out the line endings test
                     LineEnding le = LineEnding.fromControlChars(ctrlChar, prevChar);
@@ -320,9 +318,11 @@ public class AsciiModule extends ModuleBase {
     /* Set property reporting line ending type */
     private List<String> reportLineEndings() {
         List<String> retVal = new ArrayList<>();
-        for (LineEnding le : EnumSet.copyOf(this.usedLineEndings)) {
-            retVal.add(le.toString());
-            _textMD.setLinebreak(le.textMdVal);
+        if (!this.usedLineEndings.isEmpty()) {
+            for (LineEnding le : EnumSet.copyOf(this.usedLineEndings)) {
+                retVal.add(le.toString());
+                _textMD.setLinebreak(le.textMdVal);
+            }
         }
         return retVal;
     }
