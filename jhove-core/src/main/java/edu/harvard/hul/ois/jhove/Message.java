@@ -12,7 +12,6 @@ public abstract class Message {
 	/******************************************************************
 	 * PUBLIC CLASS FIELDS.
 	 ******************************************************************/
-
 	/** Value indicating a null offset. */
 	public static final long NULL = -1;
 
@@ -182,24 +181,29 @@ public abstract class Message {
 	 * Get the message string.
 	 */
 	public String getMessage() {
-		return _message;
+		return this._message;
 	}
 
 	/**
 	 * Get the submessage string.
 	 */
 	public String getSubMessage() {
-		return _subMessage;
+		return this._subMessage;
 	}
 
 	/**
 	 * Return the offset to which the information is related.
 	 */
 	public long getOffset() {
-		return _offset;
+		return this._offset;
 	}
 
 	public int getId() {
 		return this._id;
+	}
+
+	@SuppressWarnings("static-method")
+	public String getPrefix() {
+		return "";
 	}
 }

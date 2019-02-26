@@ -13,6 +13,7 @@ public class ErrorMessage extends Message {
 	/******************************************************************
 	 * CLASS CONSTRUCTOR.
 	 ******************************************************************/
+	private static final String prefix = "Error";
 
 	/**
 	 * Create an ErrorMessage.
@@ -119,5 +120,10 @@ public class ErrorMessage extends Message {
 	public ErrorMessage(int id, String message, String subMessage,
 			long offset) {
 		super(id, message, subMessage, offset);
+	}
+
+	@Override
+	public String getPrefix() {
+		return prefix;
 	}
 }

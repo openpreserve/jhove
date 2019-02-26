@@ -15,7 +15,7 @@ public class InfoMessage extends Message {
 	/******************************************************************
 	 * CLASS CONSTRUCTOR.
 	 ******************************************************************/
-
+	private static final String prefix = "Info";
 	/**
 	 * Create an InfoMessage.
 	 * 
@@ -122,5 +122,10 @@ public class InfoMessage extends Message {
 	 */
 	public InfoMessage(int id, String message, String subMessage, long offset) {
 		super(id, message, subMessage, offset);
+	}
+
+	@Override
+	public String getPrefix() {
+		return prefix;
 	}
 }

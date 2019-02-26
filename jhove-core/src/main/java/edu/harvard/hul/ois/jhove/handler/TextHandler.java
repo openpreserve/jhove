@@ -488,17 +488,7 @@ public class TextHandler
     private void showMessage (Message message)
     {
         String margin = getIndent (++_level);
-        String prefix;
-        if (message instanceof ErrorMessage) {
-            prefix = "ErrorMessage: ";
-        }
-        else if (message instanceof InfoMessage) {
-            prefix = "InfoMessage: ";
-        }
-        else {
-            prefix = "Message: ";
-        }
-
+        String prefix = message.getPrefix() + "Message: ";
         String str = message.getMessage ();
         // Append submessage, if any, after a colon.
         String submsg = message.getSubMessage ();
