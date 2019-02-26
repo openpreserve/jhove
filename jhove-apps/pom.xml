@@ -62,12 +62,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.openpreservation.jhove</groupId>
-      <artifactId>jhove-modules</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
