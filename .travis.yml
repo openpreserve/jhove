@@ -42,8 +42,7 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter
-    -l Java -r jhove-apps/target/site/jacoco-aggregate/jacoco.xml
+  - java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter report - l Java -r jhove-apps/target/site/jacoco-aggregate/jacoco.xml
 
 after_failure:
   - cat /tmp/bbt-logs/log.txt | grep --group-separator"===== Unexpected output ====="
