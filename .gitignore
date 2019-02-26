@@ -16,3 +16,5 @@ Gemfile.lock
 **/.settings
 **/.project
 **/.classpath
+**/*.class
+**/bin
