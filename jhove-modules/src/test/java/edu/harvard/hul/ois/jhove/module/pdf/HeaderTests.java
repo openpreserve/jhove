@@ -56,7 +56,7 @@ public class HeaderTests {
 	@Test
 	public final void testMinorVersion() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, minimalPdfPath,
-				RepInfo.TRUE, RepInfo.TRUE, null);
+				RepInfo.TRUE, RepInfo.TRUE);
 	}
 
 	/**

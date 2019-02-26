@@ -6,7 +6,10 @@
 package edu.harvard.hul.ois.jhove.module;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyArity;
@@ -18,20 +21,18 @@ import edu.harvard.hul.ois.jhove.PropertyType;
  *
  */
 public class Utf8BlockMarker {
-    private boolean[] blocksUsed;
+	private Set<Utf8Block> blocksUsed;
 
     public Utf8BlockMarker () {
-        blocksUsed = new boolean [Utf8Block.unicodeBlock.length];
+        this.blocksUsed = new HashSet<>();
     }
 
     public void markBlock (int code) {
-        for (int i=0; i<Utf8Block.unicodeBlock.length; i++) {
-            if (Utf8Block.unicodeBlock[i].getStart () <= code &&
-            Utf8Block.unicodeBlock[i].getEnd   () >= code) {
-                blocksUsed[i] = true;
-                break;
-            }
+        Utf8Block block = Utf8Block.blockFromInt(code);
+        if (block == null) {
+            return;
         }
+        this.blocksUsed.add(block);
     }
 
     /** Returns a Property listing the blocks that have been 
@@ -39,26 +40,22 @@ public class Utf8BlockMarker {
      *  returns null. */
     public Property getBlocksUsedProperty (String name)
     {  
-        List<String> block = new ArrayList<String> (blocksUsed.length);
-        for (int i=0; i<blocksUsed.length; i++) {
-            if (blocksUsed[i]) {
-            block.add (Utf8Block.unicodeBlock[i].getName ());
-            }
-        }
-        if (block.isEmpty ()) {
+        if (this.blocksUsed.isEmpty()) {
             return null;
         }
-        return new Property (name,
-            PropertyType.STRING,
-            PropertyArity.LIST,
-            block);
+        List<String> blocks = new ArrayList<>();
+        for (Utf8Block block : EnumSet.copyOf(this.blocksUsed)) {
+            blocks.add(block.name);
+        }
+        return new Property(name,
+                            PropertyType.STRING,
+                            PropertyArity.LIST,
+                            blocks);
     }
 
     /** Clears all marked blocks. */
     public void reset ()
     {
-        for (int i=0; i<Utf8Block.unicodeBlock.length; i++) {
-            blocksUsed[i] = false;
-        }
+        this.blocksUsed.clear();
     }
 }
