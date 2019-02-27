@@ -380,7 +380,7 @@ public class PdfModule extends ModuleBase {
 			"Portable Document Format" };
 	private static final String COVERAGE = "PDF 1.0-1.6; PDF/X-1 (ISO 15930-1:2001), X-1a (ISO 15930-4:2003), "
 			+ "X-2 (ISO 15930-5:2003), and X-3 (ISO 15930-6:2003); Tagged PDF; "
-			+ "Linearized PDF; PDF/A (ISO/CD 19005-1)";
+			+ "Linearized PDF";
 	private static final String[] MIMETYPE = { MIME_TYPE };
 	private static final String WELLFORMED = "A PDF file is "
 			+ "well-formed if it meets the criteria defined in Chapter "
@@ -651,6 +651,10 @@ public class PdfModule extends ModuleBase {
 		_profile.add(new LinearizedProfile(this));
 		TaggedProfile tpr = new TaggedProfile(this);
 		_profile.add(tpr);
+
+		/*
+		 * CURRENT PDF/A PROFILING UNFIT FOR PURPOSE; SEE GITHUB ISSUE #101.
+		 *
 		AProfile apr = new AProfile(this);
 		_profile.add(apr);
 		// Link AProfile to TaggedProfile to save checking
@@ -661,6 +665,7 @@ public class PdfModule extends ModuleBase {
 		_profile.add(apra);
 		// AProfileLevelA depends on AProfile
 		apra.setAProfile(apr);
+		*/
 
 		X1Profile x1 = new X1Profile(this);
 		_profile.add(x1);
@@ -671,6 +676,7 @@ public class PdfModule extends ModuleBase {
 		x1a.setX1Profile(x1);
 		_profile.add(new X2Profile(this));
 		_profile.add(new X3Profile(this));
+
 		_showAnnotations = false;
 		_showFonts = false;
 		_showOutlines = false;
