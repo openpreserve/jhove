@@ -134,7 +134,7 @@ public class ExifIFD
         79, 89, 93, 95
     };
     public static final String [] FOCALPLANERESOLUTIONUNIT_L = {
-        "", "", "inches", "centimeters"
+        "", "inch", "metre", "centimetre", "millimetre", "micrometre"
     };
     public static final String [] GAINCONTROL_L = {
         "none", "low gain up", "high gain up", "low gain down",
@@ -637,7 +637,7 @@ public class ExifIFD
                 checkType  (tag, type, SRATIONAL);
                 checkCount (tag, count, 1);
                 _brightnessValue = readRational (count, value);
-                _niso.setBrightness(_brightnessValue.toDouble());
+                _niso.setBrightness(_brightnessValue);
             }
             else if (tag == CFAPATTERN) {
                 checkType  (tag, type, UNDEFINED);
@@ -702,7 +702,7 @@ public class ExifIFD
                 checkType  (tag, type, SRATIONAL);
                 checkCount (tag, count, 1);
                 _exposureBiasValue = readRational (count, value);
-                _niso.setExposureBias(_exposureBiasValue.toDouble());
+                _niso.setExposureBias(_exposureBiasValue);
             }
             else if (tag == EXPOSUREINDEX) {
                 checkType  (tag, type, RATIONAL);
@@ -736,11 +736,13 @@ public class ExifIFD
                 checkType  (tag, type, SHORT);
                 checkCount (tag, count, 1);
                 _flash = readShort (type, count, value);
+                _niso.setFlash(_flash); // TODO
             }
             else if (tag == FLASHENERGY) {
                 checkType  (tag, type, RATIONAL);
                 checkCount (tag, count, 1);
                 _flashEnergy = readRational (count, value);
+                _niso.setFlashEnergy(_flashEnergy);
             }
             else if (tag == FLASHPIXVERSION) {
                 checkType  (tag, type, UNDEFINED);

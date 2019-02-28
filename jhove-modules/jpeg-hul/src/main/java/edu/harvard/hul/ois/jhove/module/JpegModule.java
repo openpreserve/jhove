@@ -1698,7 +1698,7 @@ public class JpegModule extends ModuleBase {
         if (exifData.getBackLight() != NULL) {
             _niso.setBackLight(exifData.getBackLight());
         }
-        if (exifData.getBrightness() != NULL) {
+        if (exifData.getBrightness() != null) {
             _niso.setBrightness(exifData.getBrightness());
         }
         if (exifData.getColorTemp() != NULL) {
@@ -1720,7 +1720,7 @@ public class JpegModule extends ModuleBase {
         if (exifData.getDigitalCameraModelSerialNo() != null) {
             _niso.setDigitalCameraModelSerialNo(exifData.getDigitalCameraModelSerialNo());
         }
-        if (exifData.getExposureBias() != NULL) {
+        if (exifData.getExposureBias() != null) {
             _niso.setExposureBias(exifData.getExposureBias());
         }
         if (exifData.getExposureIndex() != NULL) {
@@ -1735,7 +1735,7 @@ public class JpegModule extends ModuleBase {
         if (exifData.getFlash() != NULL) {
             _niso.setFlash(exifData.getFlash());
         }
-        if (exifData.getFlashEnergy() != NULL) {
+        if (exifData.getFlashEnergy() != null) {
             _niso.setFlashEnergy(exifData.getFlashEnergy());
         }
         if (exifData.getFlashReturn() != NULL) {
