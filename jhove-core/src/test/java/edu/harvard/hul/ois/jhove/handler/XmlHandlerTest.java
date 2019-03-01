@@ -45,6 +45,7 @@ public class XmlHandlerTest {
 	private static final int EXPECTED_IMAGE2_LENGTH = 1846;
 	private static final double EXPECTED_IMAGE2_FNUMBER = 7.1;
 	private static final double EXPECTED_IMAGE2_EXPOSURE_TIME = 0.167;
+	private static final int  EXPECTED_IMAGE2_EXPOSURE_PROGRAM = 3;
 	private static final int EXPECTED_IMAGE2_APERTURE_NUM = 925;
 	private static final int EXPECTED_IMAGE2_APERTURE_DEN = 256;
 	private static final double EXPECTED_IMAGE2_FOCAL = 14;
@@ -126,7 +127,7 @@ public class XmlHandlerTest {
 		TEST_NISO_IMAGE2_MD.setDigitalCameraModelName("DMC-G6");
 		TEST_NISO_IMAGE2_MD.setFNumber(EXPECTED_IMAGE2_FNUMBER);
 		TEST_NISO_IMAGE2_MD.setExposureTime(EXPECTED_IMAGE2_EXPOSURE_TIME);
-		TEST_NISO_IMAGE2_MD.setExposureProgram(3);
+		TEST_NISO_IMAGE2_MD.setExposureProgram(EXPECTED_IMAGE2_EXPOSURE_PROGRAM);
 		TEST_NISO_IMAGE2_MD.setBrightness(r0);
 		TEST_NISO_IMAGE2_MD.setExposureBias(r0);
 		Rational r925 = new Rational(EXPECTED_IMAGE2_APERTURE_NUM, EXPECTED_IMAGE2_APERTURE_DEN);

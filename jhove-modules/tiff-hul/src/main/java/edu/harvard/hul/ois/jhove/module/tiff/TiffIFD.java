@@ -276,7 +276,7 @@ public class TiffIFD
         0, 1, 5, 7, 9, 13, 15, 16, 24, 25, 29, 31, 32
     };
     protected static final String [] FOCALPLANERESOLUTIONUNIT_L = {
-        "", "inch", "metre", "centimetre", "millimetre", "micrometre"
+    	"", "", "inches", "centimeters", "millimeters", "micrometers"
     };
 
     /** Exif tags. */

@@ -134,7 +134,7 @@ public class ExifIFD
         79, 89, 93, 95
     };
     public static final String [] FOCALPLANERESOLUTIONUNIT_L = {
-        "", "inch", "metre", "centimetre", "millimetre", "micrometre"
+    	"", "", "inches", "centimeters", "millimeters", "micrometers"
     };
     public static final String [] GAINCONTROL_L = {
         "none", "low gain up", "high gain up", "low gain down",
