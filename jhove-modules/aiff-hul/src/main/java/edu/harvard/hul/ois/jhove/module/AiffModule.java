@@ -5,14 +5,55 @@
 
 package edu.harvard.hul.ois.jhove.module;
 
-import edu.harvard.hul.ois.jhove.*;
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import edu.harvard.hul.ois.jhove.AESAudioMetadata;
+import edu.harvard.hul.ois.jhove.Agent;
 import edu.harvard.hul.ois.jhove.Agent.Builder;
-import edu.harvard.hul.ois.jhove.module.aiff.*;
+import edu.harvard.hul.ois.jhove.AgentType;
+import edu.harvard.hul.ois.jhove.Document;
+import edu.harvard.hul.ois.jhove.DocumentType;
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.ExternalSignature;
+import edu.harvard.hul.ois.jhove.Identifier;
+import edu.harvard.hul.ois.jhove.IdentifierType;
+import edu.harvard.hul.ois.jhove.InfoMessage;
+import edu.harvard.hul.ois.jhove.InternalSignature;
+import edu.harvard.hul.ois.jhove.JhoveMessage;
+import edu.harvard.hul.ois.jhove.JhoveMessageFactory;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.Signature;
+import edu.harvard.hul.ois.jhove.SignatureType;
+import edu.harvard.hul.ois.jhove.SignatureUseType;
+import edu.harvard.hul.ois.jhove.module.aiff.AnnotationChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.ApplicationChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.AudioRecChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.AuthorChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.CommentsChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.CommonChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.CopyrightChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.ExtDouble;
+import edu.harvard.hul.ois.jhove.module.aiff.FormatVersionChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.InstrumentChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.MarkerChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.MessageConstants;
+import edu.harvard.hul.ois.jhove.module.aiff.MidiChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.NameChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.SaxelChunk;
+import edu.harvard.hul.ois.jhove.module.aiff.SoundDataChunk;
 import edu.harvard.hul.ois.jhove.module.iff.Chunk;
 import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
-
-import java.io.*;
-import java.util.*;
 
 /**
  * Module for identification and validation of AIFF files.
@@ -26,15 +67,6 @@ public class AiffModule
     /******************************************************************
      * PRIVATE Instance FIELDS.
      ******************************************************************/
-
-    /* Checksummer object */
-    protected Checksummer _ckSummer;
-        
-    /* Input stream wrapper which handles checksums */
-    protected ChecksumInputStream _cstream;
-    
-    /* Data input stream wrapped around _cstream */
-    protected DataInputStream _dstream;
 
     /* Top-level metadata property */
     protected Property _metadata;
@@ -238,20 +270,7 @@ public class AiffModule
            _aesMetadata.setPrimaryIdentifierType(AESAudioMetadata.FILE_NAME);
        }
 
-       /* We may have already done the checksums while converting a
-          temporary file. */
-       _ckSummer = null;
-       if (_je != null && _je.getChecksumFlag () &&
-           info.getChecksum().isEmpty()) {
-           _ckSummer = new Checksummer ();
-           _cstream = new ChecksumInputStream (stream, _ckSummer);
-           _dstream = getBufferedDataStream (_cstream, _je != null ?
-                   _je.getBufferSize () : 0);
-       }
-       else {
-           _dstream = getBufferedDataStream (stream, _je != null ?
-                   _je.getBufferSize () : 0);
-       }
+       setupDataStream(stream, info);
 
        try {
            // Check the start of the file for the right opening bytes
@@ -306,30 +325,9 @@ public class AiffModule
        
        /* This file looks OK. */
        if (_ckSummer != null){
-            /* We may not have actually hit the end of file. If we're calculating
-             * checksums on the fly, we have to read and discard whatever is
-             * left, so it will get checksummed. */
-            for (;;) {
-                try {
-                    long n = skipBytes (_dstream, 2048, this);
-                    if (n == 0) {
-                        break;
-                    }
-                }
-                catch (Exception e) {
-                    break;
-                }
-            }
-            info.setSize (_cstream.getNBytes ());
-            info.setChecksum (new Checksum (_ckSummer.getCRC32 (), 
-                        ChecksumType.CRC32));
-            String value = _ckSummer.getMD5 ();
-            if (value != null) {
-                info.setChecksum (new Checksum (value, ChecksumType.MD5));
-            }
-            if ((value = _ckSummer.getSHA1 ()) != null) {
-            info.setChecksum (new Checksum (value, ChecksumType.SHA1));
-            }
+           skipDstreamToEnd(info);
+           // Set the checksums in the report if they're calculated
+           setChecksums(this._ckSummer, info);
        }
 
        if (fileType == AIFFTYPE) {
