@@ -238,7 +238,9 @@ public class AiffModule
        _signature.add (sig);
 
        _bigEndian = true;
-   }
+
+       this.messageFactory = JhoveMessageFactory.getInstance("edu.harvard.hul.ois.jhove.module.aiff.ErrorMessages");
+}
 
    /**
     *   Parses the content of a purported AIFF digital object and stores the
