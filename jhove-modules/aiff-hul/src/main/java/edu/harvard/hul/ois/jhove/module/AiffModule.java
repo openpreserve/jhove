@@ -286,7 +286,7 @@ public class AiffModule
        catch (EOFException e) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage 
-                (MessageConstants.ERR_EOF_UNEXPECTED, _nByte));
+                (messageFactory.getMessage("AIFF-HUL-8"), _nByte));
            return 0;
        }
        
