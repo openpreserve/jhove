@@ -103,6 +103,7 @@ public class AiffModule
     /* Chunk data orientation is big-endian. */
     private static final boolean BIGENDIAN = true;
 
+    public final JhoveMessageFactory messageFactory = JhoveMessageFactory.getInstance("edu.harvard.hul.ois.jhove.module.aiff.ErrorMessages");
     /* Values for fileType */
     public final static int 
         AIFFTYPE = 1,
@@ -257,7 +258,7 @@ public class AiffModule
            for (int i = 0; i < 4; i++) {
                int ch = readUnsignedByte(_dstream, this);
                if (ch != sigByte[i]) {
-                   info.setMessage(new ErrorMessage(MessageConstants.ERR_NOT_AIFF_CHU, 0));
+                   info.setMessage(new ErrorMessage(messageFactory.getMessage("AIFF-HUL-1"), 0));
                    info.setWellFormed (RepInfo.FALSE);
                    return 0;
                }
@@ -292,12 +293,12 @@ public class AiffModule
        if (!commonChunkSeen) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage
-                (MessageConstants.ERR_COMMON_CHUNK_MISS));
+                (messageFactory.getMessage("AIFF-HUL-2")));
        }
        if (fileType == AIFCTYPE && !formatVersionChunkSeen) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage
-                (MessageConstants.ERR_FORMAT_VER_CHUNK_MISS));
+                (messageFactory.getMessage("AIFF-HUL-3")));
        }
        if (info.getWellFormed () != RepInfo.TRUE) {
            return 0;
@@ -593,7 +594,7 @@ public class AiffModule
         }
         else {
             info.setMessage (new ErrorMessage 
-                    (MessageConstants.ERR_FORM_CHUNK_NOT_AAIF, _nByte));
+                    (messageFactory.getMessage("AIFF-HUL-4"), _nByte));
             info.setWellFormed (RepInfo.FALSE);
             return false;
         }
@@ -742,9 +743,10 @@ public class AiffModule
     /* Factor out the reporting of duplicate chunks. */
     protected void dupChunkError (RepInfo info, String chunkName)
     {
+        JhoveMessage mess = messageFactory.getMessage("AIFF-HUL-5");
+        String message = String.format(mess.message, chunkName);
         info.setMessage (new ErrorMessage
-                        (MessageConstants.ERR_MULTI_CHUNK_NOT_PERM + chunkName +
-                         MessageConstants.ERR_MULTI_CHUNK_NOT_PERM_2,
+                        (JhoveMessage.getInstance(mess.id, message),
                          _nByte));
         info.setValid (false);
     }

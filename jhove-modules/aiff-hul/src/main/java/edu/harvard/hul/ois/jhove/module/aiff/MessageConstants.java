@@ -41,13 +41,13 @@ public enum MessageConstants {
 	/**
 	 * Error messages
 	 */
-	public static final String ERR_NOT_AIFF_CHU = "Document does not start with AIFF FORM Chunk";
-	public static final String ERR_COMMON_CHUNK_MISS = "Document does not contain a Common Chunk";
-	public static final String ERR_FORMAT_VER_CHUNK_MISS = "AIFF-C document must contain a Format Version Chunk";
+// 	public static final String ERR_NOT_AIFF_CHU = "Document does not start with AIFF FORM Chunk";
+//	public static final String ERR_COMMON_CHUNK_MISS = "Document does not contain a Common Chunk";
+//	public static final String ERR_FORMAT_VER_CHUNK_MISS = "AIFF-C document must contain a Format Version Chunk";
 	public static final String ERR_EOF_UNEXPECTED = "Unexpected EOF";
-	public static final String ERR_FORM_CHUNK_NOT_AAIF = "File type in Form Chunk is not AIFF or AIFC";
-	public static final String ERR_MULTI_CHUNK_NOT_PERM = "Multiple ";
-	public static final String ERR_MULTI_CHUNK_NOT_PERM_2 = " Chunks not permitted";
-	public static final String ERR_REC_CHUNK_WRONG_SIZE = "Audio Recording Chunk is incorrect size";
-	public static final String ERR_COMMON_CHUNK_NO_COMP_TYPE = "Common Chunk in AIFF-C does not have compression type";
+//	public static final String ERR_FORM_CHUNK_NOT_AAIF = "File type in Form Chunk is not AIFF or AIFC";
+//	public static final String ERR_MULTI_CHUNK_NOT_PERM = "Multiple ";
+//	public static final String ERR_MULTI_CHUNK_NOT_PERM_2 = " Chunks not permitted";
+//	public static final String ERR_REC_CHUNK_WRONG_SIZE = "Audio Recording Chunk is incorrect size";
+//	public static final String ERR_COMMON_CHUNK_NO_COMP_TYPE = "Common Chunk in AIFF-C does not have compression type";
 }
