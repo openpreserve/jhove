@@ -35,11 +35,6 @@ public class AsciiModule extends ModuleBase {
     public final static int MIN_PRINTABLE = 0x20;
     public final static int MAX_PRINTABLE = 0x7e;
 
-//    public final static String ERR_CHAR_INV = "Invalid character"; // ASCII-HUL-1
-//    public final static String ERR_CHAR_INV_SUB = "Character = %c (0x%2X)"; // ASCII-HUL-1
-//    public final static String ERR_ZERO_LEN = "Zero-length file"; // ASCII-HUL-2
-//    public final static String INF_PRINT_CHAR_MISS = "No printable characters"; // ASCII-HUL-3
-
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
