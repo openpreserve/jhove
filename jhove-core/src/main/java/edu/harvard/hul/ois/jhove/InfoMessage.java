@@ -34,8 +34,8 @@ public class InfoMessage extends Message {
 	 * @param message
 	 *            Human-readable string giving the information.
 	 */
-	public InfoMessage(int id, String message) {
-		super(id, message);
+	public InfoMessage(JhoveMessage message) {
+		super(message);
 	}
 
 	/**
@@ -62,8 +62,8 @@ public class InfoMessage extends Message {
 	 *            The offset in the file relevant to the
 	 *            situation being described
 	 */
-	public InfoMessage(int id, String message, long offset) {
-		super(id, message, offset);
+	public InfoMessage(JhoveMessage message, long offset) {
+		super(message, offset);
 	}
 
 	/**
@@ -88,8 +88,8 @@ public class InfoMessage extends Message {
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 */
-	public InfoMessage(int id, String message, String subMessage) {
-		super(id, message, subMessage);
+	public InfoMessage(JhoveMessage message, String subMessage) {
+		super(message, subMessage);
 	}
 
 	/**
@@ -120,8 +120,8 @@ public class InfoMessage extends Message {
 	 *            The offset in the file relevant to the
 	 *            situation being described
 	 */
-	public InfoMessage(int id, String message, String subMessage, long offset) {
-		super(id, message, subMessage, offset);
+	public InfoMessage(JhoveMessage message, String subMessage, long offset) {
+		super(message, subMessage, offset);
 	}
 
 	@Override
