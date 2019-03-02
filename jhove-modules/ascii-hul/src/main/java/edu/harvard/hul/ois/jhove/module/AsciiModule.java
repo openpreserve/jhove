@@ -35,10 +35,10 @@ public class AsciiModule extends ModuleBase {
     public final static int MIN_PRINTABLE = 0x20;
     public final static int MAX_PRINTABLE = 0x7e;
 
-    public final static String ERR_CHAR_INV = "Invalid character"; // ASCII-HUL-1
-    public final static String ERR_CHAR_INV_SUB = "Character = %c (0x%2X)"; // ASCII-HUL-1
-    public final static String ERR_ZERO_LEN = "Zero-length file"; // ASCII-HUL-2
-    public final static String INF_PRINT_CHAR_MISS = "No printable characters"; // ASCII-HUL-3
+//    public final static String ERR_CHAR_INV = "Invalid character"; // ASCII-HUL-1
+//    public final static String ERR_CHAR_INV_SUB = "Character = %c (0x%2X)"; // ASCII-HUL-1
+//    public final static String ERR_ZERO_LEN = "Zero-length file"; // ASCII-HUL-2
+//    public final static String INF_PRINT_CHAR_MISS = "No printable characters"; // ASCII-HUL-3
 
     /******************************************************************
      * PRIVATE CLASS FIELDS.
@@ -120,6 +120,7 @@ public class AsciiModule extends ModuleBase {
                 + "org/publications/files/ecma-st/" + "Ecma-006.pdf",
                 IdentifierType.URL));
         _specification.add(doc);
+        this.messageFactory = JhoveMessageFactory.getInstance("edu.harvard.hul.ois.jhove.module.ascii.ErrorMessages");
 
     }
 
@@ -161,8 +162,8 @@ public class AsciiModule extends ModuleBase {
 
                 /* Only byte values 0x00 through 0x7f are valid. */
                 if (ch > MAX_CHAR) {
-                    ErrorMessage error = new ErrorMessage(ERR_CHAR_INV,
-                             String.format(ERR_CHAR_INV_SUB,
+                    ErrorMessage error = new ErrorMessage(messageFactory.getMessage("ASCII-HUL-1"),
+                             String.format(messageFactory.getMessage("ASCII-HUL-1-SUB").message,
                                           Character.valueOf((char) ch),
                                           Integer.valueOf(ch)),
                             _nByte - 1);
@@ -205,7 +206,7 @@ public class AsciiModule extends ModuleBase {
          * Only non-zero-length files are well-formed ASCII.
          */
         if (_nByte == 0) {
-            info.setMessage(new ErrorMessage(ERR_ZERO_LEN)); // ASCII-HUL-2
+            info.setMessage(new ErrorMessage(messageFactory.getMessage("ASCII-HUL-2"))); // ASCII-HUL-2
             info.setWellFormed(RepInfo.FALSE);
             return 0;
         }
@@ -253,7 +254,7 @@ public class AsciiModule extends ModuleBase {
         }
 
         if (!printableChars) {
-            info.setMessage(new InfoMessage(INF_PRINT_CHAR_MISS));
+            info.setMessage(new InfoMessage(messageFactory.getMessage("ASCII-HUL-3")));
         }
 
         return 0;

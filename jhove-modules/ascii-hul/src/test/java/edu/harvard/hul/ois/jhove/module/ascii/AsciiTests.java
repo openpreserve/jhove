@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.JhoveMessageFactory;
 import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyArity;
 import edu.harvard.hul.ois.jhove.RepInfo;
@@ -23,6 +24,8 @@ import edu.harvard.hul.ois.jhove.module.TestUtils;
  */
 
 public class AsciiTests {
+	JhoveMessageFactory messageFactory = JhoveMessageFactory
+			.getInstance("edu.harvard.hul.ois.jhove.module.aiff.ErrorMessages");
 	private static final String asciiResourcePath = TestUtils.MODULE_RESOURCE_BASE
 			+ "ascii/";
 
@@ -49,50 +52,53 @@ public class AsciiTests {
 	@Test
 	public final void testEmpty() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, TestUtils.EMPTY_FILE_PATH,
-				RepInfo.FALSE, RepInfo.FALSE, AsciiModule.ERR_ZERO_LEN);
+				RepInfo.FALSE, RepInfo.FALSE,
+				messageFactory.getMessage("ASCII-HUL-2").message);
 	}
 
 	@Test
 	public final void testNullOnly() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, nullsOnly, RepInfo.TRUE,
-				RepInfo.TRUE, AsciiModule.ERR_ZERO_LEN, false);
+				RepInfo.TRUE, messageFactory.getMessage("ASCII-HUL-2").message,
+				false);
 	}
 
 	@Test
 	public final void testNotEmpty() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, allAscii, RepInfo.TRUE,
-				RepInfo.TRUE, AsciiModule.ERR_ZERO_LEN, false);
+				RepInfo.TRUE, messageFactory.getMessage("ASCII-HUL-2").message,
+				false);
 	}
 
 	@Test
 	public final void testCharOutOfRange() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, allAsciiInv, RepInfo.FALSE,
-				RepInfo.FALSE, AsciiModule.ERR_CHAR_INV);
+				RepInfo.FALSE, messageFactory.getMessage("ASCII-HUL-1").message);
 	}
 
 	@Test
 	public final void testPrintable() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, allAscii, RepInfo.TRUE,
-				RepInfo.TRUE, AsciiModule.INF_PRINT_CHAR_MISS, false);
+				RepInfo.TRUE, messageFactory.getMessage("ASCII-HUL-3").message, false);
 	}
 
 	@Test
 	public final void testNoPrintable() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, allCtrls, RepInfo.TRUE,
-				RepInfo.TRUE, AsciiModule.INF_PRINT_CHAR_MISS);
+				RepInfo.TRUE, messageFactory.getMessage("ASCII-HUL-3").message);
 	}
 
 	@Test
 	public final void testControlChars() throws URISyntaxException {
 		RepInfo info = TestUtils.testValidateResource(this.module, allCtrls,
-				RepInfo.TRUE, RepInfo.TRUE, AsciiModule.INF_PRINT_CHAR_MISS);
+				RepInfo.TRUE, RepInfo.TRUE, messageFactory.getMessage("ASCII-HUL-3").message);
 		testAllAsciiCtrlCharsDetected(info);
 	}
 
 	@Test
 	public final void testControlCharsWithGraphics() throws URISyntaxException {
 		RepInfo info = TestUtils.testValidateResource(this.module, allAscii,
-				RepInfo.TRUE, RepInfo.TRUE, AsciiModule.INF_PRINT_CHAR_MISS,
+				RepInfo.TRUE, RepInfo.TRUE, messageFactory.getMessage("ASCII-HUL-3").message,
 				false);
 		testAllAsciiCtrlCharsDetected(info);
 	}
@@ -100,7 +106,7 @@ public class AsciiTests {
 	@Test
 	public final void testControlCharsFalsePos() throws URISyntaxException {
 		RepInfo info = TestUtils.testValidateResource(this.module, allGraphics,
-				RepInfo.TRUE, RepInfo.TRUE, AsciiModule.INF_PRINT_CHAR_MISS,
+				RepInfo.TRUE, RepInfo.TRUE, messageFactory.getMessage("ASCII-HUL-3").message,
 				false);
 		Property asciiProp = info.getProperty("ASCIIMetadata");
 		assertTrue(asciiProp == null);
