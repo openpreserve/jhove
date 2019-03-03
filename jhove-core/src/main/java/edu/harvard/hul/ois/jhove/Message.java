@@ -5,6 +5,9 @@
 
 package edu.harvard.hul.ois.jhove;
 
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 /**
  * This class encapsulates a String to be displayed.
  */
@@ -14,8 +17,6 @@ public abstract class Message {
 	 ******************************************************************/
 	/** Value indicating a null offset. */
 	public static final long NULL = -1;
-
-	public static final String NO_ID = "NO-ID";
 
 	/******************************************************************
 	 * PRIVATE INSTANCE FIELDS.
@@ -42,7 +43,7 @@ public abstract class Message {
 	 *            Human-readable string.
 	 */
 	protected Message(final String message) {
-		this(JhoveMessage.getInstance(NO_ID, message));
+		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, message));
 	}
 
 	/**
@@ -71,7 +72,8 @@ public abstract class Message {
 	 *            Human-readable additional information.
 	 */
 	protected Message(final String message, final String subMessage) {
-		this(JhoveMessage.getInstance(NO_ID, message), subMessage);
+		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, message),
+				subMessage);
 	}
 
 	/**
@@ -105,7 +107,8 @@ public abstract class Message {
 	 *            Byte offset associated with the message.
 	 */
 	protected Message(final String message, final long offset) {
-		this(JhoveMessage.getInstance(NO_ID, message), offset);
+		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, message),
+				offset);
 	}
 
 	/**
@@ -140,8 +143,10 @@ public abstract class Message {
 	 * @param offset
 	 *            Byte offset associated with the message.
 	 */
-	protected Message(final String message, final String subMessage, final long offset) {
-		this(JhoveMessage.getInstance(NO_ID, message), subMessage, offset);
+	protected Message(final String message, final String subMessage,
+			final long offset) {
+		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, message),
+				subMessage, offset);
 	}
 
 	/**
@@ -160,7 +165,8 @@ public abstract class Message {
 	 * @param offset
 	 *            Byte offset associated with the message.
 	 */
-	protected Message(final JhoveMessage message, String subMessage, long offset) {
+	protected Message(final JhoveMessage message, String subMessage,
+			long offset) {
 		this.message = message;
 		this._subMessage = subMessage;
 		this._offset = offset;
@@ -176,7 +182,7 @@ public abstract class Message {
 	 * Get the message string.
 	 */
 	public String getMessage() {
-		return this.message.message;
+		return this.message.getMessage();
 	}
 
 	/**
@@ -194,7 +200,7 @@ public abstract class Message {
 	}
 
 	public String getId() {
-		return this.message.id;
+		return this.message.getId();
 	}
 
 	public JhoveMessage getJhoveMessage() {

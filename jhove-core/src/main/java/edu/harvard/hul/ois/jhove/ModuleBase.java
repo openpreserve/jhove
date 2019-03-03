@@ -9,6 +9,7 @@ import java.io.*;
 import java.security.*;
 import java.util.*;
 import java.util.zip.*;
+
 import java.util.logging.*;
 
 /**
@@ -95,8 +96,6 @@ public abstract class ModuleBase implements Module {
 
 	/* Data input stream wrapped around _cstream */
 	protected DataInputStream _dstream;
-
-    protected JhoveMessageFactory messageFactory = null;
 
 	/******************************************************************
 	 * CLASS CONSTRUCTOR.
@@ -554,10 +553,6 @@ public abstract class ModuleBase implements Module {
 	public final void setSHA1(MessageDigest sha1) {
 		_sha1 = sha1;
 		_checksumFinished = true;
-	}
-
-	public JhoveMessageFactory getMessageFactory() {
-		return this.messageFactory;
 	}
 
 	/******************************************************************
