@@ -52,7 +52,6 @@ import edu.harvard.hul.ois.jhove.Identifier;
 import edu.harvard.hul.ois.jhove.IdentifierType;
 import edu.harvard.hul.ois.jhove.InfoMessage;
 import edu.harvard.hul.ois.jhove.InternalSignature;
-import edu.harvard.hul.ois.jhove.JhoveMessageFactory;
 import edu.harvard.hul.ois.jhove.Message;
 import edu.harvard.hul.ois.jhove.ModuleBase;
 import edu.harvard.hul.ois.jhove.NisoImageMetadata;
@@ -422,9 +421,6 @@ public class JpegModule extends ModuleBase {
 		_signature.add(sig);
 
 		_bigEndian = true;
-
-		this.messageFactory = JhoveMessageFactory.getInstance(
-				"edu.harvard.hul.ois.jhove.module.jpeg.ErrorMessages");
 	}
 
 	/******************************************************************
@@ -544,9 +540,8 @@ public class JpegModule extends ModuleBase {
 					dbyt = readUnsignedByte(_dstream, this);
 					if (dbyt != 0XFF) {
 						info.setMessage(new ErrorMessage(
-								this.messageFactory.getMessage("JPEG-HUL-7"),
-								String.format(this.messageFactory
-										.getMessage("JPEG-HUL-7-SUB").message, dbyt),
+								MessageConstants.JPEG_HUL_7,
+								String.format(MessageConstants.JPEG_HUL_7_SUB.getMessage(), dbyt),
 								_nByte));
 						info.setWellFormed(false);
 						return 0;
@@ -561,7 +556,7 @@ public class JpegModule extends ModuleBase {
 				if (!_seenJFIF && !_seenSPIFF && !_seenExif && !_seenJPEGL
 						&& _numSegments >= 2 && !_reportedJFIF) {
 					info.setMessage(new ErrorMessage(
-							this.messageFactory.getMessage("JPEG-HUL-9"),
+							MessageConstants.JPEG_HUL_9,
 							_nByte));
 					info.setValid(false);
 					_reportedJFIF = true;
@@ -705,7 +700,7 @@ public class JpegModule extends ModuleBase {
 					default:
 						// Other values don't belong at the top level.
 						msg = new ErrorMessage(
-								this.messageFactory.getMessage("JPEG-HUL-6"), _nByte);
+								MessageConstants.JPEG_HUL_6, _nByte);
 						info.setMessage(msg);
 						info.setValid(false);
 						break loop1;
@@ -713,7 +708,7 @@ public class JpegModule extends ModuleBase {
 			}
 
 		} catch (EOFException e) {
-			msg = new ErrorMessage(this.messageFactory.getMessage("JPEG-HUL-2"),
+			msg = new ErrorMessage(MessageConstants.JPEG_HUL_2,
 					_nByte);
 			info.setMessage(msg);
 			info.setWellFormed(false);
@@ -932,7 +927,7 @@ public class JpegModule extends ModuleBase {
 		}
 		if (!valid) {
 			info.setMessage(new ErrorMessage(
-					this.messageFactory.getMessage("JPEG-HUL-4"), 0));
+					MessageConstants.JPEG_HUL_4, 0));
 			info.setWellFormed(false);
 			return false;
 		}
@@ -977,7 +972,7 @@ public class JpegModule extends ModuleBase {
 							+ _exifProfileOK);
 					// Apparently this is OK in a exif file
 					info.setMessage(new ErrorMessage(
-							this.messageFactory.getMessage("JPEG-HUL-5"),
+							MessageConstants.JPEG_HUL_5,
 							_nByte));
 					info.setValid(false);
 					skipBytes(_dstream, length - 7, this);
@@ -1192,7 +1187,7 @@ public class JpegModule extends ModuleBase {
 		if (equalArray(ident, spiffByte)) {
 			if (_numSegments > 1) {
 				info.setMessage(new ErrorMessage(
-						this.messageFactory.getMessage("JPEG-HUL-8"), _nByte));
+						MessageConstants.JPEG_HUL_8, _nByte));
 				info.setValid(false);
 			}
 			// This is a SPIFF marker. It may come only
@@ -1293,7 +1288,7 @@ public class JpegModule extends ModuleBase {
 			}
 		} catch (IllegalArgumentException ie) {
 			info.setMessage(new ErrorMessage(
-					this.messageFactory.getMessage("JPEG-HUL-11"), ie.getMessage(),
+					MessageConstants.JPEG_HUL_11, ie.getMessage(),
 					_nByte));
 		}
 
@@ -1345,7 +1340,7 @@ public class JpegModule extends ModuleBase {
 		readUnsignedShort(_dstream);
 		if (_tiling == null) {
 			info.setMessage(new ErrorMessage(
-					this.messageFactory.getMessage("JPEG-HUL-1"), _nByte));
+					MessageConstants.JPEG_HUL_1, _nByte));
 			info.setValid(false);
 			return;
 		}
@@ -1638,7 +1633,7 @@ public class JpegModule extends ModuleBase {
 			// Out of bounds value -- punt.
 			// Should add an error message here.
 			info.setMessage(new ErrorMessage(
-					this.messageFactory.getMessage("JPEG-HUL-10")));
+					MessageConstants.JPEG_HUL_10));
 			info.setValid(false);
 			return null;
 		}

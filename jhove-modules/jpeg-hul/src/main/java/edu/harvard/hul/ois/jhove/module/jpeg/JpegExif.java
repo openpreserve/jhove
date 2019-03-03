@@ -5,9 +5,22 @@
 
 package edu.harvard.hul.ois.jhove.module.jpeg;
 
-import java.io.*;
-import java.util.*;
-import edu.harvard.hul.ois.jhove.*;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.List;
+import java.util.ListIterator;
+
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.NisoImageMetadata;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.module.JpegModule;
 import edu.harvard.hul.ois.jhove.module.tiff.ExifIFD;
 import edu.harvard.hul.ois.jhove.module.tiff.TiffIFD;
@@ -71,7 +84,7 @@ public final class JpegExif {
         }
         catch (IOException e) {
             info.setMessage (new ErrorMessage
-                    (module.getMessageFactory().getMessage("JHOVE-1"),
+                    (MessageConstants.JHOVE_1,
                      e.getMessage ()));
             return info;
         }
@@ -183,7 +196,7 @@ public final class JpegExif {
         }
         catch (IOException e) {
             info.setMessage (new ErrorMessage
-                (this.module.getMessageFactory().getMessage("JPEG-HUL-3"),
+                (MessageConstants.JPEG_HUL_3,
 		 e.getMessage ()));
             // Maybe should put this directly in the parent's
             // RepInfo, otherwise I have to copy the message afterwards.
