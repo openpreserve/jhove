@@ -525,7 +525,7 @@ public class HtmlModule extends ModuleBase {
 			info.setWellFormed(false);
 		} catch (TokenMgrError f) {
 			info.setMessage(new ErrorMessage(
-					MessageConstants.HTML_HUL_17,
+					MessageConstants.HTML_HUL_19,
 					f.getLocalizedMessage()));
 			info.setWellFormed(false);
 		}

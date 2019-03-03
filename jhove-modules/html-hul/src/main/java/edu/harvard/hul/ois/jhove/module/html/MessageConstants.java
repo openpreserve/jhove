@@ -64,13 +64,12 @@ public enum MessageConstants {
 	public static final JhoveMessage HTML_HUL_16 = messageFactory.getMessage("HTML-HUL-16");
 	public static final JhoveMessage HTML_HUL_17 = messageFactory.getMessage("HTML-HUL-17");
 	public static final JhoveMessage HTML_HUL_18 = messageFactory.getMessage("HTML-HUL-18");
-	//public static final JhoveMessage HTML_HUL_19 = messageFactory.getMessage("HTML-HUL-19");
+	// From TokenMgrError
+	public static final JhoveMessage HTML_HUL_19 = messageFactory.getMessage("HTML-HUL-19");
+	public static final JhoveMessage HTML_HUL_20 = messageFactory.getMessage("HTML-HUL-20");
+	public static final JhoveMessage HTML_HUL_21 = messageFactory.getMessage("HTML-HUL-21");
 
 	public static final JhoveMessage JHOVE_1 = messageFactory.getMessage("JHOVE-1");
 	public static final JhoveMessage JHOVE_2 = messageFactory.getMessage("JHOVE-2");
 	public static final JhoveMessage JHOVE_3 = messageFactory.getMessage("JHOVE-3");
-
-	// From TokenMgrError
-	public static final String ERR_LEXICAL_ERROR = "Lexical error";
-	public static final String ERR_LEX_STATE_INV = "Error: State unchanged, ignoring invalid lexical state: ";
 }

@@ -96,7 +96,7 @@ public class TokenMgrError extends Error
     */
     protected static String LexicalError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar) {
         StringBuilder errMsg = new StringBuilder();
-        errMsg.append(MessageConstants.ERR_LEXICAL_ERROR);
+        errMsg.append(MessageConstants.HTML_HUL_20);
         errMsg.append(" at line ").append(errorLine).append(", column ").append(errorColumn).append(". Encountered: ");
         if (EOFSeen) {
             errMsg.append("<EOF> ");
