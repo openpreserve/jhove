@@ -5,6 +5,8 @@
 
 package edu.harvard.hul.ois.jhove;
 
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+
 /**
  * This class encapsulates an error message from a Module, representing
  * a problem in the content being analyzed.
