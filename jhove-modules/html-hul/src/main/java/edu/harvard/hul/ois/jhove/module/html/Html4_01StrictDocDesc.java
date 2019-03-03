@@ -137,9 +137,9 @@ public class Html4_01StrictDocDesc extends Html4StrictDocDesc {
     /**
      *  Constructor.
      */
-    public Html4_01StrictDocDesc (final HtmlModule module)
+    public Html4_01StrictDocDesc ()
     {
-        super(module);
+        super();
         // publish stSupportedElements to superclass
         supportedElements = stSupportedElements;
         init ();

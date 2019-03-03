@@ -17,8 +17,8 @@ import java.util.*;
  */
 public abstract class Html4_0TFDocDesc extends Html4TFDocDesc {
 
-    protected Html4_0TFDocDesc(final HtmlModule module) {
-        super(module);
+    protected Html4_0TFDocDesc() {
+        super();
     }
 
     protected static void classInit4 (Map stSupportedElements, int version)

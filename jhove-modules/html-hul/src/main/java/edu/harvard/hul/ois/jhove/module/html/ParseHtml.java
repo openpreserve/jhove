@@ -83,7 +83,7 @@ public class ParseHtml implements ParseHtmlConstants {
             }
             /******* End Added GDM 14-Jun-05 to avoid infinite loop ********/
         }
-        {if (true) return new JHErrorElement(elements, module.getMessageFactory().getMessage("HTML-HUL-2"), errText.toString(), true);}
+        {if (true) return new JHErrorElement(elements, MessageConstants.HTML_HUL_2, errText.toString(), true);}
     }
       {if (true) return elem;}
     throw new Error("Missing return statement in function");
@@ -113,7 +113,7 @@ public class ParseHtml implements ParseHtmlConstants {
             the whole thing from falling apart, yet will generate an error */
          {if (true) return new JHOpenTag (elements, name.image, attrs,
            name.beginLine, name.beginColumn,
-           module.getMessageFactory().getMessage("HTML-HUL-1").message);}
+           MessageConstants.HTML_HUL_1.getMessage());}
      }
      else {
          {if (true) return new JHOpenTag (elements, name.image, attrs,
@@ -187,7 +187,7 @@ public class ParseHtml implements ParseHtmlConstants {
 
   JHErrorElement ConsumeError() {
     Token tok = getNextToken();
-        return new JHErrorElement (elements, module.getMessageFactory().getMessage("HTML-HUL-3"), tok.image, true);
+        return new JHErrorElement (elements, MessageConstants.HTML_HUL_3, tok.image, true);
   }
 
   final public void DoctypeItem(List dtElements) throws ParseException {

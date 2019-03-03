@@ -31,8 +31,6 @@ public abstract class HtmlDocDesc {
 	/** Metadata for this document. */
 	private HtmlMetadata metadata;
 
-	private final HtmlModule module;
-
 	/**
 	 * Generic list of supported tags. For efficiency, this is
 	 * generated only once. Subclasses will need to get a copy
@@ -62,11 +60,6 @@ public abstract class HtmlDocDesc {
 
 	/** Header tags, which are invariant for all HTML versions. */
 	protected static String[] headings = { "h1", "h2", "h3", "h4", "h5", "h6" };
-
-	/** Consructor. */
-	public HtmlDocDesc(HtmlModule module) {
-		this.module = module;
-	}
 
 	/**
 	 * Validates the document and puts interesting properties into the
@@ -123,7 +116,7 @@ public abstract class HtmlDocDesc {
 		// and thus an implicit or explicit HEAD element.
 		if (!elementStack.isHeadSeen()) {
 			info.setMessage(new ErrorMessage(
-					this.module.getMessageFactory().getMessage("HTML-HUL-11")));
+					MessageConstants.HTML_HUL_11));
 			info.setValid(false);
 		}
 		return true;
@@ -181,7 +174,7 @@ public abstract class HtmlDocDesc {
 				toptag = top.getName();
 			}
 			info.setMessage(new ErrorMessage(
-					this.module.getMessageFactory().getMessage("HTML-HUL-4"),
+					MessageConstants.HTML_HUL_4,
 					"Name = " + name + ", "
 							+ (toptag != null ? "Container = " + toptag + ", "
 									: "")
@@ -191,7 +184,7 @@ public abstract class HtmlDocDesc {
 		}
 		if (unknownTag) {
 			info.setMessage(
-					new ErrorMessage(this.module.getMessageFactory().getMessage("HTML-HUL-6"),
+					new ErrorMessage(MessageConstants.HTML_HUL_6,
 							"Name = " + name + ", Line = " + tag.getLine()
 									+ ", Column = " + tag.getColumn()));
 			info.setValid(false);
@@ -212,7 +205,7 @@ public abstract class HtmlDocDesc {
 				HtmlAttributeDesc attDesc = tagDesc.namedAttDesc(attName);
 				if (attDesc == null) {
 					info.setMessage(new ErrorMessage(
-							this.module.getMessageFactory().getMessage("HTML-HUL-7"),
+							MessageConstants.HTML_HUL_7,
 							"Name = " + name + ", Attribute = " + attName
 									+ ", Line = " + att.getLine()
 									+ ", Column = " + att.getColumn()));
@@ -221,7 +214,7 @@ public abstract class HtmlDocDesc {
 					/* Check if value is legit */
 					if (!attDesc.valueOK(attName, attVal)) {
 						info.setMessage(new ErrorMessage(
-								this.module.getMessageFactory().getMessage("HTML-HUL-8"),
+								MessageConstants.HTML_HUL_8,
 								"Element = " + name + ", Attribute = " + attName
 										+ ", Value = " + attVal + ", Line = "
 										+ att.getLine() + ", Column = "
@@ -258,7 +251,7 @@ public abstract class HtmlDocDesc {
 				while (miter.hasNext()) {
 					String matt = (String) miter.next();
 					info.setMessage(new ErrorMessage(
-							this.module.getMessageFactory().getMessage("HTML-HUL-9"),
+							MessageConstants.HTML_HUL_9,
 							"Tag = " + name + ", Attribute = " + matt
 									+ ", Line = " + tag.getLine()
 									+ ", Column = " + tag.getColumn()));
@@ -285,7 +278,7 @@ public abstract class HtmlDocDesc {
 		int idx = elementStack.search(name);
 		if (idx == -1) {
 			info.setMessage(new ErrorMessage(
-					this.module.getMessageFactory().getMessage("HTML-HUL-10"),
+					MessageConstants.HTML_HUL_10,
 					"Name = " + name + ", Line = " + tag.getLine()
 							+ ", Column = " + tag.getColumn()));
 			info.setValid(false);
@@ -309,7 +302,7 @@ public abstract class HtmlDocDesc {
 			// It also means the document isn't valid, since the title
 			// should precede any PCData.
 			info.setMessage(new ErrorMessage(
-					this.module.getMessageFactory().getMessage("HTML-HUL-12")));
+					MessageConstants.HTML_HUL_12));
 			info.setValid(false);
 			return;
 		}
@@ -335,7 +328,7 @@ public abstract class HtmlDocDesc {
 			}
 		}
 		info.setMessage(new ErrorMessage(
-				this.module.getMessageFactory().getMessage("HTML-HUL-13"),
+				MessageConstants.HTML_HUL_13,
 				"Line = " + elem.getLine() + ", Column = " + elem.getColumn()));
 		info.setValid(false);
 	}
@@ -439,7 +432,7 @@ public abstract class HtmlDocDesc {
 					if (topElem.isCloseTagRequired()) {
 						info.setValid(false);
 						info.setMessage(new ErrorMessage(
-								this.module.getMessageFactory().getMessage("HTML-HUL-5"),
+								MessageConstants.HTML_HUL_5,
 								"Name = " + name + ", " + "Container = "
 										+ top.getName() + ", " + "Line = "
 										+ elem.getLine() + ", Column = "

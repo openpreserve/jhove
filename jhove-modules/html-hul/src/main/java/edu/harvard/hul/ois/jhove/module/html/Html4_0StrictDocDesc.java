@@ -147,9 +147,9 @@ public class Html4_0StrictDocDesc extends Html4StrictDocDesc {
      *  block rather than in the constructor, so as to minimize
      *  overhead on multiple invocations.
      */
-    public Html4_0StrictDocDesc (final HtmlModule module)
+    public Html4_0StrictDocDesc ()
     {
-    	super(module);
+    	super();
         // publish stSupportedElements to superclass
         supportedElements = stSupportedElements;
         init ();

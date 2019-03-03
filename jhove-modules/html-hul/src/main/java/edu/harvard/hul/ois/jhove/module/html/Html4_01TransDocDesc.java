@@ -33,9 +33,9 @@ public class Html4_01TransDocDesc extends Html4_01TFDocDesc {
     /**
      *  Constructor. 
      */
-    public Html4_01TransDocDesc (final HtmlModule module)
+    public Html4_01TransDocDesc ()
     {
-        super(module);
+        super();
         // publish stSupportedElements to superclass
         supportedElements = stSupportedElements;
         init ();

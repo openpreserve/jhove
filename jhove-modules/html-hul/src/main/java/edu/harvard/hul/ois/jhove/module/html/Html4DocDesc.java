@@ -63,8 +63,8 @@ public abstract class Html4DocDesc extends HtmlDocDesc {
     /** Attributes for TH and TD elements */
     protected static List thtdAtts;
 
-    protected Html4DocDesc(final HtmlModule module) {
-        super(module);
+    protected Html4DocDesc() {
+        super();
     }
 
     /** Initialization code.  This is called from the static initializer

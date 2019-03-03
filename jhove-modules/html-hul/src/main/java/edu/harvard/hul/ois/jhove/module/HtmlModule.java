@@ -38,7 +38,6 @@ import edu.harvard.hul.ois.jhove.Identifier;
 import edu.harvard.hul.ois.jhove.IdentifierType;
 import edu.harvard.hul.ois.jhove.InfoMessage;
 import edu.harvard.hul.ois.jhove.JhoveBase;
-import edu.harvard.hul.ois.jhove.JhoveMessageFactory;
 import edu.harvard.hul.ois.jhove.ModuleBase;
 import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.RepInfo;
@@ -267,8 +266,6 @@ public class HtmlModule extends ModuleBase {
 		sig = new ExternalSignature(".htm", SignatureType.EXTENSION,
 				SignatureUseType.OPTIONAL);
 		_signature.add(sig);
-		
-		this.messageFactory = JhoveMessageFactory.getInstance("edu.harvard.hul.ois.jhove.module.html.ErrorMessages");
 	}
 
 	/**
@@ -322,7 +319,7 @@ public class HtmlModule extends ModuleBase {
 			// but someone who really wanted to could remove it. In
 			// that case, you deserve what you get.
 			info.setMessage(new ErrorMessage(
-					this.messageFactory.getMessage("JHOVE-1")));
+					MessageConstants.JHOVE_1));
 			info.setWellFormed(false); // Treat it as completely wrong
 			return 0;
 		}
@@ -361,7 +358,7 @@ public class HtmlModule extends ModuleBase {
 			parser = new ParseHtml(this, cstream);
 		} catch (UnsupportedEncodingException e) {
 			info.setMessage(new ErrorMessage(
-					this.messageFactory.getMessage("JHOVE-2"), e.getMessage()));
+					MessageConstants.JHOVE_2, e.getMessage()));
 			info.setWellFormed(false);
 			return 0; // shouldn't happen!
 		}
@@ -372,14 +369,14 @@ public class HtmlModule extends ModuleBase {
 				// Consider an empty document bad
 				info.setWellFormed(false);
 				info.setMessage(new ErrorMessage(
-						this.messageFactory.getMessage("JHOVE-3")));
+						MessageConstants.JHOVE_3));
 				return 0;
 			}
 			type = checkDoctype(elements);
 			if (type < 0) {
 				info.setWellFormed(false);
 				info.setMessage(new ErrorMessage(
-						this.messageFactory.getMessage("HTML-HUL-15")));
+						MessageConstants.HTML_HUL_15));
 				return 0;
 			}
 			/*
@@ -404,7 +401,7 @@ public class HtmlModule extends ModuleBase {
 			}
 			if (!hasElements) {
 				info.setMessage(new ErrorMessage(
-						this.messageFactory.getMessage("HTML-HUL-17")));
+						MessageConstants.HTML_HUL_17));
 				info.setWellFormed(false);
 				return 0;
 			}
@@ -434,14 +431,14 @@ public class HtmlModule extends ModuleBase {
 					break; // fall through
 				case 1: // XML but not HTML
 					info.setMessage(new ErrorMessage(
-							this.messageFactory.getMessage("HTML-HUL-14")));
+							MessageConstants.HTML_HUL_14));
 					info.setWellFormed(false);
 					return 0;
 				case 2: // probably XHTML
 					return 100;
 				}
 				info.setMessage(new ErrorMessage(
-						this.messageFactory.getMessage("HTML-HUL-16")));
+						MessageConstants.HTML_HUL_16));
 				info.setValid(false);
 				// But keep going
 			}
@@ -450,38 +447,38 @@ public class HtmlModule extends ModuleBase {
 			switch (type) {
 			case HTML_3_2:
 			default:
-				docDesc = new Html3_2DocDesc(this);
+				docDesc = new Html3_2DocDesc();
 				_textMD.setMarkup_basis("HTML");
 				_textMD.setMarkup_basis_version("3.2");
 				break;
 
 			case HTML_4_0_FRAMESET:
-				docDesc = new Html4_0FrameDocDesc(this);
+				docDesc = new Html4_0FrameDocDesc();
 				_textMD.setMarkup_basis("HTML");
 				_textMD.setMarkup_basis_version("4.0");
 				break;
 			case HTML_4_0_TRANSITIONAL:
-				docDesc = new Html4_0TransDocDesc(this);
+				docDesc = new Html4_0TransDocDesc();
 				_textMD.setMarkup_basis("HTML");
 				_textMD.setMarkup_basis_version("4.0");
 				break;
 			case HTML_4_0_STRICT:
-				docDesc = new Html4_0StrictDocDesc(this);
+				docDesc = new Html4_0StrictDocDesc();
 				_textMD.setMarkup_basis("HTML");
 				_textMD.setMarkup_basis_version("4.0");
 				break;
 			case HTML_4_01_FRAMESET:
-				docDesc = new Html4_01FrameDocDesc(this);
+				docDesc = new Html4_01FrameDocDesc();
 				_textMD.setMarkup_basis("HTML");
 				_textMD.setMarkup_basis_version("4.01");
 				break;
 			case HTML_4_01_TRANSITIONAL:
-				docDesc = new Html4_01TransDocDesc(this);
+				docDesc = new Html4_01TransDocDesc();
 				_textMD.setMarkup_basis("HTML");
 				_textMD.setMarkup_basis_version("4.01");
 				break;
 			case HTML_4_01_STRICT:
-				docDesc = new Html4_01StrictDocDesc(this);
+				docDesc = new Html4_01StrictDocDesc();
 				_textMD.setMarkup_basis("HTML");
 				_textMD.setMarkup_basis_version("4.01");
 				break;
@@ -497,7 +494,7 @@ public class HtmlModule extends ModuleBase {
 			if (docDesc == null) {
 				info.setMessage(new InfoMessage(
 						MessageConstants.INF_HTML_VER_UNSPPRTD));
-				docDesc = new Html3_2DocDesc(this);
+				docDesc = new Html3_2DocDesc();
 			}
 			docDesc.validate(elements, info);
 			metadata = docDesc.getMetadata();
@@ -523,12 +520,12 @@ public class HtmlModule extends ModuleBase {
 		} catch (ParseException e) {
 			Token t = e.currentToken;
 			info.setMessage(new ErrorMessage(
-					this.messageFactory.getMessage("HTML-HUL-18"),
+					MessageConstants.HTML_HUL_18,
 					"Line = " + t.beginLine + ", column = " + t.beginColumn));
 			info.setWellFormed(false);
 		} catch (TokenMgrError f) {
 			info.setMessage(new ErrorMessage(
-					this.messageFactory.getMessage("HTML-HUL-17"),
+					MessageConstants.HTML_HUL_17,
 					f.getLocalizedMessage()));
 			info.setWellFormed(false);
 		}

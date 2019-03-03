@@ -18,8 +18,8 @@ import java.util.*;
  */
 public abstract class Html4_01TFDocDesc extends Html4TFDocDesc {
 
-    protected Html4_01TFDocDesc(final HtmlModule module) {
-        super(module);
+    protected Html4_01TFDocDesc() {
+        super();
     }
 	
     /** Initialization code.  This is called from the static initializer
