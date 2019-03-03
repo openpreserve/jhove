@@ -21,18 +21,46 @@
 
 package edu.harvard.hul.ois.jhove.module;
 
-import java.io.*;
-import java.util.*;
-
-import edu.harvard.hul.ois.jhove.*;
-import edu.harvard.hul.ois.jhove.Agent.Builder;
-import edu.harvard.hul.ois.jhove.module.gif.*;
-
-import org.xml.sax.XMLReader;
-import org.xml.sax.SAXException;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Vector;
 
 import javax.xml.parsers.SAXParserFactory;
-import edu.harvard.hul.ois.jhove.module.gif.MessageConstants;
+
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+
+import edu.harvard.hul.ois.jhove.Agent;
+import edu.harvard.hul.ois.jhove.Agent.Builder;
+import edu.harvard.hul.ois.jhove.AgentType;
+import edu.harvard.hul.ois.jhove.ByteArrayXMPSource;
+import edu.harvard.hul.ois.jhove.Document;
+import edu.harvard.hul.ois.jhove.DocumentType;
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.ExternalSignature;
+import edu.harvard.hul.ois.jhove.Identifier;
+import edu.harvard.hul.ois.jhove.IdentifierType;
+import edu.harvard.hul.ois.jhove.InternalSignature;
+import edu.harvard.hul.ois.jhove.JhoveMessageFactory;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.NisoImageMetadata;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.Signature;
+import edu.harvard.hul.ois.jhove.SignatureType;
+import edu.harvard.hul.ois.jhove.SignatureUseType;
+import edu.harvard.hul.ois.jhove.XMPHandler;
+import edu.harvard.hul.ois.jhove.module.gif.GifStrings;
 
 /**
  *  Module for identification and validation of GIF files.
@@ -95,17 +123,8 @@ public class GifModule extends ModuleBase
     /* First 6 bytes of file */
     protected byte _sig[];
 
-    /* Checksummer object */
-    protected Checksummer _ckSummer;
-
     /* XMP property */
     protected Property _xmpProp;
-
-    /* Input stream wrapper which handles checksums */
-    protected ChecksumInputStream _cstream;
-
-    /* Data input stream wrapped around _cstream */
-    protected DataInputStream _dstream;
 
     /* Flag for presence of global color table */
     protected boolean _globalColorTableFlag;
@@ -179,6 +198,7 @@ public class GifModule extends ModuleBase
        _signature.add (sig);
 
        _bigEndian = false;
+       this.messageFactory = JhoveMessageFactory.getInstance("edu.harvard.hul.ois.jhove.module.gif.ErrorMessages");
     }
 
     /******************************************************************
@@ -266,20 +286,7 @@ public class GifModule extends ModuleBase
                 PropertyArity.LIST,
                 _blocksList);
 
-        // We may have already done the checksums while converting a
-        // temporary file.
-        _ckSummer = null;
-        if (_app != null && _je.getChecksumFlag () &&
-            info.getChecksum().isEmpty()) {
-            _ckSummer = new Checksummer ();
-            _cstream = new ChecksumInputStream (stream, _ckSummer);
-            _dstream = getBufferedDataStream (_cstream, _app != null ?
-                    _je.getBufferSize () : 0);
-        }
-        else {
-            _dstream = getBufferedDataStream (stream, _app != null ?
-                    _je.getBufferSize () : 0);
-        }
+        setupDataStream(stream, info);
 
         if (!readSig (info)) {
             return 0;
@@ -301,30 +308,9 @@ public class GifModule extends ModuleBase
         }
 
         if (_ckSummer != null){
-            /* We may not have actually hit the end of file. If we're calculating
-             * checksums on the fly, we have to read and discard whatever is
-             * left, so it will get checksummed. */
-            for (;;) {
-                try {
-                    long n = skipBytes (_dstream, 2048, this);
-                    if (n == 0) {
-                        break;
-                    }
-                }
-                catch (Exception e) {
-                    break;
-                }
-            }
-            info.setSize (_cstream.getNBytes ());
-            info.setChecksum (new Checksum (_ckSummer.getCRC32 (),
-                        ChecksumType.CRC32));
-            String value = _ckSummer.getMD5 ();
-            if (value != null) {
-                info.setChecksum (new Checksum (value, ChecksumType.MD5));
-            }
-            if ((value = _ckSummer.getSHA1 ()) != null) {
-            info.setChecksum (new Checksum (value, ChecksumType.SHA1));
-            }
+            skipDstreamToEnd(info);
+            // Set the checksums in the report if they're calculated
+            setChecksums(this._ckSummer, info);
         }
         Property[] metaArray;
         if (_xmpProp != null) {
@@ -381,7 +367,7 @@ public class GifModule extends ModuleBase
                 //}
             }
             catch (EOFException e) {
-                info.setMessage(new ErrorMessage (MessageConstants.ERR_GIF_HEADER_INVALID, 0));
+                info.setMessage(new ErrorMessage (this.messageFactory.getMessage("GIF-HUL-1"), 0));
                 info.setWellFormed (RepInfo.FALSE);
                 return false;
             }
@@ -396,7 +382,7 @@ public class GifModule extends ModuleBase
             info.setProfile ("GIF 87a");
         }
         else {
-            info.setMessage(new ErrorMessage (MessageConstants.ERR_GIF_HEADER_INVALID, 0));
+            info.setMessage(new ErrorMessage (this.messageFactory.getMessage("GIF-HUL-4"), 0));
             info.setWellFormed (RepInfo.FALSE);
             return false;
         }
@@ -483,7 +469,7 @@ public class GifModule extends ModuleBase
             // required, but seems to imply it is.
             info.setWellFormed (RepInfo.FALSE);
             info.setMessage (new ErrorMessage (
-            		MessageConstants.ERR_TRAILER_BLOCK_MISSING, _nByte));
+            		this.messageFactory.getMessage("GIF-HUL-9"), _nByte));
             return false;
         }
         try {
@@ -497,7 +483,7 @@ public class GifModule extends ModuleBase
                 default:
                     info.setWellFormed (RepInfo.FALSE);
                     info.setMessage (new ErrorMessage
-                        (MessageConstants.ERR_BLOCK_TYPE_UNKNOWN,
+                        (this.messageFactory.getMessage("GIF-HUL-2"),
                          "Type = " + type, _nByte));
                     return false;
             }
@@ -506,7 +492,7 @@ public class GifModule extends ModuleBase
             // An EOF in the middle of a block is definitely a problem
             info.setWellFormed (RepInfo.FALSE);
             info.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_UNEXPECTED_END_OF_FILE, _nByte));
+                    (this.messageFactory.getMessage("GIF-HUL-10"), _nByte));
             return false;
         }
     }
@@ -528,7 +514,7 @@ public class GifModule extends ModuleBase
             default:
                 info.setWellFormed (RepInfo.FALSE);
                 info.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_EXTENSION_BLOCK_TYPE_UNKNOWN,
+                    (this.messageFactory.getMessage("GIF-HUL-3"),
                      "Type = " + subtype,
                      _nByte));
             return false;
@@ -620,7 +606,7 @@ public class GifModule extends ModuleBase
         int blockSize = readUnsignedByte (_dstream, this);
         if (blockSize != 11) {
             info.setMessage (new ErrorMessage
-                (MessageConstants.ERR_APP_EXTENSION_BLOCK_SIZE_INVALID,
+                (this.messageFactory.getMessage("GIF-HUL-1"),
                  _nByte));
             info.setWellFormed (RepInfo.FALSE);
             return false;
@@ -713,7 +699,7 @@ public class GifModule extends ModuleBase
         int blockSize = readUnsignedByte (_dstream, this);
         if (blockSize != 12) {
             info.setMessage (new ErrorMessage
-                (MessageConstants.ERR_PLAIN_TEXT_EXTENSION_BLOCK_SIZE_INVALID,
+                (this.messageFactory.getMessage("GIF-HUL-7"),
                  _nByte));
             info.setWellFormed (RepInfo.FALSE);
             return false;
@@ -722,7 +708,7 @@ public class GifModule extends ModuleBase
         // A plain text extension requires a global color table
         if (!_globalColorTableFlag) {
             info.setMessage (new ErrorMessage
-                (MessageConstants.ERR_PLAIN_TEXT_EXTENSION_COLOR_TABLE_MISSING,
+                (this.messageFactory.getMessage("GIF-HUL-8"),
                 _nByte));
             info.setValid (false);
         }
@@ -808,14 +794,14 @@ public class GifModule extends ModuleBase
         Vector propVec = new Vector (5);
         if (++_gceCounter > 1) {
             info.setMessage (new ErrorMessage
-                (MessageConstants.ERR_GRAPH_CTL_BLOCK_MULTIPLE,
+                (this.messageFactory.getMessage("GIF-HUL-5"),
                  _nByte));
             info.setWellFormed (RepInfo.FALSE);
         }
         int blockSize = readUnsignedByte (_dstream, this);
         if (blockSize != 4) {
             info.setMessage (new ErrorMessage
-                (MessageConstants.ERR_GRAPH_CTL_BLOCK_SIZE_INVALID,
+                (this.messageFactory.getMessage("GIF-HUL-6"),
                  _nByte));
             info.setWellFormed (RepInfo.FALSE);
             return false;
