@@ -23,6 +23,7 @@ import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.Agent.Builder;
 import edu.harvard.hul.ois.jhove.module.ascii.ControlChar;
 import edu.harvard.hul.ois.jhove.module.ascii.LineEnding;
+import edu.harvard.hul.ois.jhove.module.ascii.MessageConstants;
 
 import java.io.*;
 import java.util.*;
@@ -115,8 +116,6 @@ public class AsciiModule extends ModuleBase {
                 + "org/publications/files/ecma-st/" + "Ecma-006.pdf",
                 IdentifierType.URL));
         _specification.add(doc);
-        this.messageFactory = JhoveMessageFactory.getInstance("edu.harvard.hul.ois.jhove.module.ascii.ErrorMessages");
-
     }
 
     /******************************************************************
@@ -157,8 +156,8 @@ public class AsciiModule extends ModuleBase {
 
                 /* Only byte values 0x00 through 0x7f are valid. */
                 if (ch > MAX_CHAR) {
-                    ErrorMessage error = new ErrorMessage(messageFactory.getMessage("ASCII-HUL-1"),
-                             String.format(messageFactory.getMessage("ASCII-HUL-1-SUB").message,
+                    ErrorMessage error = new ErrorMessage(MessageConstants.ASCII_HUL_1,
+                             String.format(MessageConstants.ASCII_HUL_1_SUB.getMessage(),
                                           Character.valueOf((char) ch),
                                           Integer.valueOf(ch)),
                             _nByte - 1);
@@ -201,7 +200,7 @@ public class AsciiModule extends ModuleBase {
          * Only non-zero-length files are well-formed ASCII.
          */
         if (_nByte == 0) {
-            info.setMessage(new ErrorMessage(messageFactory.getMessage("ASCII-HUL-2"))); // ASCII-HUL-2
+            info.setMessage(new ErrorMessage(MessageConstants.ASCII_HUL_2)); // ASCII-HUL-2
             info.setWellFormed(RepInfo.FALSE);
             return 0;
         }
@@ -249,7 +248,7 @@ public class AsciiModule extends ModuleBase {
         }
 
         if (!printableChars) {
-            info.setMessage(new InfoMessage(messageFactory.getMessage("ASCII-HUL-3")));
+            info.setMessage(new InfoMessage(MessageConstants.ASCII_HUL_3));
         }
 
         return 0;
