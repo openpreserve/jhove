@@ -18,6 +18,10 @@ import java.util.*;
  */
 public abstract class Html4_01TFDocDesc extends Html4TFDocDesc {
 
+    protected Html4_01TFDocDesc(final HtmlModule module) {
+        super(module);
+    }
+	
     /** Initialization code.  This is called from the static initializer
      *  of our subclasses. */
     protected static void classInit4 (Map stSupportedElements, int version)

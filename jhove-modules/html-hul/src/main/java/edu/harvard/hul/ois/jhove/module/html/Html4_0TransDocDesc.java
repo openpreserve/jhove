@@ -35,8 +35,9 @@ public class Html4_0TransDocDesc extends Html4_0TFDocDesc {
      *  block rather than in the constructor, so as to minimize
      *  overhead on multiple invocations.
      */
-    public Html4_0TransDocDesc ()
+    public Html4_0TransDocDesc (final HtmlModule module)
     {
+        super(module);
         // publish stSupportedElements to superclass
         supportedElements = stSupportedElements;
         init ();

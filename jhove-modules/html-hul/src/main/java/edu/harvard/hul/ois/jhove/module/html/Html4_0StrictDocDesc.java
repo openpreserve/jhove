@@ -8,6 +8,8 @@ package edu.harvard.hul.ois.jhove.module.html;
 //import edu.harvard.hul.ois.jhove.*;
 import java.util.*;
 
+import edu.harvard.hul.ois.jhove.module.HtmlModule;
+
 /**
  * This class describes the requirements of an HTML 4.0 Strict document.
  *
@@ -145,8 +147,9 @@ public class Html4_0StrictDocDesc extends Html4StrictDocDesc {
      *  block rather than in the constructor, so as to minimize
      *  overhead on multiple invocations.
      */
-    public Html4_0StrictDocDesc ()
+    public Html4_0StrictDocDesc (final HtmlModule module)
     {
+    	super(module);
         // publish stSupportedElements to superclass
         supportedElements = stSupportedElements;
         init ();

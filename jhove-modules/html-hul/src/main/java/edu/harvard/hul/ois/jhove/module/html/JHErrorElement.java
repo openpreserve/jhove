@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class JHErrorElement extends JHElement {
 
-    private String _message;
+    private final JhoveMessage _message;
     private String _image;
     private boolean _illFormed;
     
@@ -31,7 +31,7 @@ public class JHErrorElement extends JHElement {
      *                         it only invalid.
      */
     public JHErrorElement (List elements, 
-                String message,
+    		JhoveMessage message,
                 String image, 
                 boolean illFormed) {
         super (elements);
