@@ -52,7 +52,7 @@ public class AudioRecChunk extends Chunk {
         if (bytesLeft != 24) {
             // This chunk must always have exactly 24 bytes data
             info.setMessage (new ErrorMessage
-                    (module.getMessageFactory().getMessage("AIFF-HUL-6"),
+                    (MessageConstants.AIFF_HUL_6,
                      module.getNByte ()));
             info.setWellFormed (false);
             return false;

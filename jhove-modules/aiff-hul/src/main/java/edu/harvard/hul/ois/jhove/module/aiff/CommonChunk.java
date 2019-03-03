@@ -60,7 +60,7 @@ public class CommonChunk extends Chunk {
                 // This is a rather special case, but testing did turn up
                 // a file that misbehaved in this way.
                 info.setMessage (new ErrorMessage
-                        (module.getMessageFactory().getMessage("AIFF-HUL-7"),
+                        (MessageConstants.AIFF_HUL_7,
                          module.getNByte()));
                 info.setWellFormed (false);
                 return false;

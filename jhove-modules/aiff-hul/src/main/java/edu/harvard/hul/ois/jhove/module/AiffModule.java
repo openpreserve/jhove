@@ -14,46 +14,13 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.harvard.hul.ois.jhove.AESAudioMetadata;
-import edu.harvard.hul.ois.jhove.Agent;
+import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.Agent.Builder;
-import edu.harvard.hul.ois.jhove.AgentType;
-import edu.harvard.hul.ois.jhove.Document;
-import edu.harvard.hul.ois.jhove.DocumentType;
-import edu.harvard.hul.ois.jhove.ErrorMessage;
-import edu.harvard.hul.ois.jhove.ExternalSignature;
-import edu.harvard.hul.ois.jhove.Identifier;
-import edu.harvard.hul.ois.jhove.IdentifierType;
-import edu.harvard.hul.ois.jhove.InfoMessage;
-import edu.harvard.hul.ois.jhove.InternalSignature;
-import edu.harvard.hul.ois.jhove.JhoveMessage;
-import edu.harvard.hul.ois.jhove.JhoveMessageFactory;
-import edu.harvard.hul.ois.jhove.ModuleBase;
-import edu.harvard.hul.ois.jhove.Property;
-import edu.harvard.hul.ois.jhove.PropertyArity;
-import edu.harvard.hul.ois.jhove.PropertyType;
-import edu.harvard.hul.ois.jhove.RepInfo;
-import edu.harvard.hul.ois.jhove.Signature;
-import edu.harvard.hul.ois.jhove.SignatureType;
-import edu.harvard.hul.ois.jhove.SignatureUseType;
-import edu.harvard.hul.ois.jhove.module.aiff.AnnotationChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.ApplicationChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.AudioRecChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.AuthorChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.CommentsChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.CommonChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.CopyrightChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.ExtDouble;
-import edu.harvard.hul.ois.jhove.module.aiff.FormatVersionChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.InstrumentChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.MarkerChunk;
+import edu.harvard.hul.ois.jhove.messages.*;
+import edu.harvard.hul.ois.jhove.module.*;
+import edu.harvard.hul.ois.jhove.module.aiff.*;
 import edu.harvard.hul.ois.jhove.module.aiff.MessageConstants;
-import edu.harvard.hul.ois.jhove.module.aiff.MidiChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.NameChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.SaxelChunk;
-import edu.harvard.hul.ois.jhove.module.aiff.SoundDataChunk;
-import edu.harvard.hul.ois.jhove.module.iff.Chunk;
-import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
+import edu.harvard.hul.ois.jhove.module.iff.*;
 
 /**
  * Module for identification and validation of AIFF files.
@@ -135,7 +102,6 @@ public class AiffModule
     /* Chunk data orientation is big-endian. */
     private static final boolean BIGENDIAN = true;
 
-    public final JhoveMessageFactory messageFactory = JhoveMessageFactory.getInstance("edu.harvard.hul.ois.jhove.module.aiff.ErrorMessages");
     /* Values for fileType */
     public final static int 
         AIFFTYPE = 1,
@@ -238,8 +204,6 @@ public class AiffModule
        _signature.add (sig);
 
        _bigEndian = true;
-
-       this.messageFactory = JhoveMessageFactory.getInstance("edu.harvard.hul.ois.jhove.module.aiff.ErrorMessages");
 }
 
    /**
@@ -279,7 +243,7 @@ public class AiffModule
            for (int i = 0; i < 4; i++) {
                int ch = readUnsignedByte(_dstream, this);
                if (ch != sigByte[i]) {
-                   info.setMessage(new ErrorMessage(messageFactory.getMessage("AIFF-HUL-1"), 0));
+                   info.setMessage(new ErrorMessage(MessageConstants.AIFF_HUL_1, 0));
                    info.setWellFormed (RepInfo.FALSE);
                    return 0;
                }
@@ -307,19 +271,19 @@ public class AiffModule
        catch (EOFException e) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage 
-                (messageFactory.getMessage("AIFF-HUL-8"), _nByte));
+                (MessageConstants.AIFF_HUL_8, _nByte));
            return 0;
        }
        
        if (!commonChunkSeen) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage
-                (messageFactory.getMessage("AIFF-HUL-2")));
+                (MessageConstants.AIFF_HUL_2));
        }
        if (fileType == AIFCTYPE && !formatVersionChunkSeen) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage
-                (messageFactory.getMessage("AIFF-HUL-3")));
+                (MessageConstants.AIFF_HUL_3));
        }
        if (info.getWellFormed () != RepInfo.TRUE) {
            return 0;
@@ -594,7 +558,7 @@ public class AiffModule
         }
         else {
             info.setMessage (new ErrorMessage 
-                    (messageFactory.getMessage("AIFF-HUL-4"), _nByte));
+                    (MessageConstants.AIFF_HUL_4, _nByte));
             info.setWellFormed (RepInfo.FALSE);
             return false;
         }
@@ -743,10 +707,10 @@ public class AiffModule
     /* Factor out the reporting of duplicate chunks. */
     protected void dupChunkError (RepInfo info, String chunkName)
     {
-        JhoveMessage mess = messageFactory.getMessage("AIFF-HUL-5");
-        String message = String.format(mess.message, chunkName);
+        JhoveMessage mess = MessageConstants.AIFF_HUL_5;
+        String message = String.format(mess.getMessage(), chunkName);
         info.setMessage (new ErrorMessage
-                        (JhoveMessage.getInstance(mess.id, message),
+                        (JhoveMessages.getMessageInstance(mess.getId(), message),
                          _nByte));
         info.setValid (false);
     }

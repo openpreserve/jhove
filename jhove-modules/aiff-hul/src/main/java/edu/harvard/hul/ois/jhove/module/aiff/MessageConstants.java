@@ -3,6 +3,10 @@
  */
 package edu.harvard.hul.ois.jhove.module.aiff;
 
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessageFactory;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 /**
  * Enum used to externalise the PDF modules message Strings. Using an enum
  * INSTANCE as a "trick" to ensure a single instance of the class. String
@@ -34,8 +38,21 @@ package edu.harvard.hul.ois.jhove.module.aiff;
 public enum MessageConstants {
 	INSTANCE;
 
+	private static final JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.module.aiff.ErrorMessages"); //$NON-NLS-1$
 	/**
 	 * Info messages
 	 */
 	public static final String INF_CHUNK_TYPE_IGNORED = "Ignored chunk type with ID: ";
+	
+	/**
+	 * Error messages
+	 */
+	public static final JhoveMessage AIFF_HUL_1 = messageFactory.getMessage("AIFF-HUL-1"); //$NON-NLS-1$
+	public static final JhoveMessage AIFF_HUL_2 = messageFactory.getMessage("AIFF-HUL-2"); //$NON-NLS-1$
+	public static final JhoveMessage AIFF_HUL_3 = messageFactory.getMessage("AIFF-HUL-3"); //$NON-NLS-1$
+	public static final JhoveMessage AIFF_HUL_4 = messageFactory.getMessage("AIFF-HUL-4"); //$NON-NLS-1$
+	public static final JhoveMessage AIFF_HUL_5 = messageFactory.getMessage("AIFF-HUL-5"); //$NON-NLS-1$
+	public static final JhoveMessage AIFF_HUL_6 = messageFactory.getMessage("AIFF-HUL-6"); //$NON-NLS-1$
+	public static final JhoveMessage AIFF_HUL_7 = messageFactory.getMessage("AIFF-HUL-7"); //$NON-NLS-1$
+	public static final JhoveMessage AIFF_HUL_8 = messageFactory.getMessage("AIFF-HUL-8"); //$NON-NLS-1$
 }

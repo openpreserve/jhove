@@ -50,8 +50,8 @@ public class ChunkHeader {
                     hx = "0" + hx;
                 }
                 _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_CHUNK_ID_CHAR_INV,
-                     MessageConstants.ERR_CHUNK_ID_CHAR_SUB + hx,
+                    (MessageConstants.IFF_HUL_1,
+                     MessageConstants.IFF_HUL_1_SUB.getMessage() + hx,
                      _module.getNByte ()));
                 _repInfo.setWellFormed (false);
                 return false;
