@@ -1,5 +1,9 @@
 package edu.harvard.hul.ois.jhove.module.wave;
 
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessageFactory;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 /**
  * Enum used to externalise the PDF modules message Strings. Using an enum
  * INSTANCE as a "trick" to ensure a single instance of the class. String
@@ -31,6 +35,9 @@ package edu.harvard.hul.ois.jhove.module.wave;
 public enum MessageConstants {
 	INSTANCE;
 
+	public static final JhoveMessageFactory messageFactory = JhoveMessages
+			.getInstance("edu.harvard.hul.ois.jhove.module.wave.ErrorMessages");
+
 	public static final String SUB_MESS_TYPE = "Type = ";
 	public static final String SUB_MESS_BYTES_MISSING = "Bytes missing = ";
 	public static final String SUB_MESS_TRUNCATED_CHUNK = "Truncated chunk = ";
@@ -38,32 +45,35 @@ public enum MessageConstants {
 	/**
 	 * Information messages
 	 */
-	public static final String INF_CHU_TYPE_IGND = "Ignored unrecognized chunk: ";
-	public static final String INF_CHU_DATA_IGND = "Ignored unrecognized data in chunk: ";
-	public static final String INF_DATA_CHUNK_TYPE_IGN = "Ignored Associated Data chunk of type: ";
-	public static final String INF_INFO_CHUNK_TYPE_IGN = "Ignored Info List chunk of type: ";
-	public static final String INF_FILE_TOO_LARGE = "File too large to validate";
+	public static final JhoveMessage WAVE_HUL_7 = messageFactory.getMessage("WAVE-HUL-7");
+	public static final JhoveMessage WAVE_HUL_10 = messageFactory.getMessage("WAVE-HUL-10");
+	public static final JhoveMessage WAVE_HUL_16 = messageFactory.getMessage("WAVE-HUL-16");
+	public static final JhoveMessage WAVE_HUL_17 = messageFactory.getMessage("WAVE-HUL-17");
+	public static final JhoveMessage WAVE_HUL_18 = messageFactory.getMessage("WAVE-HUL-18");
+	public static final JhoveMessage WAVE_HUL_19 = messageFactory.getMessage("WAVE-HUL-19");
+	public static final JhoveMessage WAVE_HUL_22 = messageFactory.getMessage("WAVE-HUL-22");
+	public static final JhoveMessage WAVE_HUL_26 = messageFactory.getMessage("WAVE-HUL-26");
 
 	/**
 	 * Error messages
 	 */
-	public static final String ERR_CHUNK_DUP = "Duplicate chunks found for type: ";
-	public static final String ERR_EXIF_COMM_TOO_SHORT = "Exif User Comment chunk is too short";
-	public static final String ERR_EXIF_VER_CHUNK_LEN_WRNG = "Incorrect length for Exif Version chunk";
-	public static final String ERR_CHUNK_SIZE_INVAL = "Invalid chunk size";
-	public static final String ERR_BWF_VER_UNREC = "Unrecognized BWF version: ";
-	public static final String ERR_EOF_UNEXPECTED = "Unexpected end of file";
-	public static final String ERR_FILE_IO_EXCEP = "Exception reading file: ";
-	public static final String ERR_FMT_CHUNK_MISS = "No Format chunk found";
-	public static final String ERR_DATA_CHUNK_MISS = "No Data chunk found";
-	public static final String ERR_DATA_BEFORE_FMT = "Data chunk appears before Format chunk";
-	public static final String ERR_LINK_CHUNK_SAX_EXCEP = "SAXException in reading Link chunk";
-	public static final String ERR_LINK_CHUNK_PARS_EXCEP = "ParserConfigurationException in reading Link chunk";
-	public static final String ERR_LIST_TYPE_UNK = "Unknown list type in Associated Data List chunk";
-	public static final String ERR_LIST_CHUNK_TYPE_UNK = "List chunk contains unknown type: ";
-	public static final String ERR_PEC_FORMAT_INVAL = "Invalid format value in Peak Envelope chunk";
-	public static final String ERR_PEC_PPV_INVAL = "Invalid pointsPerValue in Peak Envelope chunk";
-	public static final String ERR_RIFF_CHUNK_MISSING = "File does not start with RIFF header";
-	public static final String ERR_RIFF_HDR_TYPE_NOT_WAV = "Form type in RIFF header is not WAVE";
-	public static final String ERR_DS64_NOT_FIRST_CHUNK = "Data Size 64 chunk not in required location";
+	public static final JhoveMessage WAVE_HUL_1 = messageFactory.getMessage("WAVE-HUL-1");
+	public static final JhoveMessage WAVE_HUL_2 = messageFactory.getMessage("WAVE-HUL-2");
+	public static final JhoveMessage WAVE_HUL_3 = messageFactory.getMessage("WAVE-HUL-3");
+	public static final JhoveMessage WAVE_HUL_4 = messageFactory.getMessage("WAVE-HUL-4");
+	public static final JhoveMessage WAVE_HUL_5 = messageFactory.getMessage("WAVE-HUL-5");
+	public static final JhoveMessage WAVE_HUL_6 = messageFactory.getMessage("WAVE-HUL-6");
+	public static final JhoveMessage WAVE_HUL_8 = messageFactory.getMessage("WAVE-HUL-8");
+	public static final JhoveMessage WAVE_HUL_9 = messageFactory.getMessage("WAVE-HUL-9");
+	public static final JhoveMessage WAVE_HUL_11 = messageFactory.getMessage("WAVE-HUL-11");
+	public static final JhoveMessage WAVE_HUL_12 = messageFactory.getMessage("WAVE-HUL-12");
+	public static final JhoveMessage WAVE_HUL_13 = messageFactory.getMessage("WAVE-HUL-13");
+	public static final JhoveMessage WAVE_HUL_14 = messageFactory.getMessage("WAVE-HUL-14");
+	public static final JhoveMessage WAVE_HUL_15 = messageFactory.getMessage("WAVE-HUL-15");
+	public static final JhoveMessage WAVE_HUL_20 = messageFactory.getMessage("WAVE-HUL-20");
+	public static final JhoveMessage WAVE_HUL_21 = messageFactory.getMessage("WAVE-HUL-21");
+	public static final JhoveMessage WAVE_HUL_23 = messageFactory.getMessage("WAVE-HUL-23");
+	public static final JhoveMessage WAVE_HUL_24 = messageFactory.getMessage("WAVE-HUL-24");
+	public static final JhoveMessage WAVE_HUL_25 = messageFactory.getMessage("WAVE-HUL-25");
+	public static final JhoveMessage WAVE_HUL_27 = messageFactory.getMessage("WAVE-HUL-27");
 }
