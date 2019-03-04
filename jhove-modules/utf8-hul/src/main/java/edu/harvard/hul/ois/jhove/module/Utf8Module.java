@@ -19,14 +19,38 @@
 
 package edu.harvard.hul.ois.jhove.module;
 
-import edu.harvard.hul.ois.jhove.*;
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import edu.harvard.hul.ois.jhove.Agent;
+import edu.harvard.hul.ois.jhove.AgentType;
+import edu.harvard.hul.ois.jhove.Document;
+import edu.harvard.hul.ois.jhove.DocumentType;
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.Identifier;
+import edu.harvard.hul.ois.jhove.IdentifierType;
+import edu.harvard.hul.ois.jhove.InfoMessage;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.TextMDMetadata;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.module.ascii.ControlChar;
 import edu.harvard.hul.ois.jhove.module.ascii.LineEnding;
+import edu.harvard.hul.ois.jhove.module.utf8.MessageConstants;
 import edu.harvard.hul.ois.jhove.module.utf8.Utf8BlockMarker;
-import edu.harvard.hul.ois.jhove.module.utf8.Utf8MessageConstants;
-
-import java.io.*;
-import java.util.*;
 
 /**
  * Module for analysis of content as a UTF-8 stream.
@@ -212,7 +236,7 @@ public class Utf8Module extends ModuleBase {
                     nBytes = 4;
                 } else if ((0x80 <= b[0] && b[0] <= 0xbf)
                         || (0xf8 <= b[0] && b[0] <= 0xff)) {
-                    ErrorMessage error = new ErrorMessage(Utf8MessageConstants.ERR_INVALID_FIRST_BYTE_ENCODING,
+                    ErrorMessage error = new ErrorMessage(MessageConstants.UTF8_HUL_2,
                             "Value = " + ((char) b[0]) + " (0x"
                                     + Integer.toHexString(b[0]) + ")", this._nByte);
                     info.setMessage(error);
@@ -231,11 +255,11 @@ public class Utf8Module extends ModuleBase {
 
                     if (0x80 > b[i] || b[i] > 0xbf) {
                         String subMessage = "Value = " + ((char) b[i]) + " (0x" + Integer.toHexString(b[i]) + ")";
-                        String errMessage = "";
+                        JhoveMessage errMessage = null;
                         switch (i) { // max(nBytes) is 4
-                            case 1: errMessage = Utf8MessageConstants.ERR_INVALID_SECOND_BYTE_ENCODING; break;
-                            case 2: errMessage = Utf8MessageConstants.ERR_INVALID_THIRD_BYTE_ENCODING; break;
-                            case 3: errMessage = Utf8MessageConstants.ERR_INVALID_FOURTH_BYTE_ENCODING; break;
+                            case 1: errMessage = MessageConstants.UTF8_HUL_3; break;
+                            case 2: errMessage = MessageConstants.UTF8_HUL_4; break;
+                            case 3: errMessage = MessageConstants.UTF8_HUL_5; break;
                             default: break;
                         }
                         ErrorMessage error = new ErrorMessage(errMessage, subMessage , this._nByte);
@@ -305,7 +329,7 @@ public class Utf8Module extends ModuleBase {
          * Only non-zero-length files are well-formed UTF-8.
          */
         if (this._nByte == 0) {
-            info.setMessage(new ErrorMessage(Utf8MessageConstants.ERR_ZERO_LENGTH_FILE));
+            info.setMessage(new ErrorMessage(MessageConstants.UTF8_HUL_6));
             info.setWellFormed(RepInfo.FALSE);
             return 0;
         }
@@ -454,7 +478,7 @@ public class Utf8Module extends ModuleBase {
             // Check for UTF-8 byte order mark in 1st 3 bytes
             if (this.initialBytes[0] == 0xEF && this.initialBytes[1] == 0xBB
                     && this.initialBytes[2] == 0xBF) {
-                InfoMessage im = new InfoMessage(Utf8MessageConstants.INF_BOM_MARK_PRESENT, 0); // UTF8-HUL-1
+                InfoMessage im = new InfoMessage(MessageConstants.INF_BOM_MARK_PRESENT, 0); // UTF8-HUL-1
                 info.setMessage(im);
                 // If we've found a non-character header, clear
                 // all usage blocks
@@ -464,15 +488,15 @@ public class Utf8Module extends ModuleBase {
 
             if (this.initialBytes[0] == 0xFF && this.initialBytes[1] == 0xFE) {
                 if (this.initialBytes[2] == 0 && this.initialBytes[3] == 0) {
-                    msg = new ErrorMessage(Utf8MessageConstants.ERR_UCS4_NOT_UTF8);
+                    msg = new ErrorMessage(MessageConstants.UTF8_HUL_7);
                 } else {
-                    msg = new ErrorMessage(Utf8MessageConstants.ERR_UTF16LE_NOT_UTF8);
+                    msg = new ErrorMessage(MessageConstants.UTF8_HUL_8);
                 }
                 info.setMessage(msg);
                 info.setWellFormed(false);
                 return false;
             } else if (this.initialBytes[0] == 0xFE && this.initialBytes[1] == 0xFF) {
-                msg = new ErrorMessage(Utf8MessageConstants.ERR_UTF16BE_NOT_UTF8);
+                msg = new ErrorMessage(MessageConstants.UTF8_HUL_9);
                 info.setMessage(msg);
                 info.setWellFormed(false);
                 return false;
