@@ -40,7 +40,6 @@ public class ROIBox extends JP2Box {
      */
     @Override
 	public boolean readBox() throws IOException {
-        final String baddata = MessageConstants.ERR_ROI_BOX_CONTENT_INVALID;
         initBytesRead ();
         int nroi = ModuleBase.readUnsignedByte (_dstrm, _module);
         
@@ -50,7 +49,7 @@ public class ROIBox extends JP2Box {
             int incs = ModuleBase.readUnsignedByte (_dstrm, _module);
             if (incs > 1) {
                 _repInfo.setMessage (new ErrorMessage 
-                        (baddata, _module.getFilePos ()));
+                        (MessageConstants.JPEG2000_HUL_51, _module.getFilePos ()));
                 _repInfo.setValid (false);
             }
             roiPropList.add (_module.addIntegerProperty("InCodestream",
@@ -59,7 +58,7 @@ public class ROIBox extends JP2Box {
             int rtyp = ModuleBase.readUnsignedByte (_dstrm, _module);
             if (rtyp > 1) {
                 _repInfo.setMessage (new ErrorMessage 
-                        (MessageConstants.ERR_ROI_BOX_REGION_TYPE_INVALID,
+                        (MessageConstants.JPEG2000_HUL_52,
                          _module.getFilePos ()));
                 _repInfo.setValid (false);
             }

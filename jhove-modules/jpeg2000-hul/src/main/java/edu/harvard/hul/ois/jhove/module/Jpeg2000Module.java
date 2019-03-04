@@ -368,7 +368,7 @@ public class Jpeg2000Module extends ModuleBase {
         }
         if (badhdr) {
             info.setMessage(new
-                    ErrorMessage(MessageConstants.ERR_JP2_SIGNATURE_INVALID, i));
+                    ErrorMessage(MessageConstants.JPEG2000_HUL_35, i));
             info.setWellFormed(false);
             return;
         }
@@ -766,7 +766,7 @@ public class Jpeg2000Module extends ModuleBase {
         // 8 bytes have been read
         if (!"ftyp".equals(hdr.getType())) {
             info.setMessage(new
-                    ErrorMessage(MessageConstants.ERR_FILE_TYPE_BOX_POSITION_INVALID
+                    ErrorMessage(MessageConstants.JPEG2000_HUL_22
                         + hdr.getType(), _nByte));
             info.setWellFormed(false);
             return false;

@@ -37,8 +37,6 @@ public class ReaderRequirementsBox extends JP2Box {
      */
     @Override
 	public boolean readBox() throws IOException {
-        final String badRR =
-            MessageConstants.ERR_READER_REQUIREMENTS_BOX_CONTENT_INVALID;
         if (_parentBox != null) {
             wrongBoxContext();
             // System.out.println ("READBOX parentBox != null");
@@ -73,7 +71,7 @@ public class ReaderRequirementsBox extends JP2Box {
             break;
             
             default:
-            _repInfo.setMessage (new ErrorMessage (badRR, _module.getFilePos ()));
+            _repInfo.setMessage (new ErrorMessage (MessageConstants.JPEG2000_HUL_49, _module.getFilePos ()));
             _repInfo.setWellFormed (false);
             // System.out.println ("READBOX default");
             // System.out.flush ();

@@ -40,13 +40,13 @@ public class PPTMarkerSegment extends MarkerSegment {
     {
         if (_ccs.isPPMSeen ()) {
             _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_PPT_MARKER_WITH_PPM_MARKER));
+                    (MessageConstants.JPEG2000_HUL_45));
             return false;
         }
         Tile tile = _ccs.getCurTile ();
         if (tile == null ) {
             _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_PPT_MARKER_POSITION_INVALID));
+                    (MessageConstants.JPEG2000_HUL_44));
             return false;
         }
 
@@ -59,7 +59,7 @@ public class PPTMarkerSegment extends MarkerSegment {
             bytesToEat -= 4;
             if (nppt > bytesToEat) {
                 _repInfo.setMessage(new ErrorMessage 
-                        (MessageConstants.ERR_PPM_MARKER_TILE_PART_HEADER_SIZE_INVALID));
+                        (MessageConstants.JPEG2000_HUL_43));
                 return false;
             }
             tile.addPPTLength (nppt);

@@ -68,7 +68,7 @@ public class CompositionBox extends JP2Box {
         box = (JP2Box) next ();
         if (!(box instanceof CompOptionsBox)) {
             _repInfo.setMessage (new ErrorMessage
-                (MessageConstants.ERR_COMPOSITION_BOX_START_INVALID,
+                (MessageConstants.JPEG2000_HUL_11,
                  _module.getFilePos()));
             _repInfo.setWellFormed (false);
             return false;
