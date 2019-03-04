@@ -82,7 +82,7 @@ public class StructureElement
             k = _module.resolveIndirectObject (_dict.get ("K"));
         }
         catch (IOException e) {
-            throw new PdfInvalidException(MessageConstants.ERR_DOC_STRUCT_TREE_DATA_INVALID); // PDF-HUL-58
+            throw new PdfInvalidException(MessageConstants.PDF_HUL_58); // PDF-HUL-58
         }
         children = null;
         
@@ -121,7 +121,7 @@ public class StructureElement
             }
             else if (!isMarkedContent (kdict) && !isObjectRef (kdict)) {
                 throw new PdfInvalidException 
-                       (MessageConstants.ERR_STRUCT_TREE_ELEMENT_UNKNOWN); // PDF-HUL-49
+                       (MessageConstants.PDF_HUL_49); // PDF-HUL-49
             }
         }
         else if (k instanceof PdfArray) {
@@ -205,7 +205,7 @@ public class StructureElement
             attr = _module.resolveIndirectObject (_dict.get ("A"));
         }
         catch (Exception e) {
-            throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_REF_INVALID); // PDF-HUL-50
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_50); // PDF-HUL-50
         }
         if (attr == null) {
             // no attributes is fine
@@ -223,8 +223,8 @@ public class StructureElement
                             (attrVec.elementAt (i));
                 }
                 catch (IOException e) {
-                    _logger.log(Level.INFO, MessageConstants.ERR_STRUCT_ATT_INVALID, e);
-                    throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_INVALID); // PDF-HUL-51
+                    _logger.log(Level.INFO, MessageConstants.PDF_HUL_51.getMessage(), e);
+                    throw new PdfInvalidException (MessageConstants.PDF_HUL_51); // PDF-HUL-51
                 }
                 if (attrElem instanceof PdfDictionary) {
                     checkAttribute ((PdfDictionary) attrElem);
@@ -236,11 +236,11 @@ public class StructureElement
                     }
                     catch (Exception e) {
                         _logger.log(Level.INFO, MessageConstants.LOG_REVISION_NUM_RETRIEVAL_EXCEP, e);
-                        throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_INVALID); // PDF-HUL-52
+                        throw new PdfInvalidException (MessageConstants.PDF_HUL_52); // PDF-HUL-52
                     }
                 }
                 else {
-                    throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_INVALID); // PDF-HUL-53
+                    throw new PdfInvalidException (MessageConstants.PDF_HUL_53); // PDF-HUL-53
                 }
             }
         }
@@ -248,10 +248,10 @@ public class StructureElement
             checkAttribute ((PdfDictionary) attr);
         }
         else {
-            throw new PdfInvalidException (MessageConstants.ERR_STRUCT_ATT_TYPE_ILLEGAL); // PDF-HUL-54
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_54); // PDF-HUL-54
         }
         if (_structIsInline && _attrIsBlock) {
-            throw new PdfInvalidException (MessageConstants.ERR_INLINE_STRUCT_ELE_CONTAINS_BLOCK_ATTS); // PDF-HUL-55
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_55); // PDF-HUL-55
         }
     }
 
@@ -283,7 +283,7 @@ public class StructureElement
             }
         }
         catch (Exception e) {
-            throw new PdfInvalidException (MessageConstants.ERR_DOC_STRUCT_ATT_INVALID); // PDF-HUL-56
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_56); // PDF-HUL-56
         }
     }
 
@@ -326,7 +326,7 @@ public class StructureElement
             boolean checkStandardTypes = false;
             if (checkStandardTypes) {
                 if (!StdStructTypes.includes (st)) {
-                    throw new PdfInvalidException (MessageConstants.DEP_STRUCT_TYPE_NAME_NON_STANDARD);
+                    throw new PdfInvalidException(MessageConstants.PDF_HUL_57);
                 }
             }
             else {

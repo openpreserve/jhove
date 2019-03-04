@@ -157,11 +157,11 @@ public class StructureTree
             PdfSimpleObject typ = 
         	(PdfSimpleObject)_rootDict.get ("Type");
             if (!"StructTreeRoot".equals (typ.getStringValue ())) {
-                throw new PdfInvalidException (MessageConstants.ERR_DOC_STRUCT_ROOT_INVALID); // PDF-HUL-59
+                throw new PdfInvalidException (MessageConstants.PDF_HUL_59); // PDF-HUL-59
             }
         }
         catch (NullPointerException | ClassCastException e) {
-            throw new PdfInvalidException (MessageConstants.ERR_DOC_STRUCT_ROOT_INVALID); // PDF-HUL-60
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_60); // PDF-HUL-60
         }
     }
 
@@ -205,7 +205,7 @@ public class StructureTree
 			(kidsVec.elementAt (i));
 		}
 		catch (IOException e) {
-		    throw new PdfMalformedException (MessageConstants.ERR_DOC_STRUCT_ROOT_CONTAINS_INVALID_DATA); // PDF-HUL-61
+		    throw new PdfMalformedException (MessageConstants.PDF_HUL_61); // PDF-HUL-61
 		}
 		StructureElement se = new StructureElement 
 			((PdfDictionary) kid, this);
@@ -215,7 +215,7 @@ public class StructureTree
 	    }
 	}
 	else {
-	    throw new PdfInvalidException (MessageConstants.ERR_DOC_STRUCT_ROOT_CONTAINS_INVALID_DATA); // PDF-HUL-62
+	    throw new PdfInvalidException (MessageConstants.PDF_HUL_62); // PDF-HUL-62
 	}
     }
 
@@ -230,7 +230,7 @@ public class StructureTree
 		(_rootDict.get ("RoleMap"));
 	}
 	catch (Exception e) {
-	    throw new PdfInvalidException (MessageConstants.ERR_ROLE_MAP_INVALID); // PDF-HUL-62
+	    throw new PdfInvalidException (MessageConstants.PDF_HUL_63); // PDF-HUL-63
 	}
     }
 

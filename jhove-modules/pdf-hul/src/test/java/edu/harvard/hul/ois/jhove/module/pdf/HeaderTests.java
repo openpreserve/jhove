@@ -68,7 +68,7 @@ public class HeaderTests {
 	public final void testInvalidMajorVersion() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, invalidMajorPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_PDF_HEADER_MISSING);
+				MessageConstants.PDF_HUL_137.getMessage());
 
 	}
 
@@ -81,7 +81,7 @@ public class HeaderTests {
 	public final void testInvalidMinorVersion() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, invalidMinorPath,
 				RepInfo.TRUE, RepInfo.FALSE,
-				MessageConstants.ERR_PDF_MINOR_INVALID);
+				MessageConstants.PDF_HUL_148.getMessage());
 
 	}
 
@@ -94,7 +94,7 @@ public class HeaderTests {
 	public final void testNoMinor() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, noMinorPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_PDF_HEADER_MISSING);
+				MessageConstants.PDF_HUL_137.getMessage());
 
 	}
 
@@ -107,7 +107,7 @@ public class HeaderTests {
 	public final void testNoheaderDash() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, noHeaderDashPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_PDF_HEADER_MISSING);
+				MessageConstants.PDF_HUL_137.getMessage());
 
 	}
 
@@ -121,7 +121,7 @@ public class HeaderTests {
 	public final void testInvalidSyntaxRep() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, invalidSyntaxRepPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_PDF_HEADER_MISSING);
+				MessageConstants.PDF_HUL_137.getMessage());
 
 	}
 
@@ -134,7 +134,7 @@ public class HeaderTests {
 	public final void testInvalidSyntaxNoPdf() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, invalidSyntaxNoPdfPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_PDF_HEADER_MISSING);
+				MessageConstants.PDF_HUL_137.getMessage());
 
 	}
 
@@ -147,7 +147,7 @@ public class HeaderTests {
 	public final void testNoVersionInfo() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, noVersionInfoPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_PDF_HEADER_MISSING);
+				MessageConstants.PDF_HUL_137.getMessage());
 
 	}
 }
