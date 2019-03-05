@@ -45,7 +45,7 @@ public class FragmentListBox extends JP2Box {
 	public boolean readBox() throws IOException {
         if (!_module.isJP2HdrSeen()) {
             _repInfo.setMessage (new ErrorMessage 
-                (noJP2Hdr, _module.getFilePos ()));
+                (MessageConstants.JPEG2000_HUL_34, _module.getFilePos ()));
             return false;
         }
         initBytesRead ();
@@ -55,7 +55,7 @@ public class FragmentListBox extends JP2Box {
         if (_boxHeader.getLength () != 0 && len != 14 * nFrags + 2) {
             _repInfo.setMessage 
                 (new ErrorMessage
-                 (MessageConstants.ERR_FRAGMENT_LIST_BOX_TABLE_SIZE_INVALID,
+                 (MessageConstants.JPEG2000_HUL_23,
                   _module.getFilePos ()));
             _repInfo.setWellFormed (false);
             return false;

@@ -53,7 +53,7 @@ public class PPMMarkerSegment extends MarkerSegment {
             bytesToEat -= 4;
             if (nppm > bytesToEat) {
                 _repInfo.setMessage(new ErrorMessage 
-                        (MessageConstants.ERR_PPM_MARKER_TILE_PART_HEADER_SIZE_INVALID));
+                        (MessageConstants.JPEG2000_HUL_43));
                 return false;
             }
             _cs.addPPMLength (nppm);

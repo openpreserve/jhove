@@ -55,7 +55,7 @@ public class TLMMarkerSegment extends MarkerSegment {
             break;
             case 3:
             _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_TLM_MARKER_ST_VALUE_INVALID));
+                    (MessageConstants.JPEG2000_HUL_55));
             return false;      // invalid st value
         }
         
