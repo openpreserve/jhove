@@ -1,5 +1,9 @@
 package edu.harvard.hul.ois.jhove.module.xml;
 
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessageFactory;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 /**
  * Enum used to externalise the XML module message Strings. Using an enum
  * INSTANCE as a "trick" to ensure a single instance of the class. String
@@ -28,24 +32,33 @@ package edu.harvard.hul.ois.jhove.module.xml;
 public enum MessageConstants {
     INSTANCE;
 
-    public static final String WRN_SAX_EXCEPTION = "SaxParseException: {0}";
-    public static final String WRN_TOO_MANY_MESSAGES = "Error messages in excess of {0} not reported";
+	public static final JhoveMessageFactory messageFactory = JhoveMessages
+			.getInstance("edu.harvard.hul.ois.jhove.module.xml.ErrorMessages");
 
-    public static final String INF_XML_API_UNSPPRTD = " interface is not supported by your XML implementation."
-        + " This may result in some properties not being reported.";
-    public static final String INF_EOL_UNDET = "Not able to determine type of end of line";
-    public static final String INF_LEX_HND_UNSPPRTD = "LexicalHandler" + INF_XML_API_UNSPPRTD;
-    public static final String INF_DEC_HND_UNSPPRTD = "DeclHandler" + INF_XML_API_UNSPPRTD;
-    public static final String INF_SAX_UNSPPRTD = "This SAX parser does not support";
-    public static final String INF_SAX_NMSPC_UNSPPRTD = " XML namespaces.";
-    public static final String INF_SAX_VALID_UNSPPRTD = " validation.";
-    public static final String INF_XML_SCHMID_UNSPPRTD = "The XML implementation in use does not "
-        + "support schema language identification.  This may result in documents specified by schemas "
-        + "being reported as invalid.";
-
-    public static final String ERR_FILE_NOT_FOUND = "File not found";
-    public static final String ERR_CHR_ENC_INV = "Invalid character encoding";
-    public static final String ERR_SAX_EXCEPTION = WRN_SAX_EXCEPTION;
-    public static final String ERR_SAX_EXCEP_CAUSE = "SAXException, cause = ";
-    public static final String ERR_SAX_EXCEP_UNSPC = "Unspecified SAXException";
+	public static final JhoveMessage XML_HUL_1 = messageFactory
+			.getMessage("XML-HUL-1");
+	public static final JhoveMessage XML_HUL_2 = messageFactory
+			.getMessage("XML-HUL-2");
+	public static final JhoveMessage XML_HUL_3 = messageFactory
+			.getMessage("XML-HUL-3");
+	public static final JhoveMessage XML_HUL_4 = messageFactory
+			.getMessage("XML-HUL-4");
+	public static final JhoveMessage XML_HUL_5 = messageFactory
+			.getMessage("XML-HUL-5");
+	public static final JhoveMessage XML_HUL_6 = messageFactory
+			.getMessage("XML-HUL-6");
+	public static final JhoveMessage XML_HUL_7 = messageFactory
+			.getMessage("XML-HUL-7");
+	public static final JhoveMessage XML_HUL_8 = messageFactory
+			.getMessage("XML-HUL-8");
+	public static final JhoveMessage XML_HUL_9 = messageFactory
+			.getMessage("XML-HUL-9");
+	public static final JhoveMessage XML_HUL_10 = messageFactory
+			.getMessage("XML-HUL-10");
+	public static final JhoveMessage XML_HUL_11 = messageFactory
+			.getMessage("XML-HUL-11");
+	public static final JhoveMessage XML_HUL_12 = messageFactory
+			.getMessage("XML-HUL-12");
+	public static final JhoveMessage XML_HUL_13 = messageFactory
+			.getMessage("XML-HUL-13");
 }
