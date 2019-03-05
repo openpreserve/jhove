@@ -49,50 +49,53 @@ public class AsciiTests {
 	@Test
 	public final void testEmpty() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, TestUtils.EMPTY_FILE_PATH,
-				RepInfo.FALSE, RepInfo.FALSE, AsciiModule.ERR_ZERO_LEN);
+				RepInfo.FALSE, RepInfo.FALSE,
+				MessageConstants.ASCII_HUL_2.getMessage());
 	}
 
 	@Test
 	public final void testNullOnly() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, nullsOnly, RepInfo.TRUE,
-				RepInfo.TRUE, AsciiModule.ERR_ZERO_LEN, false);
+				RepInfo.TRUE, MessageConstants.ASCII_HUL_2.getMessage(),
+				false);
 	}
 
 	@Test
 	public final void testNotEmpty() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, allAscii, RepInfo.TRUE,
-				RepInfo.TRUE, AsciiModule.ERR_ZERO_LEN, false);
+				RepInfo.TRUE, MessageConstants.ASCII_HUL_2.getMessage(),
+				false);
 	}
 
 	@Test
 	public final void testCharOutOfRange() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, allAsciiInv, RepInfo.FALSE,
-				RepInfo.FALSE, AsciiModule.ERR_CHAR_INV);
+				RepInfo.FALSE, MessageConstants.ASCII_HUL_1.getMessage());
 	}
 
 	@Test
 	public final void testPrintable() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, allAscii, RepInfo.TRUE,
-				RepInfo.TRUE, AsciiModule.INF_PRINT_CHAR_MISS, false);
+				RepInfo.TRUE, MessageConstants.ASCII_HUL_3.getMessage(), false);
 	}
 
 	@Test
 	public final void testNoPrintable() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, allCtrls, RepInfo.TRUE,
-				RepInfo.TRUE, AsciiModule.INF_PRINT_CHAR_MISS);
+				RepInfo.TRUE, MessageConstants.ASCII_HUL_3.getMessage());
 	}
 
 	@Test
 	public final void testControlChars() throws URISyntaxException {
 		RepInfo info = TestUtils.testValidateResource(this.module, allCtrls,
-				RepInfo.TRUE, RepInfo.TRUE, AsciiModule.INF_PRINT_CHAR_MISS);
+				RepInfo.TRUE, RepInfo.TRUE, MessageConstants.ASCII_HUL_3.getMessage());
 		testAllAsciiCtrlCharsDetected(info);
 	}
 
 	@Test
 	public final void testControlCharsWithGraphics() throws URISyntaxException {
 		RepInfo info = TestUtils.testValidateResource(this.module, allAscii,
-				RepInfo.TRUE, RepInfo.TRUE, AsciiModule.INF_PRINT_CHAR_MISS,
+				RepInfo.TRUE, RepInfo.TRUE, MessageConstants.ASCII_HUL_3.getMessage(),
 				false);
 		testAllAsciiCtrlCharsDetected(info);
 	}
@@ -100,7 +103,7 @@ public class AsciiTests {
 	@Test
 	public final void testControlCharsFalsePos() throws URISyntaxException {
 		RepInfo info = TestUtils.testValidateResource(this.module, allGraphics,
-				RepInfo.TRUE, RepInfo.TRUE, AsciiModule.INF_PRINT_CHAR_MISS,
+				RepInfo.TRUE, RepInfo.TRUE, MessageConstants.ASCII_HUL_3.getMessage(),
 				false);
 		Property asciiProp = info.getProperty("ASCIIMetadata");
 		assertTrue(asciiProp == null);
