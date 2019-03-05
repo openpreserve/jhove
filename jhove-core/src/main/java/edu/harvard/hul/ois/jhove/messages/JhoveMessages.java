@@ -4,12 +4,10 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
+ * Utility class that handles creation of Message type instances, etc.
+ * 
  * @author <a href="mailto:carl@openpreservation.org">Carl Wilson</a>
  *         <a href="https://github.com/carlwilson">carlwilson AT github</a>
- *
- * @version 0.1
- * 
- *          Created 3 Mar 2019:17:46:36
  */
 
 public enum JhoveMessages {
@@ -17,6 +15,22 @@ public enum JhoveMessages {
 
 	public static final String NO_ID = "NO-ID";
 	public static final String EMPTY_MESSAGE = "";
+	public static final JhoveMessage DEFAULT_MESSAGE = getMessageInstance(NO_ID,
+			EMPTY_MESSAGE);
+
+	/**
+	 * Create a new message instance with a DEFAULT_ID
+	 * 
+	 * @param message
+	 *            the message of the new message
+	 * @return the new message instance
+	 * @throws IllegalArgumentException
+	 *             if the id or message is null or empty
+	 */
+	public static JhoveMessage getMessageInstance(final String message)
+			throws IllegalArgumentException {
+		return getMessageInstance(NO_ID, message);
+	}
 
 	/**
 	 * Create a JhoveMessage instance with the give id and message value
@@ -31,7 +45,7 @@ public enum JhoveMessages {
 	 */
 	public static JhoveMessage getMessageInstance(final String id,
 			final String message) throws IllegalArgumentException {
-		return getMessageInstance(id, message, "");
+		return getMessageInstance(id, message, EMPTY_MESSAGE);
 	}
 
 	/**
@@ -54,9 +68,9 @@ public enum JhoveMessages {
 		if (id == null || id.isEmpty())
 			throw new IllegalArgumentException(
 					"id cannot be null or an empty string.");
-		if (message == null || message.isEmpty())
+		if (message == null)
 			throw new IllegalArgumentException(
-					"message cannot be null or an empty string.");
+					"message cannot be null.");
 		return JhoveMessageImpl.getInstance(id, message, subMessage);
 	}
 
