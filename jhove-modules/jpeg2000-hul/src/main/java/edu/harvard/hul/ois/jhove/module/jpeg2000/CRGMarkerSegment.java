@@ -41,13 +41,13 @@ public class CRGMarkerSegment extends MarkerSegment {
     {
         if (_ccs.getCurTile () != null) {
             _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_CRG_MARKER_POSITION_INVALID));
+                    (MessageConstants.JPEG2000_HUL_14));
             return false;
         }
         int ncomps = _cs.getNumComponents ();
         if (ncomps * 4 != bytesToEat) {
             _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_CRG_MARKER_SIZE_INVALID));
+                    (MessageConstants.JPEG2000_HUL_15));
         }
         int[] horOffsets = new int[ncomps];
         int[] vertOffsets = new int[ncomps];

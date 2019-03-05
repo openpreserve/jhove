@@ -48,7 +48,7 @@ public class COCMarkerSegment extends MarkerSegment {
         if (compIdxBytes == 0) {
             // COC found before SIZ
             _repInfo.setMessage (new ErrorMessage 
-                    (MessageConstants.ERR_COC_MARKER_POSITION_INVALID));
+                    (MessageConstants.JPEG2000_HUL_6));
             return false;
         }
         int compIdx;

@@ -45,7 +45,7 @@ public class DataEntryURLBox extends JP2Box {
             int v = ModuleBase.readUnsignedByte (_dstrm, _module);
             if (v != 0) {
                 _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_DATA_ENTRY_URL_BOX_VERSION_FLAG_INVALID,
+                    (MessageConstants.JPEG2000_HUL_17,
                      _module.getFilePos ()));
                 _repInfo.setValid (false);
                 break;

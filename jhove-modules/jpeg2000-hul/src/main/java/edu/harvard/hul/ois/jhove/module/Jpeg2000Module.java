@@ -19,12 +19,40 @@
 
 package edu.harvard.hul.ois.jhove.module;
 
-import edu.harvard.hul.ois.jhove.*;
-import edu.harvard.hul.ois.jhove.Agent.Builder;
-import edu.harvard.hul.ois.jhove.module.jpeg2000.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
-import java.io.*;
-import java.util.*;
+import edu.harvard.hul.ois.jhove.Agent;
+import edu.harvard.hul.ois.jhove.Agent.Builder;
+import edu.harvard.hul.ois.jhove.AgentType;
+import edu.harvard.hul.ois.jhove.Document;
+import edu.harvard.hul.ois.jhove.DocumentType;
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.ExternalSignature;
+import edu.harvard.hul.ois.jhove.Identifier;
+import edu.harvard.hul.ois.jhove.IdentifierType;
+import edu.harvard.hul.ois.jhove.InternalSignature;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.NisoImageMetadata;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RAFInputStream;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.Signature;
+import edu.harvard.hul.ois.jhove.SignatureType;
+import edu.harvard.hul.ois.jhove.SignatureUseType;
+import edu.harvard.hul.ois.jhove.module.jpeg2000.BoxHeader;
+import edu.harvard.hul.ois.jhove.module.jpeg2000.Codestream;
+import edu.harvard.hul.ois.jhove.module.jpeg2000.FileTypeBox;
+import edu.harvard.hul.ois.jhove.module.jpeg2000.JP2Box;
+import edu.harvard.hul.ois.jhove.module.jpeg2000.MessageConstants;
+import edu.harvard.hul.ois.jhove.module.jpeg2000.TopLevelBoxHolder;
 
 /**
  * Module for identification and validation of JPEG 2000 files.
@@ -107,9 +135,6 @@ public class Jpeg2000Module extends ModuleBase {
 
     /* NISO image metadata for default image values */
     protected NisoImageMetadata _defaultNiso;
-
-    /* DataInputSream for reading the file */
-    protected DataInputStream _dstream;
 
     /* RandomAccessFile for reading the file */
     protected RandomAccessFile _raf;
@@ -343,7 +368,7 @@ public class Jpeg2000Module extends ModuleBase {
         }
         if (badhdr) {
             info.setMessage(new
-                    ErrorMessage(MessageConstants.ERR_JP2_SIGNATURE_INVALID, i));
+                    ErrorMessage(MessageConstants.JPEG2000_HUL_35, i));
             info.setWellFormed(false);
             return;
         }
@@ -370,13 +395,8 @@ public class Jpeg2000Module extends ModuleBase {
         info.setProperty(metadata);
 
         // Calculate checksums, if necessary.
-        if (_je != null && _je.getChecksumFlag()) {
-            if (info.getChecksum().isEmpty()) {
-                Checksummer ckSummer = new Checksummer();
-                calcRAChecksum(ckSummer, raf);
-                setChecksums(ckSummer, info);
-            }
-        }
+        // Calculate checksums if not already present
+        checksumIfRafNotCopied(info, raf);
 
         // Reader Requirements box is mandatory for JPX
         if (!rreqSeen || info.getValid() != RepInfo.TRUE) {
@@ -746,7 +766,7 @@ public class Jpeg2000Module extends ModuleBase {
         // 8 bytes have been read
         if (!"ftyp".equals(hdr.getType())) {
             info.setMessage(new
-                    ErrorMessage(MessageConstants.ERR_FILE_TYPE_BOX_POSITION_INVALID
+                    ErrorMessage(MessageConstants.JPEG2000_HUL_22
                         + hdr.getType(), _nByte));
             info.setWellFormed(false);
             return false;

@@ -47,7 +47,7 @@ public class ContCodestreamBox extends JP2Box {
         // Must come after the JP2 header
         if (!_module.isJP2HdrSeen()) {
             _repInfo.setMessage (new ErrorMessage 
-                (noJP2Hdr, _module.getFilePos ()));
+                (MessageConstants.JPEG2000_HUL_34, _module.getFilePos ()));
             return false;
         }
         int ncs = _module.getNCodestreams () + 1;

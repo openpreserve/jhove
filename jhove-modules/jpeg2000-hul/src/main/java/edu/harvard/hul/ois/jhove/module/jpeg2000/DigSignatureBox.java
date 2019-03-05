@@ -52,7 +52,7 @@ public class DigSignatureBox extends JP2Box {
         if (styp > 5) {
             // Known signature types are 0-5
             _repInfo.setMessage (new ErrorMessage 
-                    (MessageConstants.ERR_DIGITAL_SIGNATURE_BOX_TYPE_INVALID,
+                    (MessageConstants.JPEG2000_HUL_19,
                      _module.getFilePos ()));
             _repInfo.setValid (false);
         }
@@ -62,7 +62,7 @@ public class DigSignatureBox extends JP2Box {
         int ptyp = ModuleBase.readUnsignedByte (_dstrm, _module);
         if (ptyp > 1) {
             _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_DIGITAL_SIGNATURE_BOX_PTR_TYPE_INVALID,
+                    (MessageConstants.JPEG2000_HUL_18,
                      _module.getFilePos ()));
             _repInfo.setValid (false);
         }
