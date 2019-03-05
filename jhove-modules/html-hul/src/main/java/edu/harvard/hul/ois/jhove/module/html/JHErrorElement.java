@@ -5,8 +5,11 @@
 
 package edu.harvard.hul.ois.jhove.module.html;
 
-import edu.harvard.hul.ois.jhove.*;
-import java.util.*;
+import java.util.List;
+
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 
 /**
  * A JHElement which signifies a syntactic error.
@@ -16,7 +19,7 @@ import java.util.*;
  */
 public class JHErrorElement extends JHElement {
 
-    private String _message;
+    private final JhoveMessage _message;
     private String _image;
     private boolean _illFormed;
     
@@ -31,7 +34,7 @@ public class JHErrorElement extends JHElement {
      *                         it only invalid.
      */
     public JHErrorElement (List elements, 
-                String message,
+    		JhoveMessage message,
                 String image, 
                 boolean illFormed) {
         super (elements);
