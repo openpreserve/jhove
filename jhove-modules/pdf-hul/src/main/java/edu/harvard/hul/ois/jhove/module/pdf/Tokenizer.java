@@ -191,7 +191,7 @@ public abstract class Tokenizer
                     _ch = readChar ();
                     if (_ch < 0) {
                         _state = State.WHITESPACE;
-                        throw new PdfMalformedException(MessageConstants.ERR_EOF_UNEXPECTED, // PDF-HUL-64
+                        throw new PdfMalformedException(MessageConstants.PDF_HUL_64, // PDF-HUL-64
 							_offset);
                     }
                     _offset++;
@@ -312,7 +312,7 @@ public abstract class Tokenizer
                         // Invalid character in a number
                         _state = State.WHITESPACE;
                         _wsString = EMPTY;
-                        throw new PdfMalformedException (MessageConstants.ERR_TOKEN_LEXICAL, _offset); // PDF-HUL-65
+                        throw new PdfMalformedException (MessageConstants.PDF_HUL_65, _offset); // PDF-HUL-65
                     }
                 }
                 else if (_state == (State.GREATER_THAN)) {
@@ -324,7 +324,7 @@ public abstract class Tokenizer
                     }
                     _state = State.WHITESPACE;
                     _wsString = EMPTY;
-                    throw new PdfMalformedException (MessageConstants.ERR_TOKEN_LEXICAL, _offset); // PDF-HUL-66
+                    throw new PdfMalformedException (MessageConstants.PDF_HUL_66, _offset); // PDF-HUL-66
                 }
                 else if (_state == (State.HEXADECIMAL)) {
                     // We're in a hexadecimal string. We will
@@ -736,7 +736,7 @@ public abstract class Tokenizer
             d = h - 0x57;
         }
         else {
-            throw new PdfMalformedException(MessageConstants.ERR_HEX_STRING_CHAR_INVALID); // PDF-HUL-65
+            throw new PdfMalformedException(MessageConstants.PDF_HUL_65); // PDF-HUL-65
         }
 
         return d;

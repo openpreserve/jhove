@@ -48,7 +48,7 @@ public class PageTreeNode extends DocNode
     {
         /* Guard against infinite recursion */
         if (recGuard <= 0) {
-            throw new PdfMalformedException (MessageConstants.ERR_PAGE_TREE_DEPTH_EXCEEDED); // PDF-HUL-32
+            throw new PdfMalformedException (MessageConstants.PDF_HUL_32); // PDF-HUL-32
         }
         PdfArray kids = null;
         try {
@@ -125,10 +125,10 @@ public class PageTreeNode extends DocNode
             throw ee;
         }
         catch (ArrayIndexOutOfBoundsException excep) {
-            throw new PdfInvalidException(MessageConstants.ERR_PAGE_TREE_NODE_NOT_FOUND); // PDF-HUL-147
+            throw new PdfInvalidException(MessageConstants.PDF_HUL_147); // PDF-HUL-147
         }
         catch (Exception e) {
-            throw new PdfInvalidException(MessageConstants.ERR_PAGE_TREE_NODE_INVALID); // PDF-HUL-29
+            throw new PdfInvalidException(MessageConstants.PDF_HUL_29); // PDF-HUL-29
         }
 	
     }
@@ -188,7 +188,7 @@ public class PageTreeNode extends DocNode
         if (retval != null) {
             Integer objnum = Integer.valueOf(retval.getDict().getObjNumber());
             if (_visitedNodes.contains(objnum)) {
-                throw new PdfMalformedException(MessageConstants.ERR_PAGE_TREE_IMPROPERLY_CONSTRUCTED); // PDF-HUL-30
+                throw new PdfMalformedException(MessageConstants.PDF_HUL_30); // PDF-HUL-30
             }
             _visitedNodes.add(objnum);
         }
@@ -246,7 +246,7 @@ public class PageTreeNode extends DocNode
         if (retval != null) {
             Integer objnum = Integer.valueOf(retval.getDict().getObjNumber());
             if (_visitedNodes.contains(objnum)) {
-                throw new PdfMalformedException(MessageConstants.ERR_PAGE_TREE_IMPROPERLY_CONSTRUCTED); // PDF-HUL-31
+                throw new PdfMalformedException(MessageConstants.PDF_HUL_31); // PDF-HUL-31
             }
             _visitedNodes.add(objnum);
         }

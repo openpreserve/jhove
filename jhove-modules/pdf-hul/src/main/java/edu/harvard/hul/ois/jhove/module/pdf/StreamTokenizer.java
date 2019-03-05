@@ -41,7 +41,7 @@ public class StreamTokenizer extends Tokenizer {
     protected void initStream (Stream token)
         throws PdfException
     {
-        throw new PdfMalformedException (MessageConstants.ERR_STREAM_EMBEDDED_IN_OBJ_STREAM); // PDF-HUL-47
+        throw new PdfMalformedException (MessageConstants.PDF_HUL_47); // PDF-HUL-47
     }
 
     /** Gets a character from the file, using a buffer. */
@@ -82,7 +82,7 @@ public class StreamTokenizer extends Tokenizer {
     protected void setStreamOffset (Stream token)
         throws PdfException
     {
-        throw new PdfMalformedException (MessageConstants.ERR_STREAM_EMBEDDED_IN_OBJ_STREAM); // PDF-HUL-48
+        throw new PdfMalformedException (MessageConstants.PDF_HUL_48); // PDF-HUL-48
     }
 
 

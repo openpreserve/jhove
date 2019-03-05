@@ -5,9 +5,13 @@
 
 package edu.harvard.hul.ois.jhove.module.pdf;
 
-import edu.harvard.hul.ois.jhove.module.*;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.module.PdfModule;
 
 /**
  *  Class encapsulating a PDF page object node.
@@ -50,7 +54,7 @@ public class PageObject extends DocNode
             processContents(module, contents);
         }
         catch (IOException e) {
-            throw new PdfMalformedException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0); // PDF-HUL-26
+            throw new PdfMalformedException (MessageConstants.PDF_HUL_26, 0); // PDF-HUL-26
         }
     }
 
@@ -72,10 +76,10 @@ public class PageObject extends DocNode
             return (PdfArray) _module.resolveIndirectObject (_dict.get ("Annots"));
         }
         catch (ClassCastException e) {
-            throw new PdfInvalidException (MessageConstants.ERR_ANNOT_INVALID); // PDF-HUL-21
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_21); // PDF-HUL-21
         }
         catch (IOException e) {
-            throw new PdfMalformedException (MessageConstants.ERR_ANNOT_INVALID); // PDF-HUL-22
+            throw new PdfMalformedException (MessageConstants.PDF_HUL_22); // PDF-HUL-22
         }
     }
 
@@ -122,7 +126,7 @@ public class PageObject extends DocNode
     public PdfArray getArtBox () throws PdfException
     {
         return retrieveAndCheckRectangle(this._dict, "ArtBox",
-                MessageConstants.ERR_PAGE_TREE_ARTBOX_MALFORMED); // PDF-HUL-23
+                MessageConstants.PDF_HUL_23); // PDF-HUL-23
     }
 
     /**
@@ -132,7 +136,7 @@ public class PageObject extends DocNode
     public PdfArray getTrimBox () throws PdfException
     {
         return retrieveAndCheckRectangle(this._dict, "TrimBox",
-                MessageConstants.ERR_PAGE_TREE_TRIMBOX_MALFORMED); // PDF-HUL-24
+                MessageConstants.PDF_HUL_24); // PDF-HUL-24
     }
 
     /**
@@ -142,11 +146,11 @@ public class PageObject extends DocNode
     public PdfArray getBleedBox () throws PdfException
     {
         return retrieveAndCheckRectangle(this._dict, "BleedBox",
-                MessageConstants.ERR_PAGE_TREE_BLEEDBOX_MALFORMED); // PDF-HUL-25
+                MessageConstants.PDF_HUL_25); // PDF-HUL-25
     }
 
     private static PdfArray retrieveAndCheckRectangle(final PdfDictionary dict,
-            final String dictKey, final String invalidMessage) throws PdfInvalidException {
+            final String dictKey, final JhoveMessage invalidMessage) throws PdfInvalidException {
         PdfArray mbox = null;
         try {
         // Retrieve the object from the passed dictionary
@@ -180,7 +184,7 @@ public class PageObject extends DocNode
             loadContentFromArray(module, (PdfArray) contents);
         }
         else {
-            throw new PdfInvalidException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0); // PDF-HUL-27
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_27, 0); // PDF-HUL-27
         }
     }
 
@@ -198,7 +202,7 @@ public class PageObject extends DocNode
                 _contentStreams.add ((PdfStream) streamElement);
             }
             else {
-                throw new PdfInvalidException (MessageConstants.ERR_PAGE_DICT_DATA_INVALID, 0); // PDF-HUL-28
+                throw new PdfInvalidException (MessageConstants.PDF_HUL_28, 0); // PDF-HUL-28
             }
         }
     }

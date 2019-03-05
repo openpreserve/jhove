@@ -66,7 +66,7 @@ public class DocCatTests {
 	@Test
 	public final void testNoCat() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, catNoCat, RepInfo.FALSE,
-				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_DICT_MISSING);
+				RepInfo.FALSE, MessageConstants.PDF_HUL_85.getMessage());
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class DocCatTests {
 	@Test
 	public final void testCatWrongObjNum() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, catWrongObjNumberPath, RepInfo.FALSE,
-				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_OBJ_NUM_INCNSTNT);
+				RepInfo.FALSE, MessageConstants.PDF_HUL_140.getMessage());
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class DocCatTests {
 	public final void testPagRefMiss() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, catPagRefMissPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_OBJ_DEF_INVALID);
+				MessageConstants.PDF_HUL_35.getMessage());
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class DocCatTests {
 	public final void testPageRefIncorrect() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, catPageRefIncorrectPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_PAGE_TREE_MISSING);
+				MessageConstants.PDF_HUL_95.getMessage());
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class DocCatTests {
 	@Test
 	public final void testCatTypeKeyMiss() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, catTypeKyMissPath, RepInfo.FALSE,
-				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_DICT_MISSING);
+				RepInfo.FALSE, MessageConstants.PDF_HUL_85.getMessage());
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class DocCatTests {
 	public final void testCatTypeVal() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, catTypeValNotCatalogPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_DOC_CAT_TYPE_INVALID);
+				MessageConstants.PDF_HUL_141.getMessage());
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class DocCatTests {
 	@Test
 	public final void testCatTypeKeyValMiss() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, catTypeKyValPairMissPath, RepInfo.FALSE,
-				RepInfo.FALSE, MessageConstants.ERR_OBJ_DEF_INVALID);
+				RepInfo.FALSE, MessageConstants.PDF_HUL_36.getMessage());
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class DocCatTests {
 	@Test
 	public final void testOneByteMiss() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, oneByteMissingPath, RepInfo.FALSE,
-				RepInfo.FALSE, MessageConstants.ERR_DOC_CAT_OBJ_NUM_INCNSTNT);
+				RepInfo.FALSE, MessageConstants.PDF_HUL_140.getMessage());
 	}
 
 }
