@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
  *          Created 1 Mar 2019:16:52:25
  */
 
-public final class JhoveMessageFactImpl implements JhoveMessageFactory {
+final class JhoveMessageFactImpl implements JhoveMessageFactory {
 	private final ResourceBundle messageBundle;
 
 	private JhoveMessageFactImpl(final ResourceBundle messageBundle) {

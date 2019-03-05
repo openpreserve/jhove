@@ -9,7 +9,7 @@ package edu.harvard.hul.ois.jhove.messages;
  *          Created 20 Feb 2019:16:46:19
  */
 
-public final class JhoveMessageImpl implements JhoveMessage {
+final class JhoveMessageImpl implements JhoveMessage {
 	private final String id;
 	private final String message;
 	private final String subMessage;
