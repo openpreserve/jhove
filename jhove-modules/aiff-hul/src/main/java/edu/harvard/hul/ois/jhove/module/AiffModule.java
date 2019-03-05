@@ -5,14 +5,22 @@
 
 package edu.harvard.hul.ois.jhove.module;
 
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.Agent.Builder;
+import edu.harvard.hul.ois.jhove.messages.*;
+import edu.harvard.hul.ois.jhove.module.*;
 import edu.harvard.hul.ois.jhove.module.aiff.*;
-import edu.harvard.hul.ois.jhove.module.iff.Chunk;
-import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
-
-import java.io.*;
-import java.util.*;
+import edu.harvard.hul.ois.jhove.module.aiff.MessageConstants;
+import edu.harvard.hul.ois.jhove.module.iff.*;
 
 /**
  * Module for identification and validation of AIFF files.
@@ -26,15 +34,6 @@ public class AiffModule
     /******************************************************************
      * PRIVATE Instance FIELDS.
      ******************************************************************/
-
-    /* Checksummer object */
-    protected Checksummer _ckSummer;
-        
-    /* Input stream wrapper which handles checksums */
-    protected ChecksumInputStream _cstream;
-    
-    /* Data input stream wrapped around _cstream */
-    protected DataInputStream _dstream;
 
     /* Top-level metadata property */
     protected Property _metadata;
@@ -205,7 +204,7 @@ public class AiffModule
        _signature.add (sig);
 
        _bigEndian = true;
-   }
+}
 
    /**
     *   Parses the content of a purported AIFF digital object and stores the
@@ -237,27 +236,14 @@ public class AiffModule
            _aesMetadata.setPrimaryIdentifierType(AESAudioMetadata.FILE_NAME);
        }
 
-       /* We may have already done the checksums while converting a
-          temporary file. */
-       _ckSummer = null;
-       if (_je != null && _je.getChecksumFlag () &&
-           info.getChecksum().isEmpty()) {
-           _ckSummer = new Checksummer ();
-           _cstream = new ChecksumInputStream (stream, _ckSummer);
-           _dstream = getBufferedDataStream (_cstream, _je != null ?
-                   _je.getBufferSize () : 0);
-       }
-       else {
-           _dstream = getBufferedDataStream (stream, _je != null ?
-                   _je.getBufferSize () : 0);
-       }
+       setupDataStream(stream, info);
 
        try {
            // Check the start of the file for the right opening bytes
            for (int i = 0; i < 4; i++) {
                int ch = readUnsignedByte(_dstream, this);
                if (ch != sigByte[i]) {
-                   info.setMessage(new ErrorMessage(MessageConstants.ERR_NOT_AIFF_CHU, 0));
+                   info.setMessage(new ErrorMessage(MessageConstants.AIFF_HUL_1, 0));
                    info.setWellFormed (RepInfo.FALSE);
                    return 0;
                }
@@ -285,19 +271,19 @@ public class AiffModule
        catch (EOFException e) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage 
-                (MessageConstants.ERR_EOF_UNEXPECTED, _nByte));
+                (MessageConstants.AIFF_HUL_8, _nByte));
            return 0;
        }
        
        if (!commonChunkSeen) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage
-                (MessageConstants.ERR_COMMON_CHUNK_MISS));
+                (MessageConstants.AIFF_HUL_2));
        }
        if (fileType == AIFCTYPE && !formatVersionChunkSeen) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage
-                (MessageConstants.ERR_FORMAT_VER_CHUNK_MISS));
+                (MessageConstants.AIFF_HUL_3));
        }
        if (info.getWellFormed () != RepInfo.TRUE) {
            return 0;
@@ -305,30 +291,9 @@ public class AiffModule
        
        /* This file looks OK. */
        if (_ckSummer != null){
-            /* We may not have actually hit the end of file. If we're calculating
-             * checksums on the fly, we have to read and discard whatever is
-             * left, so it will get checksummed. */
-            for (;;) {
-                try {
-                    long n = skipBytes (_dstream, 2048, this);
-                    if (n == 0) {
-                        break;
-                    }
-                }
-                catch (Exception e) {
-                    break;
-                }
-            }
-            info.setSize (_cstream.getNBytes ());
-            info.setChecksum (new Checksum (_ckSummer.getCRC32 (), 
-                        ChecksumType.CRC32));
-            String value = _ckSummer.getMD5 ();
-            if (value != null) {
-                info.setChecksum (new Checksum (value, ChecksumType.MD5));
-            }
-            if ((value = _ckSummer.getSHA1 ()) != null) {
-            info.setChecksum (new Checksum (value, ChecksumType.SHA1));
-            }
+           skipDstreamToEnd(info);
+           // Set the checksums in the report if they're calculated
+           setChecksums(this._ckSummer, info);
        }
 
        if (fileType == AIFFTYPE) {
@@ -593,7 +558,7 @@ public class AiffModule
         }
         else {
             info.setMessage (new ErrorMessage 
-                    (MessageConstants.ERR_FORM_CHUNK_NOT_AAIF, _nByte));
+                    (MessageConstants.AIFF_HUL_4, _nByte));
             info.setWellFormed (RepInfo.FALSE);
             return false;
         }
@@ -742,9 +707,10 @@ public class AiffModule
     /* Factor out the reporting of duplicate chunks. */
     protected void dupChunkError (RepInfo info, String chunkName)
     {
+        JhoveMessage mess = MessageConstants.AIFF_HUL_5;
+        String message = String.format(mess.getMessage(), chunkName);
         info.setMessage (new ErrorMessage
-                        (MessageConstants.ERR_MULTI_CHUNK_NOT_PERM + chunkName +
-                         MessageConstants.ERR_MULTI_CHUNK_NOT_PERM_2,
+                        (JhoveMessages.getMessageInstance(mess.getId(), message),
                          _nByte));
         info.setValid (false);
     }
