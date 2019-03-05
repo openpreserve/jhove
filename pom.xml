@@ -90,7 +90,7 @@
     <mvn.site.version>3.6</mvn.site.version>
     <mvn.gpg.version>1.6</mvn.gpg.version>
     <mvn.jar.version>3.0.2</mvn.jar.version>
-    <mvn.javadoc.version>2.10.4</mvn.javadoc.version>
+    <mvn.javadoc.version>3.1.0</mvn.javadoc.version>
     <mvn.source.version>3.0.1</mvn.source.version>
     <mvn.surefire.version>2.19.1</mvn.surefire.version>
     <mvn.release.version>2.5.3</mvn.release.version>
@@ -162,6 +162,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${mvn.javadoc.version}</version>
+          <configuration>
+            <doclint>none</doclint>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
