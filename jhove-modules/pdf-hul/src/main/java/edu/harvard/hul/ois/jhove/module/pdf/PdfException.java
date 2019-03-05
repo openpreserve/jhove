@@ -5,7 +5,7 @@
 
 package edu.harvard.hul.ois.jhove.module.pdf;
 
-import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
@@ -35,7 +35,7 @@ public abstract class PdfException extends Exception {
 	 * Create a PdfException.
 	 */
 	public PdfException(final String m) {
-		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, m));
+		this(JhoveMessages.getMessageInstance(m));
 	}
 
 	/**
@@ -49,7 +49,7 @@ public abstract class PdfException extends Exception {
 	 * Create a PdfException with specified offset.
 	 */
 	public PdfException(final String m, final long offset) {
-		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, m), offset);
+		this(JhoveMessages.getMessageInstance(m), offset);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public abstract class PdfException extends Exception {
 	 * Create a PdfException with specified offset and token.
 	 */
 	public PdfException(final String m, final long offset, final Token token) {
-		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, m), offset, token);
+		this(JhoveMessages.getMessageInstance(m), offset, token);
 	}
 
 	/**
@@ -74,6 +74,13 @@ public abstract class PdfException extends Exception {
 		this.message = message;
 		this._offset = offset;
 		this._token = token;
+	}
+
+	/**
+	 * @return the JhoveMessage associated with this exception
+	 */
+	public JhoveMessage getJhoveMessage() {
+		return this.message;
 	}
 
 	/**
