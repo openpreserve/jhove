@@ -71,7 +71,7 @@ public class PageTreeTests {
 	public final void testNoPageTreeNode() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, noPageTreeNodePath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_OBJ_DEF_INVALID);
+				MessageConstants.PDF_HUL_37.getMessage());
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class PageTreeTests {
 	public final void testRcrsPageTreeKids() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, rcrsPageTreeKidsPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_PAGE_TREE_DEPTH_EXCEEDED);
+				MessageConstants.PDF_HUL_32.getMessage());
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class PageTreeTests {
 	public final void testDiffPageTreeKids() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, diffPageTreeKidsPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_DICT_DELIMITERS_IMPROPERLY_NESTED);
+				MessageConstants.PDF_HUL_33.getMessage());
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class PageTreeTests {
 	public final void testNtExstPageTreeChldPath() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, ntExstPageTreeChldPath,
 				RepInfo.TRUE, RepInfo.FALSE,
-				MessageConstants.ERR_PAGE_TREE_NODE_NOT_FOUND);
+				MessageConstants.PDF_HUL_147.getMessage());
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class PageTreeTests {
 	public final void testNoPageTreeKids() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, noPageTreeKidsPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_OBJ_DEF_INVALID);
+				MessageConstants.PDF_HUL_37.getMessage());
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class PageTreeTests {
 	public final void testNoTypePageTree() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, noTypePageTreePath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_OBJ_DEF_INVALID);
+				MessageConstants.PDF_HUL_38.getMessage());
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class PageTreeTests {
 	public final void testNoPageTreeCount() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, noPageTreeCountPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_OBJ_DEF_INVALID);
+				MessageConstants.PDF_HUL_37.getMessage());
 	}
 
 	/**
@@ -158,6 +158,6 @@ public class PageTreeTests {
 	public final void testWrngPageTreeType() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, wrngPageTreeTypePath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.ERR_PAGE_DICT_TYPE_INVALID);
+				MessageConstants.PDF_HUL_146.getMessage());
 	}
 }

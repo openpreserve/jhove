@@ -84,7 +84,7 @@ public class CodestreamHeaderBox extends JP2Box {
                 }
                 else {
                     _repInfo.setMessage (new ErrorMessage
-                        (MessageConstants.ERR_CODESTREAM_HEADER_BOX_START_INVALID, 
+                        (MessageConstants.JPEG2000_HUL_7, 
                                 _module.getFilePos ()));
                     _repInfo.setWellFormed (false);
                     return false;

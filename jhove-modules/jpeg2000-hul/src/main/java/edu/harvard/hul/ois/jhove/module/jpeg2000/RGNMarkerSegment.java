@@ -42,7 +42,7 @@ public class RGNMarkerSegment extends MarkerSegment {
         if (compIdxBytes == 0) {
             // RGN found before SIZ
             _repInfo.setMessage (new ErrorMessage 
-                    (MessageConstants.ERR_RGN_MARKER_POSITION_INVALID));
+                    (MessageConstants.JPEG2000_HUL_50));
             return false;
         }
         int compIdx;

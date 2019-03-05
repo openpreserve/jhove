@@ -137,7 +137,7 @@ public class ColorSpecBox extends JP2Box {
             else {
                 //_module.setJP2Compliant (false);
                 _repInfo.setMessage(new ErrorMessage
-                        (MessageConstants.ERR_COLOR_SPEC_BOX_ICC_PROFILE_INVALID,
+                        (MessageConstants.JPEG2000_HUL_10,
                          filePos));
                 _repInfo.setValid(false);
             }

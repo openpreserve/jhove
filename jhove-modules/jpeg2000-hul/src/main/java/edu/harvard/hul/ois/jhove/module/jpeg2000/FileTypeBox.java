@@ -72,7 +72,7 @@ public class FileTypeBox extends JP2Box {
         int ncomp = (((int) _boxHeader.getLength ()) - 16) / 4;
         if (ncomp < 1) {
             _repInfo.setMessage (new ErrorMessage
-                        (MessageConstants.ERR_FILE_TYPE_BOX_COMPAT_LIST_EMPTY,
+                        (MessageConstants.JPEG2000_HUL_21,
                          _module.getFilePos ()));
             _repInfo.setWellFormed (false);
             return false;
@@ -98,7 +98,7 @@ public class FileTypeBox extends JP2Box {
                         eflag = true;   // Avoid multiple report of same error
                         _repInfo.setValid (false);
                         _repInfo.setMessage (new ErrorMessage
-                            (MessageConstants.ERR_FILE_TYPE_BOX_COMPAT_ITEM_NON_ASCII,
+                            (MessageConstants.JPEG2000_HUL_20,
                              _module.getFilePos ()));
                     }
                     

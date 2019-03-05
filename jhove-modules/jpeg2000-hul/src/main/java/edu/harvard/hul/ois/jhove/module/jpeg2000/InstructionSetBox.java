@@ -69,7 +69,7 @@ public class InstructionSetBox extends JP2Box {
         if ((ityp & 0X2B) == 0) {
             if (sizeLeft != 0) {
                 _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_INSTRUCTION_SET_BOX_DATA_UNDERRUN,
+                    (MessageConstants.JPEG2000_HUL_29,
                     _module.getFilePos ()));
                 _repInfo.setWellFormed (false);
                 return false;
@@ -131,7 +131,7 @@ public class InstructionSetBox extends JP2Box {
                 }
                 if (sizeLeft < 0) {
                     _repInfo.setMessage (new ErrorMessage
-                        (MessageConstants.ERR_INSTRUCTION_SET_BOX_DATA_OVERRUN,
+                        (MessageConstants.JPEG2000_HUL_28,
                         _module.getFilePos ()));
                     _repInfo.setWellFormed (false);
                     return false;

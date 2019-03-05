@@ -5,10 +5,26 @@
 
 package edu.harvard.hul.ois.jhove.module.tiff;
 
-import edu.harvard.hul.ois.jhove.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.text.MessageFormat;
+import java.text.NumberFormat;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.InfoMessage;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.Rational;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /**
  * Encapsulation of a TIFF image file directory (IFD).
@@ -260,7 +276,7 @@ public abstract class IFD
             _next = ModuleBase.readUnsignedInt(_raf, _bigEndian);
         }
         catch (Exception e) {
-            throw new TiffException(MessageConstants.ERR_TIFF_PREM_EOF, offset);
+            throw new TiffException(MessageConstants.TIFF_HUL_1, offset);
         }
 
         DataInputStream ifdStream =
@@ -273,9 +289,9 @@ public abstract class IFD
                                                         null);
                 /* Tags must be in ascending numerical order. */
                 if (!debug_allowoutofsequence && tag < prevTag) {
-                    _info.setMessage(new ErrorMessage(MessageConstants.ERR_TAG_OUT_OF_SEQ_1 + tag + 
-                    				 				      MessageConstants.ERR_TAG_OUT_OF_SEQ_2,
-                                                      _offset + 2 + 12*i));
+                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_2.getMessage(), Integer.valueOf(tag));
+                    JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_2.getId(), mess);
+                    _info.setMessage(new ErrorMessage(message, _offset + 2 + 12*i));
                     _info.setWellFormed(false);
                 }
                 prevTag = tag;
@@ -284,9 +300,8 @@ public abstract class IFD
                                                         _bigEndian, null);
                 /* Skip over tags with unknown type. */
                 if (type < BYTE || type > IFD) {
-                    _info.setMessage(new ErrorMessage(MessageConstants.ERR_UNK_DATA_TYPE,
-                    		                          MessageConstants.ERR_UNK_DATA_TYPE_SUB_1 + type +
-                    		                          MessageConstants.ERR_UNK_DATA_TYPE_SUB_2 + tag,
+                    String subMess = MessageFormat.format(MessageConstants.TIFF_HUL_3_SUB.getMessage(), Integer.valueOf(type), Integer.valueOf(tag));
+                    _info.setMessage(new ErrorMessage(MessageConstants.TIFF_HUL_3, subMess,
                     		                          _offset + 4 + 12*i));
                 }
                 else {
@@ -303,7 +318,8 @@ public abstract class IFD
                         /* Value is the word-aligned offset of the actual
                          * value. */
 			if ((value & 1) != 0) {
-				final String message = MessageConstants.INF_VALOFF_NOT_WORD_ALIGN + value;
+				final String mess = MessageFormat.format(MessageConstants.TIFF_HUL_4.getMessage(), Long.valueOf(value));
+				JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_4.getId(), mess);
 			    if (byteOffsetIsValid) {
 				_info.setMessage(new InfoMessage(message, _offset + 10 + 12*i));
 			    }
@@ -322,7 +338,7 @@ public abstract class IFD
             }
         }
         catch (IOException e) {
-            throw new TiffException(MessageConstants.ERR_IO_READ, _offset + 2);
+            throw new TiffException(MessageConstants.TIFF_HUL_5, _offset + 2);
         }
         postParseInitialization();
 
@@ -368,7 +384,7 @@ public abstract class IFD
                 }
             }
             catch (Exception e) {
-                _errors.add(name + MessageConstants.ERR_VAL_OUT_OF_RANGE + value);
+                _errors.add(MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value)));
             }
             prop = new Property(name, PropertyType.STRING,
                                 PropertyArity.LIST, list);
@@ -398,7 +414,7 @@ public abstract class IFD
                 prop = new Property(name, PropertyType.STRING, labels[value]);
             }
             catch (ArrayIndexOutOfBoundsException aioobe) {
-                _errors.add(name + MessageConstants.ERR_VAL_OUT_OF_RANGE + value);
+                _errors.add(MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value)));
             }
         }
         if (prop == null) {
@@ -436,7 +452,7 @@ public abstract class IFD
                 prop = new Property(name, PropertyType.STRING, labels[n]);
             }
             else {
-                _errors.add(name + MessageConstants.ERR_VAL_OUT_OF_RANGE + value);
+                _errors.add(MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value)));
             }
         }
         if (prop == null) {
@@ -467,7 +483,7 @@ public abstract class IFD
                     s[i] = labels[value[i]];
                 }
                 catch (ArrayIndexOutOfBoundsException aioobe) {
-                    _errors.add(name + MessageConstants.ERR_VAL_OUT_OF_RANGE + value[i]);
+                    _errors.add(MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value[i])));
                 }
             }
             prop = new Property(name, PropertyType.STRING,
@@ -927,9 +943,9 @@ public abstract class IFD
         throws TiffException
     {
         if (count < minCount) {
-            throw new TiffException(MessageConstants.ERR_TAG_COUNT_MISMATCH + tag +
-            						MessageConstants.MISMATCH_SUB_1 + minCount +
-            						MessageConstants.MISMATCH_SUB_2 + count);
+            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_6.getMessage(), Integer.valueOf(tag), Integer.valueOf(minCount), Long.valueOf(count));
+            JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_6.getId(), mess);
+            throw new TiffException(message);
         }
     }
 
@@ -951,9 +967,9 @@ public abstract class IFD
             }
         }
         if (type != expected) {
-            throw new TiffException(MessageConstants.ERR_TAG_TYPE_MISMATCH + tag +
-            						MessageConstants.MISMATCH_SUB_1 + expected +
-            						MessageConstants.MISMATCH_SUB_2 + type);
+            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_7.getMessage(), Integer.valueOf(tag), Integer.valueOf(expected), Integer.valueOf(type));
+            JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_7.getId(), mess);
+            throw new TiffException(message);
         }
     }
 
@@ -968,10 +984,9 @@ public abstract class IFD
         throws TiffException
     {
         if (type != type1 && type != type2) {
-            throw new TiffException(MessageConstants.ERR_TAG_TYPE_MISMATCH + tag +
-            						MessageConstants.MISMATCH_SUB_1 + type1 +
-            						MessageConstants.MISMATCH_SUB_3 + type2 +
-            						MessageConstants.MISMATCH_SUB_2 + type);
+            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_8.getMessage(), Integer.valueOf(tag), Integer.valueOf(type1), Integer.valueOf(type2), Integer.valueOf(type));
+            JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_8.getId(), mess);
+            throw new TiffException(message);
         }
     }
 

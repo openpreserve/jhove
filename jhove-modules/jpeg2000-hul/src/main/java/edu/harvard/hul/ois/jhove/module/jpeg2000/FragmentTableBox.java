@@ -87,7 +87,7 @@ public class FragmentTableBox extends JP2Box {
         }
         else {
             _repInfo.setMessage (new ErrorMessage 
-                (MessageConstants.ERR_FRAGMENT_TABLE_BOX_CONTENT_INVALID,
+                (MessageConstants.JPEG2000_HUL_24,
                  _module.getFilePos ()));
             _repInfo.setWellFormed (false);
             return false;

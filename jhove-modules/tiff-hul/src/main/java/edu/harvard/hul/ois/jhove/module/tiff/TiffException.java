@@ -5,36 +5,58 @@
 
 package edu.harvard.hul.ois.jhove.module.tiff;
 
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 /**
- *  Exception subclass used internally by the TIFF module.
+ * Exception subclass used internally by the TIFF module.
  */
-public final class TiffException extends Exception
-{
-    private long _offset;     // File offset at which the exception occurred
+public final class TiffException extends Exception {
+	private final JhoveMessage message;
+	private final long _offset;     // File offset at which the exception
+								     // occurred
 
-    /**
-     *  Create a TiffException.
-     */
-    public TiffException (String m)
-    {
-	super(m);
-	_offset = -1;
-    }
+	/**
+	 * Create a TiffException.
+	 */
+	public TiffException(final String m) {
+		this(JhoveMessages.getMessageInstance(m));
+	}
 
-    /**
-     *  Create a TiffException with specified offset.
-     */
-    public TiffException (String m, long offset) 
-    {
-	super(m);
-	_offset = offset;
-    }
+	/**
+	 * Create a TiffException.
+	 */
+	public TiffException(final JhoveMessage message) {
+		this(message, -1);
+	}
 
-    /**
-     *  Returns the offset at which the exception occurred.
-     */
-    public long getOffset ()
-    {
-	return _offset;
-    }
+	/**
+	 * Create a TiffException with specified offset.
+	 */
+	public TiffException(String m, long offset) {
+		this(JhoveMessages.getMessageInstance(m), -1);
+	}
+
+	/**
+	 * Create a TiffException with specified offset.
+	 */
+	public TiffException(final JhoveMessage message, long offset) {
+		super(message.getMessage());
+		this.message = message;
+		this._offset = offset;
+	}
+
+	/**
+	 * @return the JhoveMessage associated with this exception
+	 */
+	public JhoveMessage getJhoveMessage() {
+		return this.message;
+	}
+
+	/**
+	 * Returns the offset at which the exception occurred.
+	 */
+	public long getOffset() {
+		return this._offset;
+	}
 }

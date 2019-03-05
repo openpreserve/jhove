@@ -85,7 +85,7 @@ public class PageLabelNode
 	    throw pe;
 	}
         catch (Exception e) {
-            throw new PdfInvalidException (MessageConstants.ERR_PAGE_LABEL_NODE_INVALID); // PDF-HUL-20
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_20); // PDF-HUL-20
         }
            
     }
@@ -175,7 +175,7 @@ public class PageLabelNode
                 PdfArray pairArray = (PdfArray) 
                     _module.resolveIndirectObject (_currentLeaf._dict.get ("Nums"));
                 if (pairArray == null) {
-                    throw new PdfInvalidException(MessageConstants.ERR_PAGE_NUMBER_DICT_ELEMENT_MISSING); // PDF-HUL-18
+                    throw new PdfInvalidException(MessageConstants.PDF_HUL_18); // PDF-HUL-18
                 }
                 _currentNumsVec = pairArray.getContent ();
                 _currentNumsLength = _currentNumsVec.size ();
@@ -199,7 +199,7 @@ public class PageLabelNode
             throw e;
         }
         catch (Exception e) {
-            throw new PdfInvalidException (MessageConstants.ERR_PAGE_NUMBER_TREE_DATE_INVALID); // PDF-HUL-19
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_19); // PDF-HUL-19
         }
     }
     

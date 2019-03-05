@@ -53,7 +53,7 @@ public enum FileSpecification
             }
         }
         catch (ClassCastException e) {
-            throw new PdfInvalidException(MessageConstants.ERR_FILE_SPEC_INVALID); // PDF-HUL-9
+            throw new PdfInvalidException(MessageConstants.PDF_HUL_9); // PDF-HUL-9
         }
         return null;
     }
