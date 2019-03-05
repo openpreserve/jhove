@@ -5,7 +5,9 @@
 
 package edu.harvard.hul.ois.jhove.module.html;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Abstract class for common features of HTML 4.0 and 4.01 strict
@@ -17,7 +19,9 @@ import java.util.*;
  */
 public abstract class Html4StrictDocDesc extends Html4DocDesc {
 
-
+    protected Html4StrictDocDesc() {
+        super();
+    }
     /** Code which is called from the static initializer of the
      *  subclasses.  Note that this is called before the class
      *  is instantiated, and may reference only static fields
