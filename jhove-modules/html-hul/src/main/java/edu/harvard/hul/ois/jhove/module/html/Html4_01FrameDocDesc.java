@@ -31,6 +31,7 @@ public class Html4_01FrameDocDesc extends Html4_01TFDocDesc {
     /** Constructor. */
     public Html4_01FrameDocDesc ()
     {
+    	super();
         // publish stSupportedElements to superclass
         supportedElements = stSupportedElements;
         init ();

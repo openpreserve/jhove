@@ -35,14 +35,14 @@ public class Utf8EmptyFileTests {
 	@Test
 	public final void testNotEmpty() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, utf8NotEmpty, RepInfo.TRUE,
-				RepInfo.TRUE, Utf8MessageConstants.ERR_ZERO_LENGTH_FILE, false);
+				RepInfo.TRUE, MessageConstants.UTF8_HUL_6.getMessage(), false);
 	}
 
 	@Test
 	public final void testEmpty() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, TestUtils.EMPTY_FILE_PATH,
 				RepInfo.FALSE, RepInfo.FALSE,
-				Utf8MessageConstants.ERR_ZERO_LENGTH_FILE);
+				MessageConstants.UTF8_HUL_6.getMessage());
 	}
 
 }

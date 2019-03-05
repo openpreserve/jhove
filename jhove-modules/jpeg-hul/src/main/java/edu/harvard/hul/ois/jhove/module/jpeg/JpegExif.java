@@ -5,9 +5,23 @@
 
 package edu.harvard.hul.ois.jhove.module.jpeg;
 
-import java.io.*;
-import java.util.*;
-import edu.harvard.hul.ois.jhove.*;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.List;
+import java.util.ListIterator;
+
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.NisoImageMetadata;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.module.JpegModule;
 import edu.harvard.hul.ois.jhove.module.tiff.ExifIFD;
 import edu.harvard.hul.ois.jhove.module.tiff.TiffIFD;
 import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileExif;
@@ -26,9 +40,11 @@ public final class JpegExif {
     private boolean _exifProfileOK;
     private String _profileText;
     private NisoImageMetadata _exifNiso;
+    private JpegModule module;
     
-    public JpegExif ()
+    public JpegExif (final JpegModule module)
     {
+        this.module = module;
         _exifProfileOK = false;
         _profileText = null;
         _exifNiso = null;
@@ -68,7 +84,7 @@ public final class JpegExif {
         }
         catch (IOException e) {
             info.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_TEMP_FILE_CREATION +
+                    (MessageConstants.JHOVE_1,
                      e.getMessage ()));
             return info;
         }
@@ -180,7 +196,7 @@ public final class JpegExif {
         }
         catch (IOException e) {
             info.setMessage (new ErrorMessage
-                (MessageConstants.ERR_EXIF_PROCESSING_IO_EXCEP +
+                (MessageConstants.JPEG_HUL_3,
 		 e.getMessage ()));
             // Maybe should put this directly in the parent's
             // RepInfo, otherwise I have to copy the message afterwards.
