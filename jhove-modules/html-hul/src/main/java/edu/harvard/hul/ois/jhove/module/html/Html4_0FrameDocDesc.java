@@ -34,6 +34,7 @@ public class Html4_0FrameDocDesc extends Html4_0TFDocDesc {
      */
     public Html4_0FrameDocDesc ()
     {
+        super();
         // publish stSupportedElements to superclass
         supportedElements = stSupportedElements;
         init ();

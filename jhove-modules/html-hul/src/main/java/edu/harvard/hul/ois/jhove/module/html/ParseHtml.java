@@ -4,7 +4,10 @@
  */
 package edu.harvard.hul.ois.jhove.module.html;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+
+import edu.harvard.hul.ois.jhove.module.HtmlModule;
 
 public class ParseHtml implements ParseHtmlConstants {
         private List elements;
@@ -80,7 +83,7 @@ public class ParseHtml implements ParseHtmlConstants {
             }
             /******* End Added GDM 14-Jun-05 to avoid infinite loop ********/
         }
-        {if (true) return new JHErrorElement(elements, MessageConstants.ERR_HTML_PARSING_ERROR, errText.toString(), true);}
+        {if (true) return new JHErrorElement(elements, MessageConstants.HTML_HUL_2, errText.toString(), true);}
     }
       {if (true) return elem;}
     throw new Error("Missing return statement in function");
@@ -110,7 +113,7 @@ public class ParseHtml implements ParseHtmlConstants {
             the whole thing from falling apart, yet will generate an error */
          {if (true) return new JHOpenTag (elements, name.image, attrs,
            name.beginLine, name.beginColumn,
-           MessageConstants.WRN_INCORRECT_AUTO_CLOSED_TAG);}
+           MessageConstants.HTML_HUL_1.getMessage());}
      }
      else {
          {if (true) return new JHOpenTag (elements, name.image, attrs,
@@ -184,7 +187,7 @@ public class ParseHtml implements ParseHtmlConstants {
 
   JHErrorElement ConsumeError() {
     Token tok = getNextToken();
-        return new JHErrorElement (elements, MessageConstants.ERR_HTML_PARSING_ERROR, tok.image, true);
+        return new JHErrorElement (elements, MessageConstants.HTML_HUL_3, tok.image, true);
   }
 
   final public void DoctypeItem(List dtElements) throws ParseException {
@@ -420,7 +423,7 @@ public class ParseHtml implements ParseHtmlConstants {
     if (jj_3R_5()) return true;
     return false;
   }
-
+  private final HtmlModule module;
   public ParseHtmlTokenManager token_source;
   public Token token, jj_nt;
   private int jj_ntk;
@@ -441,7 +444,8 @@ public class ParseHtml implements ParseHtmlConstants {
   private boolean jj_rescan = false;
   private int jj_gc = 0;
 
-  public ParseHtml(CharStream stream) {
+  public ParseHtml(HtmlModule module, CharStream stream) {
+    this.module = module;
     token_source = new ParseHtmlTokenManager(stream);
     token = new Token();
     jj_ntk = -1;
@@ -459,7 +463,8 @@ public class ParseHtml implements ParseHtmlConstants {
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  public ParseHtml(ParseHtmlTokenManager tm) {
+  public ParseHtml(ParseHtmlTokenManager tm, HtmlModule module) {
+    this.module = module;
     token_source = tm;
     token = new Token();
     jj_ntk = -1;
