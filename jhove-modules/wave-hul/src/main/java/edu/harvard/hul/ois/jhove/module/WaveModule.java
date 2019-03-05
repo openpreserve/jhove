@@ -69,40 +69,40 @@ import edu.harvard.hul.ois.jhove.module.wave.SampleChunk;
  */
 public class WaveModule extends ModuleBase {
 
-	/* Module metadata */
-	private static final String NAME = "WAVE-hul";
-	private static final String RELEASE = "1.6";
-	private static final int[] DATE = { 2018, 03, 29 };
-	private static final String[] FORMATS = { "WAVE", "Audio for Windows",
-			"EBU Technical Specification 3285", "Broadcast Wave Format", "BWF",
-			"EBU Technical Specification 3306", "RF64" };
-	private static final String COVERAGE = "WAVE (PCMWAVEFORMAT, WAVEFORMATEX, WAVEFORMATEXTENSIBLE); "
-			+ "Broadcast Wave Format (BWF) version 0, 1 and 2; RF64";
-	private static final String[] MIMETYPES = { "audio/vnd.wave", "audio/wav",
-			"audio/wave", "audio/x-wav", "audio/x-wave" };
-	private static final String WELLFORMED = null;
-	private static final String VALIDITY = null;
-	private static final String REPINFO = null;
-	private static final String NOTE = "There is no published standard for WAVE files. This module regards "
-			+ "a file as valid if it conforms to common usage practices.";
-	private static final String RIGHTS = "Copyright 2004-2007 by JSTOR and the "
-			+ "President and Fellows of Harvard College. "
-			+ "Released under the GNU Lesser General Public License.";
+    /* Module metadata */
+    private static final String NAME = "WAVE-hul";
+    private static final String RELEASE = "1.6.0-RC";
+    private static final int[] DATE = { 2019, 03, 05 };
+    private static final String[] FORMATS = { "WAVE", "Audio for Windows",
+            "EBU Technical Specification 3285", "Broadcast Wave Format", "BWF",
+            "EBU Technical Specification 3306", "RF64" };
+    private static final String COVERAGE = "WAVE (PCMWAVEFORMAT, WAVEFORMATEX, WAVEFORMATEXTENSIBLE); "
+            + "Broadcast Wave Format (BWF) version 0, 1 and 2; RF64";
+    private static final String[] MIMETYPES = { "audio/vnd.wave", "audio/wav",
+            "audio/wave", "audio/x-wav", "audio/x-wave" };
+    private static final String WELLFORMED = null;
+    private static final String VALIDITY = null;
+    private static final String REPINFO = null;
+    private static final String NOTE = "There is no published standard for WAVE files. This module regards "
+            + "a file as valid if it conforms to common usage practices.";
+    private static final String RIGHTS = "Copyright 2004-2007 by JSTOR and the "
+            + "President and Fellows of Harvard College. "
+            + "Released under the GNU Lesser General Public License.";
 
-	/** Fixed value for first four bytes of WAVE files */
-	private static final String RIFF_SIGNATURE = "RIFF";
+    /** Fixed value for first four bytes of WAVE files */
+    private static final String RIFF_SIGNATURE = "RIFF";
 
-	/** Fixed value for first four bytes of RF64 files */
-	private static final String RF64_SIGNATURE = "RF64";
+    /** Fixed value for first four bytes of RF64 files */
+    private static final String RF64_SIGNATURE = "RF64";
 
-	/** Length of the RIFF form type field in bytes */
-	private static final int RIFF_FORM_TYPE_LENGTH = 4;
+    /** Length of the RIFF form type field in bytes */
+    private static final int RIFF_FORM_TYPE_LENGTH = 4;
 
-	/** Length of chunk headers in bytes */
-	private static final int CHUNK_HEADER_LENGTH = 8;
+    /** Length of chunk headers in bytes */
+    private static final int CHUNK_HEADER_LENGTH = 8;
 
-	/** Value indicating a required 64-bit data size lookup */
-	public static final long LOOKUP_EXTENDED_DATA_SIZE = 0xFFFFFFFFL;
+    /** Value indicating a required 64-bit data size lookup */
+    public static final long LOOKUP_EXTENDED_DATA_SIZE = 0xFFFFFFFFL;
 
 	/**
 	 * Map of 64-bit chunk sizes found in the Data Size 64 chunk.
