@@ -3,6 +3,10 @@
  */
 package edu.harvard.hul.ois.jhove.module.jpeg;
 
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessageFactory;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 /**
  * Enum used to externalise the JPEG modules message Strings. Using an enum
  * INSTANCE as a "trick" to ensure a single instance of the class. String
@@ -35,20 +39,23 @@ package edu.harvard.hul.ois.jhove.module.jpeg;
 
 public enum MessageConstants {
 	INSTANCE;
-	
+	public static final JhoveMessageFactory messageFactory = JhoveMessages.getInstance(
+			"edu.harvard.hul.ois.jhove.module.jpeg.ErrorMessages");
 	public static final String INF_EXIF_REPORT_REQUIRES_TIFF = "TIFF-HUL module required to report Exif data";
 	public static final String INF_EXIF_APP2_MULTI_REPORT = "ICCProfile in multiple APP2 segments; not handled by JPEG-hul";
-	
-	public static final String ERR_DTT_SEG_MISSING_PREV_DTI = "DTT segment without previous DTI";
-	public static final String ERR_EOF_UNEXPECTED = "Unexpected end of file";
-	public static final String ERR_EXIF_PROCESSING_IO_EXCEP = "I/O exception processing Exif metadata: ";
-	public static final String ERR_HEADER_INVALID = "Invalid JPEG header";
-	public static final String ERR_ICCPROFILE_INVALID = "Invalid ICCProfile in APP2 segment; message ";
-	public static final String ERR_JFIF_APP_MARKER_MISSING = "JFIF APP0 marker not at beginning of file";
-	public static final String ERR_MARKER_INVALID = "Marker not valid in context";
-	public static final String ERR_MARKER_MISSING = "Expected marker byte 255, got ";
-	public static final String ERR_SPIF_MARKER_MISSING = "SPIFF marker not at beginning of file";
-	public static final String ERR_START_SEGMENT_MISSING = "File does not begin with SPIFF, Exif or JFIF segment";
-	public static final String ERR_TEMP_FILE_CREATION = "Error creating temporary file. Check your configuration: ";
-	public static final String ERR_TILING_DATA_UNRECOGNISED = "Unrecognized tiling data";
+
+	public static final JhoveMessage JPEG_HUL_1 = messageFactory.getMessage("JPEG-HUL-1");
+	public static final JhoveMessage JPEG_HUL_2 = messageFactory.getMessage("JPEG-HUL-2");
+	public static final JhoveMessage JPEG_HUL_3 = messageFactory.getMessage("JPEG-HUL-3");
+	public static final JhoveMessage JPEG_HUL_4 = messageFactory.getMessage("JPEG-HUL-4");
+	public static final JhoveMessage JPEG_HUL_5 = messageFactory.getMessage("JPEG-HUL-5");
+	public static final JhoveMessage JPEG_HUL_6 = messageFactory.getMessage("JPEG-HUL-6");
+	public static final JhoveMessage JPEG_HUL_7 = messageFactory.getMessage("JPEG-HUL-7");
+	public static final JhoveMessage JPEG_HUL_7_SUB = messageFactory.getMessage("JPEG-HUL-7-SUB");
+	public static final JhoveMessage JPEG_HUL_8 = messageFactory.getMessage("JPEG-HUL-8");
+	public static final JhoveMessage JPEG_HUL_9 = messageFactory.getMessage("JPEG-HUL-9");
+	public static final JhoveMessage JPEG_HUL_10 = messageFactory.getMessage("JPEG-HUL-10");
+	public static final JhoveMessage JPEG_HUL_11 = messageFactory.getMessage("JPEG-HUL-11");
+
+	public static final JhoveMessage JHOVE_1 = messageFactory.getMessage("JHOVE-1");
 }
