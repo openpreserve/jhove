@@ -940,7 +940,7 @@ public void ReInit(CharStream stream, int lexState)
 public void SwitchTo(int lexState)
 {
    if (lexState >= 8 || lexState < 0)
-      throw new TokenMgrError(MessageConstants.ERR_LEX_STATE_INV + lexState, TokenMgrError.INVALID_LEXICAL_STATE);
+      throw new TokenMgrError(MessageConstants.HTML_HUL_21.getMessage() + lexState, TokenMgrError.INVALID_LEXICAL_STATE);
    curLexState = lexState;
 }
 

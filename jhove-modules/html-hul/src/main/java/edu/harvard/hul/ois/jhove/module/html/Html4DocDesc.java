@@ -6,6 +6,8 @@
 package edu.harvard.hul.ois.jhove.module.html;
 import java.util.*;
 
+import edu.harvard.hul.ois.jhove.module.HtmlModule;
+
 /**
  * Abstract class for common features of HTML 4.0 and 4.01 
  * documents.
@@ -60,6 +62,10 @@ public abstract class Html4DocDesc extends HtmlDocDesc {
 
     /** Attributes for TH and TD elements */
     protected static List thtdAtts;
+
+    protected Html4DocDesc() {
+        super();
+    }
 
     /** Initialization code.  This is called from the static initializer
      *  of our subclasses. */

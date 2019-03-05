@@ -17,7 +17,10 @@ import java.util.*;
  */
 public abstract class Html4_0TFDocDesc extends Html4TFDocDesc {
 
-        
+    protected Html4_0TFDocDesc() {
+        super();
+    }
+
     protected static void classInit4 (Map stSupportedElements, int version)
     {
         Html4TFDocDesc.classInit4(stSupportedElements);
