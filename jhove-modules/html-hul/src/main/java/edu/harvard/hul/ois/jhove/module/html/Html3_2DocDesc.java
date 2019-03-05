@@ -5,7 +5,10 @@
 
 package edu.harvard.hul.ois.jhove.module.html;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class describes the requirements of an HTML 3.2 document.
@@ -193,6 +196,7 @@ public class Html3_2DocDesc extends HtmlDocDesc {
     /** Constructor. */
     public Html3_2DocDesc ()
     {
+        super();
         // publish stSupportedElements to superclass
         supportedElements = stSupportedElements;
         init ();

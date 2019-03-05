@@ -68,7 +68,7 @@ public class QCDMarkerSegment extends MarkerSegment {
             
             default:
             _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_QCD_MARKER_QUANTIZATION_TYPE_INVALID));
+                    (MessageConstants.JPEG2000_HUL_48));
             return false;    // reserved value
         }
         List propList = new ArrayList (2);

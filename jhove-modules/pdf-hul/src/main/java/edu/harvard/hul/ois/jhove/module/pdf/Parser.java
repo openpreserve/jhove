@@ -6,9 +6,13 @@
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /**
  * The Parser class implements some limited syntactic analysis for PDF.
@@ -94,7 +98,7 @@ public class Parser
         else if (tok instanceof DictionaryEnd) {
             --_dictDepth;
             if (_dictDepth < 0) {
-                throw new PdfMalformedException (MessageConstants.ERR_DICT_DELIMITERS_IMPROPERLY_NESTED); // PDF-HUL-33
+                throw new PdfMalformedException (MessageConstants.PDF_HUL_33); // PDF-HUL-33
             }
         }
         if (tok instanceof ArrayStart) {
@@ -103,7 +107,7 @@ public class Parser
         else if (tok instanceof ArrayEnd) {
             --_arrayDepth;
             if (_arrayDepth < 0) {
-                throw new PdfMalformedException (MessageConstants.ERR_ARRAY_IMPROPERLY_NESTED); // PDF-HUL-34
+                throw new PdfMalformedException (MessageConstants.PDF_HUL_34); // PDF-HUL-34
             }
         }
         return tok;
@@ -115,7 +119,7 @@ public class Parser
      * or a <code>PdfInvalidException</code> with message <code>errMsg</code>
      * will be thrown.
      */
-    public Token getNext (Class<?> clas, String errMsg)
+    public Token getNext (Class<?> clas, JhoveMessage errMsg)
             throws IOException, PdfException
     {
         Token tok = getNext ();
@@ -190,7 +194,7 @@ public class Parser
     public PdfObject readObjectDef () throws IOException, PdfException
     {
         Numeric objNumTok = (Numeric) getNext 
-            (Numeric.class, MessageConstants.ERR_OBJ_DEF_INVALID); // PDF-HUL-35
+            (Numeric.class, MessageConstants.PDF_HUL_35); // PDF-HUL-35
         return readObjectDef (objNumTok);
     }
 
@@ -207,10 +211,10 @@ public class Parser
         reset ();
         // The start of an object must be <num> <num> obj
         //Numeric objNumTok = (Numeric) getNext (Numeric.class, invDef);
-        Numeric genNumTok = (Numeric) getNext (Numeric.class, MessageConstants.ERR_OBJ_DEF_INVALID); // PDF-HUL-36
-        Keyword objKey = (Keyword) getNext (Keyword.class, MessageConstants.ERR_OBJ_DEF_INVALID); // PDF-HUL-37
+        Numeric genNumTok = (Numeric) getNext (Numeric.class, MessageConstants.PDF_HUL_36); // PDF-HUL-36
+        Keyword objKey = (Keyword) getNext (Keyword.class, MessageConstants.PDF_HUL_37); // PDF-HUL-37
         if (!"obj".equals (objKey.getValue ())) {
-            throw new PdfMalformedException (MessageConstants.ERR_OBJ_DEF_INVALID); // PDF-HUL-38
+            throw new PdfMalformedException (MessageConstants.PDF_HUL_38); // PDF-HUL-38
         }
         if (_tokenizer.getWSString ().length () > 1) {
             _pdfACompliant = false;
@@ -222,7 +226,7 @@ public class Parser
         if (obj instanceof PdfDictionary) {
             Stream strm = null;
             try {
-                strm = (Stream) getNext (Stream.class, "");
+                strm = (Stream) getNext (Stream.class, JhoveMessages.DEFAULT_MESSAGE);
             }
             catch (Exception e) {
                 // If we get an exception, it just means it wasn't a stream
@@ -278,7 +282,7 @@ public class Parser
         }
         else {
             throw new PdfMalformedException 
-              (MessageConstants.ERR_OBJ_NOT_PARSABLE, getOffset(), tok); // PDF-HUL-39
+              (MessageConstants.PDF_HUL_39, getOffset(), tok); // PDF-HUL-39
         }
     }
 
@@ -308,7 +312,7 @@ public class Parser
                     return arr;
                 }
                 throw new PdfMalformedException
-                    (MessageConstants.ERR_ARRAY_CONTAINS_UNEXPECTED_TOKEN, getOffset()); // PDF-HUL-40
+                    (MessageConstants.PDF_HUL_40, getOffset()); // PDF-HUL-40
             }
         }
     }
@@ -345,7 +349,9 @@ public class Parser
                     // The collapsed vector must contain an even number of objects
                     int vecSize = vec.size ();
                     if ((vecSize % 2) != 0) {
-                        throw new PdfMalformedException (MessageConstants.ERR_VECTOR_OBJ_COUNT_NOT_EVEN + vecSize, getOffset ()); // PDF-HUL-41
+                        String mess = MessageFormat.format(MessageConstants.PDF_HUL_41.getMessage(), Integer.valueOf(vecSize));
+                        JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.PDF_HUL_41.getId(), mess);
+                        throw new PdfMalformedException(message, getOffset ()); // PDF-HUL-41
                     }
                     for (int i = 0; i < vecSize; i += 2) {
                         try {
@@ -355,7 +361,7 @@ public class Parser
                             dict.add (key.getValue (), value);
                         }
                         catch (Exception f) {
-                            throw new PdfMalformedException (MessageConstants.ERR_DICT_MALFORMED, getOffset ()); // PDF-HUL-42
+                            throw new PdfMalformedException (MessageConstants.PDF_HUL_42, getOffset ()); // PDF-HUL-42
                         }
                     }
                     if (!dict.isPdfACompliant()) {
@@ -364,7 +370,7 @@ public class Parser
                     return dict;
                 }
                 throw new PdfMalformedException
-                (MessageConstants.ERR_DICT_CONTAINS_UNEXPECTED_TOKEN, getOffset()); // PDF-HUL-43
+                (MessageConstants.PDF_HUL_43, getOffset()); // PDF-HUL-43
             }
         }
     }
@@ -426,7 +432,7 @@ public class Parser
                         }
                         catch (Exception e) {
                             throw new PdfMalformedException 
-                                (MessageConstants.ERR_INDIRECT_OBJ_REF_MALFORMED); // PDF-HUL-44
+                                (MessageConstants.PDF_HUL_44); // PDF-HUL-44
                         }
                     }
                 }

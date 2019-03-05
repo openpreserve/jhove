@@ -98,8 +98,6 @@ public class ContCodestream {
     public boolean readCodestream (Codestream cs, RepInfo info) 
                 throws IOException
     {
-        final String badStream =
-            MessageConstants.ERR_CODESTREAM_CONTENT_INVALID;
         _codestream = cs;
         long lengthLeft = _length;
         _tileLeft = 0;
@@ -115,7 +113,7 @@ public class ContCodestream {
                 // but "markers" aren't.  
                 int ff = ModuleBase.readUnsignedByte (_dstream, _module);
                 if (ff != 0XFF) {
-                    info.setMessage (new ErrorMessage (badStream));
+                    info.setMessage (new ErrorMessage(MessageConstants.JPEG2000_HUL_8));
                     info.setWellFormed (false);
                     return false;
                 }
@@ -133,7 +131,7 @@ public class ContCodestream {
                 int markLen = ms.readMarkLen ();
                 if (!ms.process (markLen == 0 ? 0 : markLen - 2)) {
                     info.setMessage (new ErrorMessage 
-                        (MessageConstants.ERR_CODESTREAM_MARKER_SEGMENT_INVALID));
+                        (MessageConstants.JPEG2000_HUL_9));
                         info.setWellFormed (false);
                         return false;
                 }
@@ -170,7 +168,7 @@ public class ContCodestream {
             // we're done
         }
         if (!socSeen) {
-            info.setMessage (new ErrorMessage (badStream));
+            info.setMessage (new ErrorMessage(MessageConstants.JPEG2000_HUL_8));
             info.setWellFormed (false);
             return false;
         }

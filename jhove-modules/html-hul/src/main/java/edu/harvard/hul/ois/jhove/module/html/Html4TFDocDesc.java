@@ -19,6 +19,10 @@ import java.util.*;
  */
 public abstract class Html4TFDocDesc extends Html4DocDesc {
 
+    protected Html4TFDocDesc() {
+        super();
+    }
+
     /** Code which is called from the static initializer of the
      *  subclasses.  Note that this is called before the class
      *  is instantiated, and may reference only static fields

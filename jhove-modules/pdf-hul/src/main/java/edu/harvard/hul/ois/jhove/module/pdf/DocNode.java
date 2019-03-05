@@ -42,7 +42,7 @@ public abstract class DocNode
                 PdfDictionary dict) throws PdfMalformedException
     {
          if (dict == null) {
-             throw new PdfMalformedException (MessageConstants.ERR_DOC_NODE_DICT_MISSING); // PDF-HUL-4
+             throw new PdfMalformedException (MessageConstants.PDF_HUL_4); // PDF-HUL-4
          }
         _module = module;
         _parent = parent;
@@ -106,7 +106,7 @@ public abstract class DocNode
             return (PdfDictionary) resdict;
         }
         catch (ClassCastException | IOException f) {
-            throw new PdfInvalidException(MessageConstants.ERR_RESOURCES_ENTRY_INVALID); // PDF-HUL-5
+            throw new PdfInvalidException(MessageConstants.PDF_HUL_5); // PDF-HUL-5
         }
     }
 
@@ -131,7 +131,7 @@ public abstract class DocNode
         }
         catch (ClassCastException | IOException e) {
             throw new PdfMalformedException
-                    (MessageConstants.ERR_RESOURCES_FONT_ENTRY_INVALID); // PDF-HUL-6
+                    (MessageConstants.PDF_HUL_6); // PDF-HUL-6
         }
     }
     
@@ -148,11 +148,11 @@ public abstract class DocNode
             mbox = (PdfArray) get ("MediaBox", true);
         }
         catch (ClassCastException e) {
-            throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_MEDIA_BOX_MALFORMED); // PDF-HUL-7
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_7); // PDF-HUL-7
         }
         if (mbox != null && mbox.toRectangle () == null) {
             // There's a MediaBox, but it's not a rectangle
-            throw new PdfInvalidException (MessageConstants.ERR_PAGE_TREE_MEDIA_BOX_MALFORMED); // PDF-HUL-8
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_8); // PDF-HUL-8
         }
         return mbox;
     }

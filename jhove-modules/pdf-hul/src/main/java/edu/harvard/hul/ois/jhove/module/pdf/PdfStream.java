@@ -195,7 +195,7 @@ public class PdfStream extends PdfObject
             }
         }
         catch (Exception e) {
-            throw new PdfMalformedException (MessageConstants.ERR_FILTER_MALFORMED); // PDF-HUL-45
+            throw new PdfMalformedException (MessageConstants.PDF_HUL_45); // PDF-HUL-45
         }
     }
 
