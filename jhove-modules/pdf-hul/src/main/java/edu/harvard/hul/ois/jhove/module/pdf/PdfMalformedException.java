@@ -5,7 +5,8 @@
 
 package edu.harvard.hul.ois.jhove.module.pdf;
 
-import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 
 /**
  *  Exception subclass used internally by the PDF module.
@@ -20,25 +21,49 @@ public class PdfMalformedException extends PdfException {
     /**
      *  Creates a PdfMalformedException.
      */
-    public PdfMalformedException (String m)
+    public PdfMalformedException (final String m)
     {
         super(m);
     }
 
     /**
+     *  Creates a PdfMalformedException.
+     */
+    public PdfMalformedException (final JhoveMessage message)
+    {
+        super(message);
+    }
+
+    /**
      *  Creates a PdfMalformedException with specified offset.
      */
-    public PdfMalformedException (String m, long offset) 
+    public PdfMalformedException (final String m, final long offset) 
     {
         super(m, offset);
     }
 
     /**
+     *  Creates a PdfMalformedException with specified offset.
+     */
+    public PdfMalformedException (final JhoveMessage message, final long offset) 
+    {
+        super(message, offset);
+    }
+
+    /**
      *  Creates a PdfMalformedException with specified offset and token.
      */
-    public PdfMalformedException (String m, long offset, Token token) 
+    public PdfMalformedException (final String m, final long offset, final Token token) 
     {
         super(m, offset, token);
+    }
+
+    /**
+     *  Creates a PdfMalformedException with specified offset and token.
+     */
+    public PdfMalformedException (final JhoveMessage message, final long offset, final Token token) 
+    {
+        super(message, offset, token);
     }
 
     /**
@@ -47,7 +72,7 @@ public class PdfMalformedException extends PdfException {
      *  <code>setValid (false)</code>.
      */
     @Override
-    public void disparage (RepInfo info) 
+    public void disparage (final RepInfo info) 
     {
         info.setWellFormed (false);
     }

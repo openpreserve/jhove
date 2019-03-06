@@ -77,7 +77,7 @@ public class UUIDInfoBox extends JP2Box {
         if (sizeLeft != 0) {
             // Underran the superbox -- get out quick
             _repInfo.setMessage (new ErrorMessage 
-                (MessageConstants.ERR_UUID_INFO_BOX_UNDERRUN, 
+                (MessageConstants.JPEG2000_HUL_56, 
                  _module.getFilePos ()));
             _repInfo.setWellFormed (false);
             return false;

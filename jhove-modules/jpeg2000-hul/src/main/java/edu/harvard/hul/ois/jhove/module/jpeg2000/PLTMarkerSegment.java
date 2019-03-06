@@ -41,7 +41,7 @@ public class PLTMarkerSegment extends MarkerSegment {
         Tile tile = _ccs.getCurTile ();
         if (tile == null) {
             _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_PLT_MARKER_POSITION_INVALID));
+                    (MessageConstants.JPEG2000_HUL_40));
             return false;    // a tile (SOT) is required
         }
         // Skip unsigned byte
@@ -59,7 +59,7 @@ public class PLTMarkerSegment extends MarkerSegment {
                 if (--bytesToEat < 0) {
                     // bytes of a number can't cross marker segment boundaries
                     _repInfo.setMessage (new ErrorMessage
-                            (MessageConstants.ERR_PLT_MARKER_PACKET_SIZE_INVALID));
+                            (MessageConstants.JPEG2000_HUL_39));
                     return false;
                 }
                 pktLen = (pktLen << 7) | (pkByte | 0X7F);

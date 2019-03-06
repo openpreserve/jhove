@@ -199,7 +199,7 @@ public class Stream
             }
             else if (!Character.isWhitespace(c)) {
                 throw new PdfMalformedException 
-                    (MessageConstants.ERR_STREAM_ASCII_INTEGER_INVALID); // PDF-HUL-46
+                    (MessageConstants.PDF_HUL_46); // PDF-HUL-46
             }
         }
         return val;

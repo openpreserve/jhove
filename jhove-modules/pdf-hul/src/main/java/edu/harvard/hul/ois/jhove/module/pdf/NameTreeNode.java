@@ -78,13 +78,13 @@ public class NameTreeNode
             }
         }
         catch (ClassCastException ce) {
-            throw new PdfInvalidException (MessageConstants.ERR_NAME_TREE_INVALID); // PDF-HUL-12
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_12); // PDF-HUL-12
         }
         catch (ArrayIndexOutOfBoundsException | NullPointerException ce) {
-            throw new PdfInvalidException (MessageConstants.ERR_NAME_TREE_INVALID); // PDF-HUL-13
+            throw new PdfInvalidException (MessageConstants.PDF_HUL_13); // PDF-HUL-13
         }
         catch (IOException e) {
-            throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID); // PDF-HUL-14
+            throw new PdfMalformedException (MessageConstants.PDF_HUL_14); // PDF-HUL-14
         }
     }
 
@@ -152,10 +152,10 @@ public class NameTreeNode
                 }
                 return null;    // Not in any subnode
             }
-            else throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID); // PDF-HUL-15
+            else throw new PdfMalformedException (MessageConstants.PDF_HUL_15); // PDF-HUL-15
         }
         catch (IOException | ArrayIndexOutOfBoundsException | NullPointerException | ClassCastException e) {
-            throw new PdfMalformedException (MessageConstants.ERR_NAME_TREE_INVALID); // PDF-HUL-16
+            throw new PdfMalformedException (MessageConstants.PDF_HUL_16); // PDF-HUL-16
         }
     }
 

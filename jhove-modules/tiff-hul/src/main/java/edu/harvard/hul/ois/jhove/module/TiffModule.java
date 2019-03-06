@@ -19,12 +19,89 @@
 
 package edu.harvard.hul.ois.jhove.module;
 
-import edu.harvard.hul.ois.jhove.*;
-import edu.harvard.hul.ois.jhove.module.tiff.*;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.logging.Logger;
 
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
+import edu.harvard.hul.ois.jhove.Agent;
+import edu.harvard.hul.ois.jhove.AgentType;
+import edu.harvard.hul.ois.jhove.Document;
+import edu.harvard.hul.ois.jhove.DocumentType;
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.ExternalSignature;
+import edu.harvard.hul.ois.jhove.Identifier;
+import edu.harvard.hul.ois.jhove.IdentifierType;
+import edu.harvard.hul.ois.jhove.InfoMessage;
+import edu.harvard.hul.ois.jhove.InternalSignature;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.NisoImageMetadata;
+import edu.harvard.hul.ois.jhove.Property;
+import edu.harvard.hul.ois.jhove.PropertyArity;
+import edu.harvard.hul.ois.jhove.PropertyType;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.Signature;
+import edu.harvard.hul.ois.jhove.SignatureType;
+import edu.harvard.hul.ois.jhove.SignatureUseType;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+import edu.harvard.hul.ois.jhove.module.tiff.ExifIFD;
+import edu.harvard.hul.ois.jhove.module.tiff.GPSInfoIFD;
+import edu.harvard.hul.ois.jhove.module.tiff.GlobalParametersIFD;
+import edu.harvard.hul.ois.jhove.module.tiff.IFD;
+import edu.harvard.hul.ois.jhove.module.tiff.InteroperabilityIFD;
+import edu.harvard.hul.ois.jhove.module.tiff.MessageConstants;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffException;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffIFD;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfile;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassB;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassG;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITBL;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITBLP1;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITBP;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITBPP1;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITBPP2;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITCT;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITCTP1;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITCTP2;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITFP;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITFPP1;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITFPP2;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITHC;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITHCP1;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITHCP2;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITLW;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITLWP1;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITLWP2;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITMP;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITMPP1;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITMPP2;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITSD;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassITSDP2;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassP;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassR;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileClassY;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileDLFBW;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileDLFColor;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileDLFGray;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileDNG;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileDNGThumb;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileEP;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileExif;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileExifThumb;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileFXC;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileFXF;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileFXJ;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileFXL;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileFXM;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileFXS;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileGeoTIFF;
+import edu.harvard.hul.ois.jhove.module.tiff.TiffProfileRFC1314;
 
 /**
  * Module for identification and validation of TIFF files.
@@ -435,8 +512,9 @@ public class TiffModule extends ModuleBase {
             byte ch0 = _raf.readByte();
             byte ch1 = _raf.readByte();
             if (ch0 != ch1 || (ch0 != 0X49 && ch0 != 0X4D)) {
-                throw new TiffException(MessageConstants.ERR_TIFF_HEADER_MISSING + (char) ch0
-                        + (char) ch1, 0);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_20.getMessage(), (char) ch0, (char) ch1);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_20.getId(), mess);
+                throw new TiffException(message, 0);
             }
             inHeader = false;
 
@@ -446,7 +524,9 @@ public class TiffModule extends ModuleBase {
 
             int magic = readUnsignedShort(_raf, _bigEndian);
             if (magic != 42) {
-                throw new TiffException(MessageConstants.ERR_TIFF_MAGIC_NUM_MISSING + magic, 2);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_21.getMessage(), magic);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_21.getId(), mess);
+                throw new TiffException(message, 2);
             }
 
             /* If we got this far, take note that the signature is OK. */
@@ -554,11 +634,12 @@ public class TiffModule extends ModuleBase {
             info.setWellFormed(false);
             return;
         } catch (IOException e) {
-            String msg;
+            JhoveMessage msg;
             if (inHeader) {
-                msg = MessageConstants.ERR_FILE_TOO_SHORT;
+                msg = MessageConstants.TIFF_HUL_67;
             } else {
-                msg = e.getClass().getName();
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_68.getMessage(), e.getClass().getName());
+                msg = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_68.getId(), mess);
             }
             info.setMessage(new ErrorMessage(msg));
             info.setWellFormed(false);
@@ -568,13 +649,7 @@ public class TiffModule extends ModuleBase {
         /* Object is well-formed TIFF. */
 
         /* Calculate checksums, if necessary. */
-        if (_je != null && _je.getChecksumFlag()) {
-            if (info.getChecksum().isEmpty()) {
-                Checksummer ckSummer = new Checksummer();
-                calcRAChecksum(ckSummer, raf);
-                setChecksums(ckSummer, info);
-            }
-        }
+        checksumIfRafNotCopied(info, raf);
 
         info.setMimeType(_mimeType[selectMimeTypeIndex()]);
 
@@ -611,14 +686,17 @@ public class TiffModule extends ModuleBase {
             byte ch0 = _raf.readByte();
             byte ch1 = _raf.readByte();
             if (ch0 != ch1 || (ch0 != 0X49 && ch0 != 0X4D)) {
-                throw new TiffException(MessageConstants.ERR_TIFF_HEADER_MISSING + (char) ch0
-                        + (char) ch1, 0);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_22.getMessage(), (char) ch0, (char) ch1);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_22.getId(), mess);
+                throw new TiffException(message, 0);
             }
             _bigEndian = (ch0 == 0X4D);
 
             int magic = readUnsignedShort(_raf, _bigEndian);
             if (magic != 42) {
-                throw new TiffException(MessageConstants.ERR_TIFF_MAGIC_NUM_MISSING + magic, 2);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_23.getMessage(), magic);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_23.getId(), mess);
+                throw new TiffException(message, 2);
             }
             inHeader = false; // There's SOMETHING in the file
 
@@ -663,11 +741,12 @@ public class TiffModule extends ModuleBase {
             info.setMessage(new InfoMessage(e.getMessage(), e.getOffset()));
             return ifds;
         } catch (IOException e) {
-            String msg;
+            JhoveMessage msg;
             if (inHeader) {
-                msg = MessageConstants.ERR_EXIF_BLOCK_TOO_SHORT;
+                msg = MessageConstants.TIFF_HUL_70;
             } else {
-                msg = e.getClass().getName();
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_69.getMessage(), e.getClass().getName());
+                msg = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_69.getId(), mess);
             }
             info.setMessage(new ErrorMessage(msg));
             info.setWellFormed(false);
@@ -779,15 +858,15 @@ public class TiffModule extends ModuleBase {
         NisoImageMetadata niso = ifd.getNisoImageMetadata();
         int photometricInterpretation = niso.getColorSpace();
         if (photometricInterpretation == NisoImageMetadata.NULL) {
-            reportInvalid(MessageConstants.INF_PHO_NO_DEF, info);
+            reportInvalid(MessageConstants.TIFF_HUL_63, info);
         }
         long imageWidth = niso.getImageWidth();
         if (imageWidth == NisoImageMetadata.NULL) {
-            reportInvalid(MessageConstants.INF_IMAGE_WID_NO_DEF, info);
+            reportInvalid(MessageConstants.TIFF_HUL_62, info);
         }
         long imageLength = niso.getImageLength();
         if (imageLength == NisoImageMetadata.NULL) {
-            reportInvalid(MessageConstants.INF_IMAGE_WID_NO_DEF, info);
+            reportInvalid(MessageConstants.TIFF_HUL_64, info);
         }
 
         /* Strips and tiles. */
@@ -804,12 +883,12 @@ public class TiffModule extends ModuleBase {
                 || tileLength != NisoImageMetadata.NULL || tileOffsets != null || tileByteCounts != null);
 
         if (stripsDefined && tilesDefined) {
-            reportInvalid(MessageConstants.INF_STR_AND_TILE_TOGETHER, info);
-            throw new TiffException(MessageConstants.INF_STR_AND_TILE_TOGETHER);
+            reportInvalid(MessageConstants.TIFF_HUL_24, info);
+            throw new TiffException(MessageConstants.TIFF_HUL_24);
         }
         if (!stripsDefined && !tilesDefined) {
-            reportInvalid(MessageConstants.INF_STR_AND_TILE_NO_DEF, info);
-            throw new TiffException(MessageConstants.INF_STR_AND_TILE_NO_DEF);
+            reportInvalid(MessageConstants.TIFF_HUL_25, info);
+            throw new TiffException(MessageConstants.TIFF_HUL_25);
         }
 
         int planarConfiguration = niso.getPlanarConfiguration();
@@ -817,18 +896,19 @@ public class TiffModule extends ModuleBase {
 
         if (stripsDefined) {
             if (stripOffsets == null) {
-                reportInvalid(MessageConstants.INF_STR_OFF_NO_DEF, info);
-                throw new TiffException(MessageConstants.INF_STR_OFF_NO_DEF);
+                reportInvalid(MessageConstants.TIFF_HUL_26, info);
+                throw new TiffException(MessageConstants.TIFF_HUL_26);
             }
             if (stripByteCounts == null) {
-                reportInvalid(MessageConstants.INF_STR_BYTE_COUNT_NO_DEF, info);
-                throw new TiffException(MessageConstants.INF_STR_BYTE_COUNT_NO_DEF);
+                reportInvalid(MessageConstants.TIFF_HUL_27, info);
+                throw new TiffException(MessageConstants.TIFF_HUL_27);
             }
 
             int len = stripOffsets.length;
             if (len != stripByteCounts.length) {
-                reportInvalid(MessageConstants.INF_STR_OFF_BYTE_COUNT_INCONS + len + "!="
-                        + stripByteCounts.length, info);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_28.getMessage(), len, stripByteCounts.length);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_28.getId(), mess);
+                reportInvalid(message, info);
             }
             /* Check that all the strips are located within the file */
             try {
@@ -837,7 +917,7 @@ public class TiffModule extends ModuleBase {
                     long offset = stripOffsets[i];
                     long count = stripByteCounts[i];
                     if (offset + count > fileLength) {
-                        reportInvalid(MessageConstants.INF_STR_OFF_INVALID, info);
+                        reportInvalid(MessageConstants.TIFF_HUL_29, info);
                     }
                 }
             } catch (IOException e) {
@@ -846,25 +926,27 @@ public class TiffModule extends ModuleBase {
 
         if (tilesDefined) {
             if (tileWidth == NisoImageMetadata.NULL) {
-                reportInvalid(MessageConstants.ERR_TILE_WID_NO_DEF, info);
+                reportInvalid(MessageConstants.TIFF_HUL_30, info);
             }
             if (tileLength == NisoImageMetadata.NULL) {
-                reportInvalid(MessageConstants.ERR_TILE_LEN_NO_DEF, info);
+                reportInvalid(MessageConstants.TIFF_HUL_31, info);
             }
             if (tileOffsets == null) {
-                reportInvalid(MessageConstants.ERR_TILE_OFF_NO_DEF, info);
+                reportInvalid(MessageConstants.TIFF_HUL_32, info);
             }
             if (tileByteCounts == null) {
-                reportInvalid(MessageConstants.ERR_TILE_COUNT_NO_DEF, info);
+                reportInvalid(MessageConstants.TIFF_HUL_33, info);
             }
 
             if (tileWidth % 16 > 0) {
-                reportInvalid(MessageConstants.ERR_TILE_WID_NOT_DIV_16 + tileWidth,
-                        info);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_34.getMessage(), tileWidth);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_34.getId(), mess);
+                reportInvalid(message, info);
             }
             if (tileLength % 16 > 0) {
-                reportInvalid(MessageConstants.ERR_TILE_LEN_NOT_DIV_16 + tileLength,
-                        info);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_35.getMessage(), tileLength);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_35.getId(), mess);
+                reportInvalid(message, info);
             }
 
             long tilesPerImage = ((imageWidth + tileWidth - 1) / tileWidth)
@@ -872,22 +954,26 @@ public class TiffModule extends ModuleBase {
             if (planarConfiguration == 2) {
                 long spp_tpi = samplesPerPixel * tilesPerImage;
                 if (tileOffsets != null && tileOffsets.length < spp_tpi) {
-                    reportInvalid(MessageConstants.ERR_TILE_OFF_MISS_VALS
-                            + tileOffsets.length + "<" + spp_tpi, info);
+                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_36.getMessage(), tileOffsets.length, spp_tpi);
+                    JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_36.getId(), mess);
+                    reportInvalid(message, info);
                 }
                 if (tileByteCounts != null && tileByteCounts.length < spp_tpi) {
-                    reportInvalid(MessageConstants.ERR_TILE_COUNT_MISS_VALS + tileByteCounts.length + "<"
-                            + spp_tpi, info);
+                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_37.getMessage(), tileByteCounts.length, spp_tpi);
+                    JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_37.getId(), mess);
+                    reportInvalid(message, info);
                 }
             } else {
                 if (tileOffsets != null && tileOffsets.length < tilesPerImage) {
-                    reportInvalid(MessageConstants.ERR_TILE_OFF_MISS_VALS
-                            + tileOffsets.length + "<" + tilesPerImage, info);
+                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_38.getMessage(), tileOffsets.length, tilesPerImage);
+                    JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_38.getId(), mess);
+                    reportInvalid(message, info);
                 }
                 if (tileByteCounts != null
                         && tileByteCounts.length < tilesPerImage) {
-                    reportInvalid(MessageConstants.ERR_TILE_COUNT_MISS_VALS + tileByteCounts.length + "<"
-                            + tilesPerImage, info);
+                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_39.getMessage(), tileByteCounts.length, tilesPerImage);
+                    JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_37.getId(), mess);
+                    reportInvalid(message, info);
                 }
             }
         }
@@ -897,13 +983,13 @@ public class TiffModule extends ModuleBase {
         int newSubfileType = (int) ifd.getNewSubfileType();
         if ((photometricInterpretation == 4 && (newSubfileType & 4) == 0)
                 || (photometricInterpretation != 4 && (newSubfileType & 4) != 0)) {
-            reportInvalid(MessageConstants.ERR_PHO_AND_NEW_SUBFILE_INCONSISTENT,
+            reportInvalid(MessageConstants.TIFF_HUL_40,
                     info);
         }
         int[] bitsPerSample = niso.getBitsPerSample();
         if (photometricInterpretation == 4) {
             if (samplesPerPixel < 1 || bitsPerSample[0] != 1) {
-                reportInvalid(MessageConstants.ERR_TRANS_MASK_BPS, info);
+                reportInvalid(MessageConstants.TIFF_HUL_41, info);
             }
         }
 
@@ -913,15 +999,17 @@ public class TiffModule extends ModuleBase {
                 || photometricInterpretation == 3
                 || photometricInterpretation == 4) {
             if (samplesPerPixel < 1) {
-                reportInvalid(MessageConstants.ERR_PHO_INT_SPP_GT_1
-                        + samplesPerPixel, info);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_42.getMessage(), samplesPerPixel);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_42.getId(), mess);
+                reportInvalid(message, info);
             }
         }
         if (photometricInterpretation == 2 || photometricInterpretation == 6
                 || photometricInterpretation == 8) {
             if (samplesPerPixel < 3) {
-                reportInvalid(MessageConstants.ERR_PHO_INT_SPP_GT_1
-                        + samplesPerPixel, info);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_42.getMessage(), samplesPerPixel);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_42.getId(), mess);
+                reportInvalid(message, info);
             }
         }
 
@@ -934,24 +1022,26 @@ public class TiffModule extends ModuleBase {
             int[] colormapBlueValue = niso.getColormapBlueValue();
             if (colormapBitCodeValue == null || colormapRedValue == null
                     || colormapGreenValue == null || colormapBlueValue == null) {
-                reportInvalid(MessageConstants.ERR_COL_MAP_NOT_DEF,
+                reportInvalid(MessageConstants.TIFF_HUL_44,
                         info);
             }
             if (samplesPerPixel != 1) {
-                reportInvalid(MessageConstants.ERR_PAL_COL_SPP_NE_1 + samplesPerPixel, info);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_45.getMessage(), samplesPerPixel);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_45.getId(), mess);
+                reportInvalid(message, info);
             }
             int len = (1 << bitsPerSample[0]);
             if (colormapBitCodeValue.length < len) {
-                reportInvalid(MessageConstants.ERR_COL_MAP_MISS_VALS +
-                              colormapBitCodeValue.length + "<"  + len,
-                              info);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_46.getMessage(), colormapBitCodeValue.length, len);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_46.getId(), mess);
+                reportInvalid(message, info);
             }
         }
 
         /* Cells. */
 
         if (ifd.getCellLength() != IFD.NULL && ifd.getThreshholding() != 2) {
-            reportInvalid(MessageConstants.ERR_CELL_LEN_NOT_ALLWD, info);
+            reportInvalid(MessageConstants.TIFF_HUL_47, info);
         }
 
         /* Dot range. */
@@ -961,14 +1051,14 @@ public class TiffModule extends ModuleBase {
             int sampleMax = 1 << bitsPerSample[0];
             if (dotRange.length < 2 || dotRange[0] >= sampleMax
                     || dotRange[1] >= sampleMax) {
-                reportInvalid(MessageConstants.ERR_DOT_RANGE_BPS, info);
+                reportInvalid(MessageConstants.TIFF_HUL_48, info);
             }
         }
 
         /* JPEG. */
 
         if (niso.getCompressionScheme() == 6 && ifd.getJPEGProc() == IFD.NULL) {
-            reportInvalid(MessageConstants.ERR_JPEGPROC_NO_DEF,
+            reportInvalid(MessageConstants.TIFF_HUL_49,
                     info);
         }
 
@@ -982,12 +1072,13 @@ public class TiffModule extends ModuleBase {
             }
             int in = samplesPerPixel - len;
             if (in != 1 && in != 3) {
-                reportInvalid(MessageConstants.ERR_SPP_EXTRA_NT_1_OR_3 
-                        + samplesPerPixel + "-" + len, info);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_50.getMessage(), samplesPerPixel, len);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_50.getId(), mess);
+                reportInvalid(message, info);
             }
             for (int i = 0; i < bitsPerSample.length; i++) {
                 if (bitsPerSample[i] != 8 && bitsPerSample[i] != 16) {
-                    reportInvalid(MessageConstants.ERR_CIELAB_BPS_NOT_8_OR_16, info);
+                    reportInvalid(MessageConstants.TIFF_HUL_51, info);
                 }
             }
         }
@@ -996,7 +1087,7 @@ public class TiffModule extends ModuleBase {
 
         if (ifd.getClipPath() != null) {
             if (ifd.getXClipPathUnits() == IFD.NULL) {
-                reportInvalid(MessageConstants.ERR_XCLIP_PATH_NO_DEF,
+                reportInvalid(MessageConstants.TIFF_HUL_52,
                         info);
             }
         }
@@ -1006,13 +1097,17 @@ public class TiffModule extends ModuleBase {
         String dateTime = ifd.getDateTime();
         if (dateTime != null) {
             if (dateTime.length() != 19) {
-                reportInvalid(MessageConstants.ERR_DATE_TIME_LEN_INV + dateTime, info);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_53.getMessage(), dateTime);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_53.getId(), mess);
+                reportInvalid(message, info);
                 return;
             }
             if (dateTime.charAt(4) != ':' || dateTime.charAt(7) != ':'
                     || dateTime.charAt(10) != ' ' || dateTime.charAt(13) != ':'
                     || dateTime.charAt(16) != ':') {
-                reportInvalid(MessageConstants.ERR_DATE_TIME_SEP_INV + dateTime, info);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_54.getMessage(), dateTime);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_54.getId(), mess);
+                reportInvalid(message, info);
                 return;
             }
             try {
@@ -1025,17 +1120,21 @@ public class TiffModule extends ModuleBase {
                 if (yyyy < 0 || yyyy > 9999 || mm < 1 || mm > 12 || dd < 1
                         || dd > 31 || hh < 0 || hh > 24 || mn < 0 || mn > 59
                         || ss < 0 || mn > 59) {
-                    reportInvalid(MessageConstants.ERR_DATE_TIME_DIG_INV + dateTime, info);
+                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_55.getMessage(), dateTime);
+                    JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_55.getId(), mess);
+                    reportInvalid(message, info);
                 }
             } catch (Exception e) {
-                reportInvalid(MessageConstants.ERR_DATE_TIME_DIG_INV + dateTime, info);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_56.getMessage(), dateTime);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_56.getId(), mess);
+                reportInvalid(message, info);
             }
         }
     }
 
     /** Report an instance of invalidity. */
-    protected void reportInvalid(String s, RepInfo info) {
-        info.setMessage(new ErrorMessage(s));
+    protected void reportInvalid(final JhoveMessage message, final RepInfo info) {
+        info.setMessage(new ErrorMessage(message));
         info.setValid(false);
 
     }
@@ -1070,20 +1169,22 @@ public class TiffModule extends ModuleBase {
             _raf.seek(offset);
             next = readUnsignedInt(_raf, _bigEndian);
         } catch (IOException e) {
-            throw new TiffException(MessageConstants.ERR_TIFF_PREM_EOF, offset);
+            throw new TiffException(MessageConstants.TIFF_HUL_57, offset);
         }
 
         if (next == 0L) {
-            throw new TiffException(MessageConstants.ERR_IFD_MISSING, offset);
+            throw new TiffException(MessageConstants.TIFF_HUL_58, offset);
         }
 
         List<IFD> list = new LinkedList<IFD>();
         while (next != 0L) {
             if ((next & 1) != 0) {
-                throw new TiffException(MessageConstants.ERR_IFD_OFF_MISALIGN + next);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_59.getMessage(), next);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_59.getId(), mess);
+                throw new TiffException(message);
             }
             if (list.size() > 50) {
-                throw new TiffException(MessageConstants.ERR_IFD_MAX_EXCEEDED);
+                throw new TiffException(MessageConstants.TIFF_HUL_60);
             }
             _logger.info("Parsing next IFD at offset " + next);
             IFD ifd = parseIFDChain(next, info, ifdType, list, suppressErrors);

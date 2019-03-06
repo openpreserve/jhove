@@ -62,7 +62,7 @@ public class CommentMarkerSegment extends MarkerSegment {
             
             default:
             _repInfo.setMessage( (new ErrorMessage 
-                    (MessageConstants.ERR_COM_MARKER_TYPE_INVALID)));
+                    (MessageConstants.JPEG2000_HUL_13)));
             return false;        // other values are reserved
         }
         cs.addComment (prop);

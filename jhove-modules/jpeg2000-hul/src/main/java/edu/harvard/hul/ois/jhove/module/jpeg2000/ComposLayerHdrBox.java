@@ -94,7 +94,7 @@ public class ComposLayerHdrBox extends JP2Box {
         }
         if (hasOpacity && hasChannelDef) {
             _repInfo.setMessage (new ErrorMessage
-                    (MessageConstants.ERR_COMP_LAYER_HEADER_BOX_OPACITY_WITH_CHANNEL,
+                    (MessageConstants.JPEG2000_HUL_12,
                      _module.getFilePos ()));
             _repInfo.setValid (false);
         }

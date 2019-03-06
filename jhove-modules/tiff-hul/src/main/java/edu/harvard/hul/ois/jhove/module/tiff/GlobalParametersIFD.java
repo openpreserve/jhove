@@ -6,7 +6,11 @@
 package edu.harvard.hul.ois.jhove.module.tiff;
 
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 import java.io.*;
+import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -152,7 +156,11 @@ public class GlobalParametersIFD extends IFD {
             }
         }
         catch (IOException e) {
-            throw new TiffException(MessageConstants.ERR_TAG_IO_READ + tag, value);
+			String mess = MessageFormat
+					.format(MessageConstants.TIFF_HUL_19.getMessage(), Integer.valueOf(tag));
+			JhoveMessage message = JhoveMessages.getMessageInstance(
+					MessageConstants.TIFF_HUL_19.getId(), mess);
+            throw new TiffException(message, value);
         }
     }
 

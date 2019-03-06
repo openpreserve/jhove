@@ -1,5 +1,9 @@
 package edu.harvard.hul.ois.jhove.module.iff;
 
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessageFactory;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 /**
  * @author  <a href="mailto:carl@openpreservation.org">Carl Wilson</a>
  *          <a href="https://github.com/carlwilson">carlwilson AT github</a>
@@ -10,7 +14,16 @@ package edu.harvard.hul.ois.jhove.module.iff;
  */
 public enum MessageConstants {
 	INSTANCE;
+	private static final JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.module.iff.ErrorMessages"); //$NON-NLS-1$
+	/**
+	 * Info messages
+	 */
+	public static final String INF_CHUNK_TYPE_IGNORED = "Ignored chunk type with ID: ";
 
-	public static final String ERR_CHUNK_ID_CHAR_INV = "Invalid character in Chunk ID";
-	public static final String ERR_CHUNK_ID_CHAR_SUB = "Character = 0x";
+	/**
+	 * Error messages
+	 */
+	public static final JhoveMessage IFF_HUL_1 = messageFactory.getMessage("IFF-HUL-1"); //$NON-NLS-1$
+	public static final JhoveMessage IFF_HUL_1_SUB = messageFactory.getMessage("IFF-HUL-1-SUB"); //$NON-NLS-1$
+
 }

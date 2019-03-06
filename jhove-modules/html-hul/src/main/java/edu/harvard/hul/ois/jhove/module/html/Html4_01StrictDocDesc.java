@@ -7,6 +7,8 @@ package edu.harvard.hul.ois.jhove.module.html;
 
 //import edu.harvard.hul.ois.jhove.*;
 import java.util.*;
+
+import edu.harvard.hul.ois.jhove.module.HtmlModule;
 //import java.io.*;
 
 /**
@@ -137,6 +139,7 @@ public class Html4_01StrictDocDesc extends Html4StrictDocDesc {
      */
     public Html4_01StrictDocDesc ()
     {
+        super();
         // publish stSupportedElements to superclass
         supportedElements = stSupportedElements;
         init ();

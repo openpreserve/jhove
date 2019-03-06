@@ -41,7 +41,7 @@ public class PaletteBox extends JP2Box {
 	public boolean readBox() throws IOException {
         if (!(_parentBox instanceof JP2HeaderBox)) {
             _repInfo.setMessage (new ErrorMessage
-                (MessageConstants.ERR_IMAGE_HEADER_BOX_CONTEXT_INVALID,
+                (MessageConstants.JPEG2000_HUL_26,
                  _module.getFilePos ()));
             return false;
         }
@@ -55,7 +55,7 @@ public class PaletteBox extends JP2Box {
         // 2 bytes have been read
         if (ne < 1 || ne > 1024) {
             _repInfo.setMessage (new ErrorMessage
-                (MessageConstants.ERR_PALETTE_BOX_NUMBER_OF_ENTRIES_INVALID,
+                (MessageConstants.JPEG2000_HUL_37,
                  _module.getFilePos()));
             _repInfo.setValid (false);  // But keep going anyway
         }

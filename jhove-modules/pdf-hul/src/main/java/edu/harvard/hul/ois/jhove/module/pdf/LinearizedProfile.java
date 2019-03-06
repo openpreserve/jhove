@@ -1,6 +1,7 @@
 
 package edu.harvard.hul.ois.jhove.module.pdf;
 
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import edu.harvard.hul.ois.jhove.module.*;
 import java.util.*;
 import java.util.logging.*;
@@ -213,9 +214,9 @@ public final class LinearizedProfile extends PdfProfile
         try {
             _logger.info (MessageConstants.LOG_XREF_TABLE_VERIFYING);
             _parser.seek (xrefOffset);
-            _parser.getNext (Numeric.class, "");  // Object number
-            _parser.getNext (Numeric.class, "");  // Generation number
-            _parser.getNext (Keyword.class, "");  // n or f keyword
+            _parser.getNext (Numeric.class, JhoveMessages.DEFAULT_MESSAGE);  // Object number
+            _parser.getNext (Numeric.class, JhoveMessages.DEFAULT_MESSAGE);  // Generation number
+            _parser.getNext (Keyword.class, JhoveMessages.DEFAULT_MESSAGE);  // n or f keyword
             // If that didn't throw an exception, assume we're ok
             return true;
         }

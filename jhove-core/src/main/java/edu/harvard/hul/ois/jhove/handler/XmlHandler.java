@@ -678,12 +678,8 @@ public class XmlHandler
             attrs[1] [1] = Long.toString (offset);
             hasAttr = true;
         }
-        if (message instanceof ErrorMessage) {
-            attrs[2] [1] = "error";
-            hasAttr = true;
-        }
-        else if (message instanceof InfoMessage) {
-            attrs[2] [1] = "info";
+        if (!message.getPrefix().isEmpty()) {
+            attrs[2] [1] = message.getPrefix().toLowerCase();
             hasAttr = true;
         }
         if (hasAttr) {
