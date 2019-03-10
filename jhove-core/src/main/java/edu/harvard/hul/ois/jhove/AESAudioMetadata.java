@@ -47,7 +47,7 @@ public class AESAudioMetadata
      ******************************************************************/
 
     /** Constant value for the SchemaVersion field */
-    public static final String SCHEMA_VERSION = "1.02b";
+    public static final String SCHEMA_VERSION = "1.0.0";
     
     /** Constant value for the disposition field */
     private static final String DEFAULT_DISPOSITION = "validation";
@@ -160,20 +160,9 @@ public class AESAudioMetadata
      *  accessed through the public methods of this interface.
      */
     public static interface TimeDesc {
-        /** Returns the hours component. */
-        public long getHours ();
-        /** Returns the minutes component. */
-        public long getMinutes ();
-        /** Returns the seconds component. */
-        public long getSeconds ();
-        /** Returns the frames component of the fraction of a second.
-         *  We always consider frames to be thirtieths of a second. */
-        public long getFrames ();
-        /** Returns the samples remaining after the frames part of
-         *  the fractional second. */
+        /** Returns the number of samples. */
         public long getSamples ();
-        /** Returns the sample rate on which the samples remainder
-         *  is based. */
+        /** Returns the sample rate. */
         public double getSampleRate ();
     }
     
@@ -371,26 +360,12 @@ public class AESAudioMetadata
      */
     class TimeDescImpl implements TimeDesc
     {
-        private long _hours;
-        private long _minutes;
-        private long _seconds;
-        private long _frames;
         private long _samples;
         private double _sampleRate;
-        private long _frameCount;
         
-	/* Constructor rewritten to avoid rounding errors when converting to
-	 * TCF. Now uses integer remainder math instead of floating point.
-	 * Changed the base unit from a double representing seconds to a long
-	 * representing samples. Changed all existing calls (that I could find)
-	 * to this method to accomodate this change.
-	 *
-	 * @author David Ackerman
-	 */
         public TimeDescImpl (long samples)
 	{
-	    long _sample_count = samples;
-	    _frameCount = 30;
+	    _samples = samples;
 	    _sampleRate = _curFormatRegion.getSampleRate ();
 			
 	    /* It seems that this method is initially called before a valid
@@ -400,73 +375,15 @@ public class AESAudioMetadata
 	    if (_sampleRate < 0) {
                 _sampleRate = 44100.0; //reasonable default value 
             }
-
-	    long sample_in_1_frame = (long)(_sampleRate/_frameCount);
-	    long sample_in_1_second = sample_in_1_frame * _frameCount;
-	    long sample_in_1_minute = sample_in_1_frame * _frameCount * 60;
-	    long sample_in_1_hour = sample_in_1_frame * _frameCount * 60 * 60;
-	    long sample_in_1_day = sample_in_1_frame * _frameCount * 60 * 60 * 24;
-			
-	    // BWF allows for a negative timestamp but tcf does not, so adjust
-	    // time accordingly
-	    // this might be a good place to report a warning during validation
-	    if (_sample_count < 0) {
-		_sample_count += sample_in_1_day;
-		_sample_count = (_sample_count % sample_in_1_day);
-	    }
-		
-	    _hours = _sample_count / sample_in_1_hour;
-	    _sample_count -= _hours * sample_in_1_hour;
-	    _minutes = _sample_count / sample_in_1_minute;
-	    _sample_count -= _minutes * sample_in_1_minute;
-	    _seconds = _sample_count / sample_in_1_second;
-	    _sample_count -= _seconds * sample_in_1_second;
-	    _frames = _sample_count / sample_in_1_frame;
-	    _sample_count -= _frames * sample_in_1_frame;
-	    _samples = _sample_count;
-			
-	    /* At present TCF does not have the ability to handle time stamps
-	     * > midnight. Industry practice is to roll the clock forward to
-	     * zero or back to 23:59:59:29... when crossing this boundary
-	     * condition.
-	     */
-	    _hours = _hours % 24;	
         }
         
-        /** Returns the hours component. */
-        @Override
-        public long getHours () {
-            return _hours;
-        }
-
-        /** Returns the minutes component. */
-        @Override
-        public long getMinutes () {
-            return _minutes;
-        }
-
-        /** Returns the seconds component. */
-        @Override
-        public long getSeconds () {
-            return _seconds;
-        }
-
-        /** Returns the frames component of the fraction of a second.
-         *  We always consider frames to be thirtieths of a second. */
-        @Override
-        public long getFrames () {
-            return _frames;
-        }
-
-        /** Returns the samples remaining after the frames part of
-         *  the fractional second. */
+        /** Returns the number of samples. */
         @Override
         public long getSamples () {
             return _samples;
         }
         
-        /** Returns the sample rate on which the samples remainder
-         *  is based. */
+        /** Returns the sample rate. */
         @Override
         public double getSampleRate () {
             return _sampleRate;
