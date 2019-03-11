@@ -93,7 +93,7 @@ public class AuditHandler extends XmlHandler {
 		_rights = RIGHTS;
 
 		// Initialize the handler.
-		_mimeType = new TreeMap<>();
+		_mimeType = new TreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder()));
 		_stateMap = new TreeMap<>();
 		_stateStack = new Stack<>();
 		_nAudit = 0;
@@ -247,14 +247,14 @@ public class AuditHandler extends XmlHandler {
 		int nTotal = 0;
 		int nValid = 0;
 		int nWellFormed = 0;
-		Set<String> keys = _mimeType.keySet();
-		Iterator<String> iter = keys.iterator();
-		while (iter.hasNext()) {
-			String mime = iter.next();
-			AuditCount count = _mimeType.get(mime);
+		for (Map.Entry<String, AuditCount> entry : _mimeType.entrySet()) {
+			String mime = entry.getKey();
+			AuditCount count = entry.getValue();
+
 			int total = count.getTotal();
 			int valid = count.getValid();
 			int wellFormed = count.getWellFormed();
+			if (mime == null) mime = "None";
 
 			_writer.println(mime + ": " + total + " (" + valid + "," +
 					wellFormed + ")");
@@ -273,11 +273,9 @@ public class AuditHandler extends XmlHandler {
 		nWellFormed = 0;
 		int nNotFound = 0;
 		int nNotProcessed = 0;
-		keys = _stateMap.keySet();
-		iter = keys.iterator();
-		while (iter.hasNext()) {
-			String directory = iter.next();
-			state = _stateMap.get(directory);
+		for (Map.Entry<String, AuditState> entry : _stateMap.entrySet()) {
+			String directory = entry.getKey();
+			state = entry.getValue();
 
 			int total = state.getTotal();
 			int valid = state.getValid();
@@ -336,7 +334,7 @@ public class AuditHandler extends XmlHandler {
 	public void showHeader() {
 
 		// Initialize the handler.
-		_mimeType = new TreeMap<>();
+		_mimeType = new TreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder()));
 		_stateMap = new TreeMap<>();
 		_stateStack = new Stack<>();
 		_nAudit = 0;
