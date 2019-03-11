@@ -120,23 +120,6 @@ public class AuditHandler extends XmlHandler {
 	}
 
 	/**
-	 * Determine whether or not to process the file.
-	 *
-	 * @param filepath File pathname
-	 */
-	@Override
-	public final boolean okToProcess(String filepath) {
-		AuditState state = _stateStack.peek();
-
-		boolean ok = true;
-		if (!ok) {
-			state.setNotProcessed(state.getNotProcessed() + 1);
-		}
-
-		return ok;
-	}
-
-	/**
 	 * Outputs the information contained in a RepInfo object.
 	 *
 	 * @param info Object representation information
@@ -145,31 +128,27 @@ public class AuditHandler extends XmlHandler {
 	public void show(RepInfo info) {
 		AuditState state = _stateStack.peek();
 
-		// If the file is not found, then no module is assigned in the
-		// RepInfo object.
-		if (info.getModule() == null) {
-			state.setNotFound(state.getNotFound() + 1);
+		String mime = info.getMimeType();
+		AuditCount count = _mimeType.get(mime);
+		if (count == null) count = new AuditCount();
 
-			_writer.println("<!-- File not found or not readable: " +
-					info.getUri() + " -->");
-		} else {
-			String mime = info.getMimeType();
-			AuditCount count = _mimeType.get(mime);
-
-			if (count == null) {
-				count = new AuditCount();
-			}
-
-			int valid = info.getValid();
-			if (valid == RepInfo.TRUE) {
+		if (info.getWellFormed() == RepInfo.TRUE) {
+			if (info.getValid() == RepInfo.TRUE) {
 				state.setValid(state.getValid() + 1);
 				count.setValid(count.getValid() + 1);
 			} else {
 				state.setWellFormed(state.getWellFormed() + 1);
 				count.setWellFormed(count.getWellFormed() + 1);
 			}
-			_mimeType.put(mime, count);
+		} else if (info.getWellFormed() == RepInfo.FALSE) {
+			state.setNotWellFormed(state.getNotWellFormed() + 1);
+			count.setNotWellFormed(count.getNotWellFormed() + 1);
+		} else {
+			state.setUndetermined(state.getUndetermined() + 1);
+			count.setUndetermined(count.getUndetermined() + 1);
 		}
+
+		_mimeType.put(mime, count);
 
 		showImpl(info);
 	}
@@ -183,19 +162,21 @@ public class AuditHandler extends XmlHandler {
 	public void showImpl(RepInfo info) {
 
 		String status;
-		String mime = info.getMimeType();
-		if (mime != null) {
-			if (info.getWellFormed() == RepInfo.TRUE) {
-				if (info.getValid() == RepInfo.TRUE) {
+		switch (info.getWellFormed()) {
+
+			case RepInfo.TRUE:
+				if (info.getValid() == RepInfo.TRUE)
 					status = "valid";
-				} else {
+				else
 					status = "well-formed";
-				}
-			} else {
+				break;
+
+			case RepInfo.FALSE:
 				status = "not well-formed";
-			}
-		} else {
-			status = "not found";
+				break;
+
+			default:
+				status = "unknown";
 		}
 
 		// Retrieve the MD5 checksum, if available.
@@ -224,6 +205,9 @@ public class AuditHandler extends XmlHandler {
 		if (n == 0) {
 			uri = uri.substring(_home.length() + 1);
 		}
+
+		String mime = info.getMimeType();
+
 		String[][] attrs = {{"mime", mime}, {"status", status},	{"md5", md5}};
 		_writer.println(margn2 + element("file", attrs, uri));
 		_nAudit++;
@@ -237,64 +221,73 @@ public class AuditHandler extends XmlHandler {
 	@Override
 	public void showFooter() {
 		AuditState state = _stateStack.pop();
-		if (state.getTotal() > 0 || state.getNotFound() > 0) {
+		if (state.getTotal() > 0) {
 			_stateMap.put(state.getDirectory(), state);
 		}
 
 		showFooterImpl();
 
 		_writer.println("<!-- Summary by MIME type:");
+		_writer.println("<!-- [mime type]: [file count] " +
+				"([valid],[well-formed],[not well-formed],[unknown])");
 		int nTotal = 0;
 		int nValid = 0;
 		int nWellFormed = 0;
+		int nNotWellFormed = 0;
+		int nUndetermined = 0;
+
 		for (Map.Entry<String, AuditCount> entry : _mimeType.entrySet()) {
 			String mime = entry.getKey();
 			AuditCount count = entry.getValue();
-
 			int total = count.getTotal();
 			int valid = count.getValid();
 			int wellFormed = count.getWellFormed();
+			int notWellFormed = count.getNotWellFormed();
+			int undetermined = count.getUndetermined();
 			if (mime == null) mime = "None";
 
 			_writer.println(mime + ": " + total + " (" + valid + "," +
-					wellFormed + ")");
+					wellFormed + "," + notWellFormed + "," + undetermined + ")");
 
 			nTotal += total;
 			nValid += valid;
 			nWellFormed += wellFormed;
+			nNotWellFormed += notWellFormed;
+			nUndetermined += undetermined;
 		}
 		_writer.println("Total: " + nTotal + " (" + nValid + "," +
-				nWellFormed + ")");
+				nWellFormed + "," + nNotWellFormed + "," + nUndetermined + ")");
 		_writer.println("-->");
 
 		_writer.println("<!-- Summary by directory:");
+		_writer.println("<!-- [directory]: [file count] " +
+				"([valid],[well-formed],[not well-formed],[unknown])");
 		nTotal = 0;
 		nValid = 0;
 		nWellFormed = 0;
-		int nNotFound = 0;
-		int nNotProcessed = 0;
+		nNotWellFormed = 0;
+		nUndetermined = 0;
+
 		for (Map.Entry<String, AuditState> entry : _stateMap.entrySet()) {
 			String directory = entry.getKey();
 			state = entry.getValue();
-
 			int total = state.getTotal();
 			int valid = state.getValid();
 			int wellFormed = state.getWellFormed();
-			int notFound = state.getNotFound();
-			int notProcessed = state.getNotProcessed();
+			int notWellFormed = state.getNotWellFormed();
+			int undetermined = state.getUndetermined();
+
 			_writer.println(directory + ": " + total + " (" + valid + "," +
-					wellFormed + ") + " + notProcessed + "," +
-					notFound);
+					wellFormed + "," + notWellFormed + "," + undetermined + ")");
 
 			nTotal += total;
 			nValid += valid;
 			nWellFormed += wellFormed;
-			nNotFound += notFound;
-			nNotProcessed += notProcessed;
+			nNotWellFormed += notWellFormed;
+			nUndetermined += undetermined;
 		}
 		_writer.println("Total: " + nTotal + " (" + nValid + "," +
-				nWellFormed + ") + " + nNotProcessed + "," +
-				nNotFound);
+				nWellFormed + "," + nNotWellFormed + "," + nUndetermined + ")");
 		_writer.println("-->");
 
 		// Update the elapsed time.

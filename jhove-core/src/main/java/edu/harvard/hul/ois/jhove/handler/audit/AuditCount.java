@@ -25,32 +25,31 @@ package edu.harvard.hul.ois.jhove.handler.audit;
  */
 public class AuditCount {
 
-	/** Number of files not processed. */
-	protected int _notProcessed;
-
 	/** Number of valid files. */
 	protected int _valid;
 
 	/** Number of well-formed files. */
 	protected int _wellFormed;
 
+	/** Number of not-well-formed files. */
+	protected int _notWellFormed;
+
+	/** Number of undetermined files. */
+	protected int _undetermined;
+
 	/**
 	 * Instantiates an <code>AuditCount</code> object.
 	 */
 	public AuditCount() {
-		_notProcessed = 0;
 		_valid = 0;
 		_wellFormed = 0;
+		_notWellFormed = 0;
+		_undetermined = 0;
 	}
 
-	/** Returns the total number of files not processed. */
-	public int getNotProcessed() {
-		return _notProcessed;
-	}
-
-	/** Returns the total number of valid or well-formed files. */
+	/** Returns the total number of processed files. */
 	public int getTotal() {
-		return _valid + _wellFormed;
+		return _valid + _wellFormed + _notWellFormed + _undetermined;
 	}
 
 	/** Returns the total number of valid files. */
@@ -63,9 +62,14 @@ public class AuditCount {
 		return _wellFormed;
 	}
 
-	/** Sets the count of files that are not processed. */
-	public void setNotProcessed(int notProcessed) {
-		_notProcessed = notProcessed;
+	/** Returns the count of not-well-formed files. */
+	public int getNotWellFormed() {
+		return _notWellFormed;
+	}
+
+	/** Returns the count of undetermined files. */
+	public int getUndetermined() {
+		return _undetermined;
 	}
 
 	/** Sets the count of valid files. */
@@ -76,5 +80,15 @@ public class AuditCount {
 	/** Sets the count of well-formed files. */
 	public void setWellFormed(int wellFormed) {
 		_wellFormed = wellFormed;
+	}
+
+	/** Sets the count of not-well-formed files. */
+	public void setNotWellFormed(int notWellFormed) {
+		_notWellFormed = notWellFormed;
+	}
+
+	/** Sets the count of undetermined files. */
+	public void setUndetermined(int undetermined) {
+		_undetermined = undetermined;
 	}
 }

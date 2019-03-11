@@ -30,9 +30,6 @@ public class AuditState extends AuditCount implements Cloneable {
 	/** Directory pathname. */
 	protected String _directory;
 
-	/** Number of files not found. */
-	protected int _notFound;
-
 	/**
 	 * Instantiates an <code>AuditState</code> object.
 	 */
@@ -52,9 +49,10 @@ public class AuditState extends AuditCount implements Cloneable {
 			_directory = directory;
 		}
 
-		_notFound = 0;
 		_valid = 0;
 		_wellFormed = 0;
+		_notWellFormed = 0;
+		_undetermined = 0;
 	}
 
 	/**
@@ -73,11 +71,6 @@ public class AuditState extends AuditCount implements Cloneable {
 		return _directory;
 	}
 
-	/** Returns the number of files not found. */
-	public int getNotFound() {
-		return _notFound;
-	}
-
 	/** Sets the directory path. */
 	public void setDirectory(String directory) {
 		try {
@@ -86,10 +79,5 @@ public class AuditState extends AuditCount implements Cloneable {
 		} catch (Exception e) {
 			_directory = directory;
 		}
-	}
-
-	/** Sets the count of files not found. */
-	public void setNotFound(int notFound) {
-		_notFound = notFound;
 	}
 }
