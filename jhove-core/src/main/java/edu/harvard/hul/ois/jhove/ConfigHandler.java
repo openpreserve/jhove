@@ -23,7 +23,6 @@ public class ConfigHandler
 
     private String _class;
     protected StringBuffer _content;
-    private Map<String, String> _extension;
 
     /** The schema name */
     private final static String configSchemaName =
@@ -100,7 +99,6 @@ public class ConfigHandler
 
         _bufferSize = -1;
         _encoding   = null;
-        _extension  = new Hashtable<> ();
         _tempDir    = null;
         _mixVsn     = null;
         _sigBytes   = 1024;
@@ -201,14 +199,6 @@ public class ConfigHandler
     public int getBufferSize ()
     {
 	return _bufferSize;
-    }
-
-    /**
-     * Return an associative map of configuration extensions.
-     */
-    public Map<String, String> getExtensions ()
-    {
-        return _extension;
     }
 
     /**
@@ -364,9 +354,6 @@ public class ConfigHandler
 		/* Just ignore a malformed number */
 	    }
 	    _isBufferSize = false;
-	}
-	else if (!"jhoveConfig".equals (rawName)) {
-	    _extension.put (rawName, _content.toString ().trim ());
 	}
     }
     

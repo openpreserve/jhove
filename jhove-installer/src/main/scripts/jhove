@@ -51,7 +51,7 @@ done
 # Store absolute location
 CWD="$( pwd )"
 JHOVE_HOME="$( cd "$(dirname "${SCRIPT}" )" && pwd )"
-cd "${CWD}"
+cd "${CWD}" || exit
 
 # Create Java class path
 CP="${JHOVE_HOME}/bin/*"
