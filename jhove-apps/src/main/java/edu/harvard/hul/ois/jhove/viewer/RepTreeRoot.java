@@ -1181,13 +1181,14 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             val.add (new DefaultMutableTreeNode
                 ("ExifVersion: " + s, false));
         }
-        if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
+        Rational r;
+        if ((r = niso.getBrightness ()) != null) {
             val.add (new DefaultMutableTreeNode
-                ("Brightness: " + Double.toString (d), false));
+                ("Brightness: " + r.toString(), false));
         }
-        if ((d = niso.getExposureBias ()) != NisoImageMetadata.NILL) {
+        if ((r = niso.getExposureBias ()) != null) {
             val.add (new DefaultMutableTreeNode
-                ("ExposureBias: " + Double.toString (d), false));
+                ("ExposureBias: " + r.toString(), false));
         }
         
         double [] darray = niso.getSubjectDistance ();
@@ -1217,13 +1218,14 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 ("FocalLength: " + Double.toString (d), false));
         }
         if ((n = niso.getFlash ()) != NisoImageMetadata.NULL) {
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
             val.add (new DefaultMutableTreeNode
-                ("Flash: " + integerRepresentation(n,
-                        NisoImageMetadata.FLASH), false));
+                ("Flash: " + integerRepresentation(n & 1,
+                        NisoImageMetadata.FLASH_20), false));
         }
-        if ((d = niso.getFlashEnergy ()) != NisoImageMetadata.NILL) {
+        if ((r = niso.getFlashEnergy ()) != null) {
             val.add (new DefaultMutableTreeNode
-                ("FlashEnergy: " + Double.toString (d), false));
+                ("FlashEnergy: " + r.toString(), false));
         }
         if ((n = niso.getFlashReturn ()) != NisoImageMetadata.NULL) {
             val.add (new DefaultMutableTreeNode
@@ -1390,7 +1392,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             val.add (new DefaultMutableTreeNode
                 ("GrayResponseUnit: " + Integer.toString (n), false));
         }
-        Rational r = niso.getWhitePointXValue ();
+        r = niso.getWhitePointXValue ();
         if (r != null) {
             val.add (new DefaultMutableTreeNode
                 ("WhitePointXValue: " + r.toString (), false));

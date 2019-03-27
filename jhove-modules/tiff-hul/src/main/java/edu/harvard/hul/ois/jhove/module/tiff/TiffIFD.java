@@ -164,8 +164,11 @@ public class TiffIFD extends IFD {
 			"camera does not have a flash unit" };
 	private static final int[] FLASH_INDEX = { 0, 1, 5, 7, 9, 13, 15, 16, 24,
 			25, 29, 31, 32 };
-	private static final String[] FOCALPLANERESOLUTIONUNIT_L = { "", "inch",
-			"metre", "centimetre", "millimetre", "micrometre" };
+	// Official values in TIFF/EP (not compatible with EXIF or MIX) 
+	// "", "inches", "meters", "centimeters", "millimeters", "micrometers" 
+	protected static final String[] FOCALPLANERESOLUTIONUNIT_L = { "", "", 
+			"inches", "centimeters", "millimeters", "micrometers" 
+		 };
 
 	/** Exif tags. */
 	private static final int EXIFIFD = 34665, GPSINFOIFD = 34853,
@@ -2175,10 +2178,10 @@ public class TiffIFD extends IFD {
 				checkType(tag, type, SRATIONAL);
 				if (count == 1) {
 					_niso.setBrightness(
-							readSignedRational(count, value).toDouble());
+							readSignedRational(count, value));
 				} else {
 					Rational[] r = readSignedRationalArray(count, value);
-					_niso.setBrightness(average(r[0], r[1]).toDouble());
+					_niso.setBrightness(average(r[0], r[1]));
 				}
 			} else if (tag == CELLLENGTH) {
 				checkType(tag, type, SHORT);
@@ -2309,10 +2312,10 @@ public class TiffIFD extends IFD {
 				checkType(tag, type, SRATIONAL);
 				if (count == 1) {
 					_niso.setExposureBias(
-							readSignedRational(count, value).toDouble());
+							readSignedRational(count, value));
 				} else {
 					Rational[] r = readSignedRationalArray(count, value);
-					_niso.setExposureBias(average(r[0], r[1]).toDouble());
+					_niso.setExposureBias(average(r[0], r[1]));
 				}
 			} else if (tag == EXPOSUREPROGRAM) {
 				checkType(tag, type, SHORT);
@@ -2347,10 +2350,10 @@ public class TiffIFD extends IFD {
 			} else if (tag == FLASHENERGY) {
 				checkType(tag, type, RATIONAL);
 				if (count == 1) {
-					_niso.setFlashEnergy(readRational(count, value).toDouble());
+					_niso.setFlashEnergy(readRational(count, value));
 				} else {
 					Rational[] r = readRationalArray(count, value);
-					_niso.setFlashEnergy(average(r[0], r[1]).toDouble());
+					_niso.setFlashEnergy(average(r[0], r[1]));
 				}
 			} else if (tag == FNUMBER) {
 				checkType(tag, type, RATIONAL);
@@ -2372,9 +2375,6 @@ public class TiffIFD extends IFD {
 				checkType(tag, type, SHORT);
 				checkCount(tag, count, 1);
 				_focalPlaneResolutionUnit = readShort(type, count, value);
-				if (_niso.getSamplingFrequencyUnit() != NULL) {
-					_niso.setSamplingFrequencyUnit(_focalPlaneResolutionUnit);
-				}
 			} else if (tag == FOCALPLANEXRESOLUTION) {
 				checkType(tag, type, RATIONAL);
 				checkCount(tag, count, 1);

@@ -1662,14 +1662,16 @@ public class XmlHandler
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
-        d = niso.getBrightness ();
-        if (d != NisoImageMetadata.NILL) {
+        Rational r = niso.getBrightness ();
+        if (r != null) {
+        	d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:Brightness",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
-        d = niso.getExposureBias ();
-        if (d != NisoImageMetadata.NILL) {
+        r = niso.getExposureBias ();
+        if (r != null) {
+        	d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:ExposureBias",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
@@ -1709,11 +1711,15 @@ public class XmlHandler
         }
         n = niso.getFlash ();
         if (n != NisoImageMetadata.NULL) {
-            ccsBuf.append (margn4 + element ("mix:Flash", Integer.toString (n)) + EOL);
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
+        	int firstBit = n & 1;
+        	ccsBuf.append(margn4 + element("mix:Flash", NisoImageMetadata.FLASH[firstBit])
+					+ EOL);
             useCCSBuf = true;
         }
-        d = niso.getFlashEnergy ();
-        if (d != NisoImageMetadata.NILL) {
+        r = niso.getFlashEnergy ();
+        if (r != null) {
+        	d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:FlashEnergy",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
@@ -2621,19 +2627,17 @@ public class XmlHandler
             ccSetBuf.append (margn6 + element ("mix:exifVersion", s) + EOL);
             useCcSetBuf = true;
         }
-        d = niso.getBrightness();
-        if (d != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:brightnessValue",
-					       formatters.get().format (d)) + EOL);
+        Rational r = niso.getBrightness();
+        if (r != null) {
+        	rationalToString(ccSetBuf, "mix:brightnessValue", margn6, r);
             useCcSetBuf = true;
         }
-        d = niso.getExposureBias();
-        if (d != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:exposureBiasValue",
-					       formatters.get().format (d)) + EOL);
+        r = niso.getExposureBias();
+        if (r != null) {
+        	rationalToString(ccSetBuf, "mix:exposureBiasValue", margn6, r);
             useCcSetBuf = true;
         }
-        Rational r = niso.getMaxApertureValue();
+        r = niso.getMaxApertureValue();
         if (r != null) {
         	rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
             useCcSetBuf = true;
@@ -2656,8 +2660,10 @@ public class XmlHandler
         }
         n = niso.getFlash ();
         if (n != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:flash",
-					       Integer.toString (n)) + EOL);
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
+        	int firstBit = n & 1;
+        	ccSetBuf.append(margn6 + element("mix:flash", NisoImageMetadata.FLASH_20[firstBit])
+					+ EOL);
             useCcSetBuf = true;
         }
         d = niso.getFocalLength ();
@@ -2666,10 +2672,9 @@ public class XmlHandler
 					       formatters.get().format (d)) + EOL);
             useCcSetBuf = true;
         }
-        d = niso.getFlashEnergy ();
-        if (d != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:flashEnergy",
-					       formatters.get().format (d)) + EOL);
+        r = niso.getFlashEnergy ();
+        if (r != null) {
+        	rationalToString(ccSetBuf, "mix:flashEnergy", margn6, r);
             useCcSetBuf = true;
         }
         n = niso.getBackLight ();
@@ -3589,21 +3594,19 @@ public class XmlHandler
              		niso.getExifVersion()) + EOL);
              useCcSetBuf = true;
          }
-         d = niso.getBrightness();
+         Rational r = niso.getBrightness();
          if (d != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:brightnessValue",
-                            formatters.get().format (d)) + EOL);
+             rationalToString (ccSetBuf, "mix:brightnessValue", margn6, r);
              useCcSetBuf = true;
          }
-         d = niso.getExposureBias();
+         r = niso.getExposureBias();
          if (d != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:exposureBiasValue",
-                            formatters.get().format (d)) + EOL);
+             rationalToString (ccSetBuf, "mix:exposureBiasValue", margn6, r);
              useCcSetBuf = true;
          }
-         Rational r = niso.getMaxApertureValue();
+         r = niso.getMaxApertureValue();
          if (r != null) {
-         	rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
+             rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
              useCcSetBuf = true;
          }
          double[] darray = niso.getSubjectDistance ();
@@ -3635,8 +3638,10 @@ public class XmlHandler
          }
          n = niso.getFlash ();
          if (n != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:flash",
-                            Integer.toString (n)) + EOL);
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
+         	int firstBit = n & 1;
+         	ccSetBuf.append(margn6 + element("mix:flash", NisoImageMetadata.FLASH_20[firstBit])
+ 					+ EOL);
              useCcSetBuf = true;
          }
          d = niso.getFocalLength ();
@@ -3645,10 +3650,9 @@ public class XmlHandler
                             formatters.get().format (d)) + EOL);
              useCcSetBuf = true;
          }
-         d = niso.getFlashEnergy ();
-         if (d != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:flashEnergy",
-                            formatters.get().format (d)) + EOL);
+         r = niso.getFlashEnergy ();
+         if (r != null) {
+         	 rationalToString(ccSetBuf, "mix:flashEnergy", margn6, r);
              useCcSetBuf = true;
          }
          n = niso.getBackLight ();
