@@ -278,7 +278,7 @@ public class XmlModule extends ModuleBase {
 		// The XmlDeclStream filters the characters, looking for an
 		// XML declaration, since there's no way to get that info
 		// out of SAX.
-		XmlDeclStream xds = new XmlDeclStream(_cstream);
+		XmlDeclStream xds = new XmlDeclStream(_dstream);
 		try {
 			// Create an InputSource to feed the parser.
 			// If a SAX class was specified, use it, otherwise use
