@@ -6,7 +6,7 @@
     <version>1.22.0-RC</version>
   </parent>
   <artifactId>xml-hul</artifactId>
-  <version>1.5.0-RC</version>
+  <version>1.5.0-RC2</version>
   <name>JHOVE XML Module HUL</name>
   <description>XML module developed by Harvard University Library</description>
 

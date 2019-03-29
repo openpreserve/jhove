@@ -108,8 +108,8 @@ public class JpegModule extends ModuleBase {
 	 ******************************************************************/
 	private static final String NISO_IMAGE_MD = "NisoImageMetadata";
 	private static final String NAME = "JPEG-hul";
-	private static final String RELEASE = "1.5.0-RC";
-	private static final int[] DATE = { 2019, 03, 05 };
+	private static final String RELEASE = "1.5.0-RC2";
+	private static final int[] DATE = { 2019, 03, 29 };
 	private static final String[] FORMAT = { "JPEG", "ISO/IEC 10918-1:1994",
 			"Joint Photographic Experts Group", "JFIF",
 			"JPEG File Interchange Format", "SPIFF", "ISO/IEC 10918-3:1997",

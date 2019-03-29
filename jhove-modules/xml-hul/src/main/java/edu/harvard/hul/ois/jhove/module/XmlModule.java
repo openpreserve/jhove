@@ -48,8 +48,8 @@ public class XmlModule extends ModuleBase {
 	 ******************************************************************/
 
 	private static final String NAME = "XML-hul";
-	private static final String RELEASE = "1.5.0-RC";
-	private static final int[] DATE = { 2019, 03, 05 };
+	private static final String RELEASE = "1.5.0-RC2";
+	private static final int[] DATE = { 2019, 03, 29 };
 	private static final String[] FORMAT = { "XML", "XHTML" };
 	private static final String COVERAGE = "XML 1.0";
 	/*
