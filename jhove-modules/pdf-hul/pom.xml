@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.22.0-RC</version>
+    <version>1.22.0-RC2</version>
   </parent>
   <artifactId>pdf-hul</artifactId>
   <version>1.12.0-RC</version>

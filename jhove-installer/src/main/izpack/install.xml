@@ -73,14 +73,14 @@
       <executable targetfile="$INSTALL_PATH/bin/jpeg-hul-1.5.0-RC.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/pdf-hul-1.12.0-RC.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/pdf-hul-1.12.0-RC.jar"/>
-      <file targetdir="$INSTALL_PATH/bin" src="bin/tiff-hul-1.8.0-RC.jar"/>
-      <executable targetfile="$INSTALL_PATH/bin/tiff-hul-1.8.0-RC.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/tiff-hul-1.8.0-RC2.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/tiff-hul-1.8.0-RC2.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/utf8-hul-1.7.0-RC.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/utf8-hul-1.7.0-RC.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/wave-hul-1.6.0-RC.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/wave-hul-1.6.0-RC.jar"/>
-      <file targetdir="$INSTALL_PATH/bin" src="bin/xml-hul-1.5.0-RC.jar"/>
-      <executable targetfile="$INSTALL_PATH/bin/xml-hul-1.5.0-RC.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/xml-hul-1.5.0-RC2.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/xml-hul-1.5.0-RC2.jar"/>
       <file targetdir="$INSTALL_PATH/conf"  override="true" src="config/jhove.conf"/>
       <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="xml"/>
       <updatecheck>

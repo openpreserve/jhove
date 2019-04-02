@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.22.0-RC</version>
+    <version>1.22.0-RC2</version>
   </parent>
   <artifactId>wave-hul</artifactId>
   <version>1.6.0-RC</version>
