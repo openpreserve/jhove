@@ -4010,12 +4010,10 @@ public class PdfModule
     protected int resolveIndirectDest (PdfSimpleObject key)
                         throws PdfException
     {
-          if (_destNames != null) {
+          if (_destNames != null && _destNames.get(key.getRawBytes ())!= null) {
               Destination dest = new Destination (_destNames.get (key.getRawBytes ()),
                                   this, true);
-//              if (dest == null) {
-//                  return -1;
-//              }
+
               return dest.getPageDestObjNumber ();
           }
         return -1;   // This is probably an error, actually

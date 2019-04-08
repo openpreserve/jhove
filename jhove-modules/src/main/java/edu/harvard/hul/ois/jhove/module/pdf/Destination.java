@@ -6,18 +6,19 @@
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import edu.harvard.hul.ois.jhove.module.PdfModule;
+
 import java.util.*;
 
-/** 
+/**
  *  Class encapsulating PDF destination objects, which refer
  *  to a page in the document.
- * 
+ *
  *  We need to make two different kinds of distinctions: between
  *  destinations that make an indirect and a direct reference to
  *  a page; and between destinations that have been reached by
  *  a direct and an indirect reference.  The PDF spec allows
  *  only one level of indirection, so each of these forms has
- *  options not available to the other.  
+ *  options not available to the other.
  *
  *  We call a destination which has been reached directly an
  *  unnamed destination, and one which has been reached indirectly
@@ -64,6 +65,10 @@ public final class Destination
     public Destination (PdfObject destObj, PdfModule module, boolean named)
                          throws PdfException
     {
+    	if (destObj == null) {
+    		throw new IllegalArgumentException("destination object cannot be null");
+    	}
+
         try {
             if (!named && destObj instanceof PdfSimpleObject) {
                 _indirect = true;
@@ -94,7 +99,7 @@ public final class Destination
         }
     }
 
-    /** 
+    /**
      *  Returns <code>true</code> if the destination is indirect.
      */
     public boolean isIndirect ()
