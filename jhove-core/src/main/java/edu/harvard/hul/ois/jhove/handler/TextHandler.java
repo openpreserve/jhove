@@ -21,6 +21,8 @@
 package edu.harvard.hul.ois.jhove.handler;
 
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 import java.text.*;
 import java.util.*;
 
@@ -488,6 +490,10 @@ public class TextHandler
     private void showMessage (Message message)
     {
         String margin = getIndent (++_level);
+        String id = message.getId();
+        if (!(id == null || id.isEmpty() || id.equals(JhoveMessages.NO_ID))) {
+            _writer.println (margin + "ID: " + id);
+        }
         String prefix = message.getPrefix() + "Message: ";
         String str = message.getMessage ();
         // Append submessage, if any, after a colon.

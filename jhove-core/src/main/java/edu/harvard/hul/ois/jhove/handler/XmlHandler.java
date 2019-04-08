@@ -21,6 +21,7 @@
 package edu.harvard.hul.ois.jhove.handler;
 
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 import java.text.NumberFormat;
 import java.util.*;
@@ -28,7 +29,7 @@ import java.util.*;
 /**
  *  OutputHandler for XML output.
  *
- *  @see <a href="http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd">Schema
+ *  @see <a href="http://schema.openpreservation.org/ois/xml/xsd/jhove/jhove.xsd">Schema
  *       for JHOVE XML output</a>
  */
 public class XmlHandler
@@ -64,7 +65,7 @@ public class XmlHandler
     /** Handler informative note. */
     private static final String NOTE =
         "This output handler is defined by the XML Schema " +
-        "http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd";
+        "https://schema.openpreservation.org/ois/xml/xsd/jhove/jhove.xsd";
 
     /** Handler rights statement. */
     private static final String RIGHTS =
@@ -77,7 +78,7 @@ public class XmlHandler
     private final static String EOL = System.getProperty ("line.separator");
 
     /** Schema version. */
-    private static final String SCHEMA_VERSION = "1.6";
+    private static final String SCHEMA_VERSION = "1.8";
 
     /******************************************************************
      * PRIVATE INSTANCE FIELDS.
@@ -629,10 +630,10 @@ public class XmlHandler
             {"xmlns:xsi",
              "http://www.w3.org/2001/XMLSchema-instance"},
             {"xmlns",
-             "http://hul.harvard.edu/ois/xml/ns/jhove"},
+             "http://schema.openpreservation.org/ois/xml/ns/jhove"},
             {"xsi:schemaLocation",
-             "http://hul.harvard.edu/ois/xml/ns/jhove " +
-             "http://hul.harvard.edu/ois/xml/xsd/jhove/" + SCHEMA_VERSION +
+             "http://schema.openpreservation.org/ois/xml/ns/jhove " +
+             "https://schema.openpreservation.org/ois/xml/xsd/jhove/" + SCHEMA_VERSION +
 	     "/jhove.xsd"},
             {"name", _app.getName ()},
             {"release", _app.getRelease ()},
@@ -662,11 +663,12 @@ public class XmlHandler
     protected void showMessage (Message message)
     {
         String margin = getIndent (++_level);
-        String[][] attrs = new String[3][];
+        String[][] attrs = new String[4][];
         boolean hasAttr = false;
         attrs[0] = new String[] { "subMessage", null };
         attrs[1] = new String[] { "offset", null };
         attrs[2] = new String[] { "severity", null };
+        attrs[3] = new String[] { "id", null };
 
         String submsg = message.getSubMessage ();
         if (submsg != null) {
@@ -680,6 +682,11 @@ public class XmlHandler
         }
         if (!message.getPrefix().isEmpty()) {
             attrs[2] [1] = message.getPrefix().toLowerCase();
+            hasAttr = true;
+        }
+        String id = message.getJhoveMessage().getId();
+        if (!(id == null || id.isEmpty() || id.equals(JhoveMessages.NO_ID))) {
+            attrs[3] [1] = message.getId();
             hasAttr = true;
         }
         if (hasAttr) {

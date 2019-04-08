@@ -89,8 +89,6 @@ public class JhoveBase {
     protected String _configFile;
     /** Selected encoding. */
     protected String _encoding;
-    /** Associate map of configuration extensions. */
-    protected Map<String, String> _extensions;
     /** Ordered list of output handlers. */
     protected List<OutputHandler> _handlerList;
     /** Map of output handlers (for fast access by name). */
@@ -247,7 +245,6 @@ public class JhoveBase {
 
         // Update the application state to reflect the configuration file,
         // if necessary.
-        _extensions = configHandler.getExtensions();
         _jhoveHome = configHandler.getJhoveHome();
 
         _encoding = configHandler.getEncoding();
@@ -857,20 +854,6 @@ public class JhoveBase {
      */
     public String getEncoding() {
         return _encoding;
-    }
-
-    /**
-     * Returns the JHOVE configuration extensions.
-     */
-    public Map<String, String> getExtension() {
-        return _extensions;
-    }
-
-    /**
-     * Returns the JHOVE configuration extension by name.
-     */
-    public String getExtension(String name) {
-        return _extensions.get(name);
     }
 
     /**
