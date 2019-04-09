@@ -93,7 +93,7 @@ public class ADump extends Dump {
                     System.out.print (leading (os, 8) + os + ": " + ckID +
 				      " " + ckSize);
 		    long alreadyRead = 0;
-		    if (ckID.equals ("AESD")) {
+		    if ("AESD".equals (ckID)) {
 			int [] aes = new int[24];
 			for (int i=0; i<24; i++) {
 			    aes[i] = ModuleBase.readUnsignedByte (stream);
@@ -105,10 +105,10 @@ public class ADump extends Dump {
 			}
 			alreadyRead = 24;
 		    }
-		    else if (ckID.equals ("ANNO") ||
-			     ckID.equals ("AUTH") ||
-			     ckID.equals ("(c) ") ||
-			     ckID.equals ("NAME")) {
+		    else if ("ANNO".equals (ckID) ||
+			     "AUTH".equals (ckID) ||
+			     "(c) ".equals (ckID) ||
+			     "NAME".equals (ckID)) {
 			sbuf.setLength (0);
 			for (int i=0; i<ckSize; i++) {
 			    int ch = ModuleBase.readUnsignedByte (stream);
@@ -117,7 +117,7 @@ public class ADump extends Dump {
 			System.out.print (": \"" + sbuf.toString () + "\"");
 			alreadyRead = ckSize;
 		    }
-		    else if (ckID.equals ("APPL")) {
+		    else if ("APPL".equals (ckID)) {
 			sbuf.setLength (0);
 			for (int i=0; i<4; i++) {
 			    int ch = ModuleBase.readUnsignedByte (stream);
@@ -126,7 +126,7 @@ public class ADump extends Dump {
 			System.out.print (": " + sbuf.toString ());
 			alreadyRead = 4;
 		    }
-		    else if (ckID.equals ("COMM")) {
+		    else if ("COMM".equals (ckID)) {
 			int numChannels = ModuleBase.readSignedShort (stream,
 								      ENDIAN);
 			long numSampleFrames =
@@ -169,21 +169,21 @@ public class ADump extends Dump {
 			}
 
 		    }
-		    else if (ckID.equals ("COMT")) {
+		    else if ("COMT".equals (ckID)) {
 			int numComments = ModuleBase.readUnsignedShort (stream,
 									ENDIAN,
 									null);
 			System.out.print (": " + numComments);
 			alreadyRead = 2;
 		    }
-		    else if (ckID.equals ("FVER")) {
+		    else if ("FVER".equals (ckID)) {
 			long timestamp = ModuleBase.readUnsignedInt (stream,
 								     ENDIAN,
 								     null);
 			System.out.print (": " + timestamp);
 			alreadyRead = 4;
 		    }
-		    else if (ckID.equals ("INST")) {
+		    else if ("INST".equals (ckID)) {
 			int baseNote = ModuleBase.readSignedByte (stream);
 			int detune = ModuleBase.readSignedByte (stream);
 			int lowNote = ModuleBase.readSignedByte (stream);
@@ -198,13 +198,13 @@ public class ADump extends Dump {
 					  highVelocity + " " + gain);
 			alreadyRead = 8;
 		    }
-		    else if (ckID.equals ("MARK")) {
+		    else if ("MARK".equals (ckID)) {
 			int numMarkers = ModuleBase.readUnsignedShort (stream,
 								       ENDIAN);
 			System.out.print (": " + numMarkers);
 			alreadyRead = 2;
 		    }
-		    else if (ckID.equals ("SSND")) {
+		    else if ("SSND".equals (ckID)) {
 			long offset = ModuleBase.readUnsignedInt (stream,
 								  ENDIAN);
 			long blockSize = ModuleBase.readUnsignedInt (stream,
