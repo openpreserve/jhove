@@ -323,9 +323,6 @@ public class TiffModule extends ModuleBase {
         doc.setPublisher(agent);
         doc.setDate("1990-04-28");
         doc.setNote("Cygnet is no longer in business");
-        ident = new Identifier("http://hul.harvard.edu/jhove/"
-                + "references.html#classf", IdentifierType.URL);
-        doc.setIdentifier(ident);
         _specification.add(doc);
 
         // Define IETF Class F doc, with IETF agent Added 2/2/04
