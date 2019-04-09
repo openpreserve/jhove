@@ -72,7 +72,7 @@ public class ADump extends Dump {
 	    System.out.println ("00000000: FORM " + ckSize + ": " + formType);
 
 	    boolean aiff_c = false;
-	    if (formType.toString ().equals ("AIFC")) {
+	    if ("AIFC".equals (formType.toString ())) {
 		aiff_c = true;
 	    }
 
