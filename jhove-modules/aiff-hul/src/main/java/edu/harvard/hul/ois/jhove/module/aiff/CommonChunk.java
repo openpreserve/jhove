@@ -92,44 +92,44 @@ public class CommonChunk extends Chunk {
             module.addAiffProperty (new Property ("CompressionType",
 						  PropertyType.STRING, 
 						  compressionType));
-	    if ("NONE".equals (compressionType)) {
-	    }
-	    else if ("raw ".equals (compressionType)) {
-            aes.setAudioDataEncoding("PCM 8-bit offset-binary");
-	    }
-	    else if ("twos".equals (compressionType)) {
-            aes.setAudioDataEncoding("PCM 16-bit twos-complement big-endian");
-	    }
-	    else if ("sowt".equals (compressionType)) {
-            aes.setAudioDataEncoding("PCM 16-bit twos-complement little-endian");
-	    }
-	    else if ("fl32".equals (compressionType)) {
-            aes.setAudioDataEncoding("PCM 32-bit integer");
-	    }
-	    else if ("fl64".equals (compressionType)) {
-            aes.setAudioDataEncoding("PCM 64-bit floating point");
-	    }
-	    else if ("in24".equals (compressionType)) {
-            aes.setAudioDataEncoding("PCM 24-bit integer");
-	    }
-	    else if ("in32".equals (compressionType)) {
-            aes.setAudioDataEncoding("PCM 32-bit integer");
-	    }
-	    else {
-            aes.setAudioDataEncoding (compressionName);
-
-                // The size of the data after compression isn't available
-                // from the Common chunk, so we mark it as "unknown."
-                // With a bit more sophistication, we could combine the
-                // information from here and the Sound Data chunk to get
-                // the effective byte rate, but we're about to release.
-           String name = compressionName;
-           if (name == null || name.length () == 0) {
-               name = compressionType;
-	       }
-           aes.setBitrateReduction (compressionName, "", "", "",
-					 "LOSSY", "UNKNOWN", "FIXED");
-           }
+            switch (compressionType) {
+                case "NONE":
+                    break;
+                case "raw ":
+                    aes.setAudioDataEncoding("PCM 8-bit offset-binary");
+                    break;
+                case "twos":
+                    aes.setAudioDataEncoding("PCM 16-bit twos-complement big-endian");
+                    break;
+                case "sowt":
+                    aes.setAudioDataEncoding("PCM 16-bit twos-complement little-endian");
+                    break;
+                case "fl32":
+                    aes.setAudioDataEncoding("PCM 32-bit integer");
+                    break;
+                case "fl64":
+                    aes.setAudioDataEncoding("PCM 64-bit floating point");
+                    break;
+                case "in24":
+                    aes.setAudioDataEncoding("PCM 24-bit integer");
+                    break;
+                case "in32":
+                    aes.setAudioDataEncoding("PCM 32-bit integer");
+                    break;
+                default:
+                    aes.setAudioDataEncoding (compressionName);
+                    // The size of the data after compression isn't available
+                    // from the Common chunk, so we mark it as "unknown."
+                    // With a bit more sophistication, we could combine the
+                    // information from here and the Sound Data chunk to get
+                    // the effective byte rate, but we're about to release.
+                    String name = compressionName;
+                    if (name == null || name.length () == 0) {
+                        name = compressionType;
+                    }    aes.setBitrateReduction (compressionName, "", "", "",
+                            "LOSSY", "UNKNOWN", "FIXED");
+                    break;
+            }
         }
         if (compressionName != null && compressionName.length () > 0) {
             module.addAiffProperty (new Property ("CompressionName",
