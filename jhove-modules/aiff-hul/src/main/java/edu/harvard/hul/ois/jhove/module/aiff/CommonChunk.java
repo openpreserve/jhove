@@ -66,11 +66,6 @@ public class CommonChunk extends Chunk {
                 return false;
             }
             compressionType = module.read4Chars (_dstream);
-            // According to David Ackerman, the compression type can
-            // change the endianness of the document.
-            if ("sowt".equals (compressionType)) {
-                module.setEndian (false);    // little-endian
-            }
             bytesLeft -= 4;
             compressionName = module.readPascalString (_dstream);
             bytesLeft -= compressionName.length () + 1;
@@ -103,6 +98,9 @@ public class CommonChunk extends Chunk {
                     break;
                 case "sowt":
                     aes.setAudioDataEncoding("PCM 16-bit twos-complement little-endian");
+                    // According to David Ackerman, the compression type can
+                    // change the endianness of the document.
+                    module.setEndian (false);    // little-endian
                     break;
                 case "fl32":
                     aes.setAudioDataEncoding("PCM 32-bit integer");
