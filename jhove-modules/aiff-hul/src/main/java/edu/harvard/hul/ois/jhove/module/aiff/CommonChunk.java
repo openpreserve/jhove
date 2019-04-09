@@ -68,7 +68,7 @@ public class CommonChunk extends Chunk {
             compressionType = module.read4Chars (_dstream);
             // According to David Ackerman, the compression type can
             // change the endianness of the document.
-            if (compressionType.equals ("sowt")) {
+            if ("sowt".equals (compressionType)) {
                 module.setEndian (false);    // little-endian
             }
             bytesLeft -= 4;
@@ -92,27 +92,27 @@ public class CommonChunk extends Chunk {
             module.addAiffProperty (new Property ("CompressionType",
 						  PropertyType.STRING, 
 						  compressionType));
-	    if (compressionType.equals ("NONE")) {
+	    if ("NONE".equals (compressionType)) {
 	    }
-	    else if (compressionType.equals ("raw ")) {
+	    else if ("raw ".equals (compressionType)) {
             aes.setAudioDataEncoding("PCM 8-bit offset-binary");
 	    }
-	    else if (compressionType.equals ("twos")) {
+	    else if ("twos".equals (compressionType)) {
             aes.setAudioDataEncoding("PCM 16-bit twos-complement big-endian");
 	    }
-	    else if (compressionType.equals("sowt")) {
+	    else if ("sowt".equals (compressionType)) {
             aes.setAudioDataEncoding("PCM 16-bit twos-complement little-endian");
 	    }
-	    else if (compressionType.equals("fl32")) {
+	    else if ("fl32".equals (compressionType)) {
             aes.setAudioDataEncoding("PCM 32-bit integer");
 	    }
-	    else if (compressionType.equals("fl64")) {
+	    else if ("fl64".equals (compressionType)) {
             aes.setAudioDataEncoding("PCM 64-bit floating point");
 	    }
-	    else if (compressionType.equals("in24")) {
+	    else if ("in24".equals (compressionType)) {
             aes.setAudioDataEncoding("PCM 24-bit integer");
 	    }
-	    else if (compressionType.equals("in32")) {
+	    else if ("in32".equals (compressionType)) {
             aes.setAudioDataEncoding("PCM 32-bit integer");
 	    }
 	    else {
