@@ -106,7 +106,7 @@ public class PageTreeNode extends DocNode
                     PdfSimpleObject kidtype = 
                             (PdfSimpleObject) kid.get("Type");
                     String kidtypeStr = kidtype.getStringValue ();
-                    if (kidtypeStr.equals("Page")) {
+                    if ("Page".equals (kidtypeStr)) {
                         PageObject pageObj = new PageObject 
                             (_module, this, kid);
                         pageObj.loadContent (_module);
