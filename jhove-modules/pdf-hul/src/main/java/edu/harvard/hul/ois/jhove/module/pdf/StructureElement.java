@@ -195,10 +195,10 @@ public class StructureElement
         // don't mark them as ILSE's.  Also, TR, TH and TD are
         // defined to be neither BLSE's nor ILSE's.
         _attrIsBlock = false;
-        _structIsInline = !_structType.equals ("Figure") &&
-            !_structType.equals ("TH") &&
-            !_structType.equals ("TD") &&
-            !_structType.equals ("TR") &&
+        _structIsInline = !"Figure".equals (_structType) &&
+            !"TH".equals (_structType) &&
+            !"TD".equals (_structType) &&
+            !"TR".equals (_structType) &&
             !StdStructTypes.isBlockLevel (_structType);
         
         try {
@@ -380,7 +380,7 @@ public class StructureElement
         try {
             PdfSimpleObject typeObj = 
                         (PdfSimpleObject) dict.get ("Type");
-            if (!typeObj.getStringValue ().equals ("MCR")) {
+            if (!"MCR".equals (typeObj.getStringValue ())) {
                 return false;
             }
             // An MCID entry is required.
@@ -404,7 +404,7 @@ public class StructureElement
         try {
             PdfSimpleObject typeObj = 
                         (PdfSimpleObject) dict.get ("Type");
-            if (!typeObj.getStringValue ().equals ("OBJR")) {
+            if (!"OBJR".equals (typeObj.getStringValue ())) {
                 return false;
             }
             // An Obj entry is required. Must be an indirect object.
