@@ -112,7 +112,7 @@ public class PageTreeNode extends DocNode
                         pageObj.loadContent (_module);
                         _descendants.add(pageObj);
                     }
-                    else if (kidtypeStr.equals ("Pages")) {
+                    else if ("Pages".equals (kidtypeStr)) {
                         PageTreeNode nodeObj = 
                             new PageTreeNode (_module, this, kid);
                         nodeObj.buildSubtree (false, recGuard - 1);
