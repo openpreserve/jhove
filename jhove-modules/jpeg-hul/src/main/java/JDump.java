@@ -52,7 +52,7 @@ public class JDump
 
 	    boolean endOfImage = false;
 	    boolean readingECS = false;
-	    boolean haveCode   = false;;
+	    boolean haveCode   = false;
 	    int nECS = 0;
 	    int code = 0;
 	    while (!endOfImage) {
@@ -203,7 +203,7 @@ public class JDump
 							       bigEndian,
 							       null);
 		    String id  = readChars (stream, 5);
-		    if (id.equals ("JFIF\0")) {
+		    if ("JFIF\0".equals (id)) {
 			int major  = stream.readUnsignedByte ();
 			int minor  = stream.readUnsignedByte ();
 			int units  = stream.readUnsignedByte ();
@@ -229,7 +229,7 @@ public class JDump
 			}
 			System.out.println ();
 		    }
-		    else if (id.equals ("JFXX\0")) {
+		    else if ("JFXX\0".equals (id)) {
 			int ext = stream.readUnsignedByte ();
 			String hex = Integer.toHexString (ext);
 			System.out.print (leading (os, 8) + os + ": APP0 " +
@@ -262,9 +262,9 @@ public class JDump
 							       null);
 		    if ((n == 1 || n == 2) && length >= 8) {
 			String id = readChars (stream, 4);
-			int NULL    = stream.readUnsignedByte ();
+			int NULL = stream.readUnsignedByte ();
 			int padding = stream.readUnsignedByte ();
-			if (id.equals ("Exif") || id.equals ("FPXR")) {
+			if ("Exif".equals (id) || "FPXR".equals (id)) {
 			    System.out.println (leading (os, 8) + os +
 						": APP" + n + " \"" + id +
 						"\" " + NULL + " " + padding +
@@ -292,7 +292,7 @@ public class JDump
 		    int length = ModuleBase.readUnsignedShort (stream,
 							       bigEndian,
 							       null);
-		    int v   = stream.readUnsignedByte ();
+		    int v = stream.readUnsignedByte ();
 		    int rev = stream.readUnsignedByte ();
 		    System.out.print (leading (os, 8) + os + ": VER " + 
 					v + "." + rev);
