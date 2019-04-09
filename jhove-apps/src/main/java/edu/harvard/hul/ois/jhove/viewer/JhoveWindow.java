@@ -707,7 +707,7 @@ public class JhoveWindow extends JFrame
 
     private Module getSelectedModule ()
     {
-        if (_selectedModule.equals ("")) {
+        if ("".equals (_selectedModule)) {
             return null;
         }
         return (Module) _base.getModuleMap().get (_selectedModule.toLowerCase ());
