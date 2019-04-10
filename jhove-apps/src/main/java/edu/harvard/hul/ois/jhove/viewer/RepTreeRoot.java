@@ -510,23 +510,9 @@ public class RepTreeRoot extends DefaultMutableTreeNode
     {
         List<Object> l = (List<Object>) p.getValue ();
         PropertyType ptyp = p.getType ();
+        boolean canHaveChildren = Boolean.FALSE;
         for (Object item : l) {
-            if (null == ptyp) {
-                // Simple objects just need a leaf.
-                node.add (new DefaultMutableTreeNode (item, false));
-            }
-            else switch (ptyp) {
-                case PROPERTY:
-                    node.add (propToNode ((Property) item));
-                    break;
-                case NISOIMAGEMETADATA:
-                    node.add (nisoToNode ((NisoImageMetadata) item));
-                    break;
-                default:
-                    // Simple objects just need a leaf.
-                    node.add (new DefaultMutableTreeNode (item, false));
-                    break;
-            }
+            node.add(getDefaultMutableTreeNode(ptyp, item, canHaveChildren));
         }
     }
 
@@ -537,25 +523,11 @@ public class RepTreeRoot extends DefaultMutableTreeNode
     {
         Set<?> s = (Set<?>) p.getValue ();
         PropertyType ptyp = p.getType ();
+        boolean canHaveChildren = Boolean.FALSE;
         Iterator<?> iter = s.iterator ();
         while (iter.hasNext ()) {
             Object item = iter.next ();
-            if (null == ptyp) {
-                // Simple objects just need a leaf.
-                node.add (new DefaultMutableTreeNode (item, false));
-            }
-            else switch (ptyp) {
-                case PROPERTY:
-                    node.add (propToNode ((Property) item));
-                    break;
-                case NISOIMAGEMETADATA:
-                    node.add (nisoToNode ((NisoImageMetadata) item));
-                    break;
-                default:
-                    // Simple objects just need a leaf.
-                    node.add (new DefaultMutableTreeNode (item, false));
-                    break;
-            }
+            node.add(getDefaultMutableTreeNode(ptyp, item, canHaveChildren));
         }
     }
 
@@ -566,29 +538,14 @@ public class RepTreeRoot extends DefaultMutableTreeNode
     {
         Map<?, ?> m = (Map<?, ?>) p.getValue ();
         PropertyType ptyp = p.getType ();
+        Boolean canHaveChildren = Boolean.TRUE;
         //Iterator iter = m.values ().iterator ();
         Iterator<?> iter = m.keySet ().iterator ();
         while (iter.hasNext ()) {
             DefaultMutableTreeNode itemNode;
             String key = (String) iter.next ();
             Object item = m.get (key);
-            if (null == ptyp) {
-                // Simple objects just need a leaf.
-                itemNode = (new DefaultMutableTreeNode (item, true));
-            }
-            else //Object item = iter.next ();
-            switch (ptyp) {
-                case PROPERTY:
-                    itemNode = (propToNode ((Property) item));
-                    break;
-                case NISOIMAGEMETADATA:
-                    itemNode = (nisoToNode ((NisoImageMetadata) item));
-                    break;
-                default:
-                    // Simple objects just need a leaf.
-                    itemNode = (new DefaultMutableTreeNode (item, true));
-                    break;
-            }
+            itemNode = getDefaultMutableTreeNode(ptyp, item, canHaveChildren);
             node.add (itemNode);
             
             // Add a subnode for the key
@@ -1558,5 +1515,37 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         // If we don't get a match, or do get an exception
         return Integer.toString (n);
+    }
+    
+    /**
+     * This method returns a member of a property list based on it's PropertyType 
+     * @param ptyp
+     * @param item
+     * @param allowsChildren
+     * @return 
+     */
+    private DefaultMutableTreeNode getDefaultMutableTreeNode(PropertyType ptyp, Object item, boolean allowsChildren) {
+        
+        DefaultMutableTreeNode itemNode;
+        
+        if (null == ptyp) {
+                // Simple objects just need a leaf.
+                itemNode = (new DefaultMutableTreeNode (item, allowsChildren));
+            }
+            else //Object item = iter.next ();
+            switch (ptyp) {
+                case PROPERTY:
+                    itemNode = (propToNode ((Property) item));
+                    break;
+                case NISOIMAGEMETADATA:
+                    itemNode = (nisoToNode ((NisoImageMetadata) item));
+                    break;
+                default:
+                    // Simple objects just need a leaf.
+                    itemNode = (new DefaultMutableTreeNode (item, allowsChildren));
+                    break;
+            }
+        
+        return itemNode;
     }
 }
