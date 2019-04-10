@@ -6,18 +6,6 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 
 /* The cHRM (primary chromaticities and white point) chunk */
 public class ChrmChunk extends PNGChunk {
-
-	/* White point X and Y */
-	private long whitePtX;
-	private long whitePtY;
-	
-	/* Primary chromaticities */
-	private long redX;
-	private long redY;
-	private long greenX;
-	private long greenY;
-	private long blueX;
-	private long blueY;
 	
 	/** Constructor */
 	public ChrmChunk(int sig, long leng) {
@@ -46,14 +34,14 @@ public class ChrmChunk extends PNGChunk {
 			info.setWellFormed(false);
 			throw new PNGException ("Bad cHRM chunk");
 		}
-		whitePtX = readUnsignedInt();
-		whitePtY = readUnsignedInt();
-		redX = readUnsignedInt();
-		redY = readUnsignedInt();
-		greenX = readUnsignedInt();
-		greenY = readUnsignedInt();
-		blueX = readUnsignedInt();
-		blueY = readUnsignedInt();
+		long whitePtX = readUnsignedInt();
+		long whitePtY = readUnsignedInt();
+		long redX = readUnsignedInt();
+		long redY = readUnsignedInt();
+		long greenX = readUnsignedInt();
+		long greenY = readUnsignedInt();
+		long blueX = readUnsignedInt();
+		long blueY = readUnsignedInt();
 		
 		_nisoMetadata.setWhitePointXValue(new Rational(whitePtX, 100000));
 		_nisoMetadata.setWhitePointYValue(new Rational(whitePtY, 100000));
