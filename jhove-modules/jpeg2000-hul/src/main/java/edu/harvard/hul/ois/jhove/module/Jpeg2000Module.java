@@ -419,7 +419,15 @@ public class Jpeg2000Module extends ModuleBase {
             // Can that happen?
             _defaultNiso.setMimeType(mime);
         }
-
+        
+        // Calculate the compression level
+        NisoImageMetadata niso = getCurrentNiso();
+        int rate = calculateRatio(getFilePos(), // fileSize
+        		niso.getBitsPerSample(), niso.getImageLength(), niso.getImageWidth());
+        if (rate != -1) {
+        	niso.setCompressionLevel(rate);
+        }
+        		
         if (!colorSpecs.isEmpty()) {
             _propList.add(new Property("ColorSpecs", PropertyType.PROPERTY,
                     PropertyArity.LIST, colorSpecs));
@@ -468,6 +476,21 @@ public class Jpeg2000Module extends ModuleBase {
         }
 
         return;
+    }
+
+    /**
+     * Return the compression ratio
+     */
+    public int calculateRatio(long fileSize, int[] bitsPerSample, long length, long width) {
+    	long bits = 0;
+    	for (int bit:bitsPerSample) {
+    		bits += bit;
+    	}
+    	double bytes = (double)bits / 8.0;
+    	double uncompressedSize = (double)length * (double)width * bytes;
+    	if (fileSize <= 0) return -1;
+    	double ratio = uncompressedSize / (double)fileSize;
+    	return (int)Math.round(ratio);
     }
 
     /**

@@ -132,6 +132,9 @@ public class SIZMarkerSegment extends MarkerSegment {
                 PropertyType.PROPERTY,
                 PropertyArity.LIST,
                 plist));
+        
+        NisoImageMetadata niso = _module.getCurrentNiso ();
+        niso.setJp2Tiles("" + xtsiz + "x" + ytsiz);
         return true;
     }
 }
