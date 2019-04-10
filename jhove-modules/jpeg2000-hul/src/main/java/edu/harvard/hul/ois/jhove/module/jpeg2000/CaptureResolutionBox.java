@@ -6,8 +6,6 @@
 package edu.harvard.hul.ois.jhove.module.jpeg2000;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import edu.harvard.hul.ois.jhove.*;
 

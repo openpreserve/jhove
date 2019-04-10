@@ -6,7 +6,6 @@
 package edu.harvard.hul.ois.jhove.module.jpeg2000;
 
 import java.io.*;
-import java.util.*;
 
 import edu.harvard.hul.ois.jhove.*;
 
