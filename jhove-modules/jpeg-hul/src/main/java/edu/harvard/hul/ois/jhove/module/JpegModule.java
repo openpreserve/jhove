@@ -1613,14 +1613,10 @@ public class JpegModule extends ModuleBase {
 				propArr[0] = new Property("TilingType", PropertyType.STRING,
 						JpegStrings.TILING_TYPE[tilingType]);
 			}
-			propArr[1] = new Property("VerticalScale", PropertyType.INTEGER,
-					new Integer(_tiling.getVertScale()));
-			propArr[2] = new Property("HorizontalScale", PropertyType.INTEGER,
-					new Integer(_tiling.getHorScale()));
-			propArr[3] = new Property("RefGridHeight", PropertyType.LONG,
-					new Long(_tiling.getRefGridHeight()));
-			propArr[4] = new Property("RefGridWidth", PropertyType.LONG,
-					new Long(_tiling.getRefGridWidth()));
+			propArr[1] = new Property("VerticalScale", PropertyType.INTEGER, _tiling.getVertScale());
+			propArr[2] = new Property("HorizontalScale", PropertyType.INTEGER, _tiling.getHorScale());
+			propArr[3] = new Property("RefGridHeight", PropertyType.LONG, _tiling.getRefGridHeight());
+			propArr[4] = new Property("RefGridWidth", PropertyType.LONG, _tiling.getRefGridWidth());
 			propArr[5] = _tiling.buildTileListProp();
 			return new Property("Tiling", PropertyType.PROPERTY,
 					PropertyArity.ARRAY, propArr);
