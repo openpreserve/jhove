@@ -1534,9 +1534,15 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         return itemNode;
     }
     
-    private <E> void addToNode(DefaultMutableTreeNode node, E[] ar) {
-        for (int i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }
+    /**
+     * Method to add an array to a node
+     * @param <E>   generic method, can be used for arrays of different types
+     * @param node  the node to add the elements of the array
+     * @param array the array to be added to the node
+     */
+    private <E> void addToNode(DefaultMutableTreeNode node, E[] array) {
+        for (E element : array) {
+            node.add (new DefaultMutableTreeNode (element));
+        }
     }
 }
