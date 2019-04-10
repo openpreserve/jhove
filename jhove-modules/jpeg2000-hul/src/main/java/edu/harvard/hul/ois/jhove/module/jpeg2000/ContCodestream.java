@@ -23,7 +23,6 @@ import java.util.*;
  */
 public class ContCodestream {
     
-    private Codestream _codestream;
     private long _length;
     private Jpeg2000Module _module;
     private DataInputStream _dstream;
@@ -98,7 +97,6 @@ public class ContCodestream {
     public boolean readCodestream (Codestream cs, RepInfo info) 
                 throws IOException
     {
-        _codestream = cs;
         long lengthLeft = _length;
         _tileLeft = 0;
         boolean socSeen = false;  // flag to note an SOC marker has been seen
@@ -172,7 +170,7 @@ public class ContCodestream {
             info.setWellFormed (false);
             return false;
         }
-        _codestream.setTiles (_tiles);
+        cs.setTiles (_tiles);
         return true;
     }
     
