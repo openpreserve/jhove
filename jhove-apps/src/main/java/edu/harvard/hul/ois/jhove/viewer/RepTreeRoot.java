@@ -59,61 +59,72 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         PropertyType typ = pProp.getType ();
         Object pValue = pProp.getValue ();
         if (arity == PropertyArity.SCALAR) {
-            if (typ == PropertyType.NISOIMAGEMETADATA) {
-                // NISO Image metadata is a world of its own.
-                NisoImageMetadata nData = (NisoImageMetadata) pValue;
-                return nisoToNode (nData);
-            }
-            else if (typ == PropertyType.AESAUDIOMETADATA) {
-                // AES audio metadata is another world.
-                AESAudioMetadata aData = (AESAudioMetadata) pValue;
-                return aesToNode (aData);
-            }
-            else if (typ == PropertyType.TEXTMDMETADATA) {
-                // textMD metadata is another world.
-                TextMDMetadata tData = (TextMDMetadata) pValue;
-                return textMDToNode(tData);
-            }
-            else if (typ == PropertyType.PROPERTY) {
-                if ("TextMDMetadata".equals(pProp.getName())) {
-                    TextMDMetadata tData = (TextMDMetadata) pValue;
-                    return textMDToNode (tData);
-                }
-                // A scalar property of type Property -- seems 
-                // pointless, but we handle it.
-                DefaultMutableTreeNode val = 
-                        new DefaultMutableTreeNode (pProp.getName ());
-                val.add (propToNode ((Property) pValue));
+            if (null == typ) {
+                // Simple types: just use name plus string value.
+                DefaultMutableTreeNode val = new DefaultMutableTreeNode
+                                (pProp.getName () + ": " + pValue.toString ());
                 return val;
             }
             else {
-                // Simple types: just use name plus string value.
-                DefaultMutableTreeNode val = new DefaultMutableTreeNode 
-                        (pProp.getName () + ": " + pValue.toString ());
-                return val;
+                TextMDMetadata tData;
+                 DefaultMutableTreeNode val;
+                switch (typ) {
+                case NISOIMAGEMETADATA:
+                    // NISO Image metadata is a world of its own.
+                    NisoImageMetadata nData = (NisoImageMetadata) pValue;
+                    return nisoToNode (nData);
+                case AESAUDIOMETADATA:
+                    // AES audio metadata is another world.
+                    AESAudioMetadata aData = (AESAudioMetadata) pValue;
+                    return aesToNode (aData);
+                case TEXTMDMETADATA:
+                    // textMD metadata is another world.
+                    tData = (TextMDMetadata) pValue;
+                    return textMDToNode(tData);
+                case PROPERTY:
+                
+                    if ("TextMDMetadata".equals(pProp.getName())) {
+                        tData = (TextMDMetadata) pValue;
+                        return textMDToNode (tData);
+                    }
+                    // A scalar property of type Property -- seems
+                    // pointless, but we handle it.
+                    val = new DefaultMutableTreeNode (pProp.getName ());
+                    val.add (propToNode ((Property) pValue));
+                    return val;
+                
+                default:
+                
+                    // Simple types: just use name plus string value.
+                    val = new DefaultMutableTreeNode
+                                (pProp.getName () + ": " + pValue.toString ());
+                    return val;
+                
+                }
             }
         }
         // Compound properties.  The text of the node is the
         // property name.
         DefaultMutableTreeNode val = 
             new DefaultMutableTreeNode (pProp.getName ());
-        if (arity == PropertyArity.ARRAY) {
-            addArrayMembers (val, pProp);
-        }
-        else if (arity == PropertyArity.LIST) {
-            addListMembers (val, pProp);
-        }
-        else if (arity == PropertyArity.MAP) {
-            addMapMembers (val, pProp);
-        }
-        else if (arity == PropertyArity.SET) {
-            addSetMembers (val, pProp);
+        if (null != arity) switch (arity) {
+            case ARRAY:
+                addArrayMembers (val, pProp);
+                break;
+            case LIST:
+                addListMembers (val, pProp);
+                break;
+            case MAP:
+                addMapMembers (val, pProp);
+                break;
+            case SET:
+                addSetMembers (val, pProp);
+                break;
+            default:
+                break;
         }
         return val;
     }
-    
-    
-    
     
     /**
      *  Find the index of an object in its parent.
@@ -128,17 +139,23 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         if (arity == PropertyArity.SET || 
                 arity == PropertyArity.LIST ||
                 arity == PropertyArity.MAP) {
-            if (arity == PropertyArity.SET) {
-                Set<?> set = (Set<?>) pProp.getValue ();
-                iter = set.iterator ();
-            }
-            else if (arity == PropertyArity.MAP) {
-                Map<?, ?> map = (Map<?, ?>) pProp.getValue ();
-                iter = map.values().iterator ();
-            }
-            else {
+            if (null == arity) {
                 List<?> list = (List<?>) pProp.getValue ();
                 iter = list.iterator ();
+            }
+            else switch (arity) {
+                case SET:
+                    Set<?> set = (Set<?>) pProp.getValue ();
+                    iter = set.iterator ();
+                    break;
+                case MAP:
+                    Map<?, ?> map = (Map<?, ?>) pProp.getValue ();
+                    iter = map.values().iterator ();
+                    break;
+                default:
+                    List<?> list = (List<?>) pProp.getValue ();
+                    iter = list.iterator ();
+                    break;
             }
             for (int i = 0;; i++) {
                 if (!iter.hasNext ()) {
@@ -160,43 +177,51 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         Object[] objArray = null;
         int n = 0;
    
-        //if (child instanceof LeafHolder) {
+        if (null == propType) {
+            return 0;               // non-object array type
+        }
+        else //if (child instanceof LeafHolder) {
         //    return ((LeafHolder) child).getPosition ();
         //}
-        //else 
-        if (PropertyType.DATE == propType) {
-            dateArray = (java.util.Date []) pProp.getValue ();
-            n = dateArray.length;
-        }
-        else if (PropertyType.OBJECT == propType) {
-            objArray = (Object []) pProp.getValue ();
-            n = objArray.length;
-        }
-        else if (PropertyType.RATIONAL == propType) {
-            rationalArray = (Rational []) pProp.getValue ();
-            n = rationalArray.length;
-        }
-        else if (PropertyType.PROPERTY == propType) {
-            propArray = (Property []) pProp.getValue ();
-            n = propArray.length;
-        }
-        else {
-            return 0;               // non-object array type
+        //else
+        switch (propType) {
+            case DATE:
+                dateArray = (java.util.Date []) pProp.getValue ();
+                n = dateArray.length;
+                break;
+            case OBJECT:
+                objArray = (Object []) pProp.getValue ();
+                n = objArray.length;
+                break;
+            case RATIONAL:
+                rationalArray = (Rational []) pProp.getValue ();
+                n = rationalArray.length;
+                break;
+            case PROPERTY:
+                propArray = (Property []) pProp.getValue ();
+                n = propArray.length;
+                break;
+            default:
+                return 0;               // non-object array type
         }
    
         for (int i = 0; i < n; i++) {
             Object elem = null;
-            if (PropertyType.DATE == propType) {
-                elem = dateArray[i];
-            }
-            else if (PropertyType.OBJECT == propType) {
-                elem = objArray[i];
-            }
-            else if (PropertyType.RATIONAL == propType) {
-                elem = rationalArray[i];
-            }
-            else if (PropertyType.PROPERTY == propType) {
-                elem = propArray[i];
+            switch (propType) {
+                case DATE:
+                    elem = dateArray[i];
+                    break;
+                case OBJECT:
+                    elem = objArray[i];
+                    break;
+                case RATIONAL:
+                    elem = rationalArray[i];
+                    break;
+                case PROPERTY:
+                    elem = propArray[i];
+                    break;
+                default:
+                    break;
             }
             if (elem == child) {
                 return i;
@@ -409,94 +434,55 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         PropertyType typ = p.getType ();
         if (null != typ) switch (typ) {
             case INTEGER:{
-                int[] ar = (int []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }
+                addToNode(node, (Integer []) pVal);
                 break;
             }
             case LONG:{
-                long[] ar = (long []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }       
+                addToNode(node, (Long []) pVal);       
                 break;
             }
             case BOOLEAN:{
-                boolean[] ar = (boolean []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }       
+                addToNode(node, (Boolean []) pVal);    
                 break;
             }
             case CHARACTER:{
-                char[] ar = (char []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }       
+                addToNode(node, (Character []) pVal);      
                 break;
             }
             case DOUBLE:{
-                double[] ar = (double []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }       
+                addToNode(node, (Double []) pVal);     
                 break;
             }
             case FLOAT:{
-                float[] ar = (float []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }       
+                addToNode(node, (Float []) pVal);      
                 break;
             }
             case SHORT:{
-                short[] ar = (short []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }       
+                addToNode(node, (Short []) pVal);     
                 break;
             }
             case BYTE:{
-                byte[] ar = (byte []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }       
+                addToNode(node, (Byte []) pVal);       
                 break;
             }
             case STRING:{
-                String[] ar = (String []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }       
+                addToNode(node, (String []) pVal);      
                 break;
             }
             case RATIONAL:{
-                Rational[] ar = (Rational []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }       
+                addToNode(node, (Rational []) pVal);       
                 break;
             }
             case PROPERTY:{
-                Property[] ar = (Property []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (propToNode (ar[i]));
-                }       
+                addToNode(node, (Property []) pVal);      
                 break;
             }
             case NISOIMAGEMETADATA:{
-                NisoImageMetadata[] ar = (NisoImageMetadata[]) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (nisoToNode (ar[i]));
-                }       
+                addToNode(node, (NisoImageMetadata []) pVal);      
                 break;
             }
             case OBJECT:{
-                Object[] ar = (Object []) pVal;
-                for (i = 0; i < ar.length; i++) {
-                    node.add (new DefaultMutableTreeNode (ar[i]));
-                }       
+                addToNode(node, (Object []) pVal);      
                 break;
             }
             default:
@@ -511,9 +497,8 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         List<Object> l = (List<Object>) p.getValue ();
         PropertyType ptyp = p.getType ();
         boolean canHaveChildren = Boolean.FALSE;
-        for (Object item : l) {
-            node.add(getDefaultMutableTreeNode(ptyp, item, canHaveChildren));
-        }
+        l.forEach(item -> node.add(getDefaultMutableTreeNode(ptyp, item, 
+                canHaveChildren)));
     }
 
 
@@ -1519,8 +1504,8 @@ public class RepTreeRoot extends DefaultMutableTreeNode
     
     /**
      * This method returns a member of a property list based on it's PropertyType 
-     * @param ptyp
-     * @param item
+     * @param ptyp  the propertytype
+     * @param item  the item of the list
      * @param allowsChildren
      * @return 
      */
@@ -1547,5 +1532,11 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             }
         
         return itemNode;
+    }
+    
+    private <E> void addToNode(DefaultMutableTreeNode node, E[] ar) {
+        for (int i = 0; i < ar.length; i++) {
+                    node.add (new DefaultMutableTreeNode (ar[i]));
+                }
     }
 }
