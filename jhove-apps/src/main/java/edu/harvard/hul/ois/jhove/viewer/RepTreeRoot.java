@@ -261,7 +261,8 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         String wfStr;
         switch (_info.getWellFormed ()) {
             case RepInfo.TRUE:
-                wfStr = "Well-Formed";                break;
+                wfStr = "Well-Formed";
+                break;
             case RepInfo.FALSE:
                 wfStr = "Not well-formed";
                 break;
@@ -424,7 +425,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             boolean[] ar = (boolean []) pVal;
             for (i = 0; i < ar.length; i++) {
                 node.add (new DefaultMutableTreeNode 
-                    (new Boolean (ar[i])));
+                    (Boolean.valueOf (ar[i])));
             }
         }
         else if (typ == PropertyType.CHARACTER) {

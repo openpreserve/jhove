@@ -102,7 +102,7 @@ public class InstructionSetBox extends JP2Box {
                     // The high bit of life is the persistence flag
                     boolean persist = ((life & 0X80000000) != 0);
                     instProps.add (new Property ("Persist",
-                            PropertyType.BOOLEAN, new Boolean (persist)));
+                            PropertyType.BOOLEAN, persist));
                     life &= 0X7FFFFFFF;
                     instProps.add (new Property ("Life",
                             PropertyType.LONG, new Long (life)));

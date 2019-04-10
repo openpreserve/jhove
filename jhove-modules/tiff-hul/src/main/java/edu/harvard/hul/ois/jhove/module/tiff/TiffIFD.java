@@ -1242,7 +1242,7 @@ public class TiffIFD extends IFD {
 		}
 		if (_transferFunction) {
 			entries.add(new Property("TransferFunction", PropertyType.BOOLEAN,
-					new Boolean(true)));
+					Boolean.TRUE));
 		}
 		if (_transferRange != null) {
 			entries.add(new Property("TransferRange", PropertyType.INTEGER,

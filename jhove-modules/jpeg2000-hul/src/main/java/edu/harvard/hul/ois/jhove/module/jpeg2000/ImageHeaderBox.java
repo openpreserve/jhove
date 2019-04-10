@@ -94,8 +94,7 @@ public class ImageHeaderBox extends JP2Box {
         
         int unk = ModuleBase.readUnsignedByte (_dstrm, _module);
         _module.addProperty (new Property ("ColorspaceUnknown",
-                PropertyType.BOOLEAN,
-                new Boolean (unk != 0)));
+                PropertyType.BOOLEAN, Boolean.valueOf(unk != 0)));
         // Skip unsigned byte
         ModuleBase.readUnsignedByte (_dstrm, _module);
         // This just says whether there is an IPR box.

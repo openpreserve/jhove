@@ -96,9 +96,8 @@ public class DigSignatureBox extends JP2Box {
                     len = _raf.length ();
                 }
                 propList.add (new Property ("Valid",
-                    PropertyType.BOOLEAN,
-                    new Boolean (isSigValid 
-                        (styp, off, len, data))));
+                    PropertyType.BOOLEAN, isSigValid 
+                                (styp, off, len, data)));
             }
             catch (NoSuchAlgorithmException e) { 
                 // In the unlikely event the algorithms aren't

@@ -1647,10 +1647,8 @@ public class JpegModule extends ModuleBase {
 		while (iter.hasNext()) {
 			boolean[] lhlv = iter.next();
 			Property[] lhlvProp = new Property[2];
-			lhlvProp[0] = new Property("Horizontal", PropertyType.BOOLEAN,
-					new Boolean(lhlv[0]));
-			lhlvProp[1] = new Property("Vertical", PropertyType.BOOLEAN,
-					new Boolean(lhlv[1]));
+			lhlvProp[0] = new Property("Horizontal", PropertyType.BOOLEAN, lhlv[0]);
+			lhlvProp[1] = new Property("Vertical", PropertyType.BOOLEAN, lhlv[1]);
 			plist.add(new Property("Expansion", PropertyType.PROPERTY,
 					PropertyArity.ARRAY, lhlvProp));
 		}
