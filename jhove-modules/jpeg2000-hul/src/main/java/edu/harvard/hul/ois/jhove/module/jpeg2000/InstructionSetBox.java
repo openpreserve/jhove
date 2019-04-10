@@ -82,19 +82,19 @@ public class InstructionSetBox extends JP2Box {
                 if (hasXO_YO) {
                     long xo = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("HorizontalOffset",
-                            PropertyType.LONG, new Long (xo)));
+                            PropertyType.LONG, xo));
                     long yo = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("VerticalOffset",
-                            PropertyType.LONG, new Long (yo)));
+                            PropertyType.LONG, yo));
                     sizeLeft -= 8;
                 }
                 if (hasWid_Ht) {
                     long width = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("Width",
-                            PropertyType.LONG, new Long (width)));
+                            PropertyType.LONG, width));
                     long height = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("Height",
-                            PropertyType.LONG, new Long (height)));
+                            PropertyType.LONG, height));
                     sizeLeft -= 8;
                 }
                 if (hasAnimation) {
@@ -105,28 +105,28 @@ public class InstructionSetBox extends JP2Box {
                             PropertyType.BOOLEAN, persist));
                     life &= 0X7FFFFFFF;
                     instProps.add (new Property ("Life",
-                            PropertyType.LONG, new Long (life)));
+                            PropertyType.LONG, life));
 
                     // Sloppy documentation: I'm assuming that N
                     // and NEXT-USE are the same thing.
                     long nextuse = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("NextUse",
-                            PropertyType.LONG, new Long (nextuse)));
+                            PropertyType.LONG, nextuse));
                     sizeLeft -= 8;
                 }
                 if (hasCrop) {
                     long xc = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("HorizontalCropOffset",
-                            PropertyType.LONG, new Long (xc)));
+                            PropertyType.LONG, xc));
                     long yc = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("VerticalCropOffset",
-                            PropertyType.LONG, new Long (yc)));
+                            PropertyType.LONG, yc));
                     long wc = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("CroppedWidth",
-                            PropertyType.LONG, new Long (wc)));
+                            PropertyType.LONG, wc));
                     long hc = _module.readUnsignedInt (_dstrm);
                     instProps.add (new Property ("CroppedHeight",
-                            PropertyType.LONG, new Long (hc)));
+                            PropertyType.LONG, hc));
                     sizeLeft -= 16;
                 }
                 if (sizeLeft < 0) {

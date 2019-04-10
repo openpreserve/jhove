@@ -411,56 +411,56 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             int[] ar = (int []) pVal;
             for (i = 0; i < ar.length; i++) {
                 node.add (new DefaultMutableTreeNode 
-                    (new Integer (ar[i])));
+                    (ar[i]));
             }
         }
         else if (typ == PropertyType.LONG) {
             long[] ar = (long []) pVal;
             for (i = 0; i < ar.length; i++) {
                 node.add (new DefaultMutableTreeNode 
-                    (new Long (ar[i])));
+                    (ar[i]));
             }
         }
         else if (typ == PropertyType.BOOLEAN) {
             boolean[] ar = (boolean []) pVal;
             for (i = 0; i < ar.length; i++) {
                 node.add (new DefaultMutableTreeNode 
-                    (Boolean.valueOf (ar[i])));
+                    (ar[i]));
             }
         }
         else if (typ == PropertyType.CHARACTER) {
             char[] ar = (char []) pVal;
             for (i = 0; i < ar.length; i++) {
                 node.add (new DefaultMutableTreeNode 
-                    (new Character (ar[i])));
+                    (ar[i]));
             }
         }
         else if (typ == PropertyType.DOUBLE) {
             double[] ar = (double []) pVal;
             for (i = 0; i < ar.length; i++) {
                 node.add (new DefaultMutableTreeNode 
-                    (new Double (ar[i])));
+                    (ar[i]));
             }
         }
         else if (typ == PropertyType.FLOAT) {
             float[] ar = (float []) pVal;
             for (i = 0; i < ar.length; i++) {
                 node.add (new DefaultMutableTreeNode 
-                    (new Float (ar[i])));
+                    (ar[i]));
             }
         }
         else if (typ == PropertyType.SHORT) {
             short[] ar = (short []) pVal;
             for (i = 0; i < ar.length; i++) {
                 node.add (new DefaultMutableTreeNode 
-                    (new Short (ar[i])));
+                    (ar[i]));
             }
         }
         else if (typ == PropertyType.BYTE) {
             byte[] ar = (byte []) pVal;
             for (i = 0; i < ar.length; i++) {
                 node.add (new DefaultMutableTreeNode 
-                    (new Byte (ar[i])));
+                    (ar[i]));
             }
         }
         else if (typ == PropertyType.STRING) {

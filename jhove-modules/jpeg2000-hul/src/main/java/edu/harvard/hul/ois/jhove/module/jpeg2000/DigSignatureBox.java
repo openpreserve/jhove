@@ -76,11 +76,9 @@ public class DigSignatureBox extends JP2Box {
             off = _module.readSignedLong (_dstrm);
             len = _module.readSignedLong (_dstrm);
             propList.add (new Property ("Offset",
-                    PropertyType.LONG,
-                    new Long (off)));
+                    PropertyType.LONG, off));
             propList.add (new Property ("Length",
-                    PropertyType.LONG,
-                    new Long (len)));
+                    PropertyType.LONG, len));
             sizeLeft -= 8;
         }
         
