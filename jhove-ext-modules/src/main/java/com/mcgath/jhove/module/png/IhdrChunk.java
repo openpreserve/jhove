@@ -38,27 +38,6 @@ public class IhdrChunk extends PNGChunk {
 			{ 8, 16}			// truecolour with alpha
 	};
 	
-	/* Image width */
-	private long width;
-	
-	/* Image height */
-	private long height;
-	
-	/* Bit depth */
-	private int bitDepth;
-	
-	/* Colour (sic) type, should be one of the color type constants */
-	private int colorType;
-	
-	/* Compression method */
-	private int compression;
-	
-	/* Filter method */
-	private int filter;
-	
-	/* Interlace method */
-	private int interlace;
-	
 	
 	/** Constructor */
 	public IhdrChunk(int sig, long leng) {
@@ -72,6 +51,21 @@ public class IhdrChunk extends PNGChunk {
 	 *  which would just be padding. */
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
+                /* Image width */
+		long width = readUnsignedInt();
+                /* Image height */
+		long height = readUnsignedInt();
+                /* Bit depth */
+		int bitDepth = readUnsignedByte();
+                /* Colour (sic) type, should be one of the color type constants */
+		int colorType = readUnsignedByte();
+                /* Compression method */
+		int compression = readUnsignedByte();
+                /* Filter method */
+		int filter = readUnsignedByte();
+                /* Interlace method */
+		int interlace = readUnsignedByte();
+                
 		boolean badChunk = false;
 		processChunkCommon(info);
 		if (_module.isIhdrSeen ()) {
@@ -86,20 +80,12 @@ public class IhdrChunk extends PNGChunk {
 			ErrorMessage msg = new ErrorMessage ("IHDR chunk too short");
 			info.setMessage(msg);
 			throw new PNGException ("Bad IHDR chunk, aborting");
-		}
-		width = readUnsignedInt();
-		height = readUnsignedInt();
-		bitDepth = readUnsignedByte();
-		colorType = readUnsignedByte();
-		compression = readUnsignedByte();
-		filter = readUnsignedByte();
-		interlace = readUnsignedByte();
+		} 
 		
 		// Extra bytes (assume they're allowed)
 		for (int i = 0; i < length - 13; i++) {
 			readUnsignedByte();
 		}
-		
 		
 		_nisoMetadata.setImageWidth (width);
 		_nisoMetadata.setImageLength (height);
