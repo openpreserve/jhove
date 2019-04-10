@@ -116,11 +116,13 @@ public class CODMarkerSegment extends MarkerSegment {
         NisoImageMetadata niso = _module.getCurrentNiso ();
         switch (xform) {
         case 0:
-        	niso.setCompressionScheme(34713); // lossy
+        	niso.setCompressionScheme(NisoImageMetadata.COMPRESSION_JPEG2000_LOSSY);
         	break;
         case 1:
-        	niso.setCompressionScheme(34714); //lossless
+        	niso.setCompressionScheme(NisoImageMetadata.COMPRESSION_JPEG2000_LOSSLESS);
         	break;
+        default:
+        	// let the nisoDefault works
         }
         niso.setJp2Layers(nLayers);
         niso.setJp2ResolutionLevels(nDecomp);

@@ -482,11 +482,12 @@ public class Jpeg2000Module extends ModuleBase {
      * Return the compression ratio
      */
     public int calculateRatio(long fileSize, int[] bitsPerSample, long length, long width) {
+    	final double BITS_IN_BYTE = 8.0;
     	long bits = 0;
     	for (int bit:bitsPerSample) {
     		bits += bit;
     	}
-    	double bytes = (double)bits / 8.0;
+    	double bytes = (double)bits / BITS_IN_BYTE;
     	double uncompressedSize = (double)length * (double)width * bytes;
     	if (fileSize <= 0) return -1;
     	double ratio = uncompressedSize / (double)fileSize;

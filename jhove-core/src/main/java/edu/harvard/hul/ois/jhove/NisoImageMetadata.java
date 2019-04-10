@@ -88,6 +88,8 @@ public class NisoImageMetadata
 	"LZMA"												  /* 34925 */
     };
     /** Index for 6.1.3.1 compression scheme value labels. */
+    public static final int COMPRESSION_JPEG2000_LOSSY = 34713;
+    public static final int COMPRESSION_JPEG2000_LOSSLESS = 34714;
     public static final int [] COMPRESSION_SCHEME_INDEX = {
 	1, 2, 3, 4, 
 	5, 6, 7, 8, 

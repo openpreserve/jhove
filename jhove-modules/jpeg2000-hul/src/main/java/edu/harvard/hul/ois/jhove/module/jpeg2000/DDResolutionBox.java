@@ -7,6 +7,7 @@ package edu.harvard.hul.ois.jhove.module.jpeg2000;
 
 import java.io.*;
 import java.util.*;
+
 import edu.harvard.hul.ois.jhove.*;
 
 /**
@@ -57,35 +58,13 @@ public class DDResolutionBox extends JP2Box {
         int vrcExp = ModuleBase.readUnsignedByte (_dstrm, _module);
         int hrcExp = ModuleBase.readUnsignedByte (_dstrm, _module);
         
-        List vresList = new ArrayList(3);
-        List hresList = new ArrayList(3);
-        vresList.add (new Property ("Numerator",
-                PropertyType.INTEGER, new Integer (vrcNum)));
-        vresList.add (new Property ("Denominator",
-                PropertyType.INTEGER, new Integer (vrcDenom)));
-        hresList.add (new Property ("Numerator",
-                PropertyType.INTEGER, new Integer (hrcNum)));
-        hresList.add (new Property ("Denominator",
-                PropertyType.INTEGER, new Integer (hrcDenom)));
-        vresList.add (new Property ("Exponent",
-                PropertyType.INTEGER, new Integer (vrcExp)));
-        hresList.add (new Property ("Exponent",
-                PropertyType.INTEGER, new Integer (hrcExp)));
-        // The three properties for each direction are subsumed into
-        // a property.
-        Property hres = new Property ("HorizResolution",
-                PropertyType.PROPERTY,
-                PropertyArity.LIST,
-                hresList);
-        Property vres = new Property ("VertResolution",
-                PropertyType.PROPERTY,
-                PropertyArity.LIST,
-                vresList);
         // And the two resolution properties are subsumed into
         // one property for the Module.
         Property[] topProps = new Property[2];
-        topProps[0] = hres;
-        topProps[1] = vres;
+        topProps[0] = ResolutionBox.makeResolutionProperty("HorizResolution", 
+        		hrcNum, hrcDenom, hrcExp);
+        topProps[1] = ResolutionBox.makeResolutionProperty("VertResolution", 
+        		vrcNum, vrcDenom, vrcExp);
         _module.addProperty(new Property ("DefaultDisplayResolution",
                 PropertyType.PROPERTY,
                 PropertyArity.ARRAY,
@@ -102,15 +81,12 @@ public class DDResolutionBox extends JP2Box {
         // units per centimeter.
         NisoImageMetadata niso = _module.getCurrentNiso ();
         if (niso.getXSamplingFrequency() == null) {
-	        Rational vrc = new Rational 
-	                    ((int) (vrcNum * Math.pow (10, vrcExp)),
-	                     vrcDenom * 100);
-	        Rational hrc = new Rational 
-	                    ((int) (hrcNum * Math.pow (10, hrcExp)),
-	                     hrcDenom * 100);
+            Rational vrc = ResolutionBox.convertToRational(vrcNum, vrcDenom, vrcExp);
+            Rational hrc = ResolutionBox.convertToRational(hrcNum, hrcDenom, hrcExp); 
 	        niso.setYSamplingFrequency (vrc);
 	        niso.setXSamplingFrequency (hrc);
-	        niso.setSamplingFrequencyUnit (3);
+	        final int RESOLUTION_UNIT_CM = 3;
+	        niso.setSamplingFrequencyUnit (RESOLUTION_UNIT_CM);
         }
         finalizeBytesRead ();
         return true;
