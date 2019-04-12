@@ -173,10 +173,12 @@ public abstract class PNGChunk {
 		if (ancillary && !duplicateAllowed) {
 			if (_module.isChunkSeen(chunkType)) {
 				ErrorMessage msg = new ErrorMessage 
-						("Multiple " + chunkTypeString() + " chunks are not allowed");
+						(MessageConstants.PNG_GDM_38, 
+								String.format(MessageConstants.PNG_GDM_38_SUB.getMessage(),  
+										chunkTypeString()));
 				info.setMessage (msg);
 				info.setWellFormed (false);
-				throw new PNGException ("Duplicate chunk");
+				throw new PNGException (MessageConstants.PNG_GDM_39);
 			}
 			_module.setChunkSeen (chunkType);
 		}

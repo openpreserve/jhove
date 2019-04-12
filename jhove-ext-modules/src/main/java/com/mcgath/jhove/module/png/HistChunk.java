@@ -20,19 +20,19 @@ public class HistChunk extends PNGChunk {
 	 *  presence of the chunk in a property.  */
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
-		final String badChunk = "Bad hIST chunk";
+
 		processChunkCommon(info);
 		ErrorMessage msg = null;
 		if (!_module.isPlteSeen()) {
-			msg = new ErrorMessage ("hIST chunk found without preceding PLTE chunk");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_12);
 		}
 		else if (_module.isIdatSeen()) {
-			msg = new ErrorMessage ("hIST chunk is not allowed after IDAT chunk");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_13);
 		}
 		if (msg != null) {
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_14);
 		}
 		Property prop = new Property ("Histogram",
 				PropertyType.STRING,
