@@ -20,6 +20,15 @@ public class ChrmChunk extends PNGChunk {
 	 *  which would just be padding. */
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
+                long whitePtX = readUnsignedInt();
+		long whitePtY = readUnsignedInt();
+		long redX = readUnsignedInt();
+		long redY = readUnsignedInt();
+		long greenX = readUnsignedInt();
+		long greenY = readUnsignedInt();
+		long blueX = readUnsignedInt();
+		long blueY = readUnsignedInt();
+                
 		String badChunk = "Bad cHRM chunk";
 		processChunkCommon(info);
 		if (_module.isPlteSeen() || _module.isIdatSeen()) {
@@ -34,14 +43,6 @@ public class ChrmChunk extends PNGChunk {
 			info.setWellFormed(false);
 			throw new PNGException ("Bad cHRM chunk");
 		}
-		long whitePtX = readUnsignedInt();
-		long whitePtY = readUnsignedInt();
-		long redX = readUnsignedInt();
-		long redY = readUnsignedInt();
-		long greenX = readUnsignedInt();
-		long greenY = readUnsignedInt();
-		long blueX = readUnsignedInt();
-		long blueY = readUnsignedInt();
 		
 		_nisoMetadata.setWhitePointXValue(new Rational(whitePtX, 100000));
 		_nisoMetadata.setWhitePointYValue(new Rational(whitePtY, 100000));
