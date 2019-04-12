@@ -40,11 +40,9 @@ public final class JpegExif {
     private boolean _exifProfileOK;
     private String _profileText;
     private NisoImageMetadata _exifNiso;
-    private JpegModule module;
     
-    public JpegExif (final JpegModule module)
+    public JpegExif ()
     {
-        this.module = module;
         _exifProfileOK = false;
         _profileText = null;
         _exifNiso = null;

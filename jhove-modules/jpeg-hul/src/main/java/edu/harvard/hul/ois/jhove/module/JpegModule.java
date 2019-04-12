@@ -1108,7 +1108,7 @@ public class JpegModule extends ModuleBase {
 				skipBytes(_dstream, length - 8, this);
 				return;
 			}
-			JpegExif je = new JpegExif(this);
+			JpegExif je = new JpegExif();
 			RepInfo exifInfo = je.readExifData(_dstream, _je, length);
 			if (exifInfo != null) {
 				/* Copy any EXIF messages into the JPEG info object. */

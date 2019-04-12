@@ -23,9 +23,6 @@ public class PdfFlateInputStream extends FilterInputStream {
 
     private InflaterInputStream iis;
     private int predictor;
-    private int columns;
-    /* bits per component */
-    private int bpc;
     /* colors -- the term is being used in some idiosyncratic sense */
     private int colors;
 
@@ -72,11 +69,13 @@ public class PdfFlateInputStream extends FilterInputStream {
     public PdfFlateInputStream (InputStream is, PdfDictionary parms)
     {
         super(is);
+        int columns = 1;  
+         /* bits per component */
+        int bpc = 8;
+        
         iis = new InflaterInputStream (is);
         /* Set default values */
-        predictor = 1;   // no prediction
-        columns = 1;  
-        bpc = 8;
+        predictor = 1;   // no prediction 
         colors = 1;
 
         iisBuf = new byte [IISBUF_SIZE];

@@ -64,7 +64,6 @@ public class AESAudioMetadata
     private int _numChannels;
     private String _primaryIdentifier;
     private String _primaryIdentifierType;
-    private String _primaryIdentifierOtherType;
     private String _schemaVersion;
     private String _specificationVersion;
     private String[] _use;
@@ -905,7 +904,6 @@ public class AESAudioMetadata
     public void setOtherPrimaryIdentifierType (String otherType)
     {
         _primaryIdentifierType = "OTHER";
-        _primaryIdentifierOtherType = otherType;
     }
     
     /** Sets the sample rate. */

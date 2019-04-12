@@ -29,7 +29,7 @@ import edu.harvard.hul.ois.jhove.module.iff.*;
  */
 public class ListInfoTextChunk extends Chunk {
 
-	private ListInfoChunk _parent;
+	//private ListInfoChunk _parent; commenting out, does not appear to be used
 	private List _listInfoProps;
 	String _chunkID;
 
@@ -51,7 +51,7 @@ public class ListInfoTextChunk extends Chunk {
 	public ListInfoTextChunk(ModuleBase module, ChunkHeader hdr,
 			DataInputStream dstrm, List listInfoProps, ListInfoChunk parent) {
 		super(module, hdr, dstrm);
-		_parent = parent;
+		//_parent = parent;
 		_chunkID = hdr.getID();
 		_listInfoProps = listInfoProps;
 	}

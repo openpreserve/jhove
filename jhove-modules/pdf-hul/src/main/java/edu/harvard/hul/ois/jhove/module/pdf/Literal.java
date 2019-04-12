@@ -37,17 +37,10 @@ public class Literal
 
     /** First digit of a hexadecimal string value. */
     //int h1;
-
-    /** The state of the tokenization.  Only the subset of States which
-        pertain to Literals are used here. */
-    private State _state;
     
     /** True if no discrepancies with PDF/A requirements have been found,
         false if there is a discrepancy in this literal. */
     private boolean _pdfACompliant;
-    
-    /** Depth of parenthesis nesting. */
-    private int _parenLevel;
 
     /** Mapping between PDFDocEncoding and Unicode code points. */
     public static char [] PDFDOCENCODING = {
@@ -147,11 +140,17 @@ public class Literal
         int b1 = 0x00;
         /*  Character read from tokenizer. */
         int ch;
-        _parenLevel = 0;
         _rawBytes = new Vector<> (32);
-        _state = State.LITERAL;
+        
+        /** The state of the tokenization.  Only the subset of States which
+        pertain to Literals are used here. */
+        State state = State.LITERAL;
 
 	long offset = 0;
+        
+        /** Depth of parenthesis nesting. */
+        int parenLevel = 0;
+        
         for (;;) {
             ch = tok.readChar ();
             // If we get -1, then we've hit an EOF without proper termination of
@@ -162,12 +161,12 @@ public class Literal
             offset++;
             _rawBytes.add (new Integer (ch));
 
-            if (_state == State.LITERAL) {
+            if (state == State.LITERAL) {
                 // We are still in a state of flux, determining the encoding
                 if (ch == FE) {
-                    _state = State.LITERAL_FE;
+                    state = State.LITERAL_FE;
                 }
-                else if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
+                else if (ch == CLOSE_PARENTHESIS && --parenLevel < 0) {
                     // We have an empty string
                     setPDFDocEncoding (true);
                     setValue(buffer.toString());
@@ -179,7 +178,7 @@ public class Literal
                         continue;  // invalid character, ignore
                     }
                     else if (ch == FE) {
-                        _state = State.LITERAL_FE;
+                        state = State.LITERAL_FE;
                     }
                     else {
                         // any other char is treated nonspecially
@@ -193,16 +192,16 @@ public class Literal
                     if (ch == OPEN_PARENTHESIS) {
                         // Count open parens to be matched by close parens.
                         // Backslash-quoted parens won't get here.
-                        ++_parenLevel;
+                        ++parenLevel;
                     }
-                    _state = State.LITERAL_PDF;
+                    state = State.LITERAL_PDF;
                     setPDFDocEncoding (true);
                     buffer.append (PDFDOCENCODING[ch]);
                 }
             }
-            else if (_state == (State.LITERAL_FE)) {
+            else if (state == (State.LITERAL_FE)) {
                 if (ch == FF) {
-                    _state = State.LITERAL_UTF16_1;
+                    state = State.LITERAL_UTF16_1;
                     setPDFDocEncoding (false);
                 }
                 else if (ch == BACKSLASH) {
@@ -211,7 +210,7 @@ public class Literal
                         continue;  // invalid character, ignore
                     }
                     if (ch == FF) {
-                        _state = State.LITERAL_UTF16_1;
+                        state = State.LITERAL_UTF16_1;
                         setPDFDocEncoding (false);
                     }
                     else {
@@ -223,15 +222,15 @@ public class Literal
                     }
                 }
                 else {
-                    _state = State.LITERAL_PDF;
+                    state = State.LITERAL_PDF;
                     setPDFDocEncoding (true);
                     // The FE is just an FE, put it in the buffer
                     buffer.append (PDFDOCENCODING[FE]);
                     buffer.append (PDFDOCENCODING[ch]);
                 }
             }
-            else if (_state == (State.LITERAL_PDF)) {
-                if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
+            else if (state == (State.LITERAL_PDF)) {
+                if (ch == CLOSE_PARENTHESIS && --parenLevel < 0) {
                     setValue(buffer.toString());
                     return offset;
                 }
@@ -247,7 +246,7 @@ public class Literal
                     buffer.append (PDFDOCENCODING[ch]);
                 }
             }
-            else if (_state == (State.LITERAL_UTF16_1)) {
+            else if (state == (State.LITERAL_UTF16_1)) {
                 // First byte of a UTF16 character.  But a close
                 // paren or backslash is a single-byte character.
                 // Parens within the string are double-byte characters,
@@ -263,14 +262,14 @@ public class Literal
                     }
                 }
                 else {
-                    _state = State.LITERAL_UTF16_2;
+                    state = State.LITERAL_UTF16_2;
                     b1 = ch;
                 }
             }
-            else if (_state == (State.LITERAL_UTF16_2)) {
+            else if (state == (State.LITERAL_UTF16_2)) {
                 // Second byte of a UTF16 character.
                 utfch = 256 * b1 + ch;
-                _state = State.LITERAL_UTF16_1;
+                state = State.LITERAL_UTF16_1;
                 // an ESC may appear at any point to signify
                 // a language code.  Remove the language code
                 // from the stream and save it in a list of codes.

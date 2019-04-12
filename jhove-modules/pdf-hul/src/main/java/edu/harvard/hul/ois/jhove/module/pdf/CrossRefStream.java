@@ -32,11 +32,10 @@ public class CrossRefStream {
     private IndexRange[] _index;
     private int[] _fieldSizes;
     private int _freeCount;
-    private Filter[] _filters;
+    //private Filter[] _filters;  //Commented out, there is some question below why this is not being used
     private int _readRange;
     private int _readIndex;
 
-    private int _bytesPerEntry;
     private long _prevXref;    // byte offset to previous xref stream, if any
 
     /* Per-object variables. */
@@ -141,7 +140,7 @@ public class CrossRefStream {
         // Get the filter, for subsequent decompression.
         // We're guaranteed by the spec that this won't be a decryption
         // filter.
-        _filters = _xstrm.getFilters();
+        //_filters = _xstrm.getFilters();
         // Why isn't this being used?
 
         // passed all tests
@@ -156,6 +155,8 @@ public class CrossRefStream {
     public void initRead (RandomAccessFile raf) 
             throws IOException 
     {
+        int bytesPerEntry;
+        
         Stream strm = _xstrm.getStream ();
         strm.setFilters (_xstrm.getFilters ());
         strm.initRead (raf);
@@ -164,9 +165,9 @@ public class CrossRefStream {
         
         /* Calculate the total bytes per entry.  This may have
          * some utility. */
-        _bytesPerEntry = 0;
+        bytesPerEntry = 0;
         for (int i = 0; i < _fieldSizes.length; i++) {
-            _bytesPerEntry += _fieldSizes[i];
+            bytesPerEntry += _fieldSizes[i];
         }
     }
 

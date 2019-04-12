@@ -22,7 +22,6 @@ public class RepTreeRoot extends DefaultMutableTreeNode
      ******************************************************************/
 
     private RepInfo _info;
-    private JhoveBase _base;
     private boolean _rawOutput;
     private DateFormat _dateFmt;
 
@@ -39,8 +38,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
     {
         super (info.getUri());
         _info = info;
-        _base = base;
-        _rawOutput = _base.getShowRawFlag ();
+        _rawOutput = base.getShowRawFlag ();
 
         // Set the DateFormat for displaying the module date.
         _dateFmt = DateFormat.getDateInstance ();
@@ -261,7 +259,8 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         String wfStr;
         switch (_info.getWellFormed ()) {
             case RepInfo.TRUE:
-                wfStr = "Well-Formed";                break;
+                wfStr = "Well-Formed";
+                break;
             case RepInfo.FALSE:
                 wfStr = "Not well-formed";
                 break;
