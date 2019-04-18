@@ -6,7 +6,7 @@
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 /**
- *  Class for Tokens which represent the ">>" sequence that ends a Dictionary.
+ * Class for Tokens which represent the {@code >>} sequence that ends a Dictionary.
  */
 public class DictionaryEnd
     extends Token

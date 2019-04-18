@@ -11,10 +11,10 @@ package edu.harvard.hul.ois.jhove.module.utf8;
  *  
  *  Updated to Unicode 7.0.0.
  *
- *  @see Utf8Module 
+ *  @see edu.harvard.hul.ois.jhove.module.Utf8Module
  */
 public enum Utf8Block {
-    /** Unicode 6.0.0 blocks, derived from
+    /* Unicode 6.0.0 blocks, derived from
      * &lt;http://www.unicode.org/Public/3.2-Update/Blocks-3.2.0.txt&gt;
      * and updated to Unicode 6.0.0  */
 	LAT(0x0000, 0x007F, "Basic Latin"),
@@ -217,7 +217,7 @@ public enum Utf8Block {
 	/**  Start code. */
 	public final int start;
 
-	private Utf8Block(final int start, final int end, final String name) {
+	Utf8Block(final int start, final int end, final String name) {
 		this.start = start;
 		this.end = end;
 		this.name = name;

@@ -179,8 +179,8 @@ public class CrossRefStream {
      * Object Streams.
      *
      * Free objects are skipped over while being counted.  After
-     * <code>readNextObject() returns <code>false</code>, the caller
-     * may call <code>getFreeCount()</code> to determine the
+     * <code>readNextObject</code> returns <code>false</code>, the caller
+     * may call <code>getFreeCount</code> to determine the
      * number of free objects.
      * 
      * @return  <code>true</code> if there is an object, <code>false</code>

@@ -1440,7 +1440,7 @@ public class NisoImageMetadata
     }
 
     /** Set 7.7.2 digital camera model.
-     * @param model Camera model
+     * @param modelName Camera model
      */
     public void setDigitalCameraModelName (String modelName)
     {
