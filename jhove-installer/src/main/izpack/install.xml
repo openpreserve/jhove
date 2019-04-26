@@ -64,7 +64,7 @@
       <file targetdir="$INSTALL_PATH/bin" src="bin/ascii-hul-1.4.1.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/ascii-hul-1.4.1.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/gif-hul-1.4.1.jar"/>
-      <executable targetfile="$INSTALL_PATH/bin/gif-hul-1.4.0.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/gif-hul-1.4.1.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/html-hul-1.4.1.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/html-hul-1.4.1.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/jpeg2000-hul-1.4.1.jar"/>
