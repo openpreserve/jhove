@@ -719,10 +719,8 @@ public class JpegModule extends ModuleBase {
 
 		if (_units == 0) {
 			List<Property> list = new ArrayList<Property>();
-			list.add(new Property("PixelAspectRatioX", PropertyType.INTEGER,
-					new Integer(_xDensity)));
-			list.add(new Property("PixelAspectRatioY", PropertyType.INTEGER,
-					new Integer(_yDensity)));
+			list.add(new Property("PixelAspectRatioX", PropertyType.INTEGER, _xDensity));
+			list.add(new Property("PixelAspectRatioY", PropertyType.INTEGER, _yDensity));
 			_primaryImageList.add(new Property("PixelAspectRatio",
 					PropertyType.PROPERTY, PropertyArity.LIST, list));
 		}
@@ -737,10 +735,9 @@ public class JpegModule extends ModuleBase {
 		}
 		if (_restartInterval >= 0) {
 			_primaryImageList.add(new Property("RestartInterval",
-					PropertyType.INTEGER, new Integer(_restartInterval)));
+					PropertyType.INTEGER, _restartInterval));
 		}
-		_primaryImageList.add(new Property("Scans", PropertyType.INTEGER,
-				new Integer(_numScans)));
+		_primaryImageList.add(new Property("Scans", PropertyType.INTEGER, _numScans));
 		if (!_quantTables.isEmpty()) {
 			List<Property> qpl = new LinkedList<Property>();
 			ListIterator<QuantizationTable> iter = _quantTables.listIterator();
@@ -812,7 +809,7 @@ public class JpegModule extends ModuleBase {
 		 */
 		List<Property> list = new ArrayList<Property>();
 		list.add(new Property("Number", PropertyType.INTEGER,
-				PropertyArity.SCALAR, new Integer(_imageList.size())));
+				PropertyArity.SCALAR, _imageList.size()));
 		Iterator<Property> iter = _imageList.iterator();
 		while (iter.hasNext()) {
 			Property prop = iter.next();
@@ -1570,8 +1567,7 @@ public class JpegModule extends ModuleBase {
 			Property cap0Prop;
 			List<Property> capList = new ArrayList<Property>(3);
 			if (_je.getShowRawFlag()) {
-				cap0Prop = new Property("Version0", PropertyType.INTEGER,
-						new Integer(_capability0));
+				cap0Prop = new Property("Version0", PropertyType.INTEGER, _capability0);
 			} else {
 				cap0Prop = new Property("Version0", PropertyType.STRING,
 						JpegStrings.CAPABILITY_V0[_capability0]);
@@ -1581,7 +1577,7 @@ public class JpegModule extends ModuleBase {
 			if (_capability1 >= 0) {
 				if (_je.getShowRawFlag()) {
 					Property cap1Prop = new Property("Version1",
-							PropertyType.INTEGER, new Integer(_capability1));
+							PropertyType.INTEGER, _capability1);
 					capList.add(cap1Prop);
 				} else {
 					// Capability 1 entails 2 strings, one for the
@@ -1612,20 +1608,15 @@ public class JpegModule extends ModuleBase {
 			Property[] propArr = new Property[6];
 			int tilingType = _tiling.getTilingType();
 			if (_je.getShowRawFlag()) {
-				propArr[0] = new Property("TilingType", PropertyType.INTEGER,
-						new Integer(tilingType));
+				propArr[0] = new Property("TilingType", PropertyType.INTEGER, tilingType);
 			} else {
 				propArr[0] = new Property("TilingType", PropertyType.STRING,
 						JpegStrings.TILING_TYPE[tilingType]);
 			}
-			propArr[1] = new Property("VerticalScale", PropertyType.INTEGER,
-					new Integer(_tiling.getVertScale()));
-			propArr[2] = new Property("HorizontalScale", PropertyType.INTEGER,
-					new Integer(_tiling.getHorScale()));
-			propArr[3] = new Property("RefGridHeight", PropertyType.LONG,
-					new Long(_tiling.getRefGridHeight()));
-			propArr[4] = new Property("RefGridWidth", PropertyType.LONG,
-					new Long(_tiling.getRefGridWidth()));
+			propArr[1] = new Property("VerticalScale", PropertyType.INTEGER, _tiling.getVertScale());
+			propArr[2] = new Property("HorizontalScale", PropertyType.INTEGER, _tiling.getHorScale());
+			propArr[3] = new Property("RefGridHeight", PropertyType.LONG, _tiling.getRefGridHeight());
+			propArr[4] = new Property("RefGridWidth", PropertyType.LONG, _tiling.getRefGridWidth());
 			propArr[5] = _tiling.buildTileListProp();
 			return new Property("Tiling", PropertyType.PROPERTY,
 					PropertyArity.ARRAY, propArr);
@@ -1647,10 +1638,8 @@ public class JpegModule extends ModuleBase {
 		while (iter.hasNext()) {
 			boolean[] lhlv = iter.next();
 			Property[] lhlvProp = new Property[2];
-			lhlvProp[0] = new Property("Horizontal", PropertyType.BOOLEAN,
-					new Boolean(lhlv[0]));
-			lhlvProp[1] = new Property("Vertical", PropertyType.BOOLEAN,
-					new Boolean(lhlv[1]));
+			lhlvProp[0] = new Property("Horizontal", PropertyType.BOOLEAN, lhlv[0]);
+			lhlvProp[1] = new Property("Vertical", PropertyType.BOOLEAN, lhlv[1]);
 			plist.add(new Property("Expansion", PropertyType.PROPERTY,
 					PropertyArity.ARRAY, lhlvProp));
 		}
