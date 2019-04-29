@@ -6,12 +6,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -76,9 +76,9 @@ import edu.harvard.hul.ois.jhove.module.jpeg.Tiling;
 
 /**
  * Module for identification and validation of JPEG files.
- * 
+ *
  * General notes:
- * 
+ *
  * There is no such thing as a "JPEG file format." There are several commonly
  * used file formats which encapsulate JPEG data and conform to the JPEG stream
  * format. There are also many formats which can encapsulate JPEG data within
@@ -87,7 +87,7 @@ import edu.harvard.hul.ois.jhove.module.jpeg.Tiling;
  * which isn't one of the known file formats will be regarded as well-formed,
  * but not valid. To be valid, a file must conform to one of the following:
  * JFIF, SPIFF, and JPEG/Exif. Other formats may be added in the future.
- * 
+ *
  * This module uses the JPEG-L method of detecting a marker following a data
  * stream, checking for a 0 high bit rather than an entire 0 byte. So long at no
  * JPEG markers are defined with a value from 0 through 7F, this is valid for
@@ -108,8 +108,8 @@ public class JpegModule extends ModuleBase {
 	 ******************************************************************/
 	private static final String NISO_IMAGE_MD = "NisoImageMetadata";
 	private static final String NAME = "JPEG-hul";
-	private static final String RELEASE = "1.5.0-RC2";
-	private static final int[] DATE = { 2019, 03, 29 };
+	private static final String RELEASE = "1.5.1";
+  private static final int [] DATE = { 2019, 04, 17 };
 	private static final String[] FORMAT = { "JPEG", "ISO/IEC 10918-1:1994",
 			"Joint Photographic Experts Group", "JFIF",
 			"JPEG File Interchange Format", "SPIFF", "ISO/IEC 10918-3:1997",
@@ -468,7 +468,7 @@ public class JpegModule extends ModuleBase {
 	/**
 	 * Parse the content of a purported JPEG stream digital object and store the
 	 * results in RepInfo.
-	 * 
+	 *
 	 * This function uses the JPEG-L method of detecting a marker following a
 	 * data stream, checking for a 0 high bit rather than an entire 0 byte. So
 	 * long at no JPEG markers are defined with a value from 0 through 7F, this
