@@ -75,11 +75,11 @@ public class AssocDataListChunk extends Superchunk {
 			// Labelled Text.
 			String id = chunkh.getID();
 			int chunkSize = (int) chunkh.getSize();
-			if (id.equals("labl")) {
+			if ("labl".equals(id)) {
 				chunk = new LabelChunk(_module, chunkh, _dstream);
-			} else if (id.equals("note")) {
+			} else if ("note".equals(id)) {
 				chunk = new NoteChunk(_module, chunkh, _dstream);
-			} else if (id.equals("ltxt")) {
+			} else if ("ltxt".equals(id)) {
 				chunk = new LabeledTextChunk(_module, chunkh, _dstream);
 			}
 
