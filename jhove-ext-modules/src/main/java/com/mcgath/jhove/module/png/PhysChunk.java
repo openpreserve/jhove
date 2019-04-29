@@ -23,19 +23,19 @@ public class PhysChunk extends PNGChunk {
 	 */
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
-		final String badChunk = "Bad pHYS chunk";
+		
 		processChunkCommon(info);
 		ErrorMessage msg = null;
 		if (_module.isIdatSeen()) {
-			msg = new ErrorMessage ("pHYS chunk is not allowed after IDAT chunk");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_31);
 		}
 		if (length < 9) {
-			msg = new ErrorMessage ("pHYS chunk too short");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_32);
 		}
 		if (msg != null) {
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_33);
 		}
 		long xPixelsPerUnit = readUnsignedInt();
 		long yPixelsPerUnit = readUnsignedInt();

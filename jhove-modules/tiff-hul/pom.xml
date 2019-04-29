@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.22.0-RC2</version>
+    <version>1.23.0-SNAPSHOT</version>
   </parent>
   <artifactId>tiff-hul</artifactId>
-  <version>1.8.0-RC2</version>
+  <version>1.9.1</version>
   <name>JHOVE TIFF Module HUL</name>
   <description>TIFF module developed by Harvard University Library</description>
 </project>

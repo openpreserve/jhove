@@ -374,8 +374,8 @@ public class PdfModule extends ModuleBase {
 	 ******************************************************************/
 
 	private static final String NAME = "PDF-hul";
-	private static final String RELEASE = "1.12-RC";
-	private static final int[] DATE = { 2019, 03, 05 };
+	private static final String RELEASE = "1.12.1";
+  private static final int [] DATE = { 2019, 04, 17 };
 	private static final String[] FORMAT = { "PDF",
 			"Portable Document Format" };
 	private static final String COVERAGE = "PDF 1.0-1.6; PDF/X-1 (ISO 15930-1:2001), X-1a (ISO 15930-4:2003), "
@@ -3881,7 +3881,7 @@ public class PdfModule extends ModuleBase {
 	 * catalog dictionary. As a side effect, we set the actionsExist
 	 * flag if any Actions are found. Because we check destinations,
 	 * this can't be called till the page tree is built.
-	 * 
+	 *
 	 * Outlines can be recursive, according to Adobe people, so we have
 	 * to track visited nodes.
 	 */

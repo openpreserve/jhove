@@ -25,7 +25,6 @@ public class BkgdChunk extends PNGChunk {
 	 */
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
-		final String badChunk = "Bad bKGD chunk";
 		processChunkCommon(info);
 		ErrorMessage msg = null;
 		int colorType = _module.getColorType();
@@ -45,10 +44,10 @@ public class BkgdChunk extends PNGChunk {
 			break;
 		}
 		if (_module.isIdatSeen()) {
-			msg = new ErrorMessage ("bKGD chunk is not allowed after IDAT chunk");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_1);
 		}
 		else if (length < minLength) {
-			msg = new ErrorMessage ("bKGD chunk is too short");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_2);
 		}
 		else {
 			switch (colorType) {
@@ -94,7 +93,7 @@ public class BkgdChunk extends PNGChunk {
 		if (msg != null) {
 			info.setMessage (msg);
 			info.setWellFormed(false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_3);
 		}
 	}
 }

@@ -75,17 +75,17 @@ public class IhdrChunk extends PNGChunk {
 		boolean badChunk = false;
 		processChunkCommon(info);
 		if (_module.isIhdrSeen ()) {
-			ErrorMessage msg = new ErrorMessage("Multiple IHDR chunks are not allowed");
+			ErrorMessage msg = new ErrorMessage(MessageConstants.PNG_GDM_22);
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException ("Duplicate IHDR chunk");
+			throw new PNGException (MessageConstants.PNG_GDM_23);
 		}
 		_module.setIhdrSeen(true);
 		System.out.println("Chunk Type " + chunkTypeString() + " length " + length);
 		if (length < 13) {
-			ErrorMessage msg = new ErrorMessage ("IHDR chunk too short");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_24);
 			info.setMessage(msg);
-			throw new PNGException ("Bad IHDR chunk, aborting");
+			throw new PNGException (MessageConstants.PNG_GDM_25);
 		}
 		width = readUnsignedInt();
 		height = readUnsignedInt();
@@ -121,7 +121,10 @@ public class IhdrChunk extends PNGChunk {
 		} else {
 			if (!colorAndDepthOK(colorType, bitDepth)) {
 				ErrorMessage msg =
-						new ErrorMessage("Cannot use color type " + colorType + " with bit depth " + bitDepth);
+						new ErrorMessage(MessageConstants.PNG_GDM_26, 
+								String.format(MessageConstants.PNG_GDM_26_SUB.getMessage(),  
+										colorType, 
+										bitDepth));
 				info.setMessage(msg);
 				info.setWellFormed(false);
 				badChunk = true;
@@ -162,7 +165,7 @@ public class IhdrChunk extends PNGChunk {
 				PropertyType.STRING,
 				interlaceStr));
 		if (badChunk) {
-			throw new PNGException ("Bad IHDR chunk, aborting");
+			throw new PNGException (MessageConstants.PNG_GDM_27);
 		}
 	}
 	
@@ -182,7 +185,7 @@ public class IhdrChunk extends PNGChunk {
 			val = 3;
 			break;
 		default:
-			throw new PNGException ("Invalid color type");
+			throw new PNGException (MessageConstants.PNG_GDM_28);
 		}
 		return val;
 	}

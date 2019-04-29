@@ -1,12 +1,115 @@
 RELEASE NOTES
 =============
-JHOVE - JSTOR/Harvard Object Validation Environment  
-Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.  
+JHOVE - JSTOR/Harvard Object Validation Environment
+Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details).
 
-Versions 1.7 to 1.11 of JHOVE released independently.  
+Versions 1.7 to 1.11 of JHOVE released independently.
 Versions 1.12 onwards released by the Open Preservation Foundation.
+
+JHOVE 1.22
+-------------
+2018-04-18
+
+### General
+
+- Error IDs for JHOVE messages [[#397][]]
+- Fixed Rational data types for MIX metadata [[#394][], [#429][]]
+- Individual, Maven based versioning for internal modules [[#390][]]
+- Java support upgraded to Java 1.8 [[#342][], [#343][], [#391][]]
+- Factored out error messages for core applications [[#348][]]
+- Code maintenance [[#351][], [#392][]]
+- Improvements to test scripts and automated build [[#350][], [#352][], [#379][], [#383][]]
+
+### AIFF Module
+
+- Error IDs and message constants as external resources [[#398]]
+
+### ASCII Module
+
+- Refactoring and code readability improvements [[#353][]]
+- Error IDs and message constants as external resources [[#399]]
+
+### GIF Module
+
+- Error IDs and message constants as external resources [[#400]]
+
+### HTML Module
+
+- Error IDs and message constants as external resources [[#401]]
+
+### JPEG Module
+
+- Error IDs and message constants as external resources [[#402]]
+
+### JPEG 2000 Module
+
+- Error IDs and message constants as external resources [[#403]]
+
+### PDF Module
+
+- Refactored all PDF Module error messages [[#347][]]
+- Fixed class cast exception on cross-ref streams [[#349][]]
+- Error IDs and message constants as external resources [[#404]]
+
+### TIFF Module
+
+- Fixed typo in TIFF properties [[#361][]]
+- Error IDs and message constants as external resources [[#405]]
+
+### UTF-8 Module
+
+- Refactoring and code readability improvements [[#389][]]
+- Error IDs and message constants as external resources [[#406]]
+
+### WAVE Module
+
+- Flag not well-formed when chunk exceeds RIFF length [[#360][]]
+
+### XML Module
+
+- Fix for premature end of file error [[#378][]]
+- Fix internal DTD and entity problems [[#378][]]
+
+
+[#342]: https://github.com/openpreserve/jhove/pull/342
+[#343]: https://github.com/openpreserve/jhove/pull/343
+[#347]: https://github.com/openpreserve/jhove/pull/347
+[#348]: https://github.com/openpreserve/jhove/pull/348
+[#349]: https://github.com/openpreserve/jhove/pull/349
+[#350]: https://github.com/openpreserve/jhove/pull/350
+[#351]: https://github.com/openpreserve/jhove/pull/351
+[#352]: https://github.com/openpreserve/jhove/pull/352
+[#353]: https://github.com/openpreserve/jhove/pull/353
+[#360]: https://github.com/openpreserve/jhove/pull/360
+[#363]: https://github.com/openpreserve/jhove/pull/363
+[#378]: https://github.com/openpreserve/jhove/pull/378
+[#379]: https://github.com/openpreserve/jhove/pull/379
+[#382]: https://github.com/openpreserve/jhove/pull/382
+[#383]: https://github.com/openpreserve/jhove/pull/383
+[#384]: https://github.com/openpreserve/jhove/pull/384
+[#389]: https://github.com/openpreserve/jhove/pull/389
+[#390]: https://github.com/openpreserve/jhove/pull/390
+[#391]: https://github.com/openpreserve/jhove/pull/391
+[#392]: https://github.com/openpreserve/jhove/pull/392
+[#394]: https://github.com/openpreserve/jhove/pull/394
+[#397]: https://github.com/openpreserve/jhove/pull/397
+[#398]: https://github.com/openpreserve/jhove/pull/398
+[#399]: https://github.com/openpreserve/jhove/pull/399
+[#400]: https://github.com/openpreserve/jhove/pull/400
+[#401]: https://github.com/openpreserve/jhove/pull/401
+[#402]: https://github.com/openpreserve/jhove/pull/402
+[#403]: https://github.com/openpreserve/jhove/pull/403
+[#404]: https://github.com/openpreserve/jhove/pull/404
+[#405]: https://github.com/openpreserve/jhove/pull/405
+[#406]: https://github.com/openpreserve/jhove/pull/406
+[#407]: https://github.com/openpreserve/jhove/pull/407
+[#408]: https://github.com/openpreserve/jhove/pull/408
+[#409]: https://github.com/openpreserve/jhove/pull/409
+[#411]: https://github.com/openpreserve/jhove/pull/411
+[#429]: https://github.com/openpreserve/jhove/pull/429
+
 
 JHOVE 1.20
 -------------
@@ -54,7 +157,7 @@ JHOVE 1.20
 - Subformat GUID's are now reported in their standard format, e.g.
   `00000001-0000-0010-8000-00AA00389B71`, instead of as an
   array of byte values [[#308][]]
-- Added checks to verify the existence of Data chunks and their appearance 
+- Added checks to verify the existence of Data chunks and their appearance
   after Format chunks [[#308][]]
 - Expanded WAVE example corpora to cover more formats and errors [[#308][]]
 - Improved truncation detection and reporting [[#308][]]
