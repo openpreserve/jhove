@@ -18,6 +18,7 @@ public class HistChunk extends PNGChunk {
 	
 	/** Process the data in the chunk. All we do is note the
 	 *  presence of the chunk in a property.  */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		final String badChunk = "Bad hIST chunk";
 		processChunkCommon(info);

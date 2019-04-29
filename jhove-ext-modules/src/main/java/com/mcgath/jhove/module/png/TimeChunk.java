@@ -22,6 +22,7 @@ public class TimeChunk extends PNGChunk {
 	/** The tIME chunk has the following: 2 bytes year (short),
 	 *  1 byte month, 1 byte day, 1 byte hour, 1 byte minute,
 	 *  1 byte second. It's supposed to be the UTC time. */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
 		if (length < 7) {
@@ -29,36 +30,35 @@ public class TimeChunk extends PNGChunk {
 			info.setMessage (msg);
 			info.setWellFormed (false);
 			throw new PNGException ("Bad tIME chunk");
-		} else {
-			int year = readUnsignedShort();
-			int month = readUnsignedByte();
-			int day = readUnsignedByte();
-			int hour = readUnsignedByte();
-			int minute = readUnsignedByte();
-			int second = readUnsignedByte();
-			// Sanity checks.
-			if (month == 0 || month > 12 ||
-					day == 0 || day > 31 ||
-					hour > 23 ||
-					minute > 59 ||
-					second > 60) {		// 60 can be valid with a leap second
-				ErrorMessage msg = new ErrorMessage ("Invalid date in tIME chunk");
-				info.setMessage(msg);
-				info.setValid(false);		// just call this invalid, not ill-formed
-				return;
-			}
-			// Java Calendar is based January as 0.
-			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-			cal.set(year,
-					month - 1,
-					day,
-					hour,
-					minute,
-					second);
-			Property prop = new Property ("Time modified",
-					PropertyType.DATE,
-					cal.getTime());
-			_propList.add(prop);
 		}
+		int year = readUnsignedShort();
+		int month = readUnsignedByte();
+		int day = readUnsignedByte();
+		int hour = readUnsignedByte();
+		int minute = readUnsignedByte();
+		int second = readUnsignedByte();
+		// Sanity checks.
+		if (month == 0 || month > 12 ||
+				day == 0 || day > 31 ||
+				hour > 23 ||
+				minute > 59 ||
+				second > 60) {		// 60 can be valid with a leap second
+			ErrorMessage msg = new ErrorMessage ("Invalid date in tIME chunk");
+			info.setMessage(msg);
+			info.setValid(false);		// just call this invalid, not ill-formed
+			return;
+		}
+		// Java Calendar is based January as 0.
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		cal.set(year,
+				month - 1,
+				day,
+				hour,
+				minute,
+				second);
+		Property prop = new Property ("Time modified",
+				PropertyType.DATE,
+				cal.getTime());
+		_propList.add(prop);
 	}
 }

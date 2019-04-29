@@ -107,6 +107,7 @@ public class XMLWrapperStream extends InputStream
      * 
      * @see java.io.InputStream#read()
      */
+    @Override
     public int read() throws IOException 
     {
         int retval;
@@ -118,7 +119,7 @@ public class XMLWrapperStream extends InputStream
             }
             else {
                 // We haven't finished returning the declaration string.
-                return (int) xmlDecl.charAt(strIndex++);
+                return xmlDecl.charAt(strIndex++);
             }
         }
         
@@ -130,7 +131,7 @@ public class XMLWrapperStream extends InputStream
                 state = CONTENT;
             }
             else {
-            return (int) rootStart.charAt(strIndex++);
+            return rootStart.charAt(strIndex++);
             }
         }
              
@@ -152,7 +153,7 @@ public class XMLWrapperStream extends InputStream
             // We have finished the root element end and the document now.
             return -1;
         }
-        return (int) rootEnd.charAt(strIndex++);
+        return rootEnd.charAt(strIndex++);
         
      }
 

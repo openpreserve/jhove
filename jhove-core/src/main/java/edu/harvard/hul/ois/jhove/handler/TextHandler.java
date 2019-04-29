@@ -21,6 +21,8 @@
 package edu.harvard.hul.ois.jhove.handler;
 
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 import java.text.*;
 import java.util.*;
 
@@ -79,10 +81,9 @@ public class TextHandler
     /**
      *  Outputs minimal information about the application
      */
+    @Override
     public void show ()
     {
-        String margin = getIndent (++_level);
-
         _level--;
     }
 
@@ -91,6 +92,7 @@ public class TextHandler
      *  including configuration, available modules and handlers,
      *  etc.
      */
+    @Override
     public void show (App app)
     {
         String margin = getIndent (++_level);
@@ -119,15 +121,15 @@ public class TextHandler
 	    _writer.println (margin + " TempDirectory: " + s);
 	}
 	_writer.println (margin + " BufferSize: " + _je.getBufferSize ());
-        Iterator iter = _je.getModuleMap ().keySet ().iterator ();
+        Iterator<String> iter = _je.getModuleMap ().keySet ().iterator ();
         while (iter.hasNext ()) {
-            Module module = _je.getModule ((String) iter.next ());
+            Module module = _je.getModule (iter.next ());
             _writer.println (margin + " Module: " + module.getName () + " " +
 			     module.getRelease ());
         }
         iter = _je.getHandlerMap ().keySet ().iterator ();
         while (iter.hasNext ()) {
-            OutputHandler handler = _je.getHandler ((String) iter.next ());
+            OutputHandler handler = _je.getHandler (iter.next ());
             _writer.println (margin + " OutputHandler: " +
                              handler.getName () + " " +
 			     handler.getRelease ());
@@ -143,6 +145,7 @@ public class TextHandler
      *  Outputs information about the OutputHandler specified
      *  in the parameter
      */
+    @Override
     public void show (OutputHandler handler)
     {
         String margin = getIndent (++_level);
@@ -173,6 +176,7 @@ public class TextHandler
     /**
      *  Outputs information about a Module
      */
+    @Override
     public void show (Module module)
     {
         String margin = getIndent (++_level);
@@ -201,23 +205,14 @@ public class TextHandler
             };
             _writer.println ();
         }
-        List list = module.getSignature ();
-        int n = list.size ();
-        for (int i=0; i<n; i++) {
-            showSignature ((Signature) list.get (i));
+        for (Signature sig : module.getSignature ()) {
+            showSignature (sig);
         }
-        list = module.getSpecification ();
-        n = list.size ();
-        for (int i=0; i<n; i++) {
-            showDocument ((Document) list.get (i), "Specification");
+        for (Document spec : module.getSpecification()) {
+            showDocument (spec, "Specification");
         }
-        List<String> ftr = module.getFeatures ();
-        if (ftr != null) {
-            Iterator<String> iter = ftr.iterator();
-            while (iter.hasNext ()) {
-                s = iter.next ();
-                _writer.println (margin + "  Feature: " + s);
-            }
+        for (String feature : module.getFeatures ()) {
+           _writer.println (margin + "  Feature: " + feature);
         }
 
         _writer.println (margin + " Methodology:");
@@ -247,6 +242,7 @@ public class TextHandler
     /**
      *  Outputs the information contained in a RepInfo object
      */
+    @Override
     public void show (RepInfo info)
     {
         String margin = getIndent (++_level);
@@ -456,6 +452,7 @@ public class TextHandler
 
     /** Do the final output.  This should be in a suitable format
      *  for including multiple files between the header and the footer. */
+    @Override
     public void showFooter ()
     {
         _level--;
@@ -465,6 +462,7 @@ public class TextHandler
 
     /** Do the initial output.  This should be in a suitable format
      *  for including multiple files between the header and the footer. */
+    @Override
     public void showHeader ()
     {
         String margin = getIndent (++_level);
@@ -492,17 +490,11 @@ public class TextHandler
     private void showMessage (Message message)
     {
         String margin = getIndent (++_level);
-        String prefix;
-        if (message instanceof ErrorMessage) {
-            prefix = "ErrorMessage: ";
+        String id = message.getId();
+        if (!(id == null || id.isEmpty() || id.equals(JhoveMessages.NO_ID))) {
+            _writer.println (margin + "ID: " + id);
         }
-        else if (message instanceof InfoMessage) {
-            prefix = "InfoMessage: ";
-        }
-        else {
-            prefix = "Message: ";
-        }
-
+        String prefix = message.getPrefix() + "Message: ";
         String str = message.getMessage ();
         // Append submessage, if any, after a colon.
         String submsg = message.getSubMessage ();
@@ -530,11 +522,10 @@ public class TextHandler
         }
         _writer.println (margin + signature.getType ().toString () + ": " +
                          sigValue);
-        if (signature.getType ().equals (SignatureType.MAGIC)) {
-            if (((InternalSignature) signature).hasFixedOffset ()) {
-                _writer.println (margin + " Offset: " +
-                                 ((InternalSignature) signature).getOffset ());
-            }
+        if ((signature.getType ().equals (SignatureType.MAGIC)) &&
+                (((InternalSignature) signature).hasFixedOffset ())) {
+            _writer.println (margin + " Offset: " +
+                    ((InternalSignature) signature).getOffset ());
         }
         String note = signature.getNote ();
         if (note != null) {
@@ -1359,11 +1350,14 @@ public class TextHandler
         if ((d = niso.getExposureTime ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "ExposureTime: " + d);
         }
-        if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
+        Rational r;
+        if ((r = niso.getBrightness ()) != null) {
+        	d = r.toDouble();
             _writer.println (margn2 + "Brightness: " + d);
         }
-        if ((d = niso.getExposureBias ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "ExposureBias: " + d);
+        if ((r = niso.getExposureBias ()) != null) {
+        	d = r.toDouble();
+            _writer.println (margn2 + "ExposureBias: " + d); 
         }
 
         double [] darray = niso.getSubjectDistance ();
@@ -1395,7 +1389,8 @@ public class TextHandler
                              addIntegerValue (n, NisoImageMetadata.FLASH,
                                               rawOutput));
         }
-        if ((d = niso.getFlashEnergy ()) != NisoImageMetadata.NILL) {
+        if ((r = niso.getFlashEnergy ()) != null) {
+        	d = r.toDouble();
             _writer.println (margn2 + "FlashEnergy: " + d);
         }
         if ((n = niso.getFlashReturn ()) != NisoImageMetadata.NULL) {
@@ -1444,7 +1439,7 @@ public class TextHandler
              addIntegerValue (n, NisoImageMetadata.SAMPLING_FREQUENCY_UNIT,
                               rawOutput));
         }
-        Rational r = niso.getXSamplingFrequency ();
+        r = niso.getXSamplingFrequency ();
         if (r != null) {
             _writer.println (margn2 + "XSamplingFrequency: " +
                              addRationalValue (r, rawOutput));
@@ -1802,11 +1797,13 @@ public class TextHandler
             		addIntegerValue (n, NisoImageMetadata.EXPOSURE_PROGRAM,
             				rawOutput));
         }
-        if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "BrightnessValue: " + d);
+        if ((r = niso.getBrightness ()) != null) {
+            _writer.println (margn2 + "BrightnessValue: " + 
+            		addRationalValue (r, rawOutput));
         }
-        if ((d = niso.getExposureBias ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "ExposureBiasValue: " + d);
+        if ((r = niso.getExposureBias ()) != null) {
+            _writer.println (margn2 + "ExposureBiasValue: " + 
+            		addRationalValue (r, rawOutput));
         }
         double [] darray = niso.getSubjectDistance ();
         if (darray != null) {
@@ -1829,8 +1826,9 @@ public class TextHandler
         if ((d = niso.getFocalLength ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "FocalLength: " + d);
         }
-        if ((d = niso.getFlashEnergy ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "FlashEnergy: " + d);
+        if ((r = niso.getFlashEnergy ()) != null) {
+            _writer.println (margn2 + "FlashEnergy: " + 
+            		addRationalValue (r, rawOutput));
         }
         if ((n = niso.getBackLight ()) != NisoImageMetadata.NULL) {
             _writer.println (margn2 + "BackLight: " +

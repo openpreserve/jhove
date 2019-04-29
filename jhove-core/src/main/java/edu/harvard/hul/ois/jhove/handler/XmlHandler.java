@@ -21,6 +21,7 @@
 package edu.harvard.hul.ois.jhove.handler;
 
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 import java.text.NumberFormat;
 import java.util.*;
@@ -28,7 +29,7 @@ import java.util.*;
 /**
  *  OutputHandler for XML output.
  *
- *  @see <a href="http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd">Schema
+ *  @see <a href="http://schema.openpreservation.org/ois/xml/xsd/jhove/jhove.xsd">Schema
  *       for JHOVE XML output</a>
  */
 public class XmlHandler
@@ -40,7 +41,7 @@ public class XmlHandler
      ******************************************************************/
 
 	/** Thread safe formatter for doubles */
-	private static final ThreadLocal<NumberFormat> formatters = new ThreadLocal<NumberFormat>(){
+    private static final ThreadLocal<NumberFormat> formatters = new ThreadLocal<NumberFormat>(){
 		@Override
 		protected NumberFormat initialValue()
 		{
@@ -64,7 +65,7 @@ public class XmlHandler
     /** Handler informative note. */
     private static final String NOTE =
         "This output handler is defined by the XML Schema " +
-        "http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd";
+        "https://schema.openpreservation.org/ois/xml/xsd/jhove/jhove.xsd";
 
     /** Handler rights statement. */
     private static final String RIGHTS =
@@ -77,7 +78,7 @@ public class XmlHandler
     private final static String EOL = System.getProperty ("line.separator");
 
     /** Schema version. */
-    private static final String SCHEMA_VERSION = "1.6";
+    private static final String SCHEMA_VERSION = "1.8";
 
     /******************************************************************
      * PRIVATE INSTANCE FIELDS.
@@ -115,9 +116,9 @@ public class XmlHandler
     /**
      *  Outputs minimal information about the application
      */
+    @Override
     public void show ()
     {
-        String margin = getIndent (++_level);
         _level--;
     }
 
@@ -126,6 +127,7 @@ public class XmlHandler
      *  including configuration, available modules and handlers,
      *  etc.
      */
+    @Override
     public void show (App app)
     {
         String margin = getIndent (++_level);
@@ -159,9 +161,9 @@ public class XmlHandler
 	    _writer.println (margn2 + element ("bufferSize",
 				     Integer.toString (_je.getBufferSize ())));
 	    _writer.println (margn2 + elementStart ("modules"));
-        Iterator iter = _je.getModuleMap ().keySet ().iterator ();
+        Iterator<String> iter = _je.getModuleMap ().keySet ().iterator ();
         while (iter.hasNext ()) {
-            Module module = _je.getModule ((String) iter.next ());
+            Module module = _je.getModule (iter.next ());
 	        String [][] attr2 = { {"release", module.getRelease ()} };
             _writer.println (margn3 + element ("module", attr2,
 					       module.getName ()));
@@ -170,7 +172,7 @@ public class XmlHandler
         _writer.println (margn2 + elementStart ("outputHandlers"));
         iter = _je.getHandlerMap ().keySet ().iterator ();
         while (iter.hasNext ()) {
-            OutputHandler handler = _je.getHandler ((String) iter.next ());
+            OutputHandler handler = _je.getHandler (iter.next ());
 	        String [][] attr2 = { {"release", handler.getRelease ()} };
             _writer.println (margn3 + element ("outputHandler", attr2,
                                                handler.getName ()));
@@ -186,6 +188,7 @@ public class XmlHandler
      *  Outputs information about the OutputHandler specified
      *  in the parameter
      */
+    @Override
     public void show (OutputHandler handler)
     {
         String margin = getIndent (++_level);
@@ -195,13 +198,13 @@ public class XmlHandler
         _writer.println (margn2 + element ("release", handler.getRelease ()));
         _writer.println (margn2 + element ("date",
 					   date.format (handler.getDate ())));
-        List list = handler.getSpecification ();
+        List<Document> list = handler.getSpecification ();
         int n = list.size ();
         if (n > 0) {
             _writer.println (margn2 + elementStart ("specifications"));
             ++_level;
             for (int i=0; i<n; i++) {
-                showDocument ((Document) list.get (i));
+                showDocument (list.get (i));
             }
             --_level;
             _writer.println (margn2 + elementEnd ("specifications"));
@@ -224,6 +227,7 @@ public class XmlHandler
     /**
      *  Outputs information about a Module
      */
+    @Override
     public void show (Module module)
     {
         String margin = getIndent (++_level);
@@ -316,6 +320,7 @@ public class XmlHandler
     /**
      *  Outputs the information contained in a RepInfo object
      */
+    @Override
     public void show (RepInfo info)
     {
         String margin = getIndent (++_level);
@@ -596,6 +601,7 @@ public class XmlHandler
     /** Do the final output.  This should be in a suitable format
      *  for including multiple files between the header and the footer,
      *  and the XML of the header and footer must balance out. */
+    @Override
     public void showFooter ()
     {
         String margin = getIndent (_level--);
@@ -607,6 +613,7 @@ public class XmlHandler
     /** Do the initial output.  This should be in a suitable format
      *  for including multiple files between the header and the footer,
      *  and the XML of the header and footer must balance out. */
+    @Override
     public void showHeader ()
     {
         String margin = getIndent (++_level);
@@ -623,10 +630,10 @@ public class XmlHandler
             {"xmlns:xsi",
              "http://www.w3.org/2001/XMLSchema-instance"},
             {"xmlns",
-             "http://hul.harvard.edu/ois/xml/ns/jhove"},
+             "http://schema.openpreservation.org/ois/xml/ns/jhove"},
             {"xsi:schemaLocation",
-             "http://hul.harvard.edu/ois/xml/ns/jhove " +
-             "http://hul.harvard.edu/ois/xml/xsd/jhove/" + SCHEMA_VERSION +
+             "http://schema.openpreservation.org/ois/xml/ns/jhove " +
+             "https://schema.openpreservation.org/ois/xml/xsd/jhove/" + SCHEMA_VERSION +
 	     "/jhove.xsd"},
             {"name", _app.getName ()},
             {"release", _app.getRelease ()},
@@ -656,11 +663,12 @@ public class XmlHandler
     protected void showMessage (Message message)
     {
         String margin = getIndent (++_level);
-        String[][] attrs = new String[3][];
+        String[][] attrs = new String[4][];
         boolean hasAttr = false;
         attrs[0] = new String[] { "subMessage", null };
         attrs[1] = new String[] { "offset", null };
         attrs[2] = new String[] { "severity", null };
+        attrs[3] = new String[] { "id", null };
 
         String submsg = message.getSubMessage ();
         if (submsg != null) {
@@ -672,12 +680,13 @@ public class XmlHandler
             attrs[1] [1] = Long.toString (offset);
             hasAttr = true;
         }
-        if (message instanceof ErrorMessage) {
-            attrs[2] [1] = "error";
+        if (!message.getPrefix().isEmpty()) {
+            attrs[2] [1] = message.getPrefix().toLowerCase();
             hasAttr = true;
         }
-        else if (message instanceof InfoMessage) {
-            attrs[2] [1] = "info";
+        String id = message.getJhoveMessage().getId();
+        if (!(id == null || id.isEmpty() || id.equals(JhoveMessages.NO_ID))) {
+            attrs[3] [1] = message.getId();
             hasAttr = true;
         }
         if (hasAttr) {
@@ -1660,14 +1669,16 @@ public class XmlHandler
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
-        d = niso.getBrightness ();
-        if (d != NisoImageMetadata.NILL) {
+        Rational r = niso.getBrightness ();
+        if (r != null) {
+        	d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:Brightness",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
-        d = niso.getExposureBias ();
-        if (d != NisoImageMetadata.NILL) {
+        r = niso.getExposureBias ();
+        if (r != null) {
+        	d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:ExposureBias",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
@@ -1707,11 +1718,15 @@ public class XmlHandler
         }
         n = niso.getFlash ();
         if (n != NisoImageMetadata.NULL) {
-            ccsBuf.append (margn4 + element ("mix:Flash", Integer.toString (n)) + EOL);
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
+        	int firstBit = n & 1;
+        	ccsBuf.append(margn4 + element("mix:Flash", NisoImageMetadata.FLASH[firstBit])
+					+ EOL);
             useCCSBuf = true;
         }
-        d = niso.getFlashEnergy ();
-        if (d != NisoImageMetadata.NILL) {
+        r = niso.getFlashEnergy ();
+        if (r != null) {
+        	d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:FlashEnergy",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
@@ -2619,19 +2634,17 @@ public class XmlHandler
             ccSetBuf.append (margn6 + element ("mix:exifVersion", s) + EOL);
             useCcSetBuf = true;
         }
-        d = niso.getBrightness();
-        if (d != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:brightnessValue",
-					       formatters.get().format (d)) + EOL);
+        Rational r = niso.getBrightness();
+        if (r != null) {
+        	rationalToString(ccSetBuf, "mix:brightnessValue", margn6, r);
             useCcSetBuf = true;
         }
-        d = niso.getExposureBias();
-        if (d != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:exposureBiasValue",
-					       formatters.get().format (d)) + EOL);
+        r = niso.getExposureBias();
+        if (r != null) {
+        	rationalToString(ccSetBuf, "mix:exposureBiasValue", margn6, r);
             useCcSetBuf = true;
         }
-        Rational r = niso.getMaxApertureValue();
+        r = niso.getMaxApertureValue();
         if (r != null) {
         	rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
             useCcSetBuf = true;
@@ -2654,8 +2667,10 @@ public class XmlHandler
         }
         n = niso.getFlash ();
         if (n != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:flash",
-					       Integer.toString (n)) + EOL);
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
+        	int firstBit = n & 1;
+        	ccSetBuf.append(margn6 + element("mix:flash", NisoImageMetadata.FLASH_20[firstBit])
+					+ EOL);
             useCcSetBuf = true;
         }
         d = niso.getFocalLength ();
@@ -2664,10 +2679,9 @@ public class XmlHandler
 					       formatters.get().format (d)) + EOL);
             useCcSetBuf = true;
         }
-        d = niso.getFlashEnergy ();
-        if (d != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:flashEnergy",
-					       formatters.get().format (d)) + EOL);
+        r = niso.getFlashEnergy ();
+        if (r != null) {
+        	rationalToString(ccSetBuf, "mix:flashEnergy", margn6, r);
             useCcSetBuf = true;
         }
         n = niso.getBackLight ();
@@ -3587,21 +3601,19 @@ public class XmlHandler
              		niso.getExifVersion()) + EOL);
              useCcSetBuf = true;
          }
-         d = niso.getBrightness();
+         Rational r = niso.getBrightness();
          if (d != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:brightnessValue",
-                            formatters.get().format (d)) + EOL);
+             rationalToString (ccSetBuf, "mix:brightnessValue", margn6, r);
              useCcSetBuf = true;
          }
-         d = niso.getExposureBias();
+         r = niso.getExposureBias();
          if (d != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:exposureBiasValue",
-                            formatters.get().format (d)) + EOL);
+             rationalToString (ccSetBuf, "mix:exposureBiasValue", margn6, r);
              useCcSetBuf = true;
          }
-         Rational r = niso.getMaxApertureValue();
+         r = niso.getMaxApertureValue();
          if (r != null) {
-         	rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
+             rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
              useCcSetBuf = true;
          }
          double[] darray = niso.getSubjectDistance ();
@@ -3633,8 +3645,10 @@ public class XmlHandler
          }
          n = niso.getFlash ();
          if (n != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:flash",
-                            Integer.toString (n)) + EOL);
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
+         	int firstBit = n & 1;
+         	ccSetBuf.append(margn6 + element("mix:flash", NisoImageMetadata.FLASH_20[firstBit])
+ 					+ EOL);
              useCcSetBuf = true;
          }
          d = niso.getFocalLength ();
@@ -3643,10 +3657,9 @@ public class XmlHandler
                             formatters.get().format (d)) + EOL);
              useCcSetBuf = true;
          }
-         d = niso.getFlashEnergy ();
-         if (d != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:flashEnergy",
-                            formatters.get().format (d)) + EOL);
+         r = niso.getFlashEnergy ();
+         if (r != null) {
+         	 rationalToString(ccSetBuf, "mix:flashEnergy", margn6, r);
              useCcSetBuf = true;
          }
          n = niso.getBackLight ();
@@ -4069,7 +4082,7 @@ public class XmlHandler
 
  	/** Convert the metering mode value to one of the suggested
 	  *  values for MIX 2.0 */
-	private String meteringModeToString(int n) {
+    private String meteringModeToString(int n) {
 		String s = NisoImageMetadata.METERING_MODE[1];
 		if (n >= 1 && n <= 6) {
 			s = NisoImageMetadata.METERING_MODE[n];
@@ -4409,15 +4422,15 @@ public class XmlHandler
                 sb.append (c);
             }
             else {
-                int cval = (int) c;
+                int cval = c;
 
                 // More significant hex digit
                 int mshd = (cval >> 4);
                 if (mshd >= 10) {
-                    mshd += (int) 'A' - 10;
+                    mshd += 'A' - 10;
                 }
                 else {
-                    mshd += (int) '0';
+                    mshd += '0';
                 }
                 sb.append ('%');
                 sb.append ((char) mshd);
@@ -4425,10 +4438,10 @@ public class XmlHandler
                 // Less significant hex digit
                 int lshd = (cval & 0X0F);
                 if (lshd >= 10) {
-                    lshd += (int) 'A' - 10;
+                    lshd += 'A' - 10;
                 }
                 else {
-                    lshd += (int) '0';
+                    lshd += '0';
                 }
                 sb.append ((char) lshd);
                 change = true;

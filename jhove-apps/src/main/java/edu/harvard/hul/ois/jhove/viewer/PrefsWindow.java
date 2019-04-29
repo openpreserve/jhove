@@ -48,6 +48,7 @@ public class PrefsWindow extends JDialog
         JButton okButton = new JButton ("OK");
         okButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     setPrefsFromDialog ();
@@ -58,6 +59,7 @@ public class PrefsWindow extends JDialog
         JButton cancelButton = new JButton ("Cancel");
         cancelButton.addActionListener (
             new ActionListener () {
+                @Override
                 public void actionPerformed (ActionEvent e) 
                 {
                     hide ();
@@ -110,6 +112,7 @@ public class PrefsWindow extends JDialog
         }
         
         
+        @Override
         public void windowClosing (WindowEvent e) {
             prefsWin.restore ();
         }

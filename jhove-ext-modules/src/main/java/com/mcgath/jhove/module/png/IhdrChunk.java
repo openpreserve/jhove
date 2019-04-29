@@ -70,6 +70,7 @@ public class IhdrChunk extends PNGChunk {
 	/** The IHDR chunk contains image information in a fixed format.
 	 *  I don't think the spec says it can't have extra bytes
 	 *  which would just be padding. */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		boolean badChunk = false;
 		processChunkCommon(info);
@@ -143,7 +144,7 @@ public class IhdrChunk extends PNGChunk {
 		
 		_propList.add (new Property("Filter type",
 				PropertyType.INTEGER,
-				filter));
+				Integer.valueOf(filter)));
 		
 		String interlaceStr;
 		switch (interlace) {
@@ -166,7 +167,7 @@ public class IhdrChunk extends PNGChunk {
 	}
 	
 	/* Convert PNG colour type to NISO color space */
-	private int colorTypeToNiso (int typ) throws PNGException {
+	private static int colorTypeToNiso (int typ) throws PNGException {
 		int val = 0;
 		switch (typ) {
 		case COLOR_GRAYSCALE:
@@ -188,7 +189,7 @@ public class IhdrChunk extends PNGChunk {
 	
 	/* Check if the combination of color type and bit depth is allowed.
 	 * Color must be in the range 0-6. */
-	private boolean colorAndDepthOK(int color, int depth) {
+	private static boolean colorAndDepthOK(int color, int depth) {
 		int[] allowedDepths = allowedBitDepths[color];
 		boolean ok = false;
 		for (int d : allowedDepths) {

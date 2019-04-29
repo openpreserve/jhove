@@ -68,7 +68,7 @@ public abstract class XMPSource extends InputSource {
                         for (;;) {
                             ch = _reader.read ();
                             if (ch < 0 ||
-                                 (prevCh == (int) '?' && ch == (int) '>')) {
+                                 (prevCh == '?' && ch == '>')) {
                                 break;
                             }
                             prevCh = ch;

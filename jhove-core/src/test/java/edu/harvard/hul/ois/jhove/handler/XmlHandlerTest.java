@@ -41,6 +41,18 @@ public class XmlHandlerTest {
 	private static final long EXPECTED_BLUEX_NUMENATOR = 644245120L;
 	private static final long EXPECTED_BLUEY_NUMENATOR = 257698032L;
 	
+	private static final int EXPECTED_IMAGE2_WIDTH = 1136;
+	private static final int EXPECTED_IMAGE2_LENGTH = 1846;
+	private static final double EXPECTED_IMAGE2_FNUMBER = 7.1;
+	private static final double EXPECTED_IMAGE2_EXPOSURE_TIME = 0.167;
+	private static final int  EXPECTED_IMAGE2_EXPOSURE_PROGRAM = 3;
+	private static final int EXPECTED_IMAGE2_APERTURE_NUM = 925;
+	private static final int EXPECTED_IMAGE2_APERTURE_DEN = 256;
+	private static final double EXPECTED_IMAGE2_FOCAL = 14;
+	private static final int EXPECTED_IMAGE2_FLASH_NUM = 15;
+	private static final int EXPECTED_IMAGE2_FLASH_DEN = 100;
+	private static final int EXPECTED_IMAGE2_IMAGE_RESOLUTION = 180;
+	
 	private static final int EXPECTED_JPEG_COMPRESSION = 6;
 	private static final int EXPECTED_EXIF_COLORSPACE = 6;
 	private static final int EXPECTED_EXIF_IMAGE_LENGTH = 2322;
@@ -54,6 +66,7 @@ public class XmlHandlerTest {
 
 	/* Test instances to be serialized */
 	protected static NisoImageMetadata TEST_NISO_IMAGE_MD;
+	protected static NisoImageMetadata TEST_NISO_IMAGE2_MD;
 	protected static NisoImageMetadata TEST_NISO_EXIF_MD;
 	protected static TextMDMetadata TEST_TEXTMD;
 
@@ -61,7 +74,7 @@ public class XmlHandlerTest {
 	private XmlHandler handler;
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws IOException {
+	public static void setUpBeforeClass() {
 		// Define the test instance for NisoImageMetadata to be serialized
 		TEST_NISO_IMAGE_MD = new NisoImageMetadata();
 		TEST_NISO_IMAGE_MD.setByteOrder(NisoImageMetadata.BYTEORDER[1]);
@@ -102,6 +115,35 @@ public class XmlHandlerTest {
 				EXPECTED_BLUEX_NUMENATOR, EXPECTED_DENOMINATOR));
 		TEST_NISO_IMAGE_MD.setPrimaryChromaticitiesBlueY(new Rational(
 				EXPECTED_BLUEY_NUMENATOR, EXPECTED_DENOMINATOR));
+
+		// Define the test instance for NisoImageMetadata to be serialized
+		TEST_NISO_IMAGE2_MD = new NisoImageMetadata();
+		TEST_NISO_IMAGE2_MD.setByteOrder(NisoImageMetadata.BYTEORDER[0]);
+		TEST_NISO_IMAGE2_MD.setCompressionScheme(EXPECTED_JPEG_COMPRESSION);
+		TEST_NISO_IMAGE2_MD.setImageWidth(EXPECTED_IMAGE2_WIDTH);
+		TEST_NISO_IMAGE2_MD.setImageLength(EXPECTED_IMAGE2_LENGTH);
+		TEST_NISO_IMAGE2_MD.setDateTimeCreated("2017-03-28T12:58:30");
+		TEST_NISO_IMAGE2_MD.setDigitalCameraManufacturer("Panasonic");
+		TEST_NISO_IMAGE2_MD.setDigitalCameraModelName("DMC-G6");
+		TEST_NISO_IMAGE2_MD.setFNumber(EXPECTED_IMAGE2_FNUMBER);
+		TEST_NISO_IMAGE2_MD.setExposureTime(EXPECTED_IMAGE2_EXPOSURE_TIME);
+		TEST_NISO_IMAGE2_MD.setExposureProgram(EXPECTED_IMAGE2_EXPOSURE_PROGRAM);
+		TEST_NISO_IMAGE2_MD.setBrightness(r0);
+		TEST_NISO_IMAGE2_MD.setExposureBias(r0);
+		Rational r925 = new Rational(EXPECTED_IMAGE2_APERTURE_NUM, EXPECTED_IMAGE2_APERTURE_DEN);
+		TEST_NISO_IMAGE2_MD.setMaxApertureValue(r925);
+		TEST_NISO_IMAGE2_MD.setMeteringMode(2);
+		TEST_NISO_IMAGE2_MD.setFocalLength(EXPECTED_IMAGE2_FOCAL);
+		TEST_NISO_IMAGE2_MD.setFlash(1);
+		Rational r15 = new Rational(EXPECTED_IMAGE2_FLASH_NUM, EXPECTED_IMAGE2_FLASH_DEN);
+		TEST_NISO_IMAGE2_MD.setFlashEnergy(r15);
+		TEST_NISO_IMAGE2_MD.setSamplingFrequencyUnit(2);
+		Rational r180 = new Rational(EXPECTED_IMAGE2_IMAGE_RESOLUTION, 1);
+		TEST_NISO_IMAGE2_MD.setXSamplingFrequency(r180);
+		TEST_NISO_IMAGE2_MD.setYSamplingFrequency(r180);
+		TEST_NISO_IMAGE2_MD.setBitsPerSample(new int[] { EXPECTED_BYTE_SIZE,
+				EXPECTED_BYTE_SIZE, EXPECTED_BYTE_SIZE });
+		TEST_NISO_IMAGE2_MD.setSamplesPerPixel(EXPECTED_NUMBER_OF_BYTES);
 
 		// Define the test instance of Exif for NisoImageMetadata to be serialized
 		TEST_NISO_EXIF_MD = new NisoImageMetadata();
@@ -205,6 +247,51 @@ public class XmlHandlerTest {
 	}
 
 	@Test
+	public void testShowNisoImage2Metadata02() throws IOException {
+		File mix02File = new File(this.getClass().getResource("mix02_output2.xml").getPath());
+		LOGGER.info("testShowNisoImage2Metadata02 with file " + mix02File);
+		assertTrue(mix02File.isFile());
+		String expectedMix02 = readXmlFile(mix02File);
+
+		this.handler.showNisoImageMetadata02(TEST_NISO_IMAGE2_MD);
+		this.handler.close();
+
+		String generatedMix = readXmlFile(outputFile);
+		assertEquals("Mix v0.2 generated not conformant", expectedMix02,
+				generatedMix);
+	}
+
+	@Test
+	public void testShowNisoImage2Metadata10() throws IOException {
+		File mix10File = new File(this.getClass().getResource("mix10_output2.xml").getPath());
+		LOGGER.info("testShowNisoImage2Metadata10 with file " + mix10File);
+		assertTrue(mix10File.isFile());
+		String expectedMix10 = readXmlFile(mix10File);
+
+		this.handler.showNisoImageMetadata10(TEST_NISO_IMAGE2_MD);
+		this.handler.close();
+
+		String generatedMix = readXmlFile(outputFile);
+		assertEquals("Mix v1.0 generated not conformant", expectedMix10,
+				generatedMix);
+	}
+
+	@Test
+	public void testShowNisoImage2Metadata20() throws IOException {
+		File mix20File = new File(this.getClass().getResource("mix20_output2.xml").getPath());
+		LOGGER.info("testShowNisoImage2Metadata20 with file " + mix20File);
+		assertTrue(mix20File.isFile());
+		String expectedMix20 = readXmlFile(mix20File);
+
+		this.handler.showNisoImageMetadata20(TEST_NISO_IMAGE2_MD);
+		this.handler.close();
+
+		String generatedMix = readXmlFile(outputFile);
+		assertEquals("Mix v2.0 generated not conformant", expectedMix20,
+				generatedMix);
+	}
+
+	@Test
 	public void testShowNisoExifMetadata02() throws IOException {
 		File mix02File = new File(this.getClass().getResource("exif_mix02.xml").getPath());
 		LOGGER.info("testShowNisoExifMetadata02 with file " + mix02File);
@@ -273,15 +360,12 @@ public class XmlHandlerTest {
 	 */
 	private static String readXmlFile(File f) throws IOException {
 		StringBuilder sb = new StringBuilder();
-		BufferedReader br = new BufferedReader(new FileReader(f));
-		try {
+		try (BufferedReader br = new BufferedReader(new FileReader(f))) {
 			String line = br.readLine();
 			while (line != null) {
 				sb.append(line);
 				line = br.readLine();
 			}
-		} finally {
-			br.close();
 		}
 		return sb.toString().replaceAll("\\s+", " ");
 	}

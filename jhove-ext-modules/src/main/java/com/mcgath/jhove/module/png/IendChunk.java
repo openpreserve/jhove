@@ -13,6 +13,7 @@ public class IendChunk extends PNGChunk {
 		ancillary = false;
 	}
 	
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
 		_module.setIendSeen(true);

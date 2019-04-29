@@ -80,10 +80,6 @@ public class JhoveBase {
     private static final String TEMPDIR_PROPERTY = JHOVE_PROPERTY_PREFIX
             + "tempDirectory";
 
-    /** MIX schema version property. */
-    private static final String MIXVSN_PROPERTY = JHOVE_PROPERTY_PREFIX
-            + "mixvsn";
-
     /** Flag for aborting activity. */
     protected boolean _abort;
     /** Buffer size for buffered I/O. */
@@ -93,8 +89,6 @@ public class JhoveBase {
     protected String _configFile;
     /** Selected encoding. */
     protected String _encoding;
-    /** Associate map of configuration extensions. */
-    protected Map<String, String> _extensions;
     /** Ordered list of output handlers. */
     protected List<OutputHandler> _handlerList;
     /** Map of output handlers (for fast access by name). */
@@ -138,7 +132,7 @@ public class JhoveBase {
      * Instantiates a <code>JhoveBase</code> object.
      * 
      * @throws JhoveException
-     *             if invoked with a JVM lower than 1.6
+     *             if invoked with a JVM lower than 1.8
      */
     public JhoveBase() throws JhoveException {
 
@@ -147,7 +141,7 @@ public class JhoveBase {
 
         // Make sure we have a satisfactory version of Java.
         String version = System.getProperty("java.vm.version");
-        if (version.compareTo("1.6.0") < 0) {
+        if (version.compareTo("1.8.0") < 0) {
             _logger.severe(CoreMessageConstants.EXC_JAVA_VER_INCMPT);
             throw new JhoveException(CoreMessageConstants.EXC_JAVA_VER_INCMPT);
         }
@@ -157,11 +151,11 @@ public class JhoveBase {
                 new NaiveHostnameVerifier());
 
         // Initialize the engine.
-        _moduleList = new ArrayList<Module>(20);
-        _moduleMap = new TreeMap<String, Module>();
+        _moduleList = new ArrayList<>(20);
+        _moduleMap = new TreeMap<>();
 
-        _handlerList = new ArrayList<OutputHandler>();
-        _handlerMap = new TreeMap<String, OutputHandler>();
+        _handlerList = new ArrayList<>();
+        _handlerMap = new TreeMap<>();
 
         _abort = false;
         _bufferSize = -1;
@@ -251,7 +245,6 @@ public class JhoveBase {
 
         // Update the application state to reflect the configuration file,
         // if necessary.
-        _extensions = configHandler.getExtensions();
         _jhoveHome = configHandler.getJhoveHome();
 
         _encoding = configHandler.getEncoding();
@@ -861,20 +854,6 @@ public class JhoveBase {
      */
     public String getEncoding() {
         return _encoding;
-    }
-
-    /**
-     * Returns the JHOVE configuration extensions.
-     */
-    public Map<String, String> getExtension() {
-        return _extensions;
-    }
-
-    /**
-     * Returns the JHOVE configuration extension by name.
-     */
-    public String getExtension(String name) {
-        return _extensions.get(name);
     }
 
     /**

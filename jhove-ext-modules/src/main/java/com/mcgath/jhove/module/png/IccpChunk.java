@@ -16,6 +16,7 @@ public class IccpChunk extends PNGChunk {
 		duplicateAllowed = false;
 	}
 	
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		final String badChunk = "Bad iCCP chunk";
 		processChunkCommon(info);

@@ -30,8 +30,8 @@ public abstract class InfoWindow extends JFrame
     private JhoveBase _base;
     private JMenuItem _saveItem;
     private JMenuItem _closeItem;
-    private JComboBox _handlerBox;
-    private JComboBox _encodingBox;
+    private JComboBox<String> _handlerBox;
+    private JComboBox<String> _encodingBox;
     private static String _lastEncoding;
     private static String _lastHandler;
     
@@ -75,12 +75,13 @@ public abstract class InfoWindow extends JFrame
         _closeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,
                 Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         _closeItem.addActionListener (new ActionListener() {
+            @Override
             public void actionPerformed (ActionEvent e) {
                 closeFromMenu ();
             }
         });
         
-        setDefaultCloseOperation (JFrame.HIDE_ON_CLOSE);
+        setDefaultCloseOperation (WindowConstants.HIDE_ON_CLOSE);
         setJMenuBar (menuBar);
         _dateFmt = new SimpleDateFormat ("yyyy-MM-dd");
     }
@@ -131,14 +132,11 @@ public abstract class InfoWindow extends JFrame
         accessory.setPreferredSize(new Dimension (180, 120));
         
         // Build list of handlers into a popup menu
-        Vector handlerItems = new Vector (10);
-        java.util.List handlerList = _base.getHandlerList ();
-        Iterator iter = handlerList.iterator ();
-        while (iter.hasNext ()) {
-            OutputHandler han = (OutputHandler) iter.next ();
+        Vector<String> handlerItems = new Vector<> (10);
+        for (OutputHandler han : _base.getHandlerList()) {
             handlerItems.add (han.getName ());
         }
-        _handlerBox = new JComboBox(handlerItems);
+        _handlerBox = new JComboBox<>(handlerItems);
         _handlerBox.setSize (120, 20);
         accessory.add (new JLabel ("Choose output handler"));
         if (_lastHandler != null) {
@@ -148,7 +146,7 @@ public abstract class InfoWindow extends JFrame
         
         // Build a list of encodings into a popup menu.
         // The default encoding must be the first.
-        Vector encItems = new Vector (5);
+        Vector<String> encItems = new Vector<> (5);
         String defEnc = _base.getEncoding ();
         if (defEnc != null) {
             encItems.add (defEnc);
@@ -159,7 +157,7 @@ public abstract class InfoWindow extends JFrame
                 encItems.add (enc);
             }
         }
-        _encodingBox = new JComboBox (encItems);
+        _encodingBox = new JComboBox<> (encItems);
         if (_lastEncoding != null) {
             _encodingBox.setSelectedItem (_lastEncoding);
         }
@@ -242,10 +240,9 @@ public abstract class InfoWindow extends JFrame
      */
     protected OutputHandler selectHandler ()
     {
-        int modidx = _handlerBox.getSelectedIndex ();
         _lastHandler = (String) _handlerBox.getSelectedItem ();
         OutputHandler handler = 
-            (OutputHandler) _base.getHandlerMap().get (_lastHandler.toLowerCase ());
+            _base.getHandlerMap().get (_lastHandler.toLowerCase ());
         _lastEncoding = (String) _encodingBox.getSelectedItem ();
         handler.setEncoding (_lastEncoding);
         handler.setApp (_app);

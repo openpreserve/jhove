@@ -79,34 +79,21 @@ public class Property
 	if (value == null) {
 	    throw new NullPointerException (CoreMessageConstants.EXC_PROP_VAL_NULL);
 	}
-	if (arity == PropertyArity.SCALAR) {
-	    if (value instanceof List ||
-		    value instanceof Map ||
-		    value instanceof Set) {
+	if ((arity == PropertyArity.SCALAR) && !isObjScalarProp(value)) {
 		throw new IncompatibleClassChangeError
 			(CoreMessageConstants.EXC_SCL_PROP_CLSS_INCMPT);
-	    }
 	}
-	else if (arity == PropertyArity.MAP) {
-	    if (!(value instanceof Map)) {
+	else if ((arity == PropertyArity.MAP) && (!(value instanceof Map))) {
 		throw new IncompatibleClassChangeError
 			(CoreMessageConstants.EXC_MAP_PROP_CLSS_INCMPT);
-	    }
-
 	}
-	else if (arity == PropertyArity.SET) {
-	    if (!(value instanceof Set)) {
+	else if ((arity == PropertyArity.SET) && (!(value instanceof Set))) {
 		throw new IncompatibleClassChangeError
 			(CoreMessageConstants.EXC_SET_PROP_CLSS_INCMPT);
-	    }
-
 	}
-	else if (arity == PropertyArity.LIST) {
-	    if (!(value instanceof List)) {
+	else if ((arity == PropertyArity.LIST) && (!(value instanceof List))) {
 		throw new IncompatibleClassChangeError
 			(CoreMessageConstants.EXC_LIST_PROP_CLSS_INCMPT);
-	    }
-
 	}
 
 	_name  = name;
@@ -115,6 +102,11 @@ public class Property
 	_value = value;
     }
 
+    private static boolean isObjScalarProp(Object toTest) {
+        return !(toTest instanceof List ||
+                 toTest instanceof Map ||
+                 toTest instanceof Set);
+    }
     /******************************************************************
      * PUBLIC INSTANCE METHODS.
      *
@@ -153,29 +145,29 @@ public class Property
 		}
 	    }
 	    else if (_arity.equals (PropertyArity.LIST)) {
-		List list = (List) _value;
+		List<Property> list = (List<Property>) _value;
 		int len = list.size ();
 		for (int i=0; i<len; i++) {
-		    Property prop = ((Property) list.get (i)).getByName (name);
+		    Property prop = list.get (i).getByName (name);
 		    if (prop != null) {
 			return prop;
 		    }
 		}
 	    }
 	    else if (_arity.equals (PropertyArity.MAP)) {
-		Collection coll = ((Map) _value).values ();
-		Iterator iter = coll.iterator ();
+		Collection<Property> coll = ((Map<?, Property>) _value).values ();
+		Iterator<Property> iter = coll.iterator ();
 		while (iter.hasNext ()) {
-		    Property prop = ((Property) iter.next ()).getByName (name);
+		    Property prop = iter.next ().getByName (name);
 		    if (prop != null) {
 			return prop;
 		    }
 		}
 	    }
 	    else if (_arity.equals (PropertyArity.SET)) {
-		Iterator iter = ((Set) _value).iterator ();
+		Iterator<Property> iter = ((Set<Property>) _value).iterator ();
 		while (iter.hasNext ()) {
-		    Property prop = ((Property) iter.next ()).getByName (name);
+		    Property prop = iter.next ().getByName (name);
 		    if (prop != null) {
 			return prop;
 		    }

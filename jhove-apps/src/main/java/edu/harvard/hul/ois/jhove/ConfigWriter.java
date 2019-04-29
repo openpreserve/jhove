@@ -73,7 +73,7 @@ public class ConfigWriter {
             File homeDir,
             File tempDir,
             String encoding,
-            int bufferSize) throws IOException
+            int bufferSize)
     {
         writeHead ();
         
@@ -159,7 +159,7 @@ public class ConfigWriter {
     }
     
     /* Write the fixed lines which begin the config file */
-    private void writeHead () throws IOException
+    private void writeHead ()
     {
         _confOut.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         _confOut.println("<jhoveConfig version=\"1.0\"");
@@ -173,7 +173,7 @@ public class ConfigWriter {
     }
     
     /* Write out the fixed end of the config file */
-    private void writeTail () throws IOException
+    private void writeTail ()
     {
         _confOut.println("</jhoveConfig>");
     }

@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.openpreservation.jhove.modules</groupId>
+    <artifactId>jhove-modules</artifactId>
+    <version>1.22.0</version>
+  </parent>
+  <artifactId>utf8-hul</artifactId>
+  <version>1.7.1</version>
+  <name>JHOVE UTF8 Module HUL</name>
+  <description>UTF8 module developed by Harvard University Library</description>
+
+  <dependencies>
+      <dependency>
+        <groupId>org.openpreservation.jhove.modules</groupId>
+        <artifactId>ascii-hul</artifactId>
+        <version>1.4.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openpreservation.jhove.modules</groupId>
+        <artifactId>pdf-hul</artifactId>
+        <version>1.12.1</version>
+        <scope>test</scope>
+      </dependency>
+  </dependencies>
+
+</project>

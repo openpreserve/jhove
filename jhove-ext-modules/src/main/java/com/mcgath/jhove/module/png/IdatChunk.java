@@ -15,6 +15,7 @@ public class IdatChunk extends PNGChunk {
 	
 	/** Process the chunk. We don't analyze or report the data, but
 	 *  we enforce the requirement that IDAT chunks must be consecutive. */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
 		_module.setIdatSeen(true);

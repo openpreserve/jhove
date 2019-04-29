@@ -22,8 +22,6 @@ public class RepTreeRoot extends DefaultMutableTreeNode
      ******************************************************************/
 
     private RepInfo _info;
-    private Property _repProp;
-    private App _app;
     private JhoveBase _base;
     private boolean _rawOutput;
     private DateFormat _dateFmt;
@@ -37,11 +35,10 @@ public class RepTreeRoot extends DefaultMutableTreeNode
      *               be displayed.
      *  @param app   The App object under which we're operating.
      */
-    public RepTreeRoot (RepInfo info, App app, JhoveBase base) 
+    public RepTreeRoot (RepInfo info, JhoveBase base) 
     {
         super (info.getUri());
         _info = info;
-        _app = app;
         _base = base;
         _rawOutput = _base.getShowRawFlag ();
 
@@ -127,20 +124,20 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         Property pProp = (Property) parent;
         PropertyArity arity = pProp.getArity ();
         // For Lists, Maps, and Sets we construct an Iterator.
-        Iterator iter = null;
+        Iterator<?> iter = null;
         if (arity == PropertyArity.SET || 
                 arity == PropertyArity.LIST ||
                 arity == PropertyArity.MAP) {
             if (arity == PropertyArity.SET) {
-                Set set = (Set) pProp.getValue ();
+                Set<?> set = (Set<?>) pProp.getValue ();
                 iter = set.iterator ();
             }
             else if (arity == PropertyArity.MAP) {
-                Map map = (Map) pProp.getValue ();
+                Map<?, ?> map = (Map<?, ?>) pProp.getValue ();
                 iter = map.values().iterator ();
             }
             else {
-                List list = (List) pProp.getValue ();
+                List<?> list = (List<?>) pProp.getValue ();
                 iter = list.iterator ();
             }
             for (int i = 0;; i++) {
@@ -289,26 +286,26 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                         ("Status: " + wfStr, false));
 
         // Report modules that said their signatures match
-        List sigList = _info.getSigMatch();
+        List<String> sigList = _info.getSigMatch();
         if (sigList != null && sigList.size () > 0) {
             DefaultMutableTreeNode sigNode =
                 new DefaultMutableTreeNode ("SignatureMatches");
             infoNode.add (sigNode);
             for (int i = 0; i < sigList.size (); i++) {
                 DefaultMutableTreeNode sNode =
-                    new DefaultMutableTreeNode ((String) sigList.get (i));
+                    new DefaultMutableTreeNode (sigList.get (i));
                 sigNode.add(sNode);
             }
         }
         // Compile a list of messages and offsets into a subtree
-        List messageList = _info.getMessage ();
+        List<Message> messageList = _info.getMessage ();
         if (messageList != null && messageList.size() > 0) {
             DefaultMutableTreeNode msgNode = 
                 new DefaultMutableTreeNode  ("Messages");
             infoNode.add (msgNode);
             int i;
             for (i = 0; i < messageList.size(); i++) {
-                Message msg = (Message) messageList.get (i);
+                Message msg = messageList.get (i);
                 String prefix;
                 if (msg instanceof InfoMessage) {
                     prefix = "InfoMessage: ";
@@ -352,7 +349,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
 
         // Compile a list of profile strings into a string list
-        List profileList = _info.getProfile ();
+        List<String> profileList = _info.getProfile ();
         if (profileList != null && profileList.size() > 0) {
             DefaultMutableTreeNode profNode = 
                 new DefaultMutableTreeNode ("Profiles");
@@ -360,40 +357,37 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             int i;
             for (i = 0; i < profileList.size(); i++) {
                 profNode.add (new DefaultMutableTreeNode
-                        ((String) profileList.get (i), false));
+                        (profileList.get (i), false));
             }
         }
 
         // Here we come to the property map. We have to walk
         // through all the properties recursively, turning
         // each into a leaf or subtree.
-        Map map = _info.getProperty ();
+        Map<String, Property> map = _info.getProperty ();
         if (map != null) {
-            Iterator iter = map.keySet ().iterator ();
+            Iterator<String> iter = map.keySet ().iterator ();
             while (iter.hasNext ()) {
-                String key = (String) iter.next ();
+                String key = iter.next ();
                 Property property = _info.getProperty (key);
                 infoNode.add (propToNode (property));
             }
         }
         
-        List cksumList = _info.getChecksum();
-        if (cksumList != null && cksumList.size () > 0) {
+        List<Checksum> cksumList = _info.getChecksum();
+        if (cksumList != null && !cksumList.isEmpty()) {
             DefaultMutableTreeNode ckNode = 
                 new DefaultMutableTreeNode ("Checksums");
             infoNode.add (ckNode);
-            int n = cksumList.size ();
             //List cPropList = new LinkedList ();
-            for (int i = 0; i < n; i++) {
-                Checksum cksum = (Checksum) cksumList.get (i);
-                String val = cksum.getValue ();
+            for (Checksum cksum : cksumList) {
                 DefaultMutableTreeNode csNode =
                     new DefaultMutableTreeNode ("Checksum");
                 ckNode.add (csNode);
                 csNode.add (new DefaultMutableTreeNode
                     ("Type:" + cksum.getType ().toString (), false));
                 csNode.add (new DefaultMutableTreeNode
-                    ("Checksum: " + val, false));
+                    ("Checksum: " + cksum.getValue (), false));
             }
         }
         
@@ -504,11 +498,9 @@ public class RepTreeRoot extends DefaultMutableTreeNode
        The property must be of arity LIST. */
     private void addListMembers (DefaultMutableTreeNode node, Property p)
     {
-        List l = (List) p.getValue ();
+        List<Object> l = (List<Object>) p.getValue ();
         PropertyType ptyp = p.getType ();
-        Iterator iter = l.listIterator ();
-        while (iter.hasNext ()) {
-            Object item = iter.next ();
+        for (Object item : l) {
             if (ptyp == PropertyType.PROPERTY) {
                 node.add (propToNode ((Property) item));
             }
@@ -527,9 +519,9 @@ public class RepTreeRoot extends DefaultMutableTreeNode
        The property must be of arity SET. */
     private void addSetMembers (DefaultMutableTreeNode node, Property p)
     {
-        Set s = (Set) p.getValue ();
+        Set<?> s = (Set<?>) p.getValue ();
         PropertyType ptyp = p.getType ();
-        Iterator iter = s.iterator ();
+        Iterator<?> iter = s.iterator ();
         while (iter.hasNext ()) {
             Object item = iter.next ();
             if (ptyp == PropertyType.PROPERTY) {
@@ -550,10 +542,10 @@ public class RepTreeRoot extends DefaultMutableTreeNode
        The property must be of arity MAP. */
     private void addMapMembers (DefaultMutableTreeNode node, Property p)
     {
-        Map m = (Map) p.getValue ();
+        Map<?, ?> m = (Map<?, ?>) p.getValue ();
         PropertyType ptyp = p.getType ();
         //Iterator iter = m.values ().iterator ();
-        Iterator iter = m.keySet ().iterator ();
+        Iterator<?> iter = m.keySet ().iterator ();
         while (iter.hasNext ()) {
             DefaultMutableTreeNode itemNode;
             String key = (String) iter.next ();
@@ -649,10 +641,10 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         // Add the face information, which is mostly filler.
         // In the general case, it can contain multiple Faces;
         // this isn't supported yet.
-        List facelist = aes.getFaceList ();
+        List<AESAudioMetadata.Face> facelist = aes.getFaceList ();
         if (!facelist.isEmpty ()) {
             AESAudioMetadata.Face f = 
-                (AESAudioMetadata.Face) facelist.get(0);
+                facelist.get(0);
 
             DefaultMutableTreeNode face =
                     new DefaultMutableTreeNode ("Face", true);
@@ -677,13 +669,13 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 String[] locs = aes.getMapLocations ();
                 region.add (new DefaultMutableTreeNode
                         ("NumChannels: " + Integer.toString (nchan), false));
-                for (int ch = 0; ch < nchan; ch++) {
+                for (String loc : locs) {
                     // write a stream element for each channel
                     DefaultMutableTreeNode stream =
                             new DefaultMutableTreeNode ("Stream", true);
                     region.add (stream);
                     stream.add (new DefaultMutableTreeNode 
-                        ("ChannelAssignment: " + locs[ch], false));
+                        ("ChannelAssignment: " + loc, false));
                 }
             }
             face.add (region);         
@@ -693,10 +685,10 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         // FormatRegions.  This doesn't happen with any of the current
         // modules; if it's needed in the future, simply set up an
         // iteration loop on formatList.
-        List flist = aes.getFormatList ();
+        List<AESAudioMetadata.FormatRegion> flist = aes.getFormatList ();
         if (!flist.isEmpty ()) {
             AESAudioMetadata.FormatRegion rgn = 
-                (AESAudioMetadata.FormatRegion) flist.get(0);
+                flist.get(0);
             int bitDepth = rgn.getBitDepth ();
             double sampleRate = rgn.getSampleRate ();
             int wordSize = rgn.getWordSize ();
@@ -1189,13 +1181,14 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             val.add (new DefaultMutableTreeNode
                 ("ExifVersion: " + s, false));
         }
-        if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
+        Rational r;
+        if ((r = niso.getBrightness ()) != null) {
             val.add (new DefaultMutableTreeNode
-                ("Brightness: " + Double.toString (d), false));
+                ("Brightness: " + r.toString(), false));
         }
-        if ((d = niso.getExposureBias ()) != NisoImageMetadata.NILL) {
+        if ((r = niso.getExposureBias ()) != null) {
             val.add (new DefaultMutableTreeNode
-                ("ExposureBias: " + Double.toString (d), false));
+                ("ExposureBias: " + r.toString(), false));
         }
         
         double [] darray = niso.getSubjectDistance ();
@@ -1225,13 +1218,14 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 ("FocalLength: " + Double.toString (d), false));
         }
         if ((n = niso.getFlash ()) != NisoImageMetadata.NULL) {
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
             val.add (new DefaultMutableTreeNode
-                ("Flash: " + integerRepresentation(n,
-                        NisoImageMetadata.FLASH), false));
+                ("Flash: " + integerRepresentation(n & 1,
+                        NisoImageMetadata.FLASH_20), false));
         }
-        if ((d = niso.getFlashEnergy ()) != NisoImageMetadata.NILL) {
+        if ((r = niso.getFlashEnergy ()) != null) {
             val.add (new DefaultMutableTreeNode
-                ("FlashEnergy: " + Double.toString (d), false));
+                ("FlashEnergy: " + r.toString(), false));
         }
         if ((n = niso.getFlashReturn ()) != NisoImageMetadata.NULL) {
             val.add (new DefaultMutableTreeNode
@@ -1398,7 +1392,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             val.add (new DefaultMutableTreeNode
                 ("GrayResponseUnit: " + Integer.toString (n), false));
         }
-        Rational r = niso.getWhitePointXValue ();
+        r = niso.getWhitePointXValue ();
         if (r != null) {
             val.add (new DefaultMutableTreeNode
                 ("WhitePointXValue: " + r.toString (), false));

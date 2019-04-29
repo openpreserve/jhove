@@ -140,8 +140,8 @@ public class WarcRecordData {
     		throw new IllegalArgumentException(MessageConstants.ERR_RECORD_DATA_NULL);
     	}
     	WarcHeader header = record.header;
-        startOffset = record.getStartOffset();
-        consumed = record.getConsumed();
+        startOffset = Long.valueOf(record.getStartOffset());
+        consumed = Long.valueOf(record.getConsumed());
         if (header.bValidVersionFormat) {
             this.warcVersionStr = header.versionStr;
         }
@@ -155,7 +155,7 @@ public class WarcRecordData {
         this.warcIpAddress = header.warcIpAddress;
         // TODO Clone List in WarcRecord's getter at some point.
         if (header.warcConcurrentToList != null && header.warcConcurrentToList.size() > 0) {
-            this.warcConcurrentToList = new LinkedList<String>();
+            this.warcConcurrentToList = new LinkedList<>();
             WarcConcurrentTo warcConcurrentTo;
             for (int i=0; i<header.warcConcurrentToList.size(); ++i) {
             	warcConcurrentTo = header.warcConcurrentToList.get(i);
@@ -257,13 +257,13 @@ public class WarcRecordData {
         /*
          * Compliance.
          */
-        bIsNonCompliant = !record.isCompliant();
+        bIsNonCompliant = Boolean.valueOf(!record.isCompliant());
         isValidBlockDigest = record.isValidBlockDigest;
         isValidPayloadDigest = record.isValidPayloadDigest;
         /*
          * Payload.
          */
-        bHasPayload = record.hasPayload();
+        bHasPayload = Boolean.valueOf(record.hasPayload());
         Payload payload = record.getPayload();
         HeaderLine headerLine;
         if (payload != null) {

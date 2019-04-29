@@ -7,34 +7,27 @@
 package edu.harvard.hul.ois.jhove;
 
 /**
- *  This class defines enumerated types for the analog/digital
- *  flag of AESAudioMetadata. 
- *  Applications will not create or modify instances of this class, but will
- *  use one of the predefined AnalogDigitalFlagType instances.
+ * This class defines enumerated types for the analog/digital
+ * flag of AESAudioMetadata.
+ * Applications will not create or modify instances of this class, but will
+ * use one of the predefined AnalogDigitalFlagType instances.
  * 
  * @author Gary McGath
  *
  */
-public class AnalogDigitalFlagType extends EnumerationType {
+public enum AnalogDigitalFlagType {
 
-    /** Enumeration instance for analog data */
-    public static final AnalogDigitalFlagType ANALOG = 
-        new AnalogDigitalFlagType ("ANALOG");
+	/** Enumeration instance for analog data */
+	ANALOG("ANALOG"),
+	/** Enumeration instance for physical digital data */
+	PHYS_DIGITAL("PHYS_DIGITAL"),
+	/** Enumeration instance for FILE digital data */
+	FILE_DIGITAL("FILE_DIGITAL");
+	/** A String value for the type */
+	public final String value;
 
-    /** Enumeration instance for physical digital data */
-    public static final AnalogDigitalFlagType PHYS_DIGITAL = 
-        new AnalogDigitalFlagType ("PHYS_DIGITAL");
-
-    /** Enumeration instance for FILE digital data */
-    public static final AnalogDigitalFlagType FILE_DIGITAL = 
-        new AnalogDigitalFlagType ("FILE_DIGITAL");
-
-    /** 
-     *  Applications will never create PropertyTypes directly.
-     **/
-    private AnalogDigitalFlagType (String value)
-    {
-        super (value);
-    }
+	private AnalogDigitalFlagType(final String value) {
+		this.value = value;
+	}
 
 }

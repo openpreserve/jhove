@@ -17,6 +17,7 @@ public class SpltChunk extends PNGChunk {
 	/** Process the chunk. We add a property for the suggested 
 	 *  palette by adding it to the module's list of sPLT's.
 	 */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		final String badChunk = "Bad sPLT chunk";
 		String paletteName = null;
@@ -43,9 +44,8 @@ public class SpltChunk extends PNGChunk {
 			if (c == 0) {
 				paletteName = sb.toString();
 				break;
-			} else {
-				sb.append(c);
 			}
+			sb.append(c);
 		}
 		if (paletteName == null) {
 			// No null seen to terminate name

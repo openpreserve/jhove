@@ -18,18 +18,19 @@
  * USA
  **********************************************************************/
 
+import edu.harvard.hul.ois.jhove.App;
+import edu.harvard.hul.ois.jhove.ExitCode;
+import edu.harvard.hul.ois.jhove.CoreMessageConstants;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.JhoveException;
+import edu.harvard.hul.ois.jhove.viewer.JhoveWindow;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import java.awt.Toolkit;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import edu.harvard.hul.ois.jhove.App;
-import edu.harvard.hul.ois.jhove.JhoveBase;
-import edu.harvard.hul.ois.jhove.JhoveException;
-import edu.harvard.hul.ois.jhove.viewer.JhoveWindow;
 
 /**
  * JhoveView - JSTOR/Harvard Object Validation Environment.
@@ -37,142 +38,102 @@ import edu.harvard.hul.ois.jhove.viewer.JhoveWindow;
 public class JhoveView
 {
     private static final Logger LOGGER = Logger.getLogger(JhoveView.class.getCanonicalName());
-    /******************************************************************
-     * PRIVATE CLASS FIELDS.
-     *
-     * Application constants.
-     ******************************************************************/
 
     /** Application name. */
     private static final String NAME = "JhoveView"; //$NON-NLS-1$
-    private static final String iconPath = "org/openpreservation/jhove/icon.png"; //$NON-NLS-1$
+    /** Application icon. */
+    private static final String ICON_PATH = "org/openpreservation/jhove/icon.png"; //$NON-NLS-1$
 
-    /******************************************************************
-     * Action constants.
-     ******************************************************************/
-
-    /******************************************************************
-     * Exit code constants.
-     ******************************************************************/
-
-    /** General error. */
-    private static final int ERROR = -1;
-
-    /** Incompatible Java VM. */
-    private static final int INCOMPATIBLE_VM = -2;
-
-    /******************************************************************
-     * PUBLIC CLASS METHODS.
-     ******************************************************************/
-
-    /**
-     *  Stub constructor.
-     */
-
-    private JhoveView ()
+    /** Stub constructor. */
+    private JhoveView()
     {
     }
 
     /**
      * Application main entry point.
-     * @parm args Command line arguments
+     *
+     * @param args Command-line arguments
      */
-    public static void main (String [] args)
+    public static void main(String[] args)
     {
-        /* Make sure we have a satisfactory version of Java. */
-        String version = System.getProperty ("java.vm.version"); //$NON-NLS-1$
-        if (version.compareTo ("1.5.0") < 0) { //$NON-NLS-1$
-            final String message = "Java 1.5 or higher is required"; 
-            LOGGER.log(Level.SEVERE, message);
-            errorAlert (message);
-            System.exit(INCOMPATIBLE_VM);
+        // Make sure we have a satisfactory version of Java.
+        String version = System.getProperty("java.vm.version"); //$NON-NLS-1$
+        if (version.compareTo("1.8.0") < 0) { //$NON-NLS-1$
+            LOGGER.log(Level.SEVERE, CoreMessageConstants.EXC_JAVA_VER_INCMPT);
+            errorAlert(CoreMessageConstants.EXC_JAVA_VER_INCMPT);
+            System.exit(ExitCode.INCOMPATIBLE_VM.getReturnCode());
         }
 
         // If we're running on a Macintosh, put the menubar at the top
         // of the screen where it belongs.
-        System.setProperty ("apple.laf.useScreenMenuBar", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+        System.setProperty("apple.laf.useScreenMenuBar", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 
         App app = App.newAppWithName(NAME);
         try {
 
-            /**********************************************************
-             * Retrieve the configuration file.
-             **********************************************************/
-    
-            String configFile = JhoveBase.getConfigFileFromProperties ();
-            String saxClass   = JhoveBase.getSaxClassFromProperties ();
+            // Retrieve configuration.
+            String configFile = JhoveBase.getConfigFileFromProperties();
+            String saxClass = JhoveBase.getSaxClassFromProperties();
 
-            /**********************************************************
-             * Initialization:
-             *  configFile  Configuration file pathname
-             *  saxClass    SAX parser class
-             **********************************************************/
+            // Pre-parse the command line for -c and -x config options.
+            boolean quoted = false;
+            for (int i = 0; i < args.length; i++) {
+                if (quoted) {
+                    int len = args[i].length();
+                    if (args[i].charAt(len - 1) == '"') {
+                        quoted = false;
+                    }
+                }
+                else {
+                    if ("-c".equals(args[i])) {
+                        if (i < args.length - 1) {
+                            configFile = args[++i];
+                        }
+                    }
+                    else if ("-x".equals(args[i])) {
+                        if (i < args.length - 1) {
+                            saxClass = args[++i];
+                        }
+                    }
+                    else if (args[i].charAt(0) == '"') {
+                        quoted = true;
+                    }
+                }
+            }
 
-	    /* Pre-parse the command line for -c and -x config options. */
-	    boolean quoted = false;
-	    for (int i=0; i<args.length; i++) {
-		if (quoted) {
-		    int len = args[i].length ();
-		    if (args[i].charAt (len-1) == '"') {
-			quoted = false;
-		    }
-		}
-		else {
-		    if ("-c".equals(args[i])) {
-			if (i < args.length-1) {
-			    configFile = args[++i];
-			}
-		    }
-		    else if ("-x".equals(args[i])) {
-			if (i <args.length-1) {
-			    saxClass = args[++i];
-			}
-		    }
-		    else if (args[i].charAt (0) == '"') {
-			quoted = true;
-		    }
-		}
-	    }
-
-            
-            /**********************************************************
-             * Initialize the JHOVE engine.
-             **********************************************************/
-    
-            JhoveBase je = new JhoveBase ();
+            // Initialize the JHOVE engine.
+            JhoveBase je = new JhoveBase();
             try {
-                je.init (configFile, saxClass);
+                je.init(configFile, saxClass);
             }
             catch (JhoveException e) {
-                errorAlert (e.getMessage ());
+                errorAlert(e.getMessage());
                 // Keep going, so user can correct in editor
             }
 
             // Create the main window to select a file.
-            
-            JhoveWindow jwin = new JhoveWindow (app, je);
-			URL url = ClassLoader.getSystemResource(iconPath); //$NON-NLS-1$
-			Toolkit kit = Toolkit.getDefaultToolkit();
-			jwin.setIconImage(kit.createImage(url));
+            JhoveWindow jwin = new JhoveWindow(app, je);
+            URL url = ClassLoader.getSystemResource(ICON_PATH); //$NON-NLS-1$
+            Toolkit kit = Toolkit.getDefaultToolkit();
+            jwin.setIconImage(kit.createImage(url));
             jwin.setVisible (true);
 
         }
         catch (Exception e) {
-            e.printStackTrace (System.err);
+            e.printStackTrace(System.err);
             LOGGER.log(Level.SEVERE, e.getMessage());
-            System.exit (ERROR);
+            System.exit(ExitCode.ERROR.getReturnCode());
         }
     }
-    
-    /* Displays an error alert. */
-    private static void errorAlert (String msg)
+
+    /** Displays an error alert. */
+    private static void errorAlert(String msg)
     {
-        JFrame hiddenFrame = new JFrame ();
-        // Truncate long messages so the alert isn't wider
-        // than the screen
-        String message = (msg.length() > 80) ? msg.substring (0, 79) + "..." : msg;
+        JFrame hiddenFrame = new JFrame();
+        // Truncate long messages so the alert isn't wider than the screen
+        String message = (msg.length() > 80) ? msg.substring(0, 79) + "..." : msg;
         LOGGER.log(Level.WARNING, msg);
-        JOptionPane.showMessageDialog (hiddenFrame, 
-                message, "Jhove Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(hiddenFrame, message, "Jhove Error",
+                JOptionPane.ERROR_MESSAGE);
     }
 }

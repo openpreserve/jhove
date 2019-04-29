@@ -119,7 +119,7 @@ public abstract class HandlerBase
 
         _note   = note;
         _rights = rights;
-        _specification = new ArrayList<Document> ();
+        _specification = new ArrayList<> ();
 
         _level = -1;
     }
@@ -133,6 +133,7 @@ public abstract class HandlerBase
     /**
      * Reset the handler. This needs to be called before each invocation.
      */
+    @Override
     public void reset () {
         _level = -1;
     }
@@ -143,6 +144,7 @@ public abstract class HandlerBase
      * @param   params     A List whose elements are Strings.
      *                     May be empty.
      */
+    @Override
     public void setDefaultParams (List<String> params)
     {
         _defaultParams = params;
@@ -152,8 +154,8 @@ public abstract class HandlerBase
      *  Applies the default parameters.
      *  Calling this clears any prior parameters.
      */
+    @Override
     public void applyDefaultParams ()
-        throws Exception
     {
         resetParams ();
         Iterator<String> iter = _defaultParams.iterator ();
@@ -167,8 +169,8 @@ public abstract class HandlerBase
      *  Returns to a default state without any parameters.
      *  The default method clears the saved parameter.
      */
+    @Override
     public void resetParams ()
-        throws Exception
     {
         _param = null;
     }
@@ -178,8 +180,8 @@ public abstract class HandlerBase
      * Per-instantiation initialization.
      * The default method does nothing.
      */
+    @Override
     public void init (String init)
-        throws Exception
     {
 	_init = init;
     }
@@ -188,8 +190,8 @@ public abstract class HandlerBase
      * Per-action initialization.
      * The default method does nothing.
      */
+    @Override
     public void param (String param)
-        throws Exception
     {
 	_param = param;
     }
@@ -202,6 +204,7 @@ public abstract class HandlerBase
      *  Return the last modification date of this OutputHandler, as a
      *  Java Date object
      */
+    @Override
     public final Date getDate ()
     {
         return _date;
@@ -210,6 +213,7 @@ public abstract class HandlerBase
     /**
      *  Return the OutputHandler name
      */
+    @Override
     public final String getName ()
     {
         return _name;
@@ -218,6 +222,7 @@ public abstract class HandlerBase
     /**
      *  Return the OutputHandler note
      */
+    @Override
     public final String getNote ()
     {
         return _note;
@@ -226,6 +231,7 @@ public abstract class HandlerBase
     /**
      *   Return the release identifier
      */
+    @Override
     public final String getRelease ()
     {
         return _release;
@@ -234,6 +240,7 @@ public abstract class HandlerBase
     /**
      *   Return the copyright information string
      */
+    @Override
     public final String getRights ()
     {
         return _rights;
@@ -247,6 +254,7 @@ public abstract class HandlerBase
      *
      *  @see Document
      */
+    @Override
     public final List<Document> getSpecification ()
     {
         return _specification;
@@ -255,6 +263,7 @@ public abstract class HandlerBase
     /**
      *  Return the vendor information
      */
+    @Override
     public final Agent getVendor ()
     {
         return _vendor;
@@ -263,6 +272,7 @@ public abstract class HandlerBase
     /**
      *  Returns this handler's encoding.
      */
+    @Override
     public String getEncoding ()
     {
 	return _encoding;
@@ -276,6 +286,7 @@ public abstract class HandlerBase
      *  Pass the associated App object to this Module.
      *  The App makes various services available.
      */
+    @Override
     public final void setApp (App app)
     {
         _app = app;
@@ -284,6 +295,7 @@ public abstract class HandlerBase
     /**
      *  Assigns the JHOVE engine object to provide services to this handler
      */
+    @Override
     public final void setBase (JhoveBase je)
     {
         _je = je;
@@ -292,6 +304,7 @@ public abstract class HandlerBase
     /**
      *  Assigns the encoding to be used by this OutputHandler
      */
+    @Override
     public void setEncoding (String encoding)
     {
 	_encoding = encoding;
@@ -300,6 +313,7 @@ public abstract class HandlerBase
     /**
      *  Assigns a PrintWriter to do output for this OutputHandler
      */
+    @Override
     public final void setWriter (PrintWriter writer)
     {
         _writer = writer;
@@ -314,6 +328,7 @@ public abstract class HandlerBase
      * representation information.
      * @param info Object representation information
      */
+    @Override
     public void analyze (RepInfo info)
     {
 	/* Do nothing, which is sufficient for most handlers. */
@@ -322,6 +337,7 @@ public abstract class HandlerBase
     /**
      * Callback indicating a directory is finished being processed.
      */
+    @Override
     public void endDirectory ()
     {
 	/* Do nothing, which is sufficient for most handlers. */
@@ -332,6 +348,7 @@ public abstract class HandlerBase
      * not to process a file.  Most handlers will always return true.
      * @param filepath File pathname
      */
+    @Override
     public boolean okToProcess (String filepath)
     {
 	return true;
@@ -340,22 +357,26 @@ public abstract class HandlerBase
     /**
      *  Outputs information about a Module
      */
+    @Override
     public abstract void show (Module module);
 
     /**
      *  Outputs the information contained in a RepInfo object
      */
+    @Override
     public abstract void show (RepInfo info);
 
     /**
      *  Outputs information about the OutputHandler specified
      *  in the parameter 
      */
+    @Override
     public abstract void show (OutputHandler handler);
 
     /**
      *  Outputs minimal information about the application
      */
+    @Override
     public abstract void show ();
 
     /**
@@ -363,23 +384,27 @@ public abstract class HandlerBase
      *  including configuration, available modules and handlers,
      *  etc.
      */
+    @Override
     public abstract void show (App app);
 
     /**
      *  Do the initial output.  This should be in a suitable format
      *  for including multiple files between the header and the footer. 
      */
+    @Override
     public abstract void showHeader ();
 
     /**
      *  Do the final output.  This should be in a suitable format
      *  for including multiple files between the header and the footer. 
      */
+    @Override
     public abstract void showFooter ();
     
     /**
      *  Close the writer after all output has been done.
      */
+    @Override
     public void close ()
     {
         _writer.close ();
@@ -389,6 +414,7 @@ public abstract class HandlerBase
      * Callback indicating a new directory is being processed.
      * @param directory Directory path
      */
+    @Override
     public void startDirectory (String directory)
     {
 	/* Do nothing, which is sufficient for most handlers. */
@@ -803,6 +829,7 @@ public abstract class HandlerBase
             public SynchronizedDateFormat(String pattern) {
                 super(pattern);
             }
+            @Override
             public synchronized StringBuffer format(Date date,
                                     StringBuffer toAppendTo, FieldPosition pos) {
                 return super.format(date, toAppendTo, pos);
