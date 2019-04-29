@@ -13,7 +13,7 @@ TEST_BASELINES_ROOT="${TEST_ROOT}/baselines"
 TEST_INSTALL_ROOT="${TEST_ROOT}/jhove"
 CANDIADATE_ROOT="${TEST_ROOT}/candidates"
 TARGET_ROOT="${TEST_ROOT}/targets"
-BASELINE_VERSION=1.20
+BASELINE_VERSION=1.22
 
 # Create the JHOVE test root if it doesn't exist
 [[ -d "${TEST_ROOT}" ]] || mkdir -p "${TEST_ROOT}"
@@ -82,7 +82,8 @@ then
 	echo " - INFO: applying the baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
 	bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "${BASELINE_VERSION}" -c "${MAJOR_MINOR_VER}"
 else
-	echo " - WARNING: no bash script found for baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
+	echo " - ERROR: no bash script found for baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
+	exit 1
 fi
 
 echo ""

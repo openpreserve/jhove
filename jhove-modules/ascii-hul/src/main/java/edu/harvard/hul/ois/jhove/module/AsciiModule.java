@@ -40,8 +40,8 @@ public class AsciiModule extends ModuleBase {
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
     private static final String NAME = "ASCII-hul";
-    private static final String RELEASE = "1.4.0-RC";
-    private static final int [] DATE = { 2019, 03, 05 };
+    private static final String RELEASE = "1.4.1";
+    private static final int [] DATE = { 2019, 04, 17 };
     private static final String[] FORMAT = { "ASCII", "US-ASCII", "ANSI X3.4",
             "ISO 646" };
     private static final String COVERAGE = null;
