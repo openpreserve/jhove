@@ -76,11 +76,9 @@ public class DigSignatureBox extends JP2Box {
             off = _module.readSignedLong (_dstrm);
             len = _module.readSignedLong (_dstrm);
             propList.add (new Property ("Offset",
-                    PropertyType.LONG,
-                    new Long (off)));
+                    PropertyType.LONG, off));
             propList.add (new Property ("Length",
-                    PropertyType.LONG,
-                    new Long (len)));
+                    PropertyType.LONG, len));
             sizeLeft -= 8;
         }
         
@@ -96,10 +94,9 @@ public class DigSignatureBox extends JP2Box {
                     len = _raf.length ();
                 }
                 propList.add (new Property ("Valid",
-                    PropertyType.BOOLEAN,
-                    new Boolean (isSigValid 
-                        (styp, off, len, data))));
-            }
+                    PropertyType.BOOLEAN, isSigValid 
+                                (styp, off, len, data)));
+        }
             catch (NoSuchAlgorithmException e) { 
                 // In the unlikely event the algorithms aren't
                 // available, just don't report validity.  

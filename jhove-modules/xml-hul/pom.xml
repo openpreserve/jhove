@@ -3,9 +3,10 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.21.0-SNAPSHOT</version>
+    <version>1.23.0-SNAPSHOT</version>
   </parent>
   <artifactId>xml-hul</artifactId>
+  <version>1.5.1</version>
   <name>JHOVE XML Module HUL</name>
   <description>XML module developed by Harvard University Library</description>
 
@@ -13,7 +14,7 @@
       <dependency>
         <groupId>org.openpreservation.jhove.modules</groupId>
         <artifactId>utf8-hul</artifactId>
-        <version>${project.version}</version>
+        <version>1.7.1</version>
       </dependency>
   </dependencies>
 

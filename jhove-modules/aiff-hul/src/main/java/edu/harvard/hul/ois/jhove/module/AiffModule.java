@@ -25,7 +25,7 @@ import edu.harvard.hul.ois.jhove.module.iff.*;
 /**
  * Module for identification and validation of AIFF files.
  * Supports AIFF and AIFF-C.
- * 
+ *
  * @author Gary McGath
  */
 public class AiffModule
@@ -40,7 +40,7 @@ public class AiffModule
 
     /* Top-level property list */
     protected List _propList;
-    
+
     /* AES audio metadata to go into AIFF metadata */
     protected AESAudioMetadata _aesMetadata;
 
@@ -49,16 +49,16 @@ public class AiffModule
 
     /* List of MIDI Chunk properties */
     protected List _midiList;
-    
+
     /* List of Saxel properties */
     protected List _saxelList;
-    
+
     /* Bytes remaining to be read. */
     protected long bytesRemaining;
-    
+
     /* Flag to check for multiple sound chunks */
     protected boolean soundChunkSeen;
-    
+
     /* Flag to check for exactly one format version chunk */
     protected boolean formatVersionChunkSeen;
 
@@ -73,47 +73,47 @@ public class AiffModule
 
     /* Flag to check for exactly one name chunk */
     protected boolean nameChunkSeen;
-    
+
     /* Flag to check for exactly one author chunk */
     protected boolean authorChunkSeen;
-    
+
     /* Flag to check for exactly one copyright chunk */
     protected boolean copyrightChunkSeen;
-    
+
     /* Flag to check for exactly one marker chunk */
     protected boolean markerChunkSeen;
 
     /* Flag to check for exactly one audio recording chunk */
     protected boolean audioRecChunkSeen;
-    
+
     /* Flag to note that first sample offset has been recorded */
     protected boolean firstSampleOffsetMarked;
-    
+
     /* File type */
     protected int fileType;
-    
+
     /* Endianness for current file (not necessarily same as _bigEndian) */
     protected boolean thisFileBigEndian;
 
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
-    
+
     /* Chunk data orientation is big-endian. */
     private static final boolean BIGENDIAN = true;
 
     /* Values for fileType */
-    public final static int 
+    public final static int
         AIFFTYPE = 1,
         AIFCTYPE = 2;
-        
+
     /* Fixed value for first 4 bytes */
     private static final int[] sigByte =
        { 0X46, 0X4F, 0X52, 0X4D };
 
     private static final String NAME = "AIFF-hul";
-    private static final String RELEASE = "1.4";
-    private static final int [] DATE = {2017, 10, 31};
+    private static final String RELEASE = "1.5.1";
+    private static final int [] DATE = { 2019, 04, 17 };
     private static final String [] FORMAT = {
 	"AIFF", "Audio Interchange File Format"
     };
@@ -158,7 +158,7 @@ public class AiffModule
        Document doc = new Document ("Audio Interchange File Format: " +
 				    "\"AIFF\", A Standard for Sampled Sound " +
 				    "Files, Version 1.3", DocumentType.REPORT);
-       Builder builder = new Agent.Builder ("Apple Computer, Inc.", 
+       Builder builder = new Agent.Builder ("Apple Computer, Inc.",
                     AgentType.COMMERCIAL).address ("1 Infinite Loop, Cupertino, CA 95014").telephone("(408) 996-1010").web("http://www.apple.com/");
        Agent appleAgent = builder.build();
        doc.setAuthor (appleAgent);
@@ -174,7 +174,7 @@ public class AiffModule
        doc.setDate ("1991-08-26");
        doc.setNote ("*** DRAFT ***");   // Asterisks as in the printed document
        _specification.add (doc);
-                                           
+
        Signature sig = new ExternalSignature ("AIFF", SignatureType.FILETYPE,
                                     SignatureUseType.OPTIONAL);
        _signature.add (sig);
@@ -188,8 +188,8 @@ public class AiffModule
                                     SignatureUseType.OPTIONAL,
                                     "For AIFF-C profile");
        _signature.add (sig);
-       
-       sig = new InternalSignature ("FORM", SignatureType.MAGIC, 
+
+       sig = new InternalSignature ("FORM", SignatureType.MAGIC,
                                    SignatureUseType.MANDATORY, 0);
        _signature.add (sig);
 
@@ -209,7 +209,7 @@ public class AiffModule
    /**
     *   Parses the content of a purported AIFF digital object and stores the
     *   results in RepInfo.
-    * 
+    *
     *
     *   @param stream    An InputStream, positioned at its beginning,
     *                    which is generated from the object to be parsed
@@ -217,7 +217,7 @@ public class AiffModule
     *                    to reflect the results of the parsing
     *   @param parseIndex  Must be 0 in first call to <code>parse</code>.  If
     *                    <code>parse</code> returns a nonzero value, it must be
-    *                    called again with <code>parseIndex</code> 
+    *                    called again with <code>parseIndex</code>
     *                    equal to that return value.
     */
    @Override
@@ -250,18 +250,18 @@ public class AiffModule
            }
            /* If we got this far, take note that the signature is OK. */
            info.setSigMatch(_name);
-           
+
            // Get the length of the Form chunk.  This includes all
            // the subsequent chunks in the file, but excludes the
            // header ("FORM" and the length itself).
 //         bytesRemaining = readUnsignedInt (_dstream, _bigEndian, this);
            bytesRemaining = readUnsignedInt (_dstream,  BIGENDIAN, this);
-           
+
            // Read the file type.
            if (!readFileType (info)) {
                return 0;
            }
-    
+
            while (bytesRemaining > 0) {
                if (!readChunk (info)) {
                    break;
@@ -270,11 +270,11 @@ public class AiffModule
        }
        catch (EOFException e) {
            info.setWellFormed (RepInfo.FALSE);
-           info.setMessage (new ErrorMessage 
+           info.setMessage (new ErrorMessage
                 (MessageConstants.AIFF_HUL_8, _nByte));
            return 0;
        }
-       
+
        if (!commonChunkSeen) {
            info.setWellFormed (RepInfo.FALSE);
            info.setMessage (new ErrorMessage
@@ -288,7 +288,7 @@ public class AiffModule
        if (info.getWellFormed () != RepInfo.TRUE) {
            return 0;
        }
-       
+
        /* This file looks OK. */
        if (_ckSummer != null){
            skipDstreamToEnd(info);
@@ -348,21 +348,21 @@ public class AiffModule
     {
         _propList.add (prop);
     }
-    
+
     /** Adds an Annotation Property to the annotation list.
      *  This will get put into an Annotations Property. */
     public void addAnnotation (Property prop)
     {
         _annotationList.add (prop);
     }
-    
+
     /** Adds a Saxel Property to the saxel list.
      *  This will get put into a Saxels Property. */
     public void addSaxel (Property prop)
     {
         _saxelList.add (prop);
     }
-    
+
     /** Adds a MIDI Property to the MIDI list.
      *  This will get put into a MIDIData Property. */
     public void addMidi (Property prop)
@@ -374,7 +374,7 @@ public class AiffModule
      *   Initializes the state of the module for parsing.
      */
     @Override
-    protected void initParse() 
+    protected void initParse()
     {
         super.initParse ();
 
@@ -397,20 +397,20 @@ public class AiffModule
         _aesMetadata.clearBitrateReduction();
         _aesMetadata.setUse ("OTHER", "JHOVE_validation");
         _aesMetadata.setDirection ("NONE");
-        
+
         _propList.add (new Property ("AESAudioMetadata",
                 PropertyType.AESAUDIOMETADATA,
                 _aesMetadata));
-     
+
         // Create a List for accumulating properties from Annotation Chunks
         _annotationList = new LinkedList ();
 
         // Create a List for accumulating properties from MIDI Chunks
         _midiList = new LinkedList ();
-       
+
         // Create a List for accumulating properties from SAXL chunks
         _saxelList = new LinkedList ();
-       
+
         // Most chunk types are allowed to occur only once,
         // and a few must occur exactly once.
         // Clear flags for whether they have been seen.
@@ -448,8 +448,8 @@ public class AiffModule
     {
         return readSignedShort (stream, true, this);
     }
-    
-    /** This reads an 80-bit SANE number, aka IEEE 754 
+
+    /** This reads an 80-bit SANE number, aka IEEE 754
      *  extended double.
      */
     public double read80BitDouble (DataInputStream stream)
@@ -465,7 +465,7 @@ public class AiffModule
      *   Reads 4 bytes and concatenates them into a String.
      *   This pattern is used for ID's of various kinds.
      */
-    public String read4Chars(DataInputStream stream) throws IOException 
+    public String read4Chars(DataInputStream stream) throws IOException
     {
         StringBuffer sbuf = new StringBuffer(4);
         for (int i = 0; i < 4; i++) {
@@ -474,15 +474,15 @@ public class AiffModule
         }
         return sbuf.toString();
     }
-    
+
     /** Reads a Pascal string.
      *  A Pascal string is one whose count is given in the first
      *  byte.  The count is exclusive of the count byte itself.
-     *  A Pascal string can have a maximum of 255 characters. 
+     *  A Pascal string can have a maximum of 255 characters.
      *  If the count of a Pascal string is even (meaning the total
      *  number of bytes is odd), there will be a pad byte to skip,
      *  so that the next item can start on an even boundary.
-     * 
+     *
      *  We assume the string will be in ASCII or Macintosh encoding.
      */
     public String readPascalString (DataInputStream stream) throws IOException
@@ -500,15 +500,15 @@ public class AiffModule
      *  January 1, 1904) into a Java date.  The timestamp is
      *  treated as a time in the default localization.
      *  Depending on that localization,
-     *  there may be some variation in the exact hour of the date 
+     *  there may be some variation in the exact hour of the date
      *  returned, e.g., due to daylight savings time.
-     * 
+     *
      */
     public Date timestampToDate (long timestamp)
     {
         Calendar cal = Calendar.getInstance ();
         cal.set (1904, 0, 1, 0, 0, 0);
-        
+
         // If we add the seconds directly, we'll truncate the long
         // value when converting to int.  So convert to hours plus
         // residual seconds.
@@ -524,7 +524,7 @@ public class AiffModule
     {
         return fileType;
     }
-    
+
     /** Marks the first sample offset as the current byte position,
      * if it hasn't already been marked.
      * The SSND chunk offset value must be added to the current
@@ -538,7 +538,7 @@ public class AiffModule
         }
     }
 
-    /** Reads the file type.   
+    /** Reads the file type.
      *  Broken out from parse().
      *  If it is not a valid file type, returns false.
      */
@@ -557,7 +557,7 @@ public class AiffModule
             return true;
         }
         else {
-            info.setMessage (new ErrorMessage 
+            info.setMessage (new ErrorMessage
                     (MessageConstants.AIFF_HUL_4, _nByte));
             info.setWellFormed (RepInfo.FALSE);
             return false;
@@ -565,7 +565,7 @@ public class AiffModule
     }
 
     /** Reads an AIFF Chunk.
-     * 
+     *
      */
      protected boolean readChunk (RepInfo info) throws IOException
      {
@@ -576,7 +576,7 @@ public class AiffModule
         }
         int chunkSize = (int) chunkh.getSize ();
         bytesRemaining -= chunkSize + 8;
-        
+
         String id = chunkh.getID ();
         if ("FVER".equals (id)) {
             if (formatVersionChunkSeen) {
@@ -671,7 +671,7 @@ public class AiffModule
         }
         else if ("SAXL".equals (id)) {
             chunk = new SaxelChunk (this, chunkh, _dstream);
-            // Multiple saxel chunks are ok 
+            // Multiple saxel chunks are ok
         }
         else if ("ANNO".equals (id)) {
             chunk = new AnnotationChunk (this, chunkh, _dstream);
@@ -695,7 +695,7 @@ public class AiffModule
             skipBytes (_dstream, 1, this);
             --bytesRemaining;
         }
-        return true;   
+        return true;
      }
 
     /** Returns the module's AES metadata. */

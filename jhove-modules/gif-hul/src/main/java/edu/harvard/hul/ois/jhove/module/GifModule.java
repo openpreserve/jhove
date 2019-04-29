@@ -83,8 +83,8 @@ public class GifModule extends ModuleBase
      ******************************************************************/
 
     private static final String NAME = "GIF-hul";
-    private static final String RELEASE = "1.3";
-    private static final int [] DATE = {2006, 9, 5};
+    private static final String RELEASE = "1.4.1";
+    private static final int [] DATE = { 2019, 04, 17 };
     private static final String [] FORMAT = {"GIF",
                                              "Graphics Interchange Format"};
     private static final String COVERAGE = "GIF87a, GIF89a";

@@ -1,0 +1,40 @@
+<mix:mix xmlns:mix="http://www.loc.gov/mix/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mix/ http://www.loc.gov/mix/mix02.xsd">
+    <mix:BasicImageParameters>
+        <mix:Format>
+            <mix:ByteOrder>big-endian</mix:ByteOrder>
+            <mix:Compression>
+                <mix:CompressionScheme>6</mix:CompressionScheme>
+            </mix:Compression>
+        </mix:Format>
+    </mix:BasicImageParameters>
+    <mix:ImageCreation>
+        <mix:DigitalCameraCapture>
+            <mix:DigitalCameraManufacturer>Panasonic</mix:DigitalCameraManufacturer>
+            <mix:DigitalCameraModel>DMC-G6</mix:DigitalCameraModel>
+        </mix:DigitalCameraCapture>
+        <mix:CameraCaptureSettings>
+            <mix:FNumber>7.1</mix:FNumber>
+            <mix:ExposureTime>0.167</mix:ExposureTime>
+            <mix:Brightness>0</mix:Brightness>
+            <mix:ExposureBias>0</mix:ExposureBias>
+            <mix:MeteringMode>Center weighted Average</mix:MeteringMode>
+            <mix:FocalLength>14</mix:FocalLength>
+            <mix:Flash>Yes</mix:Flash>
+            <mix:FlashEnergy>0.15</mix:FlashEnergy>
+        </mix:CameraCaptureSettings>
+        <mix:DateTimeCreated>2017-03-28T12:58:30</mix:DateTimeCreated>
+    </mix:ImageCreation>
+    <mix:ImagingPerformanceAssessment>
+        <mix:SpatialMetrics>
+            <mix:SamplingFrequencyUnit>2</mix:SamplingFrequencyUnit>
+            <mix:XSamplingFrequency>180</mix:XSamplingFrequency>
+            <mix:YSamplingFrequency>180</mix:YSamplingFrequency>
+            <mix:ImageWidth>1136</mix:ImageWidth>
+            <mix:ImageLength>1846</mix:ImageLength>
+        </mix:SpatialMetrics>
+        <mix:Energetics>
+            <mix:BitsPerSample>8,8,8</mix:BitsPerSample>
+            <mix:SamplesPerPixel>3</mix:SamplesPerPixel>
+        </mix:Energetics>
+    </mix:ImagingPerformanceAssessment>
+</mix:mix>

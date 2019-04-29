@@ -3,9 +3,10 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.21.0-SNAPSHOT</version>
+    <version>1.23.0-SNAPSHOT</version>
   </parent>
   <artifactId>utf8-hul</artifactId>
+  <version>1.7.1</version>
   <name>JHOVE UTF8 Module HUL</name>
   <description>UTF8 module developed by Harvard University Library</description>
 
@@ -13,12 +14,12 @@
       <dependency>
         <groupId>org.openpreservation.jhove.modules</groupId>
         <artifactId>ascii-hul</artifactId>
-        <version>${project.version}</version>
+        <version>1.4.1</version>
       </dependency>
       <dependency>
         <groupId>org.openpreservation.jhove.modules</groupId>
         <artifactId>pdf-hul</artifactId>
-        <version>${project.version}</version>
+        <version>1.12.1</version>
         <scope>test</scope>
       </dependency>
   </dependencies>

@@ -2,7 +2,7 @@
  * Jhove - JSTOR/Harvard Object Validation Environment
  * Copyright 2004-2007 by JSTOR and the President and Fellows of Harvard College
  *
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at
@@ -39,7 +39,7 @@ import org.xml.sax.helpers.*;
 
 /**
  * Module for identification and validation of XML files.
- * 
+ *
  * @author Gary McGath
  */
 public class XmlModule extends ModuleBase {
@@ -48,8 +48,8 @@ public class XmlModule extends ModuleBase {
 	 ******************************************************************/
 
 	private static final String NAME = "XML-hul";
-	private static final String RELEASE = "1.4";
-	private static final int[] DATE = { 2007, 1, 8 };
+	private static final String RELEASE = "1.5.1";
+  private static final int [] DATE = { 2019, 04, 17 };
 	private static final String[] FORMAT = { "XML", "XHTML" };
 	private static final String COVERAGE = "XML 1.0";
 	/*
@@ -278,7 +278,7 @@ public class XmlModule extends ModuleBase {
 		// The XmlDeclStream filters the characters, looking for an
 		// XML declaration, since there's no way to get that info
 		// out of SAX.
-		XmlDeclStream xds = new XmlDeclStream(_cstream);
+		XmlDeclStream xds = new XmlDeclStream(_dstream);
 		try {
 			// Create an InputSource to feed the parser.
 			// If a SAX class was specified, use it, otherwise use
@@ -1005,7 +1005,7 @@ public class XmlModule extends ModuleBase {
 
 	/**
 	 * Verification that the string contains something usefull.
-	 * 
+	 *
 	 * @param value
 	 *            string to test
 	 * @return boolean
