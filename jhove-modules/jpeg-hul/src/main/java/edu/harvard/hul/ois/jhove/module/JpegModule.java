@@ -6,12 +6,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -76,9 +76,9 @@ import edu.harvard.hul.ois.jhove.module.jpeg.Tiling;
 
 /**
  * Module for identification and validation of JPEG files.
- * 
+ *
  * General notes:
- * 
+ *
  * There is no such thing as a "JPEG file format." There are several commonly
  * used file formats which encapsulate JPEG data and conform to the JPEG stream
  * format. There are also many formats which can encapsulate JPEG data within
@@ -87,7 +87,7 @@ import edu.harvard.hul.ois.jhove.module.jpeg.Tiling;
  * which isn't one of the known file formats will be regarded as well-formed,
  * but not valid. To be valid, a file must conform to one of the following:
  * JFIF, SPIFF, and JPEG/Exif. Other formats may be added in the future.
- * 
+ *
  * This module uses the JPEG-L method of detecting a marker following a data
  * stream, checking for a 0 high bit rather than an entire 0 byte. So long at no
  * JPEG markers are defined with a value from 0 through 7F, this is valid for
@@ -108,8 +108,8 @@ public class JpegModule extends ModuleBase {
 	 ******************************************************************/
 	private static final String NISO_IMAGE_MD = "NisoImageMetadata";
 	private static final String NAME = "JPEG-hul";
-	private static final String RELEASE = "1.5.0-RC2";
-	private static final int[] DATE = { 2019, 03, 29 };
+	private static final String RELEASE = "1.5.1";
+  private static final int [] DATE = { 2019, 04, 17 };
 	private static final String[] FORMAT = { "JPEG", "ISO/IEC 10918-1:1994",
 			"Joint Photographic Experts Group", "JFIF",
 			"JPEG File Interchange Format", "SPIFF", "ISO/IEC 10918-3:1997",
@@ -468,7 +468,7 @@ public class JpegModule extends ModuleBase {
 	/**
 	 * Parse the content of a purported JPEG stream digital object and store the
 	 * results in RepInfo.
-	 * 
+	 *
 	 * This function uses the JPEG-L method of detecting a marker following a
 	 * data stream, checking for a 0 high bit rather than an entire 0 byte. So
 	 * long at no JPEG markers are defined with a value from 0 through 7F, this
@@ -719,10 +719,8 @@ public class JpegModule extends ModuleBase {
 
 		if (_units == 0) {
 			List<Property> list = new ArrayList<Property>();
-			list.add(new Property("PixelAspectRatioX", PropertyType.INTEGER,
-					new Integer(_xDensity)));
-			list.add(new Property("PixelAspectRatioY", PropertyType.INTEGER,
-					new Integer(_yDensity)));
+			list.add(new Property("PixelAspectRatioX", PropertyType.INTEGER, _xDensity));
+			list.add(new Property("PixelAspectRatioY", PropertyType.INTEGER, _yDensity));
 			_primaryImageList.add(new Property("PixelAspectRatio",
 					PropertyType.PROPERTY, PropertyArity.LIST, list));
 		}
@@ -737,10 +735,9 @@ public class JpegModule extends ModuleBase {
 		}
 		if (_restartInterval >= 0) {
 			_primaryImageList.add(new Property("RestartInterval",
-					PropertyType.INTEGER, new Integer(_restartInterval)));
+					PropertyType.INTEGER, _restartInterval));
 		}
-		_primaryImageList.add(new Property("Scans", PropertyType.INTEGER,
-				new Integer(_numScans)));
+		_primaryImageList.add(new Property("Scans", PropertyType.INTEGER, _numScans));
 		if (!_quantTables.isEmpty()) {
 			List<Property> qpl = new LinkedList<Property>();
 			ListIterator<QuantizationTable> iter = _quantTables.listIterator();
@@ -812,7 +809,7 @@ public class JpegModule extends ModuleBase {
 		 */
 		List<Property> list = new ArrayList<Property>();
 		list.add(new Property("Number", PropertyType.INTEGER,
-				PropertyArity.SCALAR, new Integer(_imageList.size())));
+				PropertyArity.SCALAR, _imageList.size()));
 		Iterator<Property> iter = _imageList.iterator();
 		while (iter.hasNext()) {
 			Property prop = iter.next();
@@ -1570,8 +1567,7 @@ public class JpegModule extends ModuleBase {
 			Property cap0Prop;
 			List<Property> capList = new ArrayList<Property>(3);
 			if (_je.getShowRawFlag()) {
-				cap0Prop = new Property("Version0", PropertyType.INTEGER,
-						new Integer(_capability0));
+				cap0Prop = new Property("Version0", PropertyType.INTEGER, _capability0);
 			} else {
 				cap0Prop = new Property("Version0", PropertyType.STRING,
 						JpegStrings.CAPABILITY_V0[_capability0]);
@@ -1581,7 +1577,7 @@ public class JpegModule extends ModuleBase {
 			if (_capability1 >= 0) {
 				if (_je.getShowRawFlag()) {
 					Property cap1Prop = new Property("Version1",
-							PropertyType.INTEGER, new Integer(_capability1));
+							PropertyType.INTEGER, _capability1);
 					capList.add(cap1Prop);
 				} else {
 					// Capability 1 entails 2 strings, one for the
@@ -1612,20 +1608,15 @@ public class JpegModule extends ModuleBase {
 			Property[] propArr = new Property[6];
 			int tilingType = _tiling.getTilingType();
 			if (_je.getShowRawFlag()) {
-				propArr[0] = new Property("TilingType", PropertyType.INTEGER,
-						new Integer(tilingType));
+				propArr[0] = new Property("TilingType", PropertyType.INTEGER, tilingType);
 			} else {
 				propArr[0] = new Property("TilingType", PropertyType.STRING,
 						JpegStrings.TILING_TYPE[tilingType]);
 			}
-			propArr[1] = new Property("VerticalScale", PropertyType.INTEGER,
-					new Integer(_tiling.getVertScale()));
-			propArr[2] = new Property("HorizontalScale", PropertyType.INTEGER,
-					new Integer(_tiling.getHorScale()));
-			propArr[3] = new Property("RefGridHeight", PropertyType.LONG,
-					new Long(_tiling.getRefGridHeight()));
-			propArr[4] = new Property("RefGridWidth", PropertyType.LONG,
-					new Long(_tiling.getRefGridWidth()));
+			propArr[1] = new Property("VerticalScale", PropertyType.INTEGER, _tiling.getVertScale());
+			propArr[2] = new Property("HorizontalScale", PropertyType.INTEGER, _tiling.getHorScale());
+			propArr[3] = new Property("RefGridHeight", PropertyType.LONG, _tiling.getRefGridHeight());
+			propArr[4] = new Property("RefGridWidth", PropertyType.LONG, _tiling.getRefGridWidth());
 			propArr[5] = _tiling.buildTileListProp();
 			return new Property("Tiling", PropertyType.PROPERTY,
 					PropertyArity.ARRAY, propArr);
@@ -1647,10 +1638,8 @@ public class JpegModule extends ModuleBase {
 		while (iter.hasNext()) {
 			boolean[] lhlv = iter.next();
 			Property[] lhlvProp = new Property[2];
-			lhlvProp[0] = new Property("Horizontal", PropertyType.BOOLEAN,
-					new Boolean(lhlv[0]));
-			lhlvProp[1] = new Property("Vertical", PropertyType.BOOLEAN,
-					new Boolean(lhlv[1]));
+			lhlvProp[0] = new Property("Horizontal", PropertyType.BOOLEAN, lhlv[0]);
+			lhlvProp[1] = new Property("Vertical", PropertyType.BOOLEAN, lhlv[1]);
 			plist.add(new Property("Expansion", PropertyType.PROPERTY,
 					PropertyArity.ARRAY, lhlvProp));
 		}

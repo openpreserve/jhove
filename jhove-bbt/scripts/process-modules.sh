@@ -88,7 +88,7 @@ showHelp() {
 
 # Cycle through the test module directories and invoke the correct JHOVE module
 getCorpusModules() {
-  DIRS=`ls -l "$paramModuleLoc" | egrep '^d' | awk '{print $9}'`
+  DIRS=$(ls -l "$paramModuleLoc" | grep -E '^d' | awk '{print $9}')
   for DIR in $DIRS ; do
 		moduleName=${DIR}
 		if [[ ! -e "$paramOutputRootDir/audit-$moduleName.jhove.xml" ]]
@@ -102,7 +102,7 @@ getCorpusModules() {
 processModuleDir() {
 	moduleDir=$1
 	while IFS= read -r -d '' FILE; do
-		fileName=$( basename $FILE )
+		fileName=$( basename "$FILE" )
 		if [[ ! $fileName == .gitignore ]]; then
 			echo "Testing ${FILE}"
 			bash "$SCRIPT_DIR/exec-with-to.sh" -t 300 "$paramJhoveLoc/jhove" -m "${moduleName}" -h xml -o "$paramOutputRootDir/$moduleName/$fileName.jhove.xml" -k "$FILE"

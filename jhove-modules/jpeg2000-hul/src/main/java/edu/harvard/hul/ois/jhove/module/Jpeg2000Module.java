@@ -6,12 +6,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -56,7 +56,7 @@ import edu.harvard.hul.ois.jhove.module.jpeg2000.TopLevelBoxHolder;
 
 /**
  * Module for identification and validation of JPEG 2000 files.
- * 
+ *
  * Code is included for JPX, but is almost entirely untested due to the lack of
  * available sample files that use more than a tiny fraction of the features.
  * The current version of the module is based on the typo-laden and inconsisent
@@ -64,7 +64,7 @@ import edu.harvard.hul.ois.jhove.module.jpeg2000.TopLevelBoxHolder;
  * standard (5 May 2004) has just reached our hands, and this code will be
  * reviewed against it and revised accordingly in the near future. (All opinions
  * expressed in this paragraph are those of the programmer.)
- * 
+ *
  * JPEG 2000 format is not JPEG format, and isn't compatible with it. As with
  * JPEG, JPEG 2000 is not in itself a file format. It can be encapsulated in JP2
  * or JPX format, which are recognized here.
@@ -85,7 +85,7 @@ public class Jpeg2000Module extends ModuleBase {
      * boxes to be hidden within its compressed or encrypted data. All this
      * makes the concept of "parent box" trickier than it is in unextended JP2,
      * since parenthood and containment are not necessarily the same thing.
-     * 
+     *
      * The way I've chosen deal with this rather chimerical design is to have a
      * RandomAccessFile for a base, but have each Box based on a
      * DataInputStream. Not every Box has its own separate stream -- that would
@@ -94,7 +94,7 @@ public class Jpeg2000Module extends ModuleBase {
      * TopLevelBoxHolder. The extension to multiple files isn't supported here,
      * since the job of Jhove is to validate individual files, but it wouldn't
      * be difficult to add.
-     * 
+     *
      * Every BoxHolder (hence every box) implements the Iterator interface, so
      * that a box can get its subboxes in a way which is blind to the details of
      * their encoding.
@@ -105,8 +105,8 @@ public class Jpeg2000Module extends ModuleBase {
      ******************************************************************/
 
     private static final String NAME = "JPEG2000-hul";
-    private static final String RELEASE = "1.4.0-RC";
-    private static final int[] DATE = { 2019, 03, 04 };
+    private static final String RELEASE = "1.4.1";
+    private static final int [] DATE = { 2019, 04, 17 };
     private static final String[] FORMAT = { "JPEG 2000", "JP2", "JPX" };
     private static final String COVERAGE = "JP2 (ISO/IEC 15444-1:2000/"
             + "ITU-T Rec. T.800 (200)), JPX (ISO/IEC 15444-2:2004)";
@@ -315,17 +315,17 @@ public class Jpeg2000Module extends ModuleBase {
     /**
      * Parse the content of a stream digital object and store the results in
      * RepInfo.
-     * 
+     *
      * This module is based on a RandomAccessFile because of the requirements of
      * the (so far) rarely used fragmented codestream feature. Since just about
      * everything else can be done with an InputStream, we use a RAFInputStream
      * except on the occasions when random access is needed. We pass the module
      * as the <code>counted</code> argment to all read calls, so that we can
      * compute relative positions in the stream based on _nByte.
-     * 
+     *
      * @param raf
      *            A RandomAccessFile to be parsed.
-     * 
+     *
      * @param info
      *            A fresh (on the first call) RepInfo object which will be
      *            modified to reflect the results of the parsing If multiple

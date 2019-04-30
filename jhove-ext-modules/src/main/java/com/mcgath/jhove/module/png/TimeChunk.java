@@ -26,10 +26,10 @@ public class TimeChunk extends PNGChunk {
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
 		if (length < 7) {
-			ErrorMessage msg = new ErrorMessage("tIME chunk is too short");
+			ErrorMessage msg = new ErrorMessage(MessageConstants.PNG_GDM_56);
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException ("Bad tIME chunk");
+			throw new PNGException (MessageConstants.PNG_GDM_57);
 		}
 		int year = readUnsignedShort();
 		int month = readUnsignedByte();
@@ -43,7 +43,7 @@ public class TimeChunk extends PNGChunk {
 				hour > 23 ||
 				minute > 59 ||
 				second > 60) {		// 60 can be valid with a leap second
-			ErrorMessage msg = new ErrorMessage ("Invalid date in tIME chunk");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_58);
 			info.setMessage(msg);
 			info.setValid(false);		// just call this invalid, not ill-formed
 			return;

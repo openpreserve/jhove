@@ -17,7 +17,6 @@ public class ItxtChunk extends GeneralTextChunk {
 	/** Process the data portion of the chunk. */
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
-		final String badchunk = "Bad iTXt chunk";
 		processChunkCommon(info);
 		
 		//iTXt chunks may have either compressed or uncompressed values.
@@ -58,10 +57,12 @@ public class ItxtChunk extends GeneralTextChunk {
 					compressionType = c;
 					if (compressionType != 0) {
 						ErrorMessage msg = 
-								new ErrorMessage ("Unknown compression type " + compressionType  + " in iTXt chunk");
+								new ErrorMessage(MessageConstants.PNG_GDM_29, 
+										String.format(MessageConstants.PNG_GDM_29_SUB.getMessage(),  
+												compressionType));
 						info.setMessage (msg);
 						info.setWellFormed (false);
-						throw new PNGException (badchunk);
+						throw new PNGException (MessageConstants.PNG_GDM_30);
 					}
 					state = 3;
 					sb = new StringBuilder();	// set up for language

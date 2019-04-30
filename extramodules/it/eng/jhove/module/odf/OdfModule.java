@@ -288,7 +288,7 @@ public class OdfModule extends ModuleBase implements Module {
 					subDoc.setConsistent(true);
 					repInfo.putEmbeddedRepInfo(subDocName, subDoc);
 				}
-				else if ( mnfe.mediaType.equals("") ||
+				else if ( "".equals(mnfe.mediaType) ||
 						  mnfe.mediaType.equals(SKIP_TYPE) ||
 						  mnfe.mediaType.startsWith(SKIP_APP)) {
 
