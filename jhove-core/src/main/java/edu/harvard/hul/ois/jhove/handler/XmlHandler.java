@@ -4457,19 +4457,23 @@ public class XmlHandler
 
     /** Appends a Rational value to a StringBuffer */
     public void rationalToString (StringBuffer buf, String tag, String margin,
-				  Rational r)
-    {
-	String margn2 = margin + " ";
+                                  Rational r) {
+        // If rational value is null append nothing rather than throw NullPointerException
+        if (r == null) {
+            return;
+        }
 
-	long numer = r.getNumerator ();
-	long denom = r.getDenominator ();
-	buf.append (margin + elementStart (tag) + EOL);
-	buf.append (margn2 + element ("mix:numerator", Long.toString (numer)) +
-		    EOL);
-	if (denom != 1L) {
-	    buf.append (margn2 + element ("mix:denominator",
-					  Long.toString (denom)) + EOL);
-	}
-	buf.append (margin + elementEnd (tag) + EOL);
+        String margn2 = margin + " ";
+
+        long numer = r.getNumerator ();
+        long denom = r.getDenominator ();
+        buf.append (margin + elementStart (tag) + EOL);
+        buf.append (margn2 + element ("mix:numerator", Long.toString (numer)) +
+                    EOL);
+        if (denom != 1L) {
+            buf.append (margn2 + element ("mix:denominator",
+                        Long.toString (denom)) + EOL);
+        }
+        buf.append (margin + elementEnd (tag) + EOL);
     }
 }
