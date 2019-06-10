@@ -13,6 +13,7 @@
 
   <properties>
     <jwat.version>1.0.3</jwat.version>
+    <epubcheck.version>4.2.1</epubcheck.version>
   </properties>
 
   <build>
@@ -74,6 +75,12 @@
       <groupId>org.jwat</groupId>
       <artifactId>jwat-warc</artifactId>
       <version>${jwat.version}</version>
+    </dependency>
+    <!-- EPUBCheck for EPUB -->
+    <dependency>
+      <groupId>org.w3c</groupId>
+      <artifactId>epubcheck</artifactId>
+      <version>${epubcheck.version}</version>
     </dependency>
   </dependencies>
 </project>
