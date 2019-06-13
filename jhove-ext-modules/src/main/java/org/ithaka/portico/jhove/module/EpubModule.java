@@ -53,19 +53,10 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
  */
 public class EpubModule extends ModuleBase {
 
-    // Module agent information
-    public static final String PORTICOVENDORNAME = "Portico";
-    public static final AgentType PORTICOAGENTTYPE = AgentType.EDUCATIONAL;
-    public static final String PORTICOAGENTADDRESS = "Portico Electronic-Archiving Initiative, "
-            + "100 Campus Drive, Suite 100, " + "Princeton, NJ 08540";
-    public static final String PORTICOAGENTTELEPHONE = "+1 (609) 986-2222";
-    public static final String PORTICOAGENTEMAIL = "portico-jhove@portico.org";
-    public static final String RIGHTS = "Copyright 2019 by Portico. Released under "
-            + "the GNU Lesser General Public License.";
-
     private static final String NAME = "EPUB-ptc";
     private static final String RELEASE = "1.0";
     private static final int[] DATE = {2019, 5, 15};
+    private static final String RIGHTS_YEAR = "2019";
     private static final String[] FORMAT = {"EPUB"};
     private static final String COVERAGE = "EPUB";
     private static final String[] MIMETYPE = {"application/epub+zip"};
@@ -78,7 +69,7 @@ public class EpubModule extends ModuleBase {
     private static final String EPUB_AGENTNAME = "International Digital Publishing Forum";
     private static final AgentType EPUB_AGENTTYPE = AgentType.STANDARD;
     private static final String EPUB_AGENTADDRESS = "International Digital Publishing Forum (IDPF), "
-            + "113 Cherry Street, Suite 70-719, " + "Seattle, WA 98104";
+            + "113 Cherry Street, Suite 70-719, Seattle, WA 98104";
     private static final String EPUB_AGENTWEBSITE = "http://idpf.org";
     private static final String EPUB_AGENTEMAIL = "membership@idpf.org";
     private static final String EPUB_AGENTPHONE = "+1-206-451-7250";
@@ -142,13 +133,13 @@ public class EpubModule extends ModuleBase {
      */
     public EpubModule() {
         super(NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
-                VALIDITY, REPINFO, NOTE, RIGHTS, false);
+                VALIDITY, REPINFO, NOTE, PorticoConstants.RIGHTS(RIGHTS_YEAR), false);
 
-        initializeInstance(PORTICOVENDORNAME,
-                PORTICOAGENTTYPE,
-                PORTICOAGENTADDRESS,
-                PORTICOAGENTTELEPHONE,
-                PORTICOAGENTEMAIL);
+        initializeInstance(PorticoConstants.PORTICOVENDORNAME, 
+                PorticoConstants.PORTICOAGENTTYPE,
+                PorticoConstants.PORTICOAGENTADDRESS, 
+                PorticoConstants.PORTICOAGENTTELEPHONE,
+                PorticoConstants.PORTICOAGENTEMAIL);
     }
 
     /**
@@ -200,12 +191,17 @@ public class EpubModule extends ModuleBase {
             String agentEmail) {
 
         Agent agent = new Builder(agentName, agentType)
-                .address(agentAddress).telephone(agentTelephone).email(agentEmail).build();
+                .address(agentAddress)
+                .telephone(agentTelephone)
+                .email(agentEmail).build();
         _vendor = agent;
 
 
         Agent formatDocAgent = new Builder(EPUB_AGENTNAME, EPUB_AGENTTYPE)
-                .address(EPUB_AGENTADDRESS).telephone(EPUB_AGENTPHONE).web(EPUB_AGENTWEBSITE).email(EPUB_AGENTEMAIL)
+                .address(EPUB_AGENTADDRESS)
+                .telephone(EPUB_AGENTPHONE)
+                .web(EPUB_AGENTWEBSITE)
+                .email(EPUB_AGENTEMAIL)
                 .build();
 
         Document doc = new Document(EPUB_FORMATDOCTITLE, DocumentType.STANDARD);
