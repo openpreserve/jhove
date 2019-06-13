@@ -591,7 +591,7 @@ public abstract class HandlerBase
      *   to entities as necessary and removing control characters disallowed
      *   by XML.  The null string will be converted to an empty string.
      */
-    private static String encodeContent (String content)
+    protected static String encodeContent (String content)
     {
         if (content == null) {
             content = "";
@@ -632,7 +632,7 @@ public abstract class HandlerBase
      *   converting quote characters to entities and removing control
      *   characters disallowed by XML.
      */
-    private static String encodeValue (String value)
+    protected static String encodeValue (String value)
     {
         StringBuffer buffer = new StringBuffer (value);
 

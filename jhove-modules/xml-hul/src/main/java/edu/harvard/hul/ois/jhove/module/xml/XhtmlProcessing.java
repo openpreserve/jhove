@@ -21,7 +21,7 @@ public final class XhtmlProcessing {
 
     /** Process an element and extract metadata */
     /** Process the element to extract any available metadata. */
-    protected static void processElement (String localName,
+    public static void processElement (String localName,
                 String qualifiedName,
                 Attributes atts,
                 HtmlMetadata mdata)

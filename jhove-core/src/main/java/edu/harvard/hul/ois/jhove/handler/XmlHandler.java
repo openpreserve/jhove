@@ -897,10 +897,15 @@ public class XmlHandler
     }
 
 
-    /** Checks if a property would produce an empty XML element, and
-     *  returns true if it would.
+    /**
+     * Checks if a property would produce an empty XML element, and returns true if
+     * it would.
+     * 
+     * @param property
+     * @param arity
+     * @return
      */
-    private boolean isPropertyEmpty (Property property, PropertyArity arity) {
+    public boolean isPropertyEmpty (Property property, PropertyArity arity) {
         try {
             if (arity.equals (PropertyArity.SET)) {
                 Set propSet = (Set) property.getValue ();
@@ -4406,10 +4411,14 @@ public class XmlHandler
 	}
     }
 
-    /* Clean up a URI string by escaping forbidden characters.
+    /**
+     * Clean up a URI string by escaping forbidden characters. 
      * We assume (perhaps dangerously) that a % is the start of
-     * an already escaped hexadecimal sequence. */
-    private String cleanURIString (String uri) {
+     * an already escaped hexadecimal sequence.
+     * @param uri
+     * @return
+     */
+    public String cleanURIString (String uri) {
         StringBuffer sb = new StringBuffer (uri.length() * 2);
         boolean change = false;
         for (int i = 0; i < uri.length (); i++) {

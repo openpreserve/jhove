@@ -92,7 +92,7 @@ public abstract class ModuleBase implements Module {
 	protected Checksummer _ckSummer;
 
 	/* Input stream wrapper which handles checksums */
-	private ChecksumInputStream _cstream;
+	protected ChecksumInputStream _cstream;
 
 	/* Data input stream wrapped around _cstream */
 	protected DataInputStream _dstream;
