@@ -626,7 +626,8 @@ public class EpubModuleTest {
         EpubModule em = new EpubModule();
         em.checkSignatures(epubFile, new FileInputStream(epubFile), info);
         assertEquals(expectedWellFormedValue, info.getWellFormed());
-        assertEquals(expectedWellFormedValue, info.getValid());
+        // valid should always be undetermined in sig match
+        assertEquals(RepInfo.UNDETERMINED, info.getValid());
         if (expectedWellFormedValue == RepInfo.TRUE) {
             List<String> sigmatch = info.getSigMatch();
             assertEquals("EPUB-ptc", sigmatch.get(0));

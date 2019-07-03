@@ -1,5 +1,6 @@
 package org.ithaka.portico.jhove.module;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -240,6 +241,13 @@ public class EpubModule extends ModuleBase {
         } else {
             _dstream = getBufferedDataStream(stream, 0);
         }
+    }
+
+    @Override
+    public void checkSignatures(File file, InputStream stream, RepInfo info) throws IOException {
+        super.checkSignatures(file, stream, info);
+        // validity is not determined in this signature check, set to undetermined.
+        info.setValid(RepInfo.UNDETERMINED);
     }
 
     /**
