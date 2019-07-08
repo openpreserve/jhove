@@ -1,5 +1,7 @@
 package org.ithaka.portico.jhove.module;
 
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,13 +56,16 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
  */
 public class EpubModule extends ModuleBase {
 
+    private static final String EPUB_MEDIATYPE = "application/epub+zip";
+    private static final String FORMATNAME = "EPUB";
+
     private static final String NAME = "EPUB-ptc";
     private static final String RELEASE = "1.0";
     private static final int[] DATE = {2019, 5, 15};
     private static final String RIGHTS_YEAR = "2019";
-    private static final String[] FORMAT = {"EPUB"};
-    private static final String COVERAGE = "EPUB";
-    private static final String[] MIMETYPE = {"application/epub+zip"};
+    private static final String[] FORMAT = { FORMATNAME };
+    private static final String COVERAGE = FORMATNAME;
+    private static final String[] MIMETYPE = { EPUB_MEDIATYPE };
     private static final String WELLFORMED = "";
     private static final String VALIDITY = "";
     private static final String REPINFO = "";
@@ -76,38 +81,19 @@ public class EpubModule extends ModuleBase {
     private static final String EPUB_AGENTPHONE = "+1-206-451-7250";
 
     //EPUB format doc information
-    private static final String EPUB_FORMATDOCTITLE = "EPUB";
+    private static final String EPUB_FORMATDOCTITLE = FORMATNAME;
     private static final String EPUB_FORMATDOCDATE = "2019-05-15";
     private static final String EPUB_FORMATDOCURL = "http://www.idpf.org/epub/dir/";
+
+    //Signatures
     private static final String EPUB_EXTENSION = ".epub";
-    private static final String EPUB_SIGN_0 = "PK";
-    private static final String EPUB_SIGN_30 = "mimetype";
-    private static final String EPUB_SIGN_38 = "application/epub+zip";
-
-
-    // EPUB property names
-    private static final String PROP_EPUB_METADATA = "EPUBMetadata";
-    private static final String PROP_EPUB_PAGECOUNT = "PageCount";
-    private static final String PROP_EPUB_CHARCOUNT = "CharacterCount";
-    private static final String PROP_EPUB_LANGUAGE = "Language";
-    private static final String PROP_EPUB_INFO = "Info";
-    private static final String PROP_EPUB_IDENTIFIER = "Identifier";
-    private static final String PROP_EPUB_TITLE = "Title";
-    private static final String PROP_EPUB_CREATOR = "Creator";
-    private static final String PROP_EPUB_CONTRIBUTOR = "Contributor";
-    private static final String PROP_EPUB_DATE = "Date";
-    private static final String PROP_EPUB_PUBLISHER = "Publisher";
-    private static final String PROP_EPUB_SUBJECTS = "Subject";
-    private static final String PROP_EPUB_RIGHTS = "Rights";
-    private static final String PROP_EPUB_FONTS = "Fonts";
-    private static final String PROP_EPUB_FONT = "Font";
-    private static final String PROP_EPUB_FONTNAME = "FontName";
-    private static final String PROP_EPUB_FONTFILE = "FontFile";
-    private static final String PROP_EPUB_REFERENCES = "References";
-    private static final String PROP_EPUB_LOCALRESOURCES = "LocalResources";
-    private static final String PROP_EPUB_REMOTERESOURCES = "RemoteResources";
-    private static final String PROP_EPUB_MEDIATYPES = "MediaTypes";
-
+    private static final int FIRST_SIG_POSITION = 0;
+    private static final String FIRST_SIG_VALUE = "PK";
+    private static final int SECOND_SIG_POSITION = 30;
+    private static final String SECOND_SIG_VALUE = "mimetype";
+    private static final int THIRD_SIG_POSITION = 38;
+    private static final String THIRD_SIG_VALUE = EPUB_MEDIATYPE;
+    
     /*
      * FATAL errors automatically set the status to not-well-formed. Non-fatal
      * "ERROR"s are more of a mixed bag. Some relate to e.g. XHTML or CSS validity
@@ -118,11 +104,11 @@ public class EpubModule extends ModuleBase {
      */
     public static final String[] NOTWELLFORMED_ERRCODES = new String[] { "PKG-" };
 
-    /* Top-level property list. */
-    private List<Property> _propList;
+    /* Top-level property list */
+    protected List<Property> _propList;
 
-    /* Top-level property. */
-    private Property _metadata;
+    /* Top-level metadata property */
+    protected Property _metadata;
 
     /**
      * ****************************************************************
@@ -134,13 +120,9 @@ public class EpubModule extends ModuleBase {
      */
     public EpubModule() {
         super(NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
-                VALIDITY, REPINFO, NOTE, PorticoConstants.RIGHTS(RIGHTS_YEAR), false);
+                VALIDITY, REPINFO, NOTE, PorticoConstants.porticoRightsStmt(RIGHTS_YEAR), false);
 
-        initializeInstance(PorticoConstants.PORTICOVENDORNAME, 
-                PorticoConstants.PORTICOAGENTTYPE,
-                PorticoConstants.PORTICOAGENTADDRESS, 
-                PorticoConstants.PORTICOAGENTTELEPHONE,
-                PorticoConstants.PORTICOAGENTEMAIL);
+        initializeInstance(PorticoConstants.porticoAgent());
     }
 
     /**
@@ -158,23 +140,16 @@ public class EpubModule extends ModuleBase {
      * @param note
      * @param rights
      * @param isRandomAccess
-     * @param agentName
-     * @param agentType
-     * @param agentAddress
-     * @param agentTelephone
-     * @param agentEmail
+     * @param moduleAgent
      */
     public EpubModule(String name, String release, int[] date,
             String[] format, String coverage,
             String[] mimetype, String wellformedNote,
             String validityNote, String repinfoNote, String note,
-            String rights, boolean isRandomAccess,
-            String agentName, AgentType agentType,
-            String agentAddress, String agentTelephone,
-            String agentEmail) {
+            String rights, boolean isRandomAccess, Agent moduleAgent) {
         super(name, release, date, format, coverage, mimetype, wellformedNote, validityNote, repinfoNote,
                 note, rights, isRandomAccess);
-        initializeInstance(agentName, agentType, agentAddress, agentTelephone, agentEmail);
+        initializeInstance(moduleAgent);
     }
 
     /**
@@ -187,16 +162,9 @@ public class EpubModule extends ModuleBase {
      * @param agentTelephone
      * @param agentEmail
      */
-    protected void initializeInstance(String agentName, AgentType agentType,
-            String agentAddress, String agentTelephone,
-            String agentEmail) {
+    protected void initializeInstance(Agent moduleAgent) {
 
-        Agent agent = new Builder(agentName, agentType)
-                .address(agentAddress)
-                .telephone(agentTelephone)
-                .email(agentEmail).build();
-        _vendor = agent;
-
+        _vendor = moduleAgent;
 
         Agent formatDocAgent = new Builder(EPUB_AGENTNAME, EPUB_AGENTTYPE)
                 .address(EPUB_AGENTADDRESS)
@@ -220,15 +188,15 @@ public class EpubModule extends ModuleBase {
         // and https://www.loc.gov/preservation/digital/formats/fdd/fdd000278.shtml#sign
 
         // this first one will also match other kinds of zip files
-        sig = new InternalSignature(EPUB_SIGN_0, SignatureType.MAGIC, SignatureUseType.MANDATORY, 0, "");
+        sig = new InternalSignature(FIRST_SIG_VALUE, SignatureType.MAGIC, SignatureUseType.MANDATORY, FIRST_SIG_POSITION, "");
         _signature.add(sig);
 
         // "mimetype" at 30
-        sig = new InternalSignature(EPUB_SIGN_30, SignatureType.MAGIC, SignatureUseType.MANDATORY, 30, "");
+        sig = new InternalSignature(SECOND_SIG_VALUE, SignatureType.MAGIC, SignatureUseType.MANDATORY, SECOND_SIG_POSITION, "");
         _signature.add(sig);
 
         // this will also match other kinds of zip files
-        sig = new InternalSignature(EPUB_SIGN_38, SignatureType.MAGIC, SignatureUseType.MANDATORY, 38, "");
+        sig = new InternalSignature(THIRD_SIG_VALUE, SignatureType.MAGIC, SignatureUseType.MANDATORY, THIRD_SIG_POSITION, "");
         _signature.add(sig);
 
     }
@@ -283,7 +251,7 @@ public class EpubModule extends ModuleBase {
         info.setValid(false);
 
         _propList = new LinkedList<>();
-        _metadata = new Property(PROP_EPUB_METADATA, PropertyType.PROPERTY, PropertyArity.LIST, _propList);
+        _metadata = new Property(PROPNAME_EPUB_METADATA, PropertyType.PROPERTY, PropertyArity.LIST, _propList);
 
         // loads stream to _dstream so it can be checksummed when flag enabled
         _ckSummer = null;
@@ -359,31 +327,31 @@ public class EpubModule extends ModuleBase {
     private Set<Property> generateProperties(JhoveRepInfoReport report) {
         Set<Property> properties = new HashSet<Property>();
 
-        properties.add(generateProperty(PROP_EPUB_PAGECOUNT, report.getPageCount(), true));
-        properties.add(generateProperty(PROP_EPUB_CHARCOUNT, report.getCharacterCount(), true));
-        properties.add(generateProperty(PROP_EPUB_LANGUAGE, report.getLanguage()));
+        properties.add(generateProperty(PROPNAME_PAGECOUNT, report.getPageCount(), true));
+        properties.add(generateProperty(PROPNAME_CHARCOUNT, report.getCharacterCount(), true));
+        properties.add(generateProperty(PROPNAME_LANGUAGE, report.getLanguage()));
 
         Set<Property> infoProperties = new HashSet<Property>();
-        infoProperties.add(generateProperty(PROP_EPUB_IDENTIFIER, report.getIdentifier()));
-        infoProperties.add(generateProperty(PROP_EPUB_TITLE, report.getTitles()));
-        infoProperties.add(generateProperty(PROP_EPUB_CREATOR, report.getCreators()));
-        infoProperties.add(generateProperty(PROP_EPUB_CONTRIBUTOR, report.getContributors()));
-        infoProperties.add(generateProperty(PROP_EPUB_DATE, report.getDate()));
-        infoProperties.add(generateProperty(PROP_EPUB_PUBLISHER, report.getPublisher()));
-        infoProperties.add(generateProperty(PROP_EPUB_SUBJECTS, report.getSubjects()));
-        infoProperties.add(generateProperty(PROP_EPUB_RIGHTS, report.getRights()));
+        infoProperties.add(generateProperty(PROPNAME_IDENTIFIER, report.getIdentifier()));
+        infoProperties.add(generateProperty(PROPNAME_TITLE, report.getTitles()));
+        infoProperties.add(generateProperty(PROPNAME_CREATOR, report.getCreators()));
+        infoProperties.add(generateProperty(PROPNAME_CONTRIBUTOR, report.getContributors()));
+        infoProperties.add(generateProperty(PROPNAME_DATE, report.getDate()));
+        infoProperties.add(generateProperty(PROPNAME_PUBLISHER, report.getPublisher()));
+        infoProperties.add(generateProperty(PROPNAME_SUBJECTS, report.getSubjects()));
+        infoProperties.add(generateProperty(PROPNAME_RIGHTS, report.getRights()));
         infoProperties.remove(null);
 
-        properties.add(generateProperty(PROP_EPUB_INFO, infoProperties));
+        properties.add(generateProperty(PROPNAME_INFO, infoProperties));
 
         Set<Property> fontList = generateFontProps(report.getEmbeddedFonts(), true);
         fontList.addAll(generateFontProps(report.getRefFonts(), false));
-        properties.add(generateProperty(PROP_EPUB_FONTS, fontList));
+        properties.add(generateProperty(PROPNAME_FONTS, fontList));
 
-        properties.add(generateProperty(PROP_EPUB_REFERENCES, report.getReferences()));
-        properties.add(generateProperty(PROP_EPUB_LOCALRESOURCES, report.getLocalResources()));
-        properties.add(generateProperty(PROP_EPUB_REMOTERESOURCES, report.getRemoteResources()));
-        properties.add(generateProperty(PROP_EPUB_MEDIATYPES, report.getMediaTypes()));
+        properties.add(generateProperty(PROPNAME_REFERENCES, report.getReferences()));
+        properties.add(generateProperty(PROPNAME_LOCALRESOURCES, report.getLocalResources()));
+        properties.add(generateProperty(PROPNAME_REMOTERESOURCES, report.getRemoteResources()));
+        properties.add(generateProperty(PROPNAME_MEDIATYPES, report.getMediaTypes()));
 
         for (String feature : report.getFeatures()) {
             properties.add(generateProperty(feature, true));
@@ -429,10 +397,10 @@ public class EpubModule extends ModuleBase {
         if (fonts != null && fonts.size() > 0) {
             for (String font : fonts) {
                 Set<Property> fontProps = new HashSet<Property>();
-                fontProps.add(generateProperty(PROP_EPUB_FONTNAME, font));
-                fontProps.add(generateProperty(PROP_EPUB_FONTFILE, fontFile));
+                fontProps.add(generateProperty(PROPNAME_FONTNAME, font));
+                fontProps.add(generateProperty(PROPNAME_FONTFILE, fontFile));
 
-                fontPropertiesList.add(generateProperty(PROP_EPUB_FONT, fontProps));
+                fontPropertiesList.add(generateProperty(PROPNAME_FONT, fontProps));
             }
         }
         fontPropertiesList.remove(null);
@@ -555,11 +523,13 @@ public class EpubModule extends ModuleBase {
      * @return A JHOVE {@link Message}
      */
     private Message toJhoveMessage(String msgId, String messageText, Severity severity, EPUBLocation location) {
+        final String divider = ", ";
+
         String severityText = severity.toString();
         if (severity.equals(Severity.WARNING)) {
             severityText = "WARN";
         }
-        String msgText = msgId + ", " + severityText + ", [" + messageText + "]";
+        String msgText = msgId + divider + severityText + divider + "[" + messageText + "]";
 
         // append location if there is one
         if (location != null) {
@@ -567,7 +537,7 @@ public class EpubModule extends ModuleBase {
             if (location.getLine() > 0 || location.getColumn() > 0) {
                 loc = " (" + location.getLine() + "-" + location.getColumn() + ")";
             }
-            msgText = msgText + ", " + PathUtil.removeWorkingDirectory(location.getPath()) + loc;
+            msgText = msgText + divider + PathUtil.removeWorkingDirectory(location.getPath()) + loc;
         }
 
         JhoveMessage msg = JhoveMessages.getMessageInstance(msgId, msgText);

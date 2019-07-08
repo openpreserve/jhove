@@ -29,6 +29,8 @@ import com.adobe.epubcheck.util.FeatureEnum;
 @RunWith(JUnit4.class)
 public class JhoveRepInfoReportTest {
 
+    private static final String FAKE_EPUB_FILEPATH = "/fake/filepath.epub";
+
     private static final MessageId FATAL_MSG_ID_1 = MessageId.OPF_001;
     private static final String FATAL_MSG_1 = "Houston, we've had a problem here.";
     private static final String FATAL_MSG_SUGGEST_1 = "Close the hatch.";
@@ -57,8 +59,8 @@ public class JhoveRepInfoReportTest {
      */
     @Test
     public void setAndGetMessageTest() throws Exception {
-        JhoveRepInfoReport report = new JhoveRepInfoReport("/fake/filepath.epub");
-        report.message(fatalMsg_1(), messageLoc, messageArg);
+        JhoveRepInfoReport report = new JhoveRepInfoReport(FAKE_EPUB_FILEPATH);
+        report.message(fatalMsg1(), messageLoc, messageArg);
         List<CheckMessage> allMsgs = report.getAllMessages();
         assertEquals(1, allMsgs.size());
         CheckMessage fatalmsg = allMsgs.get(0);
@@ -80,8 +82,8 @@ public class JhoveRepInfoReportTest {
      */
     @Test
     public void setAndGet2DifferentMessagesTest() throws Exception {
-        JhoveRepInfoReport report = new JhoveRepInfoReport("/fake/filepath.epub");
-        report.message(fatalMsg_1(), messageLoc, messageArg);
+        JhoveRepInfoReport report = new JhoveRepInfoReport(FAKE_EPUB_FILEPATH);
+        report.message(fatalMsg1(), messageLoc, messageArg);
         report.message(warnMsg(), messageLoc, messageArg);
         List<CheckMessage> allMsgs = report.getAllMessages();
         assertEquals(2, allMsgs.size());
@@ -120,7 +122,7 @@ public class JhoveRepInfoReportTest {
      */
     @Test
     public void setAndGet2MessagesWithSameIdTest() throws Exception {
-        JhoveRepInfoReport report = new JhoveRepInfoReport("/fake/filepath.epub");
+        JhoveRepInfoReport report = new JhoveRepInfoReport(FAKE_EPUB_FILEPATH);
         report.message(errorMsg(), messageLoc, messageArg);
         report.message(errorMsg(), messageLoc2, messageArg);
         List<CheckMessage> allMsgs = report.getAllMessages();
@@ -147,16 +149,16 @@ public class JhoveRepInfoReportTest {
      */
     @Test
     public void setAndGetMultipleMessagesTest() throws Exception {
-        JhoveRepInfoReport report = new JhoveRepInfoReport("/fake/filepath.epub");
-        report.message(fatalMsg_1(), messageLoc, messageArg);
-        report.message(fatalMsg_2(), messageLoc, messageArg);
-        report.message(fatalMsg_2(), messageLoc2, messageArg);
+        JhoveRepInfoReport report = new JhoveRepInfoReport(FAKE_EPUB_FILEPATH);
+        report.message(fatalMsg1(), messageLoc, messageArg);
+        report.message(fatalMsg2(), messageLoc, messageArg);
+        report.message(fatalMsg2(), messageLoc2, messageArg);
         report.message(errorMsg(), messageLoc, messageArg);
         report.message(warnMsg(), messageLoc, messageArg);
         //added 5 messages, but two are the same message id, so there should be 4 total
         List<CheckMessage> allMsgs = report.getAllMessages();
-        assertEquals(4, allMsgs.size());
-
+        final int expectedMessagesSize = 4;
+        assertEquals(expectedMessagesSize, allMsgs.size());
         assertEquals(2, report.getFatalErrorCount());
         assertEquals(1, report.getErrorCount());
         assertEquals(1, report.getWarningCount());
@@ -168,7 +170,7 @@ public class JhoveRepInfoReportTest {
      */
     @Test
     public void reportWithNoInfoTest() throws Exception {
-        JhoveRepInfoReport report = new JhoveRepInfoReport("/fake/filepath.epub");
+        JhoveRepInfoReport report = new JhoveRepInfoReport(FAKE_EPUB_FILEPATH);
         assertEquals(0, report.getAllMessages().size());
         assertEquals(0, report.getCharacterCount());
         assertArrayEquals(null, report.getContributors());
@@ -176,7 +178,7 @@ public class JhoveRepInfoReportTest {
         assertArrayEquals(null, report.getCreators());
         assertEquals(null, report.getDate());
         assertEquals(0, report.getEmbeddedFonts().size());
-        assertEquals("/fake/filepath.epub", report.getEpubFileName());
+        assertEquals(FAKE_EPUB_FILEPATH, report.getEpubFileName());
         assertEquals(0, report.getFatalErrorCount());
         assertEquals(0, report.getFeatures().size());
         assertEquals("application/octet-stream", report.getFormat());
@@ -215,7 +217,7 @@ public class JhoveRepInfoReportTest {
         final String reference2 = "https://example.com/referencepath2";
         final String reference3 = "https://example.com/referencepath3";
 
-        JhoveRepInfoReport report = new JhoveRepInfoReport("/fake/filepath.epub");
+        JhoveRepInfoReport report = new JhoveRepInfoReport(FAKE_EPUB_FILEPATH);
 
         // references consist of both citation type references / links
         // but also any embedded remote resources that appear to be part of the epub.
@@ -235,17 +237,19 @@ public class JhoveRepInfoReportTest {
         report.info(null, FeatureEnum.RESOURCE, remoteResource2);
         report.info(null, FeatureEnum.RESOURCE, remoteResource3);
 
-
-        assertEquals(6, report.getReferences().length);
+        final int expectedNumReferences = 6;
+        assertEquals(expectedNumReferences, report.getReferences().length);
         String[] expectedReferences = new String[] { reference1, reference2, reference3, remoteResource1,
                 remoteResource2, remoteResource3 };
         assertTrue(arraysSame(expectedReferences, report.getReferences()));
 
-        assertEquals(4, report.getLocalResources().length);
+        final int expectedNumLocalResources = 4;
+        assertEquals(expectedNumLocalResources, report.getLocalResources().length);
         String[] expectedLocal = new String[] { localResource1, localResource2, localResource3, localResource4 };
         assertTrue(arraysSame(expectedLocal, report.getLocalResources()));
 
-        assertEquals(3, report.getRemoteResources().length);
+        final int expectedNumRemoteResources = 3;
+        assertEquals(expectedNumRemoteResources, report.getRemoteResources().length);
         String[] expectedRemote = new String[] { remoteResource1, remoteResource2, remoteResource3 };
         assertTrue(arraysSame(expectedRemote, report.getRemoteResources()));
     }
@@ -272,9 +276,9 @@ public class JhoveRepInfoReportTest {
         final String mimetype3 = "video/ogg";
         final String fontEmbedded = "Arial";
         final String fontReference = "Verdana";
-        final String resource1 = "EPUB/image.jpg";
-        final String resource2 = "EPUB/code.xhtml";
-        final String reference = "https://example.com/referencepath1";
+        final String resource1 = "EPUB/imageA.jpg";
+        final String resource2 = "EPUB/codeA.xhtml";
+        final String reference = "https://example.com/referencepath1A";
         final String language = "en-us";
         final String title = "A Very Good Book";
         final String creator1 = "J Lee";
@@ -286,8 +290,10 @@ public class JhoveRepInfoReportTest {
         final String rights = "CC0";
         final String sdate = "2018";
         final String identifier = "doi:10.0000/abcez123";
+        final String sTrue = "true";
 
-        JhoveRepInfoReport report = new JhoveRepInfoReport("/fake/filepath.epub");
+        JhoveRepInfoReport report = new JhoveRepInfoReport(FAKE_EPUB_FILEPATH);
+
 
         // populate all values
         report.info(null, FeatureEnum.CHARS_COUNT, charsCount);
@@ -309,10 +315,10 @@ public class JhoveRepInfoReportTest {
         report.info(null, FeatureEnum.FONT_REFERENCE, fontReference);
         report.info(null, FeatureEnum.FORMAT_NAME, formatName);
         report.info(null, FeatureEnum.FORMAT_VERSION, formatVersion);
-        report.info(null, FeatureEnum.HAS_ENCRYPTION, "true");
-        report.info(null, FeatureEnum.HAS_FIXED_LAYOUT, "true");
-        report.info(null, FeatureEnum.HAS_SCRIPTS, "true");
-        report.info(null, FeatureEnum.HAS_SIGNATURES, "true");
+        report.info(null, FeatureEnum.HAS_ENCRYPTION, sTrue);
+        report.info(null, FeatureEnum.HAS_FIXED_LAYOUT, sTrue);
+        report.info(null, FeatureEnum.HAS_SCRIPTS, sTrue);
+        report.info(null, FeatureEnum.HAS_SIGNATURES, sTrue);
         report.info(null, FeatureEnum.MODIFIED_DATE, modifiedDate);
         report.info(null, FeatureEnum.PAGES_COUNT, pagesCount);
         report.info(null, FeatureEnum.REFERENCE, reference);
@@ -320,7 +326,7 @@ public class JhoveRepInfoReportTest {
         report.info(null, FeatureEnum.RESOURCE, resource2);
         report.info(null, FeatureEnum.UNIQUE_IDENT, identifier);
 
-        assertEquals("/fake/filepath.epub", report.getEpubFileName());
+        assertEquals(FAKE_EPUB_FILEPATH, report.getEpubFileName());
         assertEquals(Long.parseLong(charsCount), report.getCharacterCount());
         assertEquals(dCreationDate, report.getCreationDate());
 
@@ -343,7 +349,8 @@ public class JhoveRepInfoReportTest {
         assertEquals(1, report.getTitles().length);
         assertEquals(title, report.getTitles()[0]);
 
-        assertEquals(3, report.getMediaTypes().length);
+        final int expectedNumMediaTypes = 3;
+        assertEquals(expectedNumMediaTypes, report.getMediaTypes().length);
         assertTrue(arraysSame(new String[] { mimetype1, mimetype2, mimetype3 }, report.getMediaTypes()));
 
         assertEquals(1, report.getEmbeddedFonts().size());
@@ -355,7 +362,8 @@ public class JhoveRepInfoReportTest {
         assertEquals(formatName, report.getFormat());
         assertEquals(formatVersion, report.getVersion());
 
-        assertEquals(6, report.getFeatures().size());
+        final int expectedNumFeatures = 6;
+        assertEquals(expectedNumFeatures, report.getFeatures().size());
         assertTrue(report.getFeatures().contains("hasEncryption"));
         assertTrue(report.getFeatures().contains("hasSignatures"));
         assertTrue(report.getFeatures().contains("hasAudio"));
@@ -383,11 +391,11 @@ public class JhoveRepInfoReportTest {
         assertEquals(0, report.getWarningCount());
     }
 
-    private static Message fatalMsg_1() {
+    private static Message fatalMsg1() {
         return new Message(FATAL_MSG_ID_1, Severity.FATAL, FATAL_MSG_1, FATAL_MSG_SUGGEST_1);
     }
 
-    private static Message fatalMsg_2() {
+    private static Message fatalMsg2() {
         return new Message(FATAL_MSG_ID_2, Severity.FATAL, FATAL_MSG_2, FATAL_MSG_SUGGEST_2);
     }
 

@@ -1,5 +1,7 @@
 package org.ithaka.portico.jhove.module.epub;
 
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.*;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,13 +66,6 @@ public class JhoveRepInfoReport extends MasterReport {
 
     protected static final String ISO_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     protected static final String FALLBACK_FORMAT = "application/octet-stream";
-
-    protected static final String FEATURE_HASENCRYPTION = "hasEncryption";
-    protected static final String FEATURE_HASSIGNATURES = "hasSignatures";
-    protected static final String FEATURE_HASAUDIO = "hasAudio";
-    protected static final String FEATURE_HASVIDEO = "hasVideo";
-    protected static final String FEATURE_HASFIXEDLAYOUT = "hasFixedLayout";
-    protected static final String FEATURE_HASSCRIPTS = "hasScripts";
 
     public JhoveRepInfoReport(String ePubName) {
         this.setEpubFileName(PathUtil.removeWorkingDirectory(ePubName));
@@ -483,5 +478,6 @@ public class JhoveRepInfoReport extends MasterReport {
 
     @Override
     public void initialize() {
+        // no initialization code required
     }
 }
