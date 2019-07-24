@@ -42,9 +42,15 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+            <argLine>-Xss1024k</argLine>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
-
   <dependencies>
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>
