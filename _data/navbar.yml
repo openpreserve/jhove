@@ -31,6 +31,8 @@
       subhref: "wave/"
     - subtitle: "XML"
       subhref: "xml/"
+    - subtitle: "EPUB"
+      subhref: "third-party/epub/"
     - subtitle: "MP3"
       subhref: "third-party/mp3/"
     - subtitle: "ZIP"
