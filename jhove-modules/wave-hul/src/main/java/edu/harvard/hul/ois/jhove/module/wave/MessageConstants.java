@@ -38,42 +38,36 @@ public enum MessageConstants {
 	public static final JhoveMessageFactory messageFactory = JhoveMessages
 			.getInstance("edu.harvard.hul.ois.jhove.module.wave.ErrorMessages");
 
-	public static final String SUB_MESS_TYPE = "Type = ";
-	public static final String SUB_MESS_BYTES_MISSING = "Bytes missing = ";
 	public static final String SUB_MESS_TRUNCATED_CHUNK = "Truncated chunk = ";
 
-	/**
-	 * Information messages
-	 */
-	public static final JhoveMessage WAVE_HUL_7 = messageFactory.getMessage("WAVE-HUL-7");
-	public static final JhoveMessage WAVE_HUL_10 = messageFactory.getMessage("WAVE-HUL-10");
-	public static final JhoveMessage WAVE_HUL_16 = messageFactory.getMessage("WAVE-HUL-16");
-	public static final JhoveMessage WAVE_HUL_17 = messageFactory.getMessage("WAVE-HUL-17");
-	public static final JhoveMessage WAVE_HUL_18 = messageFactory.getMessage("WAVE-HUL-18");
-	public static final JhoveMessage WAVE_HUL_19 = messageFactory.getMessage("WAVE-HUL-19");
-	public static final JhoveMessage WAVE_HUL_22 = messageFactory.getMessage("WAVE-HUL-22");
-	public static final JhoveMessage WAVE_HUL_26 = messageFactory.getMessage("WAVE-HUL-26");
-
-	/**
-	 * Error messages
-	 */
 	public static final JhoveMessage WAVE_HUL_1 = messageFactory.getMessage("WAVE-HUL-1");
 	public static final JhoveMessage WAVE_HUL_2 = messageFactory.getMessage("WAVE-HUL-2");
 	public static final JhoveMessage WAVE_HUL_3 = messageFactory.getMessage("WAVE-HUL-3");
+	public static final JhoveMessage WAVE_HUL_3_SUB = messageFactory.getMessage("WAVE-HUL-3-SUB");
 	public static final JhoveMessage WAVE_HUL_4 = messageFactory.getMessage("WAVE-HUL-4");
 	public static final JhoveMessage WAVE_HUL_5 = messageFactory.getMessage("WAVE-HUL-5");
 	public static final JhoveMessage WAVE_HUL_6 = messageFactory.getMessage("WAVE-HUL-6");
+	public static final JhoveMessage WAVE_HUL_7 = messageFactory.getMessage("WAVE-HUL-7");
 	public static final JhoveMessage WAVE_HUL_8 = messageFactory.getMessage("WAVE-HUL-8");
 	public static final JhoveMessage WAVE_HUL_9 = messageFactory.getMessage("WAVE-HUL-9");
+	public static final JhoveMessage WAVE_HUL_9_SUB = messageFactory.getMessage("WAVE-HUL-9-SUB");
+	public static final JhoveMessage WAVE_HUL_10 = messageFactory.getMessage("WAVE-HUL-10");
 	public static final JhoveMessage WAVE_HUL_11 = messageFactory.getMessage("WAVE-HUL-11");
 	public static final JhoveMessage WAVE_HUL_12 = messageFactory.getMessage("WAVE-HUL-12");
 	public static final JhoveMessage WAVE_HUL_13 = messageFactory.getMessage("WAVE-HUL-13");
 	public static final JhoveMessage WAVE_HUL_14 = messageFactory.getMessage("WAVE-HUL-14");
 	public static final JhoveMessage WAVE_HUL_15 = messageFactory.getMessage("WAVE-HUL-15");
+	public static final JhoveMessage WAVE_HUL_16 = messageFactory.getMessage("WAVE-HUL-16");
+	public static final JhoveMessage WAVE_HUL_17 = messageFactory.getMessage("WAVE-HUL-17");
+	public static final JhoveMessage WAVE_HUL_18 = messageFactory.getMessage("WAVE-HUL-18");
+	public static final JhoveMessage WAVE_HUL_19 = messageFactory.getMessage("WAVE-HUL-19");
 	public static final JhoveMessage WAVE_HUL_20 = messageFactory.getMessage("WAVE-HUL-20");
 	public static final JhoveMessage WAVE_HUL_21 = messageFactory.getMessage("WAVE-HUL-21");
+	public static final JhoveMessage WAVE_HUL_22 = messageFactory.getMessage("WAVE-HUL-22");
 	public static final JhoveMessage WAVE_HUL_23 = messageFactory.getMessage("WAVE-HUL-23");
 	public static final JhoveMessage WAVE_HUL_24 = messageFactory.getMessage("WAVE-HUL-24");
 	public static final JhoveMessage WAVE_HUL_25 = messageFactory.getMessage("WAVE-HUL-25");
+	public static final JhoveMessage WAVE_HUL_26 = messageFactory.getMessage("WAVE-HUL-26");
+	public static final JhoveMessage WAVE_HUL_26_SUB = messageFactory.getMessage("WAVE-HUL-26-SUB");
 	public static final JhoveMessage WAVE_HUL_27 = messageFactory.getMessage("WAVE-HUL-27");
 }

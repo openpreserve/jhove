@@ -101,6 +101,9 @@ public class WaveModule extends ModuleBase {
     /** Length of chunk headers in bytes */
     private static final int CHUNK_HEADER_LENGTH = 8;
 
+    /** Length of chunk size fields in bytes */
+    private static final int CHUNK_SIZE_LENGTH = 4;
+
     /** Value indicating a required 64-bit data size lookup */
     public static final long LOOKUP_EXTENDED_DATA_SIZE = 0xFFFFFFFFL;
 
@@ -372,8 +375,9 @@ public class WaveModule extends ModuleBase {
 			String formType = read4Chars(_dstream);
 			bytesRemaining -= RIFF_FORM_TYPE_LENGTH;
 			if (!"WAVE".equals(formType)) {
-				info.setMessage(
-						new ErrorMessage(MessageConstants.WAVE_HUL_2, _nByte));
+				info.setMessage(new ErrorMessage(
+						MessageConstants.WAVE_HUL_2,
+						_nByte - RIFF_FORM_TYPE_LENGTH));
 				info.setWellFormed(false);
 				return 0;
 			}
@@ -403,7 +407,8 @@ public class WaveModule extends ModuleBase {
 					}
 				} else {
 					info.setMessage(new ErrorMessage(
-							MessageConstants.WAVE_HUL_23, _nByte));
+							MessageConstants.WAVE_HUL_23,
+							CHUNK_HEADER_LENGTH + RIFF_FORM_TYPE_LENGTH));
 					info.setWellFormed(false);
 					return 0;
 				}
@@ -414,10 +419,19 @@ public class WaveModule extends ModuleBase {
 					break;
 				}
 			}
+
+			if (bytesRemaining > 0) {
+				// The file has been truncated or there
+				// remains unexpected chunk data to skip
+				remainingDataInfo(_dstream, info, bytesRemaining,
+						firstFourChars);
+			}
+
 		} catch (EOFException eofe) {
 			info.setWellFormed(false);
-			String subMessage = MessageConstants.SUB_MESS_BYTES_MISSING
-					+ bytesRemaining;
+			String subMessage = String.format(
+					MessageConstants.WAVE_HUL_3_SUB.getMessage(),
+					bytesRemaining);
 			if (eofe.getMessage() != null) {
 				subMessage += "; " + eofe.getMessage();
 			}
@@ -427,8 +441,8 @@ public class WaveModule extends ModuleBase {
 			e.printStackTrace();
 			info.setWellFormed(false);
 			JhoveMessage message = JhoveMessages.getMessageInstance(
-					MessageConstants.WAVE_HUL_3.getId(),
-					String.format(MessageConstants.WAVE_HUL_3.getMessage(),
+					MessageConstants.WAVE_HUL_4.getId(),
+					String.format(MessageConstants.WAVE_HUL_4.getMessage(),
 							e.getClass().getName() + ", " + e.getMessage()));
 			info.setMessage(new ErrorMessage(message, _nByte));
 			return 0;
@@ -664,18 +678,18 @@ public class WaveModule extends ModuleBase {
 	@Override
 	protected void initParse() {
 		super.initParse();
-		_propList = new LinkedList<Property>();
-		_notes = new LinkedList<Property>();
-		_labels = new LinkedList<Property>();
-		_labeledText = new LinkedList<Property>();
-		_samples = new LinkedList<Property>();
+		_propList = new LinkedList<>();
+		_notes = new LinkedList<>();
+		_labels = new LinkedList<>();
+		_labeledText = new LinkedList<>();
+		_samples = new LinkedList<>();
 		firstSampleOffsetMarked = false;
 		waveCodec = -1;
 		sampleCount = 0;
 		bytesRemaining = 0;
 		extendedRiffSize = 0;
 		extendedSampleLength = 0;
-		extendedChunkSizes = new HashMap<String, Long>();
+		extendedChunkSizes = new HashMap<>();
 
 		_metadata = new Property("WAVEMetadata", PropertyType.PROPERTY,
 				PropertyArity.LIST, _propList);
@@ -715,14 +729,17 @@ public class WaveModule extends ModuleBase {
 
 		Chunk chunk = null;
 		ChunkHeader chunkh = new ChunkHeader(this, info);
+
+		long dataRead = _nByte;
 		if (!chunkh.readHeader(_dstream)) {
+			bytesRemaining -= _nByte - dataRead;
 			return false;
 		}
 
-		String chunkID = chunkh.getID();
+		String chunkId = chunkh.getID();
 		long chunkSize = chunkh.getSize();
 		if (hasExtendedDataSizes() && chunkSize == LOOKUP_EXTENDED_DATA_SIZE) {
-			Long extendedSize = extendedChunkSizes.get(chunkID);
+			Long extendedSize = extendedChunkSizes.get(chunkId);
 			if (extendedSize != null) {
 				chunkh.setSize(extendedSize);
 				chunkSize = extendedSize;
@@ -733,22 +750,23 @@ public class WaveModule extends ModuleBase {
 
 		// Check if the chunk size is greater than the RIFF's remaining length
 		if (Long.compareUnsigned(bytesRemaining, chunkSize) < 0) {
-			info.setMessage(
-					new ErrorMessage(MessageConstants.WAVE_HUL_6, _nByte));
+			info.setMessage(new ErrorMessage(
+					MessageConstants.WAVE_HUL_6, _nByte - CHUNK_SIZE_LENGTH));
 			info.setWellFormed(false);
 			return false;
 		}
 
-		if ("fmt ".equals(chunkID)) {
+		if ("fmt ".equals(chunkId)) {
 			if (formatChunkSeen) {
 				dupChunkError(info, "Format");
 			}
 			chunk = new FormatChunk(this, chunkh, _dstream);
 			formatChunkSeen = true;
-		} else if ("data".equals(chunkID)) {
+		} else if ("data".equals(chunkId)) {
 			if (!formatChunkSeen) {
-				info.setMessage(
-						new ErrorMessage(MessageConstants.WAVE_HUL_25, _nByte));
+				info.setMessage(new ErrorMessage(
+						MessageConstants.WAVE_HUL_25,
+						_nByte - CHUNK_HEADER_LENGTH));
 				info.setValid(false);
 			}
 			if (dataChunkSeen) {
@@ -756,68 +774,68 @@ public class WaveModule extends ModuleBase {
 			}
 			chunk = new DataChunk(this, chunkh, _dstream);
 			dataChunkSeen = true;
-		} else if ("ds64".equals(chunkID)) {
+		} else if ("ds64".equals(chunkId)) {
 			chunk = new DataSize64Chunk(this, chunkh, _dstream);
 			dataSize64ChunkSeen = true;
-		} else if ("fact".equals(chunkID)) {
+		} else if ("fact".equals(chunkId)) {
 			chunk = new FactChunk(this, chunkh, _dstream);
 			factChunkSeen = true;
 			// Are multiple 'fact' chunks allowed?
-		} else if ("note".equals(chunkID)) {
+		} else if ("note".equals(chunkId)) {
 			chunk = new NoteChunk(this, chunkh, _dstream);
 			// Multiple note chunks are allowed
-		} else if ("labl".equals(chunkID)) {
+		} else if ("labl".equals(chunkId)) {
 			chunk = new LabelChunk(this, chunkh, _dstream);
 			// Multiple label chunks are allowed
-		} else if ("list".equals(chunkID)) {
+		} else if ("list".equals(chunkId)) {
 			chunk = new AssocDataListChunk(this, chunkh, _dstream, info);
 			// Are multiple chunks allowed? Who knows?
-		} else if ("LIST".equals(chunkID)) {
+		} else if ("LIST".equals(chunkId)) {
 			chunk = new ListInfoChunk(this, chunkh, _dstream, info);
 			// Multiple list chunks must be OK, since there can
 			// be different types, e.g., an INFO list and an exif list.
-		} else if ("smpl".equals(chunkID)) {
+		} else if ("smpl".equals(chunkId)) {
 			chunk = new SampleChunk(this, chunkh, _dstream);
 			// Multiple sample chunks are allowed -- I think
-		} else if ("inst".equals(chunkID)) {
+		} else if ("inst".equals(chunkId)) {
 			if (instrumentChunkSeen) {
 				dupChunkError(info, "Instrument");
 			}
 			chunk = new InstrumentChunk(this, chunkh, _dstream);
 			// Only one instrument chunk is allowed
 			instrumentChunkSeen = true;
-		} else if ("mext".equals(chunkID)) {
+		} else if ("mext".equals(chunkId)) {
 			if (mpegChunkSeen) {
 				dupChunkError(info, "MPEG Audio Extension");
 			}
 			chunk = new MpegChunk(this, chunkh, _dstream);
 			// I think only one MPEG chunk is allowed
 			mpegChunkSeen = true;
-		} else if ("cart".equals(chunkID)) {
+		} else if ("cart".equals(chunkId)) {
 			if (cartChunkSeen) {
 				dupChunkError(info, "Cart");
 			}
 			chunk = new CartChunk(this, chunkh, _dstream);
 			cartChunkSeen = true;
-		} else if ("bext".equals(chunkID)) {
+		} else if ("bext".equals(chunkId)) {
 			if (broadcastExtChunkSeen) {
 				dupChunkError(info, "Broadcast Audio Extension");
 			}
 			chunk = new BroadcastExtChunk(this, chunkh, _dstream);
 			broadcastExtChunkSeen = true;
-		} else if ("levl".equals(chunkID)) {
+		} else if ("levl".equals(chunkId)) {
 			if (peakChunkSeen) {
 				dupChunkError(info, "Peak Envelope");
 			}
 			chunk = new PeakEnvelopeChunk(this, chunkh, _dstream);
 			peakChunkSeen = true;
-		} else if ("link".equals(chunkID)) {
+		} else if ("link".equals(chunkId)) {
 			if (linkChunkSeen) {
 				dupChunkError(info, "Link");
 			}
 			chunk = new LinkChunk(this, chunkh, _dstream);
 			linkChunkSeen = true;
-		} else if ("cue ".equals(chunkID)) {
+		} else if ("cue ".equals(chunkId)) {
 			if (cueChunkSeen) {
 				dupChunkError(info, "Cue Points");
 			}
@@ -827,11 +845,12 @@ public class WaveModule extends ModuleBase {
 			JhoveMessage message = JhoveMessages.getMessageInstance(
 					MessageConstants.WAVE_HUL_7.getId(),
 					String.format(MessageConstants.WAVE_HUL_7.getMessage(),
-							"\"" + chunkID + "\""));
-			info.setMessage(new InfoMessage(message, _nByte));
+							"\"" + chunkId + "\""));
+			info.setMessage(new InfoMessage(message,
+					_nByte - CHUNK_HEADER_LENGTH));
 		}
 
-		long dataRead = _nByte;
+		dataRead = _nByte;
 		if (chunk != null) {
 			if (!chunk.readChunk(info)) {
 				return false;
@@ -847,21 +866,7 @@ public class WaveModule extends ModuleBase {
 		if (dataRead < chunkSize) {
 			// The file has been truncated or there
 			// remains unexpected chunk data to skip
-			if (_dstream.available() > 0) {
-				// Pass over any remaining chunk data so that
-				// we align with the start of any subsequent chunk
-				JhoveMessage message = JhoveMessages.getMessageInstance(
-						MessageConstants.WAVE_HUL_26.getId(),
-						String.format(MessageConstants.WAVE_HUL_26.getMessage(),
-								"\"" + chunkID + "\""));
-				info.setMessage(new InfoMessage(message, _nByte));
-				bytesRemaining -= skipBytes(_dstream, chunkSize - dataRead,
-						this);
-			} else {
-				throw new EOFException(
-						MessageConstants.SUB_MESS_TRUNCATED_CHUNK
-								+ "\"" + chunkID + "\"");
-			}
+			remainingDataInfo(_dstream, info, chunkSize - dataRead, chunkId);
 		}
 
 		if ((chunkSize & 1) != 0) {
@@ -870,6 +875,46 @@ public class WaveModule extends ModuleBase {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Reports and passes over any data still remaining following an attempt
+	 * at reading a chunk. This ensures we align with the start of any
+	 * subsequent chunk.
+	 */
+	private void remainingDataInfo(DataInputStream stream, RepInfo info,
+								   long bytesToProcess, String chunkId)
+			throws IOException {
+
+		if (stream.available() > 0) {
+
+			boolean nullData = true;
+			long bytesProcessed = 0;
+
+			// Check for non-null data
+			while (nullData && bytesProcessed < bytesToProcess) {
+				int b = readUnsignedByte(stream, this);
+				if (b != 0) nullData = false;
+				this.bytesRemaining--;
+				bytesProcessed++;
+			}
+
+			// Skip any remaining data
+			bytesProcessed += skipBytes(stream,
+					bytesToProcess - bytesProcessed, this);
+			this.bytesRemaining -= bytesProcessed;
+
+			info.setMessage(new InfoMessage(
+					MessageConstants.WAVE_HUL_26,
+					String.format(MessageConstants.WAVE_HUL_26_SUB.getMessage(),
+					"\"" + chunkId + "\"", bytesProcessed, nullData),
+					_nByte - bytesProcessed));
+
+		} else {
+			throw new EOFException(
+					MessageConstants.SUB_MESS_TRUNCATED_CHUNK
+							+ "\"" + chunkId + "\"");
+		}
 	}
 
 	/** Returns the module's AES metadata. */
@@ -882,7 +927,8 @@ public class WaveModule extends ModuleBase {
 		JhoveMessage message = JhoveMessages.getMessageInstance(
 				MessageConstants.WAVE_HUL_8.getId(), String.format(
 						MessageConstants.WAVE_HUL_8.getMessage(), chunkName));
-		info.setMessage(new ErrorMessage(message, _nByte));
+		info.setMessage(new ErrorMessage(
+				message, _nByte - CHUNK_HEADER_LENGTH));
 		info.setValid(false);
 	}
 
@@ -904,7 +950,7 @@ public class WaveModule extends ModuleBase {
 		if (_je != null && _je.getShowRawFlag()) {
 			return new Property(name, PropertyType.INTEGER, val);
 		}
-		List<String> slist = new LinkedList<String>();
+		List<String> slist = new LinkedList<>();
 		try {
 			for (int i = 0; i < oneValueNames.length; i++) {
 				String s;
