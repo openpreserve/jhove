@@ -134,11 +134,8 @@ public class WaveModule extends ModuleBase {
 	/** AES audio metadata to go into WAVE metadata */
 	protected AESAudioMetadata _aesMetadata;
 
-	/**
-	 * Bytes of the RIFF chunk remaining to be read.
-	 * Value should be treated as unsigned.
-	 */
-	protected long bytesRemaining;
+	/** RIFF size as found in the RIFF chunk header. */
+	protected long riffSize;
 
 	/** Bytes needed to store a file */
 	protected int _blockAlign;
@@ -368,12 +365,10 @@ public class WaveModule extends ModuleBase {
 			// Get the length of the Form chunk. This includes all
 			// subsequent form fields and form subchunks, but excludes
 			// the form chunk's header (its ID and the its length).
-			long riffSize = readUnsignedInt(_dstream);
-			bytesRemaining = riffSize;
+			riffSize = readUnsignedInt(_dstream);
 
 			// Read the RIFF form type
 			String formType = read4Chars(_dstream);
-			bytesRemaining -= RIFF_FORM_TYPE_LENGTH;
 			if (!"WAVE".equals(formType)) {
 				info.setMessage(new ErrorMessage(
 						MessageConstants.WAVE_HUL_2,
@@ -401,9 +396,6 @@ public class WaveModule extends ModuleBase {
 							info.setWellFormed(RepInfo.UNDETERMINED);
 							return 0;
 						}
-						// Adjust the byte count with the new RIFF size
-						long bytesRead = riffSize - bytesRemaining;
-						bytesRemaining = extendedRiffSize - bytesRead;
 					}
 				} else {
 					info.setMessage(new ErrorMessage(
@@ -414,16 +406,16 @@ public class WaveModule extends ModuleBase {
 				}
 			}
 
-			while (bytesRemaining > 0) {
+			while (getBytesRemaining() > 0) {
 				if (!readChunk(info)) {
 					break;
 				}
 			}
 
-			if (bytesRemaining > 0) {
+			if (getBytesRemaining() > 0) {
 				// The file has been truncated or there
 				// remains unexpected chunk data to skip
-				remainingDataInfo(_dstream, info, bytesRemaining,
+				remainingDataInfo(_dstream, info, getBytesRemaining(),
 						firstFourChars);
 			}
 
@@ -431,7 +423,7 @@ public class WaveModule extends ModuleBase {
 			info.setWellFormed(false);
 			String subMessage = String.format(
 					MessageConstants.WAVE_HUL_3_SUB.getMessage(),
-					bytesRemaining);
+					getBytesRemaining());
 			if (eofe.getMessage() != null) {
 				subMessage += "; " + eofe.getMessage();
 			}
@@ -686,7 +678,7 @@ public class WaveModule extends ModuleBase {
 		firstSampleOffsetMarked = false;
 		waveCodec = -1;
 		sampleCount = 0;
-		bytesRemaining = 0;
+		riffSize = 0;
 		extendedRiffSize = 0;
 		extendedSampleLength = 0;
 		extendedChunkSizes = new HashMap<>();
@@ -729,10 +721,7 @@ public class WaveModule extends ModuleBase {
 
 		Chunk chunk = null;
 		ChunkHeader chunkh = new ChunkHeader(this, info);
-
-		long dataRead = _nByte;
 		if (!chunkh.readHeader(_dstream)) {
-			bytesRemaining -= _nByte - dataRead;
 			return false;
 		}
 
@@ -746,10 +735,8 @@ public class WaveModule extends ModuleBase {
 			}
 		}
 
-		bytesRemaining -= CHUNK_HEADER_LENGTH;
-
 		// Check if the chunk size is greater than the RIFF's remaining length
-		if (Long.compareUnsigned(bytesRemaining, chunkSize) < 0) {
+		if (Long.compareUnsigned(getBytesRemaining(), chunkSize) < 0) {
 			info.setMessage(new ErrorMessage(
 					MessageConstants.WAVE_HUL_6, _nByte - CHUNK_SIZE_LENGTH));
 			info.setWellFormed(false);
@@ -850,7 +837,7 @@ public class WaveModule extends ModuleBase {
 					_nByte - CHUNK_HEADER_LENGTH));
 		}
 
-		dataRead = _nByte;
+		long dataRead = _nByte;
 		if (chunk != null) {
 			if (!chunk.readChunk(info)) {
 				return false;
@@ -861,8 +848,6 @@ public class WaveModule extends ModuleBase {
 		}
 		dataRead = _nByte - dataRead;
 
-		bytesRemaining -= dataRead;
-
 		if (dataRead < chunkSize) {
 			// The file has been truncated or there
 			// remains unexpected chunk data to skip
@@ -871,7 +856,7 @@ public class WaveModule extends ModuleBase {
 
 		if ((chunkSize & 1) != 0) {
 			// Must come out to an even byte boundary
-			bytesRemaining -= skipBytes(_dstream, 1, this);
+			skipBytes(_dstream, 1, this);
 		}
 
 		return true;
@@ -895,14 +880,12 @@ public class WaveModule extends ModuleBase {
 			while (nullData && bytesProcessed < bytesToProcess) {
 				int b = readUnsignedByte(stream, this);
 				if (b != 0) nullData = false;
-				this.bytesRemaining--;
 				bytesProcessed++;
 			}
 
 			// Skip any remaining data
 			bytesProcessed += skipBytes(stream,
 					bytesToProcess - bytesProcessed, this);
-			this.bytesRemaining -= bytesProcessed;
 
 			info.setMessage(new InfoMessage(
 					MessageConstants.WAVE_HUL_26,
@@ -915,6 +898,20 @@ public class WaveModule extends ModuleBase {
 					MessageConstants.SUB_MESS_TRUNCATED_CHUNK
 							+ "\"" + chunkId + "\"");
 		}
+	}
+
+	/** Returns the number of RIFF bytes remaining to be read. */
+	private long getBytesRemaining() {
+
+		long totalBytes = CHUNK_HEADER_LENGTH;
+
+		if (hasExtendedDataSizes()) {
+			totalBytes += extendedRiffSize;
+		} else {
+			totalBytes += riffSize;
+		}
+
+		return totalBytes - _nByte;
 	}
 
 	/** Returns the module's AES metadata. */
