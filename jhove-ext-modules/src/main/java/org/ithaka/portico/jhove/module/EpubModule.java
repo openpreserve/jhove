@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -324,8 +326,8 @@ public class EpubModule extends ModuleBase {
      * @param report
      * @return
      */
-    private Set<Property> generateProperties(JhoveRepInfoReport report) {
-        Set<Property> properties = new HashSet<Property>();
+    private List<Property> generateProperties(JhoveRepInfoReport report) {
+        List<Property> properties = new ArrayList<Property>();
 
         properties.add(generateProperty(PROPNAME_PAGECOUNT, report.getPageCount(), true));
         properties.add(generateProperty(PROPNAME_CHARCOUNT, report.getCharacterCount(), true));
@@ -357,7 +359,7 @@ public class EpubModule extends ModuleBase {
             properties.add(generateProperty(feature, true));
         }
 
-        properties.remove(null);
+        properties.removeAll(Collections.singletonList(null));
 
         return properties;
     }
