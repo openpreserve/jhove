@@ -9,7 +9,6 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -73,7 +72,8 @@ public class EpubModuleTest {
     private static final String EPUB2_MISSING_OPF_FILEPATH = "src/test/resources/epub/epub2-no-opf-minimal.epub";
     private static final String EPUB3_FIXED_LAYOUT_FILEPATH = "src/test/resources/epub/epub3-valid-fixedlayout-page-blanche.epub";
     private static final String EPUB2_ENCRYPTION = "src/test/resources/epub/epub2-valid-minimal-encryption.epub";
-    
+    private static final String EPUB3_TITLE_ENCODING = "src/test/resources/epub/epub3-multiple-renditions.epub";
+
     private static final String EXPECTED_MEDIATYPE = "application/epub+zip";
     private static final String EXPECTED_VERSION_3_2 = "3.2";
     private static final String PNG_MIMETYPE = "image/png";
@@ -640,7 +640,6 @@ public class EpubModuleTest {
      * source:
      * https://github.com/KBNLresearch/epubPolicyTests/tree/master/content/epub20_minimal_encryption
      *
-     * @throws IOException
      * @throws Exception
      */
     @Test
@@ -648,6 +647,30 @@ public class EpubModuleTest {
         File epubFile = new File(EPUB2_ENCRYPTION);
         assertTrue(checkSignatureMatch(epubFile, RepInfo.TRUE));
     }
+
+    /**
+     * EPUB file has title sensitive to incorrect encoding. This tests parses and
+     * confirms title is properly encoded in output source:
+     * https://github.com/w3c/epubcheck/blob/master/src/test/resources/30/epub/valid/edupub-multiple-renditions.epub
+     *
+     * @throws Exception
+     */
+    @Test
+    public void parseEpub3TitleEncodingTest() throws Exception {
+        File epubFile = new File(EPUB3_TITLE_ENCODING);
+        String expectedTitle = "महाभारत";
+        // well formed and valid
+        RepInfo info = parseAndCheckValidity(epubFile, RepInfo.TRUE, RepInfo.TRUE);
+
+        Property metadata = info.getProperty(PROPNAME_EPUB_METADATA);
+        Map<String, Object> props = toMap(metadata);
+        Set<Property> infoPropsSet = (Set<Property>) props.get(PROPNAME_INFO);
+        Map<String, Object> infoProps = new HashMap<String, Object>();
+        infoPropsSet.forEach(p -> infoProps.put(p.getName(), p.getValue()));
+        String title = (String) infoProps.get(PROPNAME_TITLE);
+        assertEquals(expectedTitle, title);
+    }
+
 
     /**
      * Passes file to checkSignatures(), checks wellformed, valid, and sigmatch
