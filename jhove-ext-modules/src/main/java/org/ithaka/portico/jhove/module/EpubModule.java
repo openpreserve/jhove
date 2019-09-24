@@ -1,6 +1,26 @@
 package org.ithaka.portico.jhove.module;
 
-import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.*;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_CHARCOUNT;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_CONTRIBUTOR;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_CREATOR;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_DATE;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_EPUB_METADATA;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_FONT;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_FONTFILE;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_FONTNAME;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_FONTS;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_IDENTIFIER;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_INFO;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_LANGUAGE;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_LOCALRESOURCES;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_MEDIATYPES;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_PAGECOUNT;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_PUBLISHER;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_REFERENCES;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_REMOTERESOURCES;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_RIGHTS;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_SUBJECTS;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_TITLE;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,10 +29,11 @@ import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.ithaka.portico.jhove.module.epub.JhoveRepInfoReport;
@@ -95,7 +116,7 @@ public class EpubModule extends ModuleBase {
     private static final String SECOND_SIG_VALUE = "mimetype";
     private static final int THIRD_SIG_POSITION = 38;
     private static final String THIRD_SIG_VALUE = EPUB_MEDIATYPE;
-    
+
     /*
      * FATAL errors automatically set the status to not-well-formed. Non-fatal
      * "ERROR"s are more of a mixed bag. Some relate to e.g. XHTML or CSS validity
@@ -279,7 +300,7 @@ public class EpubModule extends ModuleBase {
             info.setWellFormed(report.getFatalErrorCount() == 0 && notWellFormedErrors == 0);
             info.setValid(info.getWellFormed() == RepInfo.TRUE && report.getErrorCount() == 0);
 
-            Set<Message> msgs = new HashSet<Message>();
+            Set<Message> msgs = new TreeSet<Message>(new MessageComparator());
             for (CheckMessage msg : report.getAllMessages()) {
                 msgs.addAll(toJhoveMessages(msg));
             }
@@ -333,16 +354,15 @@ public class EpubModule extends ModuleBase {
         properties.add(generateProperty(PROPNAME_CHARCOUNT, report.getCharacterCount(), true));
         properties.add(generateProperty(PROPNAME_LANGUAGE, report.getLanguage()));
 
-        Set<Property> infoProperties = new HashSet<Property>();
-        infoProperties.add(generateProperty(PROPNAME_IDENTIFIER, report.getIdentifier()));
-        infoProperties.add(generateProperty(PROPNAME_TITLE, report.getTitles()));
-        infoProperties.add(generateProperty(PROPNAME_CREATOR, report.getCreators()));
-        infoProperties.add(generateProperty(PROPNAME_CONTRIBUTOR, report.getContributors()));
-        infoProperties.add(generateProperty(PROPNAME_DATE, report.getDate()));
-        infoProperties.add(generateProperty(PROPNAME_PUBLISHER, report.getPublisher()));
-        infoProperties.add(generateProperty(PROPNAME_SUBJECTS, report.getSubjects()));
-        infoProperties.add(generateProperty(PROPNAME_RIGHTS, report.getRights()));
-        infoProperties.remove(null);
+        Set<Property> infoProperties = new TreeSet<Property>(new PropertyComparator());
+        addProperty(infoProperties, generateProperty(PROPNAME_IDENTIFIER, report.getIdentifier()));
+        addProperty(infoProperties, generateProperty(PROPNAME_TITLE, report.getTitles()));
+        addProperty(infoProperties, generateProperty(PROPNAME_CREATOR, report.getCreators()));
+        addProperty(infoProperties, generateProperty(PROPNAME_CONTRIBUTOR, report.getContributors()));
+        addProperty(infoProperties, generateProperty(PROPNAME_DATE, report.getDate()));
+        addProperty(infoProperties, generateProperty(PROPNAME_PUBLISHER, report.getPublisher()));
+        addProperty(infoProperties, generateProperty(PROPNAME_SUBJECTS, report.getSubjects()));
+        addProperty(infoProperties, generateProperty(PROPNAME_RIGHTS, report.getRights()));
 
         properties.add(generateProperty(PROPNAME_INFO, infoProperties));
 
@@ -362,6 +382,13 @@ public class EpubModule extends ModuleBase {
         properties.removeAll(Collections.singletonList(null));
 
         return properties;
+    }
+
+    private static void addProperty(Set<Property> props, Property prop) {
+      if (prop == null) {
+		    return;
+	    }
+      props.add(prop);
     }
 
     /**
@@ -394,22 +421,22 @@ public class EpubModule extends ModuleBase {
      */
     private Set<Property> generateFontProps(Set<String> fonts, boolean fontFile) {
 
-        Set<Property> fontPropertiesList = new HashSet<Property>();
+        Set<Property> fontPropertiesList = new TreeSet<Property>(new PropertyComparator());
 
         if (fonts != null && fonts.size() > 0) {
             for (String font : fonts) {
-                Set<Property> fontProps = new HashSet<Property>();
-                fontProps.add(generateProperty(PROPNAME_FONTNAME, font));
-                fontProps.add(generateProperty(PROPNAME_FONTFILE, fontFile));
+                Set<Property> fontProps = new TreeSet<Property>(new PropertyComparator());
+                addProperty(fontProps, generateProperty(PROPNAME_FONTNAME, font));
+                addProperty(fontProps, generateProperty(PROPNAME_FONTFILE, fontFile));
 
                 fontPropertiesList.add(generateProperty(PROPNAME_FONT, fontProps));
             }
         }
-        fontPropertiesList.remove(null);
-
         return fontPropertiesList;
 
     }
+
+
 
     /**
      * Generate a JHOVE String {@link Property}
@@ -493,7 +520,7 @@ public class EpubModule extends ModuleBase {
      * @return A JHOVE Message
      */
     private Set<Message> toJhoveMessages(CheckMessage msg) {
-        Set<Message> msgs = new HashSet<Message>();
+        Set<Message> msgs = new TreeSet<Message>(new MessageComparator());
         if (msg == null) {
             return msgs;
         }
@@ -503,13 +530,19 @@ public class EpubModule extends ModuleBase {
 
         if (msg.getLocations().size() > 0) {
             for (EPUBLocation location : msg.getLocations()) {
-                msgs.add(toJhoveMessage(msgId, msgText, severity, location));
+                addJhoveMessage(msgs, toJhoveMessage(msgId, msgText, severity, location));
             }
         } else {
-            msgs.add(toJhoveMessage(msgId, msgText, severity, null));
+          addJhoveMessage(msgs, toJhoveMessage(msgId, msgText, severity, null));
         }
-        msgs.remove(null);
         return msgs;
+    }
+
+    private static void addJhoveMessage(Set<Message> msgs, Message msg) {
+        if (msg == null) {
+          return;
+        }
+        msgs.add(msg);
     }
 
     /**
@@ -566,4 +599,17 @@ public class EpubModule extends ModuleBase {
         super.initParse();
     }
 
+    static class PropertyComparator implements Comparator<Property> {
+        public int compare(final Property firstProp, final Property secondProp) {
+            int compVal = firstProp.getName().compareTo(secondProp.getName());
+            return (compVal == 0) ? firstProp.getValue().toString().compareTo(secondProp.getValue().toString()) : compVal;
+        }
+    }
+
+    static class MessageComparator implements Comparator<Message> {
+      public int compare(final Message firstMess, final Message secondMess) {
+        int compVal = firstMess.getId().compareTo(secondMess.getId()) ;
+        return (compVal == 0) ? firstMess.getMessage().compareTo(secondMess.getMessage()) : compVal;
+      }
+    }
 }

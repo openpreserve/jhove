@@ -1,15 +1,19 @@
 package org.ithaka.portico.jhove.module.epub;
 
-import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.*;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.FEATURE_HASAUDIO;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.FEATURE_HASENCRYPTION;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.FEATURE_HASFIXEDLAYOUT;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.FEATURE_HASSCRIPTS;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.FEATURE_HASSIGNATURES;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.FEATURE_HASVIDEO;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.adobe.epubcheck.api.EPUBLocation;
 import com.adobe.epubcheck.api.MasterReport;
@@ -34,24 +38,24 @@ public class JhoveRepInfoReport extends MasterReport {
     protected String creationDate;
     protected String lastModifiedDate;
     protected String identifier;
-    protected Set<String> titles = new LinkedHashSet<String>();
-    protected Set<String> creators = new LinkedHashSet<String>();
-    protected Set<String> contributors = new LinkedHashSet<String>();
-    protected Set<String> subjects = new LinkedHashSet<String>();
+    protected Set<String> titles = new TreeSet<String>();
+    protected Set<String> creators = new TreeSet<String>();
+    protected Set<String> contributors = new TreeSet<String>();
+    protected Set<String> subjects = new TreeSet<String>();
     protected String publisher;
-    protected Set<String> rights = new LinkedHashSet<String>();
+    protected Set<String> rights = new TreeSet<String>();
     protected String date;
-    protected Set<String> mediaTypes = new LinkedHashSet<String>();
+    protected Set<String> mediaTypes = new TreeSet<String>();
 
     protected String formatName;
     protected String formatVersion;
     protected long pagesCount;
     protected long charsCount;
     protected String language;
-    protected Set<String> embeddedFonts = new LinkedHashSet<String>();
-    protected Set<String> refFonts = new LinkedHashSet<String>();
-    protected Set<String> references = new LinkedHashSet<String>();
-    protected Set<String> resources = new LinkedHashSet<String>();
+    protected Set<String> embeddedFonts = new TreeSet<String>();
+    protected Set<String> refFonts = new TreeSet<String>();
+    protected Set<String> references = new TreeSet<String>();
+    protected Set<String> resources = new TreeSet<String>();
     protected boolean hasEncryption;
     protected boolean hasSignatures;
     protected boolean hasAudio;
@@ -364,7 +368,7 @@ public class JhoveRepInfoReport extends MasterReport {
      * @return
      */
     public String[] getLocalResources() {
-        Set<String> localResources = new HashSet<String>(resources);
+        Set<String> localResources = new TreeSet<String>(resources);
         localResources.removeAll(references);
         return toStringArray(localResources);
     }
@@ -376,10 +380,10 @@ public class JhoveRepInfoReport extends MasterReport {
      * @return
      */
     public String[] getRemoteResources() {
-        Set<String> localResources = new HashSet<String>(resources);
+        Set<String> localResources = new TreeSet<String>(resources);
         localResources.removeAll(references);
 
-        Set<String> remoteResources = new HashSet<String>(resources);
+        Set<String> remoteResources = new TreeSet<String>(resources);
         remoteResources.removeAll(localResources);
         return toStringArray(remoteResources);
     }
@@ -398,7 +402,7 @@ public class JhoveRepInfoReport extends MasterReport {
      * @return
      */
     public Set<String> getFeatures() {
-        Set<String> features = new HashSet<String>();
+        Set<String> features = new TreeSet<String>();
         if (hasEncryption)
             features.add(FEATURE_HASENCRYPTION);
         if (hasSignatures)
