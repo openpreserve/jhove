@@ -50,6 +50,7 @@ if [[ -d "${tempInstallLoc}" ]]; then
 fi
 
 # Create the test target root if it doesn't exist
+[[ -d "${TARGET_ROOT}" ]] && rm -rf "${TARGET_ROOT:?}/"*
 [[ -d "${TARGET_ROOT}" ]] || mkdir -p "${TARGET_ROOT}"
 
 # Grab the Major and Minor versions from the full Maven project version string
@@ -73,13 +74,14 @@ installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
 echo "INFO: Checking baseline data for target Jhove: ${MAJOR_MINOR_VER}."
 if [[ ! -d "${TARGET_ROOT}/${MAJOR_MINOR_VER}" ]]
 then
-	echo " - INFO: Generating the baseline for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
-	bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${TEST_ROOT}/corpora" -o "${TEST_ROOT}/candidates/${MAJOR_MINOR_VER}"
+	echo " - INFO: Generating the baseline for ${MAJOR_MINOR_VER} at: ${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}."
+	sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.9\/org\.jacoco.agent-0\.7\.9-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
+	bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${TEST_ROOT}/corpora" -o "${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}"
 fi
 
 if [[ -f "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" ]]
 then
-	echo " - INFO: applying the baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
+	echo " - INFO: applying the baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}"
 	bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "${BASELINE_VERSION}" -c "${MAJOR_MINOR_VER}"
 else
 	echo " - ERROR: no bash script found for baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
@@ -90,7 +92,8 @@ echo ""
 echo "Testing ${MAJOR_MINOR_VER}."
 echo "=========================="
 echo " - using development JHOVE installer: ${TEST_ROOT}/targets/${MAJOR_MINOR_VER}."
-bash "${SCRIPT_DIR}/bbt-jhove.sh" -b "${TEST_ROOT}/targets/${MAJOR_MINOR_VER}" -c "${TEST_ROOT}/corpora" -j . -o "${TEST_ROOT}/candidates" -k "dev-${MAJOR_MINOR_VER}" -i
+echo "java -Xms2g -Xmx8g -jar jhove-bbt/jhove-bbt.jar -b ${TEST_ROOT}/targets/${MAJOR_MINOR_VER} -c ${CANDIADATE_ROOT}/${MAJOR_MINOR_VER} -k dev-${MAJOR_MINOR_VER} -i"
+java -Xms2g -Xmx8g -jar "jhove-bbt/jhove-bbt.jar" -b "${TEST_ROOT}/targets/${MAJOR_MINOR_VER}" -c "${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}" -k "dev-${MAJOR_MINOR_VER}" -i
 exitStatus=$?
 echo ""
 echo "RESULTS"

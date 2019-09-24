@@ -88,15 +88,17 @@ showHelp() {
 
 # Cycle through the test module directories and invoke the correct JHOVE module
 getCorpusModules() {
-  DIRS=$(ls -l "$paramModuleLoc" | grep -E '^d' | awk '{print $9}')
-  for DIR in $DIRS ; do
-		moduleName=${DIR}
+	for DIR in "$paramModuleLoc"/*/
+	do
+	  # https://stackoverflow.com/questions/1371261/get-current-directory-name-without-full-path-in-a-bash-script
+	  moduleName="${DIR%"${DIR##*[!/]}"}" # extglob-free multi-trailing-/ trim
+	  moduleName="${moduleName##*/}"      # remove everything before the last /
 		if [[ ! -e "$paramOutputRootDir/audit-$moduleName.jhove.xml" ]]
 		then
 			bash "$SCRIPT_DIR/exec-with-to.sh" -t 10 "$paramJhoveLoc/jhove" -m "${moduleName}" -h xml -o "$paramOutputRootDir/audit-$moduleName.jhove.xml"
 		fi
 		processModuleDir "$paramModuleLoc/$moduleName"
-  done
+	done
 }
 
 processModuleDir() {

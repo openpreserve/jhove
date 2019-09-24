@@ -25,6 +25,7 @@ export SCRIPT_DIR
 # Global for Backslashed string value
 
 # Include utils script
+# shellcheck source=inc/bb-utils.sh
 . "$SCRIPT_DIR/inc/bb-utils.sh"
 
 # Globals to hold the checked param vals
@@ -59,7 +60,7 @@ checkParams () {
 		i)	paramIgnoreRelease=true
 			;;
 		v)	paramVerbose=true
-		    export $paramVerbose
+		    export paramVerbose
 			;;
 		esac
 	done

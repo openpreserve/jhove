@@ -47,9 +47,37 @@ showHelp() {
 # Execution starts here
 checkParams "$@";
 if [[ -d "${targetRoot}" ]]; then
+	echo " - removing existing baseline at ${targetRoot}."
 	rm -rf "${targetRoot}"
 fi
 
-echo "Executing baseline update"
+echo "TEST BASELINE: Creating baseline"
 # Simply copy baseline for now we're not making any changes
+echo " - copying ${baselineRoot} baseline to ${targetRoot}"
 cp -R "${baselineRoot}" "${targetRoot}"
+
+###
+# E-PUB Module Fixes
+###
+# These copies are all OK as they're new files and don't overwrite
+if [[ -f "${candidateRoot}/errors/modules/audit-EPUB-ptc.jhove.xml" ]]; then
+	echo "   - EPUB copying EPUB audit results"
+	cp "${candidateRoot}/errors/modules/audit-EPUB-ptc.jhove.xml" "${targetRoot}/errors/modules/audit-EPUB-ptc.jhove.xml"
+fi
+if [[ -d "${candidateRoot}/errors/modules/EPUB-ptc" ]]; then
+	echo "   - EPUB copying error test reults"
+	cp -R "${candidateRoot}/errors/modules/EPUB-ptc" "${targetRoot}/errors/modules"
+fi
+if [[ -f "${candidateRoot}/examples/modules/audit-EPUB-ptc.jhove.xml" ]]; then
+	echo "   - EPUB copying JHOVE audit results"
+	cp "${candidateRoot}/examples/modules/audit-EPUB-ptc.jhove.xml" "${targetRoot}/examples/modules/audit-EPUB-ptc.jhove.xml"
+fi
+if [[ -d "${candidateRoot}/examples/modules/EPUB-ptc" ]]; then
+	echo "   - EPUB copying examples test reults"
+	cp -R "${candidateRoot}/examples/modules/EPUB-ptc" "${targetRoot}/examples/modules"
+fi
+# Replace the text for XML Parser, EPub won't build without that version and JHOVE seems fine about it.
+echo "   - EPUB replacing XML parser text"
+sed -i 's%com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser%org.apache.xerces.jaxp.SAXParserImpl$JAXPSAXParser%' "${targetRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml"
+# Add line for EPUB module to JHOVE audit file
+sed -i '14 a \ \ \ <module release="1.0">EPUB-ptc</module>' "${targetRoot}/audit.jhove.xml"
