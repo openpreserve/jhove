@@ -88,6 +88,7 @@ else
 	exit 1
 fi
 
+cat "${tempInstallLoc}/jhove"
 echo ""
 echo "Testing ${MAJOR_MINOR_VER}."
 echo "=========================="
