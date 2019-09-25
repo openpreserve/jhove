@@ -75,7 +75,7 @@ echo "INFO: Checking baseline data for target Jhove: ${MAJOR_MINOR_VER}."
 if [[ ! -d "${TARGET_ROOT}/${MAJOR_MINOR_VER}" ]]
 then
 	echo " - INFO: Generating the baseline for ${MAJOR_MINOR_VER} at: ${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}."
-	sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.9\/org\.jacoco.agent-0\.7\.9-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
+	sed -i 's/^java.*/java -Xss1024k -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.9\/org\.jacoco.agent-0\.7\.9-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
 	bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${TEST_ROOT}/corpora" -o "${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}"
 fi
 
