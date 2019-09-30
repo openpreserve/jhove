@@ -2,7 +2,6 @@ package org.ithaka.portico.jhove.module.epub;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.text.SimpleDateFormat;
@@ -224,9 +223,6 @@ public class JhoveRepInfoReportTest {
         report.info(null, FeatureEnum.REFERENCE, reference1);
         report.info(null, FeatureEnum.REFERENCE, reference2);
         report.info(null, FeatureEnum.REFERENCE, reference3);
-        report.info(null, FeatureEnum.REFERENCE, remoteResource1);
-        report.info(null, FeatureEnum.REFERENCE, remoteResource2);
-        report.info(null, FeatureEnum.REFERENCE, remoteResource3);
 
         // resources are what appear to be part of the EPUB and may be local or remote
         report.info(null, FeatureEnum.RESOURCE, localResource1);
@@ -237,21 +233,16 @@ public class JhoveRepInfoReportTest {
         report.info(null, FeatureEnum.RESOURCE, remoteResource2);
         report.info(null, FeatureEnum.RESOURCE, remoteResource3);
 
-        final int expectedNumReferences = 6;
+        final int expectedNumReferences = 3;
         assertEquals(expectedNumReferences, report.getReferences().length);
-        String[] expectedReferences = new String[] { reference1, reference2, reference3, remoteResource1,
-                remoteResource2, remoteResource3 };
+        String[] expectedReferences = new String[] { reference1, reference2, reference3 };
         assertTrue(arraysSame(expectedReferences, report.getReferences()));
 
-        final int expectedNumLocalResources = 4;
-        assertEquals(expectedNumLocalResources, report.getLocalResources().length);
-        String[] expectedLocal = new String[] { localResource1, localResource2, localResource3, localResource4 };
-        assertTrue(arraysSame(expectedLocal, report.getLocalResources()));
-
-        final int expectedNumRemoteResources = 3;
-        assertEquals(expectedNumRemoteResources, report.getRemoteResources().length);
-        String[] expectedRemote = new String[] { remoteResource1, remoteResource2, remoteResource3 };
-        assertTrue(arraysSame(expectedRemote, report.getRemoteResources()));
+        final int expectedNumLocalResources = 7;
+        assertEquals(expectedNumLocalResources, report.getResources().length);
+        String[] expectedLocal = new String[] { localResource1, localResource2, localResource3, localResource4, remoteResource1,
+                remoteResource2, remoteResource3 };
+        assertTrue(arraysSame(expectedLocal, report.getResources()));
     }
 
     /**
@@ -377,10 +368,8 @@ public class JhoveRepInfoReportTest {
         assertEquals(1, report.getReferences().length);
         assertEquals(reference, report.getReferences()[0]);
 
-        assertEquals(2, report.getLocalResources().length);
-        assertTrue(arraysSame(new String[] { resource1, resource2 }, report.getLocalResources()));
-
-        assertNull(report.getRemoteResources());
+        assertEquals(2, report.getResources().length);
+        assertTrue(arraysSame(new String[] { resource1, resource2 }, report.getResources()));
 
         assertEquals(identifier, report.getIdentifier());
 

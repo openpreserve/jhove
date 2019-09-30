@@ -362,30 +362,14 @@ public class JhoveRepInfoReport extends MasterReport {
     }
 
     /**
-     * Get a list of all EPUB local resources - files that are stored in the EPUB
-     * package
+     * Get a list of all EPUB resources - files that are either stored in the EPUB
+     * package or else stored outside of the EPUB but used as a key component e.g.
+     * embedded video or audio.
      *
      * @return
      */
-    public String[] getLocalResources() {
-        Set<String> localResources = new TreeSet<String>(resources);
-        localResources.removeAll(references);
-        return toStringArray(localResources);
-    }
-
-    /**
-     * Get a list of all EPUB remote resources. These are different from links that
-     * may be citations in that they are visually or audibly embedded in the EPUB
-     *
-     * @return
-     */
-    public String[] getRemoteResources() {
-        Set<String> localResources = new TreeSet<String>(resources);
-        localResources.removeAll(references);
-
-        Set<String> remoteResources = new TreeSet<String>(resources);
-        remoteResources.removeAll(localResources);
-        return toStringArray(remoteResources);
+    public String[] getResources() {
+        return toStringArray(resources);
     }
 
     /**

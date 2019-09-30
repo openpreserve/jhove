@@ -124,7 +124,7 @@ public class EpubModuleTest {
         assertTrue(mediaTypes.contains(XHTML_MIMETYPE));
         assertTrue(mediaTypes.contains(NCX_MIMETYPE));
 
-        Set<String> resources = new HashSet<String>(Arrays.asList((String[]) props.get(PROPNAME_LOCALRESOURCES)));
+        Set<String> resources = new HashSet<String>(Arrays.asList((String[]) props.get(PROPNAME_RESOURCES)));
         final int expectedNumResources = 5;
         assertEquals(expectedNumResources, resources.size());
         assertTrue(resources.contains("EPUB/images/cover.png"));
@@ -215,11 +215,6 @@ public class EpubModuleTest {
         assertEquals(true, props.get(FEATURE_HASVIDEO));
         assertEquals(true, props.get(FEATURE_HASSCRIPTS));
 
-        Set<String> remoteResources = new HashSet<String>(Arrays.asList((String[]) props.get(PROPNAME_REMOTERESOURCES)));
-        assertEquals(2, remoteResources.size());
-        assertTrue(remoteResources.contains(remoteMp4Url));
-        assertTrue(remoteResources.contains(remoteMp3Url));
-
         Set<String> references = new HashSet<String>(Arrays.asList((String[]) props.get(PROPNAME_REFERENCES)));
         final int expectedNumReferences = 8;
         assertEquals(expectedNumReferences, references.size());
@@ -229,12 +224,14 @@ public class EpubModuleTest {
                 references.contains("http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-content-switch"));
         assertTrue(references.contains(remoteMp3Url));
 
-        Set<String> localResources = new HashSet<String>(Arrays.asList((String[]) props.get(PROPNAME_LOCALRESOURCES)));
-        final int expectedNumLocalResources = 49;
-        assertEquals(expectedNumLocalResources, localResources.size());
+        Set<String> resources = new HashSet<String>(Arrays.asList((String[]) props.get(PROPNAME_RESOURCES)));
+        final int expectedNumLocalResources = 51;
+        assertEquals(expectedNumLocalResources, resources.size());
         // spot check a few
-        assertTrue(localResources.contains("EPUB/img/mathml-01-020-styling.png"));
-        assertTrue(localResources.contains("EPUB/img/check.jpg"));
+        assertTrue(resources.contains(remoteMp4Url));
+        assertTrue(resources.contains(remoteMp3Url));
+        assertTrue(resources.contains("EPUB/img/mathml-01-020-styling.png"));
+        assertTrue(resources.contains("EPUB/img/check.jpg"));
     }
 
     /**
@@ -268,7 +265,7 @@ public class EpubModuleTest {
         assertTrue(mediaTypes.contains(XHTML_MIMETYPE));
         assertTrue(mediaTypes.contains(NCX_MIMETYPE));
 
-        Set<String> resources = new HashSet<String>(Arrays.asList((String[]) props.get(PROPNAME_LOCALRESOURCES)));
+        Set<String> resources = new HashSet<String>(Arrays.asList((String[]) props.get(PROPNAME_RESOURCES)));
         final int expectedNumResources = 4;
         assertEquals(expectedNumResources, resources.size());
         assertTrue(resources.contains("OEBPS/Text/pdfMigration.html"));

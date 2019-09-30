@@ -27,8 +27,7 @@ public class ReportPropertyNames {
     public static final String PROPNAME_FONTNAME = "FontName";
     public static final String PROPNAME_FONTFILE = "FontFile";
     public static final String PROPNAME_REFERENCES = "References";
-    public static final String PROPNAME_LOCALRESOURCES = "LocalResources";
-    public static final String PROPNAME_REMOTERESOURCES = "RemoteResources";
+    public static final String PROPNAME_RESOURCES = "Resources";
     public static final String PROPNAME_MEDIATYPES = "MediaTypes";
 
     public static final String FEATURE_HASENCRYPTION = "hasEncryption";

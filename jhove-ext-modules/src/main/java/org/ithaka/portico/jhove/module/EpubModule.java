@@ -12,12 +12,11 @@ import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_
 import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_IDENTIFIER;
 import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_INFO;
 import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_LANGUAGE;
-import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_LOCALRESOURCES;
 import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_MEDIATYPES;
 import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_PAGECOUNT;
 import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_PUBLISHER;
 import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_REFERENCES;
-import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_REMOTERESOURCES;
+import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_RESOURCES;
 import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_RIGHTS;
 import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_SUBJECTS;
 import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.PROPNAME_TITLE;
@@ -371,8 +370,7 @@ public class EpubModule extends ModuleBase {
         properties.add(generateProperty(PROPNAME_FONTS, fontList));
 
         properties.add(generateProperty(PROPNAME_REFERENCES, report.getReferences()));
-        properties.add(generateProperty(PROPNAME_LOCALRESOURCES, report.getLocalResources()));
-        properties.add(generateProperty(PROPNAME_REMOTERESOURCES, report.getRemoteResources()));
+        properties.add(generateProperty(PROPNAME_RESOURCES, report.getResources()));
         properties.add(generateProperty(PROPNAME_MEDIATYPES, report.getMediaTypes()));
 
         for (String feature : report.getFeatures()) {
