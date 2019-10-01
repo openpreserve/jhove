@@ -225,8 +225,8 @@ public class EpubModuleTest {
         assertTrue(references.contains(remoteMp3Url));
 
         Set<String> resources = new HashSet<String>(Arrays.asList((String[]) props.get(PROPNAME_RESOURCES)));
-        final int expectedNumLocalResources = 51;
-        assertEquals(expectedNumLocalResources, resources.size());
+        final int expectedNumResources = 51;
+        assertEquals(expectedNumResources, resources.size());
         // spot check a few
         assertTrue(resources.contains(remoteMp4Url));
         assertTrue(resources.contains(remoteMp3Url));

@@ -204,7 +204,7 @@ public class JhoveRepInfoReportTest {
      * @throws Exception
      */
     @Test
-    public void reportWithAllInfoTest() throws Exception {
+    public void remoteAndLocalResourcesTest() throws Exception {
         final String localResource1 = "EPUB/image.jpg";
         final String localResource2 = "EPUB/code.xhtml";
         final String localResource3 = "EPUB/somefile.xhtml";
@@ -238,20 +238,20 @@ public class JhoveRepInfoReportTest {
         String[] expectedReferences = new String[] { reference1, reference2, reference3 };
         assertTrue(arraysSame(expectedReferences, report.getReferences()));
 
-        final int expectedNumLocalResources = 7;
-        assertEquals(expectedNumLocalResources, report.getResources().length);
-        String[] expectedLocal = new String[] { localResource1, localResource2, localResource3, localResource4, remoteResource1,
+        final int expectedNumResources = 7;
+        assertEquals(expectedNumResources, report.getResources().length);
+        String[] expectedResources = new String[] { localResource1, localResource2, localResource3, localResource4, remoteResource1,
                 remoteResource2, remoteResource3 };
-        assertTrue(arraysSame(expectedLocal, report.getResources()));
+        assertTrue(arraysSame(expectedResources, report.getResources()));
     }
 
     /**
-     * Checks remote / local resources are correctly parsed
+     * Checks all report fields are correctly parsed
      *
      * @throws Exception
      */
     @Test
-    public void remoteAndLocalResourcesTest() throws Exception {
+    public void reportWithAllInfoTest() throws Exception {
         final String DATEFORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
         final String formatName = "EPUB";
