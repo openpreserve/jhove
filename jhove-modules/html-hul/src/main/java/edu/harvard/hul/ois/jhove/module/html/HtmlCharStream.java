@@ -413,7 +413,9 @@ public char BeginToken() throws java.io.IOException
         len = bufsize - tokenBegin + bufpos + 1 + inBuf;
      }
 
-     int i = 0, j = 0, k = 0;
+     int i = 0;
+     int j = 0;
+     int k = 0;
      int nextColDiff = 0, columnDiff = 0;
 
      while (i < len &&
