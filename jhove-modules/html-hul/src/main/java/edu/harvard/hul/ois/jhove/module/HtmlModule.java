@@ -436,6 +436,8 @@ public class HtmlModule extends ModuleBase {
 					return 0;
 				case 2: // probably XHTML
 					return 100;
+				default : 
+		    			break;
 				}
 				info.setMessage(new ErrorMessage(
 						MessageConstants.HTML_HUL_16));
