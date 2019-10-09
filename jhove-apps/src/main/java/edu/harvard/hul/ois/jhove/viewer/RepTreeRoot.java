@@ -304,6 +304,9 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 case RepInfo.FALSE:
                 wfStr += ", but not valid";
                 break;
+		
+		default:
+		break;
                 
                 // case UNDETERMINED: add nothing
             }
