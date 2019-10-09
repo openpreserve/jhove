@@ -761,6 +761,8 @@ public abstract class IFD
         case IFD:
             u = ModuleBase.readUnsignedInt(_raf, _bigEndian);
             break;
+	default : 
+	    break;
         }
 
         return u;
@@ -914,6 +916,8 @@ public abstract class IFD
         case DOUBLE:
             fieldSize = 8;
             break;
+	default : 
+	    break;
         }
         return  count*fieldSize;
     }
