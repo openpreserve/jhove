@@ -303,6 +303,8 @@ public class TextHandler
                     s += ", but not valid";
                     break;
 
+		    default : 
+		    break;
                     // case UNDETERMINED: add nothing
                 }
             }
