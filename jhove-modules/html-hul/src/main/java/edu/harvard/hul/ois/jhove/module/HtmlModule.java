@@ -494,6 +494,8 @@ public class HtmlModule extends ModuleBase {
 				// Force a second call to parse as XML. 100 is a
 				// magic code for the first XML call.
 				return 100;
+			default : 
+		    		break;
 			}
 			_textMD.setMarkup_language(_doctype);
 			if (docDesc == null) {
