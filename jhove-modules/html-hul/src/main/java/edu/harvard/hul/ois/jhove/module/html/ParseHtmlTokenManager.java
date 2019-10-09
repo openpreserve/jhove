@@ -1069,6 +1069,8 @@ public Token getNextToken()
          jjmatchedPos = 0;
          curPos = jjMoveStringLiteralDfa0_7();
          break;
+       default : 
+         break;
      }
      if (jjmatchedKind != 0x7fffffff)
      {
