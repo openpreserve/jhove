@@ -266,6 +266,8 @@ public class PdfFlateInputStream extends FilterInputStream {
                 break;
             case 15:    // optimum -- per line determination
                 break;
+            default : 
+		        break;
         }
     }
     
