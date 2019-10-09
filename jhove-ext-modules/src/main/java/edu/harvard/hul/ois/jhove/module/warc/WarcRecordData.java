@@ -290,6 +290,8 @@ public class WarcRecordData {
                         protocolUserAgent = headerLine.value;
                     }
                 	break;
+		default : 
+		    	break;
                 }
             }
             else {
