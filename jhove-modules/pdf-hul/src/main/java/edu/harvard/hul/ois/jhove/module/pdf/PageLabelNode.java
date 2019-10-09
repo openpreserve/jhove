@@ -326,6 +326,8 @@ public class PageLabelNode
 	    case 9:
 		buf.append ("IX");
 		break;
+	    default : 
+		    break;
 	}
 	String val = buf.toString ();
 	if (upperCase) {
