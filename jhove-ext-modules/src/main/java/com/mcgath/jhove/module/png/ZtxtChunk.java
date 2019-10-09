@@ -59,6 +59,8 @@ public class ZtxtChunk extends GeneralTextChunk {
 			case 2:
 				compressedData[cmprsIdx++] = (byte) c;
 				break;
+			default : 
+		    		break;
 			}
 		}
 		if (keyword != null) {
