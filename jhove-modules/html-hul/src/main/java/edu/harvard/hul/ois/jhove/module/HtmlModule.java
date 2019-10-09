@@ -438,8 +438,13 @@ public class HtmlModule extends ModuleBase {
 					return 0;
 				case 2: // probably XHTML
 					return 100;
+<<<<<<< HEAD
                                  default:
                                      break;
+=======
+				default : 
+		    			break;
+>>>>>>> Added a default case for the switch statement
 				}
 				info.setMessage(new ErrorMessage(
 						MessageConstants.HTML_HUL_16));
