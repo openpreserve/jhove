@@ -48,6 +48,12 @@ StringBuffer image;
 int jjimageLen;
 int lengthOfMatch;
 protected char curChar;
+int curLexState = 0;
+int defaultLexState = 0;
+int jjnewStateCnt;
+int jjround;
+int jjmatchedPos;
+int jjmatchedKind;
   
   public  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
 private final int jjStopAtPos(int pos, int kind)
@@ -971,13 +977,6 @@ protected Token jjFillToken()
    }
    return t;
 }
-
-int curLexState = 0;
-int defaultLexState = 0;
-int jjnewStateCnt;
-int jjround;
-int jjmatchedPos;
-int jjmatchedKind;
 
 public Token getNextToken()
 {
