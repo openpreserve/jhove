@@ -125,6 +125,8 @@ public class TiffProfileFXC extends TiffFXBase {
                     return false;
                 }
                 break;
+	    default : 
+		    break;
         }
         
         // By my best reading, the colormap is needed only
