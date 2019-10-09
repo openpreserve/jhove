@@ -42,6 +42,8 @@ public class BkgdChunk extends PNGChunk {
 		case 3:
 			minLength = 1;
 			break;
+		default : 
+		    break;
 		}
 		if (_module.isIdatSeen()) {
 			msg = new ErrorMessage (MessageConstants.PNG_GDM_1);
@@ -84,6 +86,8 @@ public class BkgdChunk extends PNGChunk {
 						Integer.valueOf(bkgdIndex));
 				info.setProperty (bkgdProp);
 				break;
+			default : 
+		    		break;
 			}
 			// Throw away extra bytes
 			for (int i = 0; i < length - minLength; i++) {
