@@ -15,7 +15,7 @@ import edu.harvard.hul.ois.jhove.*;
  *  method for constructing the tree.  All nodes in the tree
  *  except for the root will be plain DefaultMutablereeNodes.
  */
-public class RepTreeRoot extends DefaultMutableTreeNode 
+public class RepTreeRoot extends DefaultMutableTreeNode
 {
 
     private RepInfo _info;
@@ -32,7 +32,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
      *               be displayed.
      *  @param base   The JhoveBase object under which we're operating.
      */
-    public RepTreeRoot (RepInfo info, JhoveBase base) 
+    public RepTreeRoot (RepInfo info, JhoveBase base)
     {
         super (info.getUri());
         _info = info;
@@ -41,12 +41,12 @@ public class RepTreeRoot extends DefaultMutableTreeNode
 
         // Set the DateFormat for displaying the module date.
         _dateFmt = DateFormat.getDateInstance ();
-        
+
         // Snarf everything up into the tree.
-        
+
         snarfRepInfo ();
     }
-    
+
     /**
      *  Constructs a DefaultMutableTreeNode representing a property
      * @param pProp: the property
@@ -81,7 +81,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                     tData = (TextMDMetadata) pValue;
                     return textMDToNode(tData);
                 case PROPERTY:
-                
+
                     if ("TextMDMetadata".equals(pProp.getName())) {
                         tData = (TextMDMetadata) pValue;
                         return textMDToNode (tData);
@@ -91,20 +91,20 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                     val = new DefaultMutableTreeNode (pProp.getName ());
                     val.add (propToNode ((Property) pValue));
                     return val;
-                
+
                 default:
-                
+
                     // Simple types: just use name plus string value.
                     val = new DefaultMutableTreeNode
                                 (pProp.getName () + ": " + pValue.toString ());
                     return val;
-                
+
                 }
             }
         }
         // Compound properties.  The text of the node is the
         // property name.
-        DefaultMutableTreeNode val = 
+        DefaultMutableTreeNode val =
             new DefaultMutableTreeNode (pProp.getName ());
         if (null != arity) switch (arity) {
             case ARRAY:
@@ -132,13 +132,13 @@ public class RepTreeRoot extends DefaultMutableTreeNode
      * @param child: the child object of which we want the index
      * @return the index of the child object in its parent
      */
-    public int getIndexOfChild (Object parent, Object child) 
+    public int getIndexOfChild (Object parent, Object child)
     {
         Property pProp = (Property) parent;
         PropertyArity arity = pProp.getArity ();
         // For Lists, Maps, and Sets we construct an Iterator.
         Iterator<?> iter;
-        if (arity == PropertyArity.SET || 
+        if (arity == PropertyArity.SET ||
                 arity == PropertyArity.LIST ||
                 arity == PropertyArity.MAP) {
             if (null == arity) {
@@ -169,7 +169,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             }
         }
         // OK, that was the easy one.  Now for that damn array arity.
-        // In the case of non-object types, we can't actually tell which 
+        // In the case of non-object types, we can't actually tell which
         // position matches the object, so we return 0 and hope it doesn't
         // mess things up too much.
         PropertyType propType = pProp.getType ();
@@ -178,7 +178,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         Rational[] rationalArray = null;
         Object[] objArray = null;
         int n;
-   
+
         if (null == propType) {
             return 0;               // non-object array type
         }
@@ -206,7 +206,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             default:
                 return 0;               // non-object array type
         }
-   
+
         for (int i = 0; i < n; i++) {
             Object elem = null;
             switch (propType) {
@@ -231,31 +231,31 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         return 0;                   // somehow fell through
     }
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     private void snarfRepInfo ()
     {
-        // This node has two children, for the module and the RepInfo 
+        // This node has two children, for the module and the RepInfo
 
         Module module = _info.getModule ();
         if (module != null) {
             // Create a subnode for the module, which has three
             // leaf children.
-            DefaultMutableTreeNode moduleNode = 
+            DefaultMutableTreeNode moduleNode =
                     new DefaultMutableTreeNode ("Module");
-            moduleNode.add (new DefaultMutableTreeNode 
+            moduleNode.add (new DefaultMutableTreeNode
                 (module.getName (), false));
-            moduleNode.add (new DefaultMutableTreeNode 
+            moduleNode.add (new DefaultMutableTreeNode
                 ("Release: " + module.getRelease (), false));
             moduleNode.add (new DefaultMutableTreeNode
                 ("Date: " + _dateFmt.format (module.getDate ()), false));
             add (moduleNode);
         }
-        
+
         DefaultMutableTreeNode infoNode =
                 new DefaultMutableTreeNode ("RepInfo");
         infoNode.add (new DefaultMutableTreeNode
@@ -302,17 +302,18 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 case RepInfo.TRUE:
                     wfStr += " and valid";
                     break;
-            
+
                 case RepInfo.FALSE:
                     wfStr += ", but not valid";
                     break;
-                default: wfStr += "";
+
+                default:
                     break;
-                
+
                 // case UNDETERMINED: add nothing
             }
         }
-        infoNode.add (new DefaultMutableTreeNode 
+        infoNode.add (new DefaultMutableTreeNode
                         ("Status: " + wfStr, false));
 
         // Report modules that said their signatures match
@@ -330,7 +331,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         // Compile a list of messages and offsets into a subtree
         List<Message> messageList = _info.getMessage ();
         if (messageList != null && messageList.size() > 0) {
-            DefaultMutableTreeNode msgNode = 
+            DefaultMutableTreeNode msgNode =
                 new DefaultMutableTreeNode  ("Messages");
             infoNode.add (msgNode);
             int i;
@@ -347,7 +348,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                     prefix = "Message: ";
                 }
                 DefaultMutableTreeNode mNode =
-                        new DefaultMutableTreeNode 
+                        new DefaultMutableTreeNode
                         (prefix + msg.getMessage ());
                 String subMessage = msg.getSubMessage ();
                 if (subMessage != null) {
@@ -358,7 +359,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 if (msg instanceof ErrorMessage) {
                     offset = ((ErrorMessage) msg).getOffset ();
                 }
-                // 
+                //
                 // If the offset is positive, we give the message node
                 // a child with the offset value.
                 if (offset >= 0) {
@@ -371,17 +372,17 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 msgNode.add (mNode);
             }
         }
-        
+
         s = _info.getMimeType ();
         if (s != null) {
-            infoNode.add (new DefaultMutableTreeNode 
+            infoNode.add (new DefaultMutableTreeNode
                         ("MimeType: " + s, false));
         }
 
         // Compile a list of profile strings into a string list
         List<String> profileList = _info.getProfile ();
         if (profileList != null && profileList.size() > 0) {
-            DefaultMutableTreeNode profNode = 
+            DefaultMutableTreeNode profNode =
                 new DefaultMutableTreeNode ("Profiles");
             infoNode.add (profNode);
             int i;
@@ -403,10 +404,10 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 infoNode.add (propToNode (property));
             }
         }
-        
+
         List<Checksum> cksumList = _info.getChecksum();
         if (cksumList != null && !cksumList.isEmpty()) {
-            DefaultMutableTreeNode ckNode = 
+            DefaultMutableTreeNode ckNode =
                 new DefaultMutableTreeNode ("Checksums");
             infoNode.add (ckNode);
             //List cPropList = new LinkedList ();
@@ -420,7 +421,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                     ("Checksum: " + cksum.getValue (), false));
             }
         }
-        
+
         s = _info.getNote ();
         if (s != null) {
             infoNode.add (new DefaultMutableTreeNode
@@ -429,7 +430,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         add (infoNode);
     }
 
-    /* Add the members of an array property to a node. 
+    /* Add the members of an array property to a node.
        The property must be of arity ARRAY. */
     private void addArrayMembers (DefaultMutableTreeNode node, Property p)
     {
@@ -442,51 +443,51 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 break;
             }
             case LONG:{
-                addToNode(node, (Long []) pVal);       
+                addToNode(node, (Long []) pVal);
                 break;
             }
             case BOOLEAN:{
-                addToNode(node, (Boolean []) pVal);    
+                addToNode(node, (Boolean []) pVal);
                 break;
             }
             case CHARACTER:{
-                addToNode(node, (Character []) pVal);      
+                addToNode(node, (Character []) pVal);
                 break;
             }
             case DOUBLE:{
-                addToNode(node, (Double []) pVal);     
+                addToNode(node, (Double []) pVal);
                 break;
             }
             case FLOAT:{
-                addToNode(node, (Float []) pVal);      
+                addToNode(node, (Float []) pVal);
                 break;
             }
             case SHORT:{
-                addToNode(node, (Short []) pVal);     
+                addToNode(node, (Short []) pVal);
                 break;
             }
             case BYTE:{
-                addToNode(node, (Byte []) pVal);       
+                addToNode(node, (Byte []) pVal);
                 break;
             }
             case STRING:{
-                addToNode(node, (String []) pVal);      
+                addToNode(node, (String []) pVal);
                 break;
             }
             case RATIONAL:{
-                addToNode(node, (Rational []) pVal);       
+                addToNode(node, (Rational []) pVal);
                 break;
             }
             case PROPERTY:{
-                addToNode(node, (Property []) pVal);      
+                addToNode(node, (Property []) pVal);
                 break;
             }
             case NISOIMAGEMETADATA:{
-                addToNode(node, (NisoImageMetadata []) pVal);      
+                addToNode(node, (NisoImageMetadata []) pVal);
                 break;
             }
             case OBJECT:{
-                addToNode(node, (Object []) pVal);      
+                addToNode(node, (Object []) pVal);
                 break;
             }
             default:
@@ -494,19 +495,19 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
     }
 
-    /* Add the members of a list property to a node. 
+    /* Add the members of a list property to a node.
        The property must be of arity LIST. */
     private void addListMembers (DefaultMutableTreeNode node, Property p)
     {
         List<Object> l = (List<Object>) p.getValue ();
         PropertyType ptyp = p.getType ();
         boolean canHaveChildren = Boolean.FALSE;
-        l.forEach(item -> node.add(getDefaultMutableTreeNode(ptyp, item, 
+        l.forEach(item -> node.add(getDefaultMutableTreeNode(ptyp, item,
                 canHaveChildren)));
     }
 
 
-    /* Add the members of a set property to a node. 
+    /* Add the members of a set property to a node.
        The property must be of arity SET. */
     private void addSetMembers (DefaultMutableTreeNode node, Property p)
     {
@@ -521,7 +522,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
     }
 
 
-    /* Add the members of a map property to a node. 
+    /* Add the members of a map property to a node.
        The property must be of arity MAP. */
     private void addMapMembers (DefaultMutableTreeNode node, Property p)
     {
@@ -536,7 +537,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             Object item = m.get (key);
             itemNode = getDefaultMutableTreeNode(ptyp, item, canHaveChildren);
             node.add (itemNode);
-            
+
             // Add a subnode for the key
             itemNode.setAllowsChildren (true);
             itemNode.add (new DefaultMutableTreeNode ("Key: " + key, false));
@@ -595,7 +596,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         String[] use = aes.getUse ();
         if (use != null) {
-            DefaultMutableTreeNode u = 
+            DefaultMutableTreeNode u =
                     new DefaultMutableTreeNode ("Use", true);
             val.add (u);
             u.add (new DefaultMutableTreeNode ("UseType: " + use[0], false));
@@ -608,7 +609,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                  ("PrimaryIdentifier: " + s, true);
             val.add (pi);
             if (t != null) {
-                pi.add (new DefaultMutableTreeNode 
+                pi.add (new DefaultMutableTreeNode
                         ("IdentifierType: " + t));
             }
         }
@@ -617,7 +618,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         // this isn't supported yet.
         List<AESAudioMetadata.Face> facelist = aes.getFaceList ();
         if (!facelist.isEmpty ()) {
-            AESAudioMetadata.Face f = 
+            AESAudioMetadata.Face f =
                 facelist.get(0);
 
             DefaultMutableTreeNode face =
@@ -629,13 +630,13 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 addAESTimeRange (timeline, startTime, f.getDuration ());
             }
             face.add (timeline);
-            
+
             // For the present, assume just one face region
             AESAudioMetadata.FaceRegion facergn = f.getFaceRegion (0);
             DefaultMutableTreeNode region =
                     new DefaultMutableTreeNode ("Region", true);
             timeline = new DefaultMutableTreeNode ("TimeRange", true);
-            addAESTimeRange (timeline, 
+            addAESTimeRange (timeline,
                     facergn.getStartTime (), facergn.getDuration ());
             region.add (timeline);
             int nchan = aes.getNumChannels ();
@@ -648,11 +649,11 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                     DefaultMutableTreeNode stream =
                             new DefaultMutableTreeNode ("Stream", true);
                     region.add (stream);
-                    stream.add (new DefaultMutableTreeNode 
+                    stream.add (new DefaultMutableTreeNode
                         ("ChannelAssignment: " + loc, false));
                 }
             }
-            face.add (region);         
+            face.add (region);
             val.add (face);
         }
         // In the general case, a FormatList can contain multiple
@@ -661,7 +662,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         // iteration loop on formatList.
         List<AESAudioMetadata.FormatRegion> flist = aes.getFormatList ();
         if (!flist.isEmpty ()) {
-            AESAudioMetadata.FormatRegion rgn = 
+            AESAudioMetadata.FormatRegion rgn =
                 flist.get(0);
             int bitDepth = rgn.getBitDepth ();
             double sampleRate = rgn.getSampleRate ();
@@ -674,7 +675,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                     wordSize != AESAudioMetadata.NULL) {
                 DefaultMutableTreeNode formatList =
                         new DefaultMutableTreeNode ("FormatList", true);
-                DefaultMutableTreeNode formatRegion = 
+                DefaultMutableTreeNode formatRegion =
                         new DefaultMutableTreeNode ("FormatRegion", true);
                 if (bitDepth != AESAudioMetadata.NULL) {
                     formatRegion.add (new DefaultMutableTreeNode
@@ -689,7 +690,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                         ("WordSize: " + Integer.toString (bitDepth), false));
                 }
                 if (bitRed != null) {
-                    DefaultMutableTreeNode br = 
+                    DefaultMutableTreeNode br =
                             new DefaultMutableTreeNode ("BitrateReduction", true);
                     br.add (new DefaultMutableTreeNode
                         ("codecName: " + bitRed[0], false));
@@ -711,7 +712,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 val.add (formatList);
             }
         }
-        
+
         return val;
     }
 
@@ -763,7 +764,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
 	node.add (snode);
         parent.add (node);
 
-        // Duration is optional.  
+        // Duration is optional.
         if (duration != null) {
             node =  new DefaultMutableTreeNode ("Duration", true);
             // Put in boilerplate to match the AES schema
@@ -783,7 +784,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                     ("Seconds: " + duration.getSeconds(), false));
             node.add (new DefaultMutableTreeNode
                     ("Frames: " + duration.getFrames(), false));
-            
+
             // Do samples a bit more elaborately than is really necessary,
             // to maintain parallelism with the xml schema.
             snode = new DefaultMutableTreeNode ("Samples", true);
@@ -814,8 +815,8 @@ public class RepTreeRoot extends DefaultMutableTreeNode
     {
         DefaultMutableTreeNode val =
                  new DefaultMutableTreeNode ("TextMDMetadata", true);
-        
-        DefaultMutableTreeNode u = 
+
+        DefaultMutableTreeNode u =
             new DefaultMutableTreeNode ("Character_info", true);
         val.add (u);
 
@@ -851,7 +852,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         s = textMD.getMarkup_basis ();
         if (s != null) {
-            DefaultMutableTreeNode basis = 
+            DefaultMutableTreeNode basis =
                 new DefaultMutableTreeNode
                         ("Markup_basis: " + s, true);
             val.add (basis);
@@ -863,7 +864,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         s = textMD.getMarkup_language ();
         if (s != null) {
-            DefaultMutableTreeNode language = 
+            DefaultMutableTreeNode language =
                 new DefaultMutableTreeNode
                         ("Markup_language: " + s, true);
             val.add (language);
@@ -875,7 +876,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         return val;
     }
-   
+
     /* Function for turning the Niso metadata into a subtree. */
     private DefaultMutableTreeNode nisoToNode (NisoImageMetadata niso)
     {
@@ -891,13 +892,13 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             val.add (new DefaultMutableTreeNode
             ("ByteOrder: " + s, false));
         }
-        
+
         int n = niso.getCompressionScheme ();
         if (n != NisoImageMetadata.NULL) {
             val.add (new DefaultMutableTreeNode
                 ("CompressionScheme: " + integerRepresentation
                     (n, NisoImageMetadata.COMPRESSION_SCHEME,
-                    NisoImageMetadata.COMPRESSION_SCHEME_INDEX), 
+                    NisoImageMetadata.COMPRESSION_SCHEME_INDEX),
                     false));
         }
         if ((n = niso.getCompressionLevel ()) != NisoImageMetadata.NULL) {
@@ -931,7 +932,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         if ((n = niso.getYCbCrPositioning ()) != NisoImageMetadata.NULL) {
             val.add (new DefaultMutableTreeNode
-                ("YCbCrPositioning: " + integerRepresentation 
+                ("YCbCrPositioning: " + integerRepresentation
                     (n, NisoImageMetadata.YCBCR_POSITIONING), false));
         }
         Rational [] rarray = niso.getYCbCrCoefficients ();
@@ -954,7 +955,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         if ((n = niso.getSegmentType ()) != NisoImageMetadata.NULL) {
             val.add (new DefaultMutableTreeNode
-                ("YSegmentType: " + integerRepresentation 
+                ("YSegmentType: " + integerRepresentation
                     (n, NisoImageMetadata.SEGMENT_TYPE), false));
         }
         long [] larray = niso.getStripOffsets ();
@@ -963,7 +964,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 ("StripOffsets", true));
             val.add (nod);
             for (int i = 0; i < larray.length; i++) {
-                nod.add (new DefaultMutableTreeNode 
+                nod.add (new DefaultMutableTreeNode
                         (Long.toString (larray[i]), false));
             }
         }
@@ -977,7 +978,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 ("StripByteCounts", true));
             val.add (nod);
             for (int i = 0; i < larray.length; i++) {
-                nod.add (new DefaultMutableTreeNode 
+                nod.add (new DefaultMutableTreeNode
                         (Long.toString (larray[i]), false));
             }
         }
@@ -994,7 +995,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 ("TileOffsets", true));
             val.add (nod);
             for (int i = 0; i < larray.length; i++) {
-                nod.add (new DefaultMutableTreeNode 
+                nod.add (new DefaultMutableTreeNode
                         (Long.toString (larray[i]), false));
             }
         }
@@ -1003,7 +1004,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 ("TileByteCounts", true));
             val.add (nod);
             for (int i = 0; i < larray.length; i++) {
-                nod.add (new DefaultMutableTreeNode 
+                nod.add (new DefaultMutableTreeNode
                         (Long.toString (larray[i]), false));
             }
         }
@@ -1028,7 +1029,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         if ((n = niso.getChecksumMethod ()) != NisoImageMetadata.NULL) {
             val.add (new DefaultMutableTreeNode
                 ("ChecksumMethod: " + integerRepresentation (n,
-                        NisoImageMetadata.CHECKSUM_METHOD), 
+                        NisoImageMetadata.CHECKSUM_METHOD),
                         false));
         }
         if ((s = niso.getChecksumValue ()) != null) {
@@ -1037,14 +1038,14 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         if ((n = niso.getOrientation ()) != NisoImageMetadata.NULL) {
             val.add (new DefaultMutableTreeNode
-                ("Orientation: " + integerRepresentation (n, 
-                        NisoImageMetadata.ORIENTATION), 
+                ("Orientation: " + integerRepresentation (n,
+                        NisoImageMetadata.ORIENTATION),
                         false));
         }
         if ((n = niso.getDisplayOrientation ()) != NisoImageMetadata.NULL) {
             val.add (new DefaultMutableTreeNode
                 ("DisplayOrientation: " + integerRepresentation(n,
-                        NisoImageMetadata.DISPLAY_ORIENTATION), 
+                        NisoImageMetadata.DISPLAY_ORIENTATION),
                         false));
         }
         if ((ln = niso.getXTargetedDisplayAR ()) != NisoImageMetadata.NULL) {
@@ -1162,10 +1163,10 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             val.add (new DefaultMutableTreeNode
                 ("ExposureBias: " + r.toString(), false));
         }
-        
+
         double [] darray = niso.getSubjectDistance ();
         if (darray != null) {
-            DefaultMutableTreeNode nod = new DefaultMutableTreeNode 
+            DefaultMutableTreeNode nod = new DefaultMutableTreeNode
                         ("SubjectDistance", true);
             val.add (nod);
             for (int i = 0; i < darray.length; i++) {
@@ -1190,7 +1191,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 ("FocalLength: " + Double.toString (d), false));
         }
         if ((n = niso.getFlash ()) != NisoImageMetadata.NULL) {
-     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired)
             val.add (new DefaultMutableTreeNode
                 ("Flash: " + integerRepresentation(n & 1,
                         NisoImageMetadata.FLASH_20), false));
@@ -1243,13 +1244,13 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         if ((n = niso.getSamplingFrequencyPlane()) != NisoImageMetadata.NULL) {
             val.add (new DefaultMutableTreeNode
                 ("SamplingFrequencyPlane: " + integerRepresentation (n,
-                        NisoImageMetadata.SAMPLING_FREQUENCY_PLANE), 
+                        NisoImageMetadata.SAMPLING_FREQUENCY_PLANE),
                         false));
         }
         if ((n = niso.getSamplingFrequencyUnit()) != NisoImageMetadata.NULL) {
             val.add (new DefaultMutableTreeNode
                 ("SamplingFrequencyUnit: " + integerRepresentation (n,
-                        NisoImageMetadata.SAMPLING_FREQUENCY_UNIT), 
+                        NisoImageMetadata.SAMPLING_FREQUENCY_UNIT),
                         false));
         }
     Rational rat = niso.getXSamplingFrequency ();
@@ -1401,7 +1402,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             val.add (new DefaultMutableTreeNode
                 ("TargetType: " + integerRepresentation (n,
                         NisoImageMetadata.TARGET_TYPE), false));
-        } 
+        }
         if ((s = niso.getTargetIDManufacturer ()) != null) {
             val.add (new DefaultMutableTreeNode
                 ("TargetIDManufacturer: " + s, false));
@@ -1456,7 +1457,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                 new DefaultMutableTreeNode ("ProcessingActions", true);
             val.add (nod);
             for (int i=1; i<sarray.length; i++) {
-                nod.add (new DefaultMutableTreeNode 
+                nod.add (new DefaultMutableTreeNode
                         (sarray[i], false));
             }
         }
@@ -1479,7 +1480,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
     }
 
-    private String integerRepresentation (int n, 
+    private String integerRepresentation (int n,
                         String [] labels,
                         int [] index)
     {
@@ -1503,18 +1504,18 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         // If we don't get a match, or do get an exception
         return Integer.toString (n);
     }
-    
+
     /**
-     * This method returns a member of a property list based on it's PropertyType 
+     * This method returns a member of a property list based on it's PropertyType
      * @param ptyp  the propertytype
      * @param item  the item of the list
      * @param allowsChildren
-     * @return 
+     * @return
      */
     private DefaultMutableTreeNode getDefaultMutableTreeNode(PropertyType ptyp, Object item, boolean allowsChildren) {
-        
+
         DefaultMutableTreeNode itemNode;
-        
+
         if (null == ptyp) {
                 // Simple objects just need a leaf.
                 itemNode = (new DefaultMutableTreeNode (item, allowsChildren));
@@ -1532,10 +1533,10 @@ public class RepTreeRoot extends DefaultMutableTreeNode
                     itemNode = (new DefaultMutableTreeNode (item, allowsChildren));
                     break;
             }
-        
+
         return itemNode;
     }
-    
+
     /**
      * Method to add an array to a node
      * @param <E>   generic method, can be used for arrays of different types
