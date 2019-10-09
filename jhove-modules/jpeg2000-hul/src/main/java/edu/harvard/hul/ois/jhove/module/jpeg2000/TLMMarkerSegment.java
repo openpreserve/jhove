@@ -57,6 +57,8 @@ public class TLMMarkerSegment extends MarkerSegment {
             _repInfo.setMessage (new ErrorMessage
                     (MessageConstants.JPEG2000_HUL_55));
             return false;      // invalid st value
+	    default : 
+	    break;
         }
         
         int nParts = (bytesToEat - 2) / partLength;
