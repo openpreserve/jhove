@@ -560,78 +560,60 @@ public abstract class IFD
     }
 
     /**
-     * Reads a string value from the TIFF file.
-     * If there are non-ASCII characters, they're escaped as %XX
-     * @param count Length of string
-     * @param value Offset of string
+     * Reads a single null-terminated ASCII string from the TIFF file.
+     * If there are non-ASCII characters, they're escaped as %XX.
+     *
+     * All ASCII fields may contain multiple strings but this method
+     * will only return the first. For that reason, it's recommended
+     * to instead use {@link #readASCIIArray} and handle any additional
+     * strings appropriately.
+     *
+     * @param count Length of ASCII field
+     * @param value Offset of ASCII field
      */
     protected String readASCII(long count, long value)
         throws IOException
     {
-        _raf.seek(value);
-
-        byte [] buffer = new byte [(int) count];
-        _raf.read(buffer);
-
-        StringBuffer sb = new StringBuffer();
-        for (int i=0; i<count; i++) {
-            byte c = buffer[i];
-            if (c == 0) {
-                break;
-            }
-            // Escape characters that aren't ASCII. There really shouldn't
-            // be any, and if there are, we don't know how they're encoded.
-            if (c < 32 || c > 127) {
-                sb.append(byteToHex(c));
-            }
-            else {
-                sb.append((char) c);
-            }
-        }
-        return sb.toString();
+        String [] asciiStrings = readASCIIArray(count, value);
+        return asciiStrings.length > 0 ? asciiStrings[0] : "";
     }
 
-    /** Reads an array of strings from the TIFF file.
+    /**
+     * Reads an array of null-terminated ASCII strings from the TIFF file.
+     * If there are non-ASCII characters, they're escaped as %XX.
      * 
-     *  @param  count  Number of strings to read
-     *  @param  value  Offset from which to read
-     *  
+     * @param  count  Length of ASCII field
+     * @param  value  Offset of ASCII field
      */
     protected String [] readASCIIArray(long count, long value)
         throws IOException
     {
         _raf.seek(value);
 
-        int nstrs = 0;
-        List<String> list = new LinkedList<>();
         byte[] buf = new byte[(int) count];
         _raf.read(buf);
-        StringBuffer strbuf = new StringBuffer();
-        for (int i=0; i<count; i++) {
+
+        List<String> list = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < count; i++) {
             int b = buf[i];
             if (b == 0) {
-                list.add(strbuf.toString());
-                strbuf.setLength(0);
+                list.add(sb.toString());
+                sb.setLength(0);
             }
             else {
                 // Escape characters that aren't ASCII. There really shouldn't
                 // be any, and if there are, we don't know how they're encoded.
                 if (b < 32 || b > 127) {
-                    strbuf.append(byteToHex((byte) b));
+                    sb.append(byteToHex((byte) b));
                 }
                 else {
-                    strbuf.append((char) b);
+                    sb.append((char) b);
                 }
             }
         }
-        /* We can't use ArrayList.toArray because that returns an 
-           Object[], not a String[] ... sigh. */
-        String [] strs = new String[nstrs];
-        ListIterator<String> iter = list.listIterator();
-        for (int i=0; i<nstrs; i++) {
-            strs[i] =  iter.next();
-        }
-        return strs;
+
+        return list.toArray(new String[list.size()]);
     }
 
     /** Reads and returns a single unsigned 8-bit integer value.
