@@ -561,7 +561,7 @@ public abstract class IFD
 
     /**
      * Reads a single null-terminated ASCII string from the TIFF file.
-     * If there are non-ASCII characters, they're escaped as %XX.
+     * If there are non-ASCII characters, they're converted to hex as %XX.
      *
      * All ASCII fields may contain multiple strings but this method
      * will only return the first. For that reason, it's recommended
@@ -580,7 +580,7 @@ public abstract class IFD
 
     /**
      * Reads an array of null-terminated ASCII strings from the TIFF file.
-     * If there are non-ASCII characters, they're escaped as %XX.
+     * If there are non-ASCII characters, they're converted to hex as %XX.
      * 
      * @param  count  Length of ASCII field
      * @param  value  Offset of ASCII field
@@ -588,29 +588,38 @@ public abstract class IFD
     protected String [] readASCIIArray(long count, long value)
         throws IOException
     {
-        _raf.seek(value);
+        final int LOWEST_PRINTABLE_ASCII = 32;
+        final int HIGHEST_PRINTABLE_ASCII = 126;
+        final int HIGHEST_VALID_ASCII = 127;
 
         byte[] buf = new byte[(int) count];
+        _raf.seek(value);
         _raf.read(buf);
 
+        boolean invalidAscii = false;
         List<String> list = new LinkedList<>();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < count; i++) {
-            int b = buf[i];
+            int b = Byte.toUnsignedInt(buf[i]);
             if (b == 0) {
                 list.add(sb.toString());
                 sb.setLength(0);
             }
             else {
-                // Escape characters that aren't ASCII. There really shouldn't
-                // be any, and if there are, we don't know how they're encoded.
-                if (b < 32 || b > 127) {
+                if (b < LOWEST_PRINTABLE_ASCII || b > HIGHEST_PRINTABLE_ASCII) {
                     sb.append(byteToHex((byte) b));
+                    if (b > HIGHEST_VALID_ASCII) invalidAscii = true;
                 }
                 else {
                     sb.append((char) b);
                 }
             }
+        }
+
+        if (invalidAscii) {
+            _info.setMessage(new ErrorMessage(
+                    MessageConstants.TIFF_HUL_72, value));
+            _info.setValid(false);
         }
 
         return list.toArray(new String[list.size()]);
