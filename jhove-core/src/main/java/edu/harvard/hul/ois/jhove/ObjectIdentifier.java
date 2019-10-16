@@ -67,19 +67,19 @@ public class ObjectIdentifier
                 continue;
             }
             if (mod.isRandomAccess ()) {
-                RandomAccessFile raf = 
-                        new RandomAccessFile (file, "r");
-                mod.param (parm);
-                if (verbose) {
-                    mod.setVerbosity (Module.MAXIMUM_VERBOSITY);
+                try (RandomAccessFile raf = 
+                        new RandomAccessFile (file, "r")) {
+	                mod.param (parm);
+	                if (verbose) {
+	                    mod.setVerbosity (Module.MAXIMUM_VERBOSITY);
+	                }
+	                if (shortCheck) {
+	                    mod.checkSignatures (file, raf, info1);
+	                }
+	                else {
+	                    mod.parse (raf, info1);
+	                }
                 }
-                if (shortCheck) {
-                    mod.checkSignatures (file, raf, info1);
-                }
-                else {
-                    mod.parse (raf, info1);
-                }
-                raf.close ();
             }
             else {
                 mod.param (parm);

@@ -81,7 +81,7 @@ public abstract class InfoWindow extends JFrame
             }
         });
         
-        setDefaultCloseOperation (JFrame.HIDE_ON_CLOSE);
+        setDefaultCloseOperation (WindowConstants.HIDE_ON_CLOSE);
         setJMenuBar (menuBar);
         _dateFmt = new SimpleDateFormat ("yyyy-MM-dd");
     }

@@ -5,10 +5,12 @@
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
-    <version>1.21.0-SNAPSHOT</version>
+    <version>1.23.0-SNAPSHOT</version>
   </parent>
 
+  <groupId>org.openpreservation.jhove.modules</groupId>
   <artifactId>jhove-modules</artifactId>
+  <packaging>pom</packaging>
   <name>JHOVE Validation Modules</name>
   <description>The JHOVE HUL validation modules.</description>
 
@@ -20,7 +22,7 @@
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>
       <artifactId>jhove-core</artifactId>
-      <version>${project.version}</version>
+      <version>1.23.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>javax.xml.bind</groupId>
@@ -31,5 +33,24 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
+    </dependency>
   </dependencies>
+
+  <modules>
+    <module>ascii-hul</module>
+    <module>aiff-hul</module>
+    <module>gif-hul</module>
+    <module>html-hul</module>
+    <module>jpeg-hul</module>
+    <module>jpeg2000-hul</module>
+    <module>pdf-hul</module>
+    <module>tiff-hul</module>
+    <module>utf8-hul</module>
+    <module>wave-hul</module>
+    <module>xml-hul</module>
+  </modules>
 </project>

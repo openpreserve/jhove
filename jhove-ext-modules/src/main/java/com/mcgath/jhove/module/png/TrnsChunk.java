@@ -32,12 +32,12 @@ public class TrnsChunk extends PNGChunk {
 	}
 	
 	/** Process the data in the chunk.  */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
-		final String badChunk = "Bad tRNS chunk";
-		processChunkCommon(info);
+				processChunkCommon(info);
 		ErrorMessage msg = null;
 		if (_module.isIdatSeen()) {
-			msg = new ErrorMessage ("tRNS chunk not allowed after IDAT chunk");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_59);
 		}
 		
 		int colorType = _module.getColorType();
@@ -45,18 +45,21 @@ public class TrnsChunk extends PNGChunk {
 
 		// Make sure there are enough bytes
 		if ((colorType == 0 && length < 2) || (colorType == 2 && length < 6)) {
-			msg = new ErrorMessage ("tRNS chunk too short");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_60);
 		}
 		
 		// tRNS chunk allowed only with certain color types
 		if (colorType != 0 && colorType != 2 && colorType != 3) {
-			msg = new ErrorMessage ("tRNS chunk not permitted with color type " + colorType);
+			msg = new ErrorMessage (
+					String.format(
+							MessageConstants.PNG_GDM_61.getMessage(), 
+							colorType));
 		}
 		
 		if (msg != null) {
 			info.setMessage (msg);
 			info.setWellFormed(false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_62);
 		}
 
 		switch (colorType) {
@@ -65,7 +68,7 @@ public class TrnsChunk extends PNGChunk {
 			int transGray = readUnsignedShort();
 			info.setProperty (new Property ("Transparent grey value",
 					PropertyType.INTEGER,
-					transGray));
+					Integer.valueOf(transGray)));
 			lengthLeft = (int) length - 2;
 			break;
 			
@@ -76,13 +79,13 @@ public class TrnsChunk extends PNGChunk {
 			int transBlue = readUnsignedShort();
 			info.setProperty (new Property ("Transparent red value",
 					PropertyType.INTEGER,
-					transRed));
+					Integer.valueOf(transRed)));
 			info.setProperty (new Property ("Transparent green value",
 					PropertyType.INTEGER,
-					transGreen));
+					Integer.valueOf(transGreen)));
 			info.setProperty (new Property ("Transparent blue value",
 					PropertyType.INTEGER,
-					transBlue));
+					Integer.valueOf(transBlue)));
 			lengthLeft = (int) length - 6;
 			break;
 			

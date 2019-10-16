@@ -2,7 +2,6 @@ package com.mcgath.jhove.module;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -137,8 +136,8 @@ public class PngModule extends ModuleBase {
      *   @param info      A fresh RepInfo object which will be modified
      *                    to reflect the results of the test
      */
-    public void checkSignatures (File file, InputStream stream, RepInfo info) 
-        throws IOException
+    @Override
+	public void checkSignatures (File file, InputStream stream, RepInfo info)
     {
         int i;
         int ch;
@@ -181,7 +180,8 @@ public class PngModule extends ModuleBase {
      *                    called again with <code>parseIndex</code> 
      *                    equal to that return value.
      */
-    public int parse (InputStream stream, RepInfo info, int parseIndex)
+    @Override
+	public int parse (InputStream stream, RepInfo info, int parseIndex)
         throws IOException
     {
         initParse ();
@@ -202,7 +202,7 @@ public class PngModule extends ModuleBase {
         	_dstream = getBufferedDataStream (stream, _je != null ?
                  _je.getBufferSize () : 0);
         }
-        _propList = new LinkedList<Property> ();
+        _propList = new LinkedList<> ();
         _metadata = new Property ("PNGMetadata",
              PropertyType.PROPERTY,
              PropertyArity.LIST,
@@ -211,15 +211,15 @@ public class PngModule extends ModuleBase {
         Property nisoProp = new Property(NISO_IMAGE_MD,
                 PropertyType.NISOIMAGEMETADATA, _nisoData);
         _propList.add(nisoProp);
-        _keywordPropList = new LinkedList<Property> ();
-        _spltList = new LinkedList<Property> ();
+        _keywordPropList = new LinkedList<> ();
+        _spltList = new LinkedList<> ();
         ErrorMessage msg;
         
         // Check that the file header matching the PNG magic numbers
         for (int i = 0; i < _sigBytes.length; i++) {
         	int byt = readUnsignedByte (_dstream);
         	if (byt != _sigBytes[i]) {
-        		msg = new ErrorMessage("File header does not match PNG signature");
+        		msg = new ErrorMessage(MessageConstants.PNG_GDM_66);
         		info.setMessage(msg);
         		info.setWellFormed(false);
         		return 0;
@@ -234,7 +234,7 @@ public class PngModule extends ModuleBase {
         			break;
         		}
         		if (iendSeen) {
-        			msg = new ErrorMessage ("IEND chunk is not last");
+        			msg = new ErrorMessage (MessageConstants.PNG_GDM_67);
         			info.setMessage (msg);
         			info.setWellFormed (false);
         			return 0;
@@ -250,7 +250,9 @@ public class PngModule extends ModuleBase {
         		long storedCRC = chunk.readCRC();
         		long calculatedCRC = chunk.getCRC();
         		if (storedCRC != calculatedCRC) {
-        			msg = new ErrorMessage("Incorrect CRC in chunk " + chunk.chunkTypeString());
+        			msg = new ErrorMessage(String.format (
+							MessageConstants.PNG_GDM_68.getMessage() , 
+							chunk.chunkTypeString()));
         			info.setMessage(msg);
         			info.setWellFormed(false);
         			return 0;
@@ -262,8 +264,10 @@ public class PngModule extends ModuleBase {
         	return 0;
         }
         catch (EOFException e) {
-        	msg = new ErrorMessage ("Unexpected end of file",
-        			_nByte);
+        	msg = new ErrorMessage (
+        			String.format (
+        					MessageConstants.PNG_GDM_69.getMessage(),
+        					_nByte));
         	info.setMessage (msg);
         	info.setWellFormed (false);
         	return 0;
@@ -272,7 +276,10 @@ public class PngModule extends ModuleBase {
         	// Miscellaneous exceptions really shouldn't come here.
         	// But it's better to catch them than let them fall through.
         	// Treat them as bugs.
-        	msg = new ErrorMessage ("Exception " + e.getClass().getName());
+        	msg = new ErrorMessage (
+        			String.format (
+        					MessageConstants.PNG_GDM_70.getMessage() , 
+        					e.getClass().getName()));
         	info.setMessage (msg);
         	info.setWellFormed (false);
         	return 0;
@@ -281,17 +288,17 @@ public class PngModule extends ModuleBase {
         /* Check for required chunks. */
         boolean criticalMissing = false;
         if (!ihdrSeen) {
-        	msg = new ErrorMessage("No IHDR chunk");
+        	msg = new ErrorMessage(MessageConstants.PNG_GDM_71);
         	info.setMessage (msg);
         	criticalMissing = true;
         }
         if (!idatSeen) {
-        	msg = new ErrorMessage("No IDAT chunk");
+        	msg = new ErrorMessage(MessageConstants.PNG_GDM_72);
         	info.setMessage (msg);
         	criticalMissing = true;
         }
         if (!iendSeen) {
-        	msg = new ErrorMessage("No IEND chunk");
+        	msg = new ErrorMessage(MessageConstants.PNG_GDM_73);
         	info.setMessage (msg);
         	criticalMissing = true;
         }
@@ -302,14 +309,14 @@ public class PngModule extends ModuleBase {
         
         /** PLTE is required with color type 3 and forbidden with types 0 and 4 */
         if (_colorType == 3 && !plteSeen) {
-        	msg = new ErrorMessage ("No PLTE chunk, required with color type 3");
+        	msg = new ErrorMessage (MessageConstants.PNG_GDM_74);
 			info.setMessage (msg);
         	info.setWellFormed (false);
 			return 0;
         }
         
         if ((_colorType == 0 || _colorType == 4) && plteSeen) {
-			msg = new ErrorMessage ("PLTE chunk found, not allowed with color types 0 and 4");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_75);
 			info.setMessage (msg);
         	info.setWellFormed (false);
 			return 0;
@@ -353,7 +360,7 @@ public class PngModule extends ModuleBase {
 	/** Add a keyword, value, and language. */
 	public void addKeyword(String keywd, String translatedKeywd, String val, String language) {
 		//HashMap<String, String> map = new HashMap<String, String>();
-		List<Property> props = new ArrayList<Property>();
+		List<Property> props = new ArrayList<>();
 		Property prop = new Property ("Keyword",
 				PropertyType.PROPERTY,
 				PropertyArity.LIST,
@@ -379,7 +386,7 @@ public class PngModule extends ModuleBase {
     
     /** Add a suggested palette */
 	public void addSplt (String name, int sampleDepth, int numSamples) {
-		List<Property> props = new ArrayList<Property>();
+		List<Property> props = new ArrayList<>();
 		Property prop = new Property ("Suggested palette",
 				PropertyType.PROPERTY,
 				PropertyArity.LIST,
@@ -389,10 +396,10 @@ public class PngModule extends ModuleBase {
 				name));
 		props.add (new Property ("Sample depth",
 				PropertyType.INTEGER,
-				sampleDepth));
+				Integer.valueOf(sampleDepth)));
 		props.add (new Property ("Number of samples",
 				PropertyType.INTEGER,
-				numSamples));
+				Integer.valueOf(numSamples)));
 		_spltList.add (prop);
 	}
 	
@@ -400,7 +407,8 @@ public class PngModule extends ModuleBase {
     /**
      *   Initializes the state of the module for parsing.
      */
-    protected void initParse ()
+    @Override
+	protected void initParse ()
     {
         super.initParse ();
         ihdrSeen = false;
@@ -408,7 +416,7 @@ public class PngModule extends ModuleBase {
         idatSeen = false;
         idatFinished = false;
         iendSeen = false;
-        _ancillaryChunks = new HashSet<Integer>();
+        _ancillaryChunks = new HashSet<>();
     }
     
     /* readChunkHead reads the type and length of a chunk and

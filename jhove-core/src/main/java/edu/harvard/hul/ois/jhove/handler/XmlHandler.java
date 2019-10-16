@@ -21,6 +21,7 @@
 package edu.harvard.hul.ois.jhove.handler;
 
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 import java.text.NumberFormat;
 import java.util.*;
@@ -28,7 +29,7 @@ import java.util.*;
 /**
  *  OutputHandler for XML output.
  *
- *  @see <a href="http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd">Schema
+ *  @see <a href="http://schema.openpreservation.org/ois/xml/xsd/jhove/jhove.xsd">Schema
  *       for JHOVE XML output</a>
  */
 public class XmlHandler
@@ -64,7 +65,7 @@ public class XmlHandler
     /** Handler informative note. */
     private static final String NOTE =
         "This output handler is defined by the XML Schema " +
-        "http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd";
+        "https://schema.openpreservation.org/ois/xml/xsd/jhove/jhove.xsd";
 
     /** Handler rights statement. */
     private static final String RIGHTS =
@@ -77,7 +78,7 @@ public class XmlHandler
     private final static String EOL = System.getProperty ("line.separator");
 
     /** Schema version. */
-    private static final String SCHEMA_VERSION = "1.6";
+    private static final String SCHEMA_VERSION = "1.8";
 
     /******************************************************************
      * PRIVATE INSTANCE FIELDS.
@@ -629,10 +630,10 @@ public class XmlHandler
             {"xmlns:xsi",
              "http://www.w3.org/2001/XMLSchema-instance"},
             {"xmlns",
-             "http://hul.harvard.edu/ois/xml/ns/jhove"},
+             "http://schema.openpreservation.org/ois/xml/ns/jhove"},
             {"xsi:schemaLocation",
-             "http://hul.harvard.edu/ois/xml/ns/jhove " +
-             "http://hul.harvard.edu/ois/xml/xsd/jhove/" + SCHEMA_VERSION +
+             "http://schema.openpreservation.org/ois/xml/ns/jhove " +
+             "https://schema.openpreservation.org/ois/xml/xsd/jhove/" + SCHEMA_VERSION +
 	     "/jhove.xsd"},
             {"name", _app.getName ()},
             {"release", _app.getRelease ()},
@@ -662,11 +663,12 @@ public class XmlHandler
     protected void showMessage (Message message)
     {
         String margin = getIndent (++_level);
-        String[][] attrs = new String[3][];
+        String[][] attrs = new String[4][];
         boolean hasAttr = false;
         attrs[0] = new String[] { "subMessage", null };
         attrs[1] = new String[] { "offset", null };
         attrs[2] = new String[] { "severity", null };
+        attrs[3] = new String[] { "id", null };
 
         String submsg = message.getSubMessage ();
         if (submsg != null) {
@@ -678,12 +680,13 @@ public class XmlHandler
             attrs[1] [1] = Long.toString (offset);
             hasAttr = true;
         }
-        if (message instanceof ErrorMessage) {
-            attrs[2] [1] = "error";
+        if (!message.getPrefix().isEmpty()) {
+            attrs[2] [1] = message.getPrefix().toLowerCase();
             hasAttr = true;
         }
-        else if (message instanceof InfoMessage) {
-            attrs[2] [1] = "info";
+        String id = message.getJhoveMessage().getId();
+        if (!(id == null || id.isEmpty() || id.equals(JhoveMessages.NO_ID))) {
+            attrs[3] [1] = message.getId();
             hasAttr = true;
         }
         if (hasAttr) {
@@ -1666,14 +1669,16 @@ public class XmlHandler
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
-        d = niso.getBrightness ();
-        if (d != NisoImageMetadata.NILL) {
+        Rational r = niso.getBrightness ();
+        if (r != null) {
+        	d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:Brightness",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
-        d = niso.getExposureBias ();
-        if (d != NisoImageMetadata.NILL) {
+        r = niso.getExposureBias ();
+        if (r != null) {
+        	d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:ExposureBias",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
@@ -1713,11 +1718,15 @@ public class XmlHandler
         }
         n = niso.getFlash ();
         if (n != NisoImageMetadata.NULL) {
-            ccsBuf.append (margn4 + element ("mix:Flash", Integer.toString (n)) + EOL);
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
+        	int firstBit = n & 1;
+        	ccsBuf.append(margn4 + element("mix:Flash", NisoImageMetadata.FLASH[firstBit])
+					+ EOL);
             useCCSBuf = true;
         }
-        d = niso.getFlashEnergy ();
-        if (d != NisoImageMetadata.NILL) {
+        r = niso.getFlashEnergy ();
+        if (r != null) {
+        	d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:FlashEnergy",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
@@ -2625,19 +2634,17 @@ public class XmlHandler
             ccSetBuf.append (margn6 + element ("mix:exifVersion", s) + EOL);
             useCcSetBuf = true;
         }
-        d = niso.getBrightness();
-        if (d != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:brightnessValue",
-					       formatters.get().format (d)) + EOL);
+        Rational r = niso.getBrightness();
+        if (r != null) {
+        	rationalToString(ccSetBuf, "mix:brightnessValue", margn6, r);
             useCcSetBuf = true;
         }
-        d = niso.getExposureBias();
-        if (d != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:exposureBiasValue",
-					       formatters.get().format (d)) + EOL);
+        r = niso.getExposureBias();
+        if (r != null) {
+        	rationalToString(ccSetBuf, "mix:exposureBiasValue", margn6, r);
             useCcSetBuf = true;
         }
-        Rational r = niso.getMaxApertureValue();
+        r = niso.getMaxApertureValue();
         if (r != null) {
         	rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
             useCcSetBuf = true;
@@ -2660,8 +2667,10 @@ public class XmlHandler
         }
         n = niso.getFlash ();
         if (n != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:flash",
-					       Integer.toString (n)) + EOL);
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
+        	int firstBit = n & 1;
+        	ccSetBuf.append(margn6 + element("mix:flash", NisoImageMetadata.FLASH_20[firstBit])
+					+ EOL);
             useCcSetBuf = true;
         }
         d = niso.getFocalLength ();
@@ -2670,10 +2679,9 @@ public class XmlHandler
 					       formatters.get().format (d)) + EOL);
             useCcSetBuf = true;
         }
-        d = niso.getFlashEnergy ();
-        if (d != NisoImageMetadata.NULL) {
-            ccSetBuf.append (margn6 + element ("mix:flashEnergy",
-					       formatters.get().format (d)) + EOL);
+        r = niso.getFlashEnergy ();
+        if (r != null) {
+        	rationalToString(ccSetBuf, "mix:flashEnergy", margn6, r);
             useCcSetBuf = true;
         }
         n = niso.getBackLight ();
@@ -3593,21 +3601,19 @@ public class XmlHandler
              		niso.getExifVersion()) + EOL);
              useCcSetBuf = true;
          }
-         d = niso.getBrightness();
+         Rational r = niso.getBrightness();
          if (d != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:brightnessValue",
-                            formatters.get().format (d)) + EOL);
+             rationalToString (ccSetBuf, "mix:brightnessValue", margn6, r);
              useCcSetBuf = true;
          }
-         d = niso.getExposureBias();
+         r = niso.getExposureBias();
          if (d != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:exposureBiasValue",
-                            formatters.get().format (d)) + EOL);
+             rationalToString (ccSetBuf, "mix:exposureBiasValue", margn6, r);
              useCcSetBuf = true;
          }
-         Rational r = niso.getMaxApertureValue();
+         r = niso.getMaxApertureValue();
          if (r != null) {
-         	rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
+             rationalToString (ccSetBuf, "mix:maxApertureValue", margn6, r);
              useCcSetBuf = true;
          }
          double[] darray = niso.getSubjectDistance ();
@@ -3639,8 +3645,10 @@ public class XmlHandler
          }
          n = niso.getFlash ();
          if (n != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:flash",
-                            Integer.toString (n)) + EOL);
+     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
+         	int firstBit = n & 1;
+         	ccSetBuf.append(margn6 + element("mix:flash", NisoImageMetadata.FLASH_20[firstBit])
+ 					+ EOL);
              useCcSetBuf = true;
          }
          d = niso.getFocalLength ();
@@ -3649,10 +3657,9 @@ public class XmlHandler
                             formatters.get().format (d)) + EOL);
              useCcSetBuf = true;
          }
-         d = niso.getFlashEnergy ();
-         if (d != NisoImageMetadata.NULL) {
-             ccSetBuf.append (margn6 + element ("mix:flashEnergy",
-                            formatters.get().format (d)) + EOL);
+         r = niso.getFlashEnergy ();
+         if (r != null) {
+         	 rationalToString(ccSetBuf, "mix:flashEnergy", margn6, r);
              useCcSetBuf = true;
          }
          n = niso.getBackLight ();

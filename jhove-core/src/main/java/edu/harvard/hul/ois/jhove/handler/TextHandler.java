@@ -21,6 +21,8 @@
 package edu.harvard.hul.ois.jhove.handler;
 
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 import java.text.*;
 import java.util.*;
 
@@ -488,17 +490,11 @@ public class TextHandler
     private void showMessage (Message message)
     {
         String margin = getIndent (++_level);
-        String prefix;
-        if (message instanceof ErrorMessage) {
-            prefix = "ErrorMessage: ";
+        String id = message.getId();
+        if (!(id == null || id.isEmpty() || id.equals(JhoveMessages.NO_ID))) {
+            _writer.println (margin + "ID: " + id);
         }
-        else if (message instanceof InfoMessage) {
-            prefix = "InfoMessage: ";
-        }
-        else {
-            prefix = "Message: ";
-        }
-
+        String prefix = message.getPrefix() + "Message: ";
         String str = message.getMessage ();
         // Append submessage, if any, after a colon.
         String submsg = message.getSubMessage ();
@@ -1354,11 +1350,14 @@ public class TextHandler
         if ((d = niso.getExposureTime ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "ExposureTime: " + d);
         }
-        if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
+        Rational r;
+        if ((r = niso.getBrightness ()) != null) {
+        	d = r.toDouble();
             _writer.println (margn2 + "Brightness: " + d);
         }
-        if ((d = niso.getExposureBias ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "ExposureBias: " + d);
+        if ((r = niso.getExposureBias ()) != null) {
+        	d = r.toDouble();
+            _writer.println (margn2 + "ExposureBias: " + d); 
         }
 
         double [] darray = niso.getSubjectDistance ();
@@ -1390,7 +1389,8 @@ public class TextHandler
                              addIntegerValue (n, NisoImageMetadata.FLASH,
                                               rawOutput));
         }
-        if ((d = niso.getFlashEnergy ()) != NisoImageMetadata.NILL) {
+        if ((r = niso.getFlashEnergy ()) != null) {
+        	d = r.toDouble();
             _writer.println (margn2 + "FlashEnergy: " + d);
         }
         if ((n = niso.getFlashReturn ()) != NisoImageMetadata.NULL) {
@@ -1439,7 +1439,7 @@ public class TextHandler
              addIntegerValue (n, NisoImageMetadata.SAMPLING_FREQUENCY_UNIT,
                               rawOutput));
         }
-        Rational r = niso.getXSamplingFrequency ();
+        r = niso.getXSamplingFrequency ();
         if (r != null) {
             _writer.println (margn2 + "XSamplingFrequency: " +
                              addRationalValue (r, rawOutput));
@@ -1797,11 +1797,13 @@ public class TextHandler
             		addIntegerValue (n, NisoImageMetadata.EXPOSURE_PROGRAM,
             				rawOutput));
         }
-        if ((d = niso.getBrightness ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "BrightnessValue: " + d);
+        if ((r = niso.getBrightness ()) != null) {
+            _writer.println (margn2 + "BrightnessValue: " + 
+            		addRationalValue (r, rawOutput));
         }
-        if ((d = niso.getExposureBias ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "ExposureBiasValue: " + d);
+        if ((r = niso.getExposureBias ()) != null) {
+            _writer.println (margn2 + "ExposureBiasValue: " + 
+            		addRationalValue (r, rawOutput));
         }
         double [] darray = niso.getSubjectDistance ();
         if (darray != null) {
@@ -1824,8 +1826,9 @@ public class TextHandler
         if ((d = niso.getFocalLength ()) != NisoImageMetadata.NILL) {
             _writer.println (margn2 + "FocalLength: " + d);
         }
-        if ((d = niso.getFlashEnergy ()) != NisoImageMetadata.NILL) {
-            _writer.println (margn2 + "FlashEnergy: " + d);
+        if ((r = niso.getFlashEnergy ()) != null) {
+            _writer.println (margn2 + "FlashEnergy: " + 
+            		addRationalValue (r, rawOutput));
         }
         if ((n = niso.getBackLight ()) != NisoImageMetadata.NULL) {
             _writer.println (margn2 + "BackLight: " +

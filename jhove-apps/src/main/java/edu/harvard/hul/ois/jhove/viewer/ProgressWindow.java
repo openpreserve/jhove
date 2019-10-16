@@ -74,7 +74,7 @@ public class ProgressWindow extends JFrame{
         cancelButton.addActionListener (canceler);
 
         setTitle ("Progress");
-        setDefaultCloseOperation (JFrame.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation (WindowConstants.DO_NOTHING_ON_CLOSE);
         pack ();
         MainScreen.centerTopWindow (this);
 

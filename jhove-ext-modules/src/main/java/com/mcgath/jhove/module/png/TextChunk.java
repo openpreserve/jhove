@@ -18,6 +18,7 @@ public class TextChunk extends GeneralTextChunk {
 		duplicateAllowed = true;
 	}
 	
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
 		
@@ -32,10 +33,10 @@ public class TextChunk extends GeneralTextChunk {
 			if (c == 0) {
 				if (keyword != null) {
 					// We already had a null. This shouldn't be here.
-					msg = new ErrorMessage ("Unexpected null in tEXt chunk");
+					msg = new ErrorMessage (MessageConstants.PNG_GDM_54);
 					info.setMessage (msg);
 					info.setWellFormed(false);
-					throw new PNGException ("Bad tEXt chunk");
+					throw new PNGException (MessageConstants.PNG_GDM_55);
 				}
 				keyword = sb.toString();
 				sb = new StringBuilder();	// Now for the value

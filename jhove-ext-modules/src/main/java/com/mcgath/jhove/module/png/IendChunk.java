@@ -13,6 +13,7 @@ public class IendChunk extends PNGChunk {
 		ancillary = false;
 	}
 	
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
 		_module.setIendSeen(true);
@@ -20,7 +21,7 @@ public class IendChunk extends PNGChunk {
 		// If it's bigger, eat the extra bytes and declare the
 		// file invalid but not ill-formed.
 		if (length > 0) {
-			ErrorMessage msg = new ErrorMessage("IEND chunk is not empty");
+			ErrorMessage msg = new ErrorMessage(MessageConstants.PNG_GDM_21);
 			info.setMessage (msg);
 			info.setValid (false);
 			for (int i = 0; i < length; i++) {

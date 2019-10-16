@@ -70,21 +70,22 @@ public class IhdrChunk extends PNGChunk {
 	/** The IHDR chunk contains image information in a fixed format.
 	 *  I don't think the spec says it can't have extra bytes
 	 *  which would just be padding. */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		boolean badChunk = false;
 		processChunkCommon(info);
 		if (_module.isIhdrSeen ()) {
-			ErrorMessage msg = new ErrorMessage("Multiple IHDR chunks are not allowed");
+			ErrorMessage msg = new ErrorMessage(MessageConstants.PNG_GDM_22);
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException ("Duplicate IHDR chunk");
+			throw new PNGException (MessageConstants.PNG_GDM_23);
 		}
 		_module.setIhdrSeen(true);
 		System.out.println("Chunk Type " + chunkTypeString() + " length " + length);
 		if (length < 13) {
-			ErrorMessage msg = new ErrorMessage ("IHDR chunk too short");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_24);
 			info.setMessage(msg);
-			throw new PNGException ("Bad IHDR chunk, aborting");
+			throw new PNGException (MessageConstants.PNG_GDM_25);
 		}
 		width = readUnsignedInt();
 		height = readUnsignedInt();
@@ -120,7 +121,10 @@ public class IhdrChunk extends PNGChunk {
 		} else {
 			if (!colorAndDepthOK(colorType, bitDepth)) {
 				ErrorMessage msg =
-						new ErrorMessage("Cannot use color type " + colorType + " with bit depth " + bitDepth);
+						new ErrorMessage(MessageConstants.PNG_GDM_26, 
+								String.format(MessageConstants.PNG_GDM_26_SUB.getMessage(),  
+										colorType, 
+										bitDepth));
 				info.setMessage(msg);
 				info.setWellFormed(false);
 				badChunk = true;
@@ -143,7 +147,7 @@ public class IhdrChunk extends PNGChunk {
 		
 		_propList.add (new Property("Filter type",
 				PropertyType.INTEGER,
-				filter));
+				Integer.valueOf(filter)));
 		
 		String interlaceStr;
 		switch (interlace) {
@@ -161,12 +165,12 @@ public class IhdrChunk extends PNGChunk {
 				PropertyType.STRING,
 				interlaceStr));
 		if (badChunk) {
-			throw new PNGException ("Bad IHDR chunk, aborting");
+			throw new PNGException (MessageConstants.PNG_GDM_27);
 		}
 	}
 	
 	/* Convert PNG colour type to NISO color space */
-	private int colorTypeToNiso (int typ) throws PNGException {
+	private static int colorTypeToNiso (int typ) throws PNGException {
 		int val = 0;
 		switch (typ) {
 		case COLOR_GRAYSCALE:
@@ -181,14 +185,14 @@ public class IhdrChunk extends PNGChunk {
 			val = 3;
 			break;
 		default:
-			throw new PNGException ("Invalid color type");
+			throw new PNGException (MessageConstants.PNG_GDM_28);
 		}
 		return val;
 	}
 	
 	/* Check if the combination of color type and bit depth is allowed.
 	 * Color must be in the range 0-6. */
-	private boolean colorAndDepthOK(int color, int depth) {
+	private static boolean colorAndDepthOK(int color, int depth) {
 		int[] allowedDepths = allowedBitDepths[color];
 		boolean ok = false;
 		for (int d : allowedDepths) {

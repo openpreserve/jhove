@@ -173,10 +173,12 @@ public abstract class PNGChunk {
 		if (ancillary && !duplicateAllowed) {
 			if (_module.isChunkSeen(chunkType)) {
 				ErrorMessage msg = new ErrorMessage 
-						("Multiple " + chunkTypeString() + " chunks are not allowed");
+						(MessageConstants.PNG_GDM_38, 
+								String.format(MessageConstants.PNG_GDM_38_SUB.getMessage(),  
+										chunkTypeString()));
 				info.setMessage (msg);
 				info.setWellFormed (false);
-				throw new PNGException ("Duplicate chunk");
+				throw new PNGException (MessageConstants.PNG_GDM_39);
 			}
 			_module.setChunkSeen (chunkType);
 		}
@@ -196,7 +198,7 @@ public abstract class PNGChunk {
 		for (int i = 0; i < 4; i++) {
 			int b = _dstream.readUnsignedByte();
 			val = (val << 8) | b;
-			crc.update((int) b);
+			crc.update(b);
 		}
 		return val;
 	}
@@ -207,7 +209,7 @@ public abstract class PNGChunk {
 		for (int i = 0; i < 2; i++) {
 			int b = _dstream.readUnsignedByte();
 			val = (val << 8) | b;
-			crc.update((int) b);
+			crc.update(b);
 		}
 		return val;
 	}

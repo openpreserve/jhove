@@ -20,20 +20,20 @@ public class SbitChunk extends PNGChunk {
 	/** The SBIT chunk contains 1 to 4 bytes of information giving the
 	 *  number of significant bits per color.  Ideally, we should check
 	 *  this against the color model. */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
-		final String badChunk = "Bad sBIT chunk";
 		processChunkCommon(info);
 		if (_module.isPlteSeen() || _module.isIdatSeen()) {
-			ErrorMessage msg = new ErrorMessage ("sBIT chunk is not allowed after PLTE or IDAT");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_40);
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_41);
 		}
 		if (length == 0 || length > 4) {
-			ErrorMessage msg = new ErrorMessage ("Bad length in sBIT chunk");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_42);
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_41);
 		}
 		int[] sbitVal = new int[(int) length];
 		for (int i = 0; i < length; i++) {

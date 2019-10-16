@@ -46,7 +46,7 @@ import java.util.Map;
  */
 public class CompressionMethod {
     /** The list of valid values. */
-    private static Map<Integer,CompressionMethod> values = new HashMap<Integer, CompressionMethod>();
+    private static Map<Integer,CompressionMethod> values = new HashMap<>();
 
     /** The deflate compression method.*/
     public static final CompressionMethod DEFLATE = new CompressionMethod(8, "Deflate", true);
@@ -55,7 +55,7 @@ public class CompressionMethod {
      * Initializes the valid values.
      */
     static {
-        values.put(DEFLATE.value, DEFLATE);
+        values.put(Integer.valueOf(DEFLATE.value), DEFLATE);
     }
     
     /** The integer value for the enum instance. */

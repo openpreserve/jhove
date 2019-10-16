@@ -6,12 +6,12 @@
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at
  * your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
@@ -20,90 +20,75 @@
 
 package edu.harvard.hul.ois.jhove.handler.audit;
 
-//import java.io.*;
-
 /**
  * Count object for the JHOVE Audit output handler.
  */
-public class AuditCount
-{
-    /******************************************************************
-     * PRIVATE INSTANCE FIELDS.
-     ******************************************************************/
+public class AuditCount {
 
-    /** Number of files not processed. */
-    protected int _notProcessed;
+	/** Number of valid files. */
+	protected int _valid;
 
-    /** Number of valid files. */
-    protected int _valid;
+	/** Number of well-formed files. */
+	protected int _wellFormed;
 
-    /** Number of well-formed files. */
-    protected int _wellFormed;
+	/** Number of not-well-formed files. */
+	protected int _notWellFormed;
 
-    /******************************************************************
-     * CLASS CONSTRUCTOR.
-     ******************************************************************/
+	/** Number of undetermined files. */
+	protected int _undetermined;
 
-    /**
-     * Instantiate a <tt>AuditCount</tt> object.
-     */
-    public AuditCount ()
-    {
-	_notProcessed = 0;
-	_valid        = 0;
-	_wellFormed   = 0;
-    }
+	/**
+	 * Instantiates an <code>AuditCount</code> object.
+	 */
+	public AuditCount() {
+		_valid = 0;
+		_wellFormed = 0;
+		_notWellFormed = 0;
+		_undetermined = 0;
+	}
 
-    /******************************************************************
-     * PUBLIC INSTANCE METHODS.
-     *
-     * Accessor methods.
-     ******************************************************************/
+	/** Returns the total number of processed files. */
+	public int getTotal() {
+		return _valid + _wellFormed + _notWellFormed + _undetermined;
+	}
 
-    /** Returns the total number of files not processed. */
-    public int getNotProcessed ()
-    {
-	return _notProcessed;
-    }
+	/** Returns the total number of valid files. */
+	public int getValid() {
+		return _valid;
+	}
 
-    /** Returns the total number of valid or well-formed
-        files. */
-    public int getTotal ()
-    {
-	return _valid + _wellFormed;
-    }
+	/** Returns the total number of well-formed files. */
+	public int getWellFormed() {
+		return _wellFormed;
+	}
 
-    /** Returns the total number of valid files. */
-    public int getValid ()
-    {
-	return _valid;
-    }
+	/** Returns the count of not-well-formed files. */
+	public int getNotWellFormed() {
+		return _notWellFormed;
+	}
 
-    /** Returns the total number of well-formed files. */
-    public int getWellFormed ()
-    {
-	return _wellFormed;
-    }
+	/** Returns the count of undetermined files. */
+	public int getUndetermined() {
+		return _undetermined;
+	}
 
-    /******************************************************************
-     * Mutator methods.
-     ******************************************************************/
+	/** Sets the count of valid files. */
+	public void setValid(int valid) {
+		_valid = valid;
+	}
 
-    /** Sets the count of files that are not processed. */
-    public void setNotProcessed (int notProcessed)
-    {
-	_notProcessed = notProcessed;
-    }
+	/** Sets the count of well-formed files. */
+	public void setWellFormed(int wellFormed) {
+		_wellFormed = wellFormed;
+	}
 
-    /** Sets the count of valid files. */
-    public void setValid (int valid)
-    {
-	_valid = valid;
-    }
+	/** Sets the count of not-well-formed files. */
+	public void setNotWellFormed(int notWellFormed) {
+		_notWellFormed = notWellFormed;
+	}
 
-    /** Sets the count of well-formed files. */
-    public void setWellFormed (int wellFormed)
-    {
-	_wellFormed = wellFormed;
-    }
+	/** Sets the count of undetermined files. */
+	public void setUndetermined(int undetermined) {
+		_undetermined = undetermined;
+	}
 }

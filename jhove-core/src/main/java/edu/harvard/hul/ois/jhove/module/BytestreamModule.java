@@ -38,8 +38,8 @@ public final class BytestreamModule
      ******************************************************************/
 
     private static final String NAME = "BYTESTREAM";
-    private static final String RELEASE = "1.3";
-    private static final int [] DATE = {2007, 4, 10};
+    private static final String RELEASE = "1.4";
+    private static final int [] DATE = {2018, 10, 1};
     private static final String [] FORMAT = {"bytestream"};
     private static final String COVERAGE = null;
     private static final String [] MIMETYPE = {"application/octet-stream"};
@@ -82,9 +82,7 @@ public final class BytestreamModule
 	throws IOException
     {
         initParse ();
-        info.setModule (this);
-        info.setFormat (this._format[0]);
-        info.setMimeType (this._mimeType[0]);
+        initInfo(info);
 
         // Setup the data stream, will determine if we use checksum stream
         setupDataStream(stream, info);

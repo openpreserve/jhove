@@ -17,15 +17,15 @@ public class SpltChunk extends PNGChunk {
 	/** Process the chunk. We add a property for the suggested 
 	 *  palette by adding it to the module's list of sPLT's.
 	 */
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
-		final String badChunk = "Bad sPLT chunk";
 		String paletteName = null;
 		processChunkCommon(info);
 		if (_module.isIdatSeen()) {
-			ErrorMessage msg = new ErrorMessage ("sPLT chunk is not allowed after IDAT chunk");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_43);
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_44);
 		}
 		int lengthLeft = (int) length;
 		
@@ -43,26 +43,27 @@ public class SpltChunk extends PNGChunk {
 			if (c == 0) {
 				paletteName = sb.toString();
 				break;
-			} else {
-				sb.append(c);
 			}
+			sb.append(c);
 		}
 		if (paletteName == null) {
 			// No null seen to terminate name
-			ErrorMessage msg = new ErrorMessage ("Name not terminated in sPLT chunk");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_45);
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_44);
 		}
 		
 		// Sample depth must be 8 or 16 bits
 		int sampleDepth = readUnsignedByte();
 		--lengthLeft;
 		if (sampleDepth != 8 && sampleDepth != 16) {
-			ErrorMessage msg = new ErrorMessage ("Invalid sample depth " + sampleDepth + " for sPLT chunk");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_46.getMessage(), 
+					String.format(MessageConstants.PNG_GDM_46_SUB.getMessage(),  
+							sampleDepth));
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_44);
 		}
 		
 		// The rest of the chunk is RGBA sample values plus frequency,
@@ -72,10 +73,10 @@ public class SpltChunk extends PNGChunk {
 		// we report the sample count.
 		if ((sampleDepth == 8 && (lengthLeft % 6) != 0) ||
 				(sampleDepth == 16 && (lengthLeft % 10) != 0)) {
-			ErrorMessage msg = new ErrorMessage ("Invalid length for sPLT chunk");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_47);
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_44);
 		}
 		int nSamples;
 		if (sampleDepth == 8) {

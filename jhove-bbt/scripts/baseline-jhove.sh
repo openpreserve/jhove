@@ -34,6 +34,8 @@ paramOutputRootDir=""
 glbCleanedBackRet=""
 
 # Include utils script
+# shellcheck source=inc/bb-utils.sh
+# shellcheck disable=SC1091
 . "$SCRIPT_DIR/inc/bb-utils.sh"
 
 # Check the passed params to avoid disapointment
@@ -76,7 +78,7 @@ checkParams () {
 	fi
 
 	# Remove any trailing backslash from name
-	removeBackSlash $paramCorporaLoc;
+	removeBackSlash "$paramCorporaLoc";
 	paramCorporaLoc=${glbCleanedBackRet};
 
   # Check that the output directory exists
@@ -87,7 +89,7 @@ checkParams () {
 	fi
 
 	# Remove any trailing backslash from name
-	removeBackSlash $paramOutputRootDir;
+	removeBackSlash "$paramOutputRootDir";
 	paramOutputRootDir=${glbCleanedBackRet};
 }
 
@@ -109,7 +111,7 @@ auditJhove() {
 processModuleDirs() {
   while IFS= read -r -d '' DIR
   do
-		destDir="$( echo ${DIR} | sed "s%^${paramCorporaLoc}/%${paramOutputRootDir}/%" )"
+		destDir="$( echo "${DIR}" | sed "s%^${paramCorporaLoc}/%${paramOutputRootDir}/%" )"
 		bash "$SCRIPT_DIR/process-modules.sh" -j "$paramJhoveLoc" -m "$DIR" -o "$destDir"
   done <    <(find "$paramCorporaLoc" -type d -name modules -print0)
 }

@@ -121,12 +121,15 @@ public class NisoImageMetadata
     
     /** 7.7.3.10 flash value labels. */
     public static final String [] FLASH = {
-	"yes", "no"
+	"No", "Yes"
+    };
+    public static final String [] FLASH_20 = {
+	"Flash did not fire", "Flash fired"
     };
 
     /** 7.7.3.12 flash return value labels. */
     public static final String [] FLASH_RETURN = {
-	"yes", "no"
+	"Yes", "No"
     };
 
     /** 8.2.6 gray response unit value labels for version 0.2. */
@@ -369,9 +372,9 @@ public class NisoImageMetadata
     private Rational _maxApertureValue;
     
     /** 7.7.3.3 Brightness */
-    private double _brightness;
+    private Rational _brightness;
     /** 7.7.3.4 Exposure bias */
-    private double _exposureBias;
+    private Rational _exposureBias;
     /** 7.7.3.5 Subject distance */
     private double [] _subjectDistance;
     /** 7.7.3.6 Metering mode */
@@ -385,7 +388,7 @@ public class NisoImageMetadata
     /** 7.7.3.10 Flash */
     private int _flash;
     /** 7.7.3.11 Flash energy */
-    private double _flashEnergy;
+    private Rational _flashEnergy;
     /** 7.7.3.12 Flash return */
     private int _flashReturn;
     /** 7.7.3.13 Back light */
@@ -521,7 +524,7 @@ public class NisoImageMetadata
     {
 	_autoFocus = NULL;
 	_backLight = NULL;
-	_brightness = NILL;
+	_brightness = null;
 	_checksumMethod = NULL;
 	_colorSpace = NULL;
 	_colorTemp = NILL;
@@ -534,13 +537,13 @@ public class NisoImageMetadata
 	_digitalCameraModelSerialNo = null;
 	_displayOrientation = NULL;
 	_exifVersion = null;
-	_exposureBias = NILL;
+	_exposureBias = null;
 	_exposureIndex = NILL;
 	_exposureProgram = NULL;
 	_exposureTime = NILL;
 	_fileSize = NULL;
 	_flash = NULL;
-	_flashEnergy = NILL;
+	_flashEnergy = null;
 	_flashReturn = NULL;
 	_fNumber = NILL;
 	_focalLength = NILL;
@@ -619,7 +622,7 @@ public class NisoImageMetadata
     }
 
     /** Get 7.7.3.3 Brightness. */
-    public double getBrightness ()
+    public Rational getBrightness ()
     {
 	return _brightness;
     }
@@ -746,7 +749,7 @@ public class NisoImageMetadata
     }
 
     /** Get 7.7.3.4 exposure bias. */
-    public double getExposureBias ()
+    public Rational getExposureBias ()
     {
 	return _exposureBias;
     }
@@ -787,7 +790,7 @@ public class NisoImageMetadata
     }
 
     /** Get 7.7.3.11 flash energy. */
-    public double getFlashEnergy ()
+    public Rational getFlashEnergy ()
     {
 	return _flashEnergy;
     }
@@ -1317,7 +1320,7 @@ public class NisoImageMetadata
     /** Set 7.7.3.3 brightness.
      * @param brightness Brightness
      */
-    public void setBrightness (double brightness)
+    public void setBrightness (Rational brightness)
     {
 	_brightness = brightness;
     }
@@ -1468,7 +1471,7 @@ public class NisoImageMetadata
     /** Set 7.2.3.4 exposure bias.
      * @param bias Exposure bias
      */
-    public void setExposureBias (double bias)
+    public void setExposureBias (Rational bias)
     {
 	_exposureBias = bias;
     }
@@ -1521,7 +1524,7 @@ public class NisoImageMetadata
     /** Set 7.7.3.11 flash energy.
      * @param energy Flash energy
      */
-    public void setFlashEnergy (double energy)
+    public void setFlashEnergy (Rational energy)
     {
 	_flashEnergy = energy;
     }

@@ -21,20 +21,22 @@ public class GamaChunk extends PNGChunk {
 		duplicateAllowed = false;
 	}
 	
+	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
-		final String badChunk = "Bad gAMA chunk";
 		if (_module.isPlteSeen() || _module.isIdatSeen()) {
-			ErrorMessage msg = new ErrorMessage ("gAMA chunk is not allowed after PLTE or IDAT");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_7);
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_8);
 		}
 		if (length != 4) {
-			ErrorMessage msg = new ErrorMessage ("gAMA chunk should have length = 4, length is " + length);
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_9, 
+					String.format(MessageConstants.PNG_GDM_9_SUB.getMessage(),  
+							length));
 			info.setMessage(msg);
 			info.setWellFormed(false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_8);
 		}
 		// The value is stored multiplied by 100000
 		int gamma = (int) readUnsignedInt();
@@ -45,16 +47,16 @@ public class GamaChunk extends PNGChunk {
 		_propList.add(gammaProp);
 		
 		if (_module.isPlteSeen()) {
-			ErrorMessage msg = new ErrorMessage ("gAMA chunk not allowed after PLTE chunk");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_10);
 			info.setMessage (msg);
 			info.setWellFormed(false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_8);
 		}
 		if (_module.isIdatSeen()) {
-			ErrorMessage msg = new ErrorMessage ("gAMA chunk not allowed after IDAT chunk");
+			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_11);
 			info.setMessage (msg);
 			info.setWellFormed(false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_8);
 		}
 	}
 }
