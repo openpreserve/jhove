@@ -1,5 +1,7 @@
 package com.mcgath.jhove.module.png;
 
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+
 /** Exception class specific to the PNG module */
 public class PNGException extends Exception {
 	
@@ -9,6 +11,10 @@ public class PNGException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public PNGException (String msg) {
-		super (msg);
+		
+	}
+
+	public PNGException(JhoveMessage msg) {
+		super (msg.getMessage());
 	}
 }

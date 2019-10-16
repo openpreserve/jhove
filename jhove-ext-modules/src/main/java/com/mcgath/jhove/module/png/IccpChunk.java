@@ -18,23 +18,22 @@ public class IccpChunk extends PNGChunk {
 	
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
-		final String badChunk = "Bad iCCP chunk";
 		processChunkCommon(info);
 		
 		ErrorMessage msg = null;
 		if (_module.isPlteSeen()) {
-			msg = new ErrorMessage ("iCCP chunk is not allowed after PLTE chunk");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_15);
 		}
 		else if (_module.isIdatSeen()) {
-			msg = new ErrorMessage ("iCCP chunk is not allowed after IDAT chunk");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_16);
 		}
 		else if (_module.isChunkSeen(PNGChunk.sRGB_HEAD_SIG)) {
-			msg = new ErrorMessage ("iCCP and sRGB chunks are not allowed in the same file");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_17);
 		}
 		if (msg != null) {
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_18);
 		}
 
 		// The iCCP chunk consists of a name, a null, 
@@ -69,10 +68,10 @@ public class IccpChunk extends PNGChunk {
 		}
 		if (state != 2) {
 			// If we didn't reach state 2, something's wrong with the chunk structure
-			msg = new ErrorMessage ("Malformed iCCP chunk");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_19);
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_18);
 		}
 		Property profile = new Property ("ICC Profile name",
 				PropertyType.STRING,
