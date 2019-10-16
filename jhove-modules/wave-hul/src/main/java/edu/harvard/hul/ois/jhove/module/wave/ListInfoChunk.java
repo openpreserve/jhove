@@ -68,8 +68,7 @@ public class ListInfoChunk extends Superchunk {
 					MessageConstants.WAVE_HUL_15.getId(), String.format(
 							MessageConstants.WAVE_HUL_15.getMessage(),
 							"\"" + typeID + "\""));
-			info.setMessage(new InfoMessage(
-					message, _module.getNByte() - TYPE_LENGTH));
+			info.setMessage(new InfoMessage(message, chunkOffset));
 			_module.skipBytes(_dstream, bytesLeft, _module);
 			return true;
 		}

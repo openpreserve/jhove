@@ -16,11 +16,10 @@ import java.io.*;
  */
 public class ChunkHeader {
 
-    private static final int CHUNK_ID_LENGTH = 4;
-
     private ModuleBase _module;
     private RepInfo _repInfo;
     private String _chunkId;         // Four-character ID of the chunk
+    private long _offset;            // Offset from the beginning of file
     private long _size;              // This does not include the 8 bytes of header
 
     /**
@@ -42,17 +41,22 @@ public class ChunkHeader {
      */
     public boolean readHeader(DataInputStream dstrm) throws IOException
     {
+        final int LOWEST_PRINTABLE_ASCII = 32;
+        final int HIGHEST_PRINTABLE_ASCII = 126;
+
+        _offset = _module.getNByte();
+
         boolean idBeginsWithSpace = false;
         boolean spacePrecedesPrintableCharacters = false;
-        StringBuilder id = new StringBuilder(CHUNK_ID_LENGTH);
+        StringBuilder id = new StringBuilder(Chunk.ID_LENGTH);
 
-        for (int i = 0; i < CHUNK_ID_LENGTH; i++) {
+        for (int i = 0; i < Chunk.ID_LENGTH; i++) {
 
             boolean printableCharacter = false;
             int ch = ModuleBase.readUnsignedByte(dstrm, _module);
 
             // Characters should be in the printable ASCII range
-            if (ch < 32 || ch > 126) {
+            if (ch < LOWEST_PRINTABLE_ASCII || ch > HIGHEST_PRINTABLE_ASCII) {
                 _repInfo.setMessage(new ErrorMessage(
                         MessageConstants.IFF_HUL_1,
                         String.format(
@@ -84,7 +88,7 @@ public class ChunkHeader {
         if (spacePrecedesPrintableCharacters) {
             _repInfo.setMessage(new ErrorMessage(
                     MessageConstants.IFF_HUL_2, "\"" + _chunkId + "\"",
-                    _module.getNByte() - CHUNK_ID_LENGTH));
+                    _module.getNByte() - Chunk.ID_LENGTH));
             _repInfo.setValid(false);
         }
 
@@ -112,9 +116,15 @@ public class ChunkHeader {
         _size = size;
     }
 
-    /** Returns the chunk size (excluding the first 8 bytes) */
+    /** Returns the chunk size, which excludes the length of the header. */
     public long getSize()
     {
         return _size;
+    }
+
+    /** Returns the chunk offset in bytes from the beginning of file. */
+    public long getOffset()
+    {
+        return _offset;
     }
 }

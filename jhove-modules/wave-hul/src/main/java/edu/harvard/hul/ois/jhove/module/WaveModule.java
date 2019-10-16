@@ -98,12 +98,6 @@ public class WaveModule extends ModuleBase {
     /** Length of the RIFF form type field in bytes */
     private static final int RIFF_FORM_TYPE_LENGTH = 4;
 
-    /** Length of chunk headers in bytes */
-    private static final int CHUNK_HEADER_LENGTH = 8;
-
-    /** Length of chunk size fields in bytes */
-    private static final int CHUNK_SIZE_LENGTH = 4;
-
     /** Value indicating a required 64-bit data size lookup */
     public static final long LOOKUP_EXTENDED_DATA_SIZE = 0xFFFFFFFFL;
 
@@ -400,7 +394,7 @@ public class WaveModule extends ModuleBase {
 				} else {
 					info.setMessage(new ErrorMessage(
 							MessageConstants.WAVE_HUL_23,
-							CHUNK_HEADER_LENGTH + RIFF_FORM_TYPE_LENGTH));
+							Chunk.HEADER_LENGTH + RIFF_FORM_TYPE_LENGTH));
 					info.setWellFormed(false);
 					return 0;
 				}
@@ -738,7 +732,7 @@ public class WaveModule extends ModuleBase {
 		// Check if the chunk size is greater than the RIFF's remaining length
 		if (Long.compareUnsigned(getBytesRemaining(), chunkSize) < 0) {
 			info.setMessage(new ErrorMessage(
-					MessageConstants.WAVE_HUL_6, _nByte - CHUNK_SIZE_LENGTH));
+					MessageConstants.WAVE_HUL_6, _nByte - Chunk.SIZE_LENGTH));
 			info.setWellFormed(false);
 			return false;
 		}
@@ -752,8 +746,7 @@ public class WaveModule extends ModuleBase {
 		} else if ("data".equals(chunkId)) {
 			if (!formatChunkSeen) {
 				info.setMessage(new ErrorMessage(
-						MessageConstants.WAVE_HUL_25,
-						_nByte - CHUNK_HEADER_LENGTH));
+						MessageConstants.WAVE_HUL_25, chunkh.getOffset()));
 				info.setValid(false);
 			}
 			if (dataChunkSeen) {
@@ -833,8 +826,7 @@ public class WaveModule extends ModuleBase {
 					MessageConstants.WAVE_HUL_7.getId(),
 					String.format(MessageConstants.WAVE_HUL_7.getMessage(),
 							"\"" + chunkId + "\""));
-			info.setMessage(new InfoMessage(message,
-					_nByte - CHUNK_HEADER_LENGTH));
+			info.setMessage(new InfoMessage(message, chunkh.getOffset()));
 		}
 
 		long dataRead = _nByte;
@@ -903,7 +895,7 @@ public class WaveModule extends ModuleBase {
 	/** Returns the number of RIFF bytes remaining to be read. */
 	private long getBytesRemaining() {
 
-		long totalBytes = CHUNK_HEADER_LENGTH;
+		long totalBytes = Chunk.HEADER_LENGTH;
 
 		if (hasExtendedDataSizes()) {
 			totalBytes += extendedRiffSize;
@@ -925,7 +917,7 @@ public class WaveModule extends ModuleBase {
 				MessageConstants.WAVE_HUL_8.getId(), String.format(
 						MessageConstants.WAVE_HUL_8.getMessage(), chunkName));
 		info.setMessage(new ErrorMessage(
-				message, _nByte - CHUNK_HEADER_LENGTH));
+				message, _nByte - Chunk.HEADER_LENGTH));
 		info.setValid(false);
 	}
 
