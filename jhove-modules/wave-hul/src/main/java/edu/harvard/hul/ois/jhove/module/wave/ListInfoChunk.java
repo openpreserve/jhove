@@ -63,13 +63,15 @@ public class ListInfoChunk extends Superchunk {
 		} else if ("adtl".equals(typeID)) {
 			return readAdtlChunk(info);
 		} else {
+			// Skip unrecognized list types
 			JhoveMessage message = JhoveMessages.getMessageInstance(
 					MessageConstants.WAVE_HUL_15.getId(), String.format(
-							MessageConstants.WAVE_HUL_15.getMessage(), typeID));
-			info.setMessage(new ErrorMessage(
+							MessageConstants.WAVE_HUL_15.getMessage(),
+							"\"" + typeID + "\""));
+			info.setMessage(new InfoMessage(
 					message, _module.getNByte() - TYPE_LENGTH));
-			info.setWellFormed(false);
-			return false;
+			_module.skipBytes(_dstream, bytesLeft, _module);
+			return true;
 		}
 	}
 
