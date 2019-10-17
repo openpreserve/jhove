@@ -430,7 +430,7 @@ public class PdfModule extends ModuleBase {
 	protected int _numObjects;   // Value of the "Size" entry in the trailer
 								   // dictionary
 	protected int _numTrailers;  // Count of the number of trailers (updates)
-	protected Map _objects;      // Map of the objects in the file
+	protected Map<Long, PdfObject> _objects; // Map of the objects in the file
 	protected long[] _xref;      // array of object offsets from xref table
 	protected int[][] _xref2;   // array of int[2], giving object stream and
 								   // offset when _xref[i] < 0
@@ -774,7 +774,7 @@ public class PdfModule extends ModuleBase {
 			throws IOException {
 		initParse();
 		initInfo(info);
-		_objects = new HashMap();
+		_objects = new HashMap<>();
 		_raf = raf;
 
 		Tokenizer tok = new FileTokenizer(_raf);
@@ -4108,30 +4108,27 @@ public class PdfModule extends ModuleBase {
 	 * If we can't find a match for the reference, we return -1.
 	 */
 	protected int resolveIndirectDest(PdfSimpleObject key) throws PdfException {
+		if (key == null) {
+			throw new IllegalArgumentException("Argument key can not be null");
+		}
 		_logger.finest("Looking for indirectly referenced Dest: "
 				+ key.getStringValue());
-		if (_destNames != null) {
-			PdfObject destObj = _destNames.get(key.getRawBytes());
-			// Was the Dest this annotation refers to found in the document?
-			if (destObj == null) {
-				// Treat this condition as invalid:
-				String mess = MessageFormat.format(
-						MessageConstants.PDF_HUL_149.getMessage(),
-						key.getStringValue());
-				JhoveMessage message = JhoveMessages.getMessageInstance(
-						MessageConstants.PDF_HUL_149.getId(), mess);
-				throw new PdfInvalidException(message); // PDF-HUL-149
-				// OR if this is not considered invalid
-				// return -1;
-			} else {
-				Destination dest = new Destination(destObj, this, true);
-				// if (dest == null) {
-				// return -1;
-				// }
-				return dest.getPageDestObjNumber();
-			}
+		if (_destNames == null) return -1;
+		PdfObject destObj = _destNames.get(key.getRawBytes());
+		// Was the Dest this annotation refers to found in the document?
+		if (destObj == null) {
+			// Treat this condition as invalid:
+			String mess = MessageFormat.format(
+					MessageConstants.PDF_HUL_149.getMessage(),
+					key.getStringValue());
+			JhoveMessage message = JhoveMessages.getMessageInstance(
+					MessageConstants.PDF_HUL_149.getId(), mess);
+			throw new PdfInvalidException(message); // PDF-HUL-149
+			// OR if this is not considered invalid
+			// return -1;
 		}
-		return -1;   // This is probably an error, actually
+		Destination dest = new Destination(destObj, this, true);
+		return dest.getPageDestObjNumber();
 	}
 
 	/* Build the user permission property., */
