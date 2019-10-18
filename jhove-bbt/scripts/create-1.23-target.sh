@@ -53,3 +53,9 @@ fi
 echo "Executing baseline update"
 # Simply copy baseline for now we're not making any changes
 cp -R "${baselineRoot}" "${targetRoot}"
+
+# # Copy valid JP2K files across for new MIX metadata see https://github.com/openpreserve/jhove/pull/445
+if [[ -d "${candidateRoot}/examples/modules/JPEG2000-hul" ]]; then
+	echo "Copying valid JPEG2000 examples."
+	cp -Rf "${candidateRoot}/regression/modules/JPEG2000-hul" "${targetRoot}/examples/modules/"
+fi
