@@ -1159,8 +1159,7 @@ public class TiffIFD extends IFD {
 					NEWSUBFILETYPE_L, rawOutput));
 		} else {
 			// if 0, always report as a raw number
-			entries.add(new Property("NewSubfileType", PropertyType.LONG,
-					new Long(_newSubfileType)));
+			entries.add(new Property("NewSubfileType", PropertyType.LONG, _newSubfileType));
 		}
 		if (_subfileType != NULL && (_subfileType != 0 || rawOutput)) {
 			entries.add(addIntegerProperty("SubfileType", _subfileType - 1,
@@ -1213,8 +1212,7 @@ public class TiffIFD extends IFD {
 					addIntegerProperty("InkSet", _inkSet, INKSET_L, rawOutput));
 		}
 		if (_numberOfInks != NULL) {
-			entries.add(new Property("NumberOfInks", PropertyType.INTEGER,
-					new Integer(_numberOfInks)));
+			entries.add(new Property("NumberOfInks", PropertyType.INTEGER, _numberOfInks));
 		}
 		if (_inkNames != null) {
 			entries.add(new Property("InkNames", PropertyType.STRING,
@@ -1233,50 +1231,44 @@ public class TiffIFD extends IFD {
 					PropertyArity.ARRAY, _halftoneHints));
 		}
 		if (_cellLength != NULL) {
-			entries.add(new Property("CellLength", PropertyType.INTEGER,
-					new Integer(_cellLength)));
+			entries.add(new Property("CellLength", PropertyType.INTEGER, _cellLength));
 		}
 		if (_cellWidth != NULL) {
-			entries.add(new Property("CellWidth", PropertyType.INTEGER,
-					new Integer(_cellWidth)));
+			entries.add(new Property("CellWidth", PropertyType.INTEGER, _cellWidth));
 		}
 		if (_transferFunction) {
 			entries.add(new Property("TransferFunction", PropertyType.BOOLEAN,
-					new Boolean(true)));
+					Boolean.TRUE));
 		}
 		if (_transferRange != null) {
 			entries.add(new Property("TransferRange", PropertyType.INTEGER,
 					PropertyArity.ARRAY, _transferRange));
 		}
-		entries.add(new Property("Threshholding", PropertyType.INTEGER,
-				new Integer(_threshholding)));
+		entries.add(new Property("Threshholding", PropertyType.INTEGER, _threshholding));
 		if (_predictor != NULL) {
 			entries.add(addIntegerProperty("Predictor", _predictor, PREDICTOR_L,
 					rawOutput));
 		}
 		if (_t4Options != NULL) {
-			entries.add(new Property("T4Options", PropertyType.LONG,
-					new Long(_t4Options)));
+			entries.add(new Property("T4Options", PropertyType.LONG, _t4Options));
 		}
 		if (_t6Options != NULL) {
-			entries.add(new Property("T6Options", PropertyType.LONG,
-					new Long(_t6Options)));
+			entries.add(new Property("T6Options", PropertyType.LONG, _t6Options));
 		}
 		if (_jpegProc != NULL) {
 			entries.add(addIntegerProperty("JPEGProc", _jpegProc, JPEGPROC_L,
 					JPEGPROC_INDEX, rawOutput));
 		}
 		if (_jpegInterchangeFormat != NULL) {
-			entries.add(new Property("JPEGInterchangeFormat", PropertyType.LONG,
-					new Long(_jpegInterchangeFormat)));
+			entries.add(new Property("JPEGInterchangeFormat", PropertyType.LONG, _jpegInterchangeFormat));
 		}
 		if (_jpegInterchangeFormatLength != NULL) {
 			entries.add(new Property("JPEGInterchangeFormatLength",
-					PropertyType.LONG, new Long(_jpegInterchangeFormatLength)));
+					PropertyType.LONG, _jpegInterchangeFormatLength));
 		}
 		if (_jpegRestartInterval != NULL) {
 			entries.add(new Property("JPEGRestartInterval",
-					PropertyType.INTEGER, new Integer(_jpegRestartInterval)));
+					PropertyType.INTEGER, _jpegRestartInterval));
 		}
 		if (_jpegLosslessPredictors != null) {
 			entries.add(addIntegerArrayProperty("JPEGLosslessPredictors",
@@ -1322,24 +1314,21 @@ public class TiffIFD extends IFD {
 					PropertyArity.ARRAY, _clipPath));
 		}
 		if (_xClipPathUnits != NULL) {
-			entries.add(new Property("XClipPathUnits", PropertyType.LONG,
-					new Long(_xClipPathUnits)));
+			entries.add(new Property("XClipPathUnits", PropertyType.LONG, _xClipPathUnits));
 		}
 		if (_yClipPathUnits != NULL) {
-			entries.add(new Property("YClipPathUnits", PropertyType.LONG,
-					new Long(_yClipPathUnits)));
+			entries.add(new Property("YClipPathUnits", PropertyType.LONG, _yClipPathUnits));
 		}
 		if (_cleanFaxData != NULL) {
 			entries.add(new Property("CleanFaxData", PropertyType.LONG,
 					new Long(_cleanFaxData)));
 		}
 		if (_badFaxLines != NULL) {
-			entries.add(new Property("BadFaxLines", PropertyType.LONG,
-					new Long(_badFaxLines)));
+			entries.add(new Property("BadFaxLines", PropertyType.LONG, _badFaxLines));
 		}
 		if (_consecutiveBadFaxLines != NULL) {
 			entries.add(new Property("ConsecutiveBadFaxLines",
-					PropertyType.LONG, new Long(_consecutiveBadFaxLines)));
+					PropertyType.LONG, _consecutiveBadFaxLines));
 		}
 		if (_freeByteCounts != null) {
 			entries.add(new Property("FreeByteCounts", PropertyType.LONG,
@@ -1368,15 +1357,14 @@ public class TiffIFD extends IFD {
 				rawOutput));
 		if (_backgroundColorValue != NULL) {
 			itList.add(new Property("BackgroundColorValue",
-					PropertyType.INTEGER, new Integer(_backgroundColorValue)));
+					PropertyType.INTEGER, _backgroundColorValue));
 		}
 		itList.add(addIntegerProperty("ImageColorIndicator",
 				_imageColorIndicator, IMAGECOLORINDICATOR_L, rawOutput));
 		itList.add(addIntegerProperty("TransparencyIndicator",
 				_transparencyIndicator, TRANSPARENCYINDICATOR_L, rawOutput));
 		if (_imageColorValue != NULL) {
-			itList.add(new Property("ImageColorValue", PropertyType.INTEGER,
-					new Integer(_imageColorValue)));
+			itList.add(new Property("ImageColorValue", PropertyType.INTEGER, _imageColorValue));
 		}
 		if (_colorCharacterization != null) {
 			itList.add(new Property("ColorCharacterization",
@@ -1400,10 +1388,9 @@ public class TiffIFD extends IFD {
 		}
 		itList.add(addIntegerProperty("RasterPadding", _rasterPadding,
 				RASTERPADDING_L, rawOutput));
-		itList.add(new Property("BitsPerRunLength", PropertyType.INTEGER,
-				new Integer(_bitsPerRunLength)));
+		itList.add(new Property("BitsPerRunLength", PropertyType.INTEGER, _bitsPerRunLength));
 		itList.add(new Property("BitsPerExtendedRunLength",
-				PropertyType.INTEGER, new Integer(_bitsPerExtendedRunLength)));
+				PropertyType.INTEGER, _bitsPerExtendedRunLength));
 		entries.add(new Property("TIFFITProperties", PropertyType.PROPERTY,
 				PropertyArity.LIST, itList));
 	}
@@ -1449,16 +1436,14 @@ public class TiffIFD extends IFD {
 					PropertyArity.ARRAY, _oecf));
 		}
 		if (_interlace != NULL) {
-			epList.add(new Property("Interlace", PropertyType.INTEGER,
-					new Integer(_interlace)));
+			epList.add(new Property("Interlace", PropertyType.INTEGER, _interlace));
 		}
 		if (_timeZoneOffset != null) {
 			epList.add(new Property("TimeZoneOffset", PropertyType.INTEGER,
 					PropertyArity.ARRAY, _timeZoneOffset));
 		}
 		if (_selfTimerMode != NULL) {
-			epList.add(new Property("SelfTimerMode", PropertyType.INTEGER,
-					new Integer(_selfTimerMode)));
+			epList.add(new Property("SelfTimerMode", PropertyType.INTEGER, _selfTimerMode));
 		}
 		if (_compressedBitsPerPixel != null) {
 			epList.add(addRationalProperty("CompressedBitsPerPixel",
@@ -1503,8 +1488,7 @@ public class TiffIFD extends IFD {
 					rawOutput));
 		}
 		if (_imageNumber != NULL) {
-			epList.add(new Property("ImageNumber", PropertyType.LONG,
-					new Long(_imageNumber)));
+			epList.add(new Property("ImageNumber", PropertyType.LONG, _imageNumber));
 		}
 		if (_securityClassification != null) {
 			epList.add(new Property("SecurityClassification",
@@ -1538,13 +1522,11 @@ public class TiffIFD extends IFD {
 
 		List<Property> dirList = new LinkedList<Property>();
 		if (_geoKeyDirectoryTag != null) {
-			dirList.add(new Property("Version", PropertyType.INTEGER,
-					new Integer(_geoKeyDirectoryTag[0])));
+			dirList.add(new Property("Version", PropertyType.INTEGER, _geoKeyDirectoryTag[0]));
 			dirList.add(new Property("Revision", PropertyType.STRING,
 					Integer.toString(_geoKeyDirectoryTag[1]) + "."
 							+ Integer.toString(_geoKeyDirectoryTag[2])));
-			dirList.add(new Property("NumberOfKeys", PropertyType.INTEGER,
-					new Integer(_geoKeyDirectoryTag[3])));
+			dirList.add(new Property("NumberOfKeys", PropertyType.INTEGER, _geoKeyDirectoryTag[3]));
 			for (int i = 0; i < _geoKeyDirectoryTag[3]; i++) {
 				int j = i * 4 + 4;
 				int key = _geoKeyDirectoryTag[j];
@@ -1555,170 +1537,223 @@ public class TiffIFD extends IFD {
 				int ival = 0;
 				double dval = 0.0;
 				String sval = "NULL";
-				if (location == 0) {
-					ival = offset;
-				} else if (location == 34736) {
-					dval = _geoDoubleParamsTag[offset];
-				} else if (location == 34737) {
-					try {
-						sval = _geoAsciiParamsTag.substring(offset,
-								offset + count - 1);
-					} catch (Exception e) {
-						throw new TiffException(MessageConstants.TIFF_HUL_9);
-					}
-				}
+                            switch (location) {
+                                case 0:
+                                    ival = offset;
+                                    break;
+                                case 34736:
+                                    dval = _geoDoubleParamsTag[offset];
+                                    break;
+                                case 34737:
+                                    try {
+                                        sval = _geoAsciiParamsTag.substring(offset,
+                                                offset + count - 1);
+                                    } catch (Exception e) {
+                                        throw new TiffException(MessageConstants.TIFF_HUL_9);
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
 
-				if (key == GTMODELTYPEGEOKEY) {
-					dirList.add(addIntegerProperty("GTModelType", ival,
-							GeoTiffStrings.MODELTYPE,
-							GeoTiffStrings.MODELTYPE_INDEX, rawOutput));
-				} else if (key == GTRASTERTYPEGEOKEY) {
-					dirList.add(addIntegerProperty("GTRasterType", ival,
-							GeoTiffStrings.RASTERTYPE,
-							GeoTiffStrings.RASTERTYPE_INDEX, rawOutput));
-				} else if (key == GTCITATIONGEOKEY) {
-					dirList.add(new Property("GTCitation", PropertyType.STRING,
-							sval));
-				} else if (key == GEOGRAPHICTYPEGEOKEY) {
-					dirList.add(addIntegerProperty("GeographicType", ival,
-							GeoTiffStrings.GEOGRAPHICS,
-							GeoTiffStrings.GEOGRAPHICS_INDEX, rawOutput));
-				} else if (key == GEOGCITATIONGEOKEY) {
-					dirList.add(new Property("GeogCitation",
-							PropertyType.STRING, sval));
-				} else if (key == GEOGGEODETICDATUMGEOKEY) {
-					dirList.add(addIntegerProperty("GeogGeodeticDatum", ival,
-							GeoTiffStrings.GEODETICDATUM,
-							GeoTiffStrings.GEODETICDATUM_INDEX, rawOutput));
-				} else if (key == GEOGPRIMEMERIDIANGEOKEY) {
-					dirList.add(addIntegerProperty("GeogPrimeMeridian", ival,
-							GeoTiffStrings.PRIMEMERIDIAN,
-							GeoTiffStrings.PRIMEMERIDIAN_INDEX, rawOutput));
-				} else if (key == GEOGPRIMEMERIDIANLONGGEOKEY) {
-					dirList.add(new Property("GeogPrimeMeridianLong",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == GEOGLINEARUNITSGEOKEY) {
-					dirList.add(addIntegerProperty("GeogLinearUnits", ival,
-							GeoTiffStrings.LINEARUNITS,
-							GeoTiffStrings.LINEARUNITS_INDEX, rawOutput));
-				} else if (key == GEOGLINEARUNITSIZEGEOKEY) {
-					dirList.add(new Property("GeogLinearUnitSize",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == GEOGANGULARUNITSGEOKEY) {
-					dirList.add(addIntegerProperty("GeogAngularUnits", ival,
-							GeoTiffStrings.ANGULARUNITS,
-							GeoTiffStrings.ANGULARUNITS_INDEX, rawOutput));
-				} else if (key == GEOGANGULARUNITSIZEGEOKEY) {
-					dirList.add(new Property("GeogAngularUnitSize",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == GEOGELLIPSOIDGEOKEY) {
-					dirList.add(addIntegerProperty("GeogEllipsoid", ival,
-							GeoTiffStrings.ELLIPSOID,
-							GeoTiffStrings.ELLIPSOID_INDEX, rawOutput));
-				} else if (key == GEOGSEMIMAJORAXISGEOKEY) {
-					dirList.add(new Property("GeogSemiMajorAxis",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == GEOGSEMIMINORAXISGEOKEY) {
-					dirList.add(new Property("GeogSemiMinorAxis",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == GEOGINVFLATTENINGGEOKEY) {
-					dirList.add(new Property("GeogInvFlattening",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == GEOGAZIMUTHUNITSGEOKEY) {
-					dirList.add(addIntegerProperty("GeogAzimuthUnits", ival,
-							GeoTiffStrings.ANGULARUNITS,
-							GeoTiffStrings.ANGULARUNITS_INDEX, rawOutput));
-				} else if (key == PROJECTEDCSTYPEGEOKEY) {
-					dirList.add(addIntegerProperty("ProjectedCSType", ival,
-							GeoTiffStrings.PROJECTEDCSTYPE,
-							GeoTiffStrings.PROJECTEDCSTYPE_INDEX, rawOutput));
-				} else if (key == PCSCITATIONGEOKEY) {
-					dirList.add(new Property("PCSCitation", PropertyType.STRING,
-							sval));
-				} else if (key == PROJECTIONGEOKEY) {
-					dirList.add(addIntegerProperty("Projection", ival,
-							GeoTiffStrings.PROJECTION,
-							GeoTiffStrings.PROJECTION_INDEX, rawOutput));
-				} else if (key == PROJCOORDTRANSGEOKEY) {
-					dirList.add(addIntegerProperty("ProjCoordTrans", ival,
-							GeoTiffStrings.COORDINATETRANSFORMATION,
-							GeoTiffStrings.COORDINATETRANSFORMATION_INDEX,
-							rawOutput));
-				} else if (key == PROJLINEARUNITSGEOKEY) {
-					dirList.add(addIntegerProperty("ProjLinearUnits", ival,
-							GeoTiffStrings.LINEARUNITS,
-							GeoTiffStrings.LINEARUNITS_INDEX, rawOutput));
-				} else if (key == PROJLINEARUNITSIZEGEOKEY) {
-					dirList.add(new Property("ProjLinearUnitSize",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJSTDPARALLEL1GEOKEY) {
-					dirList.add(new Property("ProjStdParallel1",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJSTDPARALLEL2GEOKEY) {
-					dirList.add(new Property("ProjStdParallel2",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJNATORIGINLONGGEOKEY) {
-					dirList.add(new Property("ProjNatOriginLong",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJNATORIGINLATGEOKEY) {
-					dirList.add(new Property("ProjNatOriginLat",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJFALSEEASTINGGEOKEY) {
-					dirList.add(new Property("ProjFalseEasting",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJFALSENORTHINGGEOKEY) {
-					dirList.add(new Property("ProjFalseNorthing",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJFALSEORIGINLONGGEOKEY) {
-					dirList.add(new Property("ProjFalseOriginLong",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJFALSEORIGINLATGEOKEY) {
-					dirList.add(new Property("ProjFalseOriginLat",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJFALSEORIGINEASTINGGEOKEY) {
-					dirList.add(new Property("ProjFalseOriginEasting",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJFALSEORIGINNORTHINGGEOKEY
-						|| key == PROJFALSEORIGINNORTHINGGEOKEY_2) {
-					dirList.add(new Property("ProjFalseOriginNorthing",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJCENTERLONGGEOKEY) {
-					dirList.add(new Property("ProjCenterLong",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJCENTERLATGEOKEY) {
-					dirList.add(new Property("ProjCenterLat",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJCENTEREASTINGGEOKEY) {
-					dirList.add(new Property("ProjCenterEasting",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJSCALEATNATORIGINGEOKEY) {
-					dirList.add(new Property("ProjScaleAtNatOrigin",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJSCALEATCENTERGEOKEY) {
-					dirList.add(new Property("ProjScaleAtCenter",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJAZIMUTHANGLEGEOKEY) {
-					dirList.add(new Property("ProjAzimuthAngle",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == PROJSTRAIGHTVERTPOLELONGEOKEY) {
-					dirList.add(new Property("ProjStraightVertPoleLong",
-							PropertyType.DOUBLE, new Double(dval)));
-				} else if (key == VERTICALCSTYPEGEOKEY) {
-					dirList.add(addIntegerProperty("VerticalCSType", ival,
-							GeoTiffStrings.VERTICALCSTYPE,
-							GeoTiffStrings.VERTICALCSTYPE_INDEX, rawOutput));
-				} else if (key == VERTICALCITATIONGEOKEY) {
-					dirList.add(new Property("VerticalCitation",
-							PropertyType.STRING, sval));
-				} else if (key == VERTICALDATUMGEOKEY) {
-					dirList.add(addIntegerProperty("VerticalDatum", ival,
-							GeoTiffStrings.VERTICALCSDATUM,
-							GeoTiffStrings.VERTICALCSDATUM_INDEX, rawOutput));
-				} else if (key == VERTICALUNITSGEOKEY) {
-					dirList.add(addIntegerProperty("VerticalUnits", ival,
-							GeoTiffStrings.LINEARUNITS,
-							GeoTiffStrings.LINEARUNITS_INDEX, rawOutput));
-				}
+                            switch (key) {
+                                case GTMODELTYPEGEOKEY:
+                                    dirList.add(addIntegerProperty("GTModelType", ival,
+                                            GeoTiffStrings.MODELTYPE,
+                                            GeoTiffStrings.MODELTYPE_INDEX, rawOutput));
+                                    break;
+                                case GTRASTERTYPEGEOKEY:
+                                    dirList.add(addIntegerProperty("GTRasterType", ival,
+                                            GeoTiffStrings.RASTERTYPE,
+                                            GeoTiffStrings.RASTERTYPE_INDEX, rawOutput));
+                                    break;
+                                case GTCITATIONGEOKEY:
+                                    dirList.add(new Property("GTCitation", PropertyType.STRING,
+                                            sval));
+                                    break;
+                                case GEOGRAPHICTYPEGEOKEY:
+                                    dirList.add(addIntegerProperty("GeographicType", ival,
+                                            GeoTiffStrings.GEOGRAPHICS,
+                                            GeoTiffStrings.GEOGRAPHICS_INDEX, rawOutput));
+                                    break;
+                                case GEOGCITATIONGEOKEY:
+                                    dirList.add(new Property("GeogCitation",
+                                            PropertyType.STRING, sval));
+                                    break;
+                                case GEOGGEODETICDATUMGEOKEY:
+                                    dirList.add(addIntegerProperty("GeogGeodeticDatum", ival,
+                                            GeoTiffStrings.GEODETICDATUM,
+                                            GeoTiffStrings.GEODETICDATUM_INDEX, rawOutput));
+                                    break;
+                                case GEOGPRIMEMERIDIANGEOKEY:
+                                    dirList.add(addIntegerProperty("GeogPrimeMeridian", ival,
+                                            GeoTiffStrings.PRIMEMERIDIAN,
+                                            GeoTiffStrings.PRIMEMERIDIAN_INDEX, rawOutput));
+                                    break;
+                                case GEOGPRIMEMERIDIANLONGGEOKEY:
+                                    dirList.add(new Property("GeogPrimeMeridianLong",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case GEOGLINEARUNITSGEOKEY:
+                                    dirList.add(addIntegerProperty("GeogLinearUnits", ival,
+                                            GeoTiffStrings.LINEARUNITS,
+                                            GeoTiffStrings.LINEARUNITS_INDEX, rawOutput));
+                                    break;
+                                case GEOGLINEARUNITSIZEGEOKEY:
+                                    dirList.add(new Property("GeogLinearUnitSize",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case GEOGANGULARUNITSGEOKEY:
+                                    dirList.add(addIntegerProperty("GeogAngularUnits", ival,
+                                            GeoTiffStrings.ANGULARUNITS,
+                                            GeoTiffStrings.ANGULARUNITS_INDEX, rawOutput));
+                                    break;
+                                case GEOGANGULARUNITSIZEGEOKEY:
+                                    dirList.add(new Property("GeogAngularUnitSize",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case GEOGELLIPSOIDGEOKEY:
+                                    dirList.add(addIntegerProperty("GeogEllipsoid", ival,
+                                            GeoTiffStrings.ELLIPSOID,
+                                            GeoTiffStrings.ELLIPSOID_INDEX, rawOutput));
+                                    break;
+                                case GEOGSEMIMAJORAXISGEOKEY:
+                                    dirList.add(new Property("GeogSemiMajorAxis",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case GEOGSEMIMINORAXISGEOKEY:
+                                    dirList.add(new Property("GeogSemiMinorAxis",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case GEOGINVFLATTENINGGEOKEY:
+                                    dirList.add(new Property("GeogInvFlattening",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case GEOGAZIMUTHUNITSGEOKEY:
+                                    dirList.add(addIntegerProperty("GeogAzimuthUnits", ival,
+                                            GeoTiffStrings.ANGULARUNITS,
+                                            GeoTiffStrings.ANGULARUNITS_INDEX, rawOutput));
+                                    break;
+                                case PROJECTEDCSTYPEGEOKEY:
+                                    dirList.add(addIntegerProperty("ProjectedCSType", ival,
+                                            GeoTiffStrings.PROJECTEDCSTYPE,
+                                            GeoTiffStrings.PROJECTEDCSTYPE_INDEX, rawOutput));
+                                    break;
+                                case PCSCITATIONGEOKEY:
+                                    dirList.add(new Property("PCSCitation", PropertyType.STRING,
+                                            sval));
+                                    break;
+                                case PROJECTIONGEOKEY:
+                                    dirList.add(addIntegerProperty("Projection", ival,
+                                            GeoTiffStrings.PROJECTION,
+                                            GeoTiffStrings.PROJECTION_INDEX, rawOutput));
+                                    break;
+                                case PROJCOORDTRANSGEOKEY:
+                                    dirList.add(addIntegerProperty("ProjCoordTrans", ival,
+                                            GeoTiffStrings.COORDINATETRANSFORMATION,
+                                            GeoTiffStrings.COORDINATETRANSFORMATION_INDEX,
+                                            rawOutput));
+                                    break;
+                                case PROJLINEARUNITSGEOKEY:
+                                    dirList.add(addIntegerProperty("ProjLinearUnits", ival,
+                                            GeoTiffStrings.LINEARUNITS,
+                                            GeoTiffStrings.LINEARUNITS_INDEX, rawOutput));
+                                    break;
+                                case PROJLINEARUNITSIZEGEOKEY:
+                                    dirList.add(new Property("ProjLinearUnitSize",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJSTDPARALLEL1GEOKEY:
+                                    dirList.add(new Property("ProjStdParallel1",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJSTDPARALLEL2GEOKEY:
+                                    dirList.add(new Property("ProjStdParallel2",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJNATORIGINLONGGEOKEY:
+                                    dirList.add(new Property("ProjNatOriginLong",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJNATORIGINLATGEOKEY:
+                                    dirList.add(new Property("ProjNatOriginLat",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJFALSEEASTINGGEOKEY:
+                                    dirList.add(new Property("ProjFalseEasting",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJFALSENORTHINGGEOKEY:
+                                    dirList.add(new Property("ProjFalseNorthing",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJFALSEORIGINLONGGEOKEY:
+                                    dirList.add(new Property("ProjFalseOriginLong",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJFALSEORIGINLATGEOKEY:
+                                    dirList.add(new Property("ProjFalseOriginLat",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJFALSEORIGINEASTINGGEOKEY:
+                                    dirList.add(new Property("ProjFalseOriginEasting",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJFALSEORIGINNORTHINGGEOKEY:
+                                case PROJFALSEORIGINNORTHINGGEOKEY_2:
+                                    dirList.add(new Property("ProjFalseOriginNorthing",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJCENTERLONGGEOKEY:
+                                    dirList.add(new Property("ProjCenterLong",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJCENTERLATGEOKEY:
+                                    dirList.add(new Property("ProjCenterLat",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJCENTEREASTINGGEOKEY:
+                                    dirList.add(new Property("ProjCenterEasting",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJSCALEATNATORIGINGEOKEY:
+                                    dirList.add(new Property("ProjScaleAtNatOrigin",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJSCALEATCENTERGEOKEY:
+                                    dirList.add(new Property("ProjScaleAtCenter",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJAZIMUTHANGLEGEOKEY:
+                                    dirList.add(new Property("ProjAzimuthAngle",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case PROJSTRAIGHTVERTPOLELONGEOKEY:
+                                    dirList.add(new Property("ProjStraightVertPoleLong",
+                                            PropertyType.DOUBLE, dval));
+                                    break;
+                                case VERTICALCSTYPEGEOKEY:
+                                    dirList.add(addIntegerProperty("VerticalCSType", ival,
+                                            GeoTiffStrings.VERTICALCSTYPE,
+                                            GeoTiffStrings.VERTICALCSTYPE_INDEX, rawOutput));
+                                    break;
+                                case VERTICALCITATIONGEOKEY:
+                                    dirList.add(new Property("VerticalCitation",
+                                            PropertyType.STRING, sval));
+                                    break;
+                                case VERTICALDATUMGEOKEY:
+                                    dirList.add(addIntegerProperty("VerticalDatum", ival,
+                                            GeoTiffStrings.VERTICALCSDATUM,
+                                            GeoTiffStrings.VERTICALCSDATUM_INDEX, rawOutput));
+                                    break;
+                                case VERTICALUNITSGEOKEY:
+                                    dirList.add(addIntegerProperty("VerticalUnits", ival,
+                                            GeoTiffStrings.LINEARUNITS,
+                                            GeoTiffStrings.LINEARUNITS_INDEX, rawOutput));
+                                    break;
+                                default:
+                                    break;
+                            }
 			}
 		}
 		List<Property> geoList = new LinkedList<Property>();
@@ -1761,7 +1796,7 @@ public class TiffIFD extends IFD {
 				layerProps[0] = addIntegerProperty("LayerType", _imageLayer[0],
 						IMAGELAYER_L, rawOutput);
 				layerProps[1] = new Property("OrdinalNumber",
-						PropertyType.INTEGER, new Integer(_imageLayer[1]));
+						PropertyType.INTEGER, _imageLayer[1]);
 
 				entries.add(new Property("ImageLayer", PropertyType.PROPERTY,
 						PropertyArity.ARRAY, layerProps));
@@ -1843,13 +1878,11 @@ public class TiffIFD extends IFD {
 		}
 		if (_calibrationIlluminant1 != NULL) {
 			dngList.add(
-					new Property("CalibrationIlluminant1", PropertyType.INTEGER,
-							new Integer(_calibrationIlluminant1)));
+					new Property("CalibrationIlluminant1", PropertyType.INTEGER, _calibrationIlluminant1));
 		}
 		if (_calibrationIlluminant2 != NULL) {
 			dngList.add(
-					new Property("CalibrationIlluminant2", PropertyType.INTEGER,
-							new Integer(_calibrationIlluminant2)));
+					new Property("CalibrationIlluminant2", PropertyType.INTEGER, _calibrationIlluminant2));
 		}
 		if (_colorMatrix1 != null) {
 			dngList.add(new Property("ColorMatrix1", PropertyType.RATIONAL,
@@ -1902,8 +1935,7 @@ public class TiffIFD extends IFD {
 					_baselineSharpness));
 		}
 		if (_bayerGreenSplit != NULL) {
-			dngList.add(new Property("BayerGreenSplit", PropertyType.INTEGER,
-					new Integer(_bayerGreenSplit)));
+			dngList.add(new Property("BayerGreenSplit", PropertyType.INTEGER, _bayerGreenSplit));
 		}
 		if (_linearResponseLimit != null) {
 			dngList.add(new Property("LinearResponseLimit",
@@ -2132,1070 +2164,1228 @@ public class TiffIFD extends IFD {
 	public void lookupTag(int tag, int type, long count, long value)
 			throws TiffException {
 		try {
-			if (tag == APERTUREVALUE) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 1);
-				_aperatureValue = readRational(count, value);
-			} else if (tag == ARTIST) {
-				checkType(tag, type, ASCII);
-				_niso.setImageProducer(readASCII(count, value));
-
-				if (_version < 5) {
-					_version = 5;
-				}
-			} else if (tag == BACKGROUNDCOLORINDICATOR) {
-				checkType(tag, type, BYTE);
-				checkCount(tag, count, 1);
-				_backgroundColorIndicator = readByte(type, count, value);
-			} else if (tag == BACKGROUNDCOLORVALUE) {
-				checkType(tag, type, BYTE);
-				checkCount(tag, count, 1);
-				_backgroundColorValue = readByte(type, count, value);
-			} else if (tag == BADFAXLINES) {
-				checkType(tag, type, SHORT, LONG);
-				checkCount(tag, count, 1);
-				_badFaxLines = readLong(type, count, value);
-			} else if (tag == BATTERYLEVEL) {
-				checkType(tag, type, RATIONAL, ASCII);
-				if (type == RATIONAL) {
-					Rational r = readRational(count, value);
-					_batteryLevel = Double.toString(r.toDouble());
-				} else {
-					_batteryLevel = readASCII(count, value);
-				}
-			} else if (tag == BITSPEREXTENDEDRUNLENGTH) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_bitsPerExtendedRunLength = readShort(type, count, value);
-			} else if (tag == BITSPERRUNLENGTH) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_bitsPerRunLength = readShort(type, count, value);
-			} else if (tag == BITSPERSAMPLE) {
-				checkType(tag, type, SHORT);
-				_niso.setBitsPerSample(readShortArray(type, count, value));
-			} else if (tag == BRIGHTNESSVALUE) {
-				checkType(tag, type, SRATIONAL);
-				if (count == 1) {
-					_niso.setBrightness(
-							readSignedRational(count, value));
-				} else {
-					Rational[] r = readSignedRationalArray(count, value);
-					_niso.setBrightness(average(r[0], r[1]));
-				}
-			} else if (tag == CELLLENGTH) {
-				checkType(tag, type, SHORT);
-				_cellLength = readShort(type, count, value);
-			} else if (tag == CELLWIDTH) {
-				checkType(tag, type, SHORT);
-				_cellWidth = readShort(type, count, value);
-			} else if (tag == CFAPATTERN) {
-				checkType(tag, type, BYTE);
-				_cfaPattern = readByteArray(type, count, value);
-			} else if (tag == CFAREPEATPATTERNDIM) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 2);
-				_cfaRepeatPatternDim = readShortArray(type, count, value);
-			} else if (tag == CLEANFAXDATA) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_badFaxLines = readShort(type, count, value);
-			} else if (tag == CLIPPATH) {
-				checkType(tag, type, BYTE);
-				_clipPath = readByteArray(type, count, value);
-			} else if (tag == COLORCHARACTERIZATION) {
-				checkType(tag, type, ASCII);
-				_colorCharacterization = readASCII(count, value);
-			} else if (tag == COLORSEQUENCE) {
-				checkType(tag, type, ASCII);
-				_colorSequence = readASCII(count, value);
-			} else if (tag == COLORMAP) {
-				checkType(tag, type, SHORT);
-				int[] colorMap = readShortArray(type, count, value);
-				int[] bitCode = new int[colorMap.length];
-				int[] red = new int[colorMap.length];
-				int[] green = new int[colorMap.length];
-				int[] blue = new int[colorMap.length];
-				int len = colorMap.length / 3;
-				int len2 = 2 * len;
-				for (int i = 0; i < len; i++) {
-					bitCode[i] = i;
-					red[i] = colorMap[i];
-					green[i] = colorMap[i + len];
-					blue[i] = colorMap[i + len2];
-				}
-				_niso.setColormapBitCodeValue(bitCode);
-				_niso.setColormapRedValue(red);
-				_niso.setColormapGreenValue(green);
-				_niso.setColormapBlueValue(blue);
-
-				if (_version < 5) {
-					_version = 5;
-				}
-			} else if (tag == COLORTABLE) {
-				checkType(tag, type, BYTE);
-				_colorTable = readByteArray(type, count, value);
-			} else if (tag == COMPRESSEDBITSPERPIXEL) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 1);
-				_compressedBitsPerPixel = readRational(count, value);
-			} else if (tag == COMPRESSION) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				int scheme = readShort(type, count, value);
-				_niso.setCompressionScheme(scheme);
-				if (scheme == 5) {
-					// Set default predictor if none has been set
-					if (_predictor == NULL) {
-						_predictor = 1;
-					}
-					if (_version < 5) {
-						_version = 5;
-					}
-				}
-				if (scheme == 6 && _version < 6) {
-					_version = 6;
-				}
-				if (scheme == 3 && _t4Options == NULL) {
-					// Set default t4Options only if compression is 3
-					_t4Options = 0;
-				}
-				if (scheme == 4 && _t6Options == NULL) {
-					// Set default t6Options only if compression is 4
-					_t6Options = 0;
-				}
-				if (scheme == 6) {
-					_info.setMessage(new InfoMessage(
-							MessageConstants.TIFF_HUL_61));
-				}
-
-			} else if (tag == CONSECUTIVEBADFAXLINES) {
-				checkType(tag, type, SHORT, LONG);
-				checkCount(tag, count, 1);
-				_consecutiveBadFaxLines = readLong(type, count, value);
-			} else if (tag == COPYRIGHT) {
-				checkType(tag, type, ASCII);
-				_copyright = readASCII(count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == DATETIME) {
-				checkType(tag, type, ASCII);
-				checkCount(tag, count, 20);
-				_dateTime = readASCII(count, value);
-				_niso.setDateTimeCreated(_dateTime);
-
-				if (_version < 5) {
-					_version = 5;
-				}
-			} else if (tag == DATETIMEORIGINAL) {
-				checkType(tag, type, ASCII);
-				checkCount(tag, count, 20);
-				_niso.setDateTimeCreated(readASCII(count, value));
-			} else if (tag == DOCUMENTNAME) {
-				checkType(tag, type, ASCII);
-				_documentName = readASCII(count, value);
-			} else if (tag == DOTRANGE) {
-				checkType(tag, type, BYTE, SHORT);
-				checkCount(tag, count, 2);
-				_dotRange = readShortArray(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == EXIFIFD) {
-				checkType(tag, type, LONG);
-				checkCount(tag, count, 1);
-				_exifIFD = readLong(type, count, value);
-			} else if (tag == EXPOSUREBIASVALUE) {
-				checkType(tag, type, SRATIONAL);
-				if (count == 1) {
-					_niso.setExposureBias(
-							readSignedRational(count, value));
-				} else {
-					Rational[] r = readSignedRationalArray(count, value);
-					_niso.setExposureBias(average(r[0], r[1]));
-				}
-			} else if (tag == EXPOSUREPROGRAM) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_exposureProgram = readShort(type, count, value);
-			} else if (tag == EXPOSURETIME) {
-				checkType(tag, type, RATIONAL);
-				if (count == 1) {
-					_niso.setExposureTime(
-							readRational(count, value).toDouble());
-				} else {
-					Rational[] r = readRationalArray(count, value);
-					_niso.setExposureTime(average(r[0], r[1]).toDouble());
-				}
-			} else if (tag == EXTRASAMPLES) {
-				checkType(tag, type, SHORT);
-				_niso.setExtraSamples(readShortArray(type, count, value));
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == FILLORDER) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_fillOrder = readShort(type, count, value);
-			} else if (tag == FLASH) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_flash = readShort(type, count, value);
-				_niso.setFlash(_flash);
-				_niso.setFlashReturn(((_flash & 0X6) != 0) ? 1 : 0);
-			} else if (tag == FLASHENERGY) {
-				checkType(tag, type, RATIONAL);
-				if (count == 1) {
-					_niso.setFlashEnergy(readRational(count, value));
-				} else {
-					Rational[] r = readRationalArray(count, value);
-					_niso.setFlashEnergy(average(r[0], r[1]));
-				}
-			} else if (tag == FNUMBER) {
-				checkType(tag, type, RATIONAL);
-				if (count == 1) {
-					_niso.setFNumber(readRational(count, value).toDouble());
-				} else {
-					Rational[] r = readRationalArray(count, value);
-					_niso.setFNumber(average(r[0], r[1]).toDouble());
-				}
-			} else if (tag == FOCALLENGTH) {
-				checkType(tag, type, RATIONAL);
-				if (count == 1) {
-					_niso.setFocalLength(readRational(count, value).toDouble());
-				} else {
-					Rational[] r = readRationalArray(count, value);
-					_niso.setFocalLength(average(r[0], r[1]).toDouble());
-				}
-			} else if (tag == FOCALPLANERESOLUTIONUNIT) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_focalPlaneResolutionUnit = readShort(type, count, value);
-			} else if (tag == FOCALPLANEXRESOLUTION) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 1);
-				_focalPlaneXResolution = readRational(count, value);
-			} else if (tag == FOCALPLANEYRESOLUTION) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 1);
-				_focalPlaneYResolution = readRational(count, value);
-			} else if (tag == FREEBYTECOUNTS) {
-				checkType(tag, type, LONG);
-				_freeByteCounts = readLongArray(type, count, value);
-			} else if (tag == FREEOFFSETS) {
-				checkType(tag, type, LONG);
-				_freeOffsets = readLongArray(type, count, value);
-			} else if (tag == GEOASCIIPARAMSTAG) {
-				checkType(tag, type, ASCII);
-				_geoAsciiParamsTag = readASCII(count, value);
-			} else if (tag == GEODOUBLEPARAMSTAG) {
-				checkType(tag, type, DOUBLE);
-				_geoDoubleParamsTag = readDoubleArray(count, value);
-			} else if (tag == GEOKEYDIRECTORYTAG) {
-				checkType(tag, type, SHORT);
-				_geoKeyDirectoryTag = readShortArray(type, count, value);
-				int num = _geoKeyDirectoryTag[3];
-				int prevKey = -1;
-				for (int i = 0; i < num; i++) {
-					int j = i * 4 + 4;
-					int key = _geoKeyDirectoryTag[j];
-					if (prevKey > key) {
-						String mess = MessageFormat.format(
-								MessageConstants.TIFF_HUL_10.getMessage(), Integer.valueOf(key));
-						JhoveMessage message = JhoveMessages.getMessageInstance(
-								MessageConstants.TIFF_HUL_10.getId(), mess);
-						throw new TiffException(message);
-					}
-					prevKey = key;
-				}
-			} else if (tag == GLOBALPARAMETERSIFD) {
-				checkType(tag, type, LONG, IFD);
-				// RFC 2301 allows only IFD, but the latest working
-				// draft allows LONG. Even though allowing LONG
-				// technically isn't allowed yet, letting it by seems
-				// reasonable, since other IFD tags can be LONG.
-				checkCount(tag, count, 1);
-				_globalParametersIFD = readLong(type, count, value);
-			} else if (tag == GPSINFOIFD) {
-				checkType(tag, type, LONG);
-				checkCount(tag, count, 1);
-				_gpsInfoIFD = readLong(type, count, value);
-			} else if (tag == GRAYRESPONSECURVE) {
-				checkType(tag, type, SHORT);
-				_niso.setGrayResponseCurve(readShortArray(type, count, value));
-			} else if (tag == GRAYRESPONSEUNIT) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_niso.setGrayResponseUnit(readShort(type, count, value));
-			} else if (tag == HALFTONEHINTS) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 2);
-				_halftoneHints = readShortArray(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == HCUSAGE) {
-				checkType(tag, type, LONG);
-				checkCount(tag, count, 1);
-				_hcUsage = readLong(type, count, value);
-			} else if (tag == HOSTCOMPUTER) {
-				checkType(tag, type, ASCII);
-				_niso.setHostComputer(readASCII(count, value));
-
-				if (_version < 5) {
-					_version = 5;
-				}
-			} else if (tag == IMAGEDESCRIPTION) {
-				checkType(tag, type, ASCII);
-				_imageDescription = readASCII(count, value);
-			} else if (tag == IMAGEID) {
-				checkType(tag, type, ASCII);
-				_niso.setImageIdentifier(readASCII(count, value));
-			} else if (tag == IMAGECOLORINDICATOR) {
-				checkType(tag, type, BYTE);
-				checkCount(tag, count, 1);
-				_imageColorIndicator = readByte(type, count, value);
-			} else if (tag == IMAGECOLORVALUE) {
-				checkType(tag, type, BYTE);
-				checkCount(tag, count, 1);
-				_imageColorValue = readByte(type, count, value);
-			} else if (tag == IMAGEHISTORY) {
-				checkType(tag, type, ASCII);
-				_imageHistory = readASCII(count, value);
-			} else if (tag == IMAGELAYER) {
-				checkType(tag, type, SHORT, LONG);
-				checkCount(tag, count, 2);
-				_imageLayer = readShortArray(type, count, value);
-			} else if (tag == IMAGELENGTH) {
-				checkType(tag, type, SHORT, LONG);
-				checkCount(tag, count, 1);
-				_niso.setImageLength(readLong(type, count, value));
-			} else if (tag == IMAGENUMBER) {
-				checkType(tag, type, LONG);
-				checkCount(tag, count, 1);
-				_imageNumber = readLong(type, count, value);
-			} else if (tag == IMAGESOURCEDATA) {
-				checkType(tag, type, UNDEFINED);
-				// _imageSourceData = readByteArray (type, count, value);
-				// GDM 16-Sep-2005:
-				// The ImageSourceData tag sometimes has a gigantic
-				// amount of data, and we don't actually do anything with
-				// it in the current version of JHOVE except determine if
-				// it's there.
-				_imageSourceData = new int[] { 1 };
-			} else if (tag == PHOTOSHOPPROPS) {
-				// Can't find any info on what type is expected.
-				_photoshopProperties = readByteArray(type, count, value);
-			} else if (tag == ANNOTATIONS) {
-				// Can't find any info on what type is expected.
-				_annotations = readByteArray(type, count, value);
-			} else if (tag == IMAGEWIDTH) {
-				checkType(tag, type, SHORT, LONG);
-				checkCount(tag, count, 1);
-				_niso.setImageWidth(readLong(type, count, value));
-			} else if (tag == INDEXED) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_indexed = readShort(type, count, value);
-			} else if (tag == INKNAMES) {
-				checkType(tag, type, ASCII);
-				_inkNames = readASCIIArray(count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == INKSET) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_inkSet = readShort(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == ICC_PROFILE) {
-				checkType(tag, type, UNDEFINED);
-				// Read the iccProdfile data as an array of bytes
-				_iccProfile = readTrueByteArray(type, count, value);
-				try {
-					String desc = NisoImageMetadata
-							.extractIccProfileDescription(_iccProfile);
-					if (desc != null) {
-						_niso.setProfileName(desc);
-					}
-				} catch (IllegalArgumentException ie) {
-					String mess = MessageFormat.format(MessageConstants.TIFF_HUL_71.getMessage(), tag, ie.getMessage());
-					JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_71.getId(), mess);
-					throw new TiffException(message);
-				}
-			} else if (tag == INTERLACE) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_interlace = readShort(type, count, value);
-			} else if (tag == INTEROPERABILITYIFD) {
-				checkType(tag, type, LONG);
-				checkCount(tag, count, 1);
-				_interoperabilityIFD = readLong(type, count, value);
-			} else if (tag == IPTCNAA) {
-
-				if (type == ASCII) {
-					String s = readASCII(count, value);
-					long[] larray = new long[s.length()];
-					for (int i = 0; i < s.length(); i++) {
-						larray[i] = (int) s.charAt(i);
-					}
-					_iptc = larray;
-				} else if (type == LONG) {
-					_iptc = readLongArray(type, count, value);
-				} else {
-					checkType(tag, type, BYTE, UNDEFINED);
-					int[] b = readByteArray(type, count, value);
-					long[] larray = new long[b.length];
-					for (int i = 0; i < b.length; i++) {
-						larray[i] = b[i];
-						_iptc = larray;
-					}
-				}
-			} else if (tag == ISOSPEEDRATINGS) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_isoSpeedRatings = readShortArray(tag, count, value);
-			} else if (tag == IT8HEADER) {
-				checkType(tag, type, ASCII);
-				_it8Header = readASCII(count, value);
-			} else if (tag == JPEGACTABLES) {
-				checkType(tag, type, LONG);
-				_jpegACTables = readLongArray(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == JPEGDCTABLES) {
-				checkType(tag, type, LONG);
-				_jpegDCTables = readLongArray(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == JPEGINTERCHANGEFORMAT) {
-				checkType(tag, type, LONG);
-				checkCount(tag, count, 1);
-				_jpegInterchangeFormat = readLong(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == JPEGINTERCHANGEFORMATLENGTH) {
-				checkType(tag, type, LONG);
-				checkCount(tag, count, 1);
-				_jpegInterchangeFormatLength = readLong(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == JPEGLOSSLESSPREDICTORS) {
-				checkType(tag, type, SHORT);
-				_jpegLosslessPredictors = readShortArray(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == JPEGPOINTTRANSFORMS) {
-				checkType(tag, type, SHORT);
-				_jpegPointTransforms = readShortArray(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == JPEGPROC) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_jpegProc = readShort(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == JPEGQTABLES) {
-				checkType(tag, type, LONG);
-				_jpegQTables = readLongArray(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == JPEGRESTARTINTERVAL) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_jpegRestartInterval = readShort(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == JPEGTABLES) {
-				checkType(tag, type, UNDEFINED);
-				_jpegTables = readByteArray(type, count, value);
-			} else if (tag == LIGHTSOURCE) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_niso.setSceneIlluminant(readShort(type, count, value));
-			} else if (tag == MAKE) {
-				checkType(tag, type, ASCII);
-				_niso.setScannerManufacturer(readASCII(count, value));
-			} else if (tag == MAXAPERTUREVALUE) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 1);
-				_maxAperatureValue = readRational(count, value);
-			} else if (tag == MAXSAMPLEVALUE) {
-				checkType(tag, type, SHORT);
-				_maxSampleValue = readShortArray(type, count, value);
-			} else if (tag == METERINGMODE) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_niso.setMeteringMode(readShort(type, count, value));
-			} else if (tag == MINSAMPLEVALUE) {
-				checkType(tag, type, SHORT);
-				_minSampleValue = readShortArray(type, count, value);
-			} else if (tag == MODEL) {
-				checkType(tag, type, ASCII);
-				_niso.setScannerModelName(readASCII(count, value));
-			} else if (tag == MODELPIXELSCALETAG) {
-				checkType(tag, type, DOUBLE);
-				checkCount(tag, count, 3);
-				_modelPixelScaleTag = readDoubleArray(count, value);
-			} else if (tag == MODELTIEPOINTTAG) {
-				checkType(tag, type, DOUBLE);
-				_modelTiepointTag = readDoubleArray(count, value);
-			} else if (tag == MODELTRANSFORMATIONTAG) {
-				checkType(tag, type, DOUBLE);
-				checkCount(tag, count, 16);
-				_modelTransformationTag = readDoubleArray(count, value);
-			} else if (tag == NEWSUBFILETYPE) {
-				checkType(tag, type, LONG);
-				checkCount(tag, count, 1);
-				_newSubfileType = readLong(type, count, value);
-
-				if (_version < 5) {
-					_version = 5;
-				}
-			} else if (tag == NOISE) {
-				checkType(tag, type, UNDEFINED);
-				_noise = readByteArray(type, count, value);
-			} else if (tag == NUMBEROFINKS) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_numberOfInks = readShort(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == OECF) {
-				checkType(tag, type, UNDEFINED);
-				_oecf = readByteArray(tag, count, value);
-			} else if (tag == OPIPROXY) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_opiProxy = readShort(type, count, value);
-			} else if (tag == ORIENTATION) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_niso.setOrientation(readShort(type, count, value));
-			} else if (tag == PAGENAME) {
-				checkType(tag, type, ASCII);
-				_pageName = readASCII(count, value);
-			} else if (tag == PAGENUMBER) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 2);
-				_pageNumber = readShortArray(type, count, value);
-			} else if (tag == PHOTOMETRICINTERPRETATION) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_photometricInterpretation = readShort(type, count, value);
-				_niso.setColorSpace(_photometricInterpretation);
-
-				// Set default values appropriate to interpretation,
-				// only if no value has been set.
-				if (_photometricInterpretation == 5) {
-					if (_inkSet == NULL) {
-						_inkSet = 1;
-					}
-					if (_numberOfInks == NULL) {
-						_numberOfInks = 4;
-					}
-				} else if (_photometricInterpretation == 6) {
-					if (_niso.getYCbCrCoefficients() == null) {
-						_niso.setYCbCrCoefficients(
-								new Rational[] { new Rational(299, 1000),
-										new Rational(587, 1000),
-										new Rational(114, 1000) });
-					}
-					if (_niso.getYCbCrPositioning() == NULL) {
-						_niso.setYCbCrPositioning(1);
-					}
-					if (_niso.getYCbCrSubSampling() == null) {
-						_niso.setYCbCrSubSampling(new int[] { 2, 2 });
-					}
-				}
-
-				int colorSpace = _niso.getColorSpace();
-				if (colorSpace == 3 || colorSpace == 4) {
-					if (_version < 5) {
-						_version = 5;
-					}
-				} else if (colorSpace == 5 || colorSpace == 6
-						|| colorSpace == 8) {
-					if (_version < 6) {
-						_version = 6;
-					}
-				}
-			} else if (tag == PIXELINTENSITYRANGE) {
-				checkType(tag, type, BYTE);
-				_pixelIntensityRange = readShortArray(type, count, value);
-			} else if (tag == PLANARCONFIGURATION) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_niso.setPlanarConfiguration(readShort(type, count, value));
-			} else if (tag == PREDICTOR) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_predictor = readShort(type, count, value);
-
-				if (_version < 5) {
-					_version = 5;
-				}
-			} else if (tag == PRIMARYCHROMATICITIES) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 6);
-				Rational[] rarray = readRationalArray(count, value);
-				_niso.setPrimaryChromaticitiesRedX(rarray[0]);
-				_niso.setPrimaryChromaticitiesRedY(rarray[1]);
-				_niso.setPrimaryChromaticitiesGreenX(rarray[2]);
-				_niso.setPrimaryChromaticitiesGreenY(rarray[3]);
-				_niso.setPrimaryChromaticitiesBlueX(rarray[4]);
-				_niso.setPrimaryChromaticitiesBlueY(rarray[5]);
-
-				if (_version < 5) {
-					_version = 5;
-				}
-			} else if (tag == RASTERPADDING) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_rasterPadding = readShort(type, count, value);
-			} else if (tag == REFERENCEBLACKWHITE) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 6);
-				_niso.setReferenceBlackWhite(readRationalArray(count, value));
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == RESOLUTIONUNIT) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_niso.setSamplingFrequencyUnit(readShort(type, count, value));
-			} else if (tag == ROWSPERSTRIP) {
-				checkType(tag, type, SHORT, LONG);
-				checkCount(tag, count, 1);
-				_niso.setRowsPerStrip(readLong(type, count, value));
-			} else if (tag == SAMPLEFORMAT) {
-				checkType(tag, type, SHORT);
-				_sampleFormat = readShortArray(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == SAMPLESPERPIXEL) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_niso.setSamplesPerPixel(readShort(type, count, value));
-			} else if (tag == SECURITYCLASSIFICATION) {
-				checkType(tag, type, ASCII);
-				_securityClassification = readASCII(count, value);
-			} else if (tag == SELFTIMERMODE) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_selfTimerMode = readShort(type, count, value);
-			} else if (tag == SENSINGMETHOD) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_niso.setSensor(readShort(type, count, value));
-			} else if (tag == SITE) {
-				checkType(tag, type, ASCII);
-				_site = readASCII(count, value);
-			} else if (tag == STRIPROWCOUNTS) {
-				checkType(tag, type, LONG);
-				_stripRowCounts = readLongArray(type, count, value);
-			} else if (tag == SUBJECTDISTANCE) {
-				checkType(tag, type, RATIONAL, SRATIONAL);
-				double[] darray = new double[2];
-				if (count == 1) {
-					darray[0] = readRational(count, value).toDouble();
-					darray[1] = darray[0];
-				} else {
-					Rational[] r;
-					if (type == RATIONAL) {
-						r = readRationalArray(count, value);
-					} else {
-						r = readSignedRationalArray(count, value);
-					}
-					darray[0] = r[0].toDouble();
-					if (r.length > 1) {
-						darray[1] = r[1].toDouble();
-					} else {
-						darray[1] = darray[0];
-					}
-				}
-				_niso.setSubjectDistance(darray);
-			} else if (tag == SOFTWARE) {
-				checkType(tag, type, ASCII);
-				_niso.setScanningSoftware(readASCII(count, value));
-
-				if (_version < 5) {
-					_version = 5;
-				}
-			} else if (tag == SPATIALFREQUENCYRESPONSE) {
-				checkType(tag, type, UNDEFINED);
-				_spatialFrequencyResponse = readByteArray(type, count, value);
-			} else if (tag == SPECTRALSENSITIVITY) {
-				checkType(tag, type, ASCII);
-				_spectralSensitivity = readASCII(count, value);
-			} else if (tag == STRIPBYTECOUNTS) {
-				checkType(tag, type, SHORT, LONG);
-				_niso.setStripByteCounts(readLongArray(type, count, value));
-			} else if (tag == STRIPOFFSETS) {
-				checkType(tag, type, SHORT, LONG);
-				_niso.setStripOffsets(readLongArray(type, count, value));
-			} else if (tag == SUBFILETYPE) {
-				checkType(tag, type, LONG);
-				checkCount(tag, count, 1);
-				_subfileType = readShort(type, count, value);
-			} else if (tag == SUBIFDS) {
-				checkType(tag, type, LONG, IFD);
-				_subIFDs = readLongArray(type, count, value);
-			} else if (tag == SUBJECTLOCATION) {
-				checkType(tag, type, SHORT);
-				_subjectLocation = readShortArray(type, count, value);
-			} else if (tag == T4OPTIONS) {
-				checkType(tag, type, LONG);
-				_t4Options = readShort(type, count, value);
-			} else if (tag == T6OPTIONS) {
-				checkType(tag, type, LONG);
-				_t6Options = readShort(type, count, value);
-			} else if (tag == TARGETPRINTER) {
-				checkType(tag, type, ASCII);
-				_targetPrinter = readASCII(count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == THRESHHOLDING) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_threshholding = readShort(type, count, value);
-			} else if (tag == TIFFEPSTANDARDID) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 4);
-				int[] iarray = readShortArray(type, count, value);
-				_tiffEPStandardID = Integer.toString(iarray[0]) + "."
-						+ Integer.toString(iarray[1]) + "."
-						+ Integer.toString(iarray[2]) + "."
-						+ Integer.toString(iarray[3]);
-			} else if (tag == TILEBYTECOUNTS) {
-				checkType(tag, type, SHORT, LONG);
-				_niso.setTileByteCounts(readLongArray(type, count, value));
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == TILELENGTH) {
-				checkType(tag, type, SHORT, LONG);
-				checkCount(tag, count, 1);
-				_niso.setTileLength(readLong(type, count, value));
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == TILEOFFSETS) {
-				checkType(tag, type, SHORT, LONG);
-				_niso.setTileOffsets(readLongArray(type, count, value));
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == TILEWIDTH) {
-				checkType(tag, type, SHORT, LONG);
-				checkCount(tag, count, 1);
-				_niso.setTileWidth(readLong(type, count, value));
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == TIMEZONEOFFSET) {
-				checkType(tag, type, SSHORT);
-				_timeZoneOffset = readSShortArray(type, count, value);
-			} else if (tag == TRANSFERFUNCTION) {
-				/*
-				 * Transfer function arrays potentially can have millions
-				 * of elements, so we just report presence
-				 */
-				checkType(tag, type, SHORT);
-				_transferFunction = true;
-			} else if (tag == TRANSFERRANGE) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 6);
-				_transferRange = readShortArray(type, count, value);
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == TRANSPARENCYINDICATOR) {
-				checkType(tag, type, BYTE);
-				checkCount(tag, count, 1);
-				_transparencyIndicator = readByte(type, count, value);
-			} else if (tag == WHITEPOINT) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 2);
-				Rational[] rarray = readRationalArray(count, value);
-				_niso.setWhitePointXValue(rarray[0]);
-				_niso.setWhitePointYValue(rarray[0]);
-
-				if (_version < 5) {
-					_version = 5;
-				}
-			} else if (tag == XCLIPPATHUNITS) {
-				checkType(tag, type, LONG);
-				checkCount(tag, count, 1);
-				_xClipPathUnits = readLong(type, count, value);
-			} else if (tag == XPOSITION) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 1);
-				_xPosition = readRational(count, value);
-			} else if (tag == XRESOLUTION) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 1);
-				_niso.setXSamplingFrequency(readRational(count, value));
-			} else if (tag == YCBCRCOEFFICIENTS) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 3);
-				_niso.setYCbCrCoefficients(readRationalArray(count, value));
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == YCBCRPOSITIONING) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 1);
-				_niso.setYCbCrPositioning(readShort(type, count, value));
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == YCBCRSUBSAMPLING) {
-				checkType(tag, type, SHORT);
-				checkCount(tag, count, 2);
-				_niso.setYCbCrSubSampling(readShortArray(type, count, value));
-
-				if (_version < 6) {
-					_version = 6;
-				}
-			} else if (tag == YCLIPPATHUNITS) {
-				checkType(tag, type, LONG);
-				checkCount(tag, count, 1);
-				_yClipPathUnits = readLong(type, count, value);
-			} else if (tag == YPOSITION) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 1);
-				_yPosition = readRational(count, value);
-			} else if (tag == YRESOLUTION) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 1);
-				_niso.setYSamplingFrequency(readRational(count, value));
-			} else if (tag == XMP) {
-				checkType(tag, type, UNDEFINED, BYTE);
-				_xmpProp = readXMP(count, value);
-			} else if (tag == DNGVERSION) {
-				checkType(tag, type, BYTE);
-				checkCount(tag, count, 4);
-				_dngVersion = readByteArray(type, count, value);
-			} else if (tag == DNGBACKWARDVERSION) {
-				checkType(tag, type, BYTE);
-				checkCount(tag, count, 4);
-				_dngBackwardVersion = readByteArray(type, count, value);
-			} else if (tag == UNIQUECAMERAMODEL) {
-				checkType(tag, type, ASCII);
-				_uniqueCameraModel = readASCII(count, value);
-			} else if (tag == LOCALIZEDCAMERAMODEL) {
-				checkType(tag, type, ASCII, BYTE);
-				// This tag is specified as UTF-8
-				byte[] lcm = readTrueByteArray(type, count, value);
-				// Trim off trailing null (s)
-				int len = lcm.length;
-				while (len > 0 && lcm[len - 1] == 0) {
-					len--;
-				}
-				_localizedCameraModel = new String(lcm, 0, len);
-
-			} else if (tag == CFAPLANECOLOR) {
-				checkType(tag, type, BYTE);
-				_cfaPlaneColor = readByteArray(type, count, value);
-			} else if (tag == CFALAYOUT) {
-				checkType(tag, type, SHORT);
-				_cfaLayout = readShort(type, count, value);
-			} else if (tag == LINEARIZATIONTABLE) {
-				checkType(tag, type, SHORT);
-				_linearizationTable = readShortArray(type, count, value);
-			} else if (tag == BLACKLEVELREPEATDIM) {
-				checkType(tag, type, SHORT);
-				_blackLevelRepeatDim = readShortArray(type, count, value);
-			} else if (tag == BLACKLEVEL) {
-				// Just to make things complicated, this can be SHORT, LONG
-				// or RATIONAL. To give these a least common (pardon the
-				// expression) denominator, we convert all to rational.
-				if (type == RATIONAL) {
-					_blackLevel = readRationalArray(count, value);
-				} else {
-					checkType(tag, type, SHORT, LONG);
-					long[] ibl = readLongArray(type, count, value);
-					_blackLevel = new Rational[(int) count];
-					for (int i = 0; i < count; i++) {
-						_blackLevel[i] = new Rational(ibl[i], 1);
-					}
-				}
-			} else if (tag == BLACKLEVELDELTAH) {
-				checkType(tag, type, SRATIONAL);
-				_blackLevelDeltaH = readSignedRationalArray(count, value);
-			} else if (tag == BLACKLEVELDELTAV) {
-				checkType(tag, type, SRATIONAL);
-				_blackLevelDeltaV = readSignedRationalArray(count, value);
-			} else if (tag == WHITELEVEL) {
-				checkType(tag, type, SHORT, LONG);
-				_whiteLevel = readLongArray(type, count, value);
-			} else if (tag == DEFAULTSCALE) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 2);
-				_defaultScale = readRationalArray(count, value);
-			} else if (tag == BESTQUALITYSCALE) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 1);
-				_bestQualityScale = readRational(count, value);
-			} else if (tag == DEFAULTCROPORIGIN) {
-				checkCount(tag, count, 2);
-				// Just to make things complicated, this can be SHORT, LONG
-				// or RATIONAL. To give these a least common (pardon the
-				// expression) denominator, we convert all to rational.
-				if (type == RATIONAL) {
-					_defaultCropOrigin = readRationalArray(count, value);
-				} else {
-					checkType(tag, type, SHORT, LONG);
-					long[] lco = readLongArray(type, count, value);
-					_defaultCropOrigin = new Rational[(int) count];
-					for (int i = 0; i < count; i++) {
-						_defaultCropOrigin[i] = new Rational(lco[i], 1);
-					}
-				}
-			} else if (tag == DEFAULTCROPSIZE) {
-				checkCount(tag, count, 2);
-				if (type == RATIONAL) {
-					_defaultCropSize = readRationalArray(count, value);
-				} else {
-					checkType(tag, type, SHORT, LONG);
-					long[] lcs = readLongArray(type, count, value);
-					_defaultCropSize = new Rational[(int) count];
-					for (int i = 0; i < count; i++) {
-						_defaultCropSize[i] = new Rational(lcs[i], 1);
-					}
-				}
-			} else if (tag == CALIBRATIONILLUMINANT1) {
-				checkCount(tag, count, 1);
-				checkType(tag, type, SHORT);
-				_calibrationIlluminant1 = readShort(type, count, value);
-			} else if (tag == CALIBRATIONILLUMINANT2) {
-				checkCount(tag, count, 1);
-				checkType(tag, type, SHORT);
-				_calibrationIlluminant2 = readShort(type, count, value);
-			} else if (tag == COLORMATRIX1) {
-				checkType(tag, type, SRATIONAL);
-				_colorMatrix1 = readSignedRationalArray(count, value);
-			} else if (tag == COLORMATRIX2) {
-				checkType(tag, type, SRATIONAL);
-				_colorMatrix2 = readSignedRationalArray(count, value);
-			} else if (tag == CAMERACALIBRATION1) {
-				checkType(tag, type, SRATIONAL);
-				_colorMatrix1 = readSignedRationalArray(count, value);
-			} else if (tag == CAMERACALIBRATION2) {
-				checkType(tag, type, SRATIONAL);
-				_colorMatrix2 = readSignedRationalArray(count, value);
-			} else if (tag == REDUCTIONMATRIX1) {
-				checkType(tag, type, SRATIONAL);
-				_reductionMatrix1 = readSignedRationalArray(count, value);
-			} else if (tag == REDUCTIONMATRIX2) {
-				checkType(tag, type, SRATIONAL);
-				_reductionMatrix2 = readSignedRationalArray(count, value);
-			} else if (tag == ANALOGBALANCE) {
-				checkType(tag, type, RATIONAL);
-				_analogBalance = readRationalArray(count, value);
-			} else if (tag == ASSHOTNEUTRAL) {
-				// this can be either SHORT or RATIONAL
-				checkType(tag, type, SHORT, RATIONAL);
-				if (type == SHORT) {
-					int[] asn = readShortArray(type, count, value);
-					_asShotNeutral = new Rational[(int) count];
-					for (int i = 0; i < count; i++) {
-						_asShotNeutral[i] = new Rational(asn[i], 1);
-					}
-				} else {
-					_asShotNeutral = readRationalArray(count, value);
-				}
-			} else if (tag == ASSHOTWHITEXY) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 2);
-				_asShotWhiteXY = readRationalArray(count, value);
-			} else if (tag == BASELINEEXPOSURE) {
-				checkType(tag, type, SRATIONAL);
-				_baselineExposure = readSignedRational(count, value);
-			} else if (tag == BASELINENOISE) {
-				checkType(tag, type, RATIONAL);
-				_baselineNoise = readRational(count, value);
-			} else if (tag == BASELINESHARPNESS) {
-				checkType(tag, type, RATIONAL);
-				_baselineSharpness = readRational(count, value);
-			} else if (tag == BAYERGREENSPLIT) {
-				checkType(tag, type, LONG);
-				_bayerGreenSplit = (int) readLong(type, count, value);
-			} else if (tag == LINEARRESPONSELIMIT) {
-				checkType(tag, type, RATIONAL);
-				_linearResponseLimit = readRational(count, value);
-			} else if (tag == CAMERASERIALNUMBER) {
-				checkType(tag, type, ASCII);
-				_cameraSerialNumber = readASCII(count, value);
-			} else if (tag == LENSINFO) {
-				checkType(tag, type, RATIONAL);
-				checkCount(tag, count, 4);
-				_lensInfo = readRationalArray(count, value);
-			} else if (tag == CHROMABLURRADIUS) {
-				checkType(tag, type, RATIONAL);
-				_chromaBlurRadius = readRational(count, value);
-			} else if (tag == ANTIALIASSTRENGTH) {
-				checkType(tag, type, RATIONAL);
-				_antiAliasStrength = readRational(count, value);
-			} else if (tag == SHADOWSCALE) {
-				_info.setMessage(new InfoMessage(MessageConstants.TIFF_HUL_11,
-						MessageConstants.TIFF_HUL_11_SUB.getMessage()));
-			} else if (tag == DNGPRIVATEDATA) {
-				checkType(tag, type, BYTE);
-				_dngPrivateData = readByteArray(type, count, value);
-			} else if (tag == MAKERNOTESAFETY) {
-				checkType(tag, type, SHORT);
-				_makerNoteSafety = readShort(type, count, value);
-			} else {
-				String mess = MessageFormat
-						.format(MessageConstants.TIFF_HUL_12.getMessage(), tag);
-				JhoveMessage message = JhoveMessages.getMessageInstance(
-						MessageConstants.TIFF_HUL_12.getId(), mess);
-				_info.setMessage(new InfoMessage(message, value));
-			}
+                    switch (tag) {
+                        case APERTUREVALUE:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 1);
+                            _aperatureValue = readRational(count, value);
+                            break;
+                        case ARTIST:
+                            checkType(tag, type, ASCII);
+                            _niso.setImageProducer(readASCII(count, value));
+                            if (_version < 5) {
+                                _version = 5;
+                            }
+                            break;
+                        case BACKGROUNDCOLORINDICATOR:
+                            checkType(tag, type, BYTE);
+                            checkCount(tag, count, 1);
+                            _backgroundColorIndicator = readByte(type, count, value);
+                            break;
+                        case BACKGROUNDCOLORVALUE:
+                            checkType(tag, type, BYTE);
+                            checkCount(tag, count, 1);
+                            _backgroundColorValue = readByte(type, count, value);
+                            break;
+                        case BADFAXLINES:
+                            checkType(tag, type, SHORT, LONG);
+                            checkCount(tag, count, 1);
+                            _badFaxLines = readLong(type, count, value);
+                            break;
+                        case BATTERYLEVEL:
+                            checkType(tag, type, RATIONAL, ASCII);
+                            if (type == RATIONAL) {
+                                Rational r = readRational(count, value);
+                                _batteryLevel = Double.toString(r.toDouble());
+                            } else {
+                                _batteryLevel = readASCII(count, value);
+                            }
+                            break;
+                        case BITSPEREXTENDEDRUNLENGTH:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _bitsPerExtendedRunLength = readShort(type, count, value);
+                            break;
+                        case BITSPERRUNLENGTH:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _bitsPerRunLength = readShort(type, count, value);
+                            break;
+                        case BITSPERSAMPLE:
+                            checkType(tag, type, SHORT);
+                            _niso.setBitsPerSample(readShortArray(type, count, value));
+                            break;
+                        case BRIGHTNESSVALUE:
+                            checkType(tag, type, SRATIONAL);
+                            if (count == 1) {
+                                _niso.setBrightness(
+                                        readSignedRational(count, value));
+                            } else {
+                                Rational[] r = readSignedRationalArray(count, value);
+                                _niso.setBrightness(average(r[0], r[1]));
+                            }
+                            break;
+                        case CELLLENGTH:
+                            checkType(tag, type, SHORT);
+                            _cellLength = readShort(type, count, value);
+                            break;
+                        case CELLWIDTH:
+                            checkType(tag, type, SHORT);
+                            _cellWidth = readShort(type, count, value);
+                            break;
+                        case CFAPATTERN:
+                            checkType(tag, type, BYTE);
+                            _cfaPattern = readByteArray(type, count, value);
+                            break;
+                        case CFAREPEATPATTERNDIM:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 2);
+                            _cfaRepeatPatternDim = readShortArray(type, count, value);
+                            break;
+                        case CLEANFAXDATA:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _badFaxLines = readShort(type, count, value);
+                            break;
+                        case CLIPPATH:
+                            checkType(tag, type, BYTE);
+                            _clipPath = readByteArray(type, count, value);
+                            break;
+                        case COLORCHARACTERIZATION:
+                            checkType(tag, type, ASCII);
+                            _colorCharacterization = readASCII(count, value);
+                            break;
+                        case COLORSEQUENCE:
+                            checkType(tag, type, ASCII);
+                            _colorSequence = readASCII(count, value);
+                            break;
+                        case COLORMAP:
+                            {
+                                checkType(tag, type, SHORT);
+                                int[] colorMap = readShortArray(type, count, value);
+                                int[] bitCode = new int[colorMap.length];
+                                int[] red = new int[colorMap.length];
+                                int[] green = new int[colorMap.length];
+                                int[] blue = new int[colorMap.length];
+                                int len = colorMap.length / 3;
+                                int len2 = 2 * len;
+                                for (int i = 0; i < len; i++) {
+                                    bitCode[i] = i;
+                                    red[i] = colorMap[i];
+                                    green[i] = colorMap[i + len];
+                                    blue[i] = colorMap[i + len2];
+                                }
+                                _niso.setColormapBitCodeValue(bitCode);
+                                _niso.setColormapRedValue(red);
+                                _niso.setColormapGreenValue(green);
+                                _niso.setColormapBlueValue(blue);
+                                if (_version < 5) {
+                                    _version = 5;
+                                }
+                                break;
+                            }
+                        case COLORTABLE:
+                            checkType(tag, type, BYTE);
+                            _colorTable = readByteArray(type, count, value);
+                            break;
+                        case COMPRESSEDBITSPERPIXEL:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 1);
+                            _compressedBitsPerPixel = readRational(count, value);
+                            break;
+                        case COMPRESSION:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            int scheme = readShort(type, count, value);
+                            _niso.setCompressionScheme(scheme);
+                            if (scheme == 5) {
+                                // Set default predictor if none has been set
+                                if (_predictor == NULL) {
+                                    _predictor = 1;
+                                }
+                                if (_version < 5) {
+                                    _version = 5;
+                                }
+                            }
+                            if (scheme == 6 && _version < 6) {
+                                _version = 6;
+                            }
+                            if (scheme == 3 && _t4Options == NULL) {
+                                // Set default t4Options only if compression is 3
+                                _t4Options = 0;
+                            }
+                            if (scheme == 4 && _t6Options == NULL) {
+                                // Set default t6Options only if compression is 4
+                                _t6Options = 0;
+                            }
+                            if (scheme == 6) {
+                                _info.setMessage(new InfoMessage(
+                                        MessageConstants.TIFF_HUL_61));
+                            }
+                            break;
+                        case CONSECUTIVEBADFAXLINES:
+                            checkType(tag, type, SHORT, LONG);
+                            checkCount(tag, count, 1);
+                            _consecutiveBadFaxLines = readLong(type, count, value);
+                            break;
+                        case COPYRIGHT:
+                            checkType(tag, type, ASCII);
+                            _copyright = readASCII(count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case DATETIME:
+                            checkType(tag, type, ASCII);
+                            checkCount(tag, count, 20);
+                            _dateTime = readASCII(count, value);
+                            _niso.setDateTimeCreated(_dateTime);
+                            if (_version < 5) {
+                                _version = 5;
+                            }
+                            break;
+                        case DATETIMEORIGINAL:
+                            checkType(tag, type, ASCII);
+                            checkCount(tag, count, 20);
+                            _niso.setDateTimeCreated(readASCII(count, value));
+                            break;
+                        case DOCUMENTNAME:
+                            checkType(tag, type, ASCII);
+                            _documentName = readASCII(count, value);
+                            break;
+                        case DOTRANGE:
+                            checkType(tag, type, BYTE, SHORT);
+                            checkCount(tag, count, 2);
+                            _dotRange = readShortArray(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case EXIFIFD:
+                            checkType(tag, type, LONG);
+                            checkCount(tag, count, 1);
+                            _exifIFD = readLong(type, count, value);
+                            break;
+                        case EXPOSUREBIASVALUE:
+                            checkType(tag, type, SRATIONAL);
+                            if (count == 1) {
+                                _niso.setExposureBias(
+                                        readSignedRational(count, value));
+                            } else {
+                                Rational[] r = readSignedRationalArray(count, value);
+                                _niso.setExposureBias(average(r[0], r[1]));
+                            }
+                            break;
+                        case EXPOSUREPROGRAM:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _exposureProgram = readShort(type, count, value);
+                            break;
+                        case EXPOSURETIME:
+                            checkType(tag, type, RATIONAL);
+                            if (count == 1) {
+                                _niso.setExposureTime(
+                                        readRational(count, value).toDouble());
+                            } else {
+                                Rational[] r = readRationalArray(count, value);
+                                _niso.setExposureTime(average(r[0], r[1]).toDouble());
+                            }
+                            break;
+                        case EXTRASAMPLES:
+                            checkType(tag, type, SHORT);
+                            _niso.setExtraSamples(readShortArray(type, count, value));
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case FILLORDER:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _fillOrder = readShort(type, count, value);
+                            break;
+                        case FLASH:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _flash = readShort(type, count, value);
+                            _niso.setFlash(_flash);
+                            _niso.setFlashReturn(((_flash & 0X6) != 0) ? 1 : 0);
+                            break;
+                        case FLASHENERGY:
+                            checkType(tag, type, RATIONAL);
+                            if (count == 1) {
+                                _niso.setFlashEnergy(readRational(count, value));
+                            } else {
+                                Rational[] r = readRationalArray(count, value);
+                                _niso.setFlashEnergy(average(r[0], r[1]));
+                            }
+                            break;
+                        case FNUMBER:
+                            checkType(tag, type, RATIONAL);
+                            if (count == 1) {
+                                _niso.setFNumber(readRational(count, value).toDouble());
+                            } else {
+                                Rational[] r = readRationalArray(count, value);
+                                _niso.setFNumber(average(r[0], r[1]).toDouble());
+                            }
+                            break;
+                        case FOCALLENGTH:
+                            checkType(tag, type, RATIONAL);
+                            if (count == 1) {
+                                _niso.setFocalLength(readRational(count, value).toDouble());
+                            } else {
+                                Rational[] r = readRationalArray(count, value);
+                                _niso.setFocalLength(average(r[0], r[1]).toDouble());
+                            }
+                            break;
+                        case FOCALPLANERESOLUTIONUNIT:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _focalPlaneResolutionUnit = readShort(type, count, value);
+                            break;
+                        case FOCALPLANEXRESOLUTION:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 1);
+                            _focalPlaneXResolution = readRational(count, value);
+                            break;
+                        case FOCALPLANEYRESOLUTION:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 1);
+                            _focalPlaneYResolution = readRational(count, value);
+                            break;
+                        case FREEBYTECOUNTS:
+                            checkType(tag, type, LONG);
+                            _freeByteCounts = readLongArray(type, count, value);
+                            break;
+                        case FREEOFFSETS:
+                            checkType(tag, type, LONG);
+                            _freeOffsets = readLongArray(type, count, value);
+                            break;
+                        case GEOASCIIPARAMSTAG:
+                            checkType(tag, type, ASCII);
+                            _geoAsciiParamsTag = readASCII(count, value);
+                            break;
+                        case GEODOUBLEPARAMSTAG:
+                            checkType(tag, type, DOUBLE);
+                            _geoDoubleParamsTag = readDoubleArray(count, value);
+                            break;
+                        case GEOKEYDIRECTORYTAG:
+                            checkType(tag, type, SHORT);
+                            _geoKeyDirectoryTag = readShortArray(type, count, value);
+                            int num = _geoKeyDirectoryTag[3];
+                            int prevKey = -1;
+                            for (int i = 0; i < num; i++) {
+                                int j = i * 4 + 4;
+                                int key = _geoKeyDirectoryTag[j];
+                                if (prevKey > key) {
+                                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_10.getMessage(), key);
+                                    JhoveMessage message = JhoveMessages.getMessageInstance(
+                                            MessageConstants.TIFF_HUL_10.getId(), mess);
+                                    throw new TiffException(message);
+                                }
+                                prevKey = key;
+                            }
+                            break;
+                        case GLOBALPARAMETERSIFD:
+                            checkType(tag, type, LONG, IFD);
+                            // RFC 2301 allows only IFD, but the latest working
+                            // draft allows LONG. Even though allowing LONG
+                            // technically isn't allowed yet, letting it by seems
+                            // reasonable, since other IFD tags can be LONG.
+                            checkCount(tag, count, 1);
+                            _globalParametersIFD = readLong(type, count, value);
+                            break;
+                        case GPSINFOIFD:
+                            checkType(tag, type, LONG);
+                            checkCount(tag, count, 1);
+                            _gpsInfoIFD = readLong(type, count, value);
+                            break;
+                        case GRAYRESPONSECURVE:
+                            checkType(tag, type, SHORT);
+                            _niso.setGrayResponseCurve(readShortArray(type, count, value));
+                            break;
+                        case GRAYRESPONSEUNIT:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _niso.setGrayResponseUnit(readShort(type, count, value));
+                            break;
+                        case HALFTONEHINTS:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 2);
+                            _halftoneHints = readShortArray(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case HCUSAGE:
+                            checkType(tag, type, LONG);
+                            checkCount(tag, count, 1);
+                            _hcUsage = readLong(type, count, value);
+                            break;
+                        case HOSTCOMPUTER:
+                            checkType(tag, type, ASCII);
+                            _niso.setHostComputer(readASCII(count, value));
+                            if (_version < 5) {
+                                _version = 5;
+                            }
+                            break;
+                        case IMAGEDESCRIPTION:
+                            checkType(tag, type, ASCII);
+                            _imageDescription = readASCII(count, value);
+                            break;
+                        case IMAGEID:
+                            checkType(tag, type, ASCII);
+                            _niso.setImageIdentifier(readASCII(count, value));
+                            break;
+                        case IMAGECOLORINDICATOR:
+                            checkType(tag, type, BYTE);
+                            checkCount(tag, count, 1);
+                            _imageColorIndicator = readByte(type, count, value);
+                            break;
+                        case IMAGECOLORVALUE:
+                            checkType(tag, type, BYTE);
+                            checkCount(tag, count, 1);
+                            _imageColorValue = readByte(type, count, value);
+                            break;
+                        case IMAGEHISTORY:
+                            checkType(tag, type, ASCII);
+                            _imageHistory = readASCII(count, value);
+                            break;
+                        case IMAGELAYER:
+                            checkType(tag, type, SHORT, LONG);
+                            checkCount(tag, count, 2);
+                            _imageLayer = readShortArray(type, count, value);
+                            break;
+                        case IMAGELENGTH:
+                            checkType(tag, type, SHORT, LONG);
+                            checkCount(tag, count, 1);
+                            _niso.setImageLength(readLong(type, count, value));
+                            break;
+                        case IMAGENUMBER:
+                            checkType(tag, type, LONG);
+                            checkCount(tag, count, 1);
+                            _imageNumber = readLong(type, count, value);
+                            break;
+                        case IMAGESOURCEDATA:
+                            checkType(tag, type, UNDEFINED);
+                            // _imageSourceData = readByteArray (type, count, value);
+                            // GDM 16-Sep-2005:
+                            // The ImageSourceData tag sometimes has a gigantic
+                            // amount of data, and we don't actually do anything with
+                            // it in the current version of JHOVE except determine if
+                            // it's there.
+                            _imageSourceData = new int[] { 1 };
+                            break;
+                        case PHOTOSHOPPROPS:
+                            // Can't find any info on what type is expected.
+                            _photoshopProperties = readByteArray(type, count, value);
+                            break;
+                        case ANNOTATIONS:
+                            // Can't find any info on what type is expected.
+                            _annotations = readByteArray(type, count, value);
+                            break;
+                        case IMAGEWIDTH:
+                            checkType(tag, type, SHORT, LONG);
+                            checkCount(tag, count, 1);
+                            _niso.setImageWidth(readLong(type, count, value));
+                            break;
+                        case INDEXED:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _indexed = readShort(type, count, value);
+                            break;
+                        case INKNAMES:
+                            checkType(tag, type, ASCII);
+                            _inkNames = readASCIIArray(count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case INKSET:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _inkSet = readShort(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case ICC_PROFILE:
+                            checkType(tag, type, UNDEFINED);
+                            // Read the iccProdfile data as an array of bytes
+                            _iccProfile = readTrueByteArray(type, count, value);
+                            try {
+                                String desc = NisoImageMetadata
+                                        .extractIccProfileDescription(_iccProfile);
+                                if (desc != null) {
+                                    _niso.setProfileName(desc);
+                                }
+                            } catch (IllegalArgumentException ie) {
+                                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_71.getMessage(), tag, ie.getMessage());
+                                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_71.getId(), mess);
+                                throw new TiffException(message);
+                            }
+                            break;
+                        case INTERLACE:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _interlace = readShort(type, count, value);
+                            break;
+                        case INTEROPERABILITYIFD:
+                            checkType(tag, type, LONG);
+                            checkCount(tag, count, 1);
+                            _interoperabilityIFD = readLong(type, count, value);
+                            break;
+                        case IPTCNAA:
+                            if (type == ASCII) {
+                                String s = readASCII(count, value);
+                                long[] larray = new long[s.length()];
+                                for (int i = 0; i < s.length(); i++) {
+                                    larray[i] = (int) s.charAt(i);
+                                }
+                                _iptc = larray;
+                            } else if (type == LONG) {
+                                _iptc = readLongArray(type, count, value);
+                            } else {
+                                checkType(tag, type, BYTE, UNDEFINED);
+                                int[] b = readByteArray(type, count, value);
+                                long[] larray = new long[b.length];
+                                for (int i = 0; i < b.length; i++) {
+                                    larray[i] = b[i];
+                                    _iptc = larray;
+                                }
+                            }
+                            break;
+                        case ISOSPEEDRATINGS:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _isoSpeedRatings = readShortArray(tag, count, value);
+                            break;
+                        case IT8HEADER:
+                            checkType(tag, type, ASCII);
+                            _it8Header = readASCII(count, value);
+                            break;
+                        case JPEGACTABLES:
+                            checkType(tag, type, LONG);
+                            _jpegACTables = readLongArray(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case JPEGDCTABLES:
+                            checkType(tag, type, LONG);
+                            _jpegDCTables = readLongArray(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case JPEGINTERCHANGEFORMAT:
+                            checkType(tag, type, LONG);
+                            checkCount(tag, count, 1);
+                            _jpegInterchangeFormat = readLong(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case JPEGINTERCHANGEFORMATLENGTH:
+                            checkType(tag, type, LONG);
+                            checkCount(tag, count, 1);
+                            _jpegInterchangeFormatLength = readLong(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case JPEGLOSSLESSPREDICTORS:
+                            checkType(tag, type, SHORT);
+                            _jpegLosslessPredictors = readShortArray(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case JPEGPOINTTRANSFORMS:
+                            checkType(tag, type, SHORT);
+                            _jpegPointTransforms = readShortArray(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case JPEGPROC:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _jpegProc = readShort(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case JPEGQTABLES:
+                            checkType(tag, type, LONG);
+                            _jpegQTables = readLongArray(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case JPEGRESTARTINTERVAL:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _jpegRestartInterval = readShort(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case JPEGTABLES:
+                            checkType(tag, type, UNDEFINED);
+                            _jpegTables = readByteArray(type, count, value);
+                            break;
+                        case LIGHTSOURCE:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _niso.setSceneIlluminant(readShort(type, count, value));
+                            break;
+                        case MAKE:
+                            checkType(tag, type, ASCII);
+                            _niso.setScannerManufacturer(readASCII(count, value));
+                            break;
+                        case MAXAPERTUREVALUE:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 1);
+                            _maxAperatureValue = readRational(count, value);
+                            break;
+                        case MAXSAMPLEVALUE:
+                            checkType(tag, type, SHORT);
+                            _maxSampleValue = readShortArray(type, count, value);
+                            break;
+                        case METERINGMODE:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _niso.setMeteringMode(readShort(type, count, value));
+                            break;
+                        case MINSAMPLEVALUE:
+                            checkType(tag, type, SHORT);
+                            _minSampleValue = readShortArray(type, count, value);
+                            break;
+                        case MODEL:
+                            checkType(tag, type, ASCII);
+                            _niso.setScannerModelName(readASCII(count, value));
+                            break;
+                        case MODELPIXELSCALETAG:
+                            checkType(tag, type, DOUBLE);
+                            checkCount(tag, count, 3);
+                            _modelPixelScaleTag = readDoubleArray(count, value);
+                            break;
+                        case MODELTIEPOINTTAG:
+                            checkType(tag, type, DOUBLE);
+                            _modelTiepointTag = readDoubleArray(count, value);
+                            break;
+                        case MODELTRANSFORMATIONTAG:
+                            checkType(tag, type, DOUBLE);
+                            checkCount(tag, count, 16);
+                            _modelTransformationTag = readDoubleArray(count, value);
+                            break;
+                        case NEWSUBFILETYPE:
+                            checkType(tag, type, LONG);
+                            checkCount(tag, count, 1);
+                            _newSubfileType = readLong(type, count, value);
+                            if (_version < 5) {
+                                _version = 5;
+                            }
+                            break;
+                        case NOISE:
+                            checkType(tag, type, UNDEFINED);
+                            _noise = readByteArray(type, count, value);
+                            break;
+                        case NUMBEROFINKS:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _numberOfInks = readShort(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case OECF:
+                            checkType(tag, type, UNDEFINED);
+                            _oecf = readByteArray(tag, count, value);
+                            break;
+                        case OPIPROXY:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _opiProxy = readShort(type, count, value);
+                            break;
+                        case ORIENTATION:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _niso.setOrientation(readShort(type, count, value));
+                            break;
+                        case PAGENAME:
+                            checkType(tag, type, ASCII);
+                            _pageName = readASCII(count, value);
+                            break;
+                        case PAGENUMBER:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 2);
+                            _pageNumber = readShortArray(type, count, value);
+                            break;
+                        case PHOTOMETRICINTERPRETATION:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _photometricInterpretation = readShort(type, count, value);
+                            _niso.setColorSpace(_photometricInterpretation);
+                            // Set default values appropriate to interpretation,
+                            // only if no value has been set.
+                            if (_photometricInterpretation == 5) {
+                                if (_inkSet == NULL) {
+                                    _inkSet = 1;
+                                }
+                                if (_numberOfInks == NULL) {
+                                    _numberOfInks = 4;
+                                }
+                            } else if (_photometricInterpretation == 6) {
+                                if (_niso.getYCbCrCoefficients() == null) {
+                                    _niso.setYCbCrCoefficients(
+                                            new Rational[] { new Rational(299, 1000),
+                                                new Rational(587, 1000),
+                                                new Rational(114, 1000) });
+                                }
+                                if (_niso.getYCbCrPositioning() == NULL) {
+                                    _niso.setYCbCrPositioning(1);
+                                }
+                                if (_niso.getYCbCrSubSampling() == null) {
+                                    _niso.setYCbCrSubSampling(new int[] { 2, 2 });
+                                }
+                            }
+                            int colorSpace = _niso.getColorSpace();
+                            if (colorSpace == 3 || colorSpace == 4) {
+                                if (_version < 5) {
+                                    _version = 5;
+                                }
+                            } else if (colorSpace == 5 || colorSpace == 6
+                                    || colorSpace == 8) {
+                                if (_version < 6) {
+                                    _version = 6;
+                                }
+                            }
+                            break;
+                        case PIXELINTENSITYRANGE:
+                            checkType(tag, type, BYTE);
+                            _pixelIntensityRange = readShortArray(type, count, value);
+                            break;
+                        case PLANARCONFIGURATION:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _niso.setPlanarConfiguration(readShort(type, count, value));
+                            break;
+                        case PREDICTOR:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _predictor = readShort(type, count, value);
+                            if (_version < 5) {
+                                _version = 5;
+                            }
+                            break;
+                        case PRIMARYCHROMATICITIES:
+                            {
+                                checkType(tag, type, RATIONAL);
+                                checkCount(tag, count, 6);
+                                Rational[] rarray = readRationalArray(count, value);
+                                _niso.setPrimaryChromaticitiesRedX(rarray[0]);
+                                _niso.setPrimaryChromaticitiesRedY(rarray[1]);
+                                _niso.setPrimaryChromaticitiesGreenX(rarray[2]);
+                                _niso.setPrimaryChromaticitiesGreenY(rarray[3]);
+                                _niso.setPrimaryChromaticitiesBlueX(rarray[4]);
+                                _niso.setPrimaryChromaticitiesBlueY(rarray[5]);
+                                if (_version < 5) {
+                                    _version = 5;
+                                }
+                                break;
+                            }
+                        case RASTERPADDING:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _rasterPadding = readShort(type, count, value);
+                            break;
+                        case REFERENCEBLACKWHITE:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 6);
+                            _niso.setReferenceBlackWhite(readRationalArray(count, value));
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case RESOLUTIONUNIT:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _niso.setSamplingFrequencyUnit(readShort(type, count, value));
+                            break;
+                        case ROWSPERSTRIP:
+                            checkType(tag, type, SHORT, LONG);
+                            checkCount(tag, count, 1);
+                            _niso.setRowsPerStrip(readLong(type, count, value));
+                            break;
+                        case SAMPLEFORMAT:
+                            checkType(tag, type, SHORT);
+                            _sampleFormat = readShortArray(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case SAMPLESPERPIXEL:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _niso.setSamplesPerPixel(readShort(type, count, value));
+                            break;
+                        case SECURITYCLASSIFICATION:
+                            checkType(tag, type, ASCII);
+                            _securityClassification = readASCII(count, value);
+                            break;
+                        case SELFTIMERMODE:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _selfTimerMode = readShort(type, count, value);
+                            break;
+                        case SENSINGMETHOD:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _niso.setSensor(readShort(type, count, value));
+                            break;
+                        case SITE:
+                            checkType(tag, type, ASCII);
+                            _site = readASCII(count, value);
+                            break;
+                        case STRIPROWCOUNTS:
+                            checkType(tag, type, LONG);
+                            _stripRowCounts = readLongArray(type, count, value);
+                            break;
+                        case SUBJECTDISTANCE:
+                            checkType(tag, type, RATIONAL, SRATIONAL);
+                            double[] darray = new double[2];
+                            if (count == 1) {
+                                darray[0] = readRational(count, value).toDouble();
+                                darray[1] = darray[0];
+                            } else {
+                                Rational[] r;
+                                if (type == RATIONAL) {
+                                    r = readRationalArray(count, value);
+                                } else {
+                                    r = readSignedRationalArray(count, value);
+                                }
+                                darray[0] = r[0].toDouble();
+                                if (r.length > 1) {
+                                    darray[1] = r[1].toDouble();
+                                } else {
+                                    darray[1] = darray[0];
+                                }
+                            }
+                            _niso.setSubjectDistance(darray);
+                            break;
+                        case SOFTWARE:
+                            checkType(tag, type, ASCII);
+                            _niso.setScanningSoftware(readASCII(count, value));
+                            if (_version < 5) {
+                                _version = 5;
+                            }
+                            break;
+                        case SPATIALFREQUENCYRESPONSE:
+                            checkType(tag, type, UNDEFINED);
+                            _spatialFrequencyResponse = readByteArray(type, count, value);
+                            break;
+                        case SPECTRALSENSITIVITY:
+                            checkType(tag, type, ASCII);
+                            _spectralSensitivity = readASCII(count, value);
+                            break;
+                        case STRIPBYTECOUNTS:
+                            checkType(tag, type, SHORT, LONG);
+                            _niso.setStripByteCounts(readLongArray(type, count, value));
+                            break;
+                        case STRIPOFFSETS:
+                            checkType(tag, type, SHORT, LONG);
+                            _niso.setStripOffsets(readLongArray(type, count, value));
+                            break;
+                        case SUBFILETYPE:
+                            checkType(tag, type, LONG);
+                            checkCount(tag, count, 1);
+                            _subfileType = readShort(type, count, value);
+                            break;
+                        case SUBIFDS:
+                            checkType(tag, type, LONG, IFD);
+                            _subIFDs = readLongArray(type, count, value);
+                            break;
+                        case SUBJECTLOCATION:
+                            checkType(tag, type, SHORT);
+                            _subjectLocation = readShortArray(type, count, value);
+                            break;
+                        case T4OPTIONS:
+                            checkType(tag, type, LONG);
+                            _t4Options = readShort(type, count, value);
+                            break;
+                        case T6OPTIONS:
+                            checkType(tag, type, LONG);
+                            _t6Options = readShort(type, count, value);
+                            break;
+                        case TARGETPRINTER:
+                            checkType(tag, type, ASCII);
+                            _targetPrinter = readASCII(count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case THRESHHOLDING:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _threshholding = readShort(type, count, value);
+                            break;
+                        case TIFFEPSTANDARDID:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 4);
+                            int[] iarray = readShortArray(type, count, value);
+                            _tiffEPStandardID = Integer.toString(iarray[0]) + "."
+                                    + Integer.toString(iarray[1]) + "."
+                                    + Integer.toString(iarray[2]) + "."
+                                    + Integer.toString(iarray[3]);
+                            break;
+                        case TILEBYTECOUNTS:
+                            checkType(tag, type, SHORT, LONG);
+                            _niso.setTileByteCounts(readLongArray(type, count, value));
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case TILELENGTH:
+                            checkType(tag, type, SHORT, LONG);
+                            checkCount(tag, count, 1);
+                            _niso.setTileLength(readLong(type, count, value));
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case TILEOFFSETS:
+                            checkType(tag, type, SHORT, LONG);
+                            _niso.setTileOffsets(readLongArray(type, count, value));
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case TILEWIDTH:
+                            checkType(tag, type, SHORT, LONG);
+                            checkCount(tag, count, 1);
+                            _niso.setTileWidth(readLong(type, count, value));
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case TIMEZONEOFFSET:
+                            checkType(tag, type, SSHORT);
+                            _timeZoneOffset = readSShortArray(type, count, value);
+                            break;
+                        case TRANSFERFUNCTION:
+                            /*
+                            * Transfer function arrays potentially can have millions
+                            * of elements, so we just report presence
+                            */
+                            checkType(tag, type, SHORT);
+                            _transferFunction = true;
+                            break;
+                        case TRANSFERRANGE:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 6);
+                            _transferRange = readShortArray(type, count, value);
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case TRANSPARENCYINDICATOR:
+                            checkType(tag, type, BYTE);
+                            checkCount(tag, count, 1);
+                            _transparencyIndicator = readByte(type, count, value);
+                            break;
+                        case WHITEPOINT:
+                            {
+                                checkType(tag, type, RATIONAL);
+                                checkCount(tag, count, 2);
+                                Rational[] rarray = readRationalArray(count, value);
+                                _niso.setWhitePointXValue(rarray[0]);
+                                _niso.setWhitePointYValue(rarray[0]);
+                                if (_version < 5) {
+                                    _version = 5;
+                                }
+                                break;
+                            }
+                        case XCLIPPATHUNITS:
+                            checkType(tag, type, LONG);
+                            checkCount(tag, count, 1);
+                            _xClipPathUnits = readLong(type, count, value);
+                            break;
+                        case XPOSITION:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 1);
+                            _xPosition = readRational(count, value);
+                            break;
+                        case XRESOLUTION:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 1);
+                            _niso.setXSamplingFrequency(readRational(count, value));
+                            break;
+                        case YCBCRCOEFFICIENTS:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 3);
+                            _niso.setYCbCrCoefficients(readRationalArray(count, value));
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case YCBCRPOSITIONING:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 1);
+                            _niso.setYCbCrPositioning(readShort(type, count, value));
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case YCBCRSUBSAMPLING:
+                            checkType(tag, type, SHORT);
+                            checkCount(tag, count, 2);
+                            _niso.setYCbCrSubSampling(readShortArray(type, count, value));
+                            if (_version < 6) {
+                                _version = 6;
+                            }
+                            break;
+                        case YCLIPPATHUNITS:
+                            checkType(tag, type, LONG);
+                            checkCount(tag, count, 1);
+                            _yClipPathUnits = readLong(type, count, value);
+                            break;
+                        case YPOSITION:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 1);
+                            _yPosition = readRational(count, value);
+                            break;
+                        case YRESOLUTION:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 1);
+                            _niso.setYSamplingFrequency(readRational(count, value));
+                            break;
+                        case XMP:
+                            checkType(tag, type, UNDEFINED, BYTE);
+                            _xmpProp = readXMP(count, value);
+                            break;
+                        case DNGVERSION:
+                            checkType(tag, type, BYTE);
+                            checkCount(tag, count, 4);
+                            _dngVersion = readByteArray(type, count, value);
+                            break;
+                        case DNGBACKWARDVERSION:
+                            checkType(tag, type, BYTE);
+                            checkCount(tag, count, 4);
+                            _dngBackwardVersion = readByteArray(type, count, value);
+                            break;
+                        case UNIQUECAMERAMODEL:
+                            checkType(tag, type, ASCII);
+                            _uniqueCameraModel = readASCII(count, value);
+                            break;
+                        case LOCALIZEDCAMERAMODEL:
+                            {
+                                checkType(tag, type, ASCII, BYTE);
+                                // This tag is specified as UTF-8
+                                byte[] lcm = readTrueByteArray(type, count, value);
+                                // Trim off trailing null (s)
+                                int len = lcm.length;
+                                while (len > 0 && lcm[len - 1] == 0) {
+                                    len--;
+                                }
+                                _localizedCameraModel = new String(lcm, 0, len);
+                                break;
+                            }
+                        case CFAPLANECOLOR:
+                            checkType(tag, type, BYTE);
+                            _cfaPlaneColor = readByteArray(type, count, value);
+                            break;
+                        case CFALAYOUT:
+                            checkType(tag, type, SHORT);
+                            _cfaLayout = readShort(type, count, value);
+                            break;
+                        case LINEARIZATIONTABLE:
+                            checkType(tag, type, SHORT);
+                            _linearizationTable = readShortArray(type, count, value);
+                            break;
+                        case BLACKLEVELREPEATDIM:
+                            checkType(tag, type, SHORT);
+                            _blackLevelRepeatDim = readShortArray(type, count, value);
+                            break;
+                        case BLACKLEVEL:
+                            // Just to make things complicated, this can be SHORT, LONG
+                            // or RATIONAL. To give these a least common (pardon the
+                            // expression) denominator, we convert all to rational.
+                            if (type == RATIONAL) {
+                                _blackLevel = readRationalArray(count, value);
+                            } else {
+                                checkType(tag, type, SHORT, LONG);
+                                long[] ibl = readLongArray(type, count, value);
+                                _blackLevel = new Rational[(int) count];
+                                for (int i = 0; i < count; i++) {
+                                    _blackLevel[i] = new Rational(ibl[i], 1);
+                                }
+                            }
+                            break;
+                        case BLACKLEVELDELTAH:
+                            checkType(tag, type, SRATIONAL);
+                            _blackLevelDeltaH = readSignedRationalArray(count, value);
+                            break;
+                        case BLACKLEVELDELTAV:
+                            checkType(tag, type, SRATIONAL);
+                            _blackLevelDeltaV = readSignedRationalArray(count, value);
+                            break;
+                        case WHITELEVEL:
+                            checkType(tag, type, SHORT, LONG);
+                            _whiteLevel = readLongArray(type, count, value);
+                            break;
+                        case DEFAULTSCALE:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 2);
+                            _defaultScale = readRationalArray(count, value);
+                            break;
+                        case BESTQUALITYSCALE:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 1);
+                            _bestQualityScale = readRational(count, value);
+                            break;
+                        case DEFAULTCROPORIGIN:
+                            checkCount(tag, count, 2);
+                            // Just to make things complicated, this can be SHORT, LONG
+                            // or RATIONAL. To give these a least common (pardon the
+                            // expression) denominator, we convert all to rational.
+                            if (type == RATIONAL) {
+                                _defaultCropOrigin = readRationalArray(count, value);
+                            } else {
+                                checkType(tag, type, SHORT, LONG);
+                                long[] lco = readLongArray(type, count, value);
+                                _defaultCropOrigin = new Rational[(int) count];
+                                for (int i = 0; i < count; i++) {
+                                    _defaultCropOrigin[i] = new Rational(lco[i], 1);
+                                }
+                            }
+                            break;
+                        case DEFAULTCROPSIZE:
+                            checkCount(tag, count, 2);
+                            if (type == RATIONAL) {
+                                _defaultCropSize = readRationalArray(count, value);
+                            } else {
+                                checkType(tag, type, SHORT, LONG);
+                                long[] lcs = readLongArray(type, count, value);
+                                _defaultCropSize = new Rational[(int) count];
+                                for (int i = 0; i < count; i++) {
+                                    _defaultCropSize[i] = new Rational(lcs[i], 1);
+                                }
+                            }
+                            break;
+                        case CALIBRATIONILLUMINANT1:
+                            checkCount(tag, count, 1);
+                            checkType(tag, type, SHORT);
+                            _calibrationIlluminant1 = readShort(type, count, value);
+                            break;
+                        case CALIBRATIONILLUMINANT2:
+                            checkCount(tag, count, 1);
+                            checkType(tag, type, SHORT);
+                            _calibrationIlluminant2 = readShort(type, count, value);
+                            break;
+                        case COLORMATRIX1:
+                            checkType(tag, type, SRATIONAL);
+                            _colorMatrix1 = readSignedRationalArray(count, value);
+                            break;
+                        case COLORMATRIX2:
+                            checkType(tag, type, SRATIONAL);
+                            _colorMatrix2 = readSignedRationalArray(count, value);
+                            break;
+                        case CAMERACALIBRATION1:
+                            checkType(tag, type, SRATIONAL);
+                            _colorMatrix1 = readSignedRationalArray(count, value);
+                            break;
+                        case CAMERACALIBRATION2:
+                            checkType(tag, type, SRATIONAL);
+                            _colorMatrix2 = readSignedRationalArray(count, value);
+                            break;
+                        case REDUCTIONMATRIX1:
+                            checkType(tag, type, SRATIONAL);
+                            _reductionMatrix1 = readSignedRationalArray(count, value);
+                            break;
+                        case REDUCTIONMATRIX2:
+                            checkType(tag, type, SRATIONAL);
+                            _reductionMatrix2 = readSignedRationalArray(count, value);
+                            break;
+                        case ANALOGBALANCE:
+                            checkType(tag, type, RATIONAL);
+                            _analogBalance = readRationalArray(count, value);
+                            break;
+                        case ASSHOTNEUTRAL:
+                            // this can be either SHORT or RATIONAL
+                            checkType(tag, type, SHORT, RATIONAL);
+                            if (type == SHORT) {
+                                int[] asn = readShortArray(type, count, value);
+                                _asShotNeutral = new Rational[(int) count];
+                                for (int i = 0; i < count; i++) {
+                                    _asShotNeutral[i] = new Rational(asn[i], 1);
+                                }
+                            } else {
+                                _asShotNeutral = readRationalArray(count, value);
+                            }
+                            break;
+                        case ASSHOTWHITEXY:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 2);
+                            _asShotWhiteXY = readRationalArray(count, value);
+                            break;
+                        case BASELINEEXPOSURE:
+                            checkType(tag, type, SRATIONAL);
+                            _baselineExposure = readSignedRational(count, value);
+                            break;
+                        case BASELINENOISE:
+                            checkType(tag, type, RATIONAL);
+                            _baselineNoise = readRational(count, value);
+                            break;
+                        case BASELINESHARPNESS:
+                            checkType(tag, type, RATIONAL);
+                            _baselineSharpness = readRational(count, value);
+                            break;
+                        case BAYERGREENSPLIT:
+                            checkType(tag, type, LONG);
+                            _bayerGreenSplit = (int) readLong(type, count, value);
+                            break;
+                        case LINEARRESPONSELIMIT:
+                            checkType(tag, type, RATIONAL);
+                            _linearResponseLimit = readRational(count, value);
+                            break;
+                        case CAMERASERIALNUMBER:
+                            checkType(tag, type, ASCII);
+                            _cameraSerialNumber = readASCII(count, value);
+                            break;
+                        case LENSINFO:
+                            checkType(tag, type, RATIONAL);
+                            checkCount(tag, count, 4);
+                            _lensInfo = readRationalArray(count, value);
+                            break;
+                        case CHROMABLURRADIUS:
+                            checkType(tag, type, RATIONAL);
+                            _chromaBlurRadius = readRational(count, value);
+                            break;
+                        case ANTIALIASSTRENGTH:
+                            checkType(tag, type, RATIONAL);
+                            _antiAliasStrength = readRational(count, value);
+                            break;
+                        case SHADOWSCALE:
+                            _info.setMessage(new InfoMessage(MessageConstants.TIFF_HUL_11,
+                                    MessageConstants.TIFF_HUL_11_SUB.getMessage()));
+                            break;
+                        case DNGPRIVATEDATA:
+                            checkType(tag, type, BYTE);
+                            _dngPrivateData = readByteArray(type, count, value);
+                            break;
+                        case MAKERNOTESAFETY:
+                            checkType(tag, type, SHORT);
+                            _makerNoteSafety = readShort(type, count, value);
+                            break;
+                        default:
+                            String mess = MessageFormat
+                                    .format(MessageConstants.TIFF_HUL_12.getMessage(), tag);
+                            JhoveMessage message = JhoveMessages.getMessageInstance(
+                                    MessageConstants.TIFF_HUL_12.getId(), mess);
+                            _info.setMessage(new InfoMessage(message, value));
+                            break;
+                    }
 		} catch (IOException e) {
 			String mess = MessageFormat
 					.format(MessageConstants.TIFF_HUL_13.getMessage(), tag);

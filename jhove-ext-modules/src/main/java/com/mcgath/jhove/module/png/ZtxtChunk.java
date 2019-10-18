@@ -18,7 +18,6 @@ public class ZtxtChunk extends GeneralTextChunk {
 	
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
-		final String badchunk = "Bad zTXt chunk";
 		processChunkCommon(info);
 		
 		// The tEXt chunk consists of a keyword, a null, a compression type,
@@ -47,10 +46,12 @@ public class ZtxtChunk extends GeneralTextChunk {
 			case 1:
 				// Picking up compression type, which must be 0
 				if (c != 0) {
-					msg = new ErrorMessage ("Unrecognized compression type " + c + " in zTXt chunk");
+					msg = new ErrorMessage (MessageConstants.PNG_GDM_63, 
+							String.format(MessageConstants.PNG_GDM_63_SUB.getMessage(),  
+									c));
 					info.setMessage (msg);
 					info.setWellFormed (0);
-					throw new PNGException (badchunk);
+					throw new PNGException (MessageConstants.PNG_GDM_64);
 				}
 				state = 2;
 				compressedData = new byte [(int) length - i];
@@ -65,10 +66,10 @@ public class ZtxtChunk extends GeneralTextChunk {
 			try {
 				value = inflateToText(compressedData);
 			} catch (DataFormatException e) {
-				msg = new ErrorMessage ("Bad compressed data in zTXt chunk");
+				msg = new ErrorMessage (MessageConstants.PNG_GDM_65);
 				info.setMessage (msg);
 				info.setWellFormed (false);
-				throw new PNGException (badchunk);
+				throw new PNGException (MessageConstants.PNG_GDM_64);
 			}
 		}
 		_module.addKeyword (keyword, value);
