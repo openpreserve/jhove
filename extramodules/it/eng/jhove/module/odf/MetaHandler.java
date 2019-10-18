@@ -23,6 +23,9 @@ public class MetaHandler extends DefaultHandler {
     protected boolean isInDate=false;
     protected boolean isInCreationDate=false;
     protected SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private final static String TAG_DATE="dc:date";
+    private final static String TAG_CREATION="meta:creation-date";
+    
     /**
      * Cretes a new instance of <code>MetaHandler</code> .
      *
@@ -82,6 +85,5 @@ public class MetaHandler extends DefaultHandler {
 	return sdf1.parse(tagContent.toString(), new ParsePosition(0));
 	
     }
-    private final static String TAG_DATE="dc:date";
-    private final static String TAG_CREATION="meta:creation-date";
+    
 }

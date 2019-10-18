@@ -16,6 +16,14 @@ import it.eng.jhove.Booolean;
  * @version $Revision$
  */
 public class ManifestHandler extends DefaultHandler {
+    
+    private final static String FILE_ENTRY = "manifest:file-entry";
+
+    private final static String CRYP_ENTRT = "manifest:encryption-data";
+
+    private final static String ATTR_MEDIA = "manifest:media-type";
+    private final static String ATTR_PATH  = "manifest:full-path";
+    private final static String ATTR_SIZE  = "manifest:size";
 
     private Booolean isEncrypted;
     private List entries;
@@ -71,12 +79,4 @@ public class ManifestHandler extends DefaultHandler {
 	}
 
     }
-
-    private final static String FILE_ENTRY = "manifest:file-entry";
-
-    private final static String CRYP_ENTRT = "manifest:encryption-data";
-
-    private final static String ATTR_MEDIA = "manifest:media-type";
-    private final static String ATTR_PATH  = "manifest:full-path";
-    private final static String ATTR_SIZE  = "manifest:size";
 }
