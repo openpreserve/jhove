@@ -791,7 +791,8 @@ private final int jjMoveNfa_2(int startState, int curPos)
    jjnewStateCnt = 4;
    int i = 1;
    jjstateSet[0] = startState;
-   int j, kind = 0x7fffffff;
+   int j;
+   int kind = 0x7fffffff;
    for (;;)
    {
       if (++jjround == 0x7fffffff)
