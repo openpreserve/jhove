@@ -825,7 +825,7 @@ public class WaveModule extends ModuleBase {
 			JhoveMessage message = JhoveMessages.getMessageInstance(
 					MessageConstants.WAVE_HUL_7.getId(),
 					String.format(MessageConstants.WAVE_HUL_7.getMessage(),
-							"\"" + chunkId + "\""));
+							chunkId));
 			info.setMessage(new InfoMessage(message, chunkh.getOffset()));
 		}
 
@@ -882,13 +882,12 @@ public class WaveModule extends ModuleBase {
 			info.setMessage(new InfoMessage(
 					MessageConstants.WAVE_HUL_26,
 					String.format(MessageConstants.WAVE_HUL_26_SUB.getMessage(),
-					"\"" + chunkId + "\"", bytesProcessed, nullData),
+							chunkId, bytesProcessed, nullData),
 					_nByte - bytesProcessed));
 
 		} else {
-			throw new EOFException(
-					MessageConstants.SUB_MESS_TRUNCATED_CHUNK
-							+ "\"" + chunkId + "\"");
+			throw new EOFException(String.format(
+					MessageConstants.WAVE_HUL_3_SUB_2.getMessage(), chunkId));
 		}
 	}
 

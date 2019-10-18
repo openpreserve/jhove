@@ -66,8 +66,7 @@ public class ListInfoChunk extends Superchunk {
 			// Skip unrecognized list types
 			JhoveMessage message = JhoveMessages.getMessageInstance(
 					MessageConstants.WAVE_HUL_15.getId(), String.format(
-							MessageConstants.WAVE_HUL_15.getMessage(),
-							"\"" + typeID + "\""));
+							MessageConstants.WAVE_HUL_15.getMessage(), typeID));
 			info.setMessage(new InfoMessage(message, chunkOffset));
 			_module.skipBytes(_dstream, bytesLeft, _module);
 			return true;

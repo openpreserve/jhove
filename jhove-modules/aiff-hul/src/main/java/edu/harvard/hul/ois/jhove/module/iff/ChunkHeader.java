@@ -6,8 +6,14 @@
 
 package edu.harvard.hul.ois.jhove.module.iff;
 
-import edu.harvard.hul.ois.jhove.*;
-import java.io.*;
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+import edu.harvard.hul.ois.jhove.ModuleBase;
+import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
+import java.io.DataInputStream;
+import java.io.IOException;
 
 /**
  * This class encapsulates an IFF/AIFF chunk header.
@@ -86,8 +92,10 @@ public class ChunkHeader {
 
         // Spaces should not precede printable characters
         if (spacePrecedesPrintableCharacters) {
-            _repInfo.setMessage(new ErrorMessage(
-                    MessageConstants.IFF_HUL_2, "\"" + _chunkId + "\"",
+            JhoveMessage message = JhoveMessages.getMessageInstance(
+                    MessageConstants.IFF_HUL_2.getId(), String.format(
+                            MessageConstants.IFF_HUL_2.getMessage(), _chunkId));
+            _repInfo.setMessage(new ErrorMessage(message,
                     _module.getNByte() - Chunk.ID_LENGTH));
             _repInfo.setValid(false);
         }

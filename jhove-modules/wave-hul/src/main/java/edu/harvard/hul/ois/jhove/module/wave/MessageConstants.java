@@ -38,12 +38,11 @@ public enum MessageConstants {
 	public static final JhoveMessageFactory messageFactory = JhoveMessages
 			.getInstance("edu.harvard.hul.ois.jhove.module.wave.ErrorMessages");
 
-	public static final String SUB_MESS_TRUNCATED_CHUNK = "Truncated chunk = ";
-
 	public static final JhoveMessage WAVE_HUL_1 = messageFactory.getMessage("WAVE-HUL-1");
 	public static final JhoveMessage WAVE_HUL_2 = messageFactory.getMessage("WAVE-HUL-2");
 	public static final JhoveMessage WAVE_HUL_3 = messageFactory.getMessage("WAVE-HUL-3");
 	public static final JhoveMessage WAVE_HUL_3_SUB = messageFactory.getMessage("WAVE-HUL-3-SUB");
+	public static final JhoveMessage WAVE_HUL_3_SUB_2 = messageFactory.getMessage("WAVE-HUL-3-SUB-2");
 	public static final JhoveMessage WAVE_HUL_4 = messageFactory.getMessage("WAVE-HUL-4");
 	public static final JhoveMessage WAVE_HUL_5 = messageFactory.getMessage("WAVE-HUL-5");
 	public static final JhoveMessage WAVE_HUL_6 = messageFactory.getMessage("WAVE-HUL-6");
@@ -57,7 +56,7 @@ public enum MessageConstants {
 	public static final JhoveMessage WAVE_HUL_13 = messageFactory.getMessage("WAVE-HUL-13");
 	public static final JhoveMessage WAVE_HUL_14 = messageFactory.getMessage("WAVE-HUL-14");
 	public static final JhoveMessage WAVE_HUL_15 = messageFactory.getMessage("WAVE-HUL-15");
-	public static final JhoveMessage WAVE_HUL_16 = messageFactory.getMessage("WAVE-HUL-16");
+//	public static final JhoveMessage WAVE_HUL_16 = RETIRED
 	public static final JhoveMessage WAVE_HUL_17 = messageFactory.getMessage("WAVE-HUL-17");
 	public static final JhoveMessage WAVE_HUL_18 = messageFactory.getMessage("WAVE-HUL-18");
 	public static final JhoveMessage WAVE_HUL_19 = messageFactory.getMessage("WAVE-HUL-19");
