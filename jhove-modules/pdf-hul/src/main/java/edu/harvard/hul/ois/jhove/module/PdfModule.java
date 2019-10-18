@@ -1655,7 +1655,7 @@ public class PdfModule extends ModuleBase {
 					if (ver != infoVer) {
 						String mess = MessageFormat.format(
 								MessageConstants.PDF_HUL_87.getMessage(),
-								versString, infoVersString);
+								infoVersString, versString);
 						JhoveMessage message = JhoveMessages.getMessageInstance(
 								MessageConstants.PDF_HUL_87.getId(), mess);
 						info.setMessage(new InfoMessage(message));
