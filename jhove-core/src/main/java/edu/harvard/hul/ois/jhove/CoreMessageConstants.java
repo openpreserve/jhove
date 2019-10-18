@@ -22,7 +22,7 @@ public enum CoreMessageConstants {
 	public static final String EXC_JAVA_VER_INCMPT = "Java 1.8 or higher is required";
 	public static final String EXC_MODL_INST_FAIL = "Cannot instantiate module: ";
 	public static final String EXC_PRV_CNSTRCT = "Entered private constructor for: ";
-	public static final String EXC_PROP_VAL_NULL = "Null value not permitted or property: ";
+	public static final String EXC_PROP_VAL_NULL = "Null value not permitted for property: ";
 	public static final String EXC_SAX_PRSR_MISS = "SAX parser not found: ";
 	public static final String EXC_PROP_CLSS_INCMPT = "Incompatible class for property: ";
 	public static final String EXC_SCL_PROP_CLSS_INCMPT = "Scalar.";
