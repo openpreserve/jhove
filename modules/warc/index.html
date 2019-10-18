@@ -16,6 +16,7 @@ title: WARC-kb Module
   The WARC-kb module recognizes and validates the WARC (Web ARChive) format.
   [<a href="/references#warciso">WARC</a>]. It only validates the WARC file format and WARC headers, not the actual payload of the WARC records.
   This module uses the <a href="/references#jwat">JWAT</a> library for WARC parsing.
+  For Compressed WARC files the JWAT library is also used to parse compressed WARCs (.warc.gz)
 </p>
 <p>
   The module is invoked by the:
