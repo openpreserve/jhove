@@ -591,7 +591,7 @@ public abstract class HandlerBase
      *   to entities as necessary and removing control characters disallowed
      *   by XML.  The null string will be converted to an empty string.
      */
-    private static String encodeContent (String content)
+    protected static String encodeContent (String content)
     {
         if (content == null) {
             content = "";
@@ -611,7 +611,7 @@ public abstract class HandlerBase
 	n = 0;
         while ((n = buffer.indexOf ("&", n)) > -1) {
             buffer.insert (n+1, "amp;");
-            n +=5;
+            n += 5;
         }
         n = 0;
         while ((n = buffer.indexOf ("<", n)) > -1) {
@@ -632,7 +632,7 @@ public abstract class HandlerBase
      *   converting quote characters to entities and removing control
      *   characters disallowed by XML.
      */
-    private static String encodeValue (String value)
+    protected static String encodeValue (String value)
     {
         StringBuffer buffer = new StringBuffer (value);
 
@@ -650,9 +650,9 @@ public abstract class HandlerBase
         n = 0;
         while ((n = buffer.indexOf ("&", n)) > -1) {
             buffer.insert (n+1, "amp;");
-            n +=5;
+            n += 5;
         }
-     	n = 0;
+        n = 0;
         while ((n = buffer.indexOf ("<", n)) > -1) {
             buffer.replace (n, n+1, "&lt;");
             n += 4;
@@ -662,11 +662,11 @@ public abstract class HandlerBase
             buffer.replace (n, n+1, "&gt;");
             n += 4;
         }
-		n = 0;
+        n = 0;
         while ((n = buffer.indexOf ("\"", n)) > -1) {
             // [LP] fix for invalid escaping, "" quotes were accidentally left in place.
             buffer.replace (n, n+1, "&quot;");
-            n +=7;
+            n += 6;
         }
 
         return buffer.toString ();
