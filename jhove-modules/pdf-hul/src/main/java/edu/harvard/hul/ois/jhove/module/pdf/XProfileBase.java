@@ -161,11 +161,7 @@ public abstract class XProfileBase extends PdfProfile
             return false;       // Something is SERIOUSLY wrong if this happens
         }
         // ID entry is required
-        if (trailerDict.get ("ID") == null) {
-            return false;
-        }
-        
-        return true;
+        return trailerDict.get ("ID") != null;
     }
 
     /** Checks if the ExtGState resource meets profile requirements.
