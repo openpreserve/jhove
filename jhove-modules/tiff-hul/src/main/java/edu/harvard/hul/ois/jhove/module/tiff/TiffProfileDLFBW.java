@@ -41,12 +41,7 @@ public final class TiffProfileDLFBW extends TiffProfileDLF
 	if (!satisfiesPhotometricInterpretation (tifd, new int [] {0, 1} )) {
 	    return false;
 	}
-
-	/* XResolution and YResolution >= 600 (inches) or 1520 (cm) */
-	if (!hasMinimumResolution (tifd, 600.0, 1520.0)) {
-	    return false;
-	}
-
-	return true;
+        /* XResolution and YResolution >= 600 (inches) or 1520 (cm) */
+	return hasMinimumResolution (tifd, 600.0, 1520.0);
     }
 }
