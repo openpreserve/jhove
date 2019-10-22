@@ -32,6 +32,10 @@ import java.util.*;
  *  @see <a href="http://schema.openpreservation.org/ois/xml/xsd/jhove/jhove.xsd">Schema
  *       for JHOVE XML output</a>
  */
+/**
+ * @author dint151
+ *
+ */
 public class XmlHandler
         extends edu.harvard.hul.ois.jhove.HandlerBase
 
@@ -57,10 +61,10 @@ public class XmlHandler
     private static final String NAME = "XML";
 
     /** Handler release identifier. */
-    private static final String RELEASE = "1.8";
+    private static final String RELEASE = "1.9";
 
     /** Handler release date. */
-    private static final int [] DATE = {2018, 03, 29};
+    private static final int [] DATE = {2019, 10, 18};
 
     /** Handler informative note. */
     private static final String NOTE =
@@ -2274,8 +2278,17 @@ public class XmlHandler
         if (comp != NisoImageMetadata.NULL || level != NisoImageMetadata.NULL) {
             _writer.print (margn4 + elementStart ("mix:Compression") + EOL);
             if (comp != NisoImageMetadata.NULL) {
-                _writer.print (margn5 + element ("mix:compressionScheme",
-                        Integer.toString (comp)) + EOL);
+            	if (comp == 34713 || comp == 34714) { 
+	                _writer.print (margn5 + element ("mix:compressionScheme",
+	                		compressionSchemeToString (comp)) + EOL);
+	                if (level != NisoImageMetadata.NULL) {
+		                _writer.print (margn5 + element ("mix:compressionRatio",
+		                		Integer.toString(level)) + EOL);
+	                }
+            	} else {
+	                _writer.print (margn5 + element ("mix:compressionScheme",
+	                        Integer.toString (comp)) + EOL);
+            	}
             }
             // TODO it isn't clear how to get from compression level to compression ratio
 
@@ -2394,9 +2407,39 @@ public class XmlHandler
         if (useBasCharBuf) {
             _writer.println (basCharBuf);
         }
+        // SpecialFormatCharacteristics limited to JPEG2000
+        StringBuffer speCharBuf = new StringBuffer
+                (margn3 + elementStart ("mix:SpecialFormatCharacteristics") + EOL);
+        boolean useSpeCharBuf = false;
+        int lay = niso.getJp2Layers();
+        int lev = niso.getJp2ResolutionLevels();
+        String sizTiles = niso.getJp2Tiles();
+        if (sizTiles != null || lay != NisoImageMetadata.NULL ||
+        	lev != NisoImageMetadata.NULL) {
+        	
+        	useSpeCharBuf = true;
+        	speCharBuf.append(margn4 + elementStart("mix:JPEG2000") + EOL);
+        	speCharBuf.append(margn5 + elementStart("mix:EncodingOptions") + EOL);
+        	if (sizTiles != null) {
+        		speCharBuf.append (margn6 + element ("mix:tiles", sizTiles) + EOL);
+        	}
+        	if (lay != NisoImageMetadata.NULL ) {
+        		speCharBuf.append (margn6 + element ("mix:qualityLayers", Integer.toString (lay)) + EOL);
+        	}
+        	if (sizTiles != null) {
+        		speCharBuf.append (margn6 + element ("mix:resolutionLevels", Integer.toString (lev)) + EOL);
+        	}
+        	speCharBuf.append(margn5 + elementEnd("mix:EncodingOptions") + EOL);
+        	speCharBuf.append(margn4 + elementEnd("mix:JPEG2000") + EOL);
+        }
+        
+        speCharBuf.append (margn3 +
+			   elementEnd ("mix:SpecialFormatCharacteristics"));
+        if (useSpeCharBuf) {
+            _writer.println (speCharBuf);
+        }
+
         _writer.println (margn2 + elementEnd ("mix:BasicImageInformation"));
-        // TODO SpecialFormatCharacteristics would be nice to have here,
-        // but that's future expansion
     }
 
     /* 1.0, Top level element 3 of 5: ImageCaptureMetadata  */
@@ -3108,6 +3151,7 @@ public class XmlHandler
      String margn3 = margn2 + " ";
      String margn4 = margn3 + " ";
      String margn5 = margn4 + " ";
+     String margn6 = margn5 + " ";
 
      _writer.println (margn2 + elementStart ("mix:BasicDigitalObjectInformation"));
 
@@ -3170,6 +3214,12 @@ public class XmlHandler
      case 32773:
          compStr = "PackBits";
          break;
+     case 34713:
+         compStr = "JPEG2000 Lossy";
+         break;
+     case 34714:
+         compStr = "JPEG2000 Lossless";
+         break;
      default:
          compStr = "Unknown";
          break;
@@ -3181,6 +3231,12 @@ public class XmlHandler
                                             compStr) + EOL);
          }
          // TODO it isn't clear how to get from compression level to compression ratio
+         if (level != NisoImageMetadata.NULL && (comp == 34713 || comp == 34714)) {
+             _writer.print (margn5 + elementStart ("mix:compressionRatio") + EOL);
+             _writer.print (margn6 + element ("mix:numerator",
+              		Integer.toString(level)) + EOL);
+             _writer.print (margn5 + elementEnd ("mix:compressionRatio") + EOL);
+         }
 
          _writer.print (margn3 + elementEnd ("mix:Compression") + EOL);
      }
@@ -3349,9 +3405,45 @@ public class XmlHandler
      if (useBasCharBuf) {
          _writer.println (basCharBuf);
      }
-     _writer.println (margn2 + elementEnd ("mix:BasicImageInformation"));
+
      // TODO SpecialFormatCharacteristics would be nice to have here,
-     // but that's future expansion
+     // Limited to JPEG2000
+     StringBuffer speCharBuf = new StringBuffer
+             (margn3 + elementStart ("mix:SpecialFormatCharacteristics") + EOL);
+     boolean useSpeCharBuf = false;
+     int lay = niso.getJp2Layers();
+     int lev = niso.getJp2ResolutionLevels();
+     String sizTiles = niso.getJp2Tiles();
+     if (sizTiles != null || lay != NisoImageMetadata.NULL ||
+     	lev != NisoImageMetadata.NULL) {
+     	
+     	useSpeCharBuf = true;
+     	speCharBuf.append(margn4 + elementStart("mix:JPEG2000") + EOL);
+     	speCharBuf.append(margn5 + elementStart("mix:EncodingOptions") + EOL);
+     	if (sizTiles != null) {
+     		String[] sizes = sizTiles.split("x");
+         	speCharBuf.append(margn6 + elementStart("mix:Tiles") + EOL);
+     		speCharBuf.append (margn7 + element ("mix:tileWidth", sizes[0]) + EOL);
+     		speCharBuf.append (margn7 + element ("mix:tileHeight", sizes[1]) + EOL);
+         	speCharBuf.append(margn6 + elementEnd("mix:Tiles") + EOL);
+     	}
+     	if (lay != NisoImageMetadata.NULL ) {
+     		speCharBuf.append (margn6 + element ("mix:qualityLayers", Integer.toString (lay)) + EOL);
+     	}
+     	if (sizTiles != null) {
+     		speCharBuf.append (margn6 + element ("mix:resolutionLevels", Integer.toString (lev)) + EOL);
+     	}
+     	speCharBuf.append(margn5 + elementEnd("mix:EncodingOptions") + EOL);
+     	speCharBuf.append(margn4 + elementEnd("mix:JPEG2000") + EOL);
+     }
+     
+     speCharBuf.append (margn3 +
+			   elementEnd ("mix:SpecialFormatCharacteristics"));
+     if (useSpeCharBuf) {
+         _writer.println (speCharBuf);
+     }
+
+     _writer.println (margn2 + elementEnd ("mix:BasicImageInformation"));
     }
 
 
@@ -4111,6 +4203,17 @@ public class XmlHandler
         return s;
     }
 
+    /**
+     * Convert compression scheme value (based on the TIFF compression convention)
+     * to a label
+      */
+    private String compressionSchemeToString (int n) {
+        for (int i = 0; i < NisoImageMetadata.COMPRESSION_SCHEME_INDEX.length; i++) {
+        	if (n == NisoImageMetadata.COMPRESSION_SCHEME_INDEX[i])
+        		return NisoImageMetadata.COMPRESSION_SCHEME[i];
+        }
+        return Integer.toString(n);
+    }
 
     /**
      * Display the audio metadata formatted according to
