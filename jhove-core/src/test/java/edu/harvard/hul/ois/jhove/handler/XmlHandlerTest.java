@@ -292,6 +292,21 @@ public class XmlHandlerTest {
 	}
 
 	@Test
+	public void testShowNisoImage2Issue502() throws IOException {
+		File mix20File = new File(this.getClass().getResource("mix20_output3.xml").getPath());
+		LOGGER.info("testShowNisoImage2Issue502 with file " + mix20File);
+		assertTrue(mix20File.isFile());
+		String expectedMix20 = readXmlFile(mix20File);
+    TEST_NISO_IMAGE2_MD.setBrightness(null);
+		this.handler.showNisoImageMetadata20(TEST_NISO_IMAGE2_MD);
+		this.handler.close();
+
+		String generatedMix = readXmlFile(outputFile);
+		assertEquals("Mix v2.0 generated not conformant", expectedMix20,
+				generatedMix);
+	}
+
+	@Test
 	public void testShowNisoExifMetadata02() throws IOException {
 		File mix02File = new File(this.getClass().getResource("exif_mix02.xml").getPath());
 		LOGGER.info("testShowNisoExifMetadata02 with file " + mix02File);
