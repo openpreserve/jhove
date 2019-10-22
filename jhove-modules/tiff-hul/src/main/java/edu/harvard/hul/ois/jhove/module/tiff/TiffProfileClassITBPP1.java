@@ -88,17 +88,13 @@ public final class TiffProfileClassITBPP1 extends TiffProfileClassIT
         if (!satisfiesBackgroundColorIndicator (tifd, valueVec)) {
             return false;
         }
-        
-        /* Tags which must NOT be defined */
-        if (tifd.getDocumentName () != null ||
-	    niso.getScannerModelName () != null ||
-	    tifd.getPageName () != null ||
-	    niso.getHostComputer () != null ||
-	    tifd.getSite () != null ||
-	    tifd.getColorSequence () != null ||
-	    tifd.getIT8Header() != null) {
-            return false;
-        }
-        return true;
+        /* Tags which must NOT be defined */        
+        return !(tifd.getDocumentName () != null ||
+                niso.getScannerModelName () != null ||
+                tifd.getPageName () != null ||
+                niso.getHostComputer () != null ||
+                tifd.getSite () != null ||
+                tifd.getColorSequence () != null ||
+                tifd.getIT8Header() != null);
     }
 }

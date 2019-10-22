@@ -221,9 +221,6 @@ public final class X3Profile extends XProfileBase
                 return false;
         }
         // OPI objects aren't permitted
-        if (xo.get ("OPI") != null) {
-            return false;
-        }
-        return true;
+        return xo.get ("OPI") == null;
     }
 }

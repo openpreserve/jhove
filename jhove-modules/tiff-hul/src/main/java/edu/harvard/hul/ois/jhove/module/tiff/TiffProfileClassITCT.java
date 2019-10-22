@@ -69,9 +69,6 @@ public final class TiffProfileClassITCT extends TiffProfileClassIT
 
         int spp = niso.getSamplesPerPixel ();
         int numInks = tifd.getNumberOfInks ();
-        if (numInks != NisoImageMetadata.NULL && numInks != spp) {
-            return false;
-        }
-        return true;
+        return !(numInks != NisoImageMetadata.NULL && numInks != spp);
     }
 }

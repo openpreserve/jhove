@@ -82,10 +82,6 @@ public final class TiffProfileClassITHC extends TiffProfileClassIT
         }
 
         int trans = tifd.getTransparencyIndicator ();
-        if (trans != 0 && trans != 1) {
-            return false;
-        }
-
-        return true;
+        return !(trans != 0 && trans != 1);
     }
 }
