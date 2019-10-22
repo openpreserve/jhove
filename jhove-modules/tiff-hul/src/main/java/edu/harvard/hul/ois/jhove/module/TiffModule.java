@@ -969,7 +969,7 @@ public class TiffModule extends ModuleBase {
                 if (tileByteCounts != null
                         && tileByteCounts.length < tilesPerImage) {
                     String mess = MessageFormat.format(MessageConstants.TIFF_HUL_39.getMessage(), tileByteCounts.length, tilesPerImage);
-                    JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_37.getId(), mess);
+                    JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_39.getId(), mess);
                     reportInvalid(message, info);
                 }
             }
@@ -1004,8 +1004,8 @@ public class TiffModule extends ModuleBase {
         if (photometricInterpretation == 2 || photometricInterpretation == 6
                 || photometricInterpretation == 8) {
             if (samplesPerPixel < 3) {
-                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_42.getMessage(), samplesPerPixel);
-                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_42.getId(), mess);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_43.getMessage(), samplesPerPixel);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_43.getId(), mess);
                 reportInvalid(message, info);
             }
         }

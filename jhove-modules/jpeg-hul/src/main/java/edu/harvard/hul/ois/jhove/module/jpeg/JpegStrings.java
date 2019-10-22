@@ -11,13 +11,7 @@ package edu.harvard.hul.ois.jhove.module.jpeg;
  *  properties of a JPEG object. 
  */
 public class JpegStrings {
-
-    /** A private constructor just to make sure nobody
-       instantiates the class by mistake. */
-    private JpegStrings ()
-    {
-    }
-
+    
     /** JPEG compression types, indexed on marker byte - 0XC0.
      *  This applies only to marker codes for the primary image; 
      *  thumbnail compression schemes are completely incompatible.  */
@@ -133,4 +127,10 @@ public class JpegStrings {
         "DC table or iossiess table",            // 0
         "AC table",           // 1
     };
+
+    /** A private constructor just to make sure nobody
+       instantiates the class by mistake. */
+    private JpegStrings ()
+    {
+    }
 }

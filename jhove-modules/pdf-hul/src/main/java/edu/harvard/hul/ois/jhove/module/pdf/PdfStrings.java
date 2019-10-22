@@ -11,14 +11,6 @@ package edu.harvard.hul.ois.jhove.module.pdf;
  */
 public class PdfStrings 
 {
-
-    /** A private constructor just to make sure nobody
-       instantiates the class by mistake. */
-    private PdfStrings ()
-    {
-    }
-
-
     /** Encryption algorithm strings. */
     public final static String[] ALGORITHM = 
     {
@@ -100,5 +92,11 @@ public class PdfStrings
         "NoView",          // 6
         "ReadOnly"        // 7
     };
+
+    /** A private constructor just to make sure nobody
+       instantiates the class by mistake. */
+    private PdfStrings ()
+    {
+    }
 
 }
