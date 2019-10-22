@@ -147,7 +147,7 @@ public class HtmlModule extends ModuleBase {
 			XHTML_1_0_TRANSITIONAL = 9, XHTML_1_0_FRAMESET = 10, XHTML_1_1 = 11;
 
 	/* Profile names, matching the above indices */
-	private static final String[] profileNames = { null, null, // there are no
+	private static final String[] PROFILENAMES = { null, null, // there are no
 																 // profiles for
 																 // HTML 3.2
 			STRICT, FRAMESET, TRANSITIONAL, STRICT, FRAMESET, TRANSITIONAL,
@@ -160,7 +160,7 @@ public class HtmlModule extends ModuleBase {
 	};
 
 	/* Version names, matching the above indices */
-	private static final String[] versionNames = { null, "HTML 3.2", HTML_4_0,
+	private static final String[] VERSIONNAMES = { null, "HTML 3.2", HTML_4_0,
 			HTML_4_0, HTML_4_0, HTML_4_01, HTML_4_01, HTML_4_01, XHTML_1_0,
 			XHTML_1_0, XHTML_1_0, "XHTML 1.1" };
 
@@ -290,6 +290,8 @@ public class HtmlModule extends ModuleBase {
 	 *            Must be 0 in first call to <code>parse</code>. If
 	 *            <code>parse</code> returns a nonzero value, it must be called
 	 *            again with <code>parseIndex</code> equal to that return value.
+         * 
+         * @return parseInt 
 	 */
 	@Override
 	public int parse(InputStream stream, RepInfo info, int parseIndex) {
@@ -350,9 +352,9 @@ public class HtmlModule extends ModuleBase {
 		 */
 		setupDataStream(stream, info);
 
-		ParseHtml parser = null;
+		ParseHtml parser;
 		HtmlMetadata metadata = null;
-		HtmlCharStream cstream = null;
+		HtmlCharStream cstream;
 		try {
 			cstream = new HtmlCharStream(_dstream, "ISO-8859-1");
 			parser = new ParseHtml(this, cstream);
@@ -436,6 +438,8 @@ public class HtmlModule extends ModuleBase {
 					return 0;
 				case 2: // probably XHTML
 					return 100;
+                                 default:
+                                     break;
 				}
 				info.setMessage(new ErrorMessage(
 						MessageConstants.HTML_HUL_16));
@@ -443,14 +447,10 @@ public class HtmlModule extends ModuleBase {
 				// But keep going
 			}
 
-			HtmlDocDesc docDesc = null;
+			HtmlDocDesc docDesc;
 			switch (type) {
 			case HTML_3_2:
-			default:
-				docDesc = new Html3_2DocDesc();
-				_textMD.setMarkup_basis("HTML");
-				_textMD.setMarkup_basis_version("3.2");
-				break;
+			
 
 			case HTML_4_0_FRAMESET:
 				docDesc = new Html4_0FrameDocDesc();
@@ -506,7 +506,7 @@ public class HtmlModule extends ModuleBase {
 				_textMD.setCharset(TextMDMetadata.CHARSET_ISO8859_1);
 			}
 			String textMDEncoding = _textMD.getCharset();
-			if (textMDEncoding.indexOf("UTF") != -1) {
+			if (textMDEncoding.contains("UTF")) {
 				_textMD.setByte_order(_bigEndian ? TextMDMetadata.BYTE_ORDER_BIG
 						: TextMDMetadata.BYTE_ORDER_LITTLE);
 				_textMD.setByte_size("8");
@@ -535,10 +535,10 @@ public class HtmlModule extends ModuleBase {
 		}
 
 		if (type != 0) {
-			if (profileNames[type] != null) {
-				info.setProfile(profileNames[type]);
+			if (PROFILENAMES[type] != null) {
+				info.setProfile(PROFILENAMES[type]);
 			}
-			info.setVersion(versionNames[type]);
+			info.setVersion(VERSIONNAMES[type]);
 		}
 
 		if (metadata != null) {
@@ -573,6 +573,8 @@ public class HtmlModule extends ModuleBase {
 	 * @param info
 	 *            A fresh RepInfo object which will be modified to reflect the
 	 *            results of the test
+         * 
+         * @throws IOException
 	 */
 	@Override
 	public void checkSignatures(File file, InputStream stream, RepInfo info)
@@ -617,7 +619,6 @@ public class HtmlModule extends ModuleBase {
 		}
 		// If we fall through, there was no sig match
 		info.setWellFormed(false);
-		return;
 
 	}
 
@@ -652,22 +653,26 @@ public class HtmlModule extends ModuleBase {
 			}
 			str = stripQuotes(((String) dt.get(2)).toUpperCase());
 			_doctype = str;
-			if ("-//W3C//DTD HTML 3.2 FINAL//EN".equals(str)
-					|| "-//W3C//DTD HTML 3.2//EN".equals(str)) {
-				return HTML_3_2;
-			} else if ("-//W3C//DTD HTML 4.0//EN".equals(str)) {
-				return HTML_4_0_STRICT;
-			} else if ("-//W3C//DTD HTML 4.0 TRANSITIONAL//EN".equals(str)) {
-				return HTML_4_0_TRANSITIONAL;
-			} else if ("-//W3C//DTD HTML 4.0 FRAMESET//EN".equals(str)) {
-				return HTML_4_0_FRAMESET;
-			} else if ("-//W3C//DTD HTML 4.01//EN".equals(str)) {
-				return HTML_4_01_STRICT;
-			} else if ("-//W3C//DTD HTML 4.01 TRANSITIONAL//EN".equals(str)) {
-				return HTML_4_01_TRANSITIONAL;
-			} else if ("-//W3C//DTD HTML 4.01 FRAMESET//EN".equals(str)) {
-				return HTML_4_01_FRAMESET;
-			}
+			if (null
+					!= str) switch (str) {
+                        case "-//W3C//DTD HTML 3.2 FINAL//EN":
+                        case "-//W3C//DTD HTML 3.2//EN":
+                            return HTML_3_2;
+                        case "-//W3C//DTD HTML 4.0//EN":
+                            return HTML_4_0_STRICT;
+                        case "-//W3C//DTD HTML 4.0 TRANSITIONAL//EN":
+                            return HTML_4_0_TRANSITIONAL;
+                        case "-//W3C//DTD HTML 4.0 FRAMESET//EN":
+                            return HTML_4_0_FRAMESET;
+                        case "-//W3C//DTD HTML 4.01//EN":
+                            return HTML_4_01_STRICT;
+                        case "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN":
+                            return HTML_4_01_TRANSITIONAL;
+                        case "-//W3C//DTD HTML 4.01 FRAMESET//EN":
+                            return HTML_4_01_FRAMESET;
+                        default:
+                            break;
+                    }
 		} catch (Exception e) {
 			// Really shouldn't happen, but if it does we've got
 			// a bad doctype
