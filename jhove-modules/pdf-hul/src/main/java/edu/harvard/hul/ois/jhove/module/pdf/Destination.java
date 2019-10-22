@@ -92,7 +92,7 @@ public final class Destination {
 			JhoveMessage message = JhoveMessages.getMessageInstance(
 					MessageConstants.PDF_HUL_3.getId(),
 					String.format(MessageConstants.PDF_HUL_3.getMessage(), // PDF-HUL-3
-							Integer.valueOf(destArray._objNumber)));
+							e.getLocalizedMessage(), Integer.valueOf(destArray._objNumber)));
 			throw new PdfInvalidException(message);
 		}
 	}
