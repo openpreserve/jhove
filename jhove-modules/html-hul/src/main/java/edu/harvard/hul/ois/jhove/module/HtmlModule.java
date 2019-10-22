@@ -447,7 +447,7 @@ public class HtmlModule extends ModuleBase {
 				// But keep going
 			}
 
-			HtmlDocDesc docDesc;
+			HtmlDocDesc docDesc = null;
 			switch (type) {
 			case HTML_3_2:
 			
