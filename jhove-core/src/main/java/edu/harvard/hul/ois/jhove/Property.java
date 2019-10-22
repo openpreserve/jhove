@@ -81,19 +81,19 @@ public class Property
 	}
 	if ((arity == PropertyArity.SCALAR) && !isObjScalarProp(value)) {
 		throw new IncompatibleClassChangeError
-			(CoreMessageConstants.EXC_SCL_PROP_CLSS_INCMPT);
+			(String.format(CoreMessageConstants.EXC_SCL_PROP_CLSS_INCMPT, CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
 	}
 	else if ((arity == PropertyArity.MAP) && (!(value instanceof Map))) {
 		throw new IncompatibleClassChangeError
-			(CoreMessageConstants.EXC_MAP_PROP_CLSS_INCMPT);
+			(String.format(CoreMessageConstants.EXC_MAP_PROP_CLSS_INCMPT, CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
 	}
 	else if ((arity == PropertyArity.SET) && (!(value instanceof Set))) {
 		throw new IncompatibleClassChangeError
-			(CoreMessageConstants.EXC_SET_PROP_CLSS_INCMPT);
+			(String.format(CoreMessageConstants.EXC_SET_PROP_CLSS_INCMPT, CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
 	}
 	else if ((arity == PropertyArity.LIST) && (!(value instanceof List))) {
 		throw new IncompatibleClassChangeError
-			(CoreMessageConstants.EXC_LIST_PROP_CLSS_INCMPT);
+			(String.format(CoreMessageConstants.EXC_LIST_PROP_CLSS_INCMPT, CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
 	}
 
 	_name  = name;
