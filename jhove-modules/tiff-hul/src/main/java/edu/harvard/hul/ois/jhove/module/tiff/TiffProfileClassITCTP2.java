@@ -87,18 +87,13 @@ public final class TiffProfileClassITCTP2 extends TiffProfileClassIT
         if (!satisfiesDotRange (tifd, 0, 255)) {
             return false;
         }
-
         /* Tags which must NOT be defined */
-        if (tifd.getDocumentName () != null ||
-	    niso.getScannerModelName () != null ||
-	    tifd.getPageName () != null ||
-	    niso.getHostComputer () != null ||
-	    tifd.getSite () != null ||
-	    tifd.getColorSequence () != null ||
-	    tifd.getIT8Header() != null) {
-            return false;
-        }
-
-        return true;
+        return !(tifd.getDocumentName () != null ||
+                niso.getScannerModelName () != null ||
+                tifd.getPageName () != null ||
+                niso.getHostComputer () != null ||
+                tifd.getSite () != null ||
+                tifd.getColorSequence () != null ||
+                tifd.getIT8Header() != null);
     }
 }

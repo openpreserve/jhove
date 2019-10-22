@@ -89,11 +89,8 @@ public class TiffProfileFXS extends TiffFXBase {
             return false;
         }
         long t4Opt = tifd.getT4Options ();
-        if ((t4Opt & 0X3) != 0) {
-            // bits 0 and 1 must be 0
-            return false;
-        }
-        return true;         // passed all tests
+        // passed all tests
+        return (t4Opt & 0X3) == 0;         
     }
 
 }

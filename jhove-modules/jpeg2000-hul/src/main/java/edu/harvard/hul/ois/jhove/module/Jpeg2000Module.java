@@ -802,10 +802,7 @@ public class Jpeg2000Module extends ModuleBase {
         box.setRandomAccessFile(_raf);
         box.setModule(this);
         box.setRepInfo(info);
-        if (!box.readBox()) {
-            return false;
-        }
-        return true;
+        return box.readBox();
     }
 
     /*
