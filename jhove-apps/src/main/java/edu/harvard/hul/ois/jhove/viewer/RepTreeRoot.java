@@ -33,7 +33,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
      *  Constructor.
      *  @param info  The RepInfo object whose contents are to
      *               be displayed.
-     *  @param app   The App object under which we're operating.
+     *  @param base   The JhoveBase object under which we're operating.
      */
     public RepTreeRoot (RepInfo info, JhoveBase base) 
     {
@@ -52,6 +52,8 @@ public class RepTreeRoot extends DefaultMutableTreeNode
     
     /**
      *  Constructs a DefaultMutableTreeNode representing a property
+     * @param pProp: the property
+     * @return: the DefaultMutableTreeNode representing a property
      */
     private DefaultMutableTreeNode propToNode (Property pProp)
     {
@@ -129,13 +131,16 @@ public class RepTreeRoot extends DefaultMutableTreeNode
     /**
      *  Find the index of an object in its parent.
      *  Understands the Jhove property structure.
+     * @param parent: the parent object
+     * @param child: the child object of which we want the index
+     * @return the index of the child object in its parent
      */
     public int getIndexOfChild (Object parent, Object child) 
     {
         Property pProp = (Property) parent;
         PropertyArity arity = pProp.getArity ();
         // For Lists, Maps, and Sets we construct an Iterator.
-        Iterator<?> iter = null;
+        Iterator<?> iter;
         if (arity == PropertyArity.SET || 
                 arity == PropertyArity.LIST ||
                 arity == PropertyArity.MAP) {
@@ -175,7 +180,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         Property[] propArray = null;
         Rational[] rationalArray = null;
         Object[] objArray = null;
-        int n = 0;
+        int n;
    
         if (null == propType) {
             return 0;               // non-object array type
@@ -298,12 +303,14 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         if (_info.getWellFormed () == RepInfo.TRUE) {
             switch (_info.getValid ()) {
                 case RepInfo.TRUE:
-                wfStr += " and valid";
-                break;
+                    wfStr += " and valid";
+                    break;
             
                 case RepInfo.FALSE:
-                wfStr += ", but not valid";
-                break;
+                    wfStr += ", but not valid";
+                    break;
+                default: wfStr += "";
+                    break;
                 
                 // case UNDETERMINED: add nothing
             }
@@ -935,9 +942,8 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             DefaultMutableTreeNode nod = (new DefaultMutableTreeNode
                 ("YCbCrCoefficients", true));
             val.add (nod);
-            for (int i = 0; i < rarray.length; i++) {
-                nod.add (new DefaultMutableTreeNode 
-                        (rarray[i].toString (), false));
+            for (Rational rarray1 : rarray) {
+                nod.add(new DefaultMutableTreeNode(rarray1.toString(), false));
             }
         }
         rarray = niso.getReferenceBlackWhite ();
@@ -945,9 +951,8 @@ public class RepTreeRoot extends DefaultMutableTreeNode
             DefaultMutableTreeNode nod = (new DefaultMutableTreeNode
                 ("ReferenceBlackWhite", true));
             val.add (nod);
-            for (int i = 0; i < rarray.length; i++) {
-                nod.add (new DefaultMutableTreeNode 
-                        (rarray[i].toString (), false));
+            for (Rational rarray1 : rarray) {
+                nod.add(new DefaultMutableTreeNode(rarray1.toString(), false));
             }
         }
         if ((n = niso.getSegmentType ()) != NisoImageMetadata.NULL) {
