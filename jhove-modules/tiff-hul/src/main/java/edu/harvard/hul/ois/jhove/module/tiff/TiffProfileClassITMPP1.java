@@ -97,17 +97,14 @@ public final class TiffProfileClassITMPP1 extends TiffProfileClassIT
         if (pir[0] != 0 || pir[1] != 255) {
             return false;
         }
-        
         // Tags which must NOT be defined
-        if (tifd.getDocumentName () != null ||
-	    niso.getScannerModelName () != null ||
-	    tifd.getPageName () != null ||
-	    niso.getHostComputer () != null ||
-	    tifd.getSite () != null ||
-	    tifd.getColorSequence () != null ||
-	    tifd.getIT8Header() != null) {
-            return false;
-        }
-        return true;
+        
+        return !(tifd.getDocumentName () != null ||
+                niso.getScannerModelName () != null ||
+                tifd.getPageName () != null ||
+                niso.getHostComputer () != null ||
+                tifd.getSite () != null ||
+                tifd.getColorSequence () != null ||
+                tifd.getIT8Header() != null);
     }
 }

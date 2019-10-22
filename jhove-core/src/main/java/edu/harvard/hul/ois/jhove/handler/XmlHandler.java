@@ -32,6 +32,10 @@ import java.util.*;
  *  @see <a href="http://schema.openpreservation.org/ois/xml/xsd/jhove/jhove.xsd">Schema
  *       for JHOVE XML output</a>
  */
+/**
+ * @author dint151
+ *
+ */
 public class XmlHandler
         extends edu.harvard.hul.ois.jhove.HandlerBase
 
@@ -57,10 +61,10 @@ public class XmlHandler
     private static final String NAME = "XML";
 
     /** Handler release identifier. */
-    private static final String RELEASE = "1.8";
+    private static final String RELEASE = "1.9";
 
     /** Handler release date. */
-    private static final int [] DATE = {2018, 03, 29};
+    private static final int [] DATE = {2019, 10, 18};
 
     /** Handler informative note. */
     private static final String NOTE =
@@ -1402,7 +1406,7 @@ public class XmlHandler
         }
         if ((n = niso.getPlanarConfiguration ()) != NisoImageMetadata.NULL) {
             fBuf.append (margn4 + element ("mix:PlanarConfiguration",
-					   Integer.toString (n)) + EOL);
+              Integer.toString (n)) + EOL);
         }
         fBuf.append (margn3 + elementEnd ("mix:Format") + EOL);
         if (useFBuf) {
@@ -1630,7 +1634,6 @@ public class XmlHandler
             _writer.print (sscBuf.toString ());
         }
 
-
         // Same deal for digital camera capture; put the element in a tentative
         // StringBuffer and then decide if it's non-trivial.
         StringBuffer dccBuf = new StringBuffer
@@ -1671,14 +1674,14 @@ public class XmlHandler
         }
         Rational r = niso.getBrightness ();
         if (r != null) {
-        	d = r.toDouble();
+            d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:Brightness",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
         }
         r = niso.getExposureBias ();
         if (r != null) {
-        	d = r.toDouble();
+            d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:ExposureBias",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
@@ -1691,10 +1694,10 @@ public class XmlHandler
         }
         int n = niso.getMeteringMode ();
         if (n != NisoImageMetadata.NULL) {
-        	s = meteringModeToString(n);
-        	if (s.startsWith("Center weighted")) {
-        		s = "Center weighted Average";
-        	}
+            s = meteringModeToString(n);
+            if (s.startsWith("Center weighted")) {
+                s = "Center weighted Average";
+            }
             ccsBuf.append (margn4 + element ("mix:MeteringMode", s) + EOL);
             useCCSBuf = true;
         }
@@ -1718,15 +1721,15 @@ public class XmlHandler
         }
         n = niso.getFlash ();
         if (n != NisoImageMetadata.NULL) {
-     	    // First bit (0 = Flash did not fire, 1 = Flash fired) 
-        	int firstBit = n & 1;
-        	ccsBuf.append(margn4 + element("mix:Flash", NisoImageMetadata.FLASH[firstBit])
-					+ EOL);
+            // First bit (0 = Flash did not fire, 1 = Flash fired)
+            int firstBit = n & 1;
+            ccsBuf.append(margn4 + element("mix:Flash", NisoImageMetadata.FLASH[firstBit])
+                + EOL);
             useCCSBuf = true;
         }
         r = niso.getFlashEnergy ();
         if (r != null) {
-        	d = r.toDouble();
+            d = r.toDouble();
             ccsBuf.append (margn4 + element ("mix:FlashEnergy",
                                        formatters.get().format (d)) + EOL);
             useCCSBuf = true;
@@ -1827,13 +1830,13 @@ public class XmlHandler
         Rational r = niso.getXSamplingFrequency ();
         if (r != null) {
             smBuf.append (margn5 + element ("mix:XSamplingFrequency",
-					    Long.toString (r.toLong())) + EOL);
+                Long.toString (r.toLong())) + EOL);
             useSMBuf = true;
         }
         r = niso.getYSamplingFrequency ();
         if (r != null) {
             smBuf.append (margn5 + element ("mix:YSamplingFrequency",
-					    Long.toString (r.toLong())) + EOL);
+                Long.toString (r.toLong())) + EOL);
             useSMBuf = true;
         }
         long ln = niso.getImageWidth ();
@@ -2275,8 +2278,17 @@ public class XmlHandler
         if (comp != NisoImageMetadata.NULL || level != NisoImageMetadata.NULL) {
             _writer.print (margn4 + elementStart ("mix:Compression") + EOL);
             if (comp != NisoImageMetadata.NULL) {
-                _writer.print (margn5 + element ("mix:compressionScheme",
-                        Integer.toString (comp)) + EOL);
+            	if (comp == 34713 || comp == 34714) { 
+	                _writer.print (margn5 + element ("mix:compressionScheme",
+	                		compressionSchemeToString (comp)) + EOL);
+	                if (level != NisoImageMetadata.NULL) {
+		                _writer.print (margn5 + element ("mix:compressionRatio",
+		                		Integer.toString(level)) + EOL);
+	                }
+            	} else {
+	                _writer.print (margn5 + element ("mix:compressionScheme",
+	                        Integer.toString (comp)) + EOL);
+            	}
             }
             // TODO it isn't clear how to get from compression level to compression ratio
 
@@ -2356,53 +2368,83 @@ public class XmlHandler
             usePIBuf = true;
             if (iarray != null && iarray.length >= 2) {
                 piBuf.append (margn6 + elementStart ("mix:YCbCrSubSampling") +
-			      EOL);
+                    EOL);
                 piBuf.append (margn7 + element ("mix:yCbCrSubsampleHoriz",
-						Integer.toString (iarray[0])) +
-			      EOL);
+                    Integer.toString (iarray[0])) +
+                    EOL);
                 piBuf.append (margn7 + element ("mix:yCbCrSubsampleVert",
-						Integer.toString (iarray[1])) +
-			      EOL);
+                    Integer.toString (iarray[1])) +
+                    EOL);
                 piBuf.append (margn6 + elementEnd ("mix:YCbCrSubSampling") +
-			      EOL);
+                    EOL);
             }
             if (n != NisoImageMetadata.NULL) {
                 piBuf.append (margn6 + element ("mix:yCbCrPositioning",
-						Integer.toString (n)) + EOL);
+                    Integer.toString (n)) + EOL);
             }
             if (rarray != null) {
                 piBuf.append (margn6 + element ("mix:yCbCrCoefficients",
-						rationalArray10 (rarray)) +
-			      EOL);
+                    rationalArray10 (rarray)) +
+                    EOL);
             }
             piBuf.append (margn5 + elementEnd ("mix:YCbCr") + EOL);
         }
-	rarray = niso.getReferenceBlackWhite ();
-	if (rarray != null) {
-	    piBuf.append (margn6 + element ("mix:referenceBlackWhite",
-					    rationalArray10 (rarray)) + EOL);
-            usePIBuf = true;
-	}
+        rarray = niso.getReferenceBlackWhite ();
+        if (rarray != null) {
+            piBuf.append (margn6 + element ("mix:referenceBlackWhite",
+                rationalArray10 (rarray)) + EOL);
+                usePIBuf = true;
+        }
         piBuf.append (margn4 + elementEnd ("mix:PhotometricInterpretation") +
-		      EOL);
+          EOL);
         if (usePIBuf) {
             basCharBuf.append (piBuf);
             useBasCharBuf = true;
         }
         basCharBuf.append (margn3 +
-			   elementEnd ("mix:BasicImageCharacteristics"));
+            elementEnd ("mix:BasicImageCharacteristics"));
 
         if (useBasCharBuf) {
             _writer.println (basCharBuf);
         }
+        // SpecialFormatCharacteristics limited to JPEG2000
+        StringBuffer speCharBuf = new StringBuffer
+                (margn3 + elementStart ("mix:SpecialFormatCharacteristics") + EOL);
+        boolean useSpeCharBuf = false;
+        int lay = niso.getJp2Layers();
+        int lev = niso.getJp2ResolutionLevels();
+        String sizTiles = niso.getJp2Tiles();
+        if (sizTiles != null || lay != NisoImageMetadata.NULL ||
+        	lev != NisoImageMetadata.NULL) {
+        	
+        	useSpeCharBuf = true;
+        	speCharBuf.append(margn4 + elementStart("mix:JPEG2000") + EOL);
+        	speCharBuf.append(margn5 + elementStart("mix:EncodingOptions") + EOL);
+        	if (sizTiles != null) {
+        		speCharBuf.append (margn6 + element ("mix:tiles", sizTiles) + EOL);
+        	}
+        	if (lay != NisoImageMetadata.NULL ) {
+        		speCharBuf.append (margn6 + element ("mix:qualityLayers", Integer.toString (lay)) + EOL);
+        	}
+        	if (sizTiles != null) {
+        		speCharBuf.append (margn6 + element ("mix:resolutionLevels", Integer.toString (lev)) + EOL);
+        	}
+        	speCharBuf.append(margn5 + elementEnd("mix:EncodingOptions") + EOL);
+        	speCharBuf.append(margn4 + elementEnd("mix:JPEG2000") + EOL);
+        }
+        
+        speCharBuf.append (margn3 +
+			   elementEnd ("mix:SpecialFormatCharacteristics"));
+        if (useSpeCharBuf) {
+            _writer.println (speCharBuf);
+        }
+
         _writer.println (margn2 + elementEnd ("mix:BasicImageInformation"));
-        // TODO SpecialFormatCharacteristics would be nice to have here,
-	// but that's future expansion
     }
 
     /* 1.0, Top level element 3 of 5: ImageCaptureMetadata  */
     protected void showNisoImageCaptureMetadata10 (NisoImageMetadata niso,
-						   String margin)
+                                                   String margin)
     {
         String margn2 = margin + " ";
         String margn3 = margn2 + " ";
@@ -2411,8 +2453,8 @@ public class XmlHandler
         String margn6 = margn5 + " ";
         String margn7 = margn6 + " ";
 
-	StringBuffer captureBuffer = new StringBuffer ();
-	boolean useCaptureBuffer = false;
+        StringBuffer captureBuffer = new StringBuffer ();
+        boolean useCaptureBuffer = false;
 
         String s = niso.getSourceType ();
         if (s != null) {
@@ -2432,54 +2474,54 @@ public class XmlHandler
             // Assume that both X and Y exist, or neither
             captureBuffer.append (margn3 + elementStart ("mix:SourceSize"));
             captureBuffer.append (margn4 +
-				  elementStart ("mix:SourceXDimension") + EOL);
+                elementStart ("mix:SourceXDimension") + EOL);
             if (d != NisoImageMetadata.NILL) {
                 captureBuffer.append (margn5 +
-				      element ("mix:sourceXDimensionValue",
-					       formatters.get().format (d)) + EOL);
+                    element ("mix:sourceXDimensionValue",
+                    formatters.get().format (d)) + EOL);
             }
             if (n != NisoImageMetadata.NULL) {
                 captureBuffer.append (margn5 +
-				      element ("mix:sourceXDimensionUnit",
-					       Integer.toString (n)) + EOL);
+                    element ("mix:sourceXDimensionUnit",
+                    Integer.toString (n)) + EOL);
             }
             captureBuffer.append (margn4 + elementEnd ("mix:SourceXDimension")+
-				  EOL);
+                EOL);
 
             d = niso.getSourceYDimension ();
             n = niso.getSourceYDimensionUnit ();
             if (d != NisoImageMetadata.NILL || n != NisoImageMetadata.NULL) {
                 captureBuffer.append (margn4 +
-				      elementStart ("mix:SourceYDimension") +
-				      EOL);
+                    elementStart ("mix:SourceYDimension") +
+                    EOL);
                 if (d != NisoImageMetadata.NILL) {
                     captureBuffer.append (margn5 +
-					  element ("mix:sourceYDimensionValue",
-						   formatters.get().format (d)) + EOL);
+                        element ("mix:sourceYDimensionValue",
+                        formatters.get().format (d)) + EOL);
                 }
                 if (n != NisoImageMetadata.NULL) {
                     captureBuffer.append (margn5 +
-					  element ("mix:sourceYDimensionUnit",
-						   Integer.toString (n))+ EOL);
+                        element ("mix:sourceYDimensionUnit",
+                        Integer.toString (n))+ EOL);
                 }
                 captureBuffer.append (margn4 +
-				      elementEnd ("mix:SourceYDimension") +
-				      EOL);
+                    elementEnd ("mix:SourceYDimension") +
+                    EOL);
             }
             captureBuffer.append (margn3 + elementEnd ("mix:SourceSize") +
-				  EOL);
-	    useCaptureBuffer = true;
+                EOL);
+            useCaptureBuffer = true;
         }
         StringBuffer genCapBuf =
-	    new StringBuffer (margn3 +
-			      elementStart ("mix:GeneralCaptureInformation") +
-			      EOL);
+            new StringBuffer (margn3 +
+                elementStart ("mix:GeneralCaptureInformation") +
+                EOL);
         boolean useGenCapBuf = false;
 
         s = niso.getDateTimeCreated ();
         if (s != null) {
             genCapBuf.append (margn3 + element ("mix:dateTimeCreated", s) +
-			      EOL);
+                EOL);
             useGenCapBuf = true;
         }
         s = niso.getImageProducer ();
@@ -2491,28 +2533,28 @@ public class XmlHandler
         s = niso.getDeviceSource ();
         if (s != null) {
             genCapBuf.append (margn3 + element ("mix:captureDevice", s) +
-			      EOL);
+                EOL);
             /* This has a restricted set of values. Does the setting code
-	     * conform?
-	     */
+             * conform?
+             */
         }
 
         genCapBuf.append (margn3 +
-			  elementEnd ("mix:GeneralCaptureInformation") + EOL);
+            elementEnd ("mix:GeneralCaptureInformation") + EOL);
         if (useGenCapBuf) {
             captureBuffer.append (genCapBuf);
-	    useCaptureBuffer = true;
+            useCaptureBuffer = true;
         }
 
         // Here's a chunk of XML for scanners.
         StringBuffer scanCapBuf =
-	    new StringBuffer (margn3 + elementStart ("mix:ScannerCapture") +
-			      EOL);
+            new StringBuffer (margn3 + elementStart ("mix:ScannerCapture") +
+                EOL);
         boolean useScanCapBuf = false;
         String mfg = niso.getScannerManufacturer ();
         if (mfg != null) {
             scanCapBuf.append (margn4 + element ("mix:scannerManufacturer",
-						 mfg) + EOL);
+                mfg) + EOL);
             useScanCapBuf = true;
         }
         String model = niso.getScannerModelName ();
@@ -2521,18 +2563,18 @@ public class XmlHandler
         if (model != null || modelNum != null || serNum != null) {
             useScanCapBuf = true;
             scanCapBuf.append (margn4 + elementStart ("mix:ScannerModel") +
-			       EOL);
+                EOL);
             if (model != null) {
                 scanCapBuf.append (margn5 + element ("mix:scannerModelName", model) +
-				   EOL);
+                    EOL);
             }
             if (modelNum != null) {
                 scanCapBuf.append (margn5 + element ("mix:scannerModelNumber", modelNum)+
-				   EOL);
+                    EOL);
             }
             if (serNum != null) {
                 scanCapBuf.append (margn5 +
-				   element ("mix:scannerModelSerialNo", serNum) + EOL);
+                    element ("mix:scannerModelSerialNo", serNum) + EOL);
             }
             scanCapBuf.append (margn4 + elementEnd ("mix:ScannerModel") + EOL);
         }
@@ -2542,7 +2584,7 @@ public class XmlHandler
             double res = (xres > yres ? xres : yres);
             scanCapBuf.append (margn4 + element
                      ("mix:maximumOpticalResolution", formatters.get().format (res)) +
-			       EOL);
+                     EOL);
         }
         s = niso.getScanningSoftware();
         if (s != null) {
@@ -3014,12 +3056,12 @@ public class XmlHandler
 
         String s = niso.getSourceData();
         if (s != null) {
-            chBuf.append (margn4 + element ("mix:sourceData") + EOL);
+            chBuf.append (margn4 + element ("mix:sourceData", s) + EOL);
             useChBuf = true;
         }
         s = niso.getProcessingAgency();
         if (s != null) {
-            chBuf.append (margn4 + element ("mix:processingAgency") + EOL);
+            chBuf.append (margn4 + element ("mix:processingAgency", s) + EOL);
             useChBuf = true;
         }
         StringBuffer sftwBuf = new StringBuffer (margn4 +
@@ -3109,6 +3151,7 @@ public class XmlHandler
      String margn3 = margn2 + " ";
      String margn4 = margn3 + " ";
      String margn5 = margn4 + " ";
+     String margn6 = margn5 + " ";
 
      _writer.println (margn2 + elementStart ("mix:BasicDigitalObjectInformation"));
 
@@ -3171,6 +3214,12 @@ public class XmlHandler
      case 32773:
          compStr = "PackBits";
          break;
+     case 34713:
+         compStr = "JPEG2000 Lossy";
+         break;
+     case 34714:
+         compStr = "JPEG2000 Lossless";
+         break;
      default:
          compStr = "Unknown";
          break;
@@ -3182,6 +3231,12 @@ public class XmlHandler
                                             compStr) + EOL);
          }
          // TODO it isn't clear how to get from compression level to compression ratio
+         if (level != NisoImageMetadata.NULL && (comp == 34713 || comp == 34714)) {
+             _writer.print (margn5 + elementStart ("mix:compressionRatio") + EOL);
+             _writer.print (margn6 + element ("mix:numerator",
+              		Integer.toString(level)) + EOL);
+             _writer.print (margn5 + elementEnd ("mix:compressionRatio") + EOL);
+         }
 
          _writer.print (margn3 + elementEnd ("mix:Compression") + EOL);
      }
@@ -3251,7 +3306,7 @@ public class XmlHandler
          if (s != null) {
              piBuf.append (margn7 + element ("mix:iccProfileName", s) +EOL);
          }
-         if (s2!= null) {
+         if (s2 != null) {
              piBuf.append (margn7 + element ("mix:iccProfileURI", s2) +EOL);
          }
          piBuf.append (margn6 + elementEnd ("mix:IccProfile") + EOL);
@@ -3350,9 +3405,45 @@ public class XmlHandler
      if (useBasCharBuf) {
          _writer.println (basCharBuf);
      }
-     _writer.println (margn2 + elementEnd ("mix:BasicImageInformation"));
+
      // TODO SpecialFormatCharacteristics would be nice to have here,
-     // but that's future expansion
+     // Limited to JPEG2000
+     StringBuffer speCharBuf = new StringBuffer
+             (margn3 + elementStart ("mix:SpecialFormatCharacteristics") + EOL);
+     boolean useSpeCharBuf = false;
+     int lay = niso.getJp2Layers();
+     int lev = niso.getJp2ResolutionLevels();
+     String sizTiles = niso.getJp2Tiles();
+     if (sizTiles != null || lay != NisoImageMetadata.NULL ||
+     	lev != NisoImageMetadata.NULL) {
+     	
+     	useSpeCharBuf = true;
+     	speCharBuf.append(margn4 + elementStart("mix:JPEG2000") + EOL);
+     	speCharBuf.append(margn5 + elementStart("mix:EncodingOptions") + EOL);
+     	if (sizTiles != null) {
+     		String[] sizes = sizTiles.split("x");
+         	speCharBuf.append(margn6 + elementStart("mix:Tiles") + EOL);
+     		speCharBuf.append (margn7 + element ("mix:tileWidth", sizes[0]) + EOL);
+     		speCharBuf.append (margn7 + element ("mix:tileHeight", sizes[1]) + EOL);
+         	speCharBuf.append(margn6 + elementEnd("mix:Tiles") + EOL);
+     	}
+     	if (lay != NisoImageMetadata.NULL ) {
+     		speCharBuf.append (margn6 + element ("mix:qualityLayers", Integer.toString (lay)) + EOL);
+     	}
+     	if (sizTiles != null) {
+     		speCharBuf.append (margn6 + element ("mix:resolutionLevels", Integer.toString (lev)) + EOL);
+     	}
+     	speCharBuf.append(margn5 + elementEnd("mix:EncodingOptions") + EOL);
+     	speCharBuf.append(margn4 + elementEnd("mix:JPEG2000") + EOL);
+     }
+     
+     speCharBuf.append (margn3 +
+			   elementEnd ("mix:SpecialFormatCharacteristics"));
+     if (useSpeCharBuf) {
+         _writer.println (speCharBuf);
+     }
+
+     _writer.println (margn2 + elementEnd ("mix:BasicImageInformation"));
     }
 
 
@@ -3602,12 +3693,12 @@ public class XmlHandler
              useCcSetBuf = true;
          }
          Rational r = niso.getBrightness();
-         if (d != NisoImageMetadata.NULL) {
+         if (r != null) {
              rationalToString (ccSetBuf, "mix:brightnessValue", margn6, r);
              useCcSetBuf = true;
          }
          r = niso.getExposureBias();
-         if (d != NisoImageMetadata.NULL) {
+         if (r != null) {
              rationalToString (ccSetBuf, "mix:exposureBiasValue", margn6, r);
              useCcSetBuf = true;
          }
@@ -3692,7 +3783,7 @@ public class XmlHandler
              }
              if (d2 != NisoImageMetadata.NULL) {
                  ccSetBuf.append (margn7 +
-                         element ("mix:yPrintAspectRatio", formatters.get().format(d))
+                         element ("mix:yPrintAspectRatio", formatters.get().format(d2))
                          + EOL);
              }
 
@@ -3845,7 +3936,6 @@ public class XmlHandler
 
      iarray = niso.getGrayResponseCurve();
      n = niso.getGrayResponseUnit();
-
      if (iarray != null || n != NisoImageMetadata.NULL) {
          StringBuffer grayRespBuf =
              new StringBuffer (margn4 + elementStart ("mix:GrayResponse") + EOL);
@@ -4021,12 +4111,12 @@ public class XmlHandler
 
      String s = niso.getSourceData();
      if (s != null) {
-         chBuf.append (margn4 + element ("mix:sourceData") + EOL);
+         chBuf.append (margn4 + element ("mix:sourceData", s) + EOL);
          useChBuf = true;
      }
      s = niso.getProcessingAgency();
      if (s != null) {
-         chBuf.append (margn4 + element ("mix:processingAgency") + EOL);
+         chBuf.append (margn4 + element ("mix:processingAgency", s) + EOL);
          useChBuf = true;
      }
      StringBuffer sftwBuf = new StringBuffer (margn4 +
@@ -4113,6 +4203,17 @@ public class XmlHandler
         return s;
     }
 
+    /**
+     * Convert compression scheme value (based on the TIFF compression convention)
+     * to a label
+      */
+    private String compressionSchemeToString (int n) {
+        for (int i = 0; i < NisoImageMetadata.COMPRESSION_SCHEME_INDEX.length; i++) {
+        	if (n == NisoImageMetadata.COMPRESSION_SCHEME_INDEX[i])
+        		return NisoImageMetadata.COMPRESSION_SCHEME[i];
+        }
+        return Integer.toString(n);
+    }
 
     /**
      * Display the audio metadata formatted according to

@@ -65,11 +65,8 @@ public final class TiffProfileRFC1314 extends TiffProfile
 	if (!satisfiesSamplesPerPixel (tifd, 1)) {
             return false;
 	}
+        // passed all tests
 
-	if (!satisfiesResolutionUnit (tifd, new int [] {2, 3} )) {
-            return false;
-        }
-
-        return true;       // passed all tests
+        return satisfiesResolutionUnit (tifd, new int [] {2, 3} );       
     }
 }
