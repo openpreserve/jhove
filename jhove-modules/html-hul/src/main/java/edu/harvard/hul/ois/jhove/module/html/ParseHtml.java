@@ -354,63 +354,52 @@ public class ParseHtml implements ParseHtmlConstants {
 
   final private boolean jj_3_6() {
     if (jj_3R_9()) return true;
-    if (jj_scan_token(COLON)) return true;
-    return false;
+    return jj_scan_token(COLON);
   }
 
   final private boolean jj_3R_9() {
-    if (jj_scan_token(NAME)) return true;
-    return false;
+    return jj_scan_token(NAME);
   }
 
   final private boolean jj_3R_7() {
     if (jj_scan_token(LABRACKET)) return true;
-    if (jj_scan_token(SLASH)) return true;
-    return false;
+    return jj_scan_token(SLASH);
   }
 
   final private boolean jj_3_5() {
     if (jj_3R_9()) return true;
-    if (jj_scan_token(COLON)) return true;
-    return false;
+    return jj_scan_token(COLON);
   }
 
   final private boolean jj_3R_8() {
     if (jj_scan_token(LABRACKET)) return true;
-    if (jj_scan_token(QMARK)) return true;
-    return false;
+    return jj_scan_token(QMARK);
   }
 
   final private boolean jj_3R_5() {
     if (jj_scan_token(STARTDOCTYPE)) return true;
-    if (jj_scan_token(DOCTYPEKEYWORD)) return true;
-    return false;
+    return jj_scan_token(DOCTYPEKEYWORD);
   }
 
   final private boolean jj_3R_6() {
     if (jj_scan_token(LABRACKET)) return true;
-    if (jj_3R_9()) return true;
-    return false;
+    return jj_3R_9();
   }
 
   final private boolean jj_3_8() {
-    if (jj_3R_9()) return true;
-    return false;
+    return jj_3R_9();
   }
 
   final private boolean jj_3_4() {
-    if (jj_3R_8()) return true;
-    return false;
+    return jj_3R_8();
   }
 
   final private boolean jj_3_3() {
-    if (jj_3R_7()) return true;
-    return false;
+    return jj_3R_7();
   }
 
   final private boolean jj_3_2() {
-    if (jj_3R_6()) return true;
-    return false;
+    return jj_3R_6();
   }
 
   final private boolean jj_3_7() {
@@ -420,8 +409,7 @@ public class ParseHtml implements ParseHtmlConstants {
   }
 
   final private boolean jj_3_1() {
-    if (jj_3R_5()) return true;
-    return false;
+    return jj_3R_5();
   }
   private final HtmlModule module;
   public ParseHtmlTokenManager token_source;
