@@ -69,7 +69,7 @@ title: WAVE-hul Module
 
 <ul>
   <li>"RIFF" or "RF64" at byte offset 0; "WAVE" at offset 8</li>
-  <li>All chunk structures are well-formed: a four ASCII character 
+  <li>All chunk structures are well-formed: a four-character printable ASCII
       <var>ID</var>, followed by a 32-bit unsigned integer <var>size</var>, 
       followed by a <var>size</var>-length data block (if <var>size</var> is
       odd, then the data block includes a final padding byte of 0x00)</li>
@@ -88,6 +88,7 @@ title: WAVE-hul Module
 
 <ul>
   <li>The file is well-formed</li>
+  <li>All chunk IDs begin with printable ASCII</li>
   <li>The Format chunk appears before the Data chunk</li>
   <li>The following chunks appear no more than once:
     <ul>
@@ -120,7 +121,7 @@ title: WAVE-hul Module
 </p>
 
 <ul>
-  <li>Property "WAVEMetadata" of type PROPERTY and arity ARRAY
+  <li>Property "WAVEMetadata" of type PROPERTY and arity LIST
     <ul>
       <li>Properties capturing the technical attributes of the WAVE
       image from all chunks</li>
@@ -130,25 +131,30 @@ title: WAVE-hul Module
 </ul>
 
 <p>
-  The WAVE module recognizes the following chunks:
+  The module reports audio properties using the draft standard AES-X098B,
+  <cite>Core audio metadata XML definition</cite>, developed by the
+  <a href="http://www.aes.org/">Audio Engineering Society</a> (AES)
+  <a href="http://www.aes.org/standards/b_policies/aessc-structure.cfm#SC-03">SC-03-06</a>
+  Working Group on Digital Library and Archive Systems.
+</p>
+
+<p>
+  The module can recognize and process the following chunks:
 </p>
 
 <table class="table table-condensed table-hover">
+  <caption>Top-level chunks</caption>
   <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Notes</th>
-    <th>References</th>
-  </tr>
-  <tr>
-    <td><code>adtl</code></td>
-    <td>Associated Data List</td>
-    <td>Only in <code>LIST</code> chunks.</td>
-    <td></td>
+    <th style="width:10%">ID</th>
+    <th style="width:15%">List Type</th>
+    <th style="width:25%">Name</th>
+    <th style="width:25%">Property</th>
+    <th style="width:25%">References</th>
   </tr>
 <!--
   <tr>
     <td><code>axml</code></td>
+    <td></td>
     <td>AXML</td>
     <td></td>
     <td>[<a href="/references#bwf-5">BWF Supp 5</a>]</td>
@@ -156,25 +162,29 @@ title: WAVE-hul Module
 -->
   <tr>
     <td><code>bext</code></td>
-    <td>Broadcast Audio Extension</td>
     <td></td>
+    <td>Broadcast Audio Extension</td>
+    <td>BroadcastAudioExtension</td>
     <td>[<a href="/references#bwf">BWF</a>]</td>
   </tr>
   <tr>
     <td><code>cue </code></td>
+    <td></td>
     <td>Cue Points</td>
-    <td></td>
-    <td></td>
+    <td>CuePoints</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
   </tr>
   <tr>
     <td><code>data</code></td>
-    <td>Data</td>
-    <td>Required.</td>
     <td></td>
+    <td>Data</td>
+    <td>Data</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
   </tr>
 <!--
   <tr>
     <td><code>dbmd</code></td>
+    <td></td>
     <td>Dolby Metadata</td>
     <td></td>
     <td>[<a href="/references#bwf-6">BWF Supp 6</a>]</td>
@@ -182,91 +192,103 @@ title: WAVE-hul Module
 -->
   <tr>
     <td><code>ds64</code></td>
+    <td></td>
     <td>Data Size 64</td>
-    <td>Required for RF64 files.</td>
+    <td></td>
     <td>[<a href="/references#rf64">RF64</a>]</td>
   </tr>
   <tr>
-    <td><code>exif</code></td>
-    <td>Exif List</td>
-    <td>Only in <code>LIST</code> chunks.</td>
-    <td></td>
-  </tr>
-  <tr>
     <td><code>fact</code></td>
-    <td>Fact</td>
-    <td>Required for non-PCM data.</td>
     <td></td>
+    <td>Fact</td>
+    <td>Fact</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
   </tr>
   <tr>
     <td><code>fmt </code></td>
+    <td></td>
     <td>Format</td>
-    <td>Required.</td>
     <td></td>
-  </tr>
-  <tr>
-    <td><code>INFO</code></td>
-    <td>Info List</td>
-    <td>Only in <code>LIST</code> chunks.</td>
-    <td></td>
+    <td>[<a href="/references#wave">WAVE</a>,
+      <a href="/references#waveformat">WAVEFORMAT</a>,<br/>
+      <a href="/references#pcmwaveformat">PCMWAVEFORMAT</a>,<br/>
+      <a href="/references#waveformatex">WAVEFORMATEX</a>,<br/>
+      <a href="/references#waveformatextensible">WAVEFORMATEXTENSIBLE</a>]</td>
   </tr>
   <tr>
     <td><code>inst</code></td>
+    <td></td>
     <td>Instrument</td>
-    <td></td>
-    <td></td>
+    <td>Instrument</td>
+    <td>[<a href="/references#mdsu3">MDSU</a>]</td>
   </tr>
   <tr>
     <td><code>labl</code></td>
-    <td>Label</td>
     <td></td>
+    <td>Label</td>
+    <td>Label</td>
     <td></td>
   </tr>
   <tr>
     <td><code>levl</code></td>
-    <td>Peak Envelope</td>
     <td></td>
+    <td>Peak Envelope</td>
+    <td>PeakEnvelope</td>
     <td>[<a href="/references#bwf-3">BWF Supp 3</a>]</td>
   </tr>
   <tr>
     <td><code>link</code></td>
-    <td>Link</td>
     <td></td>
+    <td>Link</td>
+    <td>Link</td>
     <td>[<a href="/references#bwf-4">BWF Supp 4</a>]</td>
   </tr>
   <tr>
-    <td><code>LIST</code></td>
-    <td>List</td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
     <td><code>list</code></td>
+    <td><code>adtl</code></td>
     <td>Associated Data List</td>
     <td></td>
     <td></td>
   </tr>
   <tr>
-    <td><code>ltxt</code></td>
-    <td>Labeled Text</td>
-    <td>Only in <code>list</code> and <code>adtl</code> chunks.</td>
+    <td><code>LIST</code></td>
+    <td><code>adtl</code></td>
+    <td>Associated Data List</td>
     <td></td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>LIST</code></td>
+    <td><code>exif</code></td>
+    <td>Exif List</td>
+    <td>Exif</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+  <tr>
+    <td><code>LIST</code></td>
+    <td><code>INFO</code></td>
+    <td>Info List</td>
+    <td>ListInfo</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
   </tr>
   <tr>
     <td><code>mext</code></td>
-    <td>MPEG Audio Extension</td>
     <td></td>
+    <td>MPEG Audio Extension</td>
+    <td>MPEG</td>
     <td>[<a href="/references#bwf-1">BWF Supp 1</a>]</td>
   </tr>
   <tr>
     <td><code>note</code></td>
-    <td>Note</td>
     <td></td>
+    <td>Note</td>
+    <td>Note</td>
     <td></td>
   </tr>
 <!--
   <tr>
     <td><code>qlty</code></td>
+    <td></td>
     <td>Quality</td>
     <td></td>
     <td>[<a href="/references#bwf-2">BWF Supp 2</a>]</td>
@@ -274,19 +296,228 @@ title: WAVE-hul Module
 -->
   <tr>
     <td><code>smpl</code></td>
+    <td></td>
     <td>Sample</td>
-    <td></td>
-    <td></td>
+    <td>Sample</td>
+    <td>[<a href="/references#mdsu3">MDSU</a>]</td>
   </tr>
 </table>
 
-<p>
-  The WAVE module reports audio properties using the draft standard AES-X098B,
-  <cite>Core audio metadata XML definition</cite>, developed by the
-  <a href="http://www.aes.org/">Audio Engineering Society</a> (AES)
-  <a href="http://www.aes.org/standards/b_policies/aessc-structure.cfm#SC-03">SC-03-06</a>
-  Working Group on Digital Library and Archive Systems.
-</p>
+<table class="table table-condensed table-hover">
+  <caption>Associated Data List chunks</caption>
+  <tr>
+    <th style="width:25%">ID</th>
+    <th style="width:25%">Name</th>
+    <th style="width:25%">Property</th>
+    <th style="width:25%">References</th>
+  </tr>
+  <tr>
+    <td><code>labl</code></td>
+    <td>Label</td>
+    <td>Label</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ltxt</code></td>
+    <td>Text with Data Length</td>
+    <td>LabeledTextItem</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>note</code></td>
+    <td>Note</td>
+    <td>Note</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+</table>
+
+<table class="table table-condensed table-hover">
+  <caption>Exif List chunks</caption>
+  <tr>
+    <th style="width:25%">ID</th>
+    <th style="width:25%">Name</th>
+    <th style="width:25%">Property</th>
+    <th style="width:25%">References</th>
+  </tr>
+  <tr>
+    <td><code>ecor</code></td>
+    <td>Make</td>
+    <td>Manufacturer</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+  <tr>
+    <td><code>emdl</code></td>
+    <td>Model</td>
+    <td>Model</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+  <tr>
+    <td><code>erel</code></td>
+    <td>Related Information</td>
+    <td>RelatedImageFile</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+  <tr>
+    <td><code>etim</code></td>
+    <td>Time</td>
+    <td>TimeCreated</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ever</code></td>
+    <td>Version</td>
+    <td>ExifVersion</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+</table>
+
+<table class="table table-condensed table-hover">
+  <caption>Info List chunks</caption>
+  <tr>
+    <th style="width:25%">ID</th>
+    <th style="width:25%">Name</th>
+    <th style="width:25%">Property</th>
+    <th style="width:25%">References</th>
+  </tr>
+  <tr>
+    <td><code>IARL</code></td>
+    <td>Archival Location</td>
+    <td>ArchivalLocation</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IART</code></td>
+    <td>Artist</td>
+    <td>Artist</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ICMS</code></td>
+    <td>Commissioned</td>
+    <td>Commissioned</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ICMT</code></td>
+    <td>Comments</td>
+    <td>Comments</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ICOP</code></td>
+    <td>Copyright</td>
+    <td>Copyright</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ICRD</code></td>
+    <td>Creation Date</td>
+    <td>CreationDate</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ICRP</code></td>
+    <td>Cropped</td>
+    <td>Cropped</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IDIM</code></td>
+    <td>Dimensions</td>
+    <td>Dimensions</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IDPI</code></td>
+    <td>Dots Per Inch</td>
+    <td>DotsPerInch</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IENG</code></td>
+    <td>Engineer</td>
+    <td>Engineer</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IGNR</code></td>
+    <td>Genre</td>
+    <td>Genre</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IKEY</code></td>
+    <td>Keywords</td>
+    <td>Keywords</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ILGT</code></td>
+    <td>Lightness</td>
+    <td>Lightness</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IMED</code></td>
+    <td>Medium</td>
+    <td>Medium</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>INAM</code></td>
+    <td>Name</td>
+    <td>Name</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IPLT</code></td>
+    <td>Palette Setting</td>
+    <td>PaletteSetting</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IPRD</code></td>
+    <td>Product</td>
+    <td>Product</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ISBJ</code></td>
+    <td>Subject</td>
+    <td>Subject</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ISFT</code></td>
+    <td>Software</td>
+    <td>Software</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ISHP</code></td>
+    <td>Sharpness</td>
+    <td>Sharpness</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ISRC</code></td>
+    <td>Source</td>
+    <td>Source</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ISRF</code></td>
+    <td>Source Form</td>
+    <td>SourceForm</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ITCH</code></td>
+    <td>Technician</td>
+    <td>Technician</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+</table>
 
 
 <h3>5.1 Profiles</h3>
