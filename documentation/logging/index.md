@@ -1,12 +1,14 @@
 ---
+layout: page
 title: Logging
 ---
 
 A Guide to Logging in JHOVE
 ===========================
-{% include header.html %}
 
-Controlling the JHOVE
+Controlling JHOVE Application Logging Levels
+--------------------------------------------
+
 To change the logging level when you run the code, you can either add something like this to the config file:
 
 ```xml
@@ -65,5 +67,3 @@ logger.log(Level.FINE, "message", exception)
 ```
 
 The second example will also log the results of the accompanying exception.
-
-{% include footer.html %}
