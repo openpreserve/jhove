@@ -13,14 +13,7 @@ package edu.harvard.hul.ois.jhove.module.wave;
  *
  */
 public class WaveStrings {
-
-    /** A private constructor just to make sure nobody
-       instantiates the class by mistake. */
-    private WaveStrings() 
-    {
-    }
-
-
+    
     /** Strings for data compression formats; indexed by
      *  COMPRESSION_INDEX */
     public final static String[] COMPRESSION_FORMAT = 
@@ -207,8 +200,7 @@ public class WaveStrings {
          "Lernout & Hauspie SB12",                                    // 0x1103
          "Lernout & Hauspie SB16",                                    // 0x1104
          "Norris",                                                    // 0x1400
-         "AT&T Soundspace Musicompress",                              // 0x1500
-         
+         "AT&T Soundspace Musicompress",                              // 0x1500  
          "Sonic Foundry Lossless",                                    // 0x1971
          "Innings ADPCM",                                             // 0X1979
          "FAST Multimedia DVM",                                       // 0x2000
@@ -491,4 +483,11 @@ public class WaveStrings {
         "Energy of left channel absent",
         "No private byte free for internal use"
     };
+
+    /** A private constructor just to make sure nobody
+       instantiates the class by mistake. */
+    private WaveStrings() 
+    {
+    }
+
 }

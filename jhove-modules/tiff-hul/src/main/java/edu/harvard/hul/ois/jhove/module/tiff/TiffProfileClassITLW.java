@@ -80,9 +80,6 @@ public final class TiffProfileClassITLW extends TiffProfileClassIT
         // Per footnote h, this applies to LW, LW/P1 and LW/P2
         int spp = niso.getSamplesPerPixel ();
         int numInks = tifd.getNumberOfInks ();
-        if (numInks != IFD.NULL && numInks != spp) {
-            return false;
-        }
-        return true;
+        return !(numInks != IFD.NULL && numInks != spp);
     }
 }

@@ -77,9 +77,6 @@ public final class TiffProfileClassITSD extends TiffProfileClassIT
         }
 
 	String seq = tifd.getColorSequence ();
-	if (seq != null && !"CMYK".equals (seq) && !"YMCK".equals (seq)) {
-	    return false;
-	}
-        return true;
+        return !(seq != null && !"CMYK".equals (seq) && !"YMCK".equals (seq));
     }
 }

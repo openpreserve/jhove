@@ -387,10 +387,7 @@ public class StructureElement
             PdfSimpleObject mcidObj =
                 (PdfSimpleObject) _module.resolveIndirectObject
                         (dict.get ("MCID"));
-            if (mcidObj == null) {
-                return false;
-            }
-            return true;
+            return mcidObj != null;
         }
         catch (Exception e) {
             return false;
@@ -410,10 +407,7 @@ public class StructureElement
             // An Obj entry is required. Must be an indirect object.
             PdfObject obj = _module.resolveIndirectObject
                         (dict.get ("Obj"));
-            if (obj == null) {
-                return false;
-            }
-            return true;
+            return obj != null;
         }
         catch (Exception e) {
             return false;

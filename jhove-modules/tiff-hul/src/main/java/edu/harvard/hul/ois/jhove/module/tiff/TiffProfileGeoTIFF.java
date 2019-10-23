@@ -40,10 +40,7 @@ public final class TiffProfileGeoTIFF extends TiffProfile
             (tifd.getModelTiepointTag() != null);
         boolean hasModelTransformation =
             (tifd.getModelTransformationTag() != null);
-        if ((hasModelTiepoint && hasModelTransformation) ||
-                (!hasModelTiepoint && !hasModelTransformation)) {
-            return false;    
-        }
-        return true;
+        return !((hasModelTiepoint && hasModelTransformation) ||
+                (!hasModelTiepoint && !hasModelTransformation));
     }
 }

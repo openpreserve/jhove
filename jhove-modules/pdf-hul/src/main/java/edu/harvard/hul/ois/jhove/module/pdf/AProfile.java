@@ -276,11 +276,7 @@ public final class AProfile extends PdfProfile
                 if (desc == null) {
                     return false;    // The requirement mentioned above implies a FontDescriptor is needed.
                 }
-                if (desc.get ("CharSet") == null) {
-                    return false;
-                }
-                
-                return true;
+                return desc.get ("CharSet") != null;
             }
             if ("Type0".equals (fTypeStr)) {
                 // Type 0 fonts are OK if the descendant CIDFont uses
@@ -1064,10 +1060,8 @@ public final class AProfile extends PdfProfile
     protected boolean formObjectOK (PdfDictionary xo)
     {
         // PDF/A elements can't have an OPI or Ref key in Form xobjects.
-        if (xo.get ("OPI") != null || xo.get ("Ref") != null) {
-            return false;
-        }
-        return true;
+        
+        return !(xo.get ("OPI") != null || xo.get ("Ref") != null);
     }
 
 

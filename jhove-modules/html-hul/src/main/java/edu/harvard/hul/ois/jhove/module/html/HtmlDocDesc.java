@@ -343,12 +343,8 @@ public abstract class HtmlDocDesc {
 		 * unless the tag is "html", but Paranoia Is A Virtue
 		 */
 		String name = elem.getName();
-		if (elementStack.isEmpty()) {
-			if ("html".equals(name)) {
-				return true;
-			}
-			// This shouldn't happen
-			return false;
+		if (elementStack.isEmpty()) {                    
+			return "html".equals(name);
 		}
 		if (elementStack.excludesTag(name)) {
 			return false;

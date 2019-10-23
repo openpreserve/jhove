@@ -440,7 +440,8 @@ public class Parser
         }
         // Now remove all the positioned that were nulled.
         if (lowestChanged > 0) {
-            int i, j;
+            int i;
+            int j;
             for (i = lowestChanged, j = lowestChanged; i < v.size(); i++) {
                 PdfObject elem = v.elementAt(i);
                 if (elem != null) {

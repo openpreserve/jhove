@@ -99,10 +99,8 @@ public class TiffProfileFXJ extends TiffFXBase {
                 xywOK = true;
             }
         }
-        if (!xywOK) {
-            return false;
-        }
-        return true;         // passed all tests
+        // passed all tests
+        return xywOK;         
     }
 
 }
