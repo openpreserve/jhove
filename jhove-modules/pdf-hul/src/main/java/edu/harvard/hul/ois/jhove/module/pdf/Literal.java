@@ -109,7 +109,7 @@ public class Literal
 
     /**
      *  Append a hex character.  This is used only for hex literals
-     *  (those that start with '<'). 
+     *  (those that start with {@code <}).
      *
      *  @param  ch	The integer 8-bit code for a hex character
      */
@@ -119,7 +119,7 @@ public class Literal
             _rawBytes = new Vector<> (32);
         }
         if (haveHi) {
-            _rawBytes.add(new Integer (hexToInt (hi, ch)));
+            _rawBytes.add(hexToInt(hi, ch));
             haveHi = false;
         }
         else {
@@ -160,7 +160,7 @@ public class Literal
                 throw new EOFException (MessageConstants.PDF_HUL_10.getMessage()); // PDF-HUL-10
             }
             offset++;
-            _rawBytes.add (new Integer (ch));
+            _rawBytes.add (ch);
 
             if (_state == State.LITERAL) {
                 // We are still in a state of flux, determining the encoding
@@ -306,10 +306,10 @@ public class Literal
     {
         if (_rawBytes != null) {
             boolean utf = false;
-            StringBuffer localBuffer = new StringBuffer();
+            StringBuilder localBuffer = new StringBuilder();
             // If a high byte is left hanging, complete it with a '0'
             if (haveHi) {
-                _rawBytes.add(new Integer(hexToInt(hi, '0')));
+                _rawBytes.add(hexToInt(hi, '0'));
             }
             if (_rawBytes.size() >= 2 && rawByte(0) == 0XFE &&
                     rawByte(1) == 0XFF) {
@@ -365,7 +365,7 @@ public class Literal
         if (idx >= _rawBytes.size ()) {
             return 0;
         }
-        return _rawBytes.elementAt (idx).intValue();
+        return _rawBytes.elementAt(idx);
     }
 
 
@@ -644,7 +644,7 @@ public class Literal
      */
     private static void readUTFLanguageCode (Tokenizer tok) throws IOException
     {
-        StringBuffer sb = new StringBuffer ();
+        StringBuilder sb = new StringBuilder();
         for (;;) {
             int ch = tok.readChar1(true);
             if (ch == ESC) {
@@ -730,5 +730,3 @@ public class Literal
     }
  */       
 }
-
-

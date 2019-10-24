@@ -143,7 +143,6 @@ public class WarcModule extends ModuleBase {
         sig = new ExternalSignature (".warc.gz", SignatureType.EXTENSION,
                 SignatureUseType.OPTIONAL, "when compressed");
         _signature.add (sig);
-
     }
 
     /**
@@ -153,16 +152,16 @@ public class WarcModule extends ModuleBase {
         versions = new HashMap<>();
         recordProperties = new ArrayList<>();
 
-        bComputeBlockDigest = DEFAULT_COMPUTE_BLOCK_DIGEST.booleanValue();
+        bComputeBlockDigest = DEFAULT_COMPUTE_BLOCK_DIGEST;
         blockDigestAlgorithm = DEFAULT_BLOCK_DIGEST_ALGORITHM;
         blockDigestEncoding = DEFAULT_BLOCK_DIGEST_ENCODING;
 
-        bComputePayloadDigest = DEFAULT_COMPUTE_PAYLOAD_DIGEST.booleanValue();
+        bComputePayloadDigest = DEFAULT_COMPUTE_PAYLOAD_DIGEST;
         payloadDigestAlgorithm = DEFAULT_PAYLOAD_DIGEST_ALGORITHM;
         payloadDigestEncoding = DEFAULT_PAYLOAD_DIGEST_ENCODING;
 
-        bStrictTargetUriValidation = DEFAULT_STRICT_TARGET_URI_VALIDATION.booleanValue();
-        bStrictUriValidation = DEFAULT_STRICT_URI_VALIDATION.booleanValue();
+        bStrictTargetUriValidation = DEFAULT_STRICT_TARGET_URI_VALIDATION;
+        bStrictUriValidation = DEFAULT_STRICT_URI_VALIDATION;
     }
 
     /** Reset parameter settings.
@@ -278,7 +277,6 @@ public class WarcModule extends ModuleBase {
     /**
      * Parse WARC records. Parsing should be straight forward with all records accessible through the same source.
      * @param reader WARC reader used to parse records
-     * @throws EOFException if EOF occurs prematurely
      * @throws IOException if an IO error occurs while processing
      * @throws JhoveException if a serious problem needs to be reported
      */
@@ -298,15 +296,13 @@ public class WarcModule extends ModuleBase {
      * Process a WARC record.
      * Does not characterize the record payload.
      * @param record WARC record from WARC reader
-     * @throws EOFException if EOF occurs prematurely
      * @throws IOException if an IO error occurs while processing
-     * @throws JhoveException if a serious problem needs to be reported
      */
     protected void processRecord(WarcRecord record) throws IOException {
         if (record.header.bValidVersionFormat) {
             Integer count = versions.get(record.header.versionStr);
             if (count == null) {
-                count = Integer.valueOf(0);
+                count = 0;
             }
             ++count;
             versions.put(record.header.versionStr, count);
@@ -324,8 +320,6 @@ public class WarcModule extends ModuleBase {
      * Report the results of the characterization.
      * @param reader The WARC reader, which has read the WARC-file.
      * @param repInfo The representation info, where to report the results.
-     * @throws JhoveException
-     * @throws IOException
      */
     private void reportResults(WarcReader reader, RepInfo repInfo) {
         Diagnostics<Diagnosis> diagnostics = reader.diagnostics;
@@ -344,8 +338,8 @@ public class WarcModule extends ModuleBase {
 
         int maxCount = -1;
         for(Entry<String, Integer> e : versions.entrySet()) {
-            if(e.getValue().intValue() > maxCount) {
-                maxCount = e.getValue().intValue();
+            if(e.getValue() > maxCount) {
+                maxCount = e.getValue();
                 repInfo.setVersion(e.getKey());
             }
 
@@ -372,9 +366,9 @@ public class WarcModule extends ModuleBase {
      */
     private static String extractDiagnosisMessage(Diagnosis d) {
         StringBuilder res = new StringBuilder();
-        res.append("Entity: " + d.entity);
+        res.append("Entity: ").append(d.entity);
         for(String i : d.information) {
-            res.append(", " + i);
+            res.append(", ").append(i);
         }
         return res.toString();
     }
