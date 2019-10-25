@@ -3,55 +3,53 @@
  */
 package org.openpreservation.jhove;
 
-import static org.junit.Assert.assertTrue;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 /**
  * @author <a href="mailto:carl@openpreservation.org">Carl Wilson</a>
- *
  */
 public class ReleaseDetailsTest {
 
-
     /**
-     * Test method for {@link org.openpreservation.jhove.JhoveReleaseDetails#getInstance()}.
+     * Test method for {@link ReleaseDetails#getInstance()}.
      */
     @Test
     public final void testGetInstance() {
         ReleaseDetails instance = ReleaseDetails.getInstance();
         ReleaseDetails secondInstance = ReleaseDetails.getInstance();
-        assertTrue(instance == secondInstance);
+        assertSame(instance, secondInstance);
     }
 
     /**
-     * Test method for {@link org.openpreservation.jhove.JhoveReleaseDetails#getVersion()}.
+     * Test method for {@link ReleaseDetails#getVersion()}.
      */
     @Test
     public final void testGetVersion() {
         ReleaseDetails instance = ReleaseDetails.getInstance();
-        assertTrue("0.1.2-TESTER".equals(instance.getVersion()));
+        assertEquals(instance.getVersion(), "0.1.2-TESTER");
     }
 
     /**
-     * Test method for {@link org.openpreservation.jhove.JhoveReleaseDetails#getBuildDate()}.
+     * Test method for {@link ReleaseDetails#getBuildDate()}.
      */
     @Test
     public final void testGetBuildDate() throws ParseException {
         ReleaseDetails instance = ReleaseDetails.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = formatter.parse("2011-07-31");
-        assertTrue(instance.getBuildDate().equals(date));
+        assertEquals(instance.getBuildDate(), date);
     }
 
     /**
-     * Test the hash and equals contract for the class using EqualsVerifier
+     * Test the hash and equals contract for the class using EqualsVerifier.
      */
     @Test
     public void testEqualsContract() {
