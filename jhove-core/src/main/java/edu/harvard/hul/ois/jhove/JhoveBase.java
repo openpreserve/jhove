@@ -5,25 +5,54 @@
 
 package edu.harvard.hul.ois.jhove;
 
-import edu.harvard.hul.ois.jhove.handler.AuditHandler;
-import edu.harvard.hul.ois.jhove.handler.TextHandler;
-import edu.harvard.hul.ois.jhove.handler.XmlHandler;
-import edu.harvard.hul.ois.jhove.module.BytestreamModule;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.openpreservation.jhove.ReleaseDetails;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import javax.net.ssl.*;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.*;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.UnknownHostException;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import edu.harvard.hul.ois.jhove.Module;
+import edu.harvard.hul.ois.jhove.handler.AuditHandler;
+import edu.harvard.hul.ois.jhove.handler.TextHandler;
+import edu.harvard.hul.ois.jhove.handler.XmlHandler;
+import edu.harvard.hul.ois.jhove.module.BytestreamModule;
 
 /**
  * The JHOVE engine, providing all base services necessary to build an
