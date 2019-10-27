@@ -6,6 +6,7 @@
 package edu.harvard.hul.ois.jhove;
 
 import edu.harvard.hul.ois.jhove.handler.AuditHandler;
+import edu.harvard.hul.ois.jhove.handler.JsonHandler;
 import edu.harvard.hul.ois.jhove.handler.TextHandler;
 import edu.harvard.hul.ois.jhove.handler.XmlHandler;
 import edu.harvard.hul.ois.jhove.module.BytestreamModule;
@@ -353,6 +354,11 @@ public class JhoveBase {
         _handlerMap.put(handler.getName().toLowerCase(), handler);
 
         handler = new XmlHandler();
+        handler.setDefaultParams(new ArrayList<String>());
+        _handlerList.add(handler);
+        _handlerMap.put(handler.getName().toLowerCase(), handler);
+
+        handler = new JsonHandler();
         handler.setDefaultParams(new ArrayList<String>());
         _handlerList.add(handler);
         _handlerMap.put(handler.getName().toLowerCase(), handler);
