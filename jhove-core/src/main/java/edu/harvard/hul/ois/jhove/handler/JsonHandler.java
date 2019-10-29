@@ -915,8 +915,7 @@ public class JsonHandler
 
     /** Gives the length (number of elements) of a property
      */
-    @SuppressWarnings("unused")
-	private int propertyLength (Property property) {
+	protected int propertyLength (Property property) {
         int n = 0;
         try {
           switch (property.getArity()) {
@@ -2293,7 +2292,11 @@ public class JsonHandler
     {
       JsonArrayBuilder sBuilder = Json.createArrayBuilder();
       for (String s : sarray) {
-        sBuilder.add(s);
+    	  if (s == null) {
+    		  	sBuilder.addNull();
+    	  } else {
+    	      	sBuilder.add(s);
+    	  }
       }
       return sBuilder;
     }
@@ -2302,7 +2305,11 @@ public class JsonHandler
     {
       JsonArrayBuilder rBuilder = Json.createArrayBuilder();
       for (Rational r : rarray) {
-        rBuilder.add(showRational(r));
+    	  if (r == null) {
+  		  	rBuilder.addNull();
+	  	  } else {
+	        rBuilder.add(showRational(r));
+	  	  }
       }
       return rBuilder;
     }
