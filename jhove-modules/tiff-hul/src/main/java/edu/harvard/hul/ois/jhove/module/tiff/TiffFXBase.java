@@ -65,10 +65,8 @@ public abstract class TiffFXBase extends TiffProfile {
         }
      
         // If compression method is 3, T4 options must be specified
-        if (niso.getCompressionScheme () == 3) {
-            if (ifd.getT4Options () == IFD.NULL) {
-                return false;
-            }
+        if (niso.getCompressionScheme () == 3 && ifd.getT4Options () == IFD.NULL) {
+            return false;
         }
         return true;        // placeholder
     }
