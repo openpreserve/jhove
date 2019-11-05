@@ -132,16 +132,9 @@ public class TiffProfileFXC extends TiffFXBase {
             default:
                 break;
         }
-        
         // By my best reading, the colormap is needed only
         // if the Indexed value is 1.
-        if (tifd.getIndexed() == 1) {
-            if (niso.getColormapRedValue () == null) {
-                return false;
-            }
-        }
-
-        return true;         // passed all tests
+        return !(tifd.getIndexed() == 1 && niso.getColormapRedValue () == null);  // passed all tests       
     }
 
 }

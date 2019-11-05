@@ -1107,11 +1107,10 @@ public abstract class IFD
     {
         /* Readers are supposed to accept BYTE, SHORT or LONG for any
          * unsigned integer field. */
-        if (type == BYTE || type == SHORT || type == LONG || type == IFD) {
-            if (expected == BYTE || expected == SHORT || expected == LONG ||
-		expected == IFD) {
-                return;    // it's OK
-            }
+        if ((type == BYTE || type == SHORT || type == LONG || type == IFD) && 
+                (expected == BYTE || expected == SHORT || expected == LONG ||
+		expected == IFD)) {
+            return;    // it's OK
         }
         if (type != expected) {
             String mess = MessageFormat.format(MessageConstants.TIFF_HUL_7.getMessage(), tag, Integer.valueOf(expected), Integer.valueOf(type));
