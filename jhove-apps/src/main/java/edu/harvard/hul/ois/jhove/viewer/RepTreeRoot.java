@@ -17,9 +17,6 @@ import edu.harvard.hul.ois.jhove.*;
  */
 public class RepTreeRoot extends DefaultMutableTreeNode 
 {
-    /******************************************************************
-     * PRIVATE INSTANCE FIELDS.
-     ******************************************************************/
 
     private RepInfo _info;
     private JhoveBase _base;
@@ -127,7 +124,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode
         }
         return val;
     }
-    
+
     /**
      *  Find the index of an object in its parent.
      *  Understands the Jhove property structure.

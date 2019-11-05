@@ -309,7 +309,7 @@ public class Literal
     {
         if (_rawBytes != null) {
             boolean utf = false;
-            StringBuffer localBuffer = new StringBuffer();
+            StringBuilder localBuffer = new StringBuilder();
             // If a high byte is left hanging, complete it with a '0'
             if (haveHi) {
                 _rawBytes.add(hexToInt(hi, '0'));
@@ -368,7 +368,7 @@ public class Literal
         if (idx >= _rawBytes.size ()) {
             return 0;
         }
-        return _rawBytes.elementAt (idx);
+        return _rawBytes.elementAt(idx);
     }
 
 
@@ -655,7 +655,7 @@ public class Literal
      */
     private static void readUTFLanguageCode (Tokenizer tok) throws IOException
     {
-        StringBuffer sb = new StringBuffer ();
+        StringBuilder sb = new StringBuilder();
         for (;;) {
             int ch = tok.readChar1(true);
             if (ch == ESC) {
@@ -741,5 +741,3 @@ public class Literal
     }
  */       
 }
-
-
