@@ -154,12 +154,11 @@ public abstract class HtmlDocDesc {
 		 * If it's anything but an HTML tag, and the stack is empty,
 		 * push an "HTML" element.
 		 */
-		if (elementStack.isEmpty()) {
-			if (!"html".equals(name)) {
-				JHOpenTag fakeTag = new JHOpenTag("html");
-				fakeTag.setElement(htmlElement);
-				elementStack.push(fakeTag);
-			}
+		if (elementStack.isEmpty() && !"html".equals(name)) {
+                    JHOpenTag fakeTag = new JHOpenTag("html");
+                    fakeTag.setElement(htmlElement);
+                    elementStack.push(fakeTag);
+			
 		}
 		HtmlTagDesc tagDesc = (HtmlTagDesc) supportedElements.get(name);
 		if (tagDesc == null) {

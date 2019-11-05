@@ -430,10 +430,8 @@ public class JHOpenTag extends JHElement {
             JHAttribute attr = (JHAttribute) iter.next ();
             String attname = attr.getName ();
             String attval = attr.getValue ();
-            if ("type".equals (attname)) {
-                if (attval.length() > 0 ) {
-                    mdata.addScript (attval);
-                }
+            if ("type".equals (attname) && attval.length() > 0 ) {
+                mdata.addScript (attval);
             }
         }
     }

@@ -91,6 +91,7 @@ public class TextHandler
      *  Outputs detailed information about the application,
      *  including configuration, available modules and handlers,
      *  etc.
+     * @param app: the app that's used
      */
     @Override
     public void show (App app)
@@ -144,6 +145,7 @@ public class TextHandler
     /**
      *  Outputs information about the OutputHandler specified
      *  in the parameter
+     * @param handler: the OutputHandler of which information is demanded
      */
     @Override
     public void show (OutputHandler handler)
@@ -202,7 +204,7 @@ public class TextHandler
             _writer.print (margin + " MIMEtype: " + ss[0]);
             for (int i=1; i<ss.length; i++) {
                 _writer.print (", " + ss[i]);
-            };
+            }
             _writer.println ();
         }
         for (Signature sig : module.getSignature ()) {
@@ -241,6 +243,7 @@ public class TextHandler
 
     /**
      *  Outputs the information contained in a RepInfo object
+     * @param info: the Repinfo object
      */
     @Override
     public void show (RepInfo info)
@@ -302,8 +305,10 @@ public class TextHandler
                     case RepInfo.FALSE:
                     s += ", but not valid";
                     break;
-
+                    
                     // case UNDETERMINED: add nothing
+                    default:
+                        break;
                 }
             }
             _writer.println (s);
@@ -549,23 +554,25 @@ public class TextHandler
         else {
             _writer.print (margin + " " + key + ": ");
         }
-        if (arity.equals (PropertyArity.SCALAR)) {
-            showScalarProperty (property, margin);
-        }
-        else if (arity.equals (PropertyArity.LIST)) {
-            showListProperty (property, margin);
-        }
-        else if (arity.equals (PropertyArity.MAP)) {
-            showMapProperty (property, margin);
-        }
-        else if (arity.equals (PropertyArity.SET)) {
-            showSetProperty (property, margin);
-        }
-        else if (arity.equals (PropertyArity.ARRAY)) {
-            showArrayProperty (property, margin);
-        }
-        else {
-            _writer.println ();
+        switch (arity) {
+            case SCALAR:
+                showScalarProperty (property, margin);
+                break;
+            case LIST:
+                showListProperty (property, margin);
+                break;
+            case MAP:
+                showMapProperty (property, margin);
+                break;
+            case SET:
+                showSetProperty (property, margin);
+                break;
+            case ARRAY:
+                showArrayProperty (property, margin);
+                break;
+            default:
+                _writer.println ();
+                break;
         }
     }
 
@@ -573,26 +580,31 @@ public class TextHandler
     private void showScalarProperty (Property property, String margin)
     {
         PropertyType type = property.getType ();
-        if (PropertyType.PROPERTY.equals (type)) {
-            _writer.println ();
-            Property prop = (Property) property.getValue ();
-            showProperty (prop, prop.getName (), margin + " ");
-            //_writer.println ();   // Does this improve things?
-        }
-        else if (PropertyType.NISOIMAGEMETADATA.equals (type)) {
-            showNisoImageMetadata ((NisoImageMetadata) property.getValue (),
-                                   margin + " ", _je.getShowRawFlag ());
-        }
-        else if (PropertyType.AESAUDIOMETADATA.equals (type)) {
-            showAESAudioMetadata ((AESAudioMetadata) property.getValue (),
-                                   margin + " ", _je.getShowRawFlag ());
-        }
-        else if (PropertyType.TEXTMDMETADATA.equals(type)) {
-            showTextMDMetadata((TextMDMetadata) property.getValue(),
-                    margin + " ", _je.getShowRawFlag ());
-        }
-        else {
+        if (null == type) {
             _writer.println (property.getValue ().toString ());
+        }
+        else switch (type) {
+            case PROPERTY:
+                _writer.println ();
+                Property prop = (Property) property.getValue ();
+                showProperty (prop, prop.getName (), margin + " ");
+                //_writer.println ();   // Does this improve things?
+                break;
+            case NISOIMAGEMETADATA:
+                showNisoImageMetadata ((NisoImageMetadata) property.getValue (),
+                        margin + " ", _je.getShowRawFlag ());
+                break;
+            case AESAUDIOMETADATA:
+                showAESAudioMetadata ((AESAudioMetadata) property.getValue (),
+                        margin + " ", _je.getShowRawFlag ());
+                break;
+            case TEXTMDMETADATA:
+                showTextMDMetadata((TextMDMetadata) property.getValue(),
+                        margin + " ", _je.getShowRawFlag ());
+                break;
+            default:
+                _writer.println (property.getValue ().toString ());
+                break;
         }
     }
 
@@ -735,131 +747,137 @@ public class TextHandler
         int n = 0;
 
         PropertyType propType = property.getType();
-        if (PropertyType.BOOLEAN.equals (propType)) {
-            boolArray = (boolean []) property.getValue ();
-            n = boolArray.length;
-        }
-        else if (PropertyType.BYTE.equals (propType)) {
-            byteArray = (byte []) property.getValue ();
-            n = byteArray.length;
-        }
-        else if (PropertyType.CHARACTER.equals (propType)) {
-            charArray = (char []) property.getValue ();
-            n = charArray.length;
-        }
-        else if (PropertyType.DATE.equals (propType)) {
-            dateArray = (java.util.Date []) property.getValue ();
-            n = dateArray.length;
-        }
-        else if (PropertyType.DOUBLE.equals (propType)) {
-            doubleArray = (double []) property.getValue ();
-            n = doubleArray.length;
-        }
-        else if (PropertyType.FLOAT.equals (propType)) {
-            floatArray = (float []) property.getValue ();
-            n = floatArray.length;
-        }
-        else if (PropertyType.INTEGER.equals (propType)) {
-            intArray = (int []) property.getValue ();
-            n = intArray.length;
-        }
-        else if (PropertyType.LONG.equals (propType)) {
-            longArray = (long []) property.getValue ();
-            n = longArray.length;
-        }
-        else if (PropertyType.OBJECT.equals (propType)) {
+        if (null != propType) switch (propType) {
+            case BOOLEAN:
+                boolArray = (boolean []) property.getValue ();
+                n = boolArray.length;
+                break;
+            case BYTE:
+                byteArray = (byte []) property.getValue ();
+                n = byteArray.length;
+                break;
+            case CHARACTER:
+                charArray = (char []) property.getValue ();
+                n = charArray.length;
+                break;
+            case DATE:
+                dateArray = (java.util.Date []) property.getValue ();
+                n = dateArray.length;
+                break;
+            case DOUBLE:
+                doubleArray = (double []) property.getValue ();
+                n = doubleArray.length;
+                break;
+            case FLOAT:
+                floatArray = (float []) property.getValue ();
+                n = floatArray.length;
+                break;
+            case INTEGER:
+                intArray = (int []) property.getValue ();
+                n = intArray.length;
+                break;
+            case LONG:
+                longArray = (long []) property.getValue ();
+                n = longArray.length;
+                break;
+            case OBJECT:
                 objArray = (Object []) property.getValue ();
                 n = objArray.length;
-            }
-        else if (PropertyType.SHORT.equals (propType)) {
-            shortArray = (short []) property.getValue ();
-            n = shortArray.length;
-        }
-        else if (PropertyType.STRING.equals (propType)) {
-            stringArray = (String []) property.getValue ();
-            n = stringArray.length;
-        }
-        else if (PropertyType.RATIONAL.equals (propType)) {
-            rationalArray = (Rational []) property.getValue ();
-            n = rationalArray.length;
-        }
-        else if (PropertyType.PROPERTY.equals (propType)) {
-            propArray = (Property []) property.getValue ();
-            n = propArray.length;
-        }
-        else if (PropertyType.NISOIMAGEMETADATA.equals (propType)) {
-            nisoArray = (NisoImageMetadata []) property.getValue ();
-            n = nisoArray.length;
-        }
-        else if (PropertyType.TEXTMDMETADATA.equals(propType)) {
-            textMDArray = (TextMDMetadata []) property.getValue ();
-            n = textMDArray.length;
+                break;
+            case SHORT:
+                shortArray = (short []) property.getValue ();
+                n = shortArray.length;
+                break;
+            case STRING:
+                stringArray = (String []) property.getValue ();
+                n = stringArray.length;
+                break;
+            case RATIONAL:
+                rationalArray = (Rational []) property.getValue ();
+                n = rationalArray.length;
+                break;
+            case PROPERTY:
+                propArray = (Property []) property.getValue ();
+                n = propArray.length;
+                break;
+            case NISOIMAGEMETADATA:
+                nisoArray = (NisoImageMetadata []) property.getValue ();
+                n = nisoArray.length;
+                break;
+            case TEXTMDMETADATA:
+                textMDArray = (TextMDMetadata []) property.getValue ();
+                n = textMDArray.length;
+                break;
+            default:
+                break;
         }
 
         for (int i = 0; i < n; i++) {
             String elem;
-            if (PropertyType.BOOLEAN.equals (propType)) {
-                elem = String.valueOf (boolArray[i]);
-            }
-            else if (PropertyType.BYTE.equals (propType)) {
-                elem = String.valueOf (byteArray[i]);
-            }
-            else if (PropertyType.CHARACTER.equals (propType)) {
-                elem = String.valueOf (charArray[i]);
-            }
-            else if (PropertyType.DATE.equals (propType)) {
-                elem = dateArray[i].toString();
-            }
-            else if (PropertyType.DOUBLE.equals (propType)) {
-                elem = String.valueOf (doubleArray[i]);
-            }
-            else if (PropertyType.FLOAT.equals (propType)) {
-                elem = String.valueOf (floatArray[i]);
-            }
-            else if (PropertyType.INTEGER.equals (propType)) {
-                elem = String.valueOf (intArray[i]);
-            }
-            else if (PropertyType.LONG.equals (propType)) {
-                elem = String.valueOf (longArray[i]);
-            }
-            else if (PropertyType.OBJECT.equals (propType)) {
+            if (null == propType) elem = "<error>";
+            else switch (propType) {
+                case BOOLEAN:
+                    elem = String.valueOf (boolArray[i]);
+                    break;
+                case BYTE:
+                    elem = String.valueOf (byteArray[i]);
+                    break;
+                case CHARACTER:
+                    elem = String.valueOf (charArray[i]);
+                    break;
+                case DATE:
+                    elem = dateArray[i].toString();
+                    break;
+                case DOUBLE:
+                    elem = String.valueOf (doubleArray[i]);
+                    break;
+                case FLOAT:
+                    elem = String.valueOf (floatArray[i]);
+                    break;
+                case INTEGER:
+                    elem = String.valueOf (intArray[i]);
+                    break;
+                case LONG:
+                    elem = String.valueOf (longArray[i]);
+                    break;
+                case OBJECT:
                     elem = objArray[i].toString();
-                }
-            else if (PropertyType.SHORT.equals (propType)) {
-                elem = String.valueOf (shortArray[i]);
+                    break;
+                case SHORT:
+                    elem = String.valueOf (shortArray[i]);
+                    break;
+                case STRING:
+                    elem = stringArray[i];
+                    break;
+                case RATIONAL:
+                    elem = rationalArray[i].toString ();
+                    break;
+                case NISOIMAGEMETADATA:
+                    if (i == 0) {
+                        _writer.println ();
+                    }
+                    NisoImageMetadata niso = nisoArray[i];
+                    showNisoImageMetadata (niso,
+                            margin + " ", _je.getShowRawFlag ());
+                    continue;
+                case TEXTMDMETADATA:
+                    if (i == 0) {
+                        _writer.println ();
+                    }
+                    showTextMDMetadata (textMDArray[i],
+                            margin + " ", _je.getShowRawFlag ());
+                    continue;
+                case PROPERTY:
+                    if (i == 0) {
+                        _writer.println ();
+                    }
+                    Property pval = propArray[i];
+                    showProperty (pval, pval.getName (), margin + " ");
+                    continue;
+                default:
+                    elem = "<error>";
+                    break;
             }
-            else if (PropertyType.STRING.equals (propType)) {
-                elem = stringArray[i];
-            }
-            else if (PropertyType.RATIONAL.equals (propType)) {
-                elem = rationalArray[i].toString ();
-            }
-            else if (PropertyType.NISOIMAGEMETADATA.equals (propType)) {
-                if (i == 0) {
-                    _writer.println ();
-                }
-                NisoImageMetadata niso = nisoArray[i];
-                showNisoImageMetadata (niso,
-                                   margin + " ", _je.getShowRawFlag ());
-                continue;
-            }
-            else if (PropertyType.TEXTMDMETADATA.equals (propType)) {
-                if (i == 0) {
-                    _writer.println ();
-                }
-                showTextMDMetadata (textMDArray[i],
-                                   margin + " ", _je.getShowRawFlag ());
-                continue;
-            }
-            else if (PropertyType.PROPERTY.equals (propType)) {
-                if (i == 0) {
-                    _writer.println ();
-                }
-                Property pval = propArray[i];
-                showProperty (pval, pval.getName (), margin + " ");
-                continue;
-            }
-            else elem = "<error>";
             if (i == 0) {
                 _writer.print (elem);
             }
@@ -1120,6 +1138,8 @@ public class TextHandler
      * the MIX schema.  The schema which is used may be 0.2 or 1.0,
      * depending on the module parameters.
      * @param niso NISO image metadata
+     * @param margin the margin
+     * @param rawOutput
      */
     protected void showNisoImageMetadata (NisoImageMetadata niso, String margin,
             boolean rawOutput)
@@ -2007,7 +2027,7 @@ public class TextHandler
     private String addIntegerValue (int value, String [] labels,
                                     boolean rawOutput)
     {
-        String s = null;
+        String s;
         if (!rawOutput && 0 <= value && value < labels.length) {
             s = labels[value];
         }
@@ -2047,7 +2067,7 @@ public class TextHandler
 
     private String addRationalValue (Rational r, boolean rawOutput)
     {
-        String s = null;
+        String s;
         if (!rawOutput) {
             s = _format.format (r.toDouble ());
         }

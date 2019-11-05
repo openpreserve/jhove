@@ -8,7 +8,10 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 /** Representation of the zTXt (compressed text) chunk */
 public class ZtxtChunk extends GeneralTextChunk {
 
-	/** Constructor */
+	/** Constructor 
+         * @param sig: int representing chunktype
+         * @param leng: long representing length
+         */
 	public ZtxtChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
@@ -59,6 +62,8 @@ public class ZtxtChunk extends GeneralTextChunk {
 			case 2:
 				compressedData[cmprsIdx++] = (byte) c;
 				break;
+                        default:
+                            break;
 			}
 		}
 		if (keyword != null) {

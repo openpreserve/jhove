@@ -572,10 +572,8 @@ public class TiffModule extends ModuleBase {
                 ListIterator<TiffProfile> pter = _profile.listIterator();
                 while (pter.hasNext()) {
                     TiffProfile prof = pter.next();
-                    if (!prof.isAlreadyOK()) {
-                        if (prof.satisfiesProfile(ifd)) {
+                    if (!prof.isAlreadyOK() && prof.satisfiesProfile(ifd)) {
                             info.setProfile(prof.getText());
-                        }
                     }
                 }
 
@@ -984,30 +982,24 @@ public class TiffModule extends ModuleBase {
                     info);
         }
         int[] bitsPerSample = niso.getBitsPerSample();
-        if (photometricInterpretation == 4) {
-            if (samplesPerPixel < 1 || bitsPerSample[0] != 1) {
+        if (photometricInterpretation == 4 && (samplesPerPixel < 1 || bitsPerSample[0] != 1)) {
                 reportInvalid(MessageConstants.TIFF_HUL_41, info);
-            }
         }
 
         /* Samples per pixel. */
 
-        if (photometricInterpretation == 0 || photometricInterpretation == 1
+        if ((photometricInterpretation == 0 || photometricInterpretation == 1
                 || photometricInterpretation == 3
-                || photometricInterpretation == 4) {
-            if (samplesPerPixel < 1) {
+                || photometricInterpretation == 4) && samplesPerPixel < 1) {
                 String mess = MessageFormat.format(MessageConstants.TIFF_HUL_42.getMessage(), samplesPerPixel);
                 JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_42.getId(), mess);
                 reportInvalid(message, info);
-            }
         }
-        if (photometricInterpretation == 2 || photometricInterpretation == 6
-                || photometricInterpretation == 8) {
-            if (samplesPerPixel < 3) {
+        if ((photometricInterpretation == 2 || photometricInterpretation == 6
+                || photometricInterpretation == 8) && samplesPerPixel < 3) {
                 String mess = MessageFormat.format(MessageConstants.TIFF_HUL_43.getMessage(), samplesPerPixel);
                 JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_43.getId(), mess);
                 reportInvalid(message, info);
-            }
         }
 
         /* Palette color. */
@@ -1082,11 +1074,9 @@ public class TiffModule extends ModuleBase {
 
         /* Clipping path. */
 
-        if (ifd.getClipPath() != null) {
-            if (ifd.getXClipPathUnits() == IFD.NULL) {
-                reportInvalid(MessageConstants.TIFF_HUL_52,
+        if (ifd.getClipPath() != null && ifd.getXClipPathUnits() == IFD.NULL) {
+            reportInvalid(MessageConstants.TIFF_HUL_52,
                         info);
-            }
         }
 
         /* Date. */

@@ -342,10 +342,8 @@ public class XmlModuleHandler extends DefaultHandler {
 		}
 
 		// Do special-case checking for the XHTML DTD's
-		if (!_xhtmlFlag) {
-			if (DTDMapper.isXHTMLDTD(publicId)) {
-				_xhtmlFlag = true;
-			}
+		if (!_xhtmlFlag && DTDMapper.isXHTMLDTD(publicId)) {
+                    _xhtmlFlag = true;
 		}
 		InputSource ent = DTDMapper.publicIDToFile(publicId);
 		if (ent == null) {
@@ -382,14 +380,12 @@ public class XmlModuleHandler extends DefaultHandler {
 		entArr.publicID = publicId;
 		entArr.systemID = systemId;
 		_entities.add(entArr);
-		if (systemId.endsWith(".dtd")) {
-			/*
-			 * Assume that the first system ID in the file with a .dtd
-			 * extension is the actual DTD
-			 */
-			if (_dtdURI == null) {
-				_dtdURI = systemId;
-			}
+                /*
+                 * Assume that the first system ID in the file with a .dtd
+                 * extension is the actual DTD
+                 */
+		if (systemId.endsWith(".dtd") && _dtdURI == null) {
+                    _dtdURI = systemId;
 		}
 		return ent;
 	}

@@ -203,10 +203,8 @@ public final class AProfile extends PdfProfile
             // If it has an interactive form, it must meet certain criteria
             PdfDictionary form = (PdfDictionary) 
                 _module.resolveIndirectObject (cat.get ("AcroForm"));
-            if (form != null) {
-                if (!formOK (form)) {
-                    return false;
-                }
+            if (form != null && !formOK (form)) {
+                return false;
             }
 
             // It may not contain an AA entry or an OCProperties entry
@@ -505,10 +503,8 @@ public final class AProfile extends PdfProfile
             // The NeedAppearances flag either shall not be present
             // or shall be false.
             PdfSimpleObject needapp = (PdfSimpleObject) form.get ("NeedAppearances");
-            if (needapp != null) {
-                if (!needapp.isFalse ()) {
-                    return false;
-                }
+            if (needapp != null && !needapp.isFalse ()) {
+                return false;
             }
         }
         catch (Exception e) {
@@ -548,10 +544,8 @@ public final class AProfile extends PdfProfile
                     PdfDictionary kid = (PdfDictionary) kidVec.elementAt (i);
                     // The safest way to check if this is a field seems
                     // to be to look for the required Parent entry.
-                    if (kid.get ("Parent") != null) {
-                        if (!fieldOK (kid)) {
-                            return false;
-                        }
+                    if (kid.get ("Parent") != null && !fieldOK (kid)) {
+                        return false;
                     }
                 }
             }
@@ -681,10 +675,8 @@ public final class AProfile extends PdfProfile
                             }
                             
                             // If it's a Widget, it can't have an AA entry
-                            if ("Widget".equals (subtypeVal)) {
-                                if (annDict.get ("AA") != null) {
-                                    return false;
-                                }
+                            if ("Widget".equals (subtypeVal) && annDict.get ("AA") != null) {
+                                return false;
                             }
                             // For non-text annotation types, the
                             // Contents key is RECOMMENDED, not required.
@@ -754,10 +746,8 @@ public final class AProfile extends PdfProfile
                 }
                 // If this is the first time we've hit an uncalibrated
                 // color space, check for an appropriate OutputIntent dict.
-                if (hasUncalCS && !oldHasUncalCS) {
-                    if (!checkUncalIntent ()) {
-                        return false;
-                    }
+                if (hasUncalCS && !oldHasUncalCS && !checkUncalIntent ()) {
+                    return false;
                 }
                 if (hasDevRGB && hasDevCMYK) {
                     return false;   // can't have both in same file
@@ -806,10 +796,9 @@ public final class AProfile extends PdfProfile
                             theOutProfile = outProfile;
                         }
                         PdfSimpleObject subtype = (PdfSimpleObject) intent.get ("S");
-                        if (subtype != null) {
-                            if ("GTS_PDFA1".equals (subtype.getStringValue())) {
-                                pdfaProfileSeen = true;
-                            }
+                        if (subtype != null && 
+                                "GTS_PDFA1".equals (subtype.getStringValue())) {
+                            pdfaProfileSeen = true;
                         }
                     }
                 }
@@ -865,10 +854,8 @@ public final class AProfile extends PdfProfile
         try {
             PdfDictionary action = (PdfDictionary) 
                      _module.resolveIndirectObject (item.get ("A"));
-            if (action != null) {
-                if (!actionOK (action)) {
-                    return false;
-                }
+            if (action != null && !actionOK (action)) {
+                return false;
             }
             PdfDictionary child = (PdfDictionary)
                      _module.resolveIndirectObject (item.get ("First"));
@@ -1037,15 +1024,11 @@ public final class AProfile extends PdfProfile
                     // PS XObjects aren't allowed.
                     return false;
                 }
-                if ("Image".equals (subtypeVal)) {
-                    if (!imageObjectOK (xo)) {
-                        return false;   
-                    }
+                if ("Image".equals (subtypeVal) && !imageObjectOK (xo)) {
+                    return false;
                 }
-                if ("Form".equals (subtypeVal)) {
-                    if (!formObjectOK (xo)) {
-                        return false;   
-                    }
+                if ("Form".equals (subtypeVal) && !formObjectOK (xo)) {
+                    return false;
                 }
             }
         }
@@ -1085,10 +1068,8 @@ public final class AProfile extends PdfProfile
             
             // Interpolate is allowed only if its value is false.
             PdfSimpleObject interp = (PdfSimpleObject) xo.get ("Interpolate");
-            if (interp != null) {
-                if (!interp.isFalse ()) {
-                    return false;
-                }
+            if (interp != null && !interp.isFalse ()) {
+                return false;
             }
             
             // Intent must be one of the four standard rendering intents,

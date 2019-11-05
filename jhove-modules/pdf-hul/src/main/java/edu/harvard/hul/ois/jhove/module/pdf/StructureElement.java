@@ -146,13 +146,12 @@ public class StructureElement
                                 if(kidsObject instanceof PdfSimpleObject) {
                                     PdfSimpleObject kids = (PdfSimpleObject)kidsObject;
                                     Token tok = kids.getToken();
-                                    if(tok instanceof Numeric) {
+                                    if (tok instanceof Numeric && ((Numeric)tok).getValue() == 0) {
                                         //if the kids value is zero then there are no child objects; exit method
-                                        if(((Numeric)tok).getValue()==0) {
-                                            _logger.info(MessageConstants.LOG_NO_CHILD_OBJS);
-                                            children = null;
-                                            return;
-                                        }
+                                        _logger.info(MessageConstants.LOG_NO_CHILD_OBJS);
+                                        children = null;
+                                        return;
+                                        
                                     }
                                 }                                StructureElement se = 
                                     new StructureElement (kdict, _tree);
@@ -298,11 +297,9 @@ public class StructureElement
     {
         try {
             PdfObject typ = elem.get ("Type");
-            if (typ != null) {
-                if (!"StructElem".equals
+            if (typ != null && !"StructElem".equals
                       (((PdfSimpleObject) typ).getStringValue ())) {
-                    return false;
-                }
+                return false;
             }
 
             PdfObject s = _module.resolveIndirectObject (elem.get ("S"));
