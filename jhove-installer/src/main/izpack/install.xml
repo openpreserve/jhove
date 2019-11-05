@@ -69,7 +69,7 @@
       <executable targetfile="$INSTALL_PATH/bin/html-hul-1.4.1.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/jpeg2000-hul-1.4.1.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/jpeg2000-hul-1.4.1.jar"/>
-      <file targetdir="$INSTALL_PATH/bin" src="bin/jpeg-hul-1.5.1.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/jpeg-hul-1.5.2.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/jpeg-hul-1.5.1.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/pdf-hul-1.12.1.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/pdf-hul-1.12.1.jar"/>

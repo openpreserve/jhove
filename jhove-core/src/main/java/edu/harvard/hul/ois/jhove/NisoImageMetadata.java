@@ -53,8 +53,10 @@ public class NisoImageMetadata
     "CFA",
     "CIE Log2(L)",
     "CIE Log2(L)(u',v')",
-    "LinearRaw"
+    "LinearRaw",
+    "YCCK"
     };
+
     /** Index for 6.1.4.1 color space value labels. */
     public static final int [] COLORSPACE_INDEX = {
 	0, 1, 2, 3, 
@@ -63,7 +65,8 @@ public class NisoImageMetadata
     32803,
     32844,
     32845,
-    34892
+    34892,
+    65535
     };
 
     /** 6.1.3.1 Compression scheme value labels. */

@@ -4199,6 +4199,7 @@ public class XmlHandler
         case 10: s = "ITULab"; break;
         case 32803: s = "CFA"; break;         // used by DNG
         case 34892: s = "LinearRaw"; break;   // used by DNG
+        case 65535: s = "YCCK"; break;   // used by Adobe JPEG
         }
         return s;
     }
