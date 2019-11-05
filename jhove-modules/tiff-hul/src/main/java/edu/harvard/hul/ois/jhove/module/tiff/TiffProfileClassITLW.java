@@ -71,10 +71,8 @@ public final class TiffProfileClassITLW extends TiffProfileClassIT
             return false;
         }
         String seq = tifd.getColorSequence ();
-        if (seq == null || "CMYK".equals (seq)) {
-            if (inkSet != 1) {
-                return false;
-            }
+        if ((seq == null || "CMYK".equals (seq)) && inkSet != 1) {
+            return false;
         }
 
         // Per footnote h, this applies to LW, LW/P1 and LW/P2

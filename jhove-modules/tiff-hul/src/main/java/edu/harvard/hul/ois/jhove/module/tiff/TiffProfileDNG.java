@@ -99,12 +99,10 @@ public class TiffProfileDNG extends TiffProfile {
         
         /* If the photometric interpretation is CFA, there must be
          * certain other tags. */
-        if (pInterpretation == CFA) {
-            if (tifd.getCFAPlaneColor() == null ||
+        if (pInterpretation == CFA && (tifd.getCFAPlaneColor() == null ||
                 tifd.getCFARepeatPatternDim() == null ||
-                tifd.getCFAPattern() == null) {
-                return false;
-            }
+                tifd.getCFAPattern() == null)) {
+            return false;
         }
 
         /* Orientation is required. */
@@ -114,10 +112,9 @@ public class TiffProfileDNG extends TiffProfile {
         
         /* Compression must be 1 or 7 */
         int compression = niso.getCompressionScheme ();
-        if (compression != NisoImageMetadata.NULL) {
-            if (!(compression == 1 || compression == 7)) {
-                return false;
-            }
+        if (compression != NisoImageMetadata.NULL && 
+                !(compression == 1 || compression == 7)) {
+            return false;
         }
         
         return true;

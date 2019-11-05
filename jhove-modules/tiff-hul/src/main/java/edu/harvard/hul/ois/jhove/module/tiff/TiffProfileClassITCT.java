@@ -61,10 +61,8 @@ public final class TiffProfileClassITCT extends TiffProfileClassIT
             return false;
         }
         String seq = tifd.getColorSequence ();
-        if (seq == null || "CMYK".equals (seq)) {
-            if (inkSet != 1) {
-                return false;
-            }
+        if ((seq == null || "CMYK".equals (seq)) && inkSet != 1) {
+            return false;
         }
 
         int spp = niso.getSamplesPerPixel ();

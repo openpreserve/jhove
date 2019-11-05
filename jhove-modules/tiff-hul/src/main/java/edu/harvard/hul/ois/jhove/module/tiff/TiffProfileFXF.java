@@ -61,10 +61,8 @@ public class TiffProfileFXF extends TiffFXBase {
         // We've already established that if the compression
         // scheme is 3, T4Options exists.  But we must establish
         // that if it's 4, T6Options exists and has a value of 0.
-        if (niso.getCompressionScheme () == 4) {
-            if (tifd.getT6Options () != 0) {
-                return false;
-            }
+        if (niso.getCompressionScheme() == 4 && tifd.getT6Options() != 0) {
+            return false;
         }
 
         // XResolution, YResolution, and ImageWidth have codependencies.
@@ -77,25 +75,22 @@ public class TiffProfileFXF extends TiffFXBase {
             yRes = perCMtoPerInch ((int) yRes);
         }
         long wid = niso.getImageWidth();
-        if ((xRes == 200 && yRes == 100) ||
+        if (((xRes == 200 && yRes == 100) ||
                 (xRes == 204 && yRes == 98) ||
                 (xRes == 200 && yRes == 200) ||
                 (xRes == 204 && yRes == 196) ||
-                (xRes == 204 && yRes == 391)) {
-            if (wid == 1728 || wid == 2048 || wid == 2432) {
+                (xRes == 204 && yRes == 391)) && 
+                (wid == 1728 || wid == 2048 || wid == 2432)) {
                 xywOK = true;
-            }
         }
-        if (xRes == 300 && yRes == 300) {
-            if (wid == 2592 || wid == 3072 || wid == 3648) {
+        if (xRes == 300 && yRes == 300 && 
+                (wid == 2592 || wid == 3072 || wid == 3648)) {
                 xywOK = true;
-            }
         }
-        if ((xRes == 408 && yRes == 391) ||
-                (xRes == 400 && yRes == 400)) {
-            if (wid == 3456 || wid == 4096 || wid == 4864) {
+        if (((xRes == 408 && yRes == 391) ||
+                (xRes == 400 && yRes == 400)) 
+                && (wid == 3456 || wid == 4096 || wid == 4864)) {
                 xywOK = true;
-            }
         }
         // passed all tests
         return xywOK;         
