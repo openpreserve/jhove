@@ -58,12 +58,13 @@ public class PageLabelNode
 
     /**
      *  Build the subtree of descendants of this node, using
-     *  the Kids entry in the dictionary.  Leaf nodes are
-     *  recognized by not having a Kids entry.
+     *  the Kids entry in the dictionary.Leaf nodes are 
+     * recognized by not having a Kids entry.
+     * @throws edu.harvard.hul.ois.jhove.module.pdf.PdfException
      */
     public void buildSubtree () throws PdfException
     {
-        PdfArray kids = null;
+        PdfArray kids;
         try {
             kids = (PdfArray) _dict.get("Kids");
             if (kids != null) {
@@ -118,6 +119,7 @@ public class PageLabelNode
      *   under this node, and finally will return null when there are no more.
      *   A leaf object is one which has no Kids; it is required to have a
      *   Nums entry.
+     *   @return nextLeafObject: the leaf object under this node
      */
     public PageLabelNode nextLeafObject ()
     {
@@ -153,12 +155,16 @@ public class PageLabelNode
     } 
 
     /**
-     *  Obtain the next key-value pair from the tree.  This returns true
-     *  if a pair is available, false if not.  After this is called,
-     *  getCurrentKey and getCurrentValue may be called to retrieve the
-     *  key and value thus found.  Each time this is called,
-     *  currentKey and currentValue get copied into prevKey and
-     *  prevValue.
+     *  Obtain the next key-value pair from the tree.This returns true
+     * if a pair is available, false if not.  After this is called,
+     * getCurrentKey and getCurrentValue may be called to retrieve the
+     * key and value thus found.  Each time this is called,
+     * currentKey and currentValue get copied into prevKey and
+     * prevValue.
+     * 
+     * @return boolean: true if a next key-value pair is available, 
+     * false if no
+     * @throws edu.harvard.hul.ois.jhove.module.pdf.PdfException
      */
     public boolean findNextKeyValue () throws PdfException
     {
@@ -205,6 +211,7 @@ public class PageLabelNode
     
     /**
      *  Returns key at current position in traversing tree
+     * @return int
      */
     public int getCurrentKey () 
     {
@@ -213,6 +220,7 @@ public class PageLabelNode
     
     /**
      *  Returns value associated with current key
+     * @return PdfObject
      */
     public PdfObject _getCurrentValue ()
     {
@@ -221,6 +229,7 @@ public class PageLabelNode
 
     /**
      *  Returns key previously obtained in traversing tree 
+     *  @return int
      */
     public int getPrevKey () 
     {
@@ -230,6 +239,7 @@ public class PageLabelNode
     /**
      *  Returns value associated with key previously obtained
      *  in traversing tree
+     * @return PdfObject
      */
     public PdfObject getPrevValue ()
     {
@@ -239,6 +249,9 @@ public class PageLabelNode
     /**
      *  A convenience method to turn integers into Roman
      *  numerals, for the generation of page labels.
+     *  @param n: the integer
+     *  @param upperCase: true if upperCase Roman numerals are wanted
+     *  @return
      */
     public static String intToRoman (int n, boolean upperCase)
     {
@@ -326,6 +339,8 @@ public class PageLabelNode
 	    case 9:
 		buf.append ("IX");
 		break;
+            default:
+                break;
 	}
 	String val = buf.toString ();
 	if (upperCase) {
@@ -338,6 +353,10 @@ public class PageLabelNode
      *  "letter" page numbers as defined for PDF.  
      *  The first 26 pages are A-Z, the next 26 AA-ZZ,
      *  etc.
+     *  @param n: integers to be turned into letters
+     *  @param upperCase: true if uppercase letters are wanted
+     * 
+     *  @return String
      */
     public static String intToBase26 (int n, boolean upperCase)
     {
