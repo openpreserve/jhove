@@ -34,6 +34,10 @@ public class TiffProfileFXC extends TiffFXBase {
      *  Returns true if the IFD satisfies the requirements of a
      *  TIFF/FX C profile.  See the TIFF/FX specification for
      *  details.
+     * 
+     * @param ifd: IDF object
+     * 
+     * @return true if it satifies the profile
      */
     @Override
 	public boolean satisfiesThisProfile(IFD ifd) 
@@ -124,6 +128,8 @@ public class TiffProfileFXC extends TiffFXBase {
                 if (wid != 3456 && wid != 4096 & wid != 4864) {
                     return false;
                 }
+                break;
+            default:
                 break;
         }
         
