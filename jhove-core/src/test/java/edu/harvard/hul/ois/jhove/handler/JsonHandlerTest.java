@@ -105,7 +105,6 @@ public class JsonHandlerTest {
 		je = new JhoveBase();
 		je.setLogLevel("INFO");
 		String fileConf = JsonHandlerTest.class.getResource("/jhove_test.conf").getPath();
-		System.err.println("jhove.conf in:[" + fileConf + "]");
 		LOGGER.info("jhove.conf in:[" + fileConf + "]");
 		je.init(fileConf, null);
 	}
