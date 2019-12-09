@@ -67,6 +67,7 @@ public class NisoImageMetadata
     };
 
     /** 6.1.3.1 Compression scheme value labels. */
+    /* Taken from the TIFFTAG_COMPRESSION */
     public static final String [] COMPRESSION_SCHEME = {
 	"uncompressed", "CCITT 1D", "CCITT Group 3", "CCITT Group 4", /* 1-4 */
 	"LZW", "JPEG", "ISO JPEG", "Deflate",                 /* 5-8 */
@@ -81,9 +82,14 @@ public class NisoImageMetadata
 	"Kodak DCS",                                          /* 32947 */
 	"SGI 32-bit Log Luminance encoding",                  /* 34676 */
 	"SGI 24-bit Log Luminance encoding",                  /* 34677 */
-	"JPEG 2000"                                           /* 34712 */
+	"JPEG 2000",                                          /* 34712 */
+	"JPEG2000 Lossy",                                     /* 34713 non standard !!! */
+	"JPEG2000 Lossless",                                  /* 34714 non standard !!! */
+	"LZMA"												  /* 34925 */
     };
     /** Index for 6.1.3.1 compression scheme value labels. */
+    public static final int COMPRESSION_JPEG2000_LOSSY = 34713;
+    public static final int COMPRESSION_JPEG2000_LOSSLESS = 34714;
     public static final int [] COMPRESSION_SCHEME_INDEX = {
 	1, 2, 3, 4,
 	5, 6, 7, 8,
@@ -98,7 +104,10 @@ public class NisoImageMetadata
 	32947,
 	34676,
 	34677,
-	34712
+	34712,
+	34713,  /* non standard !!! */
+	34714,  /* non standard !!! */
+	34925
     };
 
     /** 6.2.5 display orientation value labels. */
@@ -309,6 +318,19 @@ public class NisoImageMetadata
     /** 6.3 Preferred presentation */
     private String _preferredPresentation;
 
+    /******************************************************************
+    * Special Format Characteristics
+    * From Data Dictionary - Technical Metadata for Digital Still Images
+    * (ANSI/NISO Z39.87-2006)
+    * Only used for JPEG2000 format
+    ******************************************************************/
+    /** 7.2.1.2.1 tiles */
+    private String _jp2Tiles;
+    /** 7.2.1.2.2 qualityLayers */
+    private int _jp2Layers;
+    /** 7.2.1.2.3resolutionLevels */
+    private int _jp2ResolutionLevels;
+    
     /******************************************************************
      * 7 Image creation
      ******************************************************************/
@@ -551,6 +573,9 @@ public class NisoImageMetadata
 	_imageData = null;
 	_imageLength = NULL;
 	_imageWidth = NULL;
+	_jp2Layers = NULL;
+	_jp2ResolutionLevels = NULL;
+	_jp2Tiles = null;
 	_maxApertureValue = null;
 	_meteringMode = NULL;
 	_orientation = NULL;
@@ -932,7 +957,31 @@ public class NisoImageMetadata
 	return _preferredPresentation;
     }
 
-    /** Get 8.2.8.5 primary chromaticities blue X. */
+	public String getJp2Tiles() {
+		return _jp2Tiles;
+	}
+
+	public void setJp2Tiles(String jp2Tiles) {
+		this._jp2Tiles = jp2Tiles;
+	}
+
+	public int getJp2Layers() {
+		return _jp2Layers;
+	}
+
+	public void setJp2Layers(int jp2Layers) {
+		this._jp2Layers = jp2Layers;
+	}
+
+	public int getJp2ResolutionLevels() {
+		return _jp2ResolutionLevels;
+	}
+
+	public void setJp2ResolutionLevels(int jp2ResolutionLevels) {
+		this._jp2ResolutionLevels = jp2ResolutionLevels;
+	}
+
+	/** Get 8.2.8.5 primary chromaticities blue X. */
     public Rational getPrimaryChromaticitiesBlueX ()
     {
 	return _primaryChromaticitiesBlueX;
@@ -1440,7 +1489,7 @@ public class NisoImageMetadata
     }
 
     /** Set 7.7.2 digital camera model.
-     * @param model Camera model
+     * @param modelName Camera model
      */
     public void setDigitalCameraModelName (String modelName)
     {

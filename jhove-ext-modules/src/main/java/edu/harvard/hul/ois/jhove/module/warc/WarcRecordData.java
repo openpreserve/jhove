@@ -140,8 +140,8 @@ public class WarcRecordData {
     		throw new IllegalArgumentException(MessageConstants.ERR_RECORD_DATA_NULL);
     	}
     	WarcHeader header = record.header;
-        startOffset = Long.valueOf(record.getStartOffset());
-        consumed = Long.valueOf(record.getConsumed());
+        startOffset = record.getStartOffset();
+        consumed = record.getConsumed();
         if (header.bValidVersionFormat) {
             this.warcVersionStr = header.versionStr;
         }
@@ -257,13 +257,13 @@ public class WarcRecordData {
         /*
          * Compliance.
          */
-        bIsNonCompliant = Boolean.valueOf(!record.isCompliant());
+        bIsNonCompliant = !record.isCompliant();
         isValidBlockDigest = record.isValidBlockDigest;
         isValidPayloadDigest = record.isValidPayloadDigest;
         /*
          * Payload.
          */
-        bHasPayload = Boolean.valueOf(record.hasPayload());
+        bHasPayload = record.hasPayload();
         Payload payload = record.getPayload();
         HeaderLine headerLine;
         if (payload != null) {
@@ -276,24 +276,26 @@ public class WarcRecordData {
                 payloadLength = Long.toString(httpHeader.getPayloadLength());
                 protocolVersion = httpHeader.httpVersion;
                 switch (httpHeader.headerType) {
-                case HttpHeader.HT_RESPONSE:
-                    resultCode = httpHeader.statusCodeStr;
-                    protocolContentType = httpHeader.contentType;
-                    headerLine = httpHeader.getHeader("server");
-                    if (headerLine != null && headerLine.value != null) {
-                        protocolServer = headerLine.value;
-                    }
-                	break;
-                case HttpHeader.HT_REQUEST:
-                    headerLine = httpHeader.getHeader("user-agent");
-                    if (headerLine != null && headerLine.value != null) {
-                        protocolUserAgent = headerLine.value;
-                    }
-                	break;
+                    case HttpHeader.HT_RESPONSE:
+                        resultCode = httpHeader.statusCodeStr;
+                        protocolContentType = httpHeader.contentType;
+                        headerLine = httpHeader.getHeader("server");
+                        if (headerLine != null && headerLine.value != null) {
+                            protocolServer = headerLine.value;
+                        }
+                            break;
+                    case HttpHeader.HT_REQUEST:
+                        headerLine = httpHeader.getHeader("user-agent");
+                        if (headerLine != null && headerLine.value != null) {
+                            protocolUserAgent = headerLine.value;
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
             else {
-                payloadLength = Long.toString(payload.getTotalLength());;
+                payloadLength = Long.toString(payload.getTotalLength());
             }
         }
         /*

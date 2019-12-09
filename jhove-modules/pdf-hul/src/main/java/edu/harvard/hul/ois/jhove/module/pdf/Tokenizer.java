@@ -170,21 +170,18 @@ public abstract class Tokenizer
 
         try {
             while (true) {
-                if (max > 0L) {
-                    if (_offset - startOffset > max) {
-                        // The token has exceeded the specified maximum size.
-
-                        if (token != null
-                                && token instanceof StringValuedToken
-                                && buffer != null) {
-                            ((StringValuedToken) token).setValue (
-                                    buffer.toString ());
-                        }
-                        else {
-                            token = null;
-                        }
-                        return token;
+                if (max > 0L && _offset - startOffset > max) {
+                    // The token has exceeded the specified maximum size.
+                    if (token != null
+                            && token instanceof StringValuedToken
+                            && buffer != null) {
+                        ((StringValuedToken) token).setValue (
+                                buffer.toString ());
                     }
+                    else {
+                        token = null;
+                    }
+                    return token;
                 }
 
                 if (!_lookAhead) {

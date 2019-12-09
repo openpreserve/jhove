@@ -179,16 +179,14 @@ public final class LinearizedProfile extends PdfProfile
             // "obj".
             for (;;) {
                 Token tok = _parser.getNext ();
-                if (tok instanceof Keyword) {
-                    if ("obj".equals(((Keyword) tok).getValue ())) {
-                        PdfObject val = _parser.readObject (false);
-                        // Object must be completely contained in
-                        // the first 1024 bytes.
-                        if (_parser.getOffset () <= 1024) {
-                            return val;
-                        }
-                        return null;
+                if (tok instanceof Keyword && "obj".equals(((Keyword) tok).getValue ())) {
+                    PdfObject val = _parser.readObject (false);
+                    // Object must be completely contained in
+                    // the first 1024 bytes.
+                    if (_parser.getOffset () <= 1024) {
+                        return val;
                     }
+                    return null;
                 }
                 if (_parser.getOffset () > 1024) {
                     return null;

@@ -104,7 +104,7 @@ public final class PdfHeader {
 	 * Factory method for {@link PdfHeader} that parses a new instance using the
 	 * supplied {@link Parser} instance.
 	 *
-	 * @param _parser
+	 * @param parser
 	 *            the {@link Parser} instance that will be used to parse header
 	 *            details
 	 * @return a new {@link PdfHeader} instance derived using the supplied

@@ -82,11 +82,7 @@ public final class RFC1766Lang
 		}
 	    }
 	}
-	// A dangling hyphen at the end isn't allowed.
-	if (taglength == 0) {
-	    return false;
-	}
-
-	return true;
+        // A dangling hyphen at the end isn't allowed.
+	return taglength != 0;
     }
 }

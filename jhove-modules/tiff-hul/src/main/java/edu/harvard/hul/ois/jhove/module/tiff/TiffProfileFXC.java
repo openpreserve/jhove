@@ -34,6 +34,10 @@ public class TiffProfileFXC extends TiffFXBase {
      *  Returns true if the IFD satisfies the requirements of a
      *  TIFF/FX C profile.  See the TIFF/FX specification for
      *  details.
+     * 
+     * @param ifd: IDF object
+     * 
+     * @return true if it satifies the profile
      */
     @Override
 	public boolean satisfiesThisProfile(IFD ifd) 
@@ -125,17 +129,12 @@ public class TiffProfileFXC extends TiffFXBase {
                     return false;
                 }
                 break;
+            default:
+                break;
         }
-        
         // By my best reading, the colormap is needed only
         // if the Indexed value is 1.
-        if (tifd.getIndexed() == 1) {
-            if (niso.getColormapRedValue () == null) {
-                return false;
-            }
-        }
-
-        return true;         // passed all tests
+        return !(tifd.getIndexed() == 1 && niso.getColormapRedValue () == null);  // passed all tests       
     }
 
 }

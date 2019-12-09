@@ -161,11 +161,7 @@ public abstract class XProfileBase extends PdfProfile
             return false;       // Something is SERIOUSLY wrong if this happens
         }
         // ID entry is required
-        if (trailerDict.get ("ID") == null) {
-            return false;
-        }
-        
-        return true;
+        return trailerDict.get ("ID") != null;
     }
 
     /** Checks if the ExtGState resource meets profile requirements.
@@ -269,15 +265,11 @@ public abstract class XProfileBase extends PdfProfile
                     // PS XObjects aren't allowed in any X format.
                     return false;
                 }
-                if ("Image".equals (subtypeVal)) {
-                    if (!imageObjectOK (xo)) {
-                        return false;   
-                    }
+                if ("Image".equals (subtypeVal) && !imageObjectOK (xo)) {
+                    return false;   
                 }
-                if ("Form".equals (subtypeVal)) {
-                    if (!formObjectOK (xo)) {
-                        return false;   
-                    }
+                if ("Form".equals (subtypeVal) && !formObjectOK (xo)) {
+                    return false;
                 }
             }
         }
@@ -307,20 +299,16 @@ public abstract class XProfileBase extends PdfProfile
                     return false;
                 }
             }
-            if (_xType == PDFX2) {
+            if (_xType == PDFX2 && xo.get ("OPI") != null) {
                  // PDF-X/2 elements can't have an OPI key in Form
                  // or Image xobjects.
-                 if (xo.get ("OPI") != null) {
-                    return false;
-                 }
+                 return false;
             }
 	    if (_xType == PDFX1A || _xType == PDFX2) {
 		// SMask is restricted in PDFX-1/a and X-2
 		PdfSimpleObject smask = (PdfSimpleObject) xo.get ("SMask");
-		if (smask != null) {
-		    if (!"None".equals (smask.getStringValue ())) {
-			return false;
-		    }
+		if (smask != null && !"None".equals (smask.getStringValue ())) {
+                    return false;
 		}
 	    }
         }

@@ -6,7 +6,6 @@ import java.util.EnumSet;
  * @author  <a href="mailto:carl@openpreservation.org">Carl Wilson</a>
  *          <a href="https://github.com/carlwilson">carlwilson AT github</a>
  */
-
 @SuppressWarnings("nls")
 public enum ControlChar {
 	/**
@@ -88,7 +87,7 @@ public enum ControlChar {
 	public final static EnumSet<ControlChar> ASCII = EnumSet.range(NUL, DEL);
 	/** Set of Control Chars that are only Unicode */
 	public final static EnumSet<ControlChar> UNICODE_EXTENSIONS = EnumSet.complementOf(ASCII);
-	/** Set of Unicode Control Chars, {@link ASCII} + {@link UNICODE_EXTENSIONS} */
+	/** Set of Unicode Control Chars, {@code ASCII} + {@code UNICODE_EXTENSIONS} */
 	public final static EnumSet<ControlChar> UNICODE = EnumSet.allOf(ControlChar.class);
 
 
@@ -108,7 +107,7 @@ public enum ControlChar {
 		this.code = code;
 		this.value = value;
 		this.ansiName = ansiName;
-		this.mnemonic = String.format("%s (0x%02X)", code, Integer.valueOf(value));
+		this.mnemonic = String.format("%s (0x%02X)", code, value);
 	}
 
 	/**
@@ -125,7 +124,7 @@ public enum ControlChar {
 	/**
 	 * Returns the appropriate ASCII control character for an int character value.
 	 *
-	 * @param value
+	 * @param charVal
 	 *            the int value of a possible ASCII character
 	 * @return the control character with matching ASCII value or null
 	 *         if the value is out of the ASCII control character range.

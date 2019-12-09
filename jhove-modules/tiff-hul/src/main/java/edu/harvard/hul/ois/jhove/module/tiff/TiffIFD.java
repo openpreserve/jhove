@@ -3453,12 +3453,10 @@ public class TiffIFD extends IFD {
 		// }
 		// }
 		// }
-		if (_photometricInterpretation == 5) {
-			if (_dotRange == null) {
-				_dotRange = new int[2];
-				_dotRange[0] = 0;
-				_dotRange[1] = bps1;
-			}
+		if (_photometricInterpretation == 5 && _dotRange == null) {
+                    _dotRange = new int[2];
+                    _dotRange[0] = 0;
+                    _dotRange[1] = bps1;
 		}
 		if (_photometricInterpretation == 2
 				|| _photometricInterpretation == 6) {
