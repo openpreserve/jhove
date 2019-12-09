@@ -83,10 +83,8 @@ public final class TiffProfileClassITMPP1 extends TiffProfileClassIT
         }
         
         // ImageColorValue is defined if ImageColorIndicator=1
-        if (ind == 1) {
-            if (tifd.getImageColorValue () == IFD.NULL) {
-                return false;
-            }
+        if (ind == 1 && tifd.getImageColorValue () == IFD.NULL) {
+            return false;
         }
         
         // PixelIntesityRange={0,255}

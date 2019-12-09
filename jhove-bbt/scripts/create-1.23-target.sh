@@ -58,9 +58,20 @@ cp -R "${baselineRoot}" "${targetRoot}"
 if [[ -d "${candidateRoot}/examples/modules/JPEG2000-hul" ]]; then
 	echo "Copying valid JPEG2000 examples."
 	cp -Rf "${candidateRoot}/examples/modules/JPEG2000-hul" "${targetRoot}/examples/modules/"
+fi
+if [[ -d "${candidateRoot}/errors/modules/JPEG2000-hul" ]]; then
+	echo "Copying JPEG2000 errors."
 	cp -Rf "${candidateRoot}/errors/modules/JPEG2000-hul" "${targetRoot}/errors/modules/"
 fi
+
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.4.1">JPEG2000-hul<\/module>$/   <module release="1.4.2">JPEG2000-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <outputHandler release="1.8">XML/   <outputHandler release="1.9">XML/' {} \;
 find "${targetRoot}" -type f -name "audit-JPEG2000-hul.jhove.xml" -exec sed -i 's/^  <release>1.4.1<\/release>$/  <release>1.4.2<\/release>/' {} \;
 find "${targetRoot}" -type f -name "audit-JPEG2000-hul.jhove.xml" -exec sed -i 's/^  <date>2019-04-17<\/date>$/  <date>2019-10-18<\/date>/' {} \;
+
+find  "${targetRoot}" -type f -name "audit-TIFF-hul.jhove.xml" -exec xmlstarlet ed --inplace -N 'ns=http://schema.openpreservation.org/ois/xml/ns/jhove' -d '//ns:identifiers[.//ns:identifier//ns:value[text()="http://hul.harvard.edu/jhove/references.html#classf" ]]' {} \;
+find  "${targetRoot}" -type f -name "audit-TIFF-hul.jhove.xml" -exec sed -i '/^    $/d' {} \;
+
+# Remove new SHA-256 values
+find  "${candidateRoot}" -type f -name "*.jhove.xml" -exec xmlstarlet ed --inplace -N 'ns=http://schema.openpreservation.org/ois/xml/ns/jhove' -d '//ns:checksums//ns:checksum[@type = "SHA-256"]' {} \;
+find  "${targetRoot}" -type f -name "*.jhove.xml" -exec xmlstarlet ed --inplace -N 'ns=http://schema.openpreservation.org/ois/xml/ns/jhove' -d '//ns:checksums//ns:checksum[@type = "SHA-256"]' {} \;

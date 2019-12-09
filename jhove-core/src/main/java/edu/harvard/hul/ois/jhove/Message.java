@@ -9,12 +9,14 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /**
- * This class encapsulates a String to be displayed.
+ * This class encapsulates a message to be displayed.
  */
 public abstract class Message {
+
 	/******************************************************************
 	 * PUBLIC CLASS FIELDS.
 	 ******************************************************************/
+
 	/** Value indicating a null offset. */
 	public static final long NULL = -1;
 
@@ -35,39 +37,37 @@ public abstract class Message {
 	 ******************************************************************/
 
 	/**
-	 * Create a Message with an unknown id (for backward compatibility).
-	 * This constructor cannot be invoked directly,
-	 * since Message is abstract.
+	 * Creates a Message with an unknown identifier for backward compatibility.
+	 * This constructor cannot be invoked directly, since Message is abstract.
 	 * 
 	 * @param message
-	 *            Human-readable string.
+	 *            Human-readable message text.
 	 */
 	protected Message(final String message) {
 		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, message));
 	}
 
 	/**
-	 * Create a Message with an id. This constructor cannot be invoked directly,
-	 * since Message is abstract.
+	 * Creates a Message with an identifier.
+	 * This constructor cannot be invoked directly, since Message is abstract.
 	 * 
-	 * @param id
-	 *            Unique ID (within the module) for the message
 	 * @param message
-	 *            Human-readable string.
+	 *            The message text and its identifier.
 	 */
 	protected Message(final JhoveMessage message) {
 		this(message, null, NULL);
 	}
 
 	/**
-	 * Create a Message. This constructor cannot be invoked directly,
+	 * Creates a Message.
+	 * This constructor cannot be invoked directly,
 	 * since Message is abstract. The second argument
 	 * adds secondary details to the primary message;
 	 * the message will typically be displayed in the
-	 * form "message:subMessage".
+	 * form "message: subMessage".
 	 * 
 	 * @param message
-	 *            Human-readable string.
+	 *            Human-readable message text.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 */
@@ -77,16 +77,15 @@ public abstract class Message {
 	}
 
 	/**
-	 * Create a Message. This constructor cannot be invoked directly,
+	 * Creates a Message with an identifier.
+	 * This constructor cannot be invoked directly,
 	 * since Message is abstract. The second argument
 	 * adds secondary details to the primary message;
 	 * the message will typically be displayed in the
-	 * form "message:subMessage".
+	 * form "message: subMessage".
 	 * 
-	 * @param id
-	 *            Unique ID (within the module) for the message
 	 * @param message
-	 *            Human-readable string.
+	 *            The message text and its identifier.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 */
@@ -95,14 +94,15 @@ public abstract class Message {
 	}
 
 	/**
-	 * Create a Message. This constructor cannot be invoked directly,
+	 * Creates a Message.
+	 * This constructor cannot be invoked directly,
 	 * since Message is abstract. The second argument
 	 * adds secondary details to the primary message;
 	 * the message will typically be displayed in the
-	 * form "message:subMessage".
+	 * form "message: subMessage".
 	 * 
 	 * @param message
-	 *            Human-readable string.
+	 *            Human-readable message text.
 	 * @param offset
 	 *            Byte offset associated with the message.
 	 */
@@ -112,16 +112,15 @@ public abstract class Message {
 	}
 
 	/**
-	 * Create a Message. This constructor cannot be invoked directly,
+	 * Creates a Message with an identifier.
+	 * This constructor cannot be invoked directly,
 	 * since Message is abstract. The second argument
 	 * adds secondary details to the primary message;
 	 * the message will typically be displayed in the
-	 * form "message:subMessage".
+	 * form "message: subMessage".
 	 * 
-	 * @param id
-	 *            Unique ID (within the module) for the message
 	 * @param message
-	 *            Human-readable string.
+	 *            The message text and its identifier.
 	 * @param offset
 	 *            Byte offset associated with the message.
 	 */
@@ -130,14 +129,15 @@ public abstract class Message {
 	}
 
 	/**
-	 * Create a Message. This constructor cannot be invoked directly,
+	 * Creates a Message.
+	 * This constructor cannot be invoked directly,
 	 * since Message is abstract. The second argument
 	 * adds secondary details to the primary message;
 	 * the message will typically be displayed in the
-	 * form "message:subMessage".
+	 * form "message: subMessage".
 	 * 
 	 * @param message
-	 *            Human-readable string.
+	 *            Human-readable message text.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 * @param offset
@@ -150,16 +150,15 @@ public abstract class Message {
 	}
 
 	/**
-	 * Create a Message. This constructor cannot be invoked directly,
+	 * Creates a Message with an identifier.
+	 * This constructor cannot be invoked directly,
 	 * since Message is abstract. The second argument
 	 * adds secondary details to the primary message;
 	 * the message will typically be displayed in the
-	 * form "message:subMessage".
+	 * form "message: subMessage".
 	 * 
-	 * @param id
-	 *            Unique ID (within the module) for the message
 	 * @param message
-	 *            Human-readable string.
+	 *            The message text and its identifier.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 * @param offset
@@ -179,26 +178,29 @@ public abstract class Message {
 	 ******************************************************************/
 
 	/**
-	 * Get the message string.
+	 * Returns the message text.
 	 */
 	public String getMessage() {
 		return this.message.getMessage();
 	}
 
 	/**
-	 * Get the submessage string.
+	 * Returns the submessage text.
 	 */
 	public String getSubMessage() {
 		return this._subMessage;
 	}
 
 	/**
-	 * Return the offset to which the information is related.
+	 * Returns the offset to which this message is related.
 	 */
 	public long getOffset() {
 		return this._offset;
 	}
 
+	/**
+	 * Returns the message's identifier.
+	 */
 	public String getId() {
 		return this.message.getId();
 	}

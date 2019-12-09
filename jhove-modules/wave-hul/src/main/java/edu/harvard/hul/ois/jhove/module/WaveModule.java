@@ -490,14 +490,12 @@ public class WaveModule extends ModuleBase {
 		if (flagWaveFormatExtensible) {
 			info.setProfile("WAVEFORMATEXTENSIBLE");
 		}
-		if (broadcastExtChunkSeen) {
-			if ((waveCodec == FormatChunk.WAVE_FORMAT_MPEG && factChunkSeen)
-					|| waveCodec == FormatChunk.WAVE_FORMAT_PCM) {
-				info.setProfile("BWF");
-			}
+		if (broadcastExtChunkSeen && (
+                        (waveCodec == FormatChunk.WAVE_FORMAT_MPEG && factChunkSeen)
+                        || waveCodec == FormatChunk.WAVE_FORMAT_PCM)) {
+                    info.setProfile("BWF");
 		}
-
-		return 0;
+                return 0;
 	}
 
 	/**

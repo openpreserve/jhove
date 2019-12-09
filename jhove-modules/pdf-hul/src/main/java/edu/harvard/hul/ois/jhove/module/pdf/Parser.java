@@ -407,33 +407,31 @@ public class Parser
             PdfObject obj = v.elementAt (i);
             if (obj instanceof PdfSimpleObject) {
                 Token tok = ((PdfSimpleObject) obj).getToken ();
-                if (tok instanceof Keyword) {
-                    if ("R".equals (((Keyword)tok).getValue ())) {
-                        // We're in the key of 'R'.  The two previous tokens
-                        // had better be Numerics.  Three objects in the Vector
-                        // are replaced by one.
-                        try {
-                            PdfSimpleObject nobj =
-                                    (PdfSimpleObject) v.elementAt (i - 2);
-                            Numeric ntok = (Numeric) nobj.getToken ();
-                            int objNum = ntok.getIntegerValue ();
-                            nobj = (PdfSimpleObject) v.elementAt (i - 1);
-                            ntok = (Numeric) nobj.getToken ();
-                            int genNum = ntok.getIntegerValue ();
-                            v.set (i - 2, new PdfIndirectObj
-                                    (objNum, genNum, _objectMap));
-                            //v.removeElementAt (i);
-                            //v.removeElementAt (i - 1);
-                            // Put in null as placeholder, to be removed below
-                            v.set(i, null);
-                            v.set(i - 1, null);
-                            lowestChanged = i - 1;
-                            i -= 2;
-                        }
-                        catch (Exception e) {
-                            throw new PdfMalformedException 
-                                (MessageConstants.PDF_HUL_44); // PDF-HUL-44
-                        }
+                if (tok instanceof Keyword && "R".equals (((Keyword)tok).getValue ())) {
+                    // We're in the key of 'R'.  The two previous tokens
+                    // had better be Numerics.  Three objects in the Vector
+                    // are replaced by one.
+                    try {
+                        PdfSimpleObject nobj =
+                                (PdfSimpleObject) v.elementAt (i - 2);
+                        Numeric ntok = (Numeric) nobj.getToken ();
+                        int objNum = ntok.getIntegerValue ();
+                        nobj = (PdfSimpleObject) v.elementAt (i - 1);
+                        ntok = (Numeric) nobj.getToken ();
+                        int genNum = ntok.getIntegerValue ();
+                        v.set (i - 2, new PdfIndirectObj
+                                (objNum, genNum, _objectMap));
+                        //v.removeElementAt (i);
+                        //v.removeElementAt (i - 1);
+                        // Put in null as placeholder, to be removed below
+                        v.set(i, null);
+                        v.set(i - 1, null);
+                        lowestChanged = i - 1;
+                        i -= 2;
+                    }
+                    catch (Exception e) {
+                        throw new PdfMalformedException 
+                            (MessageConstants.PDF_HUL_44); // PDF-HUL-44
                     }
                 }
             }
