@@ -69,5 +69,9 @@ find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <output
 find "${targetRoot}" -type f -name "audit-JPEG2000-hul.jhove.xml" -exec sed -i 's/^  <release>1.4.1<\/release>$/  <release>1.4.2<\/release>/' {} \;
 find "${targetRoot}" -type f -name "audit-JPEG2000-hul.jhove.xml" -exec sed -i 's/^  <date>2019-04-17<\/date>$/  <date>2019-10-18<\/date>/' {} \;
 
-find  "${targetRoot}" -type f -name "audit-TIFF-hul.jhove.xml" -exec xmlstarlet ed --inplace -P -N 'ns=http://schema.openpreservation.org/ois/xml/ns/jhove' -d '//ns:identifiers[.//ns:identifier//ns:value[text()="http://hul.harvard.edu/jhove/references.html#classf" ]]' {} \;
+find  "${targetRoot}" -type f -name "audit-TIFF-hul.jhove.xml" -exec xmlstarlet ed --inplace -N 'ns=http://schema.openpreservation.org/ois/xml/ns/jhove' -d '//ns:identifiers[.//ns:identifier//ns:value[text()="http://hul.harvard.edu/jhove/references.html#classf" ]]' {} \;
 find  "${targetRoot}" -type f -name "audit-TIFF-hul.jhove.xml" -exec sed -i '/^    $/d' {} \;
+
+# Remove new SHA-256 values
+find  "${candidateRoot}" -type f -name "*.jhove.xml" -exec xmlstarlet ed --inplace -N 'ns=http://schema.openpreservation.org/ois/xml/ns/jhove' -d '//ns:checksums//ns:checksum[@type = "SHA-256"]' {} \;
+find  "${targetRoot}" -type f -name "*.jhove.xml" -exec xmlstarlet ed --inplace -N 'ns=http://schema.openpreservation.org/ois/xml/ns/jhove' -d '//ns:checksums//ns:checksum[@type = "SHA-256"]' {} \;
