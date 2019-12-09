@@ -100,11 +100,8 @@ public class NameTreeNode
         if (_upperLimit == null) {
             return true;    // no upper limit is specified
         }
-        if (compareKey (key, _lowerLimit) < 0 || 
-            compareKey (key, _upperLimit) > 0) {
-            return false;
-        }
-        return true;
+        return !(compareKey (key, _lowerLimit) < 0 || 
+                compareKey (key, _upperLimit) > 0);
     }
     
     

@@ -85,11 +85,9 @@ public class HtmlAttributeDesc {
             // An attribute without a value is permitted only when
             // there is only one legal value, and that equals the 
             // attribute's name.
-            if (_permittedValues.length == 1 &&
-                _permittedValues[0].equals (name)) {
-                    return true;
-                }
-            return false;
+            
+            return _permittedValues.length == 1 &&
+                    _permittedValues[0].equals (name);
         }
         else {
             value = value.toLowerCase ();

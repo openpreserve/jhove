@@ -73,7 +73,7 @@ public class JHOpenTag extends JHElement {
     /**
      *  Constructor with error message.
      *  This is used to allow constructs which are erroneous but common --
-     *  specifically, the closing of a tag with "/&gt".  
+     *  specifically, the closing of a tag with {@code />}.
      * 
      *  @param   elements     The list of parsed elements, to which
      *                        this gets added.  May be null for a stub
@@ -430,10 +430,8 @@ public class JHOpenTag extends JHElement {
             JHAttribute attr = (JHAttribute) iter.next ();
             String attname = attr.getName ();
             String attval = attr.getValue ();
-            if ("type".equals (attname)) {
-                if (attval.length() > 0 ) {
-                    mdata.addScript (attval);
-                }
+            if ("type".equals (attname) && attval.length() > 0 ) {
+                mdata.addScript (attval);
             }
         }
     }

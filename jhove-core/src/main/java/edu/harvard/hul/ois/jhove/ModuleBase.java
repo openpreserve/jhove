@@ -16,12 +16,9 @@ import java.util.logging.*;
  * This class is an abstract implementation of the Module interface.
  * It contains all the methods required for a Module, but doesn't
  * do anything by itself. A subclass should provide a functional
- * implmentation of
- * <code>parse (InputStream stream, RepInfo info, int parseIndex)</code>
- * if it is not random access, or
- * <code>parse (RandomAccessFile file, RepInfo info)</code>
+ * implementation of {@code parse(InputStream, RepInfo, int)}
+ * if it is not random access, or {@code parse(RandomAccessFile, RepInfo)}
  * if it is random access.
- * 
  */
 public abstract class ModuleBase implements Module {
 	/******************************************************************
@@ -103,7 +100,7 @@ public abstract class ModuleBase implements Module {
 
 	/**
 	 * Constructors of all subclasses of ModuleBase should call
-	 * this as a <code>super</code> constructor.
+	 * this as a {@code super} constructor.
 	 *
 	 * @param name
 	 *            Name of the module
@@ -112,9 +109,9 @@ public abstract class ModuleBase implements Module {
 	 * @param date
 	 *            Last modification date of the module code,
 	 *            in the form of an array of three numbers.
-	 *            <code>date[0]</code> is the year,
-	 *            <code>date[1]</code> the month, and
-	 *            <code>date[2]</code> the day.
+	 *            {@code date[0]} is the year,
+	 *            {@code date[1]} the month, and
+	 *            {@code date[2]} the day.
 	 * @param format
 	 *            Array of format names supported by the module
 	 * @param coverage
@@ -137,8 +134,8 @@ public abstract class ModuleBase implements Module {
 	 * @param rights
 	 *            Copyright notice for the module
 	 * @param isRandomAccess
-	 *            <code>true</code> if the module treats content as
-	 *            random-access data, <false> if it treats content
+	 *            {@code true} if the module treats content as
+	 *            random-access data, {@code false} if it treats content
 	 *            as stream data
 	 */
 	protected ModuleBase(String name, String release, int[] date,
@@ -806,7 +803,7 @@ public abstract class ModuleBase implements Module {
 	}
 
 	/**
-	 * Set the checksum values.
+	 * Sets the checksum values.
 	 * 
 	 * @param ckSummer
 	 *            Checksummer object
@@ -852,7 +849,7 @@ public abstract class ModuleBase implements Module {
 	 ******************************************************************/
 
 	/**
-	 * Returns an Property representing an integer value.
+	 * Returns a Property representing an integer value.
 	 * If raw output is specified for the module, returns
 	 * an INTEGER property, and <code>labels</code> and
 	 * <code>index</code> are unused. Otherwise,
@@ -885,7 +882,7 @@ public abstract class ModuleBase implements Module {
 	}
 
 	/**
-	 * Returns an Property representing an integer value.
+	 * Returns a Property representing an integer value.
 	 * If raw output is specified for the module, returns
 	 * an INTEGER property, and <code>labels</code> and
 	 * <code>index</code> are unused. Otherwise,

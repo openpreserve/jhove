@@ -90,9 +90,6 @@ public final class TiffProfileClassITLWP1 extends TiffProfileClassIT
         }
 
         int numInks = tifd.getNumberOfInks ();
-        if (numInks != 4 || numInks != niso.getSamplesPerPixel ()) {
-            return false;
-        }
-        return true;
+        return !(numInks != 4 || numInks != niso.getSamplesPerPixel ());
     }
 }

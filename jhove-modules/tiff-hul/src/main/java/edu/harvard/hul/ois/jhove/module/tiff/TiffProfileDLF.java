@@ -31,11 +31,9 @@ public abstract class TiffProfileDLF extends TiffProfile
             return false;
         }
         TiffIFD tifd = (TiffIFD) ifd;
+        // passed all tests
 
-        if (!satisfiesPhotometricInterpretation (tifd, new int[] {0, 1} )) {
-            return false;
-        }
-        return true;       // passed all tests
+        return satisfiesPhotometricInterpretation (tifd, new int[] {0, 1} );       
     }
 
     /** Checks for minimum X and Y resolution.
@@ -62,18 +60,17 @@ public abstract class TiffProfileDLF extends TiffProfile
         }
 
         int resUnit = niso.getSamplingFrequencyUnit ();
-        if (resUnit == 2) {
-            if (xrat.toDouble() < minUnit2Res || yrat.toDouble() < minUnit2Res) {
-                return false;
-            }
-        }
-        else if (resUnit == 3) {
-            if (xrat.toDouble() < minUnit3Res || yrat.toDouble() < minUnit3Res) {
-                return false;
-            }
-        }
-        else {
-            return false;  // resUnit must be 2 or 3
+        switch (resUnit) {
+            case 2:
+                if (xrat.toDouble() < minUnit2Res || yrat.toDouble() < minUnit2Res) {
+                    return false;
+                }   break;
+            case 3:
+                if (xrat.toDouble() < minUnit3Res || yrat.toDouble() < minUnit3Res) {
+                    return false;
+                }   break;
+            default:
+                return false;  // resUnit must be 2 or 3
         }
 
         return true;       // passed all tests
