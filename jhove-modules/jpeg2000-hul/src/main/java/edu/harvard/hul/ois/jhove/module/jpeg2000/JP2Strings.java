@@ -16,15 +16,6 @@ package edu.harvard.hul.ois.jhove.module.jpeg2000;
  */
 public final class JP2Strings {
     
-    /**
-     *  Private constructor, to make sure the class isn't inadvertently
-     *  initiated.
-     */
-    private JP2Strings ()
-    {
-    }
-
-
     /** Strings for method values in the color specification box. */
     public final static String methodStr[] = {
         "",
@@ -143,4 +134,13 @@ public final class JP2Strings {
     
     /** Indexes for approxStr. */
     public final static int approxIdx[] = {1, 2, 3, 4};
+    
+    /**
+     *  Private constructor, to make sure the class isn't inadvertently
+     *  initiated.
+     */
+    private JP2Strings ()
+    {
+    }
+
 }

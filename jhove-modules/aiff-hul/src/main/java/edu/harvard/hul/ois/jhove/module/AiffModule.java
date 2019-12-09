@@ -17,7 +17,6 @@ import java.util.List;
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.Agent.Builder;
 import edu.harvard.hul.ois.jhove.messages.*;
-import edu.harvard.hul.ois.jhove.module.*;
 import edu.harvard.hul.ois.jhove.module.aiff.*;
 import edu.harvard.hul.ois.jhove.module.aiff.MessageConstants;
 import edu.harvard.hul.ois.jhove.module.iff.*;

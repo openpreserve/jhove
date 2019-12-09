@@ -61,12 +61,9 @@ public class TiffProfileExifThumb extends TiffProfile {
         if (!satisfiesCompression (tifd, new int [] {1, 6} )) {
             return false;
         }
-        
         // If the main IFD is uncompressed, the thumbnail must be too
-        if (mainCompression == 1 && 
-              tifd.getNisoImageMetadata().getCompressionScheme() != 1) {
-            return false;
-        }
-        return true;
+        
+        return !(mainCompression == 1 && 
+                tifd.getNisoImageMetadata().getCompressionScheme() != 1);
     }
 }

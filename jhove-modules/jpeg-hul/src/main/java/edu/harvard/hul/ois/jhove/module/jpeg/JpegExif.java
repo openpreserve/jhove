@@ -137,22 +137,20 @@ public final class JpegExif {
             NisoImageMetadata niso = null;
             while (iter.hasNext()) {
                 Object ifd = iter.next ();
-                if (ifd instanceof TiffIFD) {
+                if (ifd instanceof TiffIFD && first) {
                     // The TIFF IFD has useful information, which gets put
                     // into its NISO metadata.  Make it available to the caller.
-                    if (first) {
-                    	TiffIFD tifd = (TiffIFD)ifd;
-                        niso = tifd.getNisoImageMetadata ();
-                        // The first one is presumed to be the interesting one.
-                        info.setProperty (new Property ("NisoImageMetadata",
-                                               PropertyType.NISOIMAGEMETADATA,
-                                               niso));
-                        haveNisoMetadata = true;
-                        TiffProfileExif exifProfile = new TiffProfileExif ();
-                        _exifProfileOK = exifProfile.satisfiesProfile (tifd);
-                        if (_exifProfileOK) {
-                        	_profileText = exifProfile.getText();
-                        }
+                    TiffIFD tifd = (TiffIFD)ifd;
+                    niso = tifd.getNisoImageMetadata ();
+                    // The first one is presumed to be the interesting one.
+                    info.setProperty (new Property ("NisoImageMetadata",
+                                           PropertyType.NISOIMAGEMETADATA,
+                                           niso));
+                    haveNisoMetadata = true;
+                    TiffProfileExif exifProfile = new TiffProfileExif ();
+                    _exifProfileOK = exifProfile.satisfiesProfile (tifd);
+                    if (_exifProfileOK) {
+                            _profileText = exifProfile.getText();
                     }
                 }
                 if (ifd instanceof ExifIFD) {
