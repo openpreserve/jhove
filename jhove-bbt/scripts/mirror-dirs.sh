@@ -33,6 +33,7 @@ paramVerbose=false
 glbCleanedBackRet=""
 
 # Include utils script
+# shellcheck source=inc/bb-utils.sh
 . "$SCRIPT_DIR/inc/bb-utils.sh"
 
 # Check the passed params to avoid disapointment

@@ -38,10 +38,6 @@ public final class TiffProfilePhotoshop extends TiffProfile
 	    return true;
 	}
 
-	if (tifd.getImageSourceData () != null) {
-	    return true;
-	}
-
-	return false;
+	return tifd.getImageSourceData () != null;
     }
 }

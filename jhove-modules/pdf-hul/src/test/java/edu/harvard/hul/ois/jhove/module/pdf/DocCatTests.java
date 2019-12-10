@@ -15,8 +15,8 @@ import edu.harvard.hul.ois.jhove.module.TestUtils;
  *         <a href="https://github.com/carlwilson">carlwilson AT github</a>
  * @version 0.1 Created 13 Mar 2018:18:17:45
  */
-
 public class DocCatTests {
+
 	private static final String pdfResourcePath = "/edu/harvard/hul/ois/jhove/module/pdf/";
 	private static final String docCatResourcePath = pdfResourcePath + "doc-cat/";
 
@@ -50,18 +50,16 @@ public class DocCatTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
+	 * Test method for {@link PdfModule}.
 	 */
 	@Test
 	public final void testValidCatType() throws URISyntaxException {
-		TestUtils.testValidateResource(this.module, minimalPdfPath, RepInfo.TRUE,
-				RepInfo.TRUE, null);
+		TestUtils.testValidateResource(this.module, minimalPdfPath,
+				RepInfo.TRUE, RepInfo.TRUE, null);
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
+	 * Test method for {@link PdfModule}.
 	 */
 	@Test
 	public final void testNoCat() throws URISyntaxException {
@@ -70,18 +68,17 @@ public class DocCatTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
+	 * Test method for {@link PdfModule}.
 	 */
 	@Test
 	public final void testCatWrongObjNum() throws URISyntaxException {
-		TestUtils.testValidateResource(this.module, catWrongObjNumberPath, RepInfo.FALSE,
-				RepInfo.FALSE, MessageConstants.PDF_HUL_140.getMessage());
+		TestUtils.testValidateResource(this.module, catWrongObjNumberPath,
+				RepInfo.FALSE, RepInfo.FALSE,
+				MessageConstants.PDF_HUL_140.getMessage());
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
+	 * Test method for {@link PdfModule}.
 	 */
 	@Test
 	public final void testPagRefMiss() throws URISyntaxException {
@@ -91,8 +88,7 @@ public class DocCatTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
+	 * Test method for {@link PdfModule}.
 	 */
 	@Test
 	public final void testPageRefIncorrect() throws URISyntaxException {
@@ -102,18 +98,17 @@ public class DocCatTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
+	 * Test method for {@link PdfModule}.
 	 */
 	@Test
 	public final void testCatTypeKeyMiss() throws URISyntaxException {
-		TestUtils.testValidateResource(this.module, catTypeKyMissPath, RepInfo.FALSE,
-				RepInfo.FALSE, MessageConstants.PDF_HUL_85.getMessage());
+		TestUtils.testValidateResource(this.module, catTypeKyMissPath,
+				RepInfo.FALSE, RepInfo.FALSE,
+				MessageConstants.PDF_HUL_85.getMessage());
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
+	 * Test method for {@link PdfModule}.
 	 */
 	@Test
 	public final void testCatTypeVal() throws URISyntaxException {
@@ -123,23 +118,22 @@ public class DocCatTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
+	 * Test method for {@link PdfModule}.
 	 */
 	@Test
 	public final void testCatTypeKeyValMiss() throws URISyntaxException {
-		TestUtils.testValidateResource(this.module, catTypeKyValPairMissPath, RepInfo.FALSE,
-				RepInfo.FALSE, MessageConstants.PDF_HUL_36.getMessage());
+		TestUtils.testValidateResource(this.module, catTypeKyValPairMissPath,
+				RepInfo.FALSE, RepInfo.FALSE,
+				MessageConstants.PDF_HUL_36.getMessage());
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule}.
+	 * Test method for {@link PdfModule}.
 	 */
 	@Test
 	public final void testOneByteMiss() throws URISyntaxException {
-		TestUtils.testValidateResource(this.module, oneByteMissingPath, RepInfo.FALSE,
-				RepInfo.FALSE, MessageConstants.PDF_HUL_140.getMessage());
+		TestUtils.testValidateResource(this.module, oneByteMissingPath,
+				RepInfo.FALSE, RepInfo.FALSE,
+				MessageConstants.PDF_HUL_140.getMessage());
 	}
-
 }

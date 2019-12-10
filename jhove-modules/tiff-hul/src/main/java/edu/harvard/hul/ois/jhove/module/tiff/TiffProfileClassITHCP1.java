@@ -93,19 +93,14 @@ public final class TiffProfileClassITHCP1 extends TiffProfileClassIT
         if (trans != 0 && trans != 1) {
             return false;
         }
-
         // The tags DocumentName, Model, PageName, HostComputer, 
         // Site, and ColorSequence must NOT be defined
-        
-        if (tifd.getDocumentName () != null ||
-	    niso.getScannerModelName () != null ||
-	    tifd.getPageName () != null ||
-	    niso.getHostComputer () != null ||
-	    tifd.getSite () != null ||
-	    tifd.getColorSequence () != null) {
-            return false;
-        }
 
-        return true;
+        return !(tifd.getDocumentName () != null ||
+                niso.getScannerModelName () != null ||
+                tifd.getPageName () != null ||
+                niso.getHostComputer () != null ||
+                tifd.getSite () != null ||
+                tifd.getColorSequence () != null);
     }
 }

@@ -112,6 +112,21 @@ public class CODMarkerSegment extends MarkerSegment {
                     PropertyArity.LIST,
                     propList));
 
+        // The transformation property is 0 = "9-7 irreversible", 1= "5-3 reversible"
+        NisoImageMetadata niso = _module.getCurrentNiso ();
+        switch (xform) {
+        case 0:
+        	niso.setCompressionScheme(NisoImageMetadata.COMPRESSION_JPEG2000_LOSSY);
+        	break;
+        case 1:
+        	niso.setCompressionScheme(NisoImageMetadata.COMPRESSION_JPEG2000_LOSSLESS);
+        	break;
+        default:
+        	// let the nisoDefault works
+        }
+        niso.setJp2Layers(nLayers);
+        niso.setJp2ResolutionLevels(nDecomp);
+        
         return true;
     }
 
