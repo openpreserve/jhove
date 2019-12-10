@@ -9,70 +9,64 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 
 /**
  * This class encapsulates an informational message from a Module, giving
- * information (not necessarily a problem)
- * about the content being analyzed or the way that Jhove
- * deals with it.
+ * information (not necessarily a problem) about the content being analyzed
+ * or the way that JHOVE deals with it.
  */
 public class InfoMessage extends Message {
-	/******************************************************************
-	 * CLASS CONSTRUCTOR.
-	 ******************************************************************/
+
 	private static final String prefix = "Info";
+
 	/**
-	 * Create an InfoMessage.
+	 * Creates an InfoMessage.
 	 * 
 	 * @param message
-	 *            Human-readable string giving the information.
+	 *            Human-readable message giving the information.
 	 */
 	public InfoMessage(String message) {
 		super(message);
 	}
 
 	/**
-	 * Create an InfoMessage.
+	 * Creates an InfoMessage with an identifier.
 	 * 
-	 * @param id
-	 *            Unique ID (within the module) for the message
 	 * @param message
-	 *            Human-readable string giving the information.
+	 *            The message text and its identifier.
 	 */
 	public InfoMessage(JhoveMessage message) {
 		super(message);
 	}
 
 	/**
-	 * Create an InfoMessage.
+	 * Creates an InfoMessage.
 	 * 
 	 * @param message
-	 *            Human-readable string giving the information.
+	 *            Human-readable message giving the information.
 	 * @param offset
 	 *            The offset in the file relevant to the
-	 *            situation being described
+	 *            situation being described.
 	 */
 	public InfoMessage(String message, long offset) {
 		super(message, offset);
 	}
 
 	/**
-	 * Create an InfoMessage.
+	 * Creates an InfoMessage with an identifier.
 	 * 
-	 * @param id
-	 *            Unique ID (within the module) for the message
 	 * @param message
-	 *            Human-readable string giving the information.
+	 *            The message text and its identifier.
 	 * @param offset
 	 *            The offset in the file relevant to the
-	 *            situation being described
+	 *            situation being described.
 	 */
 	public InfoMessage(JhoveMessage message, long offset) {
 		super(message, offset);
 	}
 
 	/**
-	 * Create an InfoMessage.
+	 * Creates an InfoMessage.
 	 * 
 	 * @param message
-	 *            Human-readable string giving the information.
+	 *            Human-readable message giving the information.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 */
@@ -81,12 +75,10 @@ public class InfoMessage extends Message {
 	}
 
 	/**
-	 * Create an InfoMessage.
+	 * Creates an InfoMessage with an identifier.
 	 * 
-	 * @param id
-	 *            Unique ID (within the module) for the message
 	 * @param message
-	 *            Human-readable string giving the information.
+	 *            The message text and its identifier.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 */
@@ -95,32 +87,30 @@ public class InfoMessage extends Message {
 	}
 
 	/**
-	 * Create an InfoMessage.
+	 * Creates an InfoMessage.
 	 * 
 	 * @param message
-	 *            Human-readable string giving the information.
+	 *            Human-readable message giving the information.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 * @param offset
 	 *            The offset in the file relevant to the
-	 *            situation being described
+	 *            situation being described.
 	 */
 	public InfoMessage(String message, String subMessage, long offset) {
 		super(message, subMessage, offset);
 	}
 
 	/**
-	 * Create an InfoMessage.
+	 * Creates an InfoMessage with an identifier.
 	 * 
-	 * @param id
-	 *            Unique ID (within the module) for the message
 	 * @param message
-	 *            Human-readable string giving the information.
+	 *            The message text and its identifier.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 * @param offset
 	 *            The offset in the file relevant to the
-	 *            situation being described
+	 *            situation being described.
 	 */
 	public InfoMessage(JhoveMessage message, String subMessage, long offset) {
 		super(message, subMessage, offset);

@@ -6,7 +6,7 @@
 package edu.harvard.hul.ois.jhove.module.jpeg2000;
 
 import java.io.*;
-import java.util.*;
+
 import edu.harvard.hul.ois.jhove.*;
 
 /**
@@ -44,50 +44,49 @@ public class DDResolutionBox extends JP2Box {
             wrongBoxContext();
             return false;
         }
-        // The information consists of two values, horizontal and
-        // vertical, with numerator, denominator, and exponent,
-        // in dots per meter.  Not clear whether to present this 
-        // as raw data, turn it into a dots/cm rational, or what.
-        // I'll put it up as raw data for now.
-        List vresList = new ArrayList(3);
-        List hresList = new ArrayList(3);
-        vresList.add (new Property ("Numerator",
-                PropertyType.INTEGER,
-                new Integer (_module.readUnsignedShort (_dstrm))));
-        vresList.add (new Property ("Denominator",
-                PropertyType.INTEGER,
-                new Integer (_module.readUnsignedShort (_dstrm))));
-        hresList.add (new Property ("Numerator",
-                PropertyType.INTEGER,
-                new Integer (_module.readUnsignedShort (_dstrm))));
-        hresList.add (new Property ("Denominator",
-                PropertyType.INTEGER,
-                new Integer (_module.readUnsignedShort (_dstrm))));
-        vresList.add (new Property ("Exponent",
-                PropertyType.INTEGER,
-                new Integer (ModuleBase.readSignedByte (_dstrm, _module))));
-        hresList.add (new Property ("Exponent",
-                PropertyType.INTEGER,
-                new Integer (ModuleBase.readSignedByte (_dstrm, _module))));
-        // The three properties for each direction are subsumed into
-        // a property.
-        Property hres = new Property ("HorizResolution",
-                PropertyType.PROPERTY,
-                PropertyArity.LIST,
-                hresList);
-        Property vres = new Property ("VertResolution",
-                PropertyType.PROPERTY,
-                PropertyArity.LIST,
-                vresList);
+        
+        // Vertical Capture grid resolution num & denom
+        int vrcNum = _module.readUnsignedShort (_dstrm);
+        int vrcDenom = _module.readUnsignedShort (_dstrm);
+        
+        // Horizontal Capture grid resolution num & denom
+        int hrcNum = _module.readUnsignedShort (_dstrm);
+        int hrcDenom = _module.readUnsignedShort (_dstrm);
+        
+        // Vertical and Horizontal capture grid exponents
+        int vrcExp = ModuleBase.readUnsignedByte (_dstrm, _module);
+        int hrcExp = ModuleBase.readUnsignedByte (_dstrm, _module);
+        
         // And the two resolution properties are subsumed into
         // one property for the Module.
         Property[] topProps = new Property[2];
-        topProps[0] = hres;
-        topProps[1] = vres;
+        topProps[0] = ResolutionBox.makeResolutionProperty("HorizResolution", 
+        		hrcNum, hrcDenom, hrcExp);
+        topProps[1] = ResolutionBox.makeResolutionProperty("VertResolution", 
+        		vrcNum, vrcDenom, vrcExp);
         _module.addProperty(new Property ("DefaultDisplayResolution",
                 PropertyType.PROPERTY,
                 PropertyArity.ARRAY,
                 topProps));
+        
+        // If the resolution is not set by a CaptureResolutionBox, we assign it
+        // We need to set resolution in NisoImageMetadata
+        // as a Rational.  It seems unlikely that negative
+        // exponents will be used (signifying resolutions
+        // less than 1 dpi), so we figure the exponent into
+        // the numerator.  Also, this resolution is in 
+        // dots per meter, which isn't a NISO standard unit,
+        // so we multiply the denominator by 100 to give
+        // units per centimeter.
+        NisoImageMetadata niso = _module.getCurrentNiso ();
+        if (niso.getXSamplingFrequency() == null) {
+            Rational vrc = ResolutionBox.convertToRational(vrcNum, vrcDenom, vrcExp);
+            Rational hrc = ResolutionBox.convertToRational(hrcNum, hrcDenom, hrcExp); 
+	        niso.setYSamplingFrequency (vrc);
+	        niso.setXSamplingFrequency (hrc);
+	        final int RESOLUTION_UNIT_CM = 3;
+	        niso.setSamplingFrequencyUnit (RESOLUTION_UNIT_CM);
+        }
         finalizeBytesRead ();
         return true;
     }

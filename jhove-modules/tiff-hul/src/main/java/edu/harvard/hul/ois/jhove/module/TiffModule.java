@@ -121,8 +121,8 @@ public class TiffModule extends ModuleBase {
     protected Logger _logger;
 
     private static final String NAME = "TIFF-hul";
-    private static final String RELEASE = "1.9.1";
-    private static final int [] DATE = { 2019, 04, 17 };
+    private static final String RELEASE = "1.10.1";
+    private static final int [] DATE = { 2019, 12, 10 };
     private static final String[] FORMAT = { "TIFF", "Tagged Image File Format" };
     private static final String COVERAGE = "TIFF 4.0, 5.0, and 6.0; "
             + "TIFF/IT (ISO/DIS 12639:2003), including file types CT, LW, HC, MP, "
@@ -323,9 +323,6 @@ public class TiffModule extends ModuleBase {
         doc.setPublisher(agent);
         doc.setDate("1990-04-28");
         doc.setNote("Cygnet is no longer in business");
-        ident = new Identifier("http://hul.harvard.edu/jhove/"
-                + "references.html#classf", IdentifierType.URL);
-        doc.setIdentifier(ident);
         _specification.add(doc);
 
         // Define IETF Class F doc, with IETF agent Added 2/2/04
@@ -575,10 +572,8 @@ public class TiffModule extends ModuleBase {
                 ListIterator<TiffProfile> pter = _profile.listIterator();
                 while (pter.hasNext()) {
                     TiffProfile prof = pter.next();
-                    if (!prof.isAlreadyOK()) {
-                        if (prof.satisfiesProfile(ifd)) {
+                    if (!prof.isAlreadyOK() && prof.satisfiesProfile(ifd)) {
                             info.setProfile(prof.getText());
-                        }
                     }
                 }
 
@@ -630,7 +625,11 @@ public class TiffModule extends ModuleBase {
             info.setProperty(new Property("TIFFMetadata",
                     PropertyType.PROPERTY, PropertyArity.ARRAY, tiffMetadata));
         } catch (TiffException e) {
-            info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+            if (e.getJhoveMessage() != null) { // try to keep the id
+              info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
+            } else {
+              info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+            }
             info.setWellFormed(false);
             return;
         } catch (IOException e) {
@@ -987,30 +986,24 @@ public class TiffModule extends ModuleBase {
                     info);
         }
         int[] bitsPerSample = niso.getBitsPerSample();
-        if (photometricInterpretation == 4) {
-            if (samplesPerPixel < 1 || bitsPerSample[0] != 1) {
+        if (photometricInterpretation == 4 && (samplesPerPixel < 1 || bitsPerSample[0] != 1)) {
                 reportInvalid(MessageConstants.TIFF_HUL_41, info);
-            }
         }
 
         /* Samples per pixel. */
 
-        if (photometricInterpretation == 0 || photometricInterpretation == 1
+        if ((photometricInterpretation == 0 || photometricInterpretation == 1
                 || photometricInterpretation == 3
-                || photometricInterpretation == 4) {
-            if (samplesPerPixel < 1) {
+                || photometricInterpretation == 4) && samplesPerPixel < 1) {
                 String mess = MessageFormat.format(MessageConstants.TIFF_HUL_42.getMessage(), samplesPerPixel);
                 JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_42.getId(), mess);
                 reportInvalid(message, info);
-            }
         }
-        if (photometricInterpretation == 2 || photometricInterpretation == 6
-                || photometricInterpretation == 8) {
-            if (samplesPerPixel < 3) {
+        if ((photometricInterpretation == 2 || photometricInterpretation == 6
+                || photometricInterpretation == 8) && samplesPerPixel < 3) {
                 String mess = MessageFormat.format(MessageConstants.TIFF_HUL_43.getMessage(), samplesPerPixel);
                 JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_43.getId(), mess);
                 reportInvalid(message, info);
-            }
         }
 
         /* Palette color. */
@@ -1085,11 +1078,9 @@ public class TiffModule extends ModuleBase {
 
         /* Clipping path. */
 
-        if (ifd.getClipPath() != null) {
-            if (ifd.getXClipPathUnits() == IFD.NULL) {
-                reportInvalid(MessageConstants.TIFF_HUL_52,
+        if (ifd.getClipPath() != null && ifd.getXClipPathUnits() == IFD.NULL) {
+            reportInvalid(MessageConstants.TIFF_HUL_52,
                         info);
-            }
         }
 
         /* Date. */

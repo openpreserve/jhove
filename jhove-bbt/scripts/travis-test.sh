@@ -11,7 +11,7 @@ export SCRIPT_DIR
 TEST_ROOT="./test-root"
 TEST_BASELINES_ROOT="${TEST_ROOT}/baselines"
 TEST_INSTALL_ROOT="${TEST_ROOT}/jhove"
-CANDIADATE_ROOT="${TEST_ROOT}/candidates"
+CANDIDATE_ROOT="${TEST_ROOT}/candidates"
 TARGET_ROOT="${TEST_ROOT}/targets"
 BASELINE_VERSION=1.22
 
@@ -41,10 +41,10 @@ else
 fi
 
 # Create the JHOVE baseline installation root if it doesn't exist
-[[ -d "${CANDIADATE_ROOT}" ]] || mkdir -p "${CANDIADATE_ROOT}"
+[[ -d "${CANDIDATE_ROOT}" ]] || mkdir -p "${CANDIDATE_ROOT}"
 
 # Set up the temp install location for JHOVE development
-tempInstallLoc="/tmp/to-test";
+tempInstallLoc="/var/tmp/to-test";
 if [[ -d "${tempInstallLoc}" ]]; then
 	rm -rf "${tempInstallLoc}"
 fi
@@ -69,32 +69,14 @@ fi
 echo "INFO: Installing the development build of the Jhove installer to ${tempInstallLoc}."
 installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
 
-[[ -d "${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}" ]] || mkdir -p "${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}"
-
-echo "INFO: Checking baseline data for target Jhove: ${MAJOR_MINOR_VER}."
-if [[ ! -d "${TARGET_ROOT}/${MAJOR_MINOR_VER}" ]]
-then
-	echo " - INFO: Generating the baseline for ${MAJOR_MINOR_VER} at: ${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}."
-	sed -i 's/^java.*/java -Xss2048k -Xms2g -Xmx4g -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.9\/org\.jacoco.agent-0\.7\.9-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
-	bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${TEST_ROOT}/corpora" -o "${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}"
-fi
-
-if [[ -f "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" ]]
-then
-	echo " - INFO: applying the baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}"
-	bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "${BASELINE_VERSION}" -c "${MAJOR_MINOR_VER}"
-else
-	echo " - ERROR: no bash script found for baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
-	exit 1
-fi
+[[ -d "${CANDIDATE_ROOT}/${MAJOR_MINOR_VER}" ]] || mkdir -p "${CANDIDATE_ROOT}/${MAJOR_MINOR_VER}"
 
 cat "${tempInstallLoc}/jhove"
 echo ""
 echo "Testing ${MAJOR_MINOR_VER}."
 echo "=========================="
 echo " - using development JHOVE installer: ${TEST_ROOT}/targets/${MAJOR_MINOR_VER}."
-echo "java -Xms2g -Xmx8g -jar jhove-bbt/jhove-bbt.jar -b ${TEST_ROOT}/targets/${MAJOR_MINOR_VER} -c ${CANDIADATE_ROOT}/${MAJOR_MINOR_VER} -k dev-${MAJOR_MINOR_VER} -i"
-java -Xms2g -Xmx8g -jar "jhove-bbt/jhove-bbt.jar" -b "${TEST_ROOT}/targets/${MAJOR_MINOR_VER}" -c "${CANDIADATE_ROOT}/${MAJOR_MINOR_VER}" -k "dev-${MAJOR_MINOR_VER}" -i
+bash "${SCRIPT_DIR}/bbt-jhove.sh" -b "${TEST_ROOT}/targets/${MAJOR_MINOR_VER}" -c "${TEST_ROOT}/corpora" -j . -o "${TEST_ROOT}/candidates" -k "${MAJOR_MINOR_VER}" -i
 exitStatus=$?
 echo ""
 echo "RESULTS"

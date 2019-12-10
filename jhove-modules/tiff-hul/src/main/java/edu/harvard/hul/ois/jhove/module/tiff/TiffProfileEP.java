@@ -116,33 +116,26 @@ public class TiffProfileEP extends TiffProfile
 	 * are compatible. 
 	 */
 	int samplesPerPixel = niso.getSamplesPerPixel ();
-	if (pInterpretation == 1 || pInterpretation == 32803) {
-	    if (samplesPerPixel != 1) {
-		return false;
-	    }
+	if ((pInterpretation == 1 || pInterpretation == 32803) && 
+                samplesPerPixel != 1) {
 	}
-	if (pInterpretation == 2 || pInterpretation == 6) {
-	    if (samplesPerPixel != 3) {
-		return false;
-	    }
+	if ((pInterpretation == 2 || pInterpretation == 6) && 
+                samplesPerPixel != 3) {
 	}
-	if (pInterpretation == 6) {
-	    if (niso.getYCbCrCoefficients() == null ||
+	if (pInterpretation == 6 && (niso.getYCbCrCoefficients() == null ||
 		niso.getYCbCrSubSampling () == null ||
 		niso.getYCbCrPositioning () == NisoImageMetadata.NULL ||
-		niso.getReferenceBlackWhite () == null) {
-		    return false;
-	    }
+		niso.getReferenceBlackWhite () == null)) {
+            return false;
 	}
 	// meteringMode and exposureProgram checks deleted, per Bugzilla #33
 	
 	int compression = niso.getCompressionScheme ();
-	if (compression != NisoImageMetadata.NULL) {
         // Corrected 6-Jan-04 per Bugzilla #33
-	    if (!(compression == 1 || compression == 7 ||
+	if (compression != NisoImageMetadata.NULL && 
+                !(compression == 1 || compression == 7 || 
 		  compression > 32767)) {
-		return false;
-	    }
+            return false;
 	}
 	return true;
     }
