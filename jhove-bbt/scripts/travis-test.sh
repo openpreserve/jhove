@@ -50,6 +50,7 @@ if [[ -d "${tempInstallLoc}" ]]; then
 fi
 
 # Create the test target root if it doesn't exist
+[[ -d "${TARGET_ROOT}" ]] && rm -rf "${TARGET_ROOT:?}/"*
 [[ -d "${TARGET_ROOT}" ]] || mkdir -p "${TARGET_ROOT}"
 
 # Grab the Major and Minor versions from the full Maven project version string
@@ -70,6 +71,7 @@ installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
 
 [[ -d "${CANDIDATE_ROOT}/${MAJOR_MINOR_VER}" ]] || mkdir -p "${CANDIDATE_ROOT}/${MAJOR_MINOR_VER}"
 
+cat "${tempInstallLoc}/jhove"
 echo ""
 echo "Testing ${MAJOR_MINOR_VER}."
 echo "=========================="
