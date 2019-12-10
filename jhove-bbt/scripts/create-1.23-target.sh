@@ -54,6 +54,22 @@ echo "Executing baseline update"
 # Copying baseline for now we're not making any changes
 cp -R "${baselineRoot}" "${targetRoot}"
 
+# Copy AIFF files across for new AES metadata see https://github.com/openpreserve/jhove/pull/518
+if [[ -d "${candidateRoot}/examples/modules/AIFF-hul" ]]; then
+	echo "Copying valid AIFF examples."
+	cp -Rf "${candidateRoot}/examples/modules/AIFF-hul" "${targetRoot}/examples/modules/"
+fi
+
+# Copy JPEG files across for new AES metadata see https://github.com/openpreserve/jhove/pull/518
+if [[ -d "${candidateRoot}/examples/modules/JPEG-hul" ]]; then
+	echo "Copying valid JPEG examples."
+	cp -Rf "${candidateRoot}/examples/modules/JPEG-hul" "${targetRoot}/examples/modules/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/audit-JPEG-hul.jhove.xml" ]]; then
+	echo "Copying JPEG audit file."
+	cp -Rf "${candidateRoot}/examples/modules/audit-JPEG-hul.jhove.xml" "${targetRoot}/examples/modules/"
+fi
+
 # Copy valid JP2K files across for new MIX metadata see https://github.com/openpreserve/jhove/pull/445
 if [[ -d "${candidateRoot}/examples/modules/JPEG2000-hul" ]]; then
 	echo "Copying valid JPEG2000 examples."
@@ -134,17 +150,19 @@ if [[ -f "${candidateRoot}/examples/modules/PDF-hul/AA_Banner.pdf.jhove.xml" ]];
 	cp -Rf "${candidateRoot}/examples/modules/PDF-hul/AA_Banner.pdf.jhove.xml" "${targetRoot}/examples/modules/PDF-hul/"
 fi
 
+
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.4.1">JPEG2000-hul<\/module>$/   <module release="1.4.2">JPEG2000-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <outputHandler release="1.8">XML/   <outputHandler release="1.9">XML/' {} \;
 find "${targetRoot}" -type f -name "audit-JPEG2000-hul.jhove.xml" -exec sed -i 's/^  <release>1.4.1<\/release>$/  <release>1.4.2<\/release>/' {} \;
 find "${targetRoot}" -type f -name "audit-JPEG2000-hul.jhove.xml" -exec sed -i 's/^  <date>2019-04-17<\/date>$/  <date>2019-10-18<\/date>/' {} \;
+
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.5.1">JPEG-hul<\/module>$/   <module release="1.5.2">JPEG-hul<\/module>/' {} \;
 
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.7.1">WAVE-hul<\/module>$/   <module release="1.8.1">WAVE-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit-WAVE-hul.jhove.xml" -exec sed -i 's/^  <release>1.7.1<\/release>$/  <release>1.8.1<\/release>/' {} \;
 find "${targetRoot}" -type f -name "audit-WAVE-hul.jhove.xml" -exec sed -i 's/^  <date>2019-04-17<\/date>$/  <date>2019-12-10<\/date>/' {} \;
 
 find "${targetRoot}" -type f -name "*.aif.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.5.1" date="2019-04-17">AIFF-hul<\/reportingModule>$/  <reportingModule release="1.6.1" date="2019-12-10">AIFF-hul<\/reportingModule>/' {} \;
-find "${targetRoot}" -type f -name "*.AIF.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.5.1" date="2019-04-17">AIFF-hul<\/reportingModule>$/  <reportingModule release="1.6.1" date="2019-12-10">AIFF-hul<\/reportingModule>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.5.1">AIFF-hul<\/module>$/   <module release="1.6.1">AIFF-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit-AIFF-hul.jhove.xml" -exec sed -i 's/^  <release>1.5.1<\/release>$/  <release>1.6.1<\/release>/' {} \;
 find "${targetRoot}" -type f -name "audit-AIFF-hul.jhove.xml" -exec sed -i 's/^  <date>2019-04-17<\/date>$/  <date>2019-12-10<\/date>/' {} \;
