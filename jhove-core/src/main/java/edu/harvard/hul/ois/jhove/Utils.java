@@ -13,6 +13,14 @@ import java.util.Set;
  */
 public enum Utils {
 	INSTANCE;
+	private static final String amp = "&";
+	private static final String ampsym = "&amp;";
+	private static final String lt = "<";
+	private static final String ltsym = "&lt;";
+	private static final String gt = ">";
+	private static final String gtsym = "&gt;";
+	private static final String qut = "\"";
+	private static final String qutsym = "&quot;";
 
 	/**
 	 * Encodes a content String in XML-clean form, converting characters to entities
@@ -35,18 +43,18 @@ public enum Utils {
 			}
 		}
 		n = 0;
-		while ((n = buffer.indexOf("&", n)) > -1) {
-			buffer.insert(n + 1, "amp;");
+		while ((n = buffer.indexOf(amp, n)) > -1) {
+			buffer.insert(n + 1, ampsym);
 			n += 5;
 		}
 		n = 0;
-		while ((n = buffer.indexOf("<", n)) > -1) {
-			buffer.replace(n, n + 1, "&lt;");
+		while ((n = buffer.indexOf(lt, n)) > -1) {
+			buffer.replace(n, n + 1, ltsym);
 			n += 4;
 		}
 		n = 0;
-		while ((n = buffer.indexOf(">", n)) > -1) {
-			buffer.replace(n, n + 1, "&gt;");
+		while ((n = buffer.indexOf(gt, n)) > -1) {
+			buffer.replace(n, n + 1, gtsym);
 			n += 4;
 		}
 
@@ -71,25 +79,25 @@ public enum Utils {
 		}
 		// [CC], escape &, < and > characters which are disallowed in xml
 		n = 0;
-		while ((n = buffer.indexOf("&", n)) > -1) {
-			buffer.insert(n + 1, "amp;");
-			n += 5;
+		while ((n = buffer.indexOf(amp, n)) > -1) {
+			buffer.insert(n + 1, ampsym);
+			n += ampsym.length();
 		}
 		n = 0;
-		while ((n = buffer.indexOf("<", n)) > -1) {
-			buffer.replace(n, n + 1, "&lt;");
-			n += 4;
+		while ((n = buffer.indexOf(lt, n)) > -1) {
+			buffer.replace(n, n + 1, ltsym);
+			n += ltsym.length();
 		}
 		n = 0;
-		while ((n = buffer.indexOf(">", n)) > -1) {
-			buffer.replace(n, n + 1, "&gt;");
-			n += 4;
+		while ((n = buffer.indexOf(gt, n)) > -1) {
+			buffer.replace(n, n + 1, gtsym);
+			n += gtsym.length();
 		}
 		n = 0;
-		while ((n = buffer.indexOf("\"", n)) > -1) {
+		while ((n = buffer.indexOf(qut, n)) > -1) {
 			// [LP] fix for invalid escaping, "" quotes were accidentally left in place.
-			buffer.replace(n, n + 1, "&quot;");
-			n += 6;
+			buffer.replace(n, n + 1, qutsym);
+			n += qutsym.length();
 		}
 
 		return buffer.toString();
