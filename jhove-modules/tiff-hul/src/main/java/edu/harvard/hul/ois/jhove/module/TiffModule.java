@@ -121,8 +121,8 @@ public class TiffModule extends ModuleBase {
     protected Logger _logger;
 
     private static final String NAME = "TIFF-hul";
-    private static final String RELEASE = "1.9.1";
-    private static final int [] DATE = { 2019, 04, 17 };
+    private static final String RELEASE = "1.10.1";
+    private static final int [] DATE = { 2019, 12, 10 };
     private static final String[] FORMAT = { "TIFF", "Tagged Image File Format" };
     private static final String COVERAGE = "TIFF 4.0, 5.0, and 6.0; "
             + "TIFF/IT (ISO/DIS 12639:2003), including file types CT, LW, HC, MP, "
@@ -625,7 +625,11 @@ public class TiffModule extends ModuleBase {
             info.setProperty(new Property("TIFFMetadata",
                     PropertyType.PROPERTY, PropertyArity.ARRAY, tiffMetadata));
         } catch (TiffException e) {
-            info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+            if (e.getJhoveMessage() != null) { // try to keep the id
+              info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
+            } else {
+              info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+            }
             info.setWellFormed(false);
             return;
         } catch (IOException e) {

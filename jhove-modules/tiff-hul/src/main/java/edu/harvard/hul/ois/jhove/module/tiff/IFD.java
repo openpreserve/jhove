@@ -1096,6 +1096,21 @@ public abstract class IFD
     }
 
     /**
+     * Check that the count is compatible with array instanciation.
+     * @param tag Tag entry value
+     * @param count Tag entry count
+     */
+    protected static void checkCountArray(int tag, long count)
+        throws TiffException
+    {
+        if (count > Integer.MAX_VALUE) {
+            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_6.getMessage(), Integer.valueOf(tag), Integer.valueOf(Integer.MAX_VALUE), Long.valueOf(count));
+            JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_6.getId(), mess);
+            throw new TiffException(message);
+        }
+    }
+
+    /**
      * Check the tag entry type.
      * @param tag Tag entry value
      * @param type Tag entry type
