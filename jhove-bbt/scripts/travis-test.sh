@@ -71,11 +71,11 @@ installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
 
 [[ -d "${CANDIDATE_ROOT}/${MAJOR_MINOR_VER}" ]] || mkdir -p "${CANDIDATE_ROOT}/${MAJOR_MINOR_VER}"
 
-cat "${tempInstallLoc}/jhove"
 echo ""
 echo "Testing ${MAJOR_MINOR_VER}."
 echo "=========================="
 echo " - using development JHOVE installer: ${TEST_ROOT}/targets/${MAJOR_MINOR_VER}."
+echo "${SCRIPT_DIR}/bbt-jhove.sh -b ${TEST_ROOT}/targets/${MAJOR_MINOR_VER} -c ${TEST_ROOT}/corpora -j . -o ${TEST_ROOT}/candidates -k ${MAJOR_MINOR_VER} -i"
 bash "${SCRIPT_DIR}/bbt-jhove.sh" -b "${TEST_ROOT}/targets/${MAJOR_MINOR_VER}" -c "${TEST_ROOT}/corpora" -j . -o "${TEST_ROOT}/candidates" -k "${MAJOR_MINOR_VER}" -i
 exitStatus=$?
 echo ""
