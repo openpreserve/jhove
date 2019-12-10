@@ -8,18 +8,21 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 /** Representation of the zTXt (compressed text) chunk */
 public class ZtxtChunk extends GeneralTextChunk {
 
-	/** Constructor */
+	/** Constructor
+         * @param sig: int representing chunktype
+         * @param leng: long representing length
+         */
 	public ZtxtChunk(int sig, long leng) {
 		chunkType = sig;
 		length = leng;
 		ancillary = true;
 		duplicateAllowed = true;
 	}
-	
+
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
-		
+
 		// The tEXt chunk consists of a keyword, a null, a compression type,
 		// and a value.
 		// There needs to be exactly one null in the data.
@@ -46,8 +49,8 @@ public class ZtxtChunk extends GeneralTextChunk {
 			case 1:
 				// Picking up compression type, which must be 0
 				if (c != 0) {
-					msg = new ErrorMessage (MessageConstants.PNG_GDM_63, 
-							String.format(MessageConstants.PNG_GDM_63_SUB.getMessage(),  
+					msg = new ErrorMessage (MessageConstants.PNG_GDM_63,
+							String.format(MessageConstants.PNG_GDM_63_SUB.getMessage(),
 									c));
 					info.setMessage (msg);
 					info.setWellFormed (0);
@@ -59,6 +62,8 @@ public class ZtxtChunk extends GeneralTextChunk {
 			case 2:
 				compressedData[cmprsIdx++] = (byte) c;
 				break;
+			default :
+		    		break;
 			}
 		}
 		if (keyword != null) {

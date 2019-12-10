@@ -10,13 +10,7 @@ package edu.harvard.hul.ois.jhove.module.gif;
  *  properties of a GIF object. 
  */
 public class GifStrings {
-
-    /** A private constructor just to make sure nobody
-       instantiates the class by mistake. */
-    private GifStrings ()
-    {
-    }
-
+    
     /** Strings for presence or absence of global color table */
     public final static String[] GLOBAL_COLOR_TABLE_FLAG = 
     { "No global color table; background color index meaningless", 
@@ -44,7 +38,8 @@ public class GifStrings {
     /** GIF Capabilities Enquiry string: transparency
      *  index given or not */
     public final static String[] GCE_TRANSPARENCY_FLAG =
-    {  "Transparent index is not given",        "Transparent index given" };
+    {  "Transparent index is not given",
+        "Transparent index given" };
 
     /** Local color table present in image or not */
     public final static String[] LOCAL_COLOR_TABLE_FLAG = 
@@ -55,5 +50,11 @@ public class GifStrings {
     public final static String[] INTERLACE_FLAG =
     {  "Image is not interlaced",
        "Image is interlaced" }; 
+
+    /** A private constructor just to make sure nobody
+       instantiates the class by mistake. */
+    private GifStrings ()
+    {
+    }
 
 }

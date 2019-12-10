@@ -31,8 +31,8 @@ coverage:
         paths: null
 
 before_install:
-  - sudo apt-get install -y realpath
-  - sudo apt-get install jq
+  - sudo apt-get install -y realpath xmlstarlet
+  - sudo apt-get install -y jq
   - wget -O ~/codacy-coverage-reporter-assembly-latest.jar http://resources.openpreservation.org/codacy-coverage-reporter-assembly-latest.jar
 
 script:

@@ -16,12 +16,9 @@ import java.util.logging.*;
  * This class is an abstract implementation of the Module interface.
  * It contains all the methods required for a Module, but doesn't
  * do anything by itself. A subclass should provide a functional
- * implmentation of
- * <code>parse (InputStream stream, RepInfo info, int parseIndex)</code>
- * if it is not random access, or
- * <code>parse (RandomAccessFile file, RepInfo info)</code>
+ * implementation of {@code parse(InputStream, RepInfo, int)}
+ * if it is not random access, or {@code parse(RandomAccessFile, RepInfo)}
  * if it is random access.
- * 
  */
 public abstract class ModuleBase implements Module {
 	/******************************************************************
@@ -76,6 +73,8 @@ public abstract class ModuleBase implements Module {
 	protected MessageDigest _md5;
 	/** SHA-1 digest calculated on content object */
 	protected MessageDigest _sha1;
+	/** SHA-256 digest calculated on content object */
+	protected MessageDigest _sha256;
 	/** Flag indicating valid checksum information set */
 	protected boolean _checksumFinished;
 	/** Indicator of how much data to report */
@@ -92,7 +91,7 @@ public abstract class ModuleBase implements Module {
 	protected Checksummer _ckSummer;
 
 	/* Input stream wrapper which handles checksums */
-	private ChecksumInputStream _cstream;
+	protected ChecksumInputStream _cstream;
 
 	/* Data input stream wrapped around _cstream */
 	protected DataInputStream _dstream;
@@ -103,7 +102,7 @@ public abstract class ModuleBase implements Module {
 
 	/**
 	 * Constructors of all subclasses of ModuleBase should call
-	 * this as a <code>super</code> constructor.
+	 * this as a {@code super} constructor.
 	 *
 	 * @param name
 	 *            Name of the module
@@ -112,9 +111,9 @@ public abstract class ModuleBase implements Module {
 	 * @param date
 	 *            Last modification date of the module code,
 	 *            in the form of an array of three numbers.
-	 *            <code>date[0]</code> is the year,
-	 *            <code>date[1]</code> the month, and
-	 *            <code>date[2]</code> the day.
+	 *            {@code date[0]} is the year,
+	 *            {@code date[1]} the month, and
+	 *            {@code date[2]} the day.
 	 * @param format
 	 *            Array of format names supported by the module
 	 * @param coverage
@@ -137,8 +136,8 @@ public abstract class ModuleBase implements Module {
 	 * @param rights
 	 *            Copyright notice for the module
 	 * @param isRandomAccess
-	 *            <code>true</code> if the module treats content as
-	 *            random-access data, <false> if it treats content
+	 *            {@code true} if the module treats content as
+	 *            random-access data, {@code false} if it treats content
 	 *            as stream data
 	 */
 	protected ModuleBase(String name, String release, int[] date,
@@ -204,7 +203,7 @@ public abstract class ModuleBase implements Module {
 
 	/**
 	 * Set a a List of default parameters for the module.
-	 * 
+	 *
 	 * @param params
 	 *            A List whose elements are Strings.
 	 *            May be empty.
@@ -281,7 +280,7 @@ public abstract class ModuleBase implements Module {
 	 * particularly as formats sometimes incorporate data stored in
 	 * a previously defined format. For some formats, e.g., TIFF, the
 	 * endianness depends on the file being processed.
-	 * 
+	 *
 	 * Every module must initialize the value of _bigEndian for this
 	 * function, or else assign its value when parsing a file,
 	 * to return a meaningful result. For some modules (e.g.,
@@ -424,11 +423,11 @@ public abstract class ModuleBase implements Module {
 	 * Returns <code>true</code> if the module supports a given
 	 * named feature, and <code>false</code> if the feature is
 	 * unsupported or unknown. Feature names are case sensitive.
-	 * 
+	 *
 	 * It is recommended that features be named using package
 	 * nomenclature. The following features are, by default,
 	 * supported by the modules developed by OIS:
-	 * 
+	 *
 	 * <ul>
 	 * <li>edu.harvard.hul.ois.canValidate
 	 * <li>edu.harvard.hul.ois.canIdentify
@@ -512,7 +511,7 @@ public abstract class ModuleBase implements Module {
 	 * of <code>param</code> can override the verbosity setting.
 	 * It does not affect whether raw data are reported or not, only
 	 * which data are reported.
-	 * 
+	 *
 	 *
 	 * @param verbosity
 	 *            The requested verbosity value. Recognized
@@ -555,6 +554,16 @@ public abstract class ModuleBase implements Module {
 		_checksumFinished = true;
 	}
 
+
+	/**
+	 * Sets the SHA-256 calculated digest for the content object, and sets
+	 * the checksumFinished flag.
+	 */
+	public final void setSHA256(MessageDigest sha256) {
+		_sha256 = sha256;
+		_checksumFinished = true;
+	}
+
 	/******************************************************************
 	 * Parsing methods.
 	 ******************************************************************/
@@ -571,7 +580,7 @@ public abstract class ModuleBase implements Module {
 	 *            If multiple calls to <code>parse</code> are made
 	 *            on the basis of a nonzero value being returned,
 	 *            a new InputStream must be provided each time.
-	 * 
+	 *
 	 * @param info
 	 *            A fresh (on the first call) RepInfo object
 	 *            which will be modified
@@ -697,11 +706,11 @@ public abstract class ModuleBase implements Module {
 	 * @param file
 	 *            A File object representing the object to be
 	 *            parsed
-	 * 
+	 *
 	 * @param raf
 	 *            A RandomAccessFile, positioned at its beginning,
 	 *            which is generated from the object to be parsed
-	 * 
+	 *
 	 * @param info
 	 *            A fresh RepInfo object which will be modified
 	 *            to reflect the results of the test
@@ -772,7 +781,9 @@ public abstract class ModuleBase implements Module {
 		try {
 			_md5 = MessageDigest.getInstance("MD5");
 			_sha1 = MessageDigest.getInstance("SHA-1");
+			_sha256 = MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalStateException("Missing checksum algorithm.", e);
 		}
 	}
 
@@ -807,7 +818,7 @@ public abstract class ModuleBase implements Module {
 
 	/**
 	 * Set the checksum values.
-	 * 
+	 *
 	 * @param ckSummer
 	 *            Checksummer object
 	 * @param info
@@ -823,6 +834,9 @@ public abstract class ModuleBase implements Module {
 			}
 			if ((value = ckSummer.getSHA1()) != null) {
 				info.setChecksum(new Checksum(value, ChecksumType.SHA1));
+			}
+			if ((value = ckSummer.getSHA256()) != null) {
+				info.setChecksum(new Checksum(value, ChecksumType.SHA256));
 			}
 		}
 	}
@@ -852,7 +866,7 @@ public abstract class ModuleBase implements Module {
 	 ******************************************************************/
 
 	/**
-	 * Returns an Property representing an integer value.
+	 * Returns a Property representing an integer value.
 	 * If raw output is specified for the module, returns
 	 * an INTEGER property, and <code>labels</code> and
 	 * <code>index</code> are unused. Otherwise,
@@ -885,7 +899,7 @@ public abstract class ModuleBase implements Module {
 	}
 
 	/**
-	 * Returns an Property representing an integer value.
+	 * Returns a Property representing an integer value.
 	 * If raw output is specified for the module, returns
 	 * an INTEGER property, and <code>labels</code> and
 	 * <code>index</code> are unused. Otherwise,
@@ -907,7 +921,7 @@ public abstract class ModuleBase implements Module {
 
 	/**
 	 * Reads an unsigned byte from a DataInputStream.
-	 * 
+	 *
 	 * @param stream
 	 *            Stream to read
 	 */
@@ -918,7 +932,7 @@ public abstract class ModuleBase implements Module {
 
 	/**
 	 * Reads an unsigned byte from a DataInputStream.
-	 * 
+	 *
 	 * @param stream
 	 *            Stream to read
 	 * @param counted
@@ -944,7 +958,7 @@ public abstract class ModuleBase implements Module {
 
 	/**
 	 * Reads into a byte buffer from a DataInputStream.
-	 * 
+	 *
 	 * @param stream
 	 *            Stream to read from
 	 * @param buf
@@ -964,7 +978,7 @@ public abstract class ModuleBase implements Module {
 
 	/**
 	 * Reads two bytes as an unsigned short value from a DataInputStream.
-	 * 
+	 *
 	 * @param stream
 	 *            The stream to read from.
 	 * @param bigEndian
@@ -979,7 +993,7 @@ public abstract class ModuleBase implements Module {
 
 	/**
 	 * Reads two bytes as an unsigned short value from a DataInputStream.
-	 * 
+	 *
 	 * @param stream
 	 *            The stream to read from.
 	 * @param bigEndian

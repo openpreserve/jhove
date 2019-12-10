@@ -25,6 +25,7 @@ export SCRIPT_DIR
 # Global for Backslashed string value
 
 # Include utils script
+# shellcheck source=inc/bb-utils.sh
 . "$SCRIPT_DIR/inc/bb-utils.sh"
 
 # Globals to hold the checked param vals
@@ -59,7 +60,7 @@ checkParams () {
 		i)	paramIgnoreRelease=true
 			;;
 		v)	paramVerbose=true
-		    export $paramVerbose
+		    export paramVerbose
 			;;
 		esac
 	done
@@ -123,15 +124,24 @@ showHelp() {
 # Check and setup parameters
 checkParams "$@";
 candidate="${paramOutputLoc:?}/${paramKey}"
-tempInstallLoc="/tmp/to-test";
-sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.9\/org\.jacoco.agent-0\.7\.9-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
+tempInstallLoc="/var/tmp/to-test";
+sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.9\/org\.jacoco.agent-0\.7\.9-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -Xss2048k  -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
 bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${paramCorpusLoc}" -o "${candidate}"
+
+if [[ -f "${SCRIPT_DIR}/create-${paramKey}-target.sh" ]]
+then
+	echo " - INFO: applying the baseline patches for ${paramKey} at: ${TARGET_ROOT}/${paramKey}."
+	bash "${SCRIPT_DIR}/create-${paramKey}-target.sh" -b "1.22" -c "${paramKey}"
+else
+	echo " - ERROR: no bash script found for baseline patches for ${paramKey} at: ${TARGET_ROOT}/${paramKey}."
+	exit 1
+fi
 
 echo "java -Xms2g -Xmx8g -jar ${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar -b ${paramBaseline} -c ${candidate} -k ${paramKey} -i"
 if [ "$paramIgnoreRelease" =  true ] ;
 then
-	java -Xms2g -Xmx8g -jar "${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar" -b "${paramBaseline}" -c "${candidate}" -k "${paramKey}" -i
+	java -Xms2g -Xmx8g -jar "${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar" -b "${paramBaseline}" -c "${candidate}" -k "dev-${paramKey}" -i
 else
-	java -Xms2g -Xmx8g -jar "${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar" -b "${paramBaseline}" -c "${candidate}" -k "${paramKey}"
+	java -Xms2g -Xmx8g -jar "${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar" -b "${paramBaseline}" -c "${candidate}" -k "dev-${paramKey}"
 fi
 exit "${?}";

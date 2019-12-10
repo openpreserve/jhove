@@ -50,16 +50,12 @@ public class TiffProfileDNGThumb extends TiffProfile {
             // There can be only one
             return false;
         }
-
-        if (tifd.getUniqueCameraModel () == null) {
-            return false;
-        }
-
         /* The specification says that PhotometricInterpretation
          * must be 1 or 2 for a thumbnail -- but there's no requirement
          * that this BE a thumbnail.  So that requirement appears
          * to be moot. */
-        return true;
+
+        return tifd.getUniqueCameraModel () != null;
     }
 
 }

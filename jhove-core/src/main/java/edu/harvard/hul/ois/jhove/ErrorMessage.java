@@ -12,36 +12,38 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
  * a problem in the content being analyzed.
  */
 public class ErrorMessage extends Message {
+
+	private static final String prefix = "Error";
+
 	/******************************************************************
 	 * CLASS CONSTRUCTOR.
 	 ******************************************************************/
-	private static final String prefix = "Error";
 
 	/**
-	 * Create an ErrorMessage.
+	 * Creates an ErrorMessage.
 	 * 
 	 * @param message
-	 *            Human-readable string describing the problem.
+	 *            Human-readable message describing the problem.
 	 */
 	public ErrorMessage(String message) {
 		super(message);
 	}
 
 	/**
-	 * Create an ErrorMessage.
+	 * Creates an ErrorMessage with an identifier.
 	 * 
 	 * @param message
-	 *            Human-readable string describing the problem.
+	 *            The message text and its identifier.
 	 */
 	public ErrorMessage(JhoveMessage message) {
 		super(message);
 	}
 
 	/**
-	 * Create an ErrorMessage.
+	 * Creates an ErrorMessage.
 	 * 
 	 * @param message
-	 *            Human-readable string describing the problem.
+	 *            Human-readable message describing the problem.
 	 * @param offset
 	 *            The offset in the file at which the problem
 	 *            was detected.
@@ -51,12 +53,10 @@ public class ErrorMessage extends Message {
 	}
 
 	/**
-	 * Create an ErrorMessage.
+	 * Creates an ErrorMessage with an identifier.
 	 * 
-	 * @param id
-	 *            Unique ID (within the module) for the message
 	 * @param message
-	 *            Human-readable string describing the problem.
+	 *            The message text and its identifier.
 	 * @param offset
 	 *            The offset in the file at which the problem
 	 *            was detected.
@@ -66,10 +66,10 @@ public class ErrorMessage extends Message {
 	}
 
 	/**
-	 * Create an ErrorMessage.
+	 * Creates an ErrorMessage.
 	 * 
 	 * @param message
-	 *            Human-readable string describing the problem.
+	 *            Human-readable message describing the problem.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 */
@@ -78,12 +78,10 @@ public class ErrorMessage extends Message {
 	}
 
 	/**
-	 * Create an ErrorMessage.
+	 * Creates an ErrorMessage with an identifier.
 	 * 
-	 * @param id
-	 *            Unique ID (within the module) for the message
 	 * @param message
-	 *            Human-readable string describing the problem.
+	 *            The message text and its identifier.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 */
@@ -92,10 +90,10 @@ public class ErrorMessage extends Message {
 	}
 
 	/**
-	 * Create an ErrorMessage.
+	 * Creates an ErrorMessage.
 	 * 
 	 * @param message
-	 *            Human-readable string describing the problem.
+	 *            Human-readable message describing the problem.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 * @param offset
@@ -107,12 +105,10 @@ public class ErrorMessage extends Message {
 	}
 
 	/**
-	 * Create an ErrorMessage.
+	 * Creates an ErrorMessage with an identifier.
 	 * 
-	 * @param id
-	 *            Unique ID (within the module) for the message
 	 * @param message
-	 *            Human-readable string describing the problem.
+	 *            The message text and its identifier.
 	 * @param subMessage
 	 *            Human-readable additional information.
 	 * @param offset

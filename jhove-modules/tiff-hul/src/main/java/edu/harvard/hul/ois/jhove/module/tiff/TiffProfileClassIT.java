@@ -36,15 +36,11 @@ public abstract class TiffProfileClassIT
 
         /* Check required tags. */
 	NisoImageMetadata niso = tifd.getNisoImageMetadata ();
-        if (niso.getImageWidth () == NisoImageMetadata.NULL ||
-            niso.getImageLength () == NisoImageMetadata.NULL ||
-            niso.getStripOffsets () == null ||
-            niso.getStripByteCounts () == null ||
-            niso.getXSamplingFrequency () == null ||
-            niso.getYSamplingFrequency () == null) {
-            return false;
-        }
-
-        return true;
+        return !(niso.getImageWidth () == NisoImageMetadata.NULL ||
+                niso.getImageLength () == NisoImageMetadata.NULL ||
+                niso.getStripOffsets () == null ||
+                niso.getStripByteCounts () == null ||
+                niso.getXSamplingFrequency () == null ||
+                niso.getYSamplingFrequency () == null);
     }
 }

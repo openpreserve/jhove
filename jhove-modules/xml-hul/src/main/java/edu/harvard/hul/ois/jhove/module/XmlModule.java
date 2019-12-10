@@ -388,8 +388,8 @@ public class XmlModule extends ModuleBase {
 			if (handler.getSigFlag() && !_parseFromSig) {
 				info.setSigMatch(_name);
 			}
-			info.setMessage(new ErrorMessage(
-					e.getClass().getName() + ": " + e.getMessage().toString()));
+			String mess = e.getClass().getName() + ": " + e.getMessage().toString();
+			info.setMessage(new ErrorMessage(CoreMessageConstants.ERR_FILE_READ, mess));
 			info.setWellFormed(false);
 			return 0;
 		} catch (SAXParseException e) {
@@ -399,8 +399,9 @@ public class XmlModule extends ModuleBase {
 			}
 			int line = e.getLineNumber();
 			int col = e.getColumnNumber();
-			info.setMessage(new ErrorMessage(e.getMessage().toString(),
-					"Line = " + line + ", Column = " + col));
+			String mess = e.getMessage().toString() +
+					"Line = " + line + ", Column = " + col;
+			info.setMessage(new ErrorMessage(MessageConstants.XML_HUL_1, mess));
 			info.setWellFormed(false);
 			return 0;
 		} catch (SAXException e) {
