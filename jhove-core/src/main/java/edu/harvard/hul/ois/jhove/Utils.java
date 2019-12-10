@@ -14,7 +14,7 @@ import java.util.Set;
 public enum Utils {
 	INSTANCE;
 	private static final String amp = "&";
-	private static final String ampsym = "&amp;";
+	private static final String ampsym = "amp;";
 	private static final String lt = "<";
 	private static final String ltsym = "&lt;";
 	private static final String gt = ">";
@@ -45,17 +45,17 @@ public enum Utils {
 		n = 0;
 		while ((n = buffer.indexOf(amp, n)) > -1) {
 			buffer.insert(n + 1, ampsym);
-			n += 5;
+			n += ampsym.length();
 		}
 		n = 0;
 		while ((n = buffer.indexOf(lt, n)) > -1) {
 			buffer.replace(n, n + 1, ltsym);
-			n += 4;
+			n += ltsym.length();
 		}
 		n = 0;
 		while ((n = buffer.indexOf(gt, n)) > -1) {
 			buffer.replace(n, n + 1, gtsym);
-			n += 4;
+			n += gtsym.length();
 		}
 
 		return buffer.toString();
