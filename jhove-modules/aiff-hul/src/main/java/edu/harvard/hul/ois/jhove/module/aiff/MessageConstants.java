@@ -42,7 +42,7 @@ public enum MessageConstants {
 	/**
 	 * Info messages
 	 */
-	public static final String INF_CHUNK_TYPE_IGNORED = "Ignored chunk type with ID: ";
+	
 	
 	/**
 	 * Error messages
@@ -55,4 +55,5 @@ public enum MessageConstants {
 	public static final JhoveMessage AIFF_HUL_6 = messageFactory.getMessage("AIFF-HUL-6"); //$NON-NLS-1$
 	public static final JhoveMessage AIFF_HUL_7 = messageFactory.getMessage("AIFF-HUL-7"); //$NON-NLS-1$
 	public static final JhoveMessage AIFF_HUL_8 = messageFactory.getMessage("AIFF-HUL-8"); //$NON-NLS-1$
+	public static final JhoveMessage AIFF_HUL_9 = messageFactory.getMessage("AIFF-HUL-9"); //$NON-NLS-1$
 }

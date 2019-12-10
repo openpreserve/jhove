@@ -74,6 +74,16 @@ if [[ -d "${candidateRoot}/errors/modules/WAVE-hul" ]]; then
 	cp -Rf "${candidateRoot}/errors/modules/WAVE-hul" "${targetRoot}/errors/modules/"
 fi
 
+# Copy PDF files across for extra error ids
+if [[ -d "${candidateRoot}/regression/modules/PDF-hul" ]]; then
+	echo "Copying valid PDF regressions."
+	cp -Rf "${candidateRoot}/regression/modules/PDF-hul" "${targetRoot}/regression/modules/"
+fi
+if [[ -d "${candidateRoot}/errors/modules/PDF-hul" ]]; then
+	echo "Copying PDF errors."
+	cp -Rf "${candidateRoot}/errors/modules/PDF-hul" "${targetRoot}/errors/modules/"
+fi
+
 # Copy TIIF across for new Message IDs https://github.com/openpreserve/jhove/pull/510
 if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/chase-tif-f.tif.jhove.xml" ]]; then
 	echo "Copying affected TIFF examples."
@@ -98,6 +108,30 @@ fi
 if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/fax2d.g3.jhove.xml" ]]; then
 	echo "Copying affected TIFF examples."
 	cp -Rf "${candidateRoot}/examples/modules/TIFF-hul/fax2d.g3.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/quad-tile.tif.jhove.xml" ]]; then
+	echo "Copying affected TIFF examples."
+	cp -Rf "${candidateRoot}/examples/modules/TIFF-hul/quad-tile.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/cramps-tile.tif.jhove.xml" ]]; then
+	echo "Copying affected TIFF examples."
+	cp -Rf "${candidateRoot}/examples/modules/TIFF-hul/cramps-tile.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml" ]]; then
+	echo "Copying affected XML examples."
+	cp -Rf "${candidateRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml" "${targetRoot}/examples/modules/XML-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/XML-hul/external-parsed-entity.ent.jhove.xml" ]]; then
+	echo "Copying affected XML examples."
+	cp -Rf "${candidateRoot}/examples/modules/XML-hul/external-parsed-entity.ent.jhove.xml" "${targetRoot}/examples/modules/XML-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/XML-hul/external-unparsed-entity.ent.jhove.xml" ]]; then
+	echo "Copying affected XML examples."
+	cp -Rf "${candidateRoot}/examples/modules/XML-hul/external-unparsed-entity.ent.jhove.xml" "${targetRoot}/examples/modules/XML-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/PDF-hul/AA_Banner.pdf.jhove.xml" ]]; then
+	echo "Copying affected PDF examples."
+	cp -Rf "${candidateRoot}/examples/modules/PDF-hul/AA_Banner.pdf.jhove.xml" "${targetRoot}/examples/modules/PDF-hul/"
 fi
 
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.4.1">JPEG2000-hul<\/module>$/   <module release="1.4.2">JPEG2000-hul<\/module>/' {} \;

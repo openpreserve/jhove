@@ -21,26 +21,11 @@ public class PdfMalformedException extends PdfException {
     /**
      *  Creates a PdfMalformedException.
      */
-    public PdfMalformedException (final String m)
-    {
-        super(m);
-    }
-
-    /**
-     *  Creates a PdfMalformedException.
-     */
     public PdfMalformedException (final JhoveMessage message)
     {
         super(message);
     }
 
-    /**
-     *  Creates a PdfMalformedException with specified offset.
-     */
-    public PdfMalformedException (final String m, final long offset) 
-    {
-        super(m, offset);
-    }
 
     /**
      *  Creates a PdfMalformedException with specified offset.
@@ -50,13 +35,6 @@ public class PdfMalformedException extends PdfException {
         super(message, offset);
     }
 
-    /**
-     *  Creates a PdfMalformedException with specified offset and token.
-     */
-    public PdfMalformedException (final String m, final long offset, final Token token) 
-    {
-        super(m, offset, token);
-    }
 
     /**
      *  Creates a PdfMalformedException with specified offset and token.
