@@ -137,7 +137,6 @@ else
 	exit 1
 fi
 
-
 echo "java -Xms2g -Xmx8g -jar ${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar -b ${paramBaseline} -c ${candidate} -k ${paramKey} -i"
 if [ "$paramIgnoreRelease" =  true ] ;
 then
