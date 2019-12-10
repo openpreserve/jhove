@@ -56,6 +56,8 @@ public enum MessageConstants {
 	public static final JhoveMessage JPEG_HUL_9 = messageFactory.getMessage("JPEG-HUL-9");
 	public static final JhoveMessage JPEG_HUL_10 = messageFactory.getMessage("JPEG-HUL-10");
 	public static final JhoveMessage JPEG_HUL_11 = messageFactory.getMessage("JPEG-HUL-11");
+	public static final JhoveMessage JPEG_HUL_12 = messageFactory.getMessage("JPEG-HUL-12");
+	public static final JhoveMessage JPEG_HUL_13 = messageFactory.getMessage("JPEG-HUL-13");
 
 	public static final JhoveMessage JHOVE_1 = messageFactory.getMessage("JHOVE-1");
 }
