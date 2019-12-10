@@ -19,6 +19,7 @@ import edu.harvard.hul.ois.jhove.module.TestUtils;
  * @version 0.1 Created 13 Mar 2018:11:28:10
  */
 public class HeaderTests {
+
 	private static final String pdfResourcePath = "/edu/harvard/hul/ois/jhove/module/pdf/";
 	private static final String headerResourcePath = pdfResourcePath + "header/";
 	private static final String minimalPdfPath = pdfResourcePath
@@ -49,7 +50,7 @@ public class HeaderTests {
 	}
 
 	/**
-	 * Test method for {@link edu.harvard.hul.ois.jhove.module.pdf.PdfHeader}.
+	 * Test method for {@link PdfHeader}.
 	 * Ensures that a valid PDF passes.
 	 */
 	@Test
@@ -59,9 +60,8 @@ public class HeaderTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.PdfModule}.
-	 * Ensures that a file with an major version > 1 (%PDF-2.4) not well formed.
+	 * Test method for {@link PdfModule}.
+	 * Ensures that a file with a major version &gt; 1 (%PDF-2.4) is not well-formed.
 	 * TODO: This currently makes all PDF 2.0 files invalid.
 	 */
 	@Test
@@ -69,38 +69,32 @@ public class HeaderTests {
 		TestUtils.testValidateResource(this.module, invalidMajorPath,
 				RepInfo.FALSE, RepInfo.FALSE,
 				MessageConstants.PDF_HUL_137.getMessage());
-
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfHeader}.
-	 * Ensures that a file with a minor version > 7 (%PDF-1.9) is invalid.
+	 * Test method for {@link PdfHeader}.
+	 * Ensures that a file with a minor version &gt; 7 (%PDF-1.9) is invalid.
 	 */
 	@Test
 	public final void testInvalidMinorVersion() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, invalidMinorPath,
 				RepInfo.TRUE, RepInfo.FALSE,
 				MessageConstants.PDF_HUL_148.getMessage());
-
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfHeader#getVersionString()}.
-	 * Ensures that a file with no minor version (%PDF-14) is not well formed..
+	 * Test method for {@link PdfHeader#getVersionString()}.
+	 * Ensures that a file missing a minor version (%PDF-14) is not well-formed.
 	 */
 	@Test
 	public final void testNoMinor() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, noMinorPath,
 				RepInfo.FALSE, RepInfo.FALSE,
 				MessageConstants.PDF_HUL_137.getMessage());
-
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.PdfModule}.
+	 * Test method for {@link PdfModule}.
 	 * Ensures that a file with no dash in header (%PDF1.4) is invalid.
 	 */
 	@Test
@@ -108,46 +102,39 @@ public class HeaderTests {
 		TestUtils.testValidateResource(this.module, noHeaderDashPath,
 				RepInfo.FALSE, RepInfo.FALSE,
 				MessageConstants.PDF_HUL_137.getMessage());
-
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.PdfModule}.
+	 * Test method for {@link PdfModule}.
 	 * Ensures that a file with no dash replaced by period in
-	 * header (%PDF.1.4) is not well formed..
+	 * header (%PDF.1.4) is not well-formed.
 	 */
 	@Test
 	public final void testInvalidSyntaxRep() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, invalidSyntaxRepPath,
 				RepInfo.FALSE, RepInfo.FALSE,
 				MessageConstants.PDF_HUL_137.getMessage());
-
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.PdfModule}.
-	 * Ensures that a file with no PDF in header (%1.4) is not well formed..
+	 * Test method for {@link PdfModule}.
+	 * Ensures that a file with no PDF in header (%1.4) is not well-formed.
 	 */
 	@Test
 	public final void testInvalidSyntaxNoPdf() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, invalidSyntaxNoPdfPath,
 				RepInfo.FALSE, RepInfo.FALSE,
 				MessageConstants.PDF_HUL_137.getMessage());
-
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.PdfModule}.
-	 * Ensures that a file with no header is not well formed.
+	 * Test method for {@link PdfModule}.
+	 * Ensures that a file missing a header is not well-formed.
 	 */
 	@Test
 	public final void testNoVersionInfo() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, noVersionInfoPath,
 				RepInfo.FALSE, RepInfo.FALSE,
 				MessageConstants.PDF_HUL_137.getMessage());
-
 	}
 }
