@@ -47,4 +47,4 @@ REM Set default configuration location
 SET "CONFIG=%JHOVE_HOME%conf\jhove.conf"
 
 REM Set class path and invoke Java
-java -classpath "%CP%" Jhove -c "%CONFIG%" %*
+java -Xss1024k -classpath "%CP%" Jhove -c "%CONFIG%" %*

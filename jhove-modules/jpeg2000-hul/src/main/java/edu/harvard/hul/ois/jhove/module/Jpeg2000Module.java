@@ -790,8 +790,8 @@ public class Jpeg2000Module extends ModuleBase {
         // 8 bytes have been read
         if (!"ftyp".equals(hdr.getType())) {
             info.setMessage(new
-                    ErrorMessage(MessageConstants.JPEG2000_HUL_22
-                        + hdr.getType(), _nByte));
+                    ErrorMessage(MessageConstants.JPEG2000_HUL_22,
+                        hdr.getType(), _nByte));
             info.setWellFormed(false);
             return false;
 
