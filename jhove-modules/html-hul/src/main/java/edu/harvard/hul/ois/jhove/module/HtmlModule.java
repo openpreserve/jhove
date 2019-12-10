@@ -290,8 +290,8 @@ public class HtmlModule extends ModuleBase {
 	 *            Must be 0 in first call to <code>parse</code>. If
 	 *            <code>parse</code> returns a nonzero value, it must be called
 	 *            again with <code>parseIndex</code> equal to that return value.
-         * 
-         * @return parseInt 
+         *
+         * @return parseInt
 	 */
 	@Override
 	public int parse(InputStream stream, RepInfo info, int parseIndex) {
@@ -438,8 +438,8 @@ public class HtmlModule extends ModuleBase {
 					return 0;
 				case 2: // probably XHTML
 					return 100;
-                                 default:
-                                     break;
+				default :
+		    			break;
 				}
 				info.setMessage(new ErrorMessage(
 						MessageConstants.HTML_HUL_16));
@@ -450,7 +450,7 @@ public class HtmlModule extends ModuleBase {
 			HtmlDocDesc docDesc = null;
 			switch (type) {
 			case HTML_3_2:
-			
+
 
 			case HTML_4_0_FRAMESET:
 				docDesc = new Html4_0FrameDocDesc();
@@ -573,7 +573,7 @@ public class HtmlModule extends ModuleBase {
 	 * @param info
 	 *            A fresh RepInfo object which will be modified to reflect the
 	 *            results of the test
-         * 
+         *
          * @throws IOException
 	 */
 	@Override

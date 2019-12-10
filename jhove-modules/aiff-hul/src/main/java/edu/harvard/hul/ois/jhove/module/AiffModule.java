@@ -678,7 +678,7 @@ public class AiffModule
         }
         else {
             info.setMessage (new InfoMessage
-                (MessageConstants.INF_CHUNK_TYPE_IGNORED + id, _nByte));
+                (MessageConstants.AIFF_HUL_9, id, _nByte));
         }
         if (chunk != null) {
             if (!chunk.readChunk (info)) {

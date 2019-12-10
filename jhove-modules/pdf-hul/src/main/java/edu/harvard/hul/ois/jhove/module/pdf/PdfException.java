@@ -17,6 +17,10 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
  */
 public abstract class PdfException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 972230109944524397L;
 	/*
 	 * Note 25-Feb-2004: Previously PdfException indicated
 	 * a not-well-formed condition, and PdfInvalidException
@@ -34,13 +38,6 @@ public abstract class PdfException extends Exception {
 	/**
 	 * Create a PdfException.
 	 */
-	public PdfException(final String m) {
-		this(JhoveMessages.getMessageInstance(m));
-	}
-
-	/**
-	 * Create a PdfException.
-	 */
 	public PdfException(final JhoveMessage message) {
 		this(message, -1);
 	}
@@ -48,22 +45,8 @@ public abstract class PdfException extends Exception {
 	/**
 	 * Create a PdfException with specified offset.
 	 */
-	public PdfException(final String m, final long offset) {
-		this(JhoveMessages.getMessageInstance(m), offset);
-	}
-
-	/**
-	 * Create a PdfException with specified offset.
-	 */
 	public PdfException(final JhoveMessage message, final long offset) {
 		this(message, offset, null);
-	}
-
-	/**
-	 * Create a PdfException with specified offset and token.
-	 */
-	public PdfException(final String m, final long offset, final Token token) {
-		this(JhoveMessages.getMessageInstance(m), offset, token);
 	}
 
 	/**
