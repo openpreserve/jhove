@@ -111,8 +111,8 @@ public class AiffModule
        { 0X46, 0X4F, 0X52, 0X4D };
 
     private static final String NAME = "AIFF-hul";
-    private static final String RELEASE = "1.5.1";
-    private static final int [] DATE = { 2019, 04, 17 };
+    private static final String RELEASE = "1.6.1";
+    private static final int [] DATE = { 2019, 12, 10 };
     private static final String [] FORMAT = {
 	"AIFF", "Audio Interchange File Format"
     };
