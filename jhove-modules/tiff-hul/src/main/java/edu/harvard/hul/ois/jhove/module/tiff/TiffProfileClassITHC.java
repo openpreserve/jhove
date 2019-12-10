@@ -66,10 +66,8 @@ public final class TiffProfileClassITHC extends TiffProfileClassIT
             return false;
         }
         String seq = tifd.getColorSequence ();
-        if (seq == null || "CMYK".equals (seq)) {
-            if (inkSet != 1) {
-                return false;
-            }
+        if ((seq == null || "CMYK".equals (seq)) && inkSet != 1) {
+            return false;
         }
 
 		// Per footnote: If NumberOfInks tag is used, it must have the
@@ -82,10 +80,6 @@ public final class TiffProfileClassITHC extends TiffProfileClassIT
         }
 
         int trans = tifd.getTransparencyIndicator ();
-        if (trans != 0 && trans != 1) {
-            return false;
-        }
-
-        return true;
+        return !(trans != 0 && trans != 1);
     }
 }

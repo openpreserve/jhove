@@ -2213,6 +2213,7 @@ public class TiffIFD extends IFD {
                             break;
                         case BITSPERSAMPLE:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _niso.setBitsPerSample(readShortArray(type, count, value));
                             break;
                         case BRIGHTNESSVALUE:
@@ -2221,6 +2222,7 @@ public class TiffIFD extends IFD {
                                 _niso.setBrightness(
                                         readSignedRational(count, value));
                             } else {
+                                checkCountArray(tag, count);
                                 Rational[] r = readSignedRationalArray(count, value);
                                 _niso.setBrightness(average(r[0], r[1]));
                             }
@@ -2235,6 +2237,7 @@ public class TiffIFD extends IFD {
                             break;
                         case CFAPATTERN:
                             checkType(tag, type, BYTE);
+                            checkCountArray(tag, count);
                             _cfaPattern = readByteArray(type, count, value);
                             break;
                         case CFAREPEATPATTERNDIM:
@@ -2249,6 +2252,7 @@ public class TiffIFD extends IFD {
                             break;
                         case CLIPPATH:
                             checkType(tag, type, BYTE);
+                            checkCountArray(tag, count);
                             _clipPath = readByteArray(type, count, value);
                             break;
                         case COLORCHARACTERIZATION:
@@ -2262,6 +2266,7 @@ public class TiffIFD extends IFD {
                         case COLORMAP:
                             {
                                 checkType(tag, type, SHORT);
+                                checkCountArray(tag, count);
                                 int[] colorMap = readShortArray(type, count, value);
                                 int[] bitCode = new int[colorMap.length];
                                 int[] red = new int[colorMap.length];
@@ -2286,6 +2291,7 @@ public class TiffIFD extends IFD {
                             }
                         case COLORTABLE:
                             checkType(tag, type, BYTE);
+                            checkCountArray(tag, count);
                             _colorTable = readByteArray(type, count, value);
                             break;
                         case COMPRESSEDBITSPERPIXEL:
@@ -2372,6 +2378,7 @@ public class TiffIFD extends IFD {
                                 _niso.setExposureBias(
                                         readSignedRational(count, value));
                             } else {
+                                checkCountArray(tag, count);
                                 Rational[] r = readSignedRationalArray(count, value);
                                 _niso.setExposureBias(average(r[0], r[1]));
                             }
@@ -2387,12 +2394,14 @@ public class TiffIFD extends IFD {
                                 _niso.setExposureTime(
                                         readRational(count, value).toDouble());
                             } else {
+                                checkCountArray(tag, count);
                                 Rational[] r = readRationalArray(count, value);
                                 _niso.setExposureTime(average(r[0], r[1]).toDouble());
                             }
                             break;
                         case EXTRASAMPLES:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _niso.setExtraSamples(readShortArray(type, count, value));
                             if (_version < 6) {
                                 _version = 6;
@@ -2415,6 +2424,7 @@ public class TiffIFD extends IFD {
                             if (count == 1) {
                                 _niso.setFlashEnergy(readRational(count, value));
                             } else {
+                                checkCountArray(tag, count);
                                 Rational[] r = readRationalArray(count, value);
                                 _niso.setFlashEnergy(average(r[0], r[1]));
                             }
@@ -2424,6 +2434,7 @@ public class TiffIFD extends IFD {
                             if (count == 1) {
                                 _niso.setFNumber(readRational(count, value).toDouble());
                             } else {
+                                checkCountArray(tag, count);
                                 Rational[] r = readRationalArray(count, value);
                                 _niso.setFNumber(average(r[0], r[1]).toDouble());
                             }
@@ -2433,6 +2444,7 @@ public class TiffIFD extends IFD {
                             if (count == 1) {
                                 _niso.setFocalLength(readRational(count, value).toDouble());
                             } else {
+                                checkCountArray(tag, count);
                                 Rational[] r = readRationalArray(count, value);
                                 _niso.setFocalLength(average(r[0], r[1]).toDouble());
                             }
@@ -2454,10 +2466,12 @@ public class TiffIFD extends IFD {
                             break;
                         case FREEBYTECOUNTS:
                             checkType(tag, type, LONG);
+                            checkCountArray(tag, count);
                             _freeByteCounts = readLongArray(type, count, value);
                             break;
                         case FREEOFFSETS:
                             checkType(tag, type, LONG);
+                            checkCountArray(tag, count);
                             _freeOffsets = readLongArray(type, count, value);
                             break;
                         case GEOASCIIPARAMSTAG:
@@ -2466,10 +2480,12 @@ public class TiffIFD extends IFD {
                             break;
                         case GEODOUBLEPARAMSTAG:
                             checkType(tag, type, DOUBLE);
+                            checkCountArray(tag, count);
                             _geoDoubleParamsTag = readDoubleArray(count, value);
                             break;
                         case GEOKEYDIRECTORYTAG:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _geoKeyDirectoryTag = readShortArray(type, count, value);
                             int num = _geoKeyDirectoryTag[3];
                             int prevKey = -1;
@@ -2501,6 +2517,7 @@ public class TiffIFD extends IFD {
                             break;
                         case GRAYRESPONSECURVE:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _niso.setGrayResponseCurve(readShortArray(type, count, value));
                             break;
                         case GRAYRESPONSEUNIT:
@@ -2577,10 +2594,12 @@ public class TiffIFD extends IFD {
                             break;
                         case PHOTOSHOPPROPS:
                             // Can't find any info on what type is expected.
+                            checkCountArray(tag, count);
                             _photoshopProperties = readByteArray(type, count, value);
                             break;
                         case ANNOTATIONS:
                             // Can't find any info on what type is expected.
+                            checkCountArray(tag, count);
                             _annotations = readByteArray(type, count, value);
                             break;
                         case IMAGEWIDTH:
@@ -2611,6 +2630,7 @@ public class TiffIFD extends IFD {
                         case ICC_PROFILE:
                             checkType(tag, type, UNDEFINED);
                             // Read the iccProdfile data as an array of bytes
+                            checkCountArray(tag, count);
                             _iccProfile = readTrueByteArray(type, count, value);
                             try {
                                 String desc = NisoImageMetadata
@@ -2643,9 +2663,11 @@ public class TiffIFD extends IFD {
                                 }
                                 _iptc = larray;
                             } else if (type == LONG) {
+                                checkCountArray(tag, count);
                                 _iptc = readLongArray(type, count, value);
                             } else {
                                 checkType(tag, type, BYTE, UNDEFINED);
+                                checkCountArray(tag, count);
                                 int[] b = readByteArray(type, count, value);
                                 long[] larray = new long[b.length];
                                 for (int i = 0; i < b.length; i++) {
@@ -2665,6 +2687,7 @@ public class TiffIFD extends IFD {
                             break;
                         case JPEGACTABLES:
                             checkType(tag, type, LONG);
+                            checkCountArray(tag, count);
                             _jpegACTables = readLongArray(type, count, value);
                             if (_version < 6) {
                                 _version = 6;
@@ -2672,6 +2695,7 @@ public class TiffIFD extends IFD {
                             break;
                         case JPEGDCTABLES:
                             checkType(tag, type, LONG);
+                            checkCountArray(tag, count);
                             _jpegDCTables = readLongArray(type, count, value);
                             if (_version < 6) {
                                 _version = 6;
@@ -2695,6 +2719,7 @@ public class TiffIFD extends IFD {
                             break;
                         case JPEGLOSSLESSPREDICTORS:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _jpegLosslessPredictors = readShortArray(type, count, value);
                             if (_version < 6) {
                                 _version = 6;
@@ -2702,6 +2727,7 @@ public class TiffIFD extends IFD {
                             break;
                         case JPEGPOINTTRANSFORMS:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _jpegPointTransforms = readShortArray(type, count, value);
                             if (_version < 6) {
                                 _version = 6;
@@ -2717,6 +2743,7 @@ public class TiffIFD extends IFD {
                             break;
                         case JPEGQTABLES:
                             checkType(tag, type, LONG);
+                            checkCountArray(tag, count);
                             _jpegQTables = readLongArray(type, count, value);
                             if (_version < 6) {
                                 _version = 6;
@@ -2732,6 +2759,7 @@ public class TiffIFD extends IFD {
                             break;
                         case JPEGTABLES:
                             checkType(tag, type, UNDEFINED);
+                            checkCountArray(tag, count);
                             _jpegTables = readByteArray(type, count, value);
                             break;
                         case LIGHTSOURCE:
@@ -2750,6 +2778,7 @@ public class TiffIFD extends IFD {
                             break;
                         case MAXSAMPLEVALUE:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _maxSampleValue = readShortArray(type, count, value);
                             break;
                         case METERINGMODE:
@@ -2759,6 +2788,7 @@ public class TiffIFD extends IFD {
                             break;
                         case MINSAMPLEVALUE:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _minSampleValue = readShortArray(type, count, value);
                             break;
                         case MODEL:
@@ -2772,6 +2802,7 @@ public class TiffIFD extends IFD {
                             break;
                         case MODELTIEPOINTTAG:
                             checkType(tag, type, DOUBLE);
+                            checkCountArray(tag, count);
                             _modelTiepointTag = readDoubleArray(count, value);
                             break;
                         case MODELTRANSFORMATIONTAG:
@@ -2789,6 +2820,7 @@ public class TiffIFD extends IFD {
                             break;
                         case NOISE:
                             checkType(tag, type, UNDEFINED);
+                            checkCountArray(tag, count);
                             _noise = readByteArray(type, count, value);
                             break;
                         case NUMBEROFINKS:
@@ -2801,6 +2833,7 @@ public class TiffIFD extends IFD {
                             break;
                         case OECF:
                             checkType(tag, type, UNDEFINED);
+                            checkCountArray(tag, count);
                             _oecf = readByteArray(tag, count, value);
                             break;
                         case OPIPROXY:
@@ -2864,6 +2897,7 @@ public class TiffIFD extends IFD {
                             break;
                         case PIXELINTENSITYRANGE:
                             checkType(tag, type, BYTE);
+                            checkCountArray(tag, count);
                             _pixelIntensityRange = readShortArray(type, count, value);
                             break;
                         case PLANARCONFIGURATION:
@@ -2920,6 +2954,7 @@ public class TiffIFD extends IFD {
                             break;
                         case SAMPLEFORMAT:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _sampleFormat = readShortArray(type, count, value);
                             if (_version < 6) {
                                 _version = 6;
@@ -2950,6 +2985,7 @@ public class TiffIFD extends IFD {
                             break;
                         case STRIPROWCOUNTS:
                             checkType(tag, type, LONG);
+                            checkCountArray(tag, count);
                             _stripRowCounts = readLongArray(type, count, value);
                             break;
                         case SUBJECTDISTANCE:
@@ -2959,6 +2995,7 @@ public class TiffIFD extends IFD {
                                 darray[0] = readRational(count, value).toDouble();
                                 darray[1] = darray[0];
                             } else {
+                                checkCountArray(tag, count);
                                 Rational[] r;
                                 if (type == RATIONAL) {
                                     r = readRationalArray(count, value);
@@ -2983,6 +3020,7 @@ public class TiffIFD extends IFD {
                             break;
                         case SPATIALFREQUENCYRESPONSE:
                             checkType(tag, type, UNDEFINED);
+                            checkCountArray(tag, count);
                             _spatialFrequencyResponse = readByteArray(type, count, value);
                             break;
                         case SPECTRALSENSITIVITY:
@@ -2991,10 +3029,12 @@ public class TiffIFD extends IFD {
                             break;
                         case STRIPBYTECOUNTS:
                             checkType(tag, type, SHORT, LONG);
+                            checkCountArray(tag, count);
                             _niso.setStripByteCounts(readLongArray(type, count, value));
                             break;
                         case STRIPOFFSETS:
                             checkType(tag, type, SHORT, LONG);
+                            checkCountArray(tag, count);
                             _niso.setStripOffsets(readLongArray(type, count, value));
                             break;
                         case SUBFILETYPE:
@@ -3004,10 +3044,12 @@ public class TiffIFD extends IFD {
                             break;
                         case SUBIFDS:
                             checkType(tag, type, LONG, IFD);
+                            checkCountArray(tag, count);
                             _subIFDs = readLongArray(type, count, value);
                             break;
                         case SUBJECTLOCATION:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _subjectLocation = readShortArray(type, count, value);
                             break;
                         case T4OPTIONS:
@@ -3041,6 +3083,7 @@ public class TiffIFD extends IFD {
                             break;
                         case TILEBYTECOUNTS:
                             checkType(tag, type, SHORT, LONG);
+                            checkCountArray(tag, count);
                             _niso.setTileByteCounts(readLongArray(type, count, value));
                             if (_version < 6) {
                                 _version = 6;
@@ -3056,6 +3099,7 @@ public class TiffIFD extends IFD {
                             break;
                         case TILEOFFSETS:
                             checkType(tag, type, SHORT, LONG);
+                            checkCountArray(tag, count);
                             _niso.setTileOffsets(readLongArray(type, count, value));
                             if (_version < 6) {
                                 _version = 6;
@@ -3071,6 +3115,7 @@ public class TiffIFD extends IFD {
                             break;
                         case TIMEZONEOFFSET:
                             checkType(tag, type, SSHORT);
+                            checkCountArray(tag, count);
                             _timeZoneOffset = readSShortArray(type, count, value);
                             break;
                         case TRANSFERFUNCTION:
@@ -3162,6 +3207,7 @@ public class TiffIFD extends IFD {
                             break;
                         case XMP:
                             checkType(tag, type, UNDEFINED, BYTE);
+                            checkCountArray(tag, count);
                             _xmpProp = readXMP(count, value);
                             break;
                         case DNGVERSION:
@@ -3193,6 +3239,7 @@ public class TiffIFD extends IFD {
                             }
                         case CFAPLANECOLOR:
                             checkType(tag, type, BYTE);
+                            checkCountArray(tag, count);
                             _cfaPlaneColor = readByteArray(type, count, value);
                             break;
                         case CFALAYOUT:
@@ -3201,16 +3248,19 @@ public class TiffIFD extends IFD {
                             break;
                         case LINEARIZATIONTABLE:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _linearizationTable = readShortArray(type, count, value);
                             break;
                         case BLACKLEVELREPEATDIM:
                             checkType(tag, type, SHORT);
+                            checkCountArray(tag, count);
                             _blackLevelRepeatDim = readShortArray(type, count, value);
                             break;
                         case BLACKLEVEL:
                             // Just to make things complicated, this can be SHORT, LONG
                             // or RATIONAL. To give these a least common (pardon the
                             // expression) denominator, we convert all to rational.
+                            checkCountArray(tag, count);
                             if (type == RATIONAL) {
                                 _blackLevel = readRationalArray(count, value);
                             } else {
@@ -3224,14 +3274,17 @@ public class TiffIFD extends IFD {
                             break;
                         case BLACKLEVELDELTAH:
                             checkType(tag, type, SRATIONAL);
+                            checkCountArray(tag, count);
                             _blackLevelDeltaH = readSignedRationalArray(count, value);
                             break;
                         case BLACKLEVELDELTAV:
                             checkType(tag, type, SRATIONAL);
+                            checkCountArray(tag, count);
                             _blackLevelDeltaV = readSignedRationalArray(count, value);
                             break;
                         case WHITELEVEL:
                             checkType(tag, type, SHORT, LONG);
+                            checkCountArray(tag, count);
                             _whiteLevel = readLongArray(type, count, value);
                             break;
                         case DEFAULTSCALE:
@@ -3285,35 +3338,43 @@ public class TiffIFD extends IFD {
                             break;
                         case COLORMATRIX1:
                             checkType(tag, type, SRATIONAL);
+                            checkCountArray(tag, count);
                             _colorMatrix1 = readSignedRationalArray(count, value);
                             break;
                         case COLORMATRIX2:
                             checkType(tag, type, SRATIONAL);
+                            checkCountArray(tag, count);
                             _colorMatrix2 = readSignedRationalArray(count, value);
                             break;
                         case CAMERACALIBRATION1:
                             checkType(tag, type, SRATIONAL);
+                            checkCountArray(tag, count);
                             _colorMatrix1 = readSignedRationalArray(count, value);
                             break;
                         case CAMERACALIBRATION2:
                             checkType(tag, type, SRATIONAL);
+                            checkCountArray(tag, count);
                             _colorMatrix2 = readSignedRationalArray(count, value);
                             break;
                         case REDUCTIONMATRIX1:
                             checkType(tag, type, SRATIONAL);
+                            checkCountArray(tag, count);
                             _reductionMatrix1 = readSignedRationalArray(count, value);
                             break;
                         case REDUCTIONMATRIX2:
                             checkType(tag, type, SRATIONAL);
+                            checkCountArray(tag, count);
                             _reductionMatrix2 = readSignedRationalArray(count, value);
                             break;
                         case ANALOGBALANCE:
                             checkType(tag, type, RATIONAL);
+                            checkCountArray(tag, count);
                             _analogBalance = readRationalArray(count, value);
                             break;
                         case ASSHOTNEUTRAL:
                             // this can be either SHORT or RATIONAL
                             checkType(tag, type, SHORT, RATIONAL);
+                            checkCountArray(tag, count);
                             if (type == SHORT) {
                                 int[] asn = readShortArray(type, count, value);
                                 _asShotNeutral = new Rational[(int) count];
@@ -3372,6 +3433,7 @@ public class TiffIFD extends IFD {
                             break;
                         case DNGPRIVATEDATA:
                             checkType(tag, type, BYTE);
+                            checkCountArray(tag, count);
                             _dngPrivateData = readByteArray(type, count, value);
                             break;
                         case MAKERNOTESAFETY:
@@ -3453,12 +3515,10 @@ public class TiffIFD extends IFD {
 		// }
 		// }
 		// }
-		if (_photometricInterpretation == 5) {
-			if (_dotRange == null) {
-				_dotRange = new int[2];
-				_dotRange[0] = 0;
-				_dotRange[1] = bps1;
-			}
+		if (_photometricInterpretation == 5 && _dotRange == null) {
+                    _dotRange = new int[2];
+                    _dotRange[0] = 0;
+                    _dotRange[1] = bps1;
 		}
 		if (_photometricInterpretation == 2
 				|| _photometricInterpretation == 6) {

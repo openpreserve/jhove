@@ -18,10 +18,20 @@ import java.io.IOException;
  */
 public abstract class Chunk {
 
+    /** Length of chunk ID fields in bytes */
+    public static final int ID_LENGTH = 4;
+
+    /** Length of chunk size fields in bytes */
+    public static final int SIZE_LENGTH = 4;
+
+    /** Length of chunk headers in bytes */
+    public static final int HEADER_LENGTH = ID_LENGTH + SIZE_LENGTH;
+
     protected ModuleBase _module;
-    protected long chunkSize;
-    protected long bytesLeft;
     protected DataInputStream _dstream;
+    protected long bytesLeft;
+    protected long chunkSize;
+    protected long chunkOffset;
 
     /**
      * Class constructor.
@@ -33,9 +43,10 @@ public abstract class Chunk {
     public Chunk(ModuleBase module, ChunkHeader hdr, DataInputStream dstrm)
     {
         _module = module;
-        chunkSize = hdr.getSize();
-        bytesLeft = chunkSize;
         _dstream = dstrm;
+        chunkSize = hdr.getSize();
+        chunkOffset = hdr.getOffset();
+        bytesLeft = chunkSize;
     }
 
     /**

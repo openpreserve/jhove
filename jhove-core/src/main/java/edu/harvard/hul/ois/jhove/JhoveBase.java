@@ -6,6 +6,7 @@
 package edu.harvard.hul.ois.jhove;
 
 import edu.harvard.hul.ois.jhove.handler.AuditHandler;
+import edu.harvard.hul.ois.jhove.handler.JsonHandler;
 import edu.harvard.hul.ois.jhove.handler.TextHandler;
 import edu.harvard.hul.ois.jhove.handler.XmlHandler;
 import edu.harvard.hul.ois.jhove.module.BytestreamModule;
@@ -21,9 +22,35 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.openpreservation.jhove.ReleaseDetails;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+
+import edu.harvard.hul.ois.jhove.Module;
+import edu.harvard.hul.ois.jhove.handler.AuditHandler;
+import edu.harvard.hul.ois.jhove.handler.TextHandler;
+import edu.harvard.hul.ois.jhove.handler.XmlHandler;
+import edu.harvard.hul.ois.jhove.module.BytestreamModule;
 
 /**
  * The JHOVE engine, providing all base services necessary to build an
@@ -130,7 +157,7 @@ public class JhoveBase {
      * Class constructor.
      *
      * Instantiates a <code>JhoveBase</code> object.
-     * 
+     *
      * @throws JhoveException
      *             if invoked with a JVM lower than 1.8
      */
@@ -357,6 +384,11 @@ public class JhoveBase {
         _handlerList.add(handler);
         _handlerMap.put(handler.getName().toLowerCase(), handler);
 
+        handler = new JsonHandler();
+        handler.setDefaultParams(new ArrayList<String>());
+        _handlerList.add(handler);
+        _handlerMap.put(handler.getName().toLowerCase(), handler);
+
         handler = new AuditHandler();
         handler.setDefaultParams(new ArrayList<String>());
         _handlerList.add(handler);
@@ -380,7 +412,7 @@ public class JhoveBase {
      * information about that handler.
      * <li>If they're both null, provides information about the application.
      * </ul>
-     * 
+     *
      * @param app
      *            The App object for the application
      * @param module
@@ -714,6 +746,10 @@ public class JhoveBase {
             value = ckSummer.getSHA1();
             if (value != null) {
                 info.setChecksum(new Checksum(value, ChecksumType.SHA1));
+            }
+            value = ckSummer.getSHA256();
+            if (value != null) {
+                info.setChecksum(new Checksum(value, ChecksumType.SHA256));
             }
         }
         return tempFile;
@@ -1141,7 +1177,7 @@ public class JhoveBase {
 
     /**
      * Creates an output PrintWriter.
-     * 
+     *
      * @param outputFile
      *            Output filepath. If null, writer goes to System.out.
      * @param encoding

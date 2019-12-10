@@ -31,15 +31,15 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
  */
 public abstract class IFD
 {
-    
+
     /******************************************************************
      * DEBUGGING FIELDS.
      * All debugging fields should be set to false for release code.
      ******************************************************************/
-    
+
     /* Set to true to allow out-of-sequence tags. */
-    private static final boolean debug_allowoutofsequence = false;
-    
+    private static final boolean DEBUG_ALLOW_OUT_OF_SEQUENCE = false;
+
     /******************************************************************
      * PUBLIC CLASS FIELDS.
      ******************************************************************/
@@ -54,7 +54,7 @@ public abstract class IFD
     public static final int GPSINFO = 3;
     /** Global parameters IFD. */
     public static final int GLOBALPARAMETERS = 4;
-    
+
 
     /** Undefined value for integer tags. */
     public static final int NULL = -1;
@@ -110,7 +110,7 @@ public abstract class IFD
 
     /** True if this is the first IFD. */
     private boolean _first;
-    
+
     /** True if the is the "thumbnail" IFD. */
     private boolean _thumbnail;
 
@@ -125,7 +125,7 @@ public abstract class IFD
 
     /** IFD offset. */
     protected long _offset;
-    
+
     /** Open random access TIFF file. */
     private RandomAccessFile _raf;
 
@@ -166,55 +166,78 @@ public abstract class IFD
      * PUBLIC INSTANCE METHODS.
      ******************************************************************/
 
-    /** Get any errors discovered during parsing. */
+    /** Get any errors discovered during parsing.
+     * @return list of strings with errors
+     */
     public List<String> getErrors()
     {
         return _errors;
     }
 
-    /** Get the offset of the next IFD. */
+    /** Get the offset of the next IFD.
+     * @return next
+     */
     public long getNext()
     {
         return _next;
     }
 
-    /** Get the IFD offset. */
+    /** Get the IFD offset.
+     *  @return IFD offset
+    */
     public long getOffset()
     {
         return _offset;
     }
 
-    /** Get the IFD properties. */
+    /** Get the IFD properties.
+     *  @param rawOutput: boolean
+     *  @return Property
+     *  @throws edu.harvard.hul.ois.jhove.module.tiff.TiffException
+    */
     public abstract Property getProperty(boolean rawOutput)
                         throws TiffException;
 
-    /** Get the TIFF version. */
+    /** Get the TIFF version.
+     *  @return TIFF version
+     */
     public int getVersion()
     {
         return _version;
     }
 
-    /** Return true if this is the first IFD. */
+    /** Return true if this is the first IFD.
+     * @return if it's first?
+    */
     public boolean isFirst()
     {
         return _first;
     }
-    
-    /** Return true if this is the thumbnail IFD. */
+
+    /** Return true if this is the thumbnail IFD.
+     * @return if it's a thumbnail
+     */
     public boolean isThumbnail()
     {
         return _thumbnail;
     }
-    
 
-    /** Lookup IFD tag. */
+
+    /** Lookup IFD tag.
+     *  @param tag
+     *  @param type
+     *  @param count
+     *  @param value
+     *  @throws edu.harvard.hul.ois.jhove.module.tiff.TiffException
+     */
     public abstract void lookupTag(int tag, int type, long count, long value)
         throws TiffException;
 
-    /** Parse the IFD. Errors are not suppressed, and odd byte offsets for
-     *  tags not allowed.
-     *  
+    /** Parse the IFD.Errors are not suppressed, and odd byte offsets for
+     * tags not allowed.
+     *
      * @return The offset of the next IFD
+     * @throws edu.harvard.hul.ois.jhove.module.tiff.TiffException
      */
     public long parse()
         throws TiffException
@@ -226,6 +249,7 @@ public abstract class IFD
      * @param byteOffsetIsValid   If true, allow offsets on odd byte boundaries
      * @param suppressErrors      If true, return IFD even with errors
      * @return The offset of the next IFD
+     * @throws edu.harvard.hul.ois.jhove.module.tiff.TiffException
      */
     public long parse(boolean byteOffsetIsValid, boolean suppressErrors)
         throws TiffException
@@ -235,7 +259,7 @@ public abstract class IFD
         }
         catch (TiffException e) {
             // If we got a TiffException and we're suppressing errors,
-            // cover over the exception and issue an info message; 
+            // cover over the exception and issue an info message;
             // but we can't follow the IFD chain further.
             if (suppressErrors) {
                 _info.setMessage
@@ -245,12 +269,13 @@ public abstract class IFD
             throw e;
         }
     }
-    
-    
-    /** Parse the IFD. Errors are not suppressed. 
-     * 
+
+
+    /** Parse the IFD.Errors are not suppressed.
+     *
      * @param byteOffsetIsValid   If true, allow offsets on odd byte boundaries
      * @return The offset of the next IFD
+     * @throws edu.harvard.hul.ois.jhove.module.tiff.TiffException
      */
     public long parse(boolean byteOffsetIsValid)
         throws TiffException
@@ -288,8 +313,8 @@ public abstract class IFD
                 int tag = ModuleBase.readUnsignedShort(ifdStream, _bigEndian,
                                                         null);
                 /* Tags must be in ascending numerical order. */
-                if (!debug_allowoutofsequence && tag < prevTag) {
-                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_2.getMessage(), Integer.valueOf(tag));
+                if (!DEBUG_ALLOW_OUT_OF_SEQUENCE && tag < prevTag) {
+                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_2.getMessage(), tag);
                     JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_2.getId(), mess);
                     _info.setMessage(new ErrorMessage(message, _offset + 2 + 12*i));
                     _info.setWellFormed(false);
@@ -300,7 +325,7 @@ public abstract class IFD
                                                         _bigEndian, null);
                 /* Skip over tags with unknown type. */
                 if (type < BYTE || type > IFD) {
-                    String subMess = MessageFormat.format(MessageConstants.TIFF_HUL_3_SUB.getMessage(), Integer.valueOf(type), Integer.valueOf(tag));
+                    String subMess = MessageFormat.format(MessageConstants.TIFF_HUL_3_SUB.getMessage(), type, Integer.valueOf(tag));
                     _info.setMessage(new ErrorMessage(MessageConstants.TIFF_HUL_3, subMess,
                     		                          _offset + 4 + 12*i));
                 }
@@ -318,7 +343,7 @@ public abstract class IFD
                         /* Value is the word-aligned offset of the actual
                          * value. */
 			if ((value & 1) != 0) {
-				final String mess = MessageFormat.format(MessageConstants.TIFF_HUL_4.getMessage(), Long.valueOf(value));
+				final String mess = MessageFormat.format(MessageConstants.TIFF_HUL_4.getMessage(), value);
 				JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_4.getId(), mess);
 			    if (byteOffsetIsValid) {
 				_info.setMessage(new InfoMessage(message, _offset + 10 + 12*i));
@@ -345,21 +370,25 @@ public abstract class IFD
         return _next;
     }
 
-    /** Sets flag indicating whether this is the first IFD. */
+    /** Sets flag indicating whether this is the first IFD.
+     * @param first: true if it's the first IFD
+     */
     public void setFirst(boolean first)
     {
         _first = first;
     }
-    
+
     /** Sets flag indicating whether this is the "thumbnail" IFD.
      *  The second IFD in the top-level chain is assumed to be
-     *  the Thumbnail IFD. */
+     *  the Thumbnail IFD.
+     * @param thumbnail: flag true if this is the thumbnail IFD
+     */
     public void setThumbnail(boolean thumbnail)
     {
         _thumbnail = thumbnail;
     }
 
-    /** 
+    /**
      *  Returns a Property representing a bitmask.
      *  If <code>rawOutput</code> is true, returns a LIST
      *  property whose elements are STRING properties.  The
@@ -369,6 +398,14 @@ public abstract class IFD
      *  the low-order bit as bit 0.
      *  if <code>rawOutput</code> is false, returns a LONG
      *  property whose numeric value is <code>value</code>.
+     *
+     * @param name
+     * @param value
+     * @param labels
+     * @param rawOutput: true if string output is wanted, false returns
+     * a long property
+     * @return property representing a bitmask
+     *
      */
     protected Property addBitmaskProperty(String name, long value,
                                           String [] labels, boolean rawOutput)
@@ -390,13 +427,13 @@ public abstract class IFD
                                 PropertyArity.LIST, list);
         }
         if (prop == null) {
-            prop = new Property(name, PropertyType.LONG, new Long(value));
+            prop = new Property(name, PropertyType.LONG, value);
         }
 
         return prop;
     }
 
-    /** 
+    /**
      *  Returns an Property representing an integer value.
      *  If <code>rawOutput</code> is true, returns
      *  an INTEGER property, and <code>labels</code> and
@@ -404,6 +441,13 @@ public abstract class IFD
      *  returns a STRING property, with the
      *  string being the element of <code>labels</code>
      *  whose index is <code>value</code>.
+     *
+     * @param name
+     * @param value
+     * @param labels
+     * @param rawOutput: true if integer output is wanted, false returns
+     * a string property
+     * @return property representing an integer value
      */
     protected Property addIntegerProperty(String name, int value,
                                            String [] labels, boolean rawOutput)
@@ -418,14 +462,13 @@ public abstract class IFD
             }
         }
         if (prop == null) {
-            prop = new Property(name, PropertyType.INTEGER,
-                                 new Integer(value));
+            prop = new Property(name, PropertyType.INTEGER, value);
         }
 
         return prop;
     }
 
-    /** 
+    /**
      *  Returns an Property representing an integer value.
      *  If <code>rawOutput</code> is true, returns
      *  an INTEGER property, and <code>labels</code> and
@@ -434,6 +477,14 @@ public abstract class IFD
      *  string being the element of <code>labels</code>
      *  whose index is the index of
      *  <code>value</code> in <code>index</code>.
+     *
+     * @param name
+     * @param value
+     * @param labels
+     * @param index
+     * @param rawOutput: true if int output is wanted, false returns
+     * a string property
+     * @return property representing an integer value
      */
     protected Property addIntegerProperty(String name, int value,
                                           String [] labels, int [] index,
@@ -457,19 +508,26 @@ public abstract class IFD
         }
         if (prop == null) {
             prop = new Property(name, PropertyType.INTEGER,
-                                 new Integer(value));
+                                 value);
         }
 
         return prop;
     }
 
-    /** 
+    /**
      *  Returns an ARRAY Property representing an integer array.
      *  If <code>rawOutput</code> is true, the elements of the property array
      *  are INTEGER properties, and <code>labels</code> is unused.  Otherwise,
      *  the elements of the array are STRING properties, with the
      *  elements of <code>value</code> used as indices into
      *  <code>labels</code>.
+     *
+     * @param name
+     * @param value
+     * @param labels
+     * @param rawOutput: true if int output is wanted, false returns
+     * a string property
+     * @return property representing an integer array
      */
     protected Property addIntegerArrayProperty(String name, int [] value,
                                                 String [] labels,
@@ -502,7 +560,14 @@ public abstract class IFD
      * If rawOutput is true, returns a property with type
      * RATIONAL.  Otherwise, returns a property with type
      * STRING, and the text representation of the Rational
-     * value as a floating-point ratio. */
+     * value as a floating-point ratio.
+     *
+     * @param name
+     * @param r: a rational value
+     * @param rawOutput: true if int output is wanted, false returns
+     * a string property
+     * @return property for a tag with a RATIONAL value
+     */
     protected Property addRationalProperty(String name, Rational r,
                                             boolean rawOutput)
     {
@@ -545,12 +610,16 @@ public abstract class IFD
     {
     }
 
-    /** Standard IFD property header. */
+    /** Standard IFD property header.
+     *
+     * @param type
+     * @param entries
+     * @return IDF property header
+     */
     protected Property propertyHeader(String type, List entries)
     {
         Property [] array = new Property [3];
-        array[0] = new Property("Offset", PropertyType.LONG,
-                                 new Long(_offset));
+        array[0] = new Property("Offset", PropertyType.LONG,_offset);
         array[1] = new Property("Type", PropertyType.STRING, type);
         array[2] = new Property("Entries", PropertyType.PROPERTY,
                                  PropertyArity.LIST, entries);
@@ -564,6 +633,8 @@ public abstract class IFD
      * If there are non-ASCII characters, they're escaped as %XX
      * @param count Length of string
      * @param value Offset of string
+     * @return ASCII string
+     * @throws IOException
      */
     protected String readASCII(long count, long value)
         throws IOException
@@ -592,10 +663,12 @@ public abstract class IFD
     }
 
     /** Reads an array of strings from the TIFF file.
-     * 
+     *
      *  @param  count  Number of strings to read
      *  @param  value  Offset from which to read
-     *  
+     *
+     *  @return ASCII string array
+     *  @throws IOException
      */
     protected String [] readASCIIArray(long count, long value)
         throws IOException
@@ -624,7 +697,7 @@ public abstract class IFD
                 }
             }
         }
-        /* We can't use ArrayList.toArray because that returns an 
+        /* We can't use ArrayList.toArray because that returns an
            Object[], not a String[] ... sigh. */
         String [] strs = new String[nstrs];
         ListIterator<String> iter = list.listIterator();
@@ -635,11 +708,13 @@ public abstract class IFD
     }
 
     /** Reads and returns a single unsigned 8-bit integer value.
-     * 
+     *
      *  @param  type   TIFF type to read; must be an 8-bit type
      *  @param  count  Unused
      *  @param  value  Offset from which to read
-     *  
+     *
+     *  @return unsigned 8-bit integer value
+     *  @throws java.io.IOException
      */
     protected int readByte(int type, long count, long value)
         throws IOException
@@ -650,11 +725,14 @@ public abstract class IFD
     }
 
     /** Reads an array of bytes and returns it as an int array.
-     * 
-     *  @param  type   TIFF type to read; must be an 8-bit type 
+     *
+     *  @param  type   TIFF type to read; must be an 8-bit type
      *  @param  count  Number of bytes to read
      *  @param  value  Offset from which to read
-     */  
+     *
+     *  @return int array of bytes
+     *  @throws IOException
+     */
     protected int [] readByteArray(int type, long count, long value)
         throws IOException
     {
@@ -670,11 +748,14 @@ public abstract class IFD
 
 
     /** Reads an array of bytes and returns it as a byte array.
-     * 
-     *  @param  type   Unused 
+     *
+     *  @param  type   Unused
      *  @param  count  Number of bytes to read
      *  @param  value  Offset from which to read
-     */  
+     *
+     *  @return byte array
+     *  @throws java.io.IOException
+     */
     protected byte [] readTrueByteArray(int type, long count, long value)
         throws IOException
     {
@@ -685,11 +766,14 @@ public abstract class IFD
     }
 
     /**
-     *  Reads a TIFF array of DOUBLE 64-bit values and returns 
+     *  Reads a TIFF array of DOUBLE 64-bit values and returns
      *  it as a double array.
-     * 
+     *
      *  @param  count  Number of values to read
      *  @param  value  Offset from which to read
+     *
+     *  @return double array
+     *  @throws IOException
      */
     protected double [] readDoubleArray(long count, long value)
         throws IOException
@@ -705,11 +789,13 @@ public abstract class IFD
     }
 
     /** Reads and returns a single unsigned 32-bit integer value.
-     * 
+     *
      *  @param  type   TIFF type to read; must be a 32-bit type
      *  @param  count  Unused
      *  @param  value  Offset from which to read
-     *  
+     *
+     *  @return unsigned 32-bit integer value
+     *  @throws  IOException
      */
     protected long readLong(int type, long count, long value)
         throws IOException
@@ -722,12 +808,15 @@ public abstract class IFD
 
 
     /**
-     *  Reads a TIFF array of signed 32-bit integer values and returns 
+     *  Reads a TIFF array of signed 32-bit integer values and returns
      *  it as a long array.
-     * 
+     *
      *  @param  type   TIFF type to read; must be a 32-bit type
      *  @param  count  Number of values to read
      *  @param  value  Offset from which to read
+     *
+     *  @return long array
+     *  @throws IOException
      */
     protected long [] readLongArray(int type, long count, long value)
         throws IOException
@@ -743,9 +832,12 @@ public abstract class IFD
 
     /** Reads an unsigned number of any type.
      *  @param  type   TIFF type to read
+     *
+     *  @return unsigned number
+     *  @throws IOException
      */
-    public long readUnsigned(int type) 
-        throws IOException 
+    public long readUnsigned(int type)
+        throws IOException
     {
         long u = 0L;
 
@@ -761,6 +853,8 @@ public abstract class IFD
         case IFD:
             u = ModuleBase.readUnsignedInt(_raf, _bigEndian);
             break;
+        default:
+            break;
         }
 
         return u;
@@ -768,12 +862,18 @@ public abstract class IFD
 
 
     /** Reads a RATIONAL value and returns it as a Rational.
+     *
+     * @param count
+     * @param value
+     *
+     * @return rational
+     * @throws IOException
      */
     protected Rational readRational(long count, long value)
         throws IOException
     {
         _raf.seek(value);
-        
+
         long numer = ModuleBase.readUnsignedInt(_raf, _bigEndian);
         long denom = ModuleBase.readUnsignedInt(_raf, _bigEndian);
         return new Rational(numer, denom);
@@ -781,6 +881,12 @@ public abstract class IFD
 
     /** Reads an array of RATIONAL values and returns it as an
      *  array of Rational.
+     *
+     * @param count
+     * @param value
+     *
+     * @return array of rational values
+     * @throws IOException
      */
     protected Rational [] readRationalArray(long count, long value)
         throws IOException
@@ -791,12 +897,12 @@ public abstract class IFD
         _raf.read(buffer);
         DataInputStream stream =
             new DataInputStream(new ByteArrayInputStream(buffer));
-        
+
         Rational [] rarray = new Rational [(int) count];
         for (int i=0; i<count; i++) {
-           long numer = ModuleBase.readUnsignedInt 
+           long numer = ModuleBase.readUnsignedInt
                            (stream, _bigEndian, null);
-           long denom = ModuleBase.readUnsignedInt 
+           long denom = ModuleBase.readUnsignedInt
                            (stream, _bigEndian, null);
            rarray[i] = new Rational(numer, denom);
         }
@@ -805,12 +911,18 @@ public abstract class IFD
     }
 
     /** Reads an SRATIONAL value and returns it as a Rational.
+     *
+     * @param count
+     * @param value
+     *
+     * @return rational
+     * @throws IOException
      */
     protected Rational readSignedRational(long count, long value)
         throws IOException
     {
         _raf.seek(value);
-        
+
         long numer = ModuleBase.readSignedInt(_raf, _bigEndian);
         long denom = ModuleBase.readSignedInt(_raf, _bigEndian);
         return new Rational(numer, denom);
@@ -818,6 +930,12 @@ public abstract class IFD
 
     /** Reads an array of SRATIONAL values and returns it as an
      *  array of Rational.
+     *
+     * @param count
+     * @param value
+     *
+     * @return array of rational values
+     * @throws IOException
      */
     protected Rational [] readSignedRationalArray(long count, long value)
         throws IOException
@@ -828,12 +946,12 @@ public abstract class IFD
         _raf.read(buffer);
         DataInputStream stream =
             new DataInputStream(new ByteArrayInputStream(buffer));
-        
+
         Rational [] rarray = new Rational [(int) count];
         for (int i=0; i<count; i++) {
-           long numer = ModuleBase.readSignedInt 
+           long numer = ModuleBase.readSignedInt
                            (stream, _bigEndian, null);
-           long denom = ModuleBase.readSignedInt 
+           long denom = ModuleBase.readSignedInt
                            (stream, _bigEndian, null);
            rarray[i] = new Rational(numer, denom);
         }
@@ -842,7 +960,15 @@ public abstract class IFD
     }
 
 
-    /** Reads and returns a single unsigned 16-bit value. */
+    /** Reads and returns a single unsigned 16-bit value.
+     *
+     * @param type
+     * @param count
+     * @param value
+     *
+     * @return unsigned 16-bit value
+     * @throws IOException
+     */
     protected int readShort(int type, long count, long value)
         throws IOException
     {
@@ -852,8 +978,15 @@ public abstract class IFD
     }
 
     /**
-     *  Reads a TIFF array of unsigned 16-bit values and returns 
+     *  Reads a TIFF array of unsigned 16-bit values and returns
      *  it as an int array.
+     *
+     * @param type
+     * @param count
+     * @param value
+     *
+     * @return int array
+     * @throws IOException
      */
     protected int [] readShortArray(int type, long count, long value)
         throws IOException
@@ -868,8 +1001,15 @@ public abstract class IFD
     }
 
     /**
-     *  Reads a TIFF array of signed 16-bit values and returns 
+     *  Reads a TIFF array of signed 16-bit values and returns
      *  it as an int array.
+     *
+     * @param type
+     * @param count
+     * @param value
+     *
+     * @return int array
+     * @throws IOException
      */
     protected int [] readSShortArray(int type, long count, long value)
         throws IOException
@@ -888,6 +1028,8 @@ public abstract class IFD
      * type will require.
      * @param type Field type
      * @param count Field count
+     *
+     * @return number of bytes
      */
     public static long calcValueSize(int type, long count)
     {
@@ -914,12 +1056,14 @@ public abstract class IFD
         case DOUBLE:
             fieldSize = 8;
             break;
+        default:
+            break;
         }
         return  count*fieldSize;
     }
-    
-    /** 
-     *  Returns <code>true</code> if file is big-endian, 
+
+    /**
+     *  Returns <code>true</code> if file is big-endian,
      *  <code>false</code> if little-endian.
      */
     public boolean isBigEndian()
@@ -938,12 +1082,29 @@ public abstract class IFD
      * @param tag Tag entry value
      * @param count Tag entry count
      * @param minCount Tag count
+     * @throws edu.harvard.hul.ois.jhove.module.tiff.TiffException
      */
     protected static void checkCount(int tag, long count, int minCount)
         throws TiffException
     {
         if (count < minCount) {
-            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_6.getMessage(), Integer.valueOf(tag), Integer.valueOf(minCount), Long.valueOf(count));
+            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_6.getMessage(),
+                    tag, Integer.valueOf(minCount), Long.valueOf(count));
+            JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_6.getId(), mess);
+            throw new TiffException(message);
+        }
+    }
+
+    /**
+     * Check that the count is compatible with array instanciation.
+     * @param tag Tag entry value
+     * @param count Tag entry count
+     */
+    protected static void checkCountArray(int tag, long count)
+        throws TiffException
+    {
+        if (count > Integer.MAX_VALUE) {
+            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_6.getMessage(), Integer.valueOf(tag), Integer.valueOf(Integer.MAX_VALUE), Long.valueOf(count));
             JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_6.getId(), mess);
             throw new TiffException(message);
         }
@@ -953,21 +1114,21 @@ public abstract class IFD
      * Check the tag entry type.
      * @param tag Tag entry value
      * @param type Tag entry type
-     * @param expected Tag type
+     * @param expected Tag
+     * @throws edu.harvard.hul.ois.jhove.module.tiff.TiffException
      */
     protected static void checkType(int tag, int type, int expected)
         throws TiffException
     {
         /* Readers are supposed to accept BYTE, SHORT or LONG for any
          * unsigned integer field. */
-        if (type == BYTE || type == SHORT || type == LONG || type == IFD) {
-            if (expected == BYTE || expected == SHORT || expected == LONG ||
-		expected == IFD) {
-                return;    // it's OK
-            }
+        if ((type == BYTE || type == SHORT || type == LONG || type == IFD) &&
+                (expected == BYTE || expected == SHORT || expected == LONG ||
+		expected == IFD)) {
+            return;    // it's OK
         }
         if (type != expected) {
-            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_7.getMessage(), Integer.valueOf(tag), Integer.valueOf(expected), Integer.valueOf(type));
+            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_7.getMessage(), tag, Integer.valueOf(expected), Integer.valueOf(type));
             JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_7.getId(), mess);
             throw new TiffException(message);
         }
@@ -979,12 +1140,14 @@ public abstract class IFD
      * @param type Tag entry type
      * @param type1 Tag type
      * @param type2 Alternate tag type
+     * @throws edu.harvard.hul.ois.jhove.module.tiff.TiffException
      */
     protected static void checkType(int tag, int type, int type1, int type2)
         throws TiffException
     {
         if (type != type1 && type != type2) {
-            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_8.getMessage(), Integer.valueOf(tag), Integer.valueOf(type1), Integer.valueOf(type2), Integer.valueOf(type));
+            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_8.getMessage(),
+                    tag, Integer.valueOf(type1), Integer.valueOf(type2), Integer.valueOf(type));
             JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_8.getId(), mess);
             throw new TiffException(message);
         }

@@ -30,15 +30,13 @@ public class StructureTree
     private boolean _transient;
 
     /**
-     *  Constructor.  If there is a document structure tree,
-     *  this fills in the appropriate information.  If there isn't,
-     *  it does nothing.  Call isPresent() to determine whether
-     *  there is a document structure tree.  A PdfInvalidException may be
-     *  thrown if there is a structure tree but it is invalid.
+     *  Constructor. If there is a document structure tree,
+     *  this fills in the appropriate information. If there isn't,
+     *  it does nothing. Call {@code isPresent} to determine whether
+     *  there is a document structure tree. A {@code PdfInvalidException}
+     *  may be thrown if there is a structure tree but it is invalid.
      *
      *  @param module     The PdfModule under which we're operating
-     *  @param raf        The document file object
-     *  @param parser     The Parser being used
      */
     public StructureTree (PdfModule module)
         {

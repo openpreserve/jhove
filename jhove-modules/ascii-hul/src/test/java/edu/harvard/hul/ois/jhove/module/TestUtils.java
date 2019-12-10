@@ -1,9 +1,5 @@
 package edu.harvard.hul.ois.jhove.module;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,6 +11,8 @@ import java.net.URISyntaxException;
 import edu.harvard.hul.ois.jhove.Message;
 import edu.harvard.hul.ois.jhove.Module;
 import edu.harvard.hul.ois.jhove.RepInfo;
+
+import static org.junit.Assert.*;
 
 /**
  * Convenience methods to test that the result of JHOVE validation are as
@@ -29,8 +27,8 @@ import edu.harvard.hul.ois.jhove.RepInfo;
  *         <a href="https://github.com/carlwilson">carlwilson AT github</a>
  * @version 0.1 Created 14 Mar 2018:20:14:19
  */
-
 public final class TestUtils {
+
 	public static final String MODULE_RESOURCE_BASE = "/edu/harvard/hul/ois/jhove/module/";
 	public static final String EMPTY_FILE_PATH = MODULE_RESOURCE_BASE + "empty";
 
@@ -44,8 +42,7 @@ public final class TestUtils {
 	 * the results of JHOVE are as expected.
 	 *
 	 * @param module
-	 *            a {@link edu.harvard.hul.ois.jhove.Module} instance
-	 *            to use to validate the resource.
+	 *            a {@link Module} instance to validate the resource.
 	 * @param resToTest
 	 *            the String path of the resource to validate and test.
 	 * @param expctWllFrmd
@@ -87,15 +84,14 @@ public final class TestUtils {
 	/**
 	 * 
 	 * @param module
-	 *            a {@link edu.harvard.hul.ois.jhove.Module} instance
-	 *            to use to validate the resource.
+	 *            a {@link Module} instance to validate the resource.
 	 * @param resToTest
 	 *            the String path of the resource to validate and test.
 	 * @param expctWllFrmd
 	 *            the expected well formed value
 	 * @param expctVld
 	 *            the expected is valid value
-	 * @param message
+	 * @param expctMessage
 	 *            a JHOVE validation string message which MUST be found in the
 	 *            list of validation messages if messMustBePresent is true.
 	 *            When messMustBePresent is false the message MUST NOT be
@@ -120,19 +116,14 @@ public final class TestUtils {
 	 * Method that takes a file and tests that the results of JHOVE are as
 	 * expected.
 	 *
-	 * @param pdfModule
-	 *            a {@link edu.harvard.hul.ois.jhove.module.PdfModule} instance
-	 *            to use to validate the resource.
+	 * @param module
+	 *            a {@link Module} instance to validate the resource.
 	 * @param fileToTest
 	 *            a Java File instance to validate
 	 * @param expctWllFrmd
-	 *            the expected well formed value
+	 *            the expected well-formed value
 	 * @param expctVld
 	 *            the expected is valid value
-	 * @param expctMessage
-	 *            a JHOVE validation string message expected to be found in the
-	 *            list of validation messages. If this parameter is null the
-	 *            test isn't performed.
 	 */
 	public static RepInfo testValidateFile(final Module module,
 			final File fileToTest, final int expctWllFrmd, final int expctVld) {
@@ -167,14 +158,14 @@ public final class TestUtils {
 						"Expected message: %s, not found.", message));
 				outputMessages(info);
 			}
-			assertTrue("Expected message: " + message, jhoveMessage != null);
+			assertNotNull("Expected message: " + message, jhoveMessage);
 		} else {
 			if (jhoveMessage != null) {
 				System.out.println(String.format(
 						"Unexpected message: %s, found.", jhoveMessage.getMessage()));
 				outputMessages(info);
 			}
-			assertTrue("Unexpected message: " + message, jhoveMessage == null);
+			assertNull("Unexpected message: " + message, jhoveMessage);
 		}
 	}
 

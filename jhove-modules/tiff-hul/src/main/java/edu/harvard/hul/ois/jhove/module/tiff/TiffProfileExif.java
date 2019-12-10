@@ -78,11 +78,10 @@ public final class TiffProfileExif extends TiffProfile
 	            if (!(pInterpretation == 2 || pInterpretation == 6)) {
 	                return false;
 	            }
-	            if (pInterpretation == 6) {
-	                if (niso.getYCbCrSubSampling () == null ||
-	                niso.getYCbCrPositioning () == NisoImageMetadata.NULL) {
-	                    return false;
-	                }
+	            if (pInterpretation == 6 && (
+                            niso.getYCbCrSubSampling () == null ||
+                            niso.getYCbCrPositioning () == NisoImageMetadata.NULL)) {
+                        return false;
 	            }
 	    	}
 	        else {

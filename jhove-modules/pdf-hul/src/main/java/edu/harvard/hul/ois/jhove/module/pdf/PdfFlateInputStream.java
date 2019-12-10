@@ -15,7 +15,7 @@ import java.util.zip.InflaterInputStream;
  * An enhancement of InflaterInputStream to support Predictor and Columns.
  * How complicated does this get?  Do I need to read the whole thing before I can
  * "predict" anything?
- * 
+ *
  * @author Gary McGath
  *
  */
@@ -50,24 +50,24 @@ public class PdfFlateInputStream extends FilterInputStream {
     private int iisBufLen;
     /* End of file indicator for IIS stream */
     private boolean iisEof;
-    
+
     /**
      * Constructor with null DecodeParms dictionary
-     * 
+     *
      * @param is    InputStream to be inflated
      */
     public PdfFlateInputStream(InputStream is) {
         this (is, null);
     }
-    
+
     /**
      * Constructor with specified DecodeParms dictionary
-     * 
+     *
      * @param is    InputStream to be inflated
      * @param parms DecodeParms dictionary.
      *              May be null, in which case this is equivalent
      *              to the one-parameter constructor.
-     * 
+     *
      */
     public PdfFlateInputStream (InputStream is, PdfDictionary parms)
     {
@@ -75,7 +75,7 @@ public class PdfFlateInputStream extends FilterInputStream {
         iis = new InflaterInputStream (is);
         /* Set default values */
         predictor = 1;   // no prediction
-        columns = 1;  
+        columns = 1;
         bpc = 8;
         colors = 1;
 
@@ -120,6 +120,9 @@ public class PdfFlateInputStream extends FilterInputStream {
 
     /** Reads one byte from the stream.
      *  Returns -1 if end of file is reached.
+     *
+     * @return number of bytes
+     * @throws IOException
      */
     @Override
     public int read() throws IOException
@@ -139,10 +142,15 @@ public class PdfFlateInputStream extends FilterInputStream {
         }
         return rowBuf[rowBufOff++] & 0xFF;
     }
-    
-    /** Reads the specified number of bytes into a buffer.
-     *  Returns the number of bytes actually read, or -1 if
-     *  end of file has been reached. */
+
+    /** *  Reads the specified number of bytes into a buffer.Returns the number of bytes actually read, or -1 if
+  end of file has been reached.
+     *
+     *  @param b: array of bytes in buffer
+     *  @return int: the number of bytes actually read or -1 if
+     *  end of file has been reached
+     *  @throws IOException
+     */
     @Override
     public int read (byte[] b) throws IOException
     {
@@ -154,7 +162,13 @@ public class PdfFlateInputStream extends FilterInputStream {
      *  with offset and length specified.
      *  Returns -1 if end of file has been reached.
      *  No matter how much is requested, this will only return one
-     *  row's worth of data at most. 
+     *  row's worth of data at most.
+     *
+     *  @param b: array of bytes of file
+     *  @param off: the specified offset
+     *  @param len: the specified length
+     *  @return number of bytes or -1 if end of file is reached
+     *  @throws IOException
      */
     @Override
     public int read (byte[] b, int off, int len) throws IOException
@@ -184,12 +198,12 @@ public class PdfFlateInputStream extends FilterInputStream {
         }
         return len;
     }
-    
+
     @Override
     public long skip (long n) throws IOException {
         return skipIISBytes(n);
     }
-    
+
     /* Reads a row's worth of data and stores in rowBuf. */
     private void readRow () throws IOException
     {
@@ -198,7 +212,7 @@ public class PdfFlateInputStream extends FilterInputStream {
         rowBuf = rowBuf2;
         rowBuf2 = r;
         rowBufOff = colBytes;
-        
+
         // Ignore weird predictor of 15 for now
         if (predictor >= 10) {
             // throw one byte away
@@ -210,9 +224,9 @@ public class PdfFlateInputStream extends FilterInputStream {
             if (n > 0) {
                 off += n;
             }
-            else { 
+            else {
                 eof = true;
-                return; 
+                return;
             }
         }
         switch (predictor) {
@@ -227,16 +241,16 @@ public class PdfFlateInputStream extends FilterInputStream {
                     rowBuf[i] += rowBuf[i - colBytes];
                 }
                 break;
-            case 12:    
+            case 12:
                 // Up -- above
                 for (int i = colBytes; i < rowLen; i++) {
-                    rowBuf[i] += rowBuf2[i]; 
+                    rowBuf[i] += rowBuf2[i];
                 }
                 break;
             case 13:
                 // Average -- (left + above) / 2
                 for (int i = colBytes; i < rowLen; i++) {
-                    rowBuf[i] += ((rowBuf[i - colBytes] & 0xFF) + 
+                    rowBuf[i] += ((rowBuf[i - colBytes] & 0xFF) +
                                   (rowBuf2[i] & 0xFF)) / 2;
                 }
                 break;
@@ -266,9 +280,11 @@ public class PdfFlateInputStream extends FilterInputStream {
                 break;
             case 15:    // optimum -- per line determination
                 break;
+            default:
+                break;
         }
     }
-    
+
     /** Get an "inflated" byte.  We do buffering here
      *  for efficiency. */
     private int readIISByte ()
@@ -285,9 +301,9 @@ public class PdfFlateInputStream extends FilterInputStream {
         }
         return iisBuf[iisBufOff++] & 0xFF;
     }
-    
+
     /** Get a bufferload of bytes. */
-    private int readIISBytes (byte[] buf, int off, int len) 
+    private int readIISBytes (byte[] buf, int off, int len)
              throws IOException
     {
         if (iisBufOff >= iisBufLen && !iisEof) {
@@ -304,8 +320,8 @@ public class PdfFlateInputStream extends FilterInputStream {
             buf[i] = iisBuf[iisBufOff++];
         }
         return len;
-    } 
-    
+    }
+
     /** Skip a specified number of bytes. */
     private long skipIISBytes (long n) throws IOException {
         if (iisBufOff >= iisBufLen && !iisEof) {
@@ -320,7 +336,7 @@ public class PdfFlateInputStream extends FilterInputStream {
         iisBufOff += n;
         return n;
     }
-    
+
     /** Fill up the IIS buffer.  Should be called only by
      *  other IIS buffer-specific routines. */
     private int readIIS () throws IOException
