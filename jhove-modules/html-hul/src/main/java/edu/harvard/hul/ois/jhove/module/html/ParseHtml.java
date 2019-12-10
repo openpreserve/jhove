@@ -632,6 +632,7 @@ public class ParseHtml implements ParseHtmlConstants {
             case 5: jj_3_6(); break;
             case 6: jj_3_7(); break;
             case 7: jj_3_8(); break;
+            default : break;
           }
         }
         p = p.next;

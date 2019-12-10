@@ -13,14 +13,14 @@ import edu.harvard.hul.ois.jhove.*;
 /**
  * Class for the TLM (tile length) marker segment.
  * This may occur only in the main header.
- * 
+ *
  * @author Gary McGath
  *
  */
 public class TLMMarkerSegment extends MarkerSegment {
 
     /**
-     * 
+     *
      */
     public TLMMarkerSegment() {
         super();
@@ -31,7 +31,7 @@ public class TLMMarkerSegment extends MarkerSegment {
   will be at the point of having read the marker code.The
     <code>process</code> method must consume exactly the number
   of bytes remaining in the marker segment.
-     * 
+     *
      *  @param    bytesToEat   The number of bytes that must be consumed.
      *                         If it is 0 for a MarkerSegment, the
      *                         number of bytes to consume is unknown.
@@ -45,7 +45,7 @@ public class TLMMarkerSegment extends MarkerSegment {
         int stlm = ModuleBase.readUnsignedByte (_dstream, _module);
         int st = (stlm & 0X30) >> 4;
         int sp = (stlm & 0X40) >> 6;
-        
+
         int partLength = (sp == 1) ? 4 : 2;
         switch (st) {
             // case 0: add nothing
@@ -62,7 +62,7 @@ public class TLMMarkerSegment extends MarkerSegment {
             default:
                 break;
         }
-        
+
         int nParts = (bytesToEat - 2) / partLength;
         // Make sure it's an even multiple
         if (nParts * partLength != bytesToEat - 2) {

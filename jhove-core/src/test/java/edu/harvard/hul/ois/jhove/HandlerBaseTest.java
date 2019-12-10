@@ -27,7 +27,7 @@ public class HandlerBaseTest {
 
     String encodeValue;
     for (int i = 0; i < VALUES.length; i++) {
-      encodeValue = HandlerBase.encodeContent(VALUES[i]);
+      encodeValue = Utils.encodeContent(VALUES[i]);
       LOGGER.info("testEncodeContent: " + VALUES[i] + GIVES + encodeValue);
       assertEquals(EXPECTED[i], encodeValue);
     }
@@ -45,7 +45,7 @@ public class HandlerBaseTest {
 
     String encodeValue;
     for (int i = 0; i < VALUES.length; i++) {
-      encodeValue = HandlerBase.encodeValue(VALUES[i]);
+      encodeValue = Utils.encodeValue(VALUES[i]);
       LOGGER.info("testEncodeValue: " + VALUES[i] + GIVES + encodeValue);
       assertEquals(EXPECTED[i], encodeValue);
     }

@@ -478,7 +478,7 @@ public class Utf8Module extends ModuleBase {
             // Check for UTF-8 byte order mark in 1st 3 bytes
             if (this.initialBytes[0] == 0xEF && this.initialBytes[1] == 0xBB
                     && this.initialBytes[2] == 0xBF) {
-                InfoMessage im = new InfoMessage(MessageConstants.INF_BOM_MARK_PRESENT, 0); // UTF8-HUL-1
+                InfoMessage im = new InfoMessage(MessageConstants.UTF8_HUL_1, 0); // UTF8-HUL-1
                 info.setMessage(im);
                 // If we've found a non-character header, clear
                 // all usage blocks
