@@ -399,6 +399,8 @@ public class XmlHandler
                     wfStr += ", but not valid";
                     break;
 
+		    default : 
+		    break;
                     // case UNDETERMINED: add nothing
                 }
             }
@@ -4086,6 +4088,7 @@ public class XmlHandler
         case 10: s = "ITULab"; break;
         case 32803: s = "CFA"; break;         // used by DNG
         case 34892: s = "LinearRaw"; break;   // used by DNG
+	default : break;
         }
         return s;
     }
