@@ -71,7 +71,6 @@ installJhoveFromFile "${JHOVE_INSTALLER}" "${tempInstallLoc}"
 
 [[ -d "${CANDIDATE_ROOT}/${MAJOR_MINOR_VER}" ]] || mkdir -p "${CANDIDATE_ROOT}/${MAJOR_MINOR_VER}"
 
-cat "${tempInstallLoc}/jhove"
 echo ""
 echo "Testing ${MAJOR_MINOR_VER}."
 echo "=========================="
