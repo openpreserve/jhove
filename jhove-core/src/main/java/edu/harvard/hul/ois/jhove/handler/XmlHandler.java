@@ -762,7 +762,7 @@ public class XmlHandler
 
         // If the property would generate an empty element, don't output it,
         // as this could result in a schema violation.
-        if (isPropertyEmpty (property, arity))
+        if (Utils.isPropertyEmpty (property, arity))
             return;
 
         boolean valueIsProperty = PropertyType.PROPERTY.equals(type);
@@ -901,119 +901,6 @@ public class XmlHandler
     }
 
 
-    /** Checks if a property would produce an empty XML element, and
-     *  returns true if it would.
-     */
-    private boolean isPropertyEmpty (Property property, PropertyArity arity) {
-        try {
-            if (arity.equals (PropertyArity.SET)) {
-                Set propSet = (Set) property.getValue ();
-                return (propSet.isEmpty());
-            }
-            else if (arity.equals (PropertyArity.LIST)) {
-                List propList = (List) property.getValue ();
-                return (propList.isEmpty());
-            }
-            else if (arity.equals (PropertyArity.MAP)) {
-                Map propMap = (Map) property.getValue ();
-                return (propMap.isEmpty());
-            }
-            else if (arity.equals (PropertyArity.ARRAY)) {
-                // Ack! Is there any easy way to do this?
-                boolean[] boolArray = null;
-                byte[] byteArray = null;
-                char[] charArray = null;
-                java.util.Date[] dateArray = null;
-                double[] doubleArray = null;
-                float[] floatArray = null;
-                int[] intArray = null;
-                long[] longArray = null;
-                Object[] objArray = null;
-                Property[] propArray = null;
-                short[] shortArray = null;
-                String[] stringArray = null;
-                Rational[] rationalArray = null;
-                NisoImageMetadata[] nisoArray = null;
-                AESAudioMetadata[] aesArray = null;
-                TextMDMetadata[] textMDArray = null;
-                int n = 0;
-
-                PropertyType propType = property.getType();
-                if (PropertyType.BOOLEAN.equals (propType)) {
-                    boolArray = (boolean []) property.getValue ();
-                    n = boolArray.length;
-                }
-                else if (PropertyType.BYTE.equals (propType)) {
-                    byteArray = (byte []) property.getValue ();
-                    n = byteArray.length;
-                }
-                else if (PropertyType.CHARACTER.equals (propType)) {
-                    charArray = (char []) property.getValue ();
-                    n = charArray.length;
-                }
-                else if (PropertyType.DATE.equals (propType)) {
-                    dateArray = (java.util.Date []) property.getValue ();
-                    n = dateArray.length;
-                }
-                else if (PropertyType.DOUBLE.equals (propType)) {
-                    doubleArray = (double []) property.getValue ();
-                    n = doubleArray.length;
-                }
-                else if (PropertyType.FLOAT.equals (propType)) {
-                    floatArray = (float []) property.getValue ();
-                    n = floatArray.length;
-                }
-                else if (PropertyType.INTEGER.equals (propType)) {
-                    intArray = (int []) property.getValue ();
-                    n = intArray.length;
-                }
-                else if (PropertyType.LONG.equals (propType)) {
-                    longArray = (long []) property.getValue ();
-                    n = longArray.length;
-                }
-                else if (PropertyType.OBJECT.equals (propType)) {
-                        objArray = (Object []) property.getValue ();
-                        n = objArray.length;
-                    }
-                else if (PropertyType.SHORT.equals (propType)) {
-                    shortArray = (short []) property.getValue ();
-                    n = shortArray.length;
-                }
-                else if (PropertyType.STRING.equals (propType)) {
-                    stringArray = (String []) property.getValue ();
-                    n = stringArray.length;
-                }
-                else if (PropertyType.RATIONAL.equals (propType)) {
-                    rationalArray = (Rational []) property.getValue ();
-                    n = rationalArray.length;
-                }
-                else if (PropertyType.PROPERTY.equals (propType)) {
-                    propArray = (Property []) property.getValue ();
-                    n = propArray.length;
-                }
-                else if (PropertyType.NISOIMAGEMETADATA.equals (propType)) {
-                    nisoArray = (NisoImageMetadata []) property.getValue ();
-                    n = nisoArray.length;
-                }
-                else if (PropertyType.AESAUDIOMETADATA.equals (propType)) {
-                    aesArray = (AESAudioMetadata []) property.getValue ();
-                    n = aesArray.length;
-                }
-                else if (PropertyType.TEXTMDMETADATA.equals (propType)) {
-                    textMDArray = (TextMDMetadata []) property.getValue ();
-                    n = textMDArray.length;
-                }
-                return (n == 0);
-            }
-            else {
-                return property.getValue ().toString ().length() == 0;
-            }
-        }
-        catch (Exception e) {
-            // If something goes seriously wrong, return true to punt the property
-            return true;
-        }
-    }
 
     /* The array property has so many special cases of its own
        that we break it out of showProperty */
