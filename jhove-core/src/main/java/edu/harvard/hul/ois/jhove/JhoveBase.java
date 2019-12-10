@@ -130,7 +130,7 @@ public class JhoveBase {
      * Class constructor.
      *
      * Instantiates a <code>JhoveBase</code> object.
-     * 
+     *
      * @throws JhoveException
      *             if invoked with a JVM lower than 1.8
      */
@@ -380,7 +380,7 @@ public class JhoveBase {
      * information about that handler.
      * <li>If they're both null, provides information about the application.
      * </ul>
-     * 
+     *
      * @param app
      *            The App object for the application
      * @param module
@@ -714,6 +714,10 @@ public class JhoveBase {
             value = ckSummer.getSHA1();
             if (value != null) {
                 info.setChecksum(new Checksum(value, ChecksumType.SHA1));
+            }
+            value = ckSummer.getSHA256();
+            if (value != null) {
+                info.setChecksum(new Checksum(value, ChecksumType.SHA256));
             }
         }
         return tempFile;
@@ -1141,7 +1145,7 @@ public class JhoveBase {
 
     /**
      * Creates an output PrintWriter.
-     * 
+     *
      * @param outputFile
      *            Output filepath. If null, writer goes to System.out.
      * @param encoding

@@ -5,6 +5,56 @@ package edu.harvard.hul.ois.jhove.module.html;
 public class ParseHtmlTokenManager implements ParseHtmlConstants
 {
   public  java.io.PrintStream debugStream = System.out;
+  static final long[] jjbitVec0 = {
+   0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
+};
+  static final int[] jjnextStates = {
+   2, 3, 5, 6,
+};
+public static final String[] jjstrLiteralImages = {
+"", "\74\41", "\74", null, null, null, null, null, null, null, "\77", "\57", 
+"\72", "\76", null, null, null, null, null, null, null, null, null, null, null, null,
+null, };
+public static final String[] lexStateNames = {
+   "DEFAULT",
+   "IN_PCDATA",
+   "IN_TAG",
+   "IN_ATTVALUE",
+   "IN_DOCTYPE",
+   "IN_DOCTYPE2",
+   "IN_COMMENT",
+   "ENDING_COMMENT",
+};
+public static final int[] jjnewLexState = {
+   -1, 4, 2, 1, 0, -1, 3, 2, 2, 2, -1, -1, -1, 0, 5, -1, -1, -1, -1, -1, -1, -1, 6, 7, -1,
+   0, 6,
+};
+static final long[] jjtoToken = {
+   0x1fff7L,
+};
+static final long[] jjtoSkip = {
+   0x6be0000L,
+};
+static final long[] jjtoSpecial = {
+   0x6800000L,
+};
+static final long[] jjtoMore = {
+   0x1400008L,
+};
+protected CharStream input_stream;
+private final int[] jjrounds = new int[7];
+private final int[] jjstateSet = new int[14];
+StringBuffer image;
+int jjimageLen;
+int lengthOfMatch;
+protected char curChar;
+int curLexState = 0;
+int defaultLexState = 0;
+int jjnewStateCnt;
+int jjround;
+int jjmatchedPos;
+int jjmatchedKind;
+  
   public  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
 private final int jjStopAtPos(int pos, int kind)
 {
@@ -41,9 +91,7 @@ private final void jjCheckNAddTwoStates(int state1, int state2)
    jjCheckNAdd(state1);
    jjCheckNAdd(state2);
 }
-static final long[] jjbitVec0 = {
-   0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
-};
+
 private final int jjMoveNfa_7(int startState, int curPos)
 {
    int startsAt = 0;
@@ -791,7 +839,8 @@ private final int jjMoveNfa_2(int startState, int curPos)
    jjnewStateCnt = 4;
    int i = 1;
    jjstateSet[0] = startState;
-   int j, kind = 0x7fffffff;
+   int j;
+   int kind = 0x7fffffff;
    for (;;)
    {
       if (++jjround == 0x7fffffff)
@@ -869,46 +918,7 @@ private final int jjMoveNfa_2(int startState, int curPos)
       catch(java.io.IOException e) { return curPos; }
    }
 }
-static final int[] jjnextStates = {
-   2, 3, 5, 6,
-};
-public static final String[] jjstrLiteralImages = {
-"", "\74\41", "\74", null, null, null, null, null, null, null, "\77", "\57", 
-"\72", "\76", null, null, null, null, null, null, null, null, null, null, null, null,
-null, };
-public static final String[] lexStateNames = {
-   "DEFAULT",
-   "IN_PCDATA",
-   "IN_TAG",
-   "IN_ATTVALUE",
-   "IN_DOCTYPE",
-   "IN_DOCTYPE2",
-   "IN_COMMENT",
-   "ENDING_COMMENT",
-};
-public static final int[] jjnewLexState = {
-   -1, 4, 2, 1, 0, -1, 3, 2, 2, 2, -1, -1, -1, 0, 5, -1, -1, -1, -1, -1, -1, -1, 6, 7, -1,
-   0, 6,
-};
-static final long[] jjtoToken = {
-   0x1fff7L,
-};
-static final long[] jjtoSkip = {
-   0x6be0000L,
-};
-static final long[] jjtoSpecial = {
-   0x6800000L,
-};
-static final long[] jjtoMore = {
-   0x1400008L,
-};
-protected CharStream input_stream;
-private final int[] jjrounds = new int[7];
-private final int[] jjstateSet = new int[14];
-StringBuffer image;
-int jjimageLen;
-int lengthOfMatch;
-protected char curChar;
+
 public ParseHtmlTokenManager(CharStream stream)
 {
    input_stream = stream;
@@ -968,13 +978,6 @@ protected Token jjFillToken()
    }
    return t;
 }
-
-int curLexState = 0;
-int defaultLexState = 0;
-int jjnewStateCnt;
-int jjround;
-int jjmatchedPos;
-int jjmatchedKind;
 
 public Token getNextToken()
 {

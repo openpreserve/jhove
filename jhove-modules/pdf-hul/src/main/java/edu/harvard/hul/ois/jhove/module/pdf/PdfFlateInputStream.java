@@ -120,6 +120,9 @@ public class PdfFlateInputStream extends FilterInputStream {
 
     /** Reads one byte from the stream.
      *  Returns -1 if end of file is reached.
+     * 
+     * @return number of bytes
+     * @throws IOException
      */
     @Override
     public int read() throws IOException
@@ -140,9 +143,14 @@ public class PdfFlateInputStream extends FilterInputStream {
         return rowBuf[rowBufOff++] & 0xFF;
     }
     
-    /** Reads the specified number of bytes into a buffer.
-     *  Returns the number of bytes actually read, or -1 if
-     *  end of file has been reached. */
+    /** *  Reads the specified number of bytes into a buffer.Returns the number of bytes actually read, or -1 if
+  end of file has been reached. 
+     * 
+     *  @param b: array of bytes in buffer
+     *  @return int: the number of bytes actually read or -1 if
+     *  end of file has been reached
+     *  @throws IOException
+     */
     @Override
     public int read (byte[] b) throws IOException
     {
@@ -155,6 +163,12 @@ public class PdfFlateInputStream extends FilterInputStream {
      *  Returns -1 if end of file has been reached.
      *  No matter how much is requested, this will only return one
      *  row's worth of data at most. 
+     * 
+     *  @param b: array of bytes of file
+     *  @param off: the specified offset
+     *  @param len: the specified length 
+     *  @return number of bytes or -1 if end of file is reached
+     *  @throws IOException
      */
     @Override
     public int read (byte[] b, int off, int len) throws IOException
@@ -265,6 +279,8 @@ public class PdfFlateInputStream extends FilterInputStream {
                 }
                 break;
             case 15:    // optimum -- per line determination
+                break;
+            default:
                 break;
         }
     }
