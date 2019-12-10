@@ -56,13 +56,11 @@ public final class TiffProfilePagemaker6 extends TiffProfile
 	    }
 	}
 
-	if (to) {
-	    if (niso.getTileWidth () == NisoImageMetadata.NULL ||
+	if (to && (niso.getTileWidth () == NisoImageMetadata.NULL ||
 		niso.getTileLength () == NisoImageMetadata.NULL ||
 		niso.getTileOffsets () == null ||
-		niso.getTileByteCounts () == null) {
+		niso.getTileByteCounts () == null)) {
 		return false;
-	    }
 	}
 
 	/* Check required values. */
@@ -89,10 +87,8 @@ public final class TiffProfilePagemaker6 extends TiffProfile
 		return false;
 	    }
 	}
-	else if (inkSet == 1) {  /* Only check for RGB, not hi-fi/multi-ink. */
-	    if (spp != 4) {
+	else if (inkSet == 1 && spp != 4) {  /* Only check for RGB, not hi-fi/multi-ink. */
 		return false;
-	    }
 	}
 
 	int [] bps = niso.getBitsPerSample ();
@@ -117,12 +113,10 @@ public final class TiffProfilePagemaker6 extends TiffProfile
 	    return false;
 	}
 
-	if (inkSet == 2) {
-	    if (tifd.getInkNames () == null ||
-		tifd.getNumberOfInks () == IFD.NULL) {
-		return false;
-	    }
-	}
+	if (inkSet == 2 && (tifd.getInkNames () == null ||
+		tifd.getNumberOfInks () == IFD.NULL)) {
+            return false;
+        }
 
 	return true;
     }

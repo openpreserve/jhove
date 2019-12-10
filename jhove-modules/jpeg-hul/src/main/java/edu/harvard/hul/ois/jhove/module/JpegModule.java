@@ -1641,32 +1641,29 @@ public class JpegModule extends ModuleBase {
 		if (dbyt != 0XF7 && dbyt != 0XF8) {
 			_seenJPEGL = false;
 		}
-
-		if (dbyt == 0XF7) {
-			// This is probably a JPEG-L file.
-			if (!_seenSPIFF && !_seenJFIF && !_seenExif && !_seenJPEGL) {
-				if (!_reportedSigMatch) {
-					info.setSigMatch(_name);
-					_reportedSigMatch = true;
-				}
-				int length = readUnsignedShort(_dstream);
-				int precision = readUnsignedByte(_dstream, this);
-				int nLines = readUnsignedShort(_dstream);
-				int samPerLine = readUnsignedShort(_dstream);
-				int numComps = readUnsignedByte(_dstream, this);
-				skipBytes(_dstream, length - 8, this);
-				_seenJPEGL = true;
-				_niso.setImageLength(nLines);
-				_niso.setImageWidth(samPerLine);
-				int[] bps = new int[numComps];
-				for (int i = 0; i < numComps; i++) {
-					bps[i] = precision;
-				}
-				_niso.setBitsPerSample(bps);
-				_niso.setSamplesPerPixel(numComps);
-				_seenSOF = true;
-				return;
-			}
+		if (dbyt == 0XF7 && !_seenSPIFF && !_seenJFIF && !_seenExif && !_seenJPEGL) {
+                    // This is probably a JPEG-L file.
+                    if (!_reportedSigMatch) {
+                        info.setSigMatch(_name);
+                        _reportedSigMatch = true;
+                    }
+                    int length = readUnsignedShort(_dstream);
+                    int precision = readUnsignedByte(_dstream, this);
+                    int nLines = readUnsignedShort(_dstream);
+                    int samPerLine = readUnsignedShort(_dstream);
+                    int numComps = readUnsignedByte(_dstream, this);
+                    skipBytes(_dstream, length - 8, this);
+                    _seenJPEGL = true;
+                    _niso.setImageLength(nLines);
+                    _niso.setImageWidth(samPerLine);
+                    int[] bps = new int[numComps];
+                    for (int i = 0; i < numComps; i++) {
+                            bps[i] = precision;
+                    }
+                    _niso.setBitsPerSample(bps);
+                    _niso.setSamplesPerPixel(numComps);
+                    _seenSOF = true;
+                    return;
 		}
 
 		int length = readUnsignedShort(_dstream);

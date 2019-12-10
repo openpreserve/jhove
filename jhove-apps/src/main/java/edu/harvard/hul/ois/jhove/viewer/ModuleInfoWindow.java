@@ -160,11 +160,10 @@ public class ModuleInfoWindow extends InfoWindow{
         }
         texta.append (margin + signature.getType ().toString () + ": " +
                          sigValue + eol);
-        if (signature.getType ().equals (SignatureType.MAGIC)) {
-            if (((InternalSignature) signature).hasFixedOffset ()) {
-                texta.append (margin + "Offset: " +
+        if (signature.getType ().equals (SignatureType.MAGIC) && 
+                ((InternalSignature) signature).hasFixedOffset ()) {
+            texta.append (margin + "Offset: " +
 		     ((InternalSignature) signature).getOffset () + eol);
-            }
         }
         String note = signature.getNote ();
         if (note != null) {

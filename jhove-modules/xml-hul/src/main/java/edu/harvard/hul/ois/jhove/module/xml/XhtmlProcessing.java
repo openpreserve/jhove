@@ -292,16 +292,12 @@ public final class XhtmlProcessing {
         for (int i = 0; i < atts.getLength (); i++) {
             String attname = atts.getLocalName (i);
             String attval = atts.getValue (i);
-            if ("title".equals (attname)) {
-                if (attval.length() > 0 ) {
-                    lst.add (new Property ("title",
-                            PropertyType.STRING,
-                            attval));
+            if ("title".equals (attname) && attval.length() > 0) {
+                lst.add (new Property ("title", PropertyType.STRING, attval));
                 }
                 // Note: The PCData should be stuck at the
                 // front of the list when we get it, as
                 // the "abbr" property.
-            }
         }
         mdata.setPropUnderConstruction (p);
     }
