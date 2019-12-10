@@ -49,6 +49,7 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.Signature;
 import edu.harvard.hul.ois.jhove.SignatureType;
 import edu.harvard.hul.ois.jhove.TextMDMetadata;
+import edu.harvard.hul.ois.jhove.Utils;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /**
@@ -752,7 +753,7 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
 
 		// If the property would generate an empty element, don't output it,
 		// as this could result in a schema violation.
-		if (isPropertyEmpty(property, arity))
+		if (Utils.isPropertyEmpty(property, arity))
 			return;
 
 		boolean valueIsProperty = PropertyType.PROPERTY.equals(type);
@@ -872,102 +873,6 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
 		_writer.println(margn3 + elementEnd("values"));
 		_writer.println(margn2 + elementEnd("property"));
 		--_level;
-	}
-
-	/**
-	 * Checks if a property would produce an empty XML element, and returns true
-	 * if it would.
-	 */
-	private boolean isPropertyEmpty(Property property, PropertyArity arity) {
-		try {
-			if (arity.equals(PropertyArity.SET)) {
-				Set propSet = (Set) property.getValue();
-				return (propSet.isEmpty());
-			} else if (arity.equals(PropertyArity.LIST)) {
-				List propList = (List) property.getValue();
-				return (propList.isEmpty());
-			} else if (arity.equals(PropertyArity.MAP)) {
-				Map propMap = (Map) property.getValue();
-				return (propMap.isEmpty());
-			} else if (arity.equals(PropertyArity.ARRAY)) {
-				// Ack! Is there any easy way to do this?
-				boolean[] boolArray = null;
-				byte[] byteArray = null;
-				char[] charArray = null;
-				java.util.Date[] dateArray = null;
-				double[] doubleArray = null;
-				float[] floatArray = null;
-				int[] intArray = null;
-				long[] longArray = null;
-				Object[] objArray = null;
-				Property[] propArray = null;
-				short[] shortArray = null;
-				String[] stringArray = null;
-				Rational[] rationalArray = null;
-				NisoImageMetadata[] nisoArray = null;
-				AESAudioMetadata[] aesArray = null;
-				TextMDMetadata[] textMDArray = null;
-				int n = 0;
-
-				PropertyType propType = property.getType();
-				if (PropertyType.BOOLEAN.equals(propType)) {
-					boolArray = (boolean[]) property.getValue();
-					n = boolArray.length;
-				} else if (PropertyType.BYTE.equals(propType)) {
-					byteArray = (byte[]) property.getValue();
-					n = byteArray.length;
-				} else if (PropertyType.CHARACTER.equals(propType)) {
-					charArray = (char[]) property.getValue();
-					n = charArray.length;
-				} else if (PropertyType.DATE.equals(propType)) {
-					dateArray = (java.util.Date[]) property.getValue();
-					n = dateArray.length;
-				} else if (PropertyType.DOUBLE.equals(propType)) {
-					doubleArray = (double[]) property.getValue();
-					n = doubleArray.length;
-				} else if (PropertyType.FLOAT.equals(propType)) {
-					floatArray = (float[]) property.getValue();
-					n = floatArray.length;
-				} else if (PropertyType.INTEGER.equals(propType)) {
-					intArray = (int[]) property.getValue();
-					n = intArray.length;
-				} else if (PropertyType.LONG.equals(propType)) {
-					longArray = (long[]) property.getValue();
-					n = longArray.length;
-				} else if (PropertyType.OBJECT.equals(propType)) {
-					objArray = (Object[]) property.getValue();
-					n = objArray.length;
-				} else if (PropertyType.SHORT.equals(propType)) {
-					shortArray = (short[]) property.getValue();
-					n = shortArray.length;
-				} else if (PropertyType.STRING.equals(propType)) {
-					stringArray = (String[]) property.getValue();
-					n = stringArray.length;
-				} else if (PropertyType.RATIONAL.equals(propType)) {
-					rationalArray = (Rational[]) property.getValue();
-					n = rationalArray.length;
-				} else if (PropertyType.PROPERTY.equals(propType)) {
-					propArray = (Property[]) property.getValue();
-					n = propArray.length;
-				} else if (PropertyType.NISOIMAGEMETADATA.equals(propType)) {
-					nisoArray = (NisoImageMetadata[]) property.getValue();
-					n = nisoArray.length;
-				} else if (PropertyType.AESAUDIOMETADATA.equals(propType)) {
-					aesArray = (AESAudioMetadata[]) property.getValue();
-					n = aesArray.length;
-				} else if (PropertyType.TEXTMDMETADATA.equals(propType)) {
-					textMDArray = (TextMDMetadata[]) property.getValue();
-					n = textMDArray.length;
-				}
-				return (n == 0);
-			} else {
-				return property.getValue().toString().length() == 0;
-			}
-		} catch (Exception e) {
-			// If something goes seriously wrong, return true to punt the
-			// property
-			return true;
-		}
 	}
 
 	/*
@@ -4182,345 +4087,295 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
 		return s.substring(0, 1).toUpperCase(Locale.ROOT) + s.substring(1);
 	}
 
-	/**
-	 * Convert the color space value (which is based on the TIFF
-	 * PhotometricInterpretation convention) to one of the suggested values for
-	 * MIX 2.0
-	 */
-	private String photometricInterpretationToString(int n) {
-		String s = "Unknown";
-		switch (n) {
-		case 0:
-			s = "WhiteIsZero";
-			break;
-		case 1:
-			s = "BlackIsZero";
-			break;
-		case 2:
-			s = "RGB";
-			break;
-		case 3:
-			s = "PaletteColor";
-			break;
-		case 4:
-			s = "TransparencyMask";
-			break;
-		case 5:
-			s = "CMYK";
-			break;
-		case 6:
-			s = "YCbCr";
-			break;
-		case 8:
-			s = "CIELab";
-			break;
-		case 9:
-			s = "ICCLab";
-			break;
-		case 10:
-			s = "ITULab";
-			break;
-		case 32803:
-			s = "CFA";
-			break; // used by DNG
-		case 34892:
-			s = "LinearRaw";
-			break; // used by DNG
-		}
-		return s;
-	}
+    /** Convert the color space value (which is based on the TIFF
+     *  PhotometricInterpretation convention) to one of the suggested
+     *  values for MIX 2.0 */
+    private String photometricInterpretationToString (int n) {
+        String s = "Unknown";
+        switch (n) {
+        case 0: s = "WhiteIsZero"; break;
+        case 1: s = "BlackIsZero"; break;
+        case 2: s = "RGB"; break;
+        case 3: s = "PaletteColor"; break;
+        case 4: s = "TransparencyMask"; break;
+        case 5: s = "CMYK"; break;
+        case 6: s = "YCbCr"; break;
+        case 8: s = "CIELab"; break;
+        case 9: s = "ICCLab"; break;
+        case 10: s = "ITULab"; break;
+        case 32803: s = "CFA"; break;         // used by DNG
+        case 34892: s = "LinearRaw"; break;   // used by DNG
+        case 65535: s = "YCCK"; break;   // used by Adobe JPEG
+				default: break;
+        }
+        return s;
+    }
 
-	/**
-	 * Convert compression scheme value (based on the TIFF compression
-	 * convention) to a label
-	 */
-	private String compressionSchemeToString(int n) {
-		for (int i = 0; i < NisoImageMetadata.COMPRESSION_SCHEME_INDEX.length; i++) {
-			if (n == NisoImageMetadata.COMPRESSION_SCHEME_INDEX[i])
-				return NisoImageMetadata.COMPRESSION_SCHEME[i];
-		}
-		return Integer.toString(n);
-	}
+    /**
+     * Convert compression scheme value (based on the TIFF compression convention)
+     * to a label
+      */
+    private String compressionSchemeToString (int n) {
+        for (int i = 0; i < NisoImageMetadata.COMPRESSION_SCHEME_INDEX.length; i++) {
+        	if (n == NisoImageMetadata.COMPRESSION_SCHEME_INDEX[i])
+        		return NisoImageMetadata.COMPRESSION_SCHEME[i];
+        }
+        return Integer.toString(n);
+    }
 
-	/**
-	 * Display the audio metadata formatted according to the AES schema.
-	 *
-	 * @param aes
-	 *            AES audio metadata
-	 */
-	protected void showAESAudioMetadata(AESAudioMetadata aes) {
-		_level += 3;
-		final String margin = getIndent(_level);
-		final String margn2 = margin + " ";
-		final String margn3 = margn2 + " ";
-		final String margn4 = margn3 + " ";
-		final String margn5 = margn4 + " ";
-		// final String margn6 = margn5 + " ";
+    /**
+     * Display the audio metadata formatted according to
+     * the AES schema.
+     * @param aes AES audio metadata
+     */
+    protected void showAESAudioMetadata (AESAudioMetadata aes)
+    {
+        _level += 3;
+        final String margin = getIndent (_level);
+        final String margn2 = margin + " ";
+        final String margn3 = margn2 + " ";
+        final String margn4 = margn3 + " ";
+        final String margn5 = margn4 + " ";
+        //final String margn6 = margn5 + " ";
 
-		// ID strings. These are arbitrary, but must be unique
-		// within the document.
-		final String formatRegionID = "J1";
-		final String faceRegionID = "J2";
-		final String faceID = "J3";
-		final String audioObjectID = "J4";
-		final String streamIDBase = "J9";
+        // ID strings.  These are arbitrary, but must be unique
+        // within the document.
+        final String formatRegionID = "J1";
+        final String faceRegionID = "J2";
+        final String faceID = "J3";
+        final String audioObjectID = "J4";
+        final String streamIDBase = "J9";
 
-		_sampleRate = aes.getSampleRate();
+	_sampleRate = aes.getSampleRate ();
 
-		final String[][] attrs = {
-				{ "xmlns:aes", "http://www.aes.org/audioObject" },
-				{ "xmlns:tcf", "http://www.aes.org/tcf" },
-				{ "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance" },
-				{ "ID", audioObjectID },
-				{ "analogDigitalFlag", aes.getAnalogDigitalFlag() },
-				{ "disposition", "Validated by JHOVE" },
-				{ "schemaVersion", "1.02b" } };
-		_writer.println(margin + elementStart("aes:audioObject", attrs));
-		String s = aes.getFormat();
-		if (s != null) {
-			String v = aes.getSpecificationVersion();
-			String[][] fmattrs = new String[1][2];
-			fmattrs[0][0] = "specificationVersion";
-			if (v != null) {
-				fmattrs[0][1] = v;
-			} else {
-				// Shouldn't happen
-				fmattrs[0][1] = "";
-			}
-			_writer.println(margn2 + element("aes:format", fmattrs, s));
-		}
-		s = aes.getAppSpecificData();
-		if (s != null) {
-			_writer.println(margn2 + element("aes:appSpecificData", s));
-		}
-		s = aes.getAudioDataEncoding();
-		if (s != null) {
-			_writer.println(margn2 + element("aes:audioDataEncoding", s));
-		}
-		int in = aes.getByteOrder();
-		if (in != AESAudioMetadata.NULL) {
-			_writer.println(margn2
-					+ element("aes:byteOrder",
-							in == AESAudioMetadata.BIG_ENDIAN ? "BIG_ENDIAN"
-									: "LITTLE_ENDIAN"));
-		}
-		long lin = aes.getFirstSampleOffset();
-		if (lin != AESAudioMetadata.NULL) {
-			_writer.println(margn2
-					+ element("aes:firstSampleOffset", Long.toString(lin)));
-		}
-		String[] use = aes.getUse();
-		if (use != null) {
-			String[][] uattrs = new String[][] { { "useType", use[0] },
-					{ "otherType", use[1] } };
-			_writer.println(margn2 + element("aes:use", uattrs));
-		}
-		s = aes.getPrimaryIdentifier();
-		if (s != null) {
-			String t = aes.getPrimaryIdentifierType();
-			String[][] idattrs = new String[1][2];
-			idattrs[0][0] = "identifierType";
-			if (t != null) {
-				idattrs[0][1] = t;
-			} else {
-				// Shouldn't happen
-				idattrs[0][1] = "";
-			}
-			_writer.println(margn2
-					+ element("aes:primaryIdentifier", idattrs, s));
-		}
+        final String [][] attrs = {{"xmlns:aes", "http://www.aes.org/audioObject"},
+                             {"xmlns:tcf", "http://www.aes.org/tcf"},
+ 			     {"xmlns:xsi",
+ 			      "http://www.w3.org/2001/XMLSchema-instance"},
+                             {"ID", audioObjectID },
+			     {"analogDigitalFlag",
+                              aes.getAnalogDigitalFlag ()},
+                             {"disposition",
+                              "Validated by JHOVE"},
+                             {"schemaVersion","1.02b"}};
+        _writer.println (margin + elementStart ("aes:audioObject", attrs));
+        String  s = aes.getFormat ();
+        if (s != null) {
+            String v = aes.getSpecificationVersion ();
+            String[][] fmattrs = new String[1][2];
+            fmattrs[0][0] = "specificationVersion";
+            if (v != null) {
+                fmattrs[0][1] = v;
+            }
+            else {
+                // Shouldn't happen
+                fmattrs[0][1] = "";
+            }
+            _writer.println (margn2 + element
+                ("aes:format", fmattrs, s));
+        }
+        s = aes.getAppSpecificData();
+        if (s != null) {
+            _writer.println (margn2 + element
+                ("aes:appSpecificData", s));
+        }
+        s = aes.getAudioDataEncoding ();
+        if (s != null) {
+            _writer.println (margn2 + element
+                ("aes:audioDataEncoding", s));
+        }
+	    int in = aes.getByteOrder ();
+	    if (in != AESAudioMetadata.NULL) {
+	       _writer.println (margn2 + element ("aes:byteOrder",
+					    in == AESAudioMetadata.BIG_ENDIAN ?
+					    "BIG_ENDIAN" : "LITTLE_ENDIAN"));
+        }
+        long lin = aes.getFirstSampleOffset ();
+        if (lin != AESAudioMetadata.NULL) {
+            _writer.println (margn2 + element ("aes:firstSampleOffset",
+                     Long.toString (lin)));
+        }
+        String[] use = aes.getUse ();
+        if (use != null) {
+            String[][] uattrs = new String [][]
+                { { "useType", use[0] },
+                  { "otherType", use[1] }};
+            _writer.println (margn2 + element ("aes:use", uattrs));
+        }
+        s = aes.getPrimaryIdentifier();
+        if (s != null) {
+            String t= aes.getPrimaryIdentifierType ();
+            String[][] idattrs = new String[1][2];
+            idattrs[0][0] = "identifierType";
+            if (t != null) {
+                idattrs[0][1] = t;
+            }
+            else {
+                // Shouldn't happen
+                idattrs[0][1] = "";
+            }
+            _writer.println (margn2 + element
+                ("aes:primaryIdentifier", idattrs, s));
+        }
 
-		// Add the face information, which is mostly filler.
-		// In the general case, it can contain multiple Faces;
-		// this isn't supported yet.
-		List<AESAudioMetadata.Face> facelist = aes.getFaceList();
-		if (!facelist.isEmpty()) {
-			final String[][] faceRegionAttrs = { { "ID", faceRegionID },
-					{ "formatRef", formatRegionID }, { "faceRef", faceID },
-					{ "label", "BuiltByJHOVE" } };
-			final String[][] faceAttrs = { { "direction", null },
-					{ "ID", faceID }, { "audioObjectRef", audioObjectID },
-					{ "label", "Face" } };
-			AESAudioMetadata.Face f = (AESAudioMetadata.Face) facelist.get(0);
-			faceAttrs[0][1] = f.getDirection();
-			_writer.println(margn2 + elementStart("aes:face", faceAttrs));
-			// Fill in a minimal time range.
-			AESAudioMetadata.TimeDesc startTime = f.getStartTime();
-			if (startTime != null) {
-				_writer.println(margn3 + elementStart("aes:timeline"));
-				writeAESTimeRange(margn3, startTime, f.getDuration());
-				_writer.println(margn3 + elementEnd("aes:timeline"));
-			}
+        // Add the face information, which is mostly filler.
+        // In the general case, it can contain multiple Faces;
+        // this isn't supported yet.
+        List facelist = aes.getFaceList ();
+        if (!facelist.isEmpty ()) {
+            final String [] [] faceRegionAttrs = {
+                { "ID", faceRegionID },
+                { "formatRef", formatRegionID },
+                { "faceRef", faceID },
+                { "label", "BuiltByJHOVE" }
+            };
+            final String [] [] faceAttrs = {
+                { "direction", null },
+                { "ID", faceID },
+                { "audioObjectRef", audioObjectID },
+                { "label", "Face" }
+            };
+            AESAudioMetadata.Face f =
+                (AESAudioMetadata.Face) facelist.get(0);
+            faceAttrs[0] [1] = f.getDirection();
+            _writer.println (margn2 + elementStart ("aes:face", faceAttrs));
+            // Fill in a minimal time range.
+            AESAudioMetadata.TimeDesc startTime = f.getStartTime();
+            if (startTime != null) {
+                 _writer.println (margn3 + elementStart ("aes:timeline"));
+                 writeAESTimeRange (margn3, startTime, f.getDuration());
+                 _writer.println (margn3 + elementEnd ("aes:timeline"));
+            }
 
-			// For the present, assume just one face region
-			AESAudioMetadata.FaceRegion facergn = f.getFaceRegion(0);
-			_writer.println(margn3
-					+ elementStart("aes:region", faceRegionAttrs));
-			_writer.println(margn4 + elementStart("aes:timeRange"));
-			writeAESTimeRange(margn3, facergn.getStartTime(),
-					facergn.getDuration());
-			_writer.println(margn4 + elementEnd("aes:timeRange"));
-			int nchan = aes.getNumChannels();
-			if (nchan != AESAudioMetadata.NULL) {
-				_writer.println(margn4
-						+ element("aes:numChannels", Integer.toString(nchan)));
-			}
-			String[] locs = aes.getMapLocations();
-			for (int ch = 0; ch < nchan; ch++) {
-				// write a stream element for each channel
-				String[][] streamAttrs = {
-						{ "ID", streamIDBase + Integer.toString(ch) },
-						{ "label", "JHOVE" }, { "faceRegionRef", faceRegionID }
+            // For the present, assume just one face region
+            AESAudioMetadata.FaceRegion facergn = f.getFaceRegion (0);
+             _writer.println (margn3 + elementStart ("aes:region", faceRegionAttrs));
+              _writer.println (margn4 + elementStart ("aes:timeRange"));
+              writeAESTimeRange (margn3,
+                    facergn.getStartTime (), facergn.getDuration ());
+              _writer.println (margn4 + elementEnd ("aes:timeRange"));
+              int nchan = aes.getNumChannels ();
+              if (nchan != AESAudioMetadata.NULL) {
+                _writer.println (margn4 + element ("aes:numChannels",
+                                Integer.toString (nchan)));
+              }
+              String[] locs = aes.getMapLocations ();
+              for (int ch = 0; ch < nchan; ch++) {
+                // write a stream element for each channel
+                String [] [] streamAttrs = {
+                    { "ID", streamIDBase + Integer.toString (ch) },
+                    { "label", "JHOVE" },
+                    { "faceRegionRef", faceRegionID }
 
-				};
-				_writer.println(margn4
-						+ elementStart("aes:stream", streamAttrs));
-				String[][] chanAttrs = {
-						{ "channelNum", Integer.toString(ch) },
-						{ "mapLocation", locs[ch] } };
-				_writer.println(margn5
-						+ element("aes:channelAssignment", chanAttrs));
-				_writer.println(margn4 + elementEnd("aes:stream"));
-			}
-			_writer.println(margn3 + elementEnd("aes:region"));
-			_writer.println(margn2 + elementEnd("aes:face"));
-		}
+                };
+                _writer.println (margn4 + elementStart ("aes:stream", streamAttrs));
+                String [] [] chanAttrs = {
+                    { "channelNum", Integer.toString(ch) },
+                    { "mapLocation", locs[ch] }
+                };
+                _writer.println (margn5 + element ("aes:channelAssignment", chanAttrs));
+                _writer.println (margn4 + elementEnd ("aes:stream"));
+              }
+             _writer.println (margn3 + elementEnd ("aes:region"));
+            _writer.println (margn2+ elementEnd ("aes:face"));
+        }
 
-		// In the general case, a FormatList can contain multiple
-		// FormatRegions. This doesn't happen with any of the current
-		// modules; if it's needed in the future, simply set up an
-		// iteration loop on formatList.
-		List<AESAudioMetadata.FormatRegion> flist = aes.getFormatList();
-		if (!flist.isEmpty()) {
-			AESAudioMetadata.FormatRegion rgn = (AESAudioMetadata.FormatRegion) flist
-					.get(0);
-			int bitDepth = rgn.getBitDepth();
-			double sampleRate = rgn.getSampleRate();
-			int wordSize = rgn.getWordSize();
-			String[] bitRed = rgn.getBitrateReduction();
-			// Build a FormatRegion subtree if at least one piece of data
-			// that goes into it is present.
-			if (bitDepth != AESAudioMetadata.NULL
-					|| sampleRate != AESAudioMetadata.NILL
-					|| wordSize != AESAudioMetadata.NULL) {
-				_writer.println(margn2 + elementStart("aes:formatList"));
-				String[][] frAttr = { { "ID", formatRegionID } };
-				_writer.println(margn3
-						+ elementStart("aes:formatRegion", frAttr));
-				if (bitDepth != AESAudioMetadata.NULL) {
-					_writer.println(margn4
-							+ element("aes:bitDepth",
-									Integer.toString(bitDepth)));
-				}
-				if (sampleRate != AESAudioMetadata.NILL) {
-					_writer.println(margn4
-							+ element("aes:sampleRate", formatters.get()
-									.format(sampleRate)));
-				}
-				if (wordSize != AESAudioMetadata.NULL) {
-					_writer.println(margn4
-							+ element("aes:wordSize",
-									Integer.toString(wordSize)));
-				}
-				if (bitRed != null) {
-					_writer.println(margn4
-							+ elementStart("aes:bitrateReduction"));
-					_writer.println(margn5
-							+ element("aes:codecName", bitRed[0]));
-					_writer.println(margn5
-							+ element("aes:codecNameVersion", bitRed[1]));
-					_writer.println(margn5
-							+ element("aes:codecCreatorApplication", bitRed[2]));
-					_writer.println(margn5
-							+ element("aes:codecCreatorApplicationVersion",
-									bitRed[3]));
-					_writer.println(margn5
-							+ element("aes:codecQuality", bitRed[4]));
-					_writer.println(margn5 + element("aes:dataRate", bitRed[5]));
-					_writer.println(margn5
-							+ element("aes:dataRateMode", bitRed[6]));
-					_writer.println(margn4 + elementEnd("aes:bitrateReduction"));
-				}
-				_writer.println(margn3 + elementEnd("aes:formatRegion"));
-				_writer.println(margn2 + elementEnd("aes:formatList"));
-			}
-		}
-		/* This should go somewhere, but where? */
-		// int nchan = aes.getNumChannels ();
-		// if (nchan != AESAudioMetadata.NULL) {
-		// _writer.println (margn2 + element ("aes:numChannels",
-		// Integer.toString (nchan)));
-		// }
+        // In the general case, a FormatList can contain multiple
+        // FormatRegions.  This doesn't happen with any of the current
+        // modules; if it's needed in the future, simply set up an
+        // iteration loop on formatList.
+        List flist = aes.getFormatList ();
+        if (!flist.isEmpty ()) {
+            AESAudioMetadata.FormatRegion rgn =
+                (AESAudioMetadata.FormatRegion) flist.get(0);
+            int bitDepth = rgn.getBitDepth ();
+            double sampleRate = rgn.getSampleRate ();
+            int wordSize = rgn.getWordSize ();
+            String[] bitRed = rgn.getBitrateReduction ();
+            // Build a FormatRegion subtree if at least one piece of data
+            // that goes into it is present.
+            if (bitDepth != AESAudioMetadata.NULL ||
+                    sampleRate != AESAudioMetadata.NILL ||
+                    wordSize != AESAudioMetadata.NULL) {
+                _writer.println (margn2 + elementStart ("aes:formatList"));
+                String[] [] frAttr = { { "ID", formatRegionID } };
+                _writer.println (margn3 + elementStart ("aes:formatRegion", frAttr));
+                if (bitDepth != AESAudioMetadata.NULL) {
+                    _writer.println (margn4 + element ("aes:bitDepth",
+                                Integer.toString (bitDepth)));
+                }
+                if (sampleRate != AESAudioMetadata.NILL) {
+                    _writer.println (margn4 + element ("aes:sampleRate",
+                                formatters.get().format (sampleRate)));
+                }
+                if (wordSize != AESAudioMetadata.NULL) {
+                    _writer.println (margn4 + element ("aes:wordSize",
+                                Integer.toString (wordSize)));
+                }
+                if (bitRed != null) {
+                    _writer.println (margn4 + elementStart ("aes:bitrateReduction"));
+                      _writer.println (margn5 + element
+                            ("aes:codecName", bitRed[0]));
+                      _writer.println (margn5 + element
+                            ("aes:codecNameVersion", bitRed[1]));
+                      _writer.println (margn5 + element
+                            ("aes:codecCreatorApplication", bitRed[2]));
+                      _writer.println (margn5 + element
+                            ("aes:codecCreatorApplicationVersion", bitRed[3]));
+                      _writer.println (margn5 + element
+                            ("aes:codecQuality", bitRed[4]));
+                      _writer.println (margn5 + element
+                            ("aes:dataRate", bitRed[5]));
+                      _writer.println (margn5 + element
+                            ("aes:dataRateMode", bitRed[6]));
+                    _writer.println (margn4 + elementEnd ("aes:bitrateReduction"));
+                }
+                _writer.println (margn3 + elementEnd ("aes:formatRegion"));
+                _writer.println (margn2 + elementEnd ("aes:formatList"));
+            }
+        }
+        /* This should go somewhere, but where? */
+//        int nchan = aes.getNumChannels ();
+//        if (nchan != AESAudioMetadata.NULL) {
+//            _writer.println (margn2 + element ("aes:numChannels",
+//                            Integer.toString (nchan)));
+//        }
 
-		_writer.println(margin + elementEnd("aes:audioObject"));
+        _writer.println (margin + elementEnd ("aes:audioObject"));
 
-		_level -= 3;
-	}
+        _level -= 3;
+    }
 
-	/*
-	 * Break out the writing of a timeRangeType element. This always gives a
-	 * start time of 0. This is all FAKE DATA for the moment.
-	 */
-	private void writeAESTimeRange(String baseIndent,
-			AESAudioMetadata.TimeDesc start, AESAudioMetadata.TimeDesc duration) {
-		final String margn1 = baseIndent + " ";
-		final String margn2 = margn1 + " ";
-		final String margn3 = margn2 + " ";
-		final String[][] attrs = { { "tcf:frameCount", "30" },
-				{ "tcf:timeBase", "1000" }, { "tcf:videoField", "FIELD_1" },
-				{ "tcf:countingMode", "NTSC_NON_DROP_FRAME" } };
-		final String[][] ffAttrs = { { "tcf:framing", "NOT_APPLICABLE" },
-				{ "xsi:type", "tcf:ntscFilmFramingType" } };
-		_writer.println(margn1 + elementStart("tcf:startTime", attrs));
-		_writer.println(margn2
-				+ element("tcf:hours", Long.toString(start.getHours())));
-		_writer.println(margn2
-				+ element("tcf:minutes", Long.toString(start.getMinutes())));
-		_writer.println(margn2
-				+ element("tcf:seconds", Long.toString(start.getSeconds())));
-		_writer.println(margn2
-				+ element("tcf:frames", Long.toString(start.getFrames())));
-		String[][] sampleAttrs = { { "tcf:sampleRate", "" } };
-		double sr = start.getSampleRate();
+    /* Break out the writing of a timeRangeType element.
+     * This always gives a start time of 0.  This is all
+     * FAKE DATA for the moment. */
+    private void writeAESTimeRange (String baseIndent,
+        AESAudioMetadata.TimeDesc start,
+        AESAudioMetadata.TimeDesc duration)
+    {
+        final String margn1 = baseIndent + " ";
+        final String margn2 = margn1 + " ";
+        final String [] [] attrs = {
+            { "tcf:frameCount", "30" },
+            { "tcf:timeBase", "1000" },
+            { "tcf:videoField", "FIELD_1" },
+            { "tcf:countingMode", "NTSC_NON_DROP_FRAME" }
+        };
+        _writer.println (margn1 + elementStart ("tcf:startTime", attrs));
+		_writer.println (margn2 + element ("tcf:hours",
+					   Long.toString (start.getHours ())));
+		_writer.println (margn2 + element ("tcf:minutes",
+					   Long.toString (start.getMinutes ())));
+		_writer.println (margn2 + element ("tcf:seconds",
+					   Long.toString (start.getSeconds ())));
+		_writer.println (margn2 + element ("tcf:frames",
+					   Long.toString (start.getFrames ()) ));
+        _writer.println (margn1 + elementEnd("tcf:startTime"));
+		double sr = start.getSampleRate ();
 		if (sr == 1.0) {
-			sr = _sampleRate;
+		    sr = _sampleRate;
 		}
-		sampleAttrs[0][1] = "S" + Integer.toString((int) sr);
-		_writer.println(margn2 + elementStart("tcf:samples", sampleAttrs));
-		_writer.println(margn3
-				+ element("tcf:numberOfSamples",
-						Long.toString(start.getSamples())));
-		_writer.println(margn2 + elementEnd("tcf:samples"));
-		_writer.println(margn2 + element("tcf:filmFraming", ffAttrs));
-		_writer.println(margn1 + elementEnd("tcf:startTime"));
-
-		if (duration != null) {
-			_writer.println(margn1 + elementStart("tcf:duration", attrs));
-			_writer.println(margn2
-					+ element("tcf:hours", Long.toString(duration.getHours())));
-			_writer.println(margn2
-					+ element("tcf:minutes",
-							Long.toString(duration.getMinutes())));
-			_writer.println(margn2
-					+ element("tcf:seconds",
-							Long.toString(duration.getSeconds())));
-			_writer.println(margn2
-					+ element("tcf:frames", Long.toString(duration.getFrames())));
-			sr = duration.getSampleRate();
-			if (sr == 1.0) {
-				sr = _sampleRate;
-			}
-			sampleAttrs[0][1] = "S" + Integer.toString((int) sr);
-			_writer.println(margn2 + elementStart("tcf:samples", sampleAttrs));
-			_writer.println(margn3
-					+ element("tcf:numberOfSamples",
-							Long.toString(duration.getSamples())));
-			_writer.println(margn2 + elementEnd("tcf:samples"));
-			_writer.println(margn2 + element("tcf:filmFraming", ffAttrs));
-			_writer.println(margn1 + elementEnd("tcf:duration"));
-		}
-	}
-
+    }
 	/*
 	 * Clean up a URI string by escaping forbidden characters. We assume
 	 * (perhaps dangerously) that a % is the start of an already escaped
