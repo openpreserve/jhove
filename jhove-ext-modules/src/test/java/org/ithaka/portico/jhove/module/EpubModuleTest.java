@@ -178,7 +178,8 @@ public class EpubModuleTest {
         assertEquals("da79cb9b", checksums.get(ChecksumType.CRC32));
         assertEquals("4c2dee43162e40690ba05926b9f42522", checksums.get(ChecksumType.MD5));
         assertEquals("72bcf1b71f4dd9b902a5fcd614601d5e488003a0", checksums.get(ChecksumType.SHA1));
-        final int expectedNumChecksums = 3;
+        assertEquals("a1da72ef94de43a70a97538d5e789f74bf7c29bd99f8059697ae75a6b85a75f7", checksums.get(ChecksumType.SHA256));
+        final int expectedNumChecksums = 4;
         assertEquals(expectedNumChecksums, info.getChecksum().size());
     }
 
@@ -312,7 +313,8 @@ public class EpubModuleTest {
         assertEquals("8b80b526", checksums.get(ChecksumType.CRC32));
         assertEquals("b2110219d62c3c6ef1683c645636fd38", checksums.get(ChecksumType.MD5));
         assertEquals("79f20f6a499a640019a9bb0334652edbb954c3c9", checksums.get(ChecksumType.SHA1));
-        final int expectedNumChecksum = 3;
+        assertEquals("4776bb33b1cce8598b31996ed0b4daf36e4b74e379b811a27e51efa15315744a", checksums.get(ChecksumType.SHA256));
+        final int expectedNumChecksum = 4;
         assertEquals(expectedNumChecksum, info.getChecksum().size());
     }
 
