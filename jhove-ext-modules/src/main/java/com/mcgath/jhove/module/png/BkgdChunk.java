@@ -8,7 +8,7 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 /** The bKGD (background color) chunk */
 public class BkgdChunk extends PNGChunk {
 
-	/** Constructor 
+	/** Constructor
          * @param sig: the chunktype
          * @param leng: the length
          */
@@ -18,10 +18,10 @@ public class BkgdChunk extends PNGChunk {
 		ancillary = true;
 		duplicateAllowed = false;
 	}
-	
+
 	/** Process the data in the chunk. All we do is note the
 	 *  presence of the chunk in a property.
-	 *  
+	 *
 	 *  The greyscale, RGB, and palette backgrounds are all
 	 *  different kinds of data, so make them three different
 	 *  properties so that processing software doesn't get confused.
@@ -33,7 +33,7 @@ public class BkgdChunk extends PNGChunk {
 		processChunkCommon(info);
 		ErrorMessage msg = null;
 		int colorType = _module.getColorType();
-		// Make sure there are enough bytes 
+		// Make sure there are enough bytes
 		int minLength = 0;
 		switch (colorType) {
 		case 0:
@@ -47,8 +47,8 @@ public class BkgdChunk extends PNGChunk {
 		case 3:
 			minLength = 1;
 			break;
-                default:
-                    break;
+		default :
+		    break;
 		}
 		if (_module.isIdatSeen()) {
 			msg = new ErrorMessage (MessageConstants.PNG_GDM_1);
@@ -91,6 +91,8 @@ public class BkgdChunk extends PNGChunk {
 						bkgdIndex);
 				info.setProperty (bkgdProp);
 				break;
+			default :
+		    		break;
 			}
 			// Throw away extra bytes
 			for (int i = 0; i < length - minLength; i++) {
