@@ -74,6 +74,32 @@ if [[ -d "${candidateRoot}/errors/modules/WAVE-hul" ]]; then
 	cp -Rf "${candidateRoot}/errors/modules/WAVE-hul" "${targetRoot}/errors/modules/"
 fi
 
+# Copy TIIF across for new Message IDs https://github.com/openpreserve/jhove/pull/510
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/chase-tif-f.tif.jhove.xml" ]]; then
+	echo "Copying affected TIFF examples."
+	cp -Rf "${candidateRoot}/examples/modules/TIFF-hul/chase-tif-f.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/g3test.g3.jhove.xml" ]]; then
+	echo "Copying affected TIFF examples."
+	cp -Rf "${candidateRoot}/examples/modules/TIFF-hul/g3test.g3.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/smallliz.tif.jhove.xml" ]]; then
+	echo "Copying affected TIFF examples."
+	cp -Rf "${candidateRoot}/examples/modules/TIFF-hul/smallliz.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/peppers.tif.jhove.xml" ]]; then
+	echo "Copying affected TIFF examples."
+	cp -Rf "${candidateRoot}/examples/modules/TIFF-hul/peppers.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/zackthecat.tif.jhove.xml" ]]; then
+	echo "Copying affected TIFF examples."
+	cp -Rf "${candidateRoot}/examples/modules/TIFF-hul/zackthecat.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/fax2d.g3.jhove.xml" ]]; then
+	echo "Copying affected TIFF examples."
+	cp -Rf "${candidateRoot}/examples/modules/TIFF-hul/fax2d.g3.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/"
+fi
+
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.4.1">JPEG2000-hul<\/module>$/   <module release="1.4.2">JPEG2000-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <outputHandler release="1.8">XML/   <outputHandler release="1.9">XML/' {} \;
 find "${targetRoot}" -type f -name "audit-JPEG2000-hul.jhove.xml" -exec sed -i 's/^  <release>1.4.1<\/release>$/  <release>1.4.2<\/release>/' {} \;

@@ -625,7 +625,11 @@ public class TiffModule extends ModuleBase {
             info.setProperty(new Property("TIFFMetadata",
                     PropertyType.PROPERTY, PropertyArity.ARRAY, tiffMetadata));
         } catch (TiffException e) {
-            info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+            if (e.getJhoveMessage() != null) { // try to keep the id
+              info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
+            } else {
+              info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+            }
             info.setWellFormed(false);
             return;
         } catch (IOException e) {
