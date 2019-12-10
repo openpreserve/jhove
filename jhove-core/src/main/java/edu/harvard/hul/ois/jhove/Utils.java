@@ -28,10 +28,7 @@ public enum Utils {
 	 * string will be converted to an empty string.
 	 */
 	public static String encodeContent(String content) {
-		if (content == null) {
-			content = "";
-		}
-		StringBuffer buffer = new StringBuffer(content);
+		StringBuffer buffer = (content == null) ? new StringBuffer("") : new StringBuffer(content);
 
 		/* Remove disallowed control characters from the content string. */
 		int n = buffer.length();
