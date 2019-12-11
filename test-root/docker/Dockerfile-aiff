@@ -1,0 +1,20 @@
+FROM jhove-test:1.22-base as base
+
+FROM openjdk:8-jre-alpine
+
+ENV DEV_VERSION=1.23.0-SNAPSHOT
+
+LABEL maintainer="carl.wilson@openpreservation.org" \
+      org.openpreservation.vendor="Open Preservation Foundation" \
+      version="0.1"
+
+# Since this is a running network service we'll create an unprivileged account
+# which will be used to perform the rest of the work and run the actual service:
+
+WORKDIR /opt/jhove
+COPY --from=base "/opt/jhove/jhove-corpora/errors/modules/PDF-hul" "/opt/jhove/corpora/errors/modules/PDF-hul"
+COPY --from=base "/opt/jhove/jhove-corpora/examples/modules/PDF-hul" "/opt/jhove/corpora/examples/modules/PDF-hul"
+COPY --from=base "/opt/jhove/jhove-corpora/regression/modules/PDF-hul" "/opt/jhove/corpora/regression/modules/PDF-hul"
+COPY --from=base "/opt/jhove/baseline/1.22/errors/modules/PDF-hul" "/opt/jhove/baseline/1.22/errors/modules/PDF-hul"
+COPY --from=base "/opt/jhove/baseline/1.22/examples/modules/PDF-hul" "/opt/jhove/baseline/1.22/examples/modules/PDF-hul"
+COPY --from=base "/opt/jhove/baseline/1.22/regression/modules/PDF-hul" "/opt/jhove/baseline/1.22/regression/modules/PDF-hul"

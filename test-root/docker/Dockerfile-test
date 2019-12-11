@@ -1,0 +1,21 @@
+FROM openjdk:8-jre-alpine
+
+LABEL maintainer="carl.wilson@openpreservation.org" \
+      org.openpreservation.vendor="Open Preservation Foundation" \
+      version="0.1"
+
+RUN  apk update && apk --no-cache --update-cache add bash git
+
+ENV BASELINE_VERSION=1.22
+
+# Since this is a running network service we'll create an unprivileged account
+# which will be used to perform the rest of the work and run the actual service:
+
+# Alpine / Busybox:
+RUN install -d -o root -g root -m 755 /opt && adduser -h /opt/jhove -u 1000 -S jhove
+
+WORKDIR /opt/jhove
+RUN git clone https://github.com/opf-corpora/jhove-corpora.git
+COPY ./scripts ./scripts
+RUN wget ""http://software.openpreservation.org/rel/jhove/jhove-${BASELINE_VERSION}.jar"" -O "/opt/jhove/jhove-installer.jar" && java -jar "/opt/jhove/jhove-installer.jar" "./scripts/auto-install-baseline.xml" &&  rm "/opt/jhove/jhove-installer.jar"
+RUN bash "/opt/jhove/scripts/baseline-jhove.sh" -j "/opt/jhove/baseline/jhove" -c "/opt/jhove/jhove-corpora" -o "/opt/jhove/baseline/${BASELINE_VERSION}"

@@ -1,0 +1,25 @@
+ARG MODULE
+ARG VERSION="1.22"
+
+FROM jhove-test:${VERSION}-base as base
+
+FROM openjdk:8-jre-alpine
+
+ARG MODULE
+ARG VERSION
+ARG PKGNAME
+
+LABEL maintainer="carl.wilson@openpreservation.org" \
+      org.openpreservation.vendor="Open Preservation Foundation" \
+      version="0.1"
+
+# Since this is a running network service we'll create an unprivileged account
+# which will be used to perform the rest of the work and run the actual service:
+
+WORKDIR /opt/jhove
+# COPY --from=base "/opt/jhove/jhove-corpora/errors/modules/${MODULE}" "/opt/jhove/corpora/errors/modules/${MODULE}"
+COPY --from=base "/opt/jhove/jhove-corpora/examples/modules/${MODULE}" "/opt/jhove/corpora/examples/modules/${MODULE}"
+# COPY --from=base "/opt/jhove/jhove-corpora/regression/modules/${MODULE}" "/opt/jhove/corpora/regression/modules/${MODULE}"
+# COPY --from=base "/opt/jhove/baseline/${VERSION}/errors/modules/${MODULE}" "/opt/jhove/baseline/${VERSION}/errors/modules/${MODULE}"
+COPY --from=base "/opt/jhove/baseline/${VERSION}/examples/modules/${MODULE}" "/opt/jhove/baseline/${VERSION}/examples/modules/${MODULE}"
+# COPY --from=base "/opt/jhove/baseline/${VERSION}/regression/modules/${MODULE}" "/opt/jhove/baseline/${VERSION}/regression/modules/${MODULE}"
