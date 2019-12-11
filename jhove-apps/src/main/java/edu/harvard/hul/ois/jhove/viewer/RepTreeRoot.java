@@ -36,6 +36,10 @@ import edu.harvard.hul.ois.jhove.TextMDMetadata;
  */
 public class RepTreeRoot extends DefaultMutableTreeNode {
 
+	/**
+	 * Serialisation identifier
+	 */
+	private static final long serialVersionUID = -4409152022584715925L;
 	private RepInfo _info;
 	private JhoveBase _base;
 	private boolean _rawOutput;
@@ -341,6 +345,12 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 				}
 				DefaultMutableTreeNode mNode = new DefaultMutableTreeNode(
 						prefix + msg.getMessage());
+
+				if (msg.getId() != null && !msg.getId().isEmpty()) {
+					mNode.add(new DefaultMutableTreeNode("ID: "
+							+ msg.getId()));
+				}
+
 				String subMessage = msg.getSubMessage();
 				if (subMessage != null) {
 					mNode.add(new DefaultMutableTreeNode("SubMessage: "
