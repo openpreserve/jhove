@@ -70,10 +70,8 @@ public final class TiffProfileClassITMP extends TiffProfileClassIT
         
         // ImageColorValue is defined if ImageColorIndicator=1
 	int ind = tifd.getImageColorIndicator ();
-        if (ind == 1) {
-            if (tifd.getImageColorValue () == IFD.NULL) {
+        if (ind == 1 && tifd.getImageColorValue () == IFD.NULL) {
                 return false;
-            }
         }
         return true;
     }

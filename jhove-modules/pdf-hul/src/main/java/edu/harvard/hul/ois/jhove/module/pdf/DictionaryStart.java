@@ -6,7 +6,7 @@
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 /**
- *  Class for Tokens which represent the "<<" sequence that opens a Dictionary.
+ * Class for Tokens which represent the {@code <<} sequence that opens a Dictionary.
  */
 public class DictionaryStart
     extends Token

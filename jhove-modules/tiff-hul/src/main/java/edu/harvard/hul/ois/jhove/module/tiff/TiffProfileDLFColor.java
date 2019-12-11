@@ -50,12 +50,7 @@ public final class TiffProfileDLFColor extends TiffProfileDLF
 		return false;
 	    }
 	}
-
-	/* XResolution and YResolution >= 300 (in) or 760 (cm) */
-	if (!hasMinimumResolution (tifd, 300.0, 760.0)) {
-	    return false;
-	}
-
-	return true;
+        /* XResolution and YResolution >= 300 (in) or 760 (cm) */
+	return hasMinimumResolution (tifd, 300.0, 760.0);
     }
 }

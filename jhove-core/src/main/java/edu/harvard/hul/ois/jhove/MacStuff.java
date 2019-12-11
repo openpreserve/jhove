@@ -12,61 +12,53 @@ import java.lang.reflect.*;
 
 /**
  * Code specific to Macintosh Java. This class consists of static
- * methods, and should not be instantiated.  Its methods should be
- * called only on the Macintosh OS X platform.  It requires the 
- * package com.apple.eio.FileManager.
- * 
- * @author Gary McGath
+ * methods, and should not be instantiated. Its methods should be
+ * called only on the Macintosh OS X platform. It requires the
+ * package {@code com.apple.eio.FileManager}.
  *
+ * @author Gary McGath
  */
 public class MacStuff {
-    
+
     /** Private constructor to prevent instantiation.*/
-    private MacStuff ()
-    {
+    private MacStuff() {
     }
-    
-    
+
     /**
-     * Determines if we're running on a Macintosh,
-     * so appropriate UI adjustments can be made.  In accordance
-     * with Apple's recommendations, this checks for the existence
-     * of the mrj.version property rather than checking the os.name
-     * property.
+     * Determines if we're running on a Macintosh, so appropriate UI
+	 * adjustments can be made. In accordance with Apple's recommendations,
+	 * this checks for the existence of the {@code mrj.version} property
+	 * rather than checking the {@code os.name} property.
      */
-    public static boolean isMacintosh ()
-    {
-        return (System.getProperty ("mrj.version") != null);
-
+    public static boolean isMacintosh() {
+        return (System.getProperty("mrj.version") != null);
     }
-    
-    
 
     /**
-     * Returns true if a file has the given file type.
-     * This method uses FileManager in a dynamic way, so 
-     * that it will merely throw a ClassNotFound exception
+     * Returns {@code true} if a file has the given file type.
+     * This method uses {@code FileManager} in a dynamic way, so
+     * that it will merely throw a {@code ClassNotFound} exception
      * if it fails.
-     * 
+     * <p>
      * Currently this code isn't actually used, since the
      * Jhove application is specified as checking only internal
-     * signatures.  Should some future version or add-on
-     * code wish to use it, the code should
-     * look something like this:
-     * 
-     * <code><pre>
-     *           try {
-     *               if (sig.getType() == SignatureType.FILETYPE &&
-     *                       MacStuff.isMacintosh ()) {
-     *                   if (!MacStuff.fileHasType(file, sig.getValueString())) {
-     *                       info.setConsistent (false);
-     *                   }    
-     *               }
-     *           }
-     *           catch (ClassNotFoundException e) {
-     *               // Mac classes missing -- can't check filetype.
-     *           }
-     * </pre></code>
+     * signatures. Should some future version or add-on code
+     * wish to use it, the code should look something like this:
+     * <pre>
+	 * {@code
+     *     try {
+     *         if (sig.getType() == SignatureType.FILETYPE &&
+     *                 MacStuff.isMacintosh()) {
+     *             if (!MacStuff.fileHasType(file, sig.getValueString())) {
+     *                 info.setConsistent(false);
+     *             }
+     *         }
+     *     }
+     *     catch (ClassNotFoundException cnfe) {
+     *         // Mac classes missing -- can't check filetype.
+     *     }
+	 * }
+     * </pre>
      */
     public static boolean fileHasType(File file, String type)
             throws ClassNotFoundException
@@ -77,19 +69,19 @@ public class MacStuff {
             if (type == null) {
                 return false;
             }
-            Class<?> fmclass = Class.forName ("com.apple.eio.FileManager");
+            Class<?> fmClass = Class.forName("com.apple.eio.FileManager");
             Class<?>[] params = new Class[1];
-            params[0] = Class.forName ("java.io.File");
+            params[0] = Class.forName("java.io.File");
             Object[] args = new Object[1];
-            args[0] = file; 
-            Method method = fmclass.getMethod ("getFileType", params);
-            String ftype = (String) method.invoke (null, args); 
-            return (type.equals (ftype));
+            args[0] = file;
+            Method method = fmClass.getMethod("getFileType", params);
+            String fType = (String) method.invoke(null, args);
+            return (type.equals(fType));
         }
-        catch (ClassNotFoundException e) {
-            throw e;
+        catch (ClassNotFoundException cnfe) {
+            throw cnfe;
         }
-        catch (Exception f) {
+        catch (Exception e) {
             return false;
         }
     }

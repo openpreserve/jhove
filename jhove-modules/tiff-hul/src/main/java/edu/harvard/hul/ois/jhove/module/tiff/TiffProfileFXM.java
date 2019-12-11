@@ -104,10 +104,8 @@ public class TiffProfileFXM extends TiffFXBase {
         }
         // By my best reading, the colormap is needed only
         // if the Indexed value is 1.
-        if (tifd.getIndexed() == 1) {
-            if (niso.getColormapRedValue () == null) {
-                return false;
-            }
+        if (tifd.getIndexed() == 1 && niso.getColormapRedValue () == null) {
+            return false;
         }
 
         return true;         // passed all tests

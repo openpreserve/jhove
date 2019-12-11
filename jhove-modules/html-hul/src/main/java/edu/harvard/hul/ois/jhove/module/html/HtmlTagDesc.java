@@ -108,7 +108,7 @@ public class HtmlTagDesc {
      *  @param openTagRequired   <code>true</code> if an opening tag is required
      *  @param closeTagRequired  <code>true</code> if a closing tag is required
      *  @param sequence          Array indicating the sequencing of elements in
-     *                           <code> content.  Must have the same length
+     *                           content. Must have the same length
      *                           as <code>sequence</code>.
      *  @param attributes        List of HtmlAttributeDesc elements enumerating
      *                           the permitted attributes.  May be null, in which

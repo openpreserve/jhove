@@ -18,8 +18,8 @@ import edu.harvard.hul.ois.jhove.module.TestUtils;
  * 
  * Created 19 Mar 2018:02:03:50
  */
-
 public class PageTreeTests {
+
 	private static final String pdfResourcePath = "/edu/harvard/hul/ois/jhove/module/pdf/";
 	private static final String pageTreeResourcePath = pdfResourcePath + "page-tree/";
 
@@ -54,18 +54,16 @@ public class PageTreeTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * Test method for {@link PdfModule#getCatalogDict()}.
 	 */
 	@Test
 	public final void testValidCatType() throws URISyntaxException {
-		TestUtils.testValidateResource(this.module, minimalPdfPath, RepInfo.TRUE,
-				RepInfo.TRUE, null);
+		TestUtils.testValidateResource(this.module, minimalPdfPath,
+				RepInfo.TRUE, RepInfo.TRUE, null);
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * Test method for {@link PdfModule#getCatalogDict()}.
 	 */
 	@Test
 	public final void testNoPageTreeNode() throws URISyntaxException {
@@ -75,8 +73,7 @@ public class PageTreeTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * Test method for {@link PdfModule#getCatalogDict()}.
 	 */
 	@Test
 	public final void testRcrsPageTreeKids() throws URISyntaxException {
@@ -86,8 +83,7 @@ public class PageTreeTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * Test method for {@link PdfModule#getCatalogDict()}.
 	 */
 	@Test
 	public final void testDiffPageTreeKids() throws URISyntaxException {
@@ -97,8 +93,7 @@ public class PageTreeTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * Test method for {@link PdfModule#getCatalogDict()}.
 	 */
 	@Test
 	public final void testNtExstPageTreeChldPath() throws URISyntaxException {
@@ -108,8 +103,7 @@ public class PageTreeTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * Test method for {@link PdfModule#getCatalogDict()}.
 	 */
 	@Test
 	public final void testNoPageTreeKids() throws URISyntaxException {
@@ -119,8 +113,7 @@ public class PageTreeTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * Test method for {@link PdfModule#getCatalogDict()}.
 	 */
 	@Test
 	public final void testNoTypePageTree() throws URISyntaxException {
@@ -130,8 +123,7 @@ public class PageTreeTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * Test method for {@link PdfModule#getCatalogDict()}.
 	 */
 	@Test
 	public final void testWrngPageTreeCount() throws URISyntaxException {
@@ -140,8 +132,7 @@ public class PageTreeTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * Test method for {@link PdfModule#getCatalogDict()}.
 	 */
 	@Test
 	public final void testNoPageTreeCount() throws URISyntaxException {
@@ -151,8 +142,7 @@ public class PageTreeTests {
 	}
 
 	/**
-	 * Test method for
-	 * {@link edu.harvard.hul.ois.jhove.module.pdf.PdfModule#getCatalogDict()}.
+	 * Test method for {@link PdfModule#getCatalogDict()}.
 	 */
 	@Test
 	public final void testWrngPageTreeType() throws URISyntaxException {

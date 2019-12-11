@@ -14,13 +14,10 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
  * that the document is invalid but not necessarily ill-formed.
  */
 public final class PdfInvalidException extends PdfException {
-
 	/**
-	 * Creates a PdfInvalidException.
+	 * 
 	 */
-	public PdfInvalidException(final String m) {
-		super(m);
-	}
+	private static final long serialVersionUID = -3224356746816316033L;
 
 	/**
 	 * Creates a PdfInvalidException.
@@ -32,24 +29,10 @@ public final class PdfInvalidException extends PdfException {
 	/**
 	 * Creates a PdfInvalidException with specified offset.
 	 */
-	public PdfInvalidException(final String m, final long offset) {
-		super(m, offset);
-	}
-
-	/**
-	 * Creates a PdfInvalidException with specified offset.
-	 */
 	public PdfInvalidException(final JhoveMessage message, final long offset) {
 		super(message, offset);
 	}
 
-	/**
-	 * Creates a PdfInvalidException with specified offset and token.
-	 */
-	public PdfInvalidException(final String m, final long offset,
-			final Token token) {
-		super(m, offset, token);
-	}
 
 	/**
 	 * Creates a PdfInvalidException with specified offset and token.
