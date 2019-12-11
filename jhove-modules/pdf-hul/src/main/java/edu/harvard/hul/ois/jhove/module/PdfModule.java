@@ -4218,13 +4218,13 @@ public class PdfModule extends ModuleBase {
 		if (propObject instanceof PdfSimpleObject) {
 			Token tok = ((PdfSimpleObject) propObject).getToken();
 			if (tok instanceof Literal) {
-				Date propDate = ((Literal) tok).parseDate();
+				Literal lit = (Literal) tok;
+				Date propDate = lit.parseDate();
 				if (propDate != null) {
-					propList.add(new Property(propName, PropertyType.DATE,
-							propDate));
-				} else {
-					throw new PdfInvalidException(MessageConstants.PDF_HUL_133,
-							0); // PDF-HUL-133
+					propList.add(new Property(propName, PropertyType.DATE, propDate));
+				// Ignore empty literals as this isn't an error
+				} else if (!lit.getValue().isEmpty()) {
+					throw new PdfInvalidException(MessageConstants.PDF_HUL_133, 0); // PDF-HUL-133
 				}
 			}
 		}
