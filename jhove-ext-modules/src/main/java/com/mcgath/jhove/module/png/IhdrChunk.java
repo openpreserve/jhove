@@ -81,7 +81,6 @@ public class IhdrChunk extends PNGChunk {
 			throw new PNGException (MessageConstants.PNG_GDM_23);
 		}
 		_module.setIhdrSeen(true);
-		System.out.println("Chunk Type " + chunkTypeString() + " length " + length);
 		if (length < 13) {
 			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_24);
 			info.setMessage(msg);
