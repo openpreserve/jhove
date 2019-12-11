@@ -363,6 +363,7 @@ The `jhove-ext-modules` contains JHOVE modules developed by external parties, sp
  * PNG
  * WARC
  * GZIP
+ * EPUB
 
 These are all packaged in a single modules JAR:
 

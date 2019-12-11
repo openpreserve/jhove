@@ -625,7 +625,11 @@ public class TiffModule extends ModuleBase {
             info.setProperty(new Property("TIFFMetadata",
                     PropertyType.PROPERTY, PropertyArity.ARRAY, tiffMetadata));
         } catch (TiffException e) {
-            info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+            if (e.getJhoveMessage() != null) { // try to keep the id
+              info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
+            } else {
+              info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+            }
             info.setWellFormed(false);
             return;
         } catch (IOException e) {
@@ -733,7 +737,10 @@ public class TiffModule extends ModuleBase {
             // For parsing EXIF, we don't want to make the enclosing
             // document invalid, so we don't declare the EXIF non-well-formed
             // even though it is.
-            info.setMessage(new InfoMessage(e.getMessage(), e.getOffset()));
+        	if (e.getJhoveMessage() != null)
+        		info.setMessage(new InfoMessage(e.getJhoveMessage(), e.getOffset()));
+        	else
+        		info.setMessage(new InfoMessage(e.getMessage(), e.getOffset()));
             return ifds;
         } catch (IOException e) {
             JhoveMessage msg;
@@ -834,7 +841,11 @@ public class TiffModule extends ModuleBase {
                     checkValidity((TiffIFD) ifd, info);
                 }
             } catch (TiffException e) {
-                info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+                if (e.getJhoveMessage() != null) { // try to keep the id
+                    info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
+                } else {
+                	info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+                }
                 info.setValid(false);
             }
         }
