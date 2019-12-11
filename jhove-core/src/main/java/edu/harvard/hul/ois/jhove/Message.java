@@ -55,7 +55,7 @@ public abstract class Message {
 	 *            The message text and its identifier.
 	 */
 	protected Message(final JhoveMessage message) {
-		this(message, null, NULL);
+		this(message, message.getSubMessage(), NULL);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public abstract class Message {
 	 *            Byte offset associated with the message.
 	 */
 	protected Message(final JhoveMessage message, final long offset) {
-		this(message, null, offset);
+		this(message, message.getSubMessage(), offset);
 	}
 
 	/**
@@ -166,8 +166,9 @@ public abstract class Message {
 	 */
 	protected Message(final JhoveMessage message, String subMessage,
 			long offset) {
+		super();
 		this.message = message;
-		this._subMessage = subMessage;
+		this._subMessage = (subMessage.isEmpty()) ? null : subMessage;
 		this._offset = offset;
 	}
 
