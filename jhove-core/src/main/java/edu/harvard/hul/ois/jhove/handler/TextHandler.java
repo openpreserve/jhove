@@ -492,10 +492,6 @@ public class TextHandler extends HandlerBase {
 
 	private void showMessage(Message message) {
 		String margin = getIndent(++_level);
-		String id = message.getId();
-		if (!(id == null || id.isEmpty() || id.equals(JhoveMessages.NO_ID))) {
-			_writer.println(margin + "ID: " + id);
-		}
 		String prefix = message.getPrefix() + "Message: ";
 		String str = message.getMessage();
 		// Append submessage, if any, after a colon.
@@ -504,6 +500,10 @@ public class TextHandler extends HandlerBase {
 			str += ": " + submsg;
 		}
 		_writer.println(margin + prefix + str);
+		String id = message.getId();
+		if (!(id == null || id.isEmpty() || id.equals(JhoveMessages.NO_ID))) {
+			_writer.println(margin + " ID: " + id);
+		}
 		long offset = message.getOffset();
 		if (offset > -1) {
 			_writer.println(margin + " Offset: " + offset);
