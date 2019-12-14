@@ -37,13 +37,13 @@ public class Utf8ByteOrderTests {
 	@Test
 	public final void testBom() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, utf8BomTest, RepInfo.TRUE,
-				RepInfo.TRUE, MessageConstants.INF_BOM_MARK_PRESENT, true);
+				RepInfo.TRUE, MessageConstants.UTF8_HUL_1.getMessage(), true);
 	}
 
 	@Test
 	public final void testNoBom() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, utf8NoBomTest, RepInfo.TRUE,
-				RepInfo.TRUE, MessageConstants.INF_BOM_MARK_PRESENT, false);
+				RepInfo.TRUE, MessageConstants.UTF8_HUL_1.getMessage(), false);
 	}
 
 }

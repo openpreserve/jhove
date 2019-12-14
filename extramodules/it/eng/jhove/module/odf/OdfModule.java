@@ -49,6 +49,112 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @version $Revision$
  */
 public class OdfModule extends ModuleBase implements Module {
+    
+    private static final String NAME = "ODF-engineering";
+    private static final String RELEASE = "1.0";
+    private static final int DATE[] = {2006, 9, 25};
+    private static final String FORMAT[] = {
+		"ODF",
+		"Open Document Format for Office Applications 1.0"
+    };
+    private static final String MIMETYPES[] = {"application/vnd.oasis.opendocument.text",
+											   "application/vnd.oasis.opendocument.text-template",
+											   "application/vnd.oasis.opendocument.graphics",
+											   "application/vnd.oasis.opendocument.graphics-template",
+											   "application/vnd.oasis.opendocument.presentation",
+											   "application/vnd.oasis.opendocument.presentation-template",
+											   "application/vnd.oasis.opendocument.spreadsheet",
+											   "application/vnd.oasis.opendocument.spreadsheet-template",
+											   "application/vnd.oasis.opendocument.chart",
+											   "application/vnd.oasis.opendocument.chart-template",
+											   "application/vnd.oasis.opendocument.image",
+											   "application/vnd.oasis.opendocument.image-template",
+											   "application/vnd.oasis.opendocument.formula",
+											   "application/vnd.oasis.opendocument.formula-template",
+											   "application/vnd.oasis.opendocument.text-master",
+											   "application/vnd.oasis.opendocument.text-web"};
+
+    private static final String COVERAGE = "ODF";
+    private static final String WELLFORMED = null;
+    private static final String VALIDITY = null;
+    private static final String REPINFO = null;
+    private static final String NOTE = "Work in progress";
+    private static final String RIGHTS =
+		"Copyright 2006 Engineering Ingengeria Informatica S.p.a." +
+		"Released under the GNU Lesser General Public License." +
+		"Cryptoserver Library Copyright Engiweb Security, all rights reserved";
+    private static final boolean RANDOM = false;
+
+    private static final String PROFILES[] = {"Open Document Format Text Document",
+											  "Open Document Format Text Document Template",
+											  "Open Document Format Drawing",
+											  "Open Document Format Drawing Template",
+											  "Open Document Format Presentation Document",
+											  "Open Document Format Presentation Document Template",
+											  "Open Document Format Spreadsheet",
+											  "Open Document Format Spreadsheet Template",
+											  "Open Document Format Chart",
+											  "Open Document Format Spreadsheet Chart Template",
+											  "Open Document Format Image",
+											  "Open Document Format Image Template",
+											  "Open Document Format Mathematic Formula",
+											  "Open Document Format Mathematic Formula Template",
+											  "Open Document Format Global Text Document",
+											  "Open Document Format HTML Text Document Template"};
+
+    private static final Map mimeTypeMap = new HashMap();
+
+    static {
+		for (int i = 0; i < MIMETYPES.length; i++) {
+			mimeTypeMap.put(MIMETYPES[i],PROFILES[i]);
+		}
+    }
+
+    // Magic number
+    private static final int header[] =new int[]{'P', 'K', ' ', ' ',
+												 ' ', ' ', ' ', ' ',
+												 ' ', ' ', ' ', ' ',
+												 ' ', ' ', ' ', ' ',
+												 ' ', ' ', ' ', ' ',
+												 ' ', ' ', ' ', ' ',
+												 ' ', ' ', ' ', ' ',
+												 ' ', ' ', 'm', 'i',
+												 'm', 'e', 't', 'y',
+												 'p', 'e'};
+
+    // These are the name of the mandatory ZipEntries in an Open
+    // Document Format file.
+    private final static String MIMETYPE="mimetype";
+    private final static String MANIFEST="META-INF/manifest.xml";
+
+    // Schemas for the Relax NG validation
+    private final static String SCHEMA_MANIFEST = "OpenDocument-manifest-schema-v1.0-os.rng";
+    private final static String SCHEMA_OPENDOCUMENT = "OpenDocument-schema-v1.0-os.rng";
+    private final static String RESOURCES = "resources/";
+
+    // Media types that need "special processing"
+    private final static String
+    SKIP_TYPE = "application/binary";   // this is a non standard media
+    // type that has to be skipped
+
+    private final static String
+    XRNG_TYPE = "text/xml";     // all the xml file in a Open
+    // Document file are to be
+    // validated againist
+    // SCHEMA_OPENDOCUMENT
+
+    private final static String
+    SKIP_APP = "application/";      // Application specific binary
+    // stuff, i.e. substitutes for
+    // a faster OLE display or
+
+    private final static String
+    IMG_TYPE = "image/";        // Images have their own
+    // processing...
+
+    // Special contents
+    private final static String META_FILE = "meta.xml";
+    private final static String SKIP_ROOT = "/";
 
 
     /**
@@ -288,7 +394,7 @@ public class OdfModule extends ModuleBase implements Module {
 					subDoc.setConsistent(true);
 					repInfo.putEmbeddedRepInfo(subDocName, subDoc);
 				}
-				else if ( mnfe.mediaType.equals("") ||
+				else if ( "".equals(mnfe.mediaType) ||
 						  mnfe.mediaType.equals(SKIP_TYPE) ||
 						  mnfe.mediaType.startsWith(SKIP_APP)) {
 
@@ -651,111 +757,7 @@ public class OdfModule extends ModuleBase implements Module {
     }
 
 
-    private static final String NAME = "ODF-engineering";
-    private static final String RELEASE = "1.0";
-    private static final int DATE[] = {2006, 9, 25};
-    private static final String FORMAT[] = {
-		"ODF",
-		"Open Document Format for Office Applications 1.0"
-    };
-    private static final String MIMETYPES[] = {"application/vnd.oasis.opendocument.text",
-											   "application/vnd.oasis.opendocument.text-template",
-											   "application/vnd.oasis.opendocument.graphics",
-											   "application/vnd.oasis.opendocument.graphics-template",
-											   "application/vnd.oasis.opendocument.presentation",
-											   "application/vnd.oasis.opendocument.presentation-template",
-											   "application/vnd.oasis.opendocument.spreadsheet",
-											   "application/vnd.oasis.opendocument.spreadsheet-template",
-											   "application/vnd.oasis.opendocument.chart",
-											   "application/vnd.oasis.opendocument.chart-template",
-											   "application/vnd.oasis.opendocument.image",
-											   "application/vnd.oasis.opendocument.image-template",
-											   "application/vnd.oasis.opendocument.formula",
-											   "application/vnd.oasis.opendocument.formula-template",
-											   "application/vnd.oasis.opendocument.text-master",
-											   "application/vnd.oasis.opendocument.text-web"};
-
-    private static final String COVERAGE = "ODF";
-    private static final String WELLFORMED = null;
-    private static final String VALIDITY = null;
-    private static final String REPINFO = null;
-    private static final String NOTE = "Work in progress";
-    private static final String RIGHTS =
-		"Copyright 2006 Engineering Ingengeria Informatica S.p.a." +
-		"Released under the GNU Lesser General Public License." +
-		"Cryptoserver Library Copyright Engiweb Security, all rights reserved";
-    private static final boolean RANDOM = false;
-
-    private static final String PROFILES[] = {"Open Document Format Text Document",
-											  "Open Document Format Text Document Template",
-											  "Open Document Format Drawing",
-											  "Open Document Format Drawing Template",
-											  "Open Document Format Presentation Document",
-											  "Open Document Format Presentation Document Template",
-											  "Open Document Format Spreadsheet",
-											  "Open Document Format Spreadsheet Template",
-											  "Open Document Format Chart",
-											  "Open Document Format Spreadsheet Chart Template",
-											  "Open Document Format Image",
-											  "Open Document Format Image Template",
-											  "Open Document Format Mathematic Formula",
-											  "Open Document Format Mathematic Formula Template",
-											  "Open Document Format Global Text Document",
-											  "Open Document Format HTML Text Document Template"};
-
-    private static final Map mimeTypeMap = new HashMap();
-
-    static {
-		for (int i = 0; i < MIMETYPES.length; i++) {
-			mimeTypeMap.put(MIMETYPES[i],PROFILES[i]);
-		}
-    }
-
-    // Magic number
-    private static final int header[] =new int[]{'P', 'K', ' ', ' ',
-												 ' ', ' ', ' ', ' ',
-												 ' ', ' ', ' ', ' ',
-												 ' ', ' ', ' ', ' ',
-												 ' ', ' ', ' ', ' ',
-												 ' ', ' ', ' ', ' ',
-												 ' ', ' ', ' ', ' ',
-												 ' ', ' ', 'm', 'i',
-												 'm', 'e', 't', 'y',
-												 'p', 'e'};
-
-    // These are the name of the mandatory ZipEntries in an Open
-    // Document Format file.
-    private final static String MIMETYPE="mimetype";
-    private final static String MANIFEST="META-INF/manifest.xml";
-
-    // Schemas for the Relax NG validation
-    private final static String SCHEMA_MANIFEST = "OpenDocument-manifest-schema-v1.0-os.rng";
-    private final static String SCHEMA_OPENDOCUMENT = "OpenDocument-schema-v1.0-os.rng";
-    private final static String RESOURCES = "resources/";
-
-    // Media types that need "special processing"
-    private final static String
-    SKIP_TYPE = "application/binary";   // this is a non standard media
-    // type that has to be skipped
-
-    private final static String
-    XRNG_TYPE = "text/xml";     // all the xml file in a Open
-    // Document file are to be
-    // validated againist
-    // SCHEMA_OPENDOCUMENT
-
-    private final static String
-    SKIP_APP = "application/";      // Application specific binary
-    // stuff, i.e. substitutes for
-    // a faster OLE display or
-
-    private final static String
-    IMG_TYPE = "image/";        // Images have their own
-    // processing...
-
-    // Special contents
-    private final static String META_FILE = "meta.xml";
-    private final static String SKIP_ROOT = "/";
+    
 
 }
 

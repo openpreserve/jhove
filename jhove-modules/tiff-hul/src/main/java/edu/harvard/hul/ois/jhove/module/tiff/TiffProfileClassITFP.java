@@ -90,10 +90,7 @@ public final class TiffProfileClassITFP extends TiffProfileClassIT
         int pint = niso.getColorSpace ();
         int inkSet = tifd.getInkSet ();
         int nInks = tifd.getNumberOfInks ();
-        if (pint == 5 && (inkSet != 1 || nInks != 4 ||
-			  !satisfiesDotRange (tifd, 0, 255))) {
-            return false;
-        }
-        return true;
+        return !(pint == 5 && (inkSet != 1 || nInks != 4 ||
+                !satisfiesDotRange (tifd, 0, 255)));
     }
 }

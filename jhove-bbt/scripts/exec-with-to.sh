@@ -73,7 +73,7 @@ fi
 
 # kill -0 pid   Exit code indicates if a signal may be sent to $pid process.
 (
-    ((t = timeout))
+    ((t = $timeout))
 
     while ((t > 0)); do
         sleep $interval

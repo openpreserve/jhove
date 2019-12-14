@@ -58,10 +58,7 @@ public class TiffProfileExifIFD extends TiffProfile {
             return false;
         }
         int colspc = eifd.getColorspace ();
-        if (colspc != 1 && colspc != 65535) {
-            return false;
-        }
-        return true;
+        return !(colspc != 1 && colspc != 65535);
     }
 
     public int getMajorVersion() {

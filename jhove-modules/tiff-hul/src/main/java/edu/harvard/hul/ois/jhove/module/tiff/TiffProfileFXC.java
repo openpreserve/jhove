@@ -10,7 +10,7 @@ import edu.harvard.hul.ois.jhove.*;
 /**
  *
  *  Profile checker for TIFF FX, Profile C (Baseline Color).
- * 
+ *
  *  Image data content is not checked for profile conformance.
  *  Only tags are checked.
  *
@@ -34,9 +34,13 @@ public class TiffProfileFXC extends TiffFXBase {
      *  Returns true if the IFD satisfies the requirements of a
      *  TIFF/FX C profile.  See the TIFF/FX specification for
      *  details.
+     *
+     * @param ifd: IDF object
+     *
+     * @return true if it satifies the profile
      */
     @Override
-	public boolean satisfiesThisProfile(IFD ifd) 
+	public boolean satisfiesThisProfile(IFD ifd)
     {
         if (!(ifd instanceof TiffIFD)) {
             return false;
@@ -45,12 +49,12 @@ public class TiffProfileFXC extends TiffFXBase {
         if (!satisfiesClass (tifd)) {
             return false;
         }
-        if (!satisfiesImageWidth (tifd, new int[] 
+        if (!satisfiesImageWidth (tifd, new int[]
                 {864, 1024, 1216, 1728, 2048, 2432,
                  2592, 3072, 3456, 3648, 4096, 4864} )) {
             return false;
         }
-        
+
         if (!satisfiesSamplesPerPixel(tifd, new int[] {1, 3})) {
             return false;
         }
@@ -58,7 +62,7 @@ public class TiffProfileFXC extends TiffFXBase {
         if (!satisfiesCompression (tifd, 7)) {
             return false;
         }
-        
+
         if (!satisfiesPhotometricInterpretation(tifd, 10)) {
             return false;
         }
@@ -69,7 +73,7 @@ public class TiffProfileFXC extends TiffFXBase {
             // the 2003 working draft allows only 2 (inch).
             // Watch for change.
         }
-        if (!satisfiesSamplesPerPixel(tifd, 
+        if (!satisfiesSamplesPerPixel(tifd,
                 new int[] {1, 3} )) {
             return false;
         }
@@ -99,7 +103,7 @@ public class TiffProfileFXC extends TiffFXBase {
             // Watch for changes.
             return false;
         }
-        
+
         // Check if image width is suitable to resolution
         int wid = (int) niso.getImageWidth ();
         switch ((int) xRes) {
@@ -113,29 +117,24 @@ public class TiffProfileFXC extends TiffFXBase {
                     return false;
                 }
                 break;
-            
+
             case 300:
                 if (wid != 2592 && wid != 3072 & wid != 3648) {
                     return false;
                 }
                 break;
-            
+
             case 400:
                 if (wid != 3456 && wid != 4096 & wid != 4864) {
                     return false;
                 }
                 break;
+            default:
+                break;
         }
-        
         // By my best reading, the colormap is needed only
         // if the Indexed value is 1.
-        if (tifd.getIndexed() == 1) {
-            if (niso.getColormapRedValue () == null) {
-                return false;
-            }
-        }
-
-        return true;         // passed all tests
+        return !(tifd.getIndexed() == 1 && niso.getColormapRedValue () == null);  // passed all tests
     }
 
 }

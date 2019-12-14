@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.22.0</version>
+    <version>1.23.0-SNAPSHOT</version>
   </parent>
   <artifactId>aiff-hul</artifactId>
   <version>1.5.1</version>

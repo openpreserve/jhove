@@ -40,19 +40,19 @@ public class XmlHandlerTest {
 	private static final long EXPECTED_GREENY_NUMENATOR = 2576980480L;
 	private static final long EXPECTED_BLUEX_NUMENATOR = 644245120L;
 	private static final long EXPECTED_BLUEY_NUMENATOR = 257698032L;
-	
+
 	private static final int EXPECTED_IMAGE2_WIDTH = 1136;
 	private static final int EXPECTED_IMAGE2_LENGTH = 1846;
 	private static final double EXPECTED_IMAGE2_FNUMBER = 7.1;
 	private static final double EXPECTED_IMAGE2_EXPOSURE_TIME = 0.167;
-	private static final int  EXPECTED_IMAGE2_EXPOSURE_PROGRAM = 3;
+	private static final int EXPECTED_IMAGE2_EXPOSURE_PROGRAM = 3;
 	private static final int EXPECTED_IMAGE2_APERTURE_NUM = 925;
 	private static final int EXPECTED_IMAGE2_APERTURE_DEN = 256;
 	private static final double EXPECTED_IMAGE2_FOCAL = 14;
 	private static final int EXPECTED_IMAGE2_FLASH_NUM = 15;
 	private static final int EXPECTED_IMAGE2_FLASH_DEN = 100;
 	private static final int EXPECTED_IMAGE2_IMAGE_RESOLUTION = 180;
-	
+
 	private static final int EXPECTED_JPEG_COMPRESSION = 6;
 	private static final int EXPECTED_EXIF_COLORSPACE = 6;
 	private static final int EXPECTED_EXIF_IMAGE_LENGTH = 2322;
@@ -127,15 +127,18 @@ public class XmlHandlerTest {
 		TEST_NISO_IMAGE2_MD.setDigitalCameraModelName("DMC-G6");
 		TEST_NISO_IMAGE2_MD.setFNumber(EXPECTED_IMAGE2_FNUMBER);
 		TEST_NISO_IMAGE2_MD.setExposureTime(EXPECTED_IMAGE2_EXPOSURE_TIME);
-		TEST_NISO_IMAGE2_MD.setExposureProgram(EXPECTED_IMAGE2_EXPOSURE_PROGRAM);
+		TEST_NISO_IMAGE2_MD
+				.setExposureProgram(EXPECTED_IMAGE2_EXPOSURE_PROGRAM);
 		TEST_NISO_IMAGE2_MD.setBrightness(r0);
 		TEST_NISO_IMAGE2_MD.setExposureBias(r0);
-		Rational r925 = new Rational(EXPECTED_IMAGE2_APERTURE_NUM, EXPECTED_IMAGE2_APERTURE_DEN);
+		Rational r925 = new Rational(EXPECTED_IMAGE2_APERTURE_NUM,
+				EXPECTED_IMAGE2_APERTURE_DEN);
 		TEST_NISO_IMAGE2_MD.setMaxApertureValue(r925);
 		TEST_NISO_IMAGE2_MD.setMeteringMode(2);
 		TEST_NISO_IMAGE2_MD.setFocalLength(EXPECTED_IMAGE2_FOCAL);
 		TEST_NISO_IMAGE2_MD.setFlash(1);
-		Rational r15 = new Rational(EXPECTED_IMAGE2_FLASH_NUM, EXPECTED_IMAGE2_FLASH_DEN);
+		Rational r15 = new Rational(EXPECTED_IMAGE2_FLASH_NUM,
+				EXPECTED_IMAGE2_FLASH_DEN);
 		TEST_NISO_IMAGE2_MD.setFlashEnergy(r15);
 		TEST_NISO_IMAGE2_MD.setSamplingFrequencyUnit(2);
 		Rational r180 = new Rational(EXPECTED_IMAGE2_IMAGE_RESOLUTION, 1);
@@ -145,7 +148,8 @@ public class XmlHandlerTest {
 				EXPECTED_BYTE_SIZE, EXPECTED_BYTE_SIZE });
 		TEST_NISO_IMAGE2_MD.setSamplesPerPixel(EXPECTED_NUMBER_OF_BYTES);
 
-		// Define the test instance of Exif for NisoImageMetadata to be serialized
+		// Define the test instance of Exif for NisoImageMetadata to be
+		// serialized
 		TEST_NISO_EXIF_MD = new NisoImageMetadata();
 		TEST_NISO_EXIF_MD.setByteOrder(NisoImageMetadata.BYTEORDER[0]);
 		TEST_NISO_EXIF_MD.setCompressionScheme(EXPECTED_JPEG_COMPRESSION);
@@ -159,7 +163,8 @@ public class XmlHandlerTest {
 		TEST_NISO_EXIF_MD.setFNumber(EXPECTED_EXIT_FNUMBER);
 		TEST_NISO_EXIF_MD.setExposureProgram(2);
 		TEST_NISO_EXIF_MD.setExifVersion(EXPECTED_EXIF_VERSION);
-		Rational r228 = new Rational(EXPECTED_EXIF_APERTURE_NUM, EXPECTED_EXIF_APERTURE_DEN);
+		Rational r228 = new Rational(EXPECTED_EXIF_APERTURE_NUM,
+				EXPECTED_EXIF_APERTURE_DEN);
 		TEST_NISO_EXIF_MD.setMaxApertureValue(r228);
 		TEST_NISO_EXIF_MD.setMeteringMode(2);
 		TEST_NISO_EXIF_MD.setFocalLength(EXPECTED_EXIF_FOCAL);
@@ -187,6 +192,10 @@ public class XmlHandlerTest {
 
 	@Before
 	public void setUp() throws IOException {
+		// Restore the sample
+		Rational r0 = new Rational(0, 1);
+		TEST_NISO_IMAGE2_MD.setBrightness(r0);
+
 		// Prepare for a new test
 		this.outputFile = File.createTempFile("jhove_", ".xml");
 		PrintWriter writer = new PrintWriter(outputFile);
@@ -203,7 +212,8 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowNisoImageMetadata02() throws IOException {
-		File mix02File = new File(this.getClass().getResource("mix02_output.xml").getPath());
+		File mix02File = new File(this.getClass()
+				.getResource("mix02_output.xml").getPath());
 		LOGGER.info("testShowNisoImageMetadata02 with file " + mix02File);
 		assertTrue(mix02File.isFile());
 		String expectedMix02 = readXmlFile(mix02File);
@@ -218,7 +228,8 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowNisoImageMetadata10() throws IOException {
-		File mix10File = new File(this.getClass().getResource("mix10_output.xml").getPath());
+		File mix10File = new File(this.getClass()
+				.getResource("mix10_output.xml").getPath());
 		LOGGER.info("testShowNisoImageMetadata10 with file " + mix10File);
 		assertTrue(mix10File.isFile());
 		String expectedMix10 = readXmlFile(mix10File);
@@ -233,7 +244,8 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowNisoImageMetadata20() throws IOException {
-		File mix20File = new File(this.getClass().getResource("mix20_output.xml").getPath());
+		File mix20File = new File(this.getClass()
+				.getResource("mix20_output.xml").getPath());
 		LOGGER.info("testShowNisoImageMetadata20 with file " + mix20File);
 		assertTrue(mix20File.isFile());
 		String expectedMix20 = readXmlFile(mix20File);
@@ -248,7 +260,8 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowNisoImage2Metadata02() throws IOException {
-		File mix02File = new File(this.getClass().getResource("mix02_output2.xml").getPath());
+		File mix02File = new File(this.getClass()
+				.getResource("mix02_output2.xml").getPath());
 		LOGGER.info("testShowNisoImage2Metadata02 with file " + mix02File);
 		assertTrue(mix02File.isFile());
 		String expectedMix02 = readXmlFile(mix02File);
@@ -263,7 +276,8 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowNisoImage2Metadata10() throws IOException {
-		File mix10File = new File(this.getClass().getResource("mix10_output2.xml").getPath());
+		File mix10File = new File(this.getClass()
+				.getResource("mix10_output2.xml").getPath());
 		LOGGER.info("testShowNisoImage2Metadata10 with file " + mix10File);
 		assertTrue(mix10File.isFile());
 		String expectedMix10 = readXmlFile(mix10File);
@@ -278,7 +292,8 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowNisoImage2Metadata20() throws IOException {
-		File mix20File = new File(this.getClass().getResource("mix20_output2.xml").getPath());
+		File mix20File = new File(this.getClass()
+				.getResource("mix20_output2.xml").getPath());
 		LOGGER.info("testShowNisoImage2Metadata20 with file " + mix20File);
 		assertTrue(mix20File.isFile());
 		String expectedMix20 = readXmlFile(mix20File);
@@ -292,8 +307,25 @@ public class XmlHandlerTest {
 	}
 
 	@Test
+	public void testShowNisoImage2Issue502() throws IOException {
+		File mix20File = new File(this.getClass()
+				.getResource("mix20_output3.xml").getPath());
+		LOGGER.info("testShowNisoImage2Issue502 with file " + mix20File);
+		assertTrue(mix20File.isFile());
+		String expectedMix20 = readXmlFile(mix20File);
+		TEST_NISO_IMAGE2_MD.setBrightness(null);
+		this.handler.showNisoImageMetadata20(TEST_NISO_IMAGE2_MD);
+		this.handler.close();
+
+		String generatedMix = readXmlFile(outputFile);
+		assertEquals("Mix v2.0 generated not conformant", expectedMix20,
+				generatedMix);
+	}
+
+	@Test
 	public void testShowNisoExifMetadata02() throws IOException {
-		File mix02File = new File(this.getClass().getResource("exif_mix02.xml").getPath());
+		File mix02File = new File(this.getClass().getResource("exif_mix02.xml")
+				.getPath());
 		LOGGER.info("testShowNisoExifMetadata02 with file " + mix02File);
 		assertTrue(mix02File.isFile());
 		String expectedMix02 = readXmlFile(mix02File);
@@ -308,7 +340,8 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowNisoExifMetadata10() throws IOException {
-		File mix10File = new File(this.getClass().getResource("exif_mix10.xml").getPath());
+		File mix10File = new File(this.getClass().getResource("exif_mix10.xml")
+				.getPath());
 		LOGGER.info("testShowNisoExifMetadata10 with file " + mix10File);
 		assertTrue(mix10File.isFile());
 		String expectedMix10 = readXmlFile(mix10File);
@@ -323,7 +356,8 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowNisoExifMetadata20() throws IOException {
-		File mix20File = new File(this.getClass().getResource("exif_mix20.xml").getPath());
+		File mix20File = new File(this.getClass().getResource("exif_mix20.xml")
+				.getPath());
 		LOGGER.info("testShowNisoExifMetadata20 with file " + mix20File);
 		assertTrue(mix20File.isFile());
 		String expectedMix20 = readXmlFile(mix20File);
@@ -338,7 +372,8 @@ public class XmlHandlerTest {
 
 	@Test
 	public void testShowTextMDMetadata() throws IOException {
-		File textMD30File = new File(this.getClass().getResource("text30_output.xml").getPath());
+		File textMD30File = new File(this.getClass()
+				.getResource("text30_output.xml").getPath());
 		LOGGER.info("testShowTextMDMetadata with file " + textMD30File);
 		assertTrue(textMD30File.isFile());
 		String expectedText30 = readXmlFile(textMD30File);
@@ -351,10 +386,12 @@ public class XmlHandlerTest {
 				generatedTextMD);
 	}
 
-	
 	/**
-	 * Reads an XML file into an one line string and eliminates the multiple spaces.  
-	 * @param f the xml file
+	 * Reads an XML file into an one line string and eliminates the multiple
+	 * spaces.
+	 * 
+	 * @param f
+	 *            the xml file
 	 * @return one line with the content
 	 * @throws IOException
 	 */

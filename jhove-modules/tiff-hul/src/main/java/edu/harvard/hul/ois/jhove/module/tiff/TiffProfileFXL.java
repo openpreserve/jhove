@@ -103,10 +103,8 @@ public class TiffProfileFXL extends TiffFXBase {
             return false;
         }
         
-        if (tifd.getIndexed() == 1) {
-            if (niso.getColormapRedValue () == null) {
-                return false;
-            }
+        if (tifd.getIndexed() == 1 && niso.getColormapRedValue () == null) {
+            return false;
         }
 
         return true;         // passed all tests

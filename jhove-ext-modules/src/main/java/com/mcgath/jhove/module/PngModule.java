@@ -219,7 +219,7 @@ public class PngModule extends ModuleBase {
         for (int i = 0; i < _sigBytes.length; i++) {
         	int byt = readUnsignedByte (_dstream);
         	if (byt != _sigBytes[i]) {
-        		msg = new ErrorMessage("File header does not match PNG signature");
+        		msg = new ErrorMessage(MessageConstants.PNG_GDM_66);
         		info.setMessage(msg);
         		info.setWellFormed(false);
         		return 0;
@@ -234,7 +234,7 @@ public class PngModule extends ModuleBase {
         			break;
         		}
         		if (iendSeen) {
-        			msg = new ErrorMessage ("IEND chunk is not last");
+        			msg = new ErrorMessage (MessageConstants.PNG_GDM_67);
         			info.setMessage (msg);
         			info.setWellFormed (false);
         			return 0;
@@ -250,7 +250,9 @@ public class PngModule extends ModuleBase {
         		long storedCRC = chunk.readCRC();
         		long calculatedCRC = chunk.getCRC();
         		if (storedCRC != calculatedCRC) {
-        			msg = new ErrorMessage("Incorrect CRC in chunk " + chunk.chunkTypeString());
+        			msg = new ErrorMessage(String.format (
+							MessageConstants.PNG_GDM_68.getMessage() , 
+							chunk.chunkTypeString()));
         			info.setMessage(msg);
         			info.setWellFormed(false);
         			return 0;
@@ -262,8 +264,10 @@ public class PngModule extends ModuleBase {
         	return 0;
         }
         catch (EOFException e) {
-        	msg = new ErrorMessage ("Unexpected end of file",
-        			_nByte);
+        	msg = new ErrorMessage (
+        			String.format (
+        					MessageConstants.PNG_GDM_69.getMessage(),
+        					_nByte));
         	info.setMessage (msg);
         	info.setWellFormed (false);
         	return 0;
@@ -272,7 +276,10 @@ public class PngModule extends ModuleBase {
         	// Miscellaneous exceptions really shouldn't come here.
         	// But it's better to catch them than let them fall through.
         	// Treat them as bugs.
-        	msg = new ErrorMessage ("Exception " + e.getClass().getName());
+        	msg = new ErrorMessage (
+        			String.format (
+        					MessageConstants.PNG_GDM_70.getMessage() , 
+        					e.getClass().getName()));
         	info.setMessage (msg);
         	info.setWellFormed (false);
         	return 0;
@@ -281,17 +288,17 @@ public class PngModule extends ModuleBase {
         /* Check for required chunks. */
         boolean criticalMissing = false;
         if (!ihdrSeen) {
-        	msg = new ErrorMessage("No IHDR chunk");
+        	msg = new ErrorMessage(MessageConstants.PNG_GDM_71);
         	info.setMessage (msg);
         	criticalMissing = true;
         }
         if (!idatSeen) {
-        	msg = new ErrorMessage("No IDAT chunk");
+        	msg = new ErrorMessage(MessageConstants.PNG_GDM_72);
         	info.setMessage (msg);
         	criticalMissing = true;
         }
         if (!iendSeen) {
-        	msg = new ErrorMessage("No IEND chunk");
+        	msg = new ErrorMessage(MessageConstants.PNG_GDM_73);
         	info.setMessage (msg);
         	criticalMissing = true;
         }
@@ -302,14 +309,14 @@ public class PngModule extends ModuleBase {
         
         /** PLTE is required with color type 3 and forbidden with types 0 and 4 */
         if (_colorType == 3 && !plteSeen) {
-        	msg = new ErrorMessage ("No PLTE chunk, required with color type 3");
+        	msg = new ErrorMessage (MessageConstants.PNG_GDM_74);
 			info.setMessage (msg);
         	info.setWellFormed (false);
 			return 0;
         }
         
         if ((_colorType == 0 || _colorType == 4) && plteSeen) {
-			msg = new ErrorMessage ("PLTE chunk found, not allowed with color types 0 and 4");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_75);
 			info.setMessage (msg);
         	info.setWellFormed (false);
 			return 0;

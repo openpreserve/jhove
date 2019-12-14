@@ -20,9 +20,10 @@ import edu.harvard.hul.ois.jhove.module.iff.*;
  * several different types of informational chunks.
  *
  * @author Gary McGath
- *
  */
 public class AssocDataListChunk extends Superchunk {
+
+	private static final int TYPE_LENGTH = 4;
 
 	/**
 	 * Constructor.
@@ -57,11 +58,12 @@ public class AssocDataListChunk extends Superchunk {
 		// this was intended to allow other list structures (don't ask
 		// why), but any others will be considered non-conforming.
 		String typeID = module.read4Chars(_dstream);
-		bytesLeft -= 4;
+		bytesLeft -= TYPE_LENGTH;
 		if (!"adtl".equals(typeID)) {
 			info.setMessage(new ErrorMessage(MessageConstants.WAVE_HUL_9,
-					MessageConstants.SUB_MESS_TYPE + typeID,
-					_module.getNByte()));
+					String.format(MessageConstants.WAVE_HUL_9_SUB.getMessage(),
+							typeID),
+					_module.getNByte() - TYPE_LENGTH));
 			info.setWellFormed(false);
 			return false;
 		}
@@ -75,11 +77,11 @@ public class AssocDataListChunk extends Superchunk {
 			// Labelled Text.
 			String id = chunkh.getID();
 			int chunkSize = (int) chunkh.getSize();
-			if (id.equals("labl")) {
+			if ("labl".equals(id)) {
 				chunk = new LabelChunk(_module, chunkh, _dstream);
-			} else if (id.equals("note")) {
+			} else if ("note".equals(id)) {
 				chunk = new NoteChunk(_module, chunkh, _dstream);
-			} else if (id.equals("ltxt")) {
+			} else if ("ltxt".equals(id)) {
 				chunk = new LabeledTextChunk(_module, chunkh, _dstream);
 			}
 
@@ -97,5 +99,4 @@ public class AssocDataListChunk extends Superchunk {
 		}
 		return true;
 	}
-
 }

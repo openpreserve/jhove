@@ -11,18 +11,53 @@ package edu.harvard.hul.ois.jhove.module.html;
  * mechanisms so long as you retain the public fields.
  */
 public class ParseException extends Exception {
+    
+    /**
+   * This variable determines which constructor was used to create
+   * this object and thereby affects the semantics of the
+   * "getMessage" method (see below).
+   */
+  protected boolean specialConstructor;
 
   /**
-   * This constructor is used by the method "generateParseException"
-   * in the generated parser.  Calling this constructor generates
-   * a new object of this type with the fields "currentToken",
-   * "expectedTokenSequences", and "tokenImage" set.  The boolean
-   * flag "specialConstructor" is also set to true to indicate that
+   * This is the last token that has been consumed successfully.  If
+   * this object has been created due to a parse error, the token
+   * followng this token will (therefore) be the first error token.
+   */
+  public Token currentToken;
+
+  /**
+   * Each entry in this array is an array of integers.  Each array
+   * of integers represents a sequence of tokens (by their ordinal
+   * values) that is expected at this point of the parse.
+   */
+  public int[][] expectedTokenSequences;
+
+  /**
+   * This is a reference to the "tokenImage" array of the generated
+   * parser within which the parse error occurred.  This array is
+   * defined in the generated ...Constants interface.
+   */
+  public String[] tokenImage;
+  
+  /**
+   * The end of line string for this machine.
+   */
+  protected String eol = System.getProperty("line.separator", "\n");
+
+  /**
+   * This constructor is used by the method {@code generateParseException}
+   * in the generated parser. Calling this constructor generates
+   * a new object of this type with the fields {@code currentToken},
+   * {@code expectedTokenSequences}, and {@code tokenImage} set. The boolean
+   * flag {@code specialConstructor} is also set to true to indicate that
    * this constructor was used to create this object.
    * This constructor calls its super class with the empty string
-   * to force the "toString" method of parent class "Throwable" to
+   * to force the {@code toString} method of parent class {@code Throwable} to
    * print the error message in the form:
-   *     ParseException: <result of getMessage>
+   * <pre>
+   *     {@code ParseException: <result of getMessage>}
+   * </pre>
    */
   public ParseException(Token currentTokenVal,
                         int[][] expectedTokenSequencesVal,
@@ -55,34 +90,6 @@ public class ParseException extends Exception {
     super(message);
     specialConstructor = false;
   }
-
-  /**
-   * This variable determines which constructor was used to create
-   * this object and thereby affects the semantics of the
-   * "getMessage" method (see below).
-   */
-  protected boolean specialConstructor;
-
-  /**
-   * This is the last token that has been consumed successfully.  If
-   * this object has been created due to a parse error, the token
-   * followng this token will (therefore) be the first error token.
-   */
-  public Token currentToken;
-
-  /**
-   * Each entry in this array is an array of integers.  Each array
-   * of integers represents a sequence of tokens (by their ordinal
-   * values) that is expected at this point of the parse.
-   */
-  public int[][] expectedTokenSequences;
-
-  /**
-   * This is a reference to the "tokenImage" array of the generated
-   * parser within which the parse error occurred.  This array is
-   * defined in the generated ...Constants interface.
-   */
-  public String[] tokenImage;
 
   /**
    * This method has the standard behavior when this object has been
@@ -138,11 +145,6 @@ public String getMessage() {
     retval.append(expected);
     return retval.toString();
   }
-
-  /**
-   * The end of line string for this machine.
-   */
-  protected String eol = System.getProperty("line.separator", "\n");
  
   /**
    * Used to convert raw characters to their escaped version
