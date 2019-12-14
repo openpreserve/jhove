@@ -480,7 +480,8 @@ public class EpubModuleTest {
         Message msg = info.getMessage().get(0);
         assertEquals("PKG-010", msg.getId());
         assertTrue(msg.getMessage().contains("WARN"));
-        assertTrue(msg.getMessage().contains("Filename contains spaces"));
+        // Do NOT compare strings because of translated messages
+        // assertTrue(msg.getMessage().contains("Filename contains spaces"));
         assertTrue(msg instanceof ErrorMessage);
     }
 
@@ -624,13 +625,16 @@ public class EpubModuleTest {
         Map<String, Object> props = toMap(metadata);
         assertEquals(true, props.get(FEATURE_HASENCRYPTION));
 
+        boolean bFoundRsc4 = false; 
         for (Message msg : info.getMessage()) {
-            if (msg.getId().equals("RSC-004")) {
-                assertTrue(msg.getMessage().contains("could not be decrypted"));
-                return;
+            if ("RSC-004".equals(msg.getId())) {
+                // Do NOT compare strings because of translations...
+                // assertTrue(msg.getMessage().contains("could not be decrypted"));
+                bFoundRsc4 = true;
+                break;
             }
         }
-        fail("RSC-004 error was not found");
+        assertEquals("RSC-004 error was not found", true, bFoundRsc4);
     }
 
     /**

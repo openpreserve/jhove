@@ -44,16 +44,17 @@ public class WaveModuleTest {
 		// Go though messages looking for the expected error:
 		boolean foundEofMessage = false;
 		for( Message m : info.getMessage()) {
-			if ("Unexpected end of file".equals(m.getMessage())
+			// Use ID to be language independent
+			if ("WAVE-HUL-3".equals(m.getId())
 					&& m.getOffset() == 96) {
 				foundEofMessage = true;
 			}
-			System.out.println("MESSAGE: " + m.getMessage() + " "
+			System.out.println("MESSAGE: (" + m.getId() + ") " + m.getMessage() + " "
 					+ m.getSubMessage()
 					+ " @" + m.getOffset());
 		}
 		// Fail if the error was not found.
-		assertTrue("The message 'Unexpected end of file'@96 was not found. ",
+		assertTrue("The message of id=WAVE-HUL-3 ('Unexpected end of file')@96 was not found. ",
 				foundEofMessage);
 	}
 
