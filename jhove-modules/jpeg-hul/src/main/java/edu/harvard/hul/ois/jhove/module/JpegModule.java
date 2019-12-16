@@ -1974,6 +1974,10 @@ public class JpegModule extends ModuleBase {
 			_niso.setYSamplingFrequency(exifData.getYSamplingFrequency());
 			_niso.setSamplingFrequencyUnit(exifData.getSamplingFrequencyUnit());
 		}
+		if (_niso.getProfileName() == null
+				&& exifData.getProfileName() != null) {
+			_niso.setProfileName(exifData.getProfileName());
+		}
 
 		// If exif FNumber is defined then assume is a camera and not a scanner,
 		// migrate Scanner info to DigitalCamera info
