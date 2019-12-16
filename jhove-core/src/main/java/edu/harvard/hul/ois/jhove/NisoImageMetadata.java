@@ -6,8 +6,8 @@
 package edu.harvard.hul.ois.jhove;
 
 import java.awt.color.ICC_Profile;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 
@@ -2254,18 +2254,22 @@ public class NisoImageMetadata
 
     public static String extractIccProfileDescription(byte[] data) throws IllegalArgumentException {
     	// Validate the ICCProfile with the java library
-    	ICC_Profile profile = ICC_Profile.getInstance(data);
+        ICC_Profile profile = ICC_Profile.getInstance(data);
     	// Extract the 'desc' record (cf http://www.color.org/ICC1-V41.pdf)
-    	byte[] dataProf = profile.getData(ICC_Profile.icSigProfileDescriptionTag);
+        byte[] dataProf = profile.getData(ICC_Profile.icSigProfileDescriptionTag);
     	if (dataProf == null) {
     		return null;
     	}
 
     	String description = null;
-    	ByteBuffer bb = ByteBuffer.wrap(dataProf).asReadOnlyBuffer();
+        ByteBuffer bb = ByteBuffer.wrap(dataProf).asReadOnlyBuffer();
+        int majorVersion = profile.getMajorVersion();
+        int minorVersion = profile.getMinorVersion();
+        LOGGER.fine("Version " + majorVersion + "." + minorVersion);
 
-    	LOGGER.fine("Version " + profile.getMajorVersion());
-    	if (profile.getMajorVersion() <= 2) {
+        int beginTag = bb.getInt(0);
+        if (beginTag == ICC_Profile.icSigProfileDescriptionTag) {
+            // Invariant option
         	// ICC v2 http://www.color.org/ICC_Minor_Revision_for_Web.pdf
 	    	// Read only the ASCII form (cf 6.5.17 ICC v2)
 	    	final int OFFSET_LENGTH = 8;
@@ -2278,20 +2282,16 @@ public class NisoImageMetadata
 	    	bb.position(OFFSET_DESC);
 	    	bb.get(asciiDesc);
 
-			try {
-				description = new String(asciiDesc, "US-ASCII");
-			} catch (UnsupportedEncodingException e) {
-				// IGNORE: US-ASCII always there... wait for Java 1.7
-			}
+			description = new String(asciiDesc, StandardCharsets.US_ASCII);
     	} else {
         	// ICC v4 http://www.color.org/ICC1-V41.pdf
-	    	final int OFFSET_NUMBER = 8;
+            final int OFFSET_NUMBER = 8;
 	    	final int MLUC_TAG = 0x6D6C7563;
 	    	final int OFFSET_NAME_LENGTH = 20;
 	    	final int OFFSET_NAME_OFFSET = 24;
 
     		// 6.2 segment tag table definition
-    		int tagMluc = bb.getInt(0);
+            int tagMluc = bb.getInt(0);
 
         	// Read the 1st mulc form (cf 6.5.12 ICC v4)
     		int nb =  bb.getInt(OFFSET_NUMBER);
@@ -2300,20 +2300,14 @@ public class NisoImageMetadata
     		}
     		int firstNameLength = bb.getInt(OFFSET_NAME_LENGTH);
     		int firstNameOffset = bb.getInt(OFFSET_NAME_OFFSET);
-
         	// readString
         	byte[] desc = new byte[firstNameLength];
         	bb.position(firstNameOffset);
         	bb.get(desc);
 
-    		try {
-    			// The  Unicode  strings  in  storage  are  encoded  as  16-bit
-    			// big-endian,  UTF-16BE,  and should not be NULL terminated.
-    			description = new String(desc, "UTF-16BE");
-    		} catch (UnsupportedEncodingException e) {
-    			// IGNORE: UTF-16 always there... wait for Java 1.7
-    		}
-
+            // The  Unicode  strings  in  storage  are  encoded  as  16-bit
+            // big-endian,  UTF-16BE,  and should not be NULL terminated.
+            description = new String(desc, StandardCharsets.UTF_16BE);
     	}
     	return description;
     }
