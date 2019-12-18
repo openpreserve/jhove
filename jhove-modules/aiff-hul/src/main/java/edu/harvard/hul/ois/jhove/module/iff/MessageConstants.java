@@ -15,15 +15,8 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 public enum MessageConstants {
 	INSTANCE;
 	private static final JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.module.iff.ErrorMessages"); //$NON-NLS-1$
-	/**
-	 * Info messages
-	 */
-	public static final String INF_CHUNK_TYPE_IGNORED = "Ignored chunk type with ID: ";
 
-	/**
-	 * Error messages
-	 */
 	public static final JhoveMessage IFF_HUL_1 = messageFactory.getMessage("IFF-HUL-1"); //$NON-NLS-1$
 	public static final JhoveMessage IFF_HUL_1_SUB = messageFactory.getMessage("IFF-HUL-1-SUB"); //$NON-NLS-1$
-
+	public static final JhoveMessage IFF_HUL_2 = messageFactory.getMessage("IFF-HUL-2"); //$NON-NLS-1$
 }

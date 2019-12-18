@@ -23,6 +23,10 @@ public final class Agent {
             .web("http://openpreservation.org")
             .email("jhove@openpreservation.org").build();
 
+    private static final Agent BNF = new Builder(
+            "Bibliothèque nationale de France", AgentType.EDUCATIONAL)
+            .web("http://www.bnf.fr").build();
+
     /******************************************************************
      * PRIVATE INSTANCE FIELDS.
      ******************************************************************/
@@ -123,8 +127,10 @@ public final class Agent {
     public static final Agent opfInstance() {
         return OPF;
     }
-    
-    
+
+    public static final Agent bnfInstance() {
+        return BNF;
+    }
 
     /**
      * { @inheritDoc }

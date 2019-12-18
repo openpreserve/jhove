@@ -20,6 +20,7 @@
 package edu.harvard.hul.ois.jhove.module;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.File;
@@ -28,12 +29,10 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.xml.parsers.SAXParserFactory;
@@ -64,6 +63,8 @@ import edu.harvard.hul.ois.jhove.Signature;
 import edu.harvard.hul.ois.jhove.SignatureType;
 import edu.harvard.hul.ois.jhove.SignatureUseType;
 import edu.harvard.hul.ois.jhove.XMPHandler;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import edu.harvard.hul.ois.jhove.module.jpeg.ArithConditioning;
 import edu.harvard.hul.ois.jhove.module.jpeg.JpegExif;
 import edu.harvard.hul.ois.jhove.module.jpeg.JpegStrings;
@@ -108,18 +109,18 @@ public class JpegModule extends ModuleBase {
 	 ******************************************************************/
 	private static final String NISO_IMAGE_MD = "NisoImageMetadata";
 	private static final String NAME = "JPEG-hul";
-	private static final String RELEASE = "1.5.1";
-  private static final int [] DATE = { 2019, 04, 17 };
+	private static final String RELEASE = "1.5.2";
+  private static final int [] DATE = { 2019, 11, 05 };
 	private static final String[] FORMAT = { "JPEG", "ISO/IEC 10918-1:1994",
 			"Joint Photographic Experts Group", "JFIF",
 			"JPEG File Interchange Format", "SPIFF", "ISO/IEC 10918-3:1997",
 			"Still Picture Interchange File Format", "JTIP",
 			"ISO/IEC 10918-3:1997", "JPEG Tiled Image Pyramid", "JPEG-LS",
-			"ISO/IEC 14495" };
+			"ISO/IEC 14495", "Adobe JPEG", "ISO/IEC 10918-6:2013" };
 	private static final String COVERAGE = "JPEG (ISO/IEC 10918-1:1994), JFIF 1.02, "
 			+ "SPIFF (ISO/IEC 10918-3:1997), "
 			+ "Exif 2.0, 2.1 (JEIDA-49-1998), 2.2 (JEITA CP-3451), 2.21 (JEITA CP-3451A), and 2.3 (JEITA CP-3451C), "
-			+ "JTIP (ISO/IEC 10918-3:1997), JPEG-LS (ISO/IEC 14495)";
+			+ "JTIP (ISO/IEC 10918-3:1997), JPEG-LS (ISO/IEC 14495), Adobe JPEG (ISO/IEC 10918-6:2013)";
 	private static final String[] MIMETYPE = { "image/jpeg" };
 	private static final String WELLFORMED = "A JPEG file is well-formed if "
 			+ "the first three bytes are 0xFFD8FF, it consists of one or more "
@@ -128,10 +129,11 @@ public class JpegModule extends ModuleBase {
 			+ "terminated";
 	private static final String VALIDITY = "A JPEG file is valid if "
 			+ "well-formed; the first non-comment segment is APP0 (with "
-			+ "identifier 0x4A46494600, indicating JFIF or JTIP), APP1 (with "
-			+ "identifier (0x457869660000, indicating Exif), APP8 (with "
-			+ "identifier 0x545049464600, indicating SPIFF), or JPG7 (or SOF55, "
-			+ "indicating JPEG-LS); D8 marker occurs only at the beginning of "
+			+ "identifier 0x4A46494600, indicating JFIF or JTIP, with 1, 3 or 4 components), "
+			+ "APP1 (with identifier (0x457869660000, indicating Exif, and only 3 components), "
+			+ "APP8 (with identifier 0x545049464600, indicating SPIFF), "
+			+ "or JPG7 (or SOF55, indicating JPEG-LS); "
+			+ "D8 marker occurs only at the beginning of "
 			+ "the file; any DTT segments are preceded by DTI segments; and all "
 			+ "DTI segment tiling type have a value of 0, 1, or 2";
 	private static final String REPINFO = "Additional representation "
@@ -145,6 +147,12 @@ public class JpegModule extends ModuleBase {
 	/******************************************************************
 	 * PRIVATE INSTANCE FIELDS.
 	 ******************************************************************/
+    private static final int CS_GRAYSCALE = 1;
+    private static final int CS_RGB = 2;
+    private static final int CS_PALETTE = 3;
+    private static final int CS_YCC = 6; // YcbCr
+    private static final int CS_CMYK = 5;
+    private static final int CS_YCCK = 65535; // not existing !!!
 
 	/*
 	 * Profile names. These are just informal identifiers, and probably will be
@@ -154,6 +162,7 @@ public class JpegModule extends ModuleBase {
 	protected String spiffProfileName = "SPIFF";
 	protected String exifProfileName = "Exif";
 	protected String jpeglProfileName = "JPEG-L";
+    protected String adobeProfileName = "Adobe JPEG";
 
 	/* a NumberFormat for handling the minor part of version numbers */
 	protected NumberFormat minorFmt;
@@ -235,6 +244,9 @@ public class JpegModule extends ModuleBase {
 	/* Exif profile if one is satisfied, more specific than just Exif */
 	protected String _exifProfileText;
 
+    /* Flag indicating an APP14 Adobe segment has been read */
+    protected boolean _seenAdobe;
+
 	/* Flag indicating lack of a JFIF segment has been reported */
 	protected boolean _reportedJFIF;
 
@@ -255,9 +267,6 @@ public class JpegModule extends ModuleBase {
 	 */
 	protected List<boolean[]> _expList;
 
-	/* Set of compression types used. */
-	protected Set _compressSet;
-
 	/* Capability 0 byte, from VER segment. -1 if none. */
 	protected int _capability0;
 
@@ -266,6 +275,12 @@ public class JpegModule extends ModuleBase {
 
 	/* Fixed value for first 3 bytes */
 	private static final int[] sigByte = { 0XFF, 0XD8, 0XFF };
+
+    /* Transform flag from the Adobe marker segment. */
+    protected byte _transformFlag = -1;
+
+    /* Keep all the chunks of an ICC profile */
+    protected ByteArrayOutputStream _baosIccProfile = null;
 
 	/* Resolution units. */
 	protected int _units;
@@ -348,6 +363,16 @@ public class JpegModule extends ModuleBase {
 				DocumentType.STANDARD);
 		doc.setPublisher(isoAgent);
 		_specification.add(doc);
+
+        // Define ISO Adobe extensions
+        doc = new Document(
+                "ISO/IEC 10918-6:2013(E), Digital compression"
+                        + "and coding of continuous-tone still-images: "
+                        + "Application to printing systems", DocumentType.STANDARD);
+        doc.setPublisher(isoAgent);
+        doc.setIdentifier(new Identifier("ITU-T Rec. T.872 (06/12)",
+                IdentifierType.CCITT));
+        _specification.add(doc);
 
 		// Define JEITA Exif 2.3 doc
 		doc = new Document(
@@ -521,14 +546,14 @@ public class JpegModule extends ModuleBase {
 				if (dataPlowing) {
 					for (;;) {
 						dbyt = readUnsignedByte(_dstream, this);
-						if (dbyt == 0XFF) {
+						if (dbyt == 0xFF) {
 							sawFF = true;
 							// multiple FF's count same as one
 						} else if (sawFF) {
 							// Note use of JPEG-L check. For a
 							// standard JPEG check, we would use
 							// (dbyt != 0)
-							if ((dbyt & 0X80) != 0) {
+							if ((dbyt & 0x80) != 0) {
 								dataPlowing = false;
 								break;
 							}
@@ -538,7 +563,7 @@ public class JpegModule extends ModuleBase {
 					}
 				} else {
 					dbyt = readUnsignedByte(_dstream, this);
-					if (dbyt != 0XFF) {
+					if (dbyt != 0xFF) {
 						info.setMessage(new ErrorMessage(
 								MessageConstants.JPEG_HUL_7,
 								String.format(MessageConstants.JPEG_HUL_7_SUB.getMessage(), dbyt),
@@ -548,7 +573,7 @@ public class JpegModule extends ModuleBase {
 					}
 					// There can be padding bytes equal to FF,
 					// so read till we get one that isn't.
-					while (dbyt == 0XFF) {
+					while (dbyt == 0xFF) {
 						dbyt = readUnsignedByte(_dstream, this);
 					}
 				}
@@ -561,10 +586,10 @@ public class JpegModule extends ModuleBase {
 					info.setValid(false);
 					_reportedJFIF = true;
 				}
-				if (dbyt >= 0XD0 && dbyt <= 0XD7) {
+				if (dbyt >= 0xD0 && dbyt <= 0xD7) {
 					// RST[m] -- Restart with modulo 8 count 0-7
 					dataPlowing = true;
-				} else if (dbyt >= 0XF7 && dbyt <= 0XFD) {
+				} else if (dbyt >= 0xF7 && dbyt <= 0xFD) {
 					// JPGn extension
 					readJPEGExtension(dbyt, info);
 				} else
@@ -573,98 +598,102 @@ public class JpegModule extends ModuleBase {
 						// Byte stuffing -- ignore
 						break;
 
-					case 0XC0:
-					case 0XC1:
-					case 0XC2:
-					case 0XC3:
-					case 0XC5:
-					case 0XC6:
-					case 0XC7:
-					case 0XC9:
-					case 0XCA:
-					case 0XCB:
-					case 0XCD:
-					case 0XCE:
-					case 0XCF:
+					case 0xC0:
+					case 0xC1:
+					case 0xC2:
+					case 0xC3:
+					case 0xC5:
+					case 0xC6:
+					case 0xC7:
+					case 0xC9:
+					case 0xCA:
+					case 0xCB:
+					case 0xCD:
+					case 0xCE:
+					case 0xCF:
 						// SOF(n) marker; value indicates encoding type
 						readSOF(dbyt, info);
 						break;
 
-					case 0XC4:
+					case 0xC4:
 						// DHT -- define Huffman tables
 						skipSegment(info);
 						break;
 
-					case 0XCC:
+					case 0xCC:
 						// DAC -- define arithmetic coding conditioning
 						readDAC(info);
 						break;
 
-					case 0XD9:
+					case 0xD9:
 						// EOI
 						break loop1;
 
-					case 0XDA:
+					case 0xDA:
 						// SOS -- start of scan. This is followed by data.
 						skipSegment(info);
 						++_numScans;
 						dataPlowing = true;
 						break;
 
-					case 0XDB:
+					case 0xDB:
 						// DQT -- define quantization tables
 						readDQT(info);
 						break;
 
-					case 0XDC:
+					case 0xDC:
 						// DNL -- define number of lines
 						skipSegment(info);
 						break;
 
-					case 0XDD:
+					case 0xDD:
 						// DRI -- define restart interval
 						readDRI(info);
 						break;
 
-					case 0XDE:
+					case 0xDE:
 						// DHP -- define hierarchical progression
 						readDHP(info);
 						break;
 
-					case 0XDF:
+					case 0xDF:
 						// EXP -- Expand reference component
 						readEXP(info);
 						break;
 
-					case 0XE0:
+					case 0xE0:
 						// APP0 extension
 						readAPP0(info);
 						break;
 
-					case 0XE8:
+					case 0xE1:
+						readAPP1(info);
+						break;
+
+					case 0xE2:
+						readAPP2(info);
+						break;
+
+					case 0xE8:
 						// APP8 extension
 						readAPP8(info);
 						break;
 
-					case 0XE1:
-						readAPP1(info);
-						break;
+                    case 0xEE:
+                    	readAPP14(info);
+                    	break;
 
-					case 0XE2:
-						readAPP2(info);
-						break;
-					case 0XE3:
-					case 0XE4:
-					case 0XE5:
-					case 0XE6:
-					case 0XE7:
-					case 0XE9:
-					case 0XEA:
-					case 0XEB:
-					case 0XEC:
-					case 0XED:
-					case 0XEE:
-					case 0XEF:
+                    case 0xE3:
+					case 0xE4:
+					case 0xE5:
+					case 0xE6:
+					case 0xE7:
+					case 0xE9:
+					case 0xEA:
+					case 0xEB:
+					case 0xEC:
+					case 0xED:
+					case 0xEF:
 						// Appn extensions which we don't handle specially,
 						// but do report the existence thereof
 						reportAppExt(dbyt, info);
@@ -803,6 +832,9 @@ public class JpegModule extends ModuleBase {
 		if (_seenJPEGL) {
 			info.setProfile(jpeglProfileName);
 		}
+        if (_seenAdobe) {
+            info.setProfile(adobeProfileName);
+        }
 		/*
 		 * Create a new property list containing the count of the images and the
 		 * list of image properties.
@@ -866,7 +898,7 @@ public class JpegModule extends ModuleBase {
 	@Override
 	protected void initParse() {
 		super.initParse();
-		_imageList = new LinkedList();
+		_imageList = new LinkedList<Property>();
 		_tiling = null;
 		_restartInterval = -1;
 		_seenSOF = false;
@@ -876,6 +908,7 @@ public class JpegModule extends ModuleBase {
 		_seenJPEGL = false;
 		_spiffDir = null;
 		_seenExif = false;
+		_seenAdobe = false;
 		_reportedSigMatch = false;
 		_exifProfileOK = false;
 		_exifProfileText = null;
@@ -889,12 +922,13 @@ public class JpegModule extends ModuleBase {
 		_quantTables = new LinkedList<QuantizationTable>();
 		_arithCondTables = new LinkedList<ArithConditioning>();
 		_srsList = new LinkedList<SRS>();
-		_compressSet = new HashSet();
 		_expList = new LinkedList<boolean[]>();
 		_exifProp = null;
 		_xmpProp = null;
 		_capability0 = -1;
 		_capability1 = -1;
+		_transformFlag = -1;
+		_baosIccProfile = new ByteArrayOutputStream();
 	}
 
 	/**
@@ -1006,7 +1040,7 @@ public class JpegModule extends ModuleBase {
 				NisoImageMetadata thumbNiso = new NisoImageMetadata();
 				thumbNiso.setImageWidth(xThumbPix);
 				thumbNiso.setImageLength(yThumbPix);
-				thumbNiso.setColorSpace(2); // RGB
+				thumbNiso.setColorSpace(CS_RGB); // RGB
 				thumbNiso.setCompressionScheme(1); // uncompressed
 				thumbNiso.setPixelSize(8);
 
@@ -1018,20 +1052,20 @@ public class JpegModule extends ModuleBase {
 						thumbPropList);
 				_imageList.add(thumbProp);
 			}
-			_niso.setColorSpace(6); // JFIF header implies Yc[b]c[r]
+			_niso.setColorSpace(CS_YCC); // JFIF header usually implies YCbCr
 			skipBytes(_dstream, 3 * xThumbPix * yThumbPix, this);
 		} else if (equalArray(ident, jfxxByte)) {
 			int extCode = readUnsignedByte(_dstream, this);
 			switch (extCode) {
-			// The extension codes 0X10, 0X11, and 0X13 indicate
+			// The extension codes 0x10, 0x11, and 0x13 indicate
 			// different thumbnail formats.
 
-			// 0X10 indicates that the thumbnail is itself a JPEG
+			// 0x10 indicates that the thumbnail is itself a JPEG
 			// stream! Yech! Have to call the module recursively?
 			// Skip for now.
-			case 0X11:
+			case 0x11:
 				// thumbnail, palette color, 1 byte/pixel (fall through)
-			case 0X13:
+			case 0x13:
 				// thumbnail, RGB, 3 bytes/pixel
 				// Both of these have the same relevant information, the
 				// width and height. We just grab those and skip the rest.
@@ -1041,7 +1075,7 @@ public class JpegModule extends ModuleBase {
 				NisoImageMetadata thumbNiso = new NisoImageMetadata();
 				thumbNiso.setImageWidth(xThumbPix);
 				thumbNiso.setImageLength(yThumbPix);
-				thumbNiso.setColorSpace(extCode == 0X13 ? 2 : 3);
+				thumbNiso.setColorSpace(extCode == 0x13 ? CS_RGB : CS_PALETTE);
 				thumbNiso.setCompressionScheme(1); // uncompressed
 				thumbNiso.setPixelSize(8);
 				List<Property> thumbPropList = new LinkedList<Property>();
@@ -1069,9 +1103,9 @@ public class JpegModule extends ModuleBase {
 	 * TIFF file embedded in the segment.
 	 */
 	protected void readAPP1(RepInfo info) throws IOException {
-		final int[] exifByte = { 0X45, 0X78, 0X69, 0X66, 0X00, 0X00 };
+		final int[] exifByte = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
 		// First 6 bytes of xmpStr
-		final int[] xmpByte = { 0X68, 0X74, 0X74, 0X70, 0X3A, 0X2F };
+		final int[] xmpByte = { 0x68, 0x74, 0x74, 0x70, 0x3A, 0x2F };
 		final String xmpStr = "http://ns.adobe.com/xap/1.0/";
 		reportAppExt(0XE1, info);
 
@@ -1112,7 +1146,16 @@ public class JpegModule extends ModuleBase {
 				List<Message> list = exifInfo.getMessage();
 				int size = list.size();
 				for (int i = 0; i < size; i++) {
-					info.setMessage(list.get(i));
+					Message msg = list.get(i);
+					// Skip message JPEG deprecated in TIFF !!!
+					if (msg instanceof InfoMessage) {
+						InfoMessage imsg = (InfoMessage)msg;
+						if (!"TIFF-HUL-61".equals(imsg.getId())) {
+							info.setMessage(imsg);
+						}
+					} else {
+						info.setMessage(msg);
+					}
 				}
 
 				_exifProp = exifInfo.getProperty("Exif");
@@ -1127,7 +1170,9 @@ public class JpegModule extends ModuleBase {
 					extractExifNisoData(je.getExifNiso());
 				}
 			}
-			_exifProfileOK = je.isExifProfileOK();
+			if (_niso.getSamplesPerPixel() == 3) { // EXIF images only have 3 components
+				_exifProfileOK = je.isExifProfileOK();
+			}
 			_exifProfileText = je.getProfileText();
 		} else if (equalArray(ident, xmpByte) && length >= 32) {
 			// Check if the rest of xmpStr matches
@@ -1161,14 +1206,14 @@ public class JpegModule extends ModuleBase {
 	 * directory entry. We have already read the APP8 marker itself.
 	 */
 	protected void readAPP8(RepInfo info) throws IOException {
-		final int[] spiffByte = { 0X53, 0X50, 0X49, 0X46, 0X46, 0X00 };
+		final int[] spiffByte = { 0x53, 0x50, 0x49, 0x46, 0x46, 0x00 };
 
 		/* Seeing an APP8 segment counts as seeing a signature. */
 		if (!_reportedSigMatch) {
 			info.setSigMatch(_name);
 			_reportedSigMatch = true;
 		}
-		reportAppExt(0XE8, info);
+		reportAppExt(0xE8, info);
 
 		int length = readUnsignedShort(_dstream);
 		int[] ident = new int[6];
@@ -1264,31 +1309,25 @@ public class JpegModule extends ModuleBase {
 		int numberOfChunks = readUnsignedByte(_dstream, this);
 		int profileLength = length - SEQUENCE_LENGTH - 2 - 2;
 
-		if (numberOfChunks != 1) {
-			if (chunkNumber == 1) {
-				// report only once
-				info.setMessage(new InfoMessage(
-						MessageConstants.INF_EXIF_APP2_MULTI_REPORT, _nByte));
-			}
-			skipBytes(_dstream, profileLength, this);
-			return;
-		}
 		// Read the iccprofile data
 		byte[] iccProfile = new byte[profileLength];
 		readByteBuf(_dstream, iccProfile, this);
-		try {
-			// Validate and record the name
-			String desc = NisoImageMetadata
-					.extractIccProfileDescription(iccProfile);
-			if (desc != null) {
-				_niso.setProfileName(desc);
+		_baosIccProfile.write(iccProfile);
+		if (chunkNumber == numberOfChunks) {
+			// Last chunk for the ICC Profile
+			try {
+				// Validate and record the name
+				String desc = NisoImageMetadata.extractIccProfileDescription(
+						_baosIccProfile.toByteArray());
+				if (desc != null) {
+					_niso.setProfileName(desc);
+				}
+			} catch (IllegalArgumentException ie) {
+				info.setMessage(new ErrorMessage(
+						MessageConstants.JPEG_HUL_11, ie.getMessage(),
+						_nByte));
 			}
-		} catch (IllegalArgumentException ie) {
-			info.setMessage(new ErrorMessage(
-					MessageConstants.JPEG_HUL_11, ie.getMessage(),
-					_nByte));
 		}
-
 	}
 
 	/* Read the VER marker, and set version information accordingly */
@@ -1362,7 +1401,53 @@ public class JpegModule extends ModuleBase {
 		_srsList.add(new SRS(vertOffset, horOffset, vertSize, horSize));
 	}
 
-	/*
+    /*
+     * Reads an APP14 marker segment. This indicates a Adobe file.
+     * We have already read the APP14 marker itself.
+     */
+    protected void readAPP14(RepInfo info) throws IOException {
+        final String ADOBE_SEQUENCE = "Adobe\0";
+        final int SEQUENCE_LENGTH = 6;
+        reportAppExt(0xEE, info);
+
+        int length = readUnsignedShort(_dstream);
+        if (length < 8) {
+            // Guard against pathological short packets.
+            skipBytes(_dstream, length - 2, this);
+            return;
+        }
+
+        byte[] ident = new byte[SEQUENCE_LENGTH];
+        for (int i = 0; i < SEQUENCE_LENGTH; i++) {
+            ident[i] = (byte)readUnsignedByte(_dstream, this);
+        }
+        String sIdent = new String(ident, "US-ASCII");
+
+        int skip = length - SEQUENCE_LENGTH - 2;
+        if (!ADOBE_SEQUENCE.equalsIgnoreCase(sIdent)) {
+        	// This is not a APP14 segment containing an Adobe
+        	skipBytes(_dstream, skip, this);
+        	return;
+        }
+        // This is a Adobe marker.
+        _seenAdobe = true;
+
+        // Skip the head of the segment
+        while (skip > 1) {
+            readUnsignedByte(_dstream, this); // version (byte), flags0 (int), flags1 (int)
+            skip--;
+        }
+        _transformFlag = (byte)readUnsignedByte(_dstream, this);
+        skip--;
+        if (_transformFlag > 2) {
+            String mess = String.format(MessageConstants.JPEG_HUL_12.getMessage(), _transformFlag);
+            JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.JPEG_HUL_12.getId(), mess);
+            info.setMessage(new ErrorMessage(message, _nByte));
+            info.setValid(false);
+        }
+    }
+
+    /*
 	 * Accumulate reports of APPn segments into a property. It's tempting to
 	 * report information about the segment, since many APPn segments have ASCII
 	 * identifiers, but there's no guarantee of any content beyond the length
@@ -1372,12 +1457,12 @@ public class JpegModule extends ModuleBase {
 	 */
 	protected void reportAppExt(int dbyt, RepInfo info) {
 		String appStr = "APP";
-		if (dbyt <= 0XE9) {
+		if (dbyt <= 0xE9) {
 			// 0-9
-			appStr += (char) (dbyt - 0XE0 + 0X30);
+			appStr += (char) (dbyt - 0xE0 + 0x30);
 		} else {
 			// 10-15
-			appStr += "1" + (char) (dbyt - 0XEA + 0X30);
+			appStr += "1" + (char) (dbyt - 0xEA + 0x30);
 		}
 		_appSegsList.add(appStr);
 	}
@@ -1389,12 +1474,28 @@ public class JpegModule extends ModuleBase {
 	 * frames.
 	 */
 	protected void readSOF(int dbyt, RepInfo info) throws IOException {
-		int length = readUnsignedShort(_dstream);
-		int precision = readUnsignedByte(_dstream, this);
-		int nLines = readUnsignedShort(_dstream);
-		int samPerLine = readUnsignedShort(_dstream);
-		int numComps = readUnsignedByte(_dstream, this);
-		skipBytes(_dstream, length - 8, this);
+        final int[] UC_RGB = new int[] {82, 71, 66};
+        final int[] LC_RGB = new int[] {114, 103, 98};
+
+        int length = readUnsignedShort(_dstream);
+        int precision = readUnsignedByte(_dstream, this);
+        int nLines = readUnsignedShort(_dstream);
+        int samPerLine = readUnsignedShort(_dstream);
+        int numComps = readUnsignedByte(_dstream, this);
+        int[] componentsId = new int[numComps];
+        int skip = length - 8;
+        for (int i = 0; i < numComps; i++) {
+            componentsId[i] = readUnsignedByte(_dstream, this);
+            skip--;
+            readUnsignedByte(_dstream); // samplingFactor
+            skip--;
+            readUnsignedByte(_dstream, this); // qtableSelector
+            skip--;
+        }
+        if (skip > 0) {
+            skipBytes(_dstream, skip, this);
+        }
+		
 		if (!_seenSOF) {
 			_niso.setImageLength(nLines);
 			_niso.setImageWidth(samPerLine);
@@ -1405,8 +1506,55 @@ public class JpegModule extends ModuleBase {
 			_niso.setBitsPerSample(bps);
 			_niso.setSamplesPerPixel(numComps);
 			_propList.add(new Property("CompressionType", PropertyType.STRING,
-					JpegStrings.COMPRESSION_TYPE[dbyt - 0XC0]));
+					JpegStrings.COMPRESSION_TYPE[dbyt - 0xC0]));
 			_seenSOF = true;
+
+            // Define the colorspace
+            switch (numComps) {
+                case 1: // 1 component
+                _niso.setColorSpace(CS_GRAYSCALE); // grayscale
+                break;
+                case 3: // 3 components
+                if (_seenJFIF && _seenJFIFFirst) {
+                    _niso.setColorSpace(CS_YCC); // YCbCr
+                } else {
+                    switch (_transformFlag) {
+                        case -1:
+                        if (equalArray(componentsId, UC_RGB) || equalArray(componentsId, LC_RGB)) {
+                            _niso.setColorSpace(CS_RGB); // RGB
+                        } else {
+                            _niso.setColorSpace(CS_YCC); // YCbCr
+                        }
+                        break;
+                        case 0:
+                        _niso.setColorSpace(CS_RGB); // RGB
+                        break;
+                        case 1:
+                        default:
+                        _niso.setColorSpace(CS_YCC); // YCbCr
+                        break;
+                    }
+                }
+                break;
+                case 4: // 4 components
+                switch (_transformFlag) {
+                    case -1:
+                    case 0:
+                    _niso.setColorSpace(CS_CMYK);
+                    break;
+                    case 2:
+                    default:
+                    _niso.setColorSpace(CS_YCCK);
+                    break;
+                }
+                break;
+                default: // others ?!?
+                String mess = String.format(MessageConstants.JPEG_HUL_13.getMessage(), numComps);
+                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.JPEG_HUL_13.getId(), mess);
+                info.setMessage(new ErrorMessage(message, _nByte));
+                info.setValid(false);
+                break;
+            }
 		}
 	}
 
@@ -1825,6 +1973,10 @@ public class JpegModule extends ModuleBase {
 				&& exifData.getYSamplingFrequency() != null) {
 			_niso.setYSamplingFrequency(exifData.getYSamplingFrequency());
 			_niso.setSamplingFrequencyUnit(exifData.getSamplingFrequencyUnit());
+		}
+		if (_niso.getProfileName() == null
+				&& exifData.getProfileName() != null) {
+			_niso.setProfileName(exifData.getProfileName());
 		}
 
 		// If exif FNumber is defined then assume is a camera and not a scanner,

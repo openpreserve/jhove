@@ -6,8 +6,8 @@
 package edu.harvard.hul.ois.jhove;
 
 import java.awt.color.ICC_Profile;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 
@@ -19,7 +19,7 @@ public class NisoImageMetadata
 {
 	/** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(NisoImageMetadata.class.getCanonicalName());
-    
+
     /******************************************************************
      * PUBLIC CLASS FIELDS.
      ******************************************************************/
@@ -42,7 +42,7 @@ public class NisoImageMetadata
 
     /** 6.2.3.1 Checksum method value labels. */
     public static final String [] CHECKSUM_METHOD = {
-	"CRC32", "MD5", "SHA-1"
+	"CRC32", "MD5", "SHA-1", "SHA-256"
     };
 
     /** 6.1.4.1 Color space value labels. */
@@ -53,17 +53,20 @@ public class NisoImageMetadata
     "CFA",
     "CIE Log2(L)",
     "CIE Log2(L)(u',v')",
-    "LinearRaw"
+    "LinearRaw",
+    "YCCK"
     };
+
     /** Index for 6.1.4.1 color space value labels. */
     public static final int [] COLORSPACE_INDEX = {
-	0, 1, 2, 3, 
+	0, 1, 2, 3,
     4, 5, 6, 8, 9,
     10,
     32803,
     32844,
     32845,
-    34892
+    34892,
+    65535
     };
 
     /** 6.1.3.1 Compression scheme value labels. */
@@ -91,18 +94,18 @@ public class NisoImageMetadata
     public static final int COMPRESSION_JPEG2000_LOSSY = 34713;
     public static final int COMPRESSION_JPEG2000_LOSSLESS = 34714;
     public static final int [] COMPRESSION_SCHEME_INDEX = {
-	1, 2, 3, 4, 
-	5, 6, 7, 8, 
+	1, 2, 3, 4,
+	5, 6, 7, 8,
 	32661,
 	32771,
-	32773, 32766, 32809, 
-	32895, 
-	32896, 32897, 32898, 
+	32773, 32766, 32809,
+	32895,
+	32896, 32897, 32898,
 	32908,
-	32909, 
-	32946, 
+	32909,
+	32946,
 	32947,
-	34676, 
+	34676,
 	34677,
 	34712,
 	34713,  /* non standard !!! */
@@ -122,12 +125,12 @@ public class NisoImageMetadata
 
     public static final String [] EXPOSURE_PROGRAM = {
 	"Not defined", " Manual", "Normal program", "Aperture priority",
-	"Shutter priority", "Creative program (biased toward depth of field)", 
+	"Shutter priority", "Creative program (biased toward depth of field)",
 	"Action program (biased toward fast shutter speed)",
 	"Portrait mode (for closeup photos with the background out of focus)",
 	"Landscape mode (for landscape photos with the background in focus)"
     };
-    
+
     /** 7.7.3.10 flash value labels. */
     public static final String [] FLASH = {
 	"No", "Yes"
@@ -147,7 +150,7 @@ public class NisoImageMetadata
 	"thousandths of a unit", "ten-thousandths of a unit",
 	"hundred-thousandths of a unit"
     };
-    
+
     /** Gray response unit value for version 2.0 of MIX, corresponding
      *  to NISO values of 1-5 */
     public static final String [] GRAY_RESPONSE_UNIT_20 = {
@@ -166,7 +169,7 @@ public class NisoImageMetadata
 	    "unassociated alpha data",
 	    "range or depth data"
 	};
-	
+
     /** 7.7.3.6 metering mode value labels. */
     public static final String [] METERING_MODE = {
 	"unidentified", "average", "center weighted average", "spot",
@@ -176,7 +179,7 @@ public class NisoImageMetadata
     /** 6.2.4 orientation value labels. */
     public static final String [] ORIENTATION = {
 	"", "normal", "reflected horiz", "rotated 180 deg", "reflected vert",
-	"left top", "rotated cw 90 deg", "Right bottom", "Rotated ccw 90 deg", 
+	"left top", "rotated cw 90 deg", "Right bottom", "Rotated ccw 90 deg",
 	"Unknown"
     };
 
@@ -388,11 +391,11 @@ public class NisoImageMetadata
     private double _fNumber;
     /** 7.7.3.2 Exposure time */
     private double _exposureTime;
-    
+
     private int _exposureProgram;
     private String _exifVersion;
     private Rational _maxApertureValue;
-    
+
     /** 7.7.3.3 Brightness */
     private Rational _brightness;
     /** 7.7.3.4 Exposure bias */
@@ -624,7 +627,7 @@ public class NisoImageMetadata
 
     /******************************************************************
      * PUBLIC INSTANCE METHODS.
-     * 
+     *
      * Accessor methods.
      ******************************************************************/
 
@@ -789,7 +792,7 @@ public class NisoImageMetadata
     {
 	return _exposureProgram;
     }
-    
+
     /** Get 7.7.3.2 exposure time. */
     public double getExposureTime ()
     {
@@ -1516,7 +1519,7 @@ public class NisoImageMetadata
     {
     	_exifVersion = version;
     }
-    
+
     /** Set 7.2.3.4 exposure bias.
      * @param bias Exposure bias
      */
@@ -1552,7 +1555,7 @@ public class NisoImageMetadata
     public void setExtraSamples (int [] extra)
     {
 	_extraSamples = extra;
-    }	    
+    }
 
     /** Set 6.2.2 file size.
      * @param size File size
@@ -1831,8 +1834,8 @@ public class NisoImageMetadata
          _processingSoftwareName = name;
     }
 
-    /** Set 9.1.4.2  ProcessingSoftwareVersion 
-     *  @param version  Version number of the processing software 
+    /** Set 9.1.4.2  ProcessingSoftwareVersion
+     *  @param version  Version number of the processing software
      */
     public void setProcessingSoftwareVersion (String version)
     {
@@ -2093,7 +2096,7 @@ public class NisoImageMetadata
 	_tileLength = length;
     }
 
-    /** Set 6.1.5.7 Tile offsets. 
+    /** Set 6.1.5.7 Tile offsets.
      * @param offsets tile offsets
      */
     public void setTileOffsets (long [] offsets)
@@ -2213,7 +2216,7 @@ public class NisoImageMetadata
 	_yTargetedDisplayAR = y;
     }
 
-    /** Set information for Swing GUI viewer. 
+    /** Set information for Swing GUI viewer.
      *  @param viewerData  Private data for RepTreeModel
      */
     public void setViewerData (Property viewerData)
@@ -2248,48 +2251,48 @@ public class NisoImageMetadata
             return null;
         }
     }
-    
+
     public static String extractIccProfileDescription(byte[] data) throws IllegalArgumentException {
     	// Validate the ICCProfile with the java library
-    	ICC_Profile profile = ICC_Profile.getInstance(data);
-    	// Extract the 'desc' record (cf http://www.color.org/ICC1-V41.pdf) 
-    	byte[] dataProf = profile.getData(ICC_Profile.icSigProfileDescriptionTag);
+        ICC_Profile profile = ICC_Profile.getInstance(data);
+    	// Extract the 'desc' record (cf http://www.color.org/ICC1-V41.pdf)
+        byte[] dataProf = profile.getData(ICC_Profile.icSigProfileDescriptionTag);
     	if (dataProf == null) {
     		return null;
     	}
 
     	String description = null;
-    	ByteBuffer bb = ByteBuffer.wrap(dataProf).asReadOnlyBuffer();
-    	
-    	LOGGER.fine("Version " + profile.getMajorVersion());
-    	if (profile.getMajorVersion() <= 2) {
+        ByteBuffer bb = ByteBuffer.wrap(dataProf).asReadOnlyBuffer();
+        int majorVersion = profile.getMajorVersion();
+        int minorVersion = profile.getMinorVersion();
+        LOGGER.fine("Version " + majorVersion + "." + minorVersion);
+
+        int beginTag = bb.getInt(0);
+        if (beginTag == ICC_Profile.icSigProfileDescriptionTag) {
+            // Invariant option
         	// ICC v2 http://www.color.org/ICC_Minor_Revision_for_Web.pdf
 	    	// Read only the ASCII form (cf 6.5.17 ICC v2)
 	    	final int OFFSET_LENGTH = 8;
 	    	final int OFFSET_DESC = OFFSET_LENGTH + 4;
-	    	
+
 	    	int lengthAscii = bb.getInt(OFFSET_LENGTH);
-	    	
+
 	    	// readString
 	    	byte[] asciiDesc = new byte[lengthAscii -1];
 	    	bb.position(OFFSET_DESC);
 	    	bb.get(asciiDesc);
-	    	
-			try {
-				description = new String(asciiDesc, "US-ASCII");
-			} catch (UnsupportedEncodingException e) {
-				// IGNORE: US-ASCII always there... wait for Java 1.7
-			}
+
+			description = new String(asciiDesc, StandardCharsets.US_ASCII);
     	} else {
         	// ICC v4 http://www.color.org/ICC1-V41.pdf
-	    	final int OFFSET_NUMBER = 8;
+            final int OFFSET_NUMBER = 8;
 	    	final int MLUC_TAG = 0x6D6C7563;
 	    	final int OFFSET_NAME_LENGTH = 20;
 	    	final int OFFSET_NAME_OFFSET = 24;
-	    	
+
     		// 6.2 segment tag table definition
-    		int tagMluc = bb.getInt(0);
-    		
+            int tagMluc = bb.getInt(0);
+
         	// Read the 1st mulc form (cf 6.5.12 ICC v4)
     		int nb =  bb.getInt(OFFSET_NUMBER);
     		if (tagMluc != MLUC_TAG || nb < 1) {
@@ -2297,22 +2300,16 @@ public class NisoImageMetadata
     		}
     		int firstNameLength = bb.getInt(OFFSET_NAME_LENGTH);
     		int firstNameOffset = bb.getInt(OFFSET_NAME_OFFSET);
-    		
         	// readString
         	byte[] desc = new byte[firstNameLength];
         	bb.position(firstNameOffset);
         	bb.get(desc);
-        	
-    		try {
-    			// The  Unicode  strings  in  storage  are  encoded  as  16-bit
-    			// big-endian,  UTF-16BE,  and should not be NULL terminated.
-    			description = new String(desc, "UTF-16BE");
-    		} catch (UnsupportedEncodingException e) {
-    			// IGNORE: UTF-16 always there... wait for Java 1.7
-    		}
-    		
+
+            // The  Unicode  strings  in  storage  are  encoded  as  16-bit
+            // big-endian,  UTF-16BE,  and should not be NULL terminated.
+            description = new String(desc, StandardCharsets.UTF_16BE);
     	}
     	return description;
     }
-    
+
 }

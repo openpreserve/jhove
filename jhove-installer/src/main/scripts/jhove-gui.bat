@@ -20,7 +20,7 @@ REM       -x saxclass SAX parser class (defaults to J2SE 1.4 default)
 REM       -t tempdir  Temporary directory in which to create temporary files
 REM       -b bufsize  Buffer size for buffered I/O (defaults to J2SE default)
 REM       -l loglevel Logging level
-REM       -k          Calculate CRC32, MD5, and SHA-1 checksums
+REM       -k          Calculate CRC32, MD5, SHA-1 and SHA-256 checksums
 REM       -r          Display raw data flags, not textual equivalents
 REM       -s          Format identification based on internal signatures only
 REM       dir-file-or-uri Directory, file pathname, or URI of formatted content
@@ -47,4 +47,4 @@ REM Set default configuration location
 SET "CONFIG=%JHOVE_HOME%conf\jhove.conf"
 
 REM Set class path and invoke Java
-java -classpath "%CP%" JhoveView -c "%CONFIG%" %*
+java -Xss1024k -classpath "%CP%" JhoveView -c "%CONFIG%" %*

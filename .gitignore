@@ -18,3 +18,5 @@ Gemfile.lock
 **/.classpath
 **/*.class
 **/bin
+# Ignore VisualCode artefacts
+**/.vscode
