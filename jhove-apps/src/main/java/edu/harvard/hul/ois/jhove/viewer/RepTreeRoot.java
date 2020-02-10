@@ -366,8 +366,6 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 				if (offset >= 0) {
 					mNode.add(new DefaultMutableTreeNode("Offset: "
 							+ Long.toString(offset)));
-				} else if (subMessage == null) {
-					mNode.setAllowsChildren(false);
 				}
 				msgNode.add(mNode);
 			}
