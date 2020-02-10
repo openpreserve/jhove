@@ -6,6 +6,7 @@
 package edu.harvard.hul.ois.jhove.viewer;
 
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -436,11 +437,25 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 		if (null != typ)
 			switch (typ) {
 			case INTEGER: {
-				addToNode(node, (Integer[]) pVal);
+				if (pVal instanceof int[]) {
+					Integer[] vals = Arrays.stream((int[])pVal) // IntStream
+							.boxed()				// Stream<Integer>
+							.toArray(Integer[]::new);
+					addToNode(node, vals);
+				} else {
+					addToNode(node, (Integer[]) pVal);
+				}
 				break;
 			}
 			case LONG: {
-				addToNode(node, (Long[]) pVal);
+				if (pVal instanceof long[]) {
+					Long[] vals = Arrays.stream((long[])pVal) // IntStream
+							.boxed()				// Stream<Integer>
+							.toArray(Long[]::new);
+					addToNode(node, vals);
+				} else {
+					addToNode(node, (Long[]) pVal);
+				}
 				break;
 			}
 			case BOOLEAN: {
@@ -1473,7 +1488,11 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 	 */
 	private <E> void addToNode(DefaultMutableTreeNode node, E[] array) {
 		for (E element : array) {
-			node.add(new DefaultMutableTreeNode(element));
+			if (element instanceof Property) {
+				node.add(propToNode((Property) element));
+			} else {
+				node.add(new DefaultMutableTreeNode(element));
+			}
 		}
 	}
 }
