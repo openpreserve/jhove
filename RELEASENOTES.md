@@ -100,11 +100,14 @@ JHOVE 1.24
 [#484]: https://github.com/openpreserve/jhove/pull/484
 [#485]: https://github.com/openpreserve/jhove/pull/485
 [#486]: https://github.com/openpreserve/jhove/pull/486
+[#488]: https://github.com/openpreserve/jhove/pull/488
 [#489]: https://github.com/openpreserve/jhove/pull/489
 [#490]: https://github.com/openpreserve/jhove/pull/490
 [#491]: https://github.com/openpreserve/jhove/pull/491
 [#492]: https://github.com/openpreserve/jhove/pull/492
 [#493]: https://github.com/openpreserve/jhove/pull/493
+[#494]: https://github.com/openpreserve/jhove/pull/494
+[#495]: https://github.com/openpreserve/jhove/pull/495
 [#496]: https://github.com/openpreserve/jhove/pull/496
 [#497]: https://github.com/openpreserve/jhove/pull/497
 [#498]: https://github.com/openpreserve/jhove/pull/498
