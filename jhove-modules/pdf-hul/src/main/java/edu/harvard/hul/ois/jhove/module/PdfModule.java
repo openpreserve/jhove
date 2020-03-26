@@ -374,8 +374,8 @@ public class PdfModule extends ModuleBase {
 	 ******************************************************************/
 
 	private static final String NAME = "PDF-hul";
-	private static final String RELEASE = "1.12.1";
-  private static final int [] DATE = { 2019, 04, 17 };
+	private static final String RELEASE = "1.12.2";
+  private static final int [] DATE = { 2019, 12, 10 };
 	private static final String[] FORMAT = { "PDF",
 			"Portable Document Format" };
 	private static final String COVERAGE = "PDF 1.0-1.6; PDF/X-1 (ISO 15930-1:2001), X-1a (ISO 15930-4:2003), "

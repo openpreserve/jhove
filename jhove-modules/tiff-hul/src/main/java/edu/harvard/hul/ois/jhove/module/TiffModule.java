@@ -121,7 +121,7 @@ public class TiffModule extends ModuleBase {
     protected Logger _logger;
 
     private static final String NAME = "TIFF-hul";
-    private static final String RELEASE = "1.10.1";
+    private static final String RELEASE = "1.9.2";
     private static final int [] DATE = { 2019, 12, 10 };
     private static final String[] FORMAT = { "TIFF", "Tagged Image File Format" };
     private static final String COVERAGE = "TIFF 4.0, 5.0, and 6.0; "
