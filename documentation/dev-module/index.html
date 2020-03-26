@@ -13,6 +13,7 @@ title: Writing a module
 
 <a class="name" name="module">
 <h2>1 The Module Interface</h2>
+</a>
 
 <p>
   All JHOVE modules implement the <tt>module</tt> interface.
@@ -267,7 +268,7 @@ statement, and notes.
 
 <a class="name" name="modulebase">
 <h2>2 ModuleBase Class</h2>
-
+</a>
 <p>
 The <a href="#module"><tt>Module</tt></a> interface is implemented by the abstract
 <tt>ModuleBase</tt> class from which all JHOVE modules are extended.
@@ -353,7 +354,7 @@ then the default JRE buffer size is used.
 
 <a class="name" name="modulename">
 <h3>3.1 Module name</h3>
-
+</a>
 <p>
 Module names should consist of two parts, an uppercase format name and
 a lowercase vendor name, separated by a hyphen:
@@ -702,7 +703,8 @@ function is being called in a context where
 </ul>
 
 <a class="name" name="randomaccess">
-<h3>3.6 Reading a random-access document</h3></a>
+<h3>3.6 Reading a random-access document</h3>
+</a>
 <p>
 There is less built-in support for random-access modules
 than for stream-based modules, since random access is more
@@ -748,6 +750,7 @@ harmful in this context.
 
 <a class="name" name="features">
 <h3>3.7 Module features</h3>
+</a>
 <p>
 To allow greater flexibility in incorporating third-party
 modules with different degrees of functionality, JHOVE modules
@@ -786,7 +789,8 @@ a particular feature, or <code>getFeatures</code> to retrieve the
 complete list.
 </p>
 <a class="name" name="checksum">
-<h3>3.8 Checksum calculations</h3></a>
+<h3>3.8 Checksum calculations</h3>
+</a>
 <p>
 One of the tasks of the module's parse() function is to
 calculate checksums on the module if requested.
@@ -839,7 +843,8 @@ be used with random-access modules.
 </p>
 
 <a class="name" name="document">
-<h3>3.9 The Document object</h3></a>
+<h3>3.9 The Document object</h3>
+</a>
 <p>
 The <code>Document</code> object is used to define sources of
 documentation for a module.  <code>Document</code> objects are added to
@@ -884,7 +889,8 @@ The identifier is defined using an
 </p>
 
 <a class="name" name="signature">
-<h3>3.10 The Signature object</h3></a>
+<h3>3.10 The Signature object</h3>
+</a>
 <p>
 <code>Signature</code> objects are used to specify quick checks for
 whether a document conforms to a format.  When checking
@@ -971,7 +977,8 @@ specifications is reported as not consistent.
 </p>
 
 <a class="name" name="repinfo">
-<h3>3.11 The RepInfo object</h3></a>
+<h3>3.11 The RepInfo object</h3>
+</a>
 <p>
 The module's <code>parse</code> method may place information into the
 variable <code>_info</code>, which is a
@@ -1036,7 +1043,8 @@ this.
 </ul>
 
 <a class="name" name="app">
-<h3>3.12 The App object</h3></a>
+<h3>3.12 The App object</h3>
+</a>
 <p>
 There is a single object of type <code>App</code>, which holds
 information describing the application state.
@@ -1048,7 +1056,8 @@ should now refer to the <code>JhoveBase</code> object.
 </p>
 
 <a class="name" name="jhovebase">
-<h3>3.13 The JhoveBase object</h3></a>
+<h3>3.13 The JhoveBase object</h3>
+</a>
 <p>
 There may be one or more than one <code>JhoveBase</code>
 objects, depending on the application architecture. It holds
@@ -1078,7 +1087,8 @@ checksum calculations.</li>
 </ul>
 
 <a class="name" name="agent">
-<h3>3.14 The Agent object</h3></a>
+<h3>3.14 The Agent object</h3>
+</a>
 <p>
 The <code>Agent</code> object defines a party that has a role in
 the creation, publication, or distribution of a <code>Document</code>.
@@ -1112,7 +1122,8 @@ using its setter methods:
     <li><code>public void setWeb (String web);</code>
 </ul>
 <a class="name" name="identifier">
-<h3>3.15 The Identifier object</h3></a>
+<h3>3.15 The Identifier object</h3>
+</a>
 <p>
 The <code>Identifier</code> object provides various ways of
 assigning an identifier to a <code>Document</code>.
@@ -1150,7 +1161,8 @@ one of the predefined values of <code>IdentifierType</code>:
 <p>The note parameter may be null.</p>
 
 <a class="name" name="property">
-<h3>3.16 The Property object</h3></a>
+<h3>3.16 The Property object</h3>
+</a>
 <p>
 Properties are used to report information about a document.
 Output handlers and the viewer application present
@@ -1241,7 +1253,8 @@ The object type must be used with all other arities.
 </code></td></table>
 
 <a class="name" name="message">
-<h3>3.17 The Message object</h3></a>
+<h3>3.17 The Message object</h3>
+</a>
 <p>
 A <code>Message</code> object is used to report information about
 the document.  <code>Message</code> is an abstract class with
@@ -1264,7 +1277,8 @@ constructor with an offset should be used; otherwise
 the single-argument constructor should be used.
 </p>
 <a class="name" name="nisoimagemetadata">
-<h3>3.18 The NisoImageMetadata object</h3></a>
+<h3>3.18 The NisoImageMetadata object</h3>
+</a>
 <p>
 <code>NisoImageMetadata</code> provides a standard way to report
 many common document properties. The output handlers
@@ -1283,7 +1297,8 @@ and parameter values.
 </p>
 
 <a class="name" name="rational">
-<h3>3.19 The Rational object</h3></a>
+<h3>3.19 The Rational object</h3>
+</a>
 <p>
 A <code>Rational</code> object provides a way to represent the
 ratio of two integers. A <code>Rational</code> is stored
