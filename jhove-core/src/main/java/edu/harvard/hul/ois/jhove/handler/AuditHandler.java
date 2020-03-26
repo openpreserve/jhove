@@ -33,9 +33,6 @@ import java.util.*;
  * It is expected that this class will be used as the parent for other, more
  * interesting output handlers. Subclasses should override the implementations
  * of the Impl methods, e.g. endDirectoryImpl().
- *
- * @see <a href="http://hul.harvard.edu/jhove/using.html#xml-hul">JHOVE
- * XML output handler</a>
  */
 public class AuditHandler extends XmlHandler {
 

@@ -16,6 +16,10 @@ package edu.harvard.hul.ois.jhove.module.html;
 public class HtmlSpecialToken {
 
     String _name;
+    //public static HtmlSpecialToken EMPTY = new HtmlSpecialToken ("EMPTY");
+    /** The PCDATA token. Signifies that PCDATA is permitted in the content
+     *  of an element. */
+    public static HtmlSpecialToken PCDATA = new HtmlSpecialToken ("PCDATA");
     
     /** Private constructor.  This class may not be instantiated. */
     private HtmlSpecialToken () {}
@@ -25,8 +29,5 @@ public class HtmlSpecialToken {
         _name = name;
     }
     
-    //public static HtmlSpecialToken EMPTY = new HtmlSpecialToken ("EMPTY");
-    /** The PCDATA token. Signifies that PCDATA is permitted in the content
-     *  of an element. */
-    public static HtmlSpecialToken PCDATA = new HtmlSpecialToken ("PCDATA");
+    
 }

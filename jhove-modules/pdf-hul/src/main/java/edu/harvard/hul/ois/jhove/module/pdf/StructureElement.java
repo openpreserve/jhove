@@ -146,13 +146,12 @@ public class StructureElement
                                 if(kidsObject instanceof PdfSimpleObject) {
                                     PdfSimpleObject kids = (PdfSimpleObject)kidsObject;
                                     Token tok = kids.getToken();
-                                    if(tok instanceof Numeric) {
+                                    if (tok instanceof Numeric && ((Numeric)tok).getValue() == 0) {
                                         //if the kids value is zero then there are no child objects; exit method
-                                        if(((Numeric)tok).getValue()==0) {
-                                            _logger.info(MessageConstants.LOG_NO_CHILD_OBJS);
-                                            children = null;
-                                            return;
-                                        }
+                                        _logger.info(MessageConstants.LOG_NO_CHILD_OBJS);
+                                        children = null;
+                                        return;
+                                        
                                     }
                                 }                                StructureElement se = 
                                     new StructureElement (kdict, _tree);
@@ -195,10 +194,10 @@ public class StructureElement
         // don't mark them as ILSE's.  Also, TR, TH and TD are
         // defined to be neither BLSE's nor ILSE's.
         _attrIsBlock = false;
-        _structIsInline = !_structType.equals ("Figure") &&
-            !_structType.equals ("TH") &&
-            !_structType.equals ("TD") &&
-            !_structType.equals ("TR") &&
+        _structIsInline = !"Figure".equals (_structType) &&
+            !"TH".equals (_structType) &&
+            !"TD".equals (_structType) &&
+            !"TR".equals (_structType) &&
             !StdStructTypes.isBlockLevel (_structType);
         
         try {
@@ -298,11 +297,9 @@ public class StructureElement
     {
         try {
             PdfObject typ = elem.get ("Type");
-            if (typ != null) {
-                if (!"StructElem".equals
+            if (typ != null && !"StructElem".equals
                       (((PdfSimpleObject) typ).getStringValue ())) {
-                    return false;
-                }
+                return false;
             }
 
             PdfObject s = _module.resolveIndirectObject (elem.get ("S"));
@@ -380,17 +377,14 @@ public class StructureElement
         try {
             PdfSimpleObject typeObj = 
                         (PdfSimpleObject) dict.get ("Type");
-            if (!typeObj.getStringValue ().equals ("MCR")) {
+            if (!"MCR".equals (typeObj.getStringValue ())) {
                 return false;
             }
             // An MCID entry is required.
             PdfSimpleObject mcidObj =
                 (PdfSimpleObject) _module.resolveIndirectObject
                         (dict.get ("MCID"));
-            if (mcidObj == null) {
-                return false;
-            }
-            return true;
+            return mcidObj != null;
         }
         catch (Exception e) {
             return false;
@@ -404,16 +398,13 @@ public class StructureElement
         try {
             PdfSimpleObject typeObj = 
                         (PdfSimpleObject) dict.get ("Type");
-            if (!typeObj.getStringValue ().equals ("OBJR")) {
+            if (!"OBJR".equals (typeObj.getStringValue ())) {
                 return false;
             }
             // An Obj entry is required. Must be an indirect object.
             PdfObject obj = _module.resolveIndirectObject
                         (dict.get ("Obj"));
-            if (obj == null) {
-                return false;
-            }
-            return true;
+            return obj != null;
         }
         catch (Exception e) {
             return false;

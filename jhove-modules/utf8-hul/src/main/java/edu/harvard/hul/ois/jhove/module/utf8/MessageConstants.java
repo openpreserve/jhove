@@ -38,8 +38,8 @@ public enum MessageConstants {
 
 	public static final JhoveMessageFactory messageFactory = JhoveMessages
 			.getInstance("edu.harvard.hul.ois.jhove.module.utf8.ErrorMessages");
-	public static final String INF_BOM_MARK_PRESENT = "UTF-8 Byte Order Mark signature is present"; // UTF8-HUL-1
 
+	public static final JhoveMessage UTF8_HUL_1 = messageFactory.getMessage("UTF8-HUL-1");
 	public static final JhoveMessage UTF8_HUL_2 = messageFactory.getMessage("UTF8-HUL-2");
 	public static final JhoveMessage UTF8_HUL_3 = messageFactory.getMessage("UTF8-HUL-3");
 	public static final JhoveMessage UTF8_HUL_4 = messageFactory.getMessage("UTF8-HUL-4");

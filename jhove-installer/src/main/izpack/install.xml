@@ -59,26 +59,26 @@
       <description>JHOVE application JARs including the internal modules and configuration files.</description>
       <file targetdir="$INSTALL_PATH/bin" src="bin/jhove-apps-${project.version}.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/jhove-apps-${project.version}.jar"/>
-      <file targetdir="$INSTALL_PATH/bin" src="bin/aiff-hul-1.5.1.jar"/>
-      <executable targetfile="$INSTALL_PATH/bin/aiff-hul-1.5.1.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/aiff-hul-1.6.1.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/aiff-hul-1.6.1.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/ascii-hul-1.4.1.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/ascii-hul-1.4.1.jar"/>
-      <file targetdir="$INSTALL_PATH/bin" src="bin/gif-hul-1.4.1.jar"/>
-      <executable targetfile="$INSTALL_PATH/bin/gif-hul-1.4.1.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/gif-hul-1.4.2.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/gif-hul-1.4.2.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/html-hul-1.4.1.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/html-hul-1.4.1.jar"/>
-      <file targetdir="$INSTALL_PATH/bin" src="bin/jpeg2000-hul-1.4.1.jar"/>
-      <executable targetfile="$INSTALL_PATH/bin/jpeg2000-hul-1.4.1.jar"/>
-      <file targetdir="$INSTALL_PATH/bin" src="bin/jpeg-hul-1.5.1.jar"/>
-      <executable targetfile="$INSTALL_PATH/bin/jpeg-hul-1.5.1.jar"/>
-      <file targetdir="$INSTALL_PATH/bin" src="bin/pdf-hul-1.12.1.jar"/>
-      <executable targetfile="$INSTALL_PATH/bin/pdf-hul-1.12.1.jar"/>
-      <file targetdir="$INSTALL_PATH/bin" src="bin/tiff-hul-1.9.1.jar"/>
-      <executable targetfile="$INSTALL_PATH/bin/tiff-hul-1.9.1.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/jpeg2000-hul-1.4.2.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/jpeg2000-hul-1.4.2.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/jpeg-hul-1.5.2.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/jpeg-hul-1.5.2.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/pdf-hul-1.12.2.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/pdf-hul-1.12.2.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/tiff-hul-1.9.2.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/tiff-hul-1.9.2.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/utf8-hul-1.7.1.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/utf8-hul-1.7.1.jar"/>
-      <file targetdir="$INSTALL_PATH/bin" src="bin/wave-hul-1.6.1.jar"/>
-      <executable targetfile="$INSTALL_PATH/bin/wave-hul-1.6.1.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/wave-hul-1.8.1.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/wave-hul-1.8.1.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/xml-hul-1.5.1.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/xml-hul-1.5.1.jar"/>
       <file targetdir="$INSTALL_PATH/conf"  override="true" src="config/jhove.conf"/>

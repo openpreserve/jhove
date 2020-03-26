@@ -63,10 +63,6 @@ public final class TiffProfileClassP extends TiffProfile
             return false;
         }
 
-	if (!satisfiesResolutionUnit (tifd, new int [] {1, 2, 3} )) {
-            return false;
-        }
-
-        return true;
+        return satisfiesResolutionUnit (tifd, new int [] {1, 2, 3} );
     }
 }

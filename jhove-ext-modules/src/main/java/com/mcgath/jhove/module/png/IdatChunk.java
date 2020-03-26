@@ -20,7 +20,7 @@ public class IdatChunk extends PNGChunk {
 		processChunkCommon(info);
 		_module.setIdatSeen(true);
 		if (_module.isIdatFinished()) {
-			ErrorMessage msg = new ErrorMessage("IDAT chunks are not consecutive in file");
+			ErrorMessage msg = new ErrorMessage(MessageConstants.PNG_GDM_20);
 			info.setMessage(msg);
 			info.setWellFormed(false);
 			throw new PNGException ("Misplaced IDAT chunk");

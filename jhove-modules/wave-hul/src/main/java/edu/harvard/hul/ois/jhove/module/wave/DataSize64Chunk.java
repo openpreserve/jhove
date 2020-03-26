@@ -19,6 +19,9 @@ import java.io.IOException;
  */
 public class DataSize64Chunk extends Chunk {
 
+    /** The combined length of all mandatory fields. */
+    private final static int MINIMUM_CHUNK_LENGTH = 24;
+
     /**
      * Constructor.
      *
@@ -48,16 +51,18 @@ public class DataSize64Chunk extends Chunk {
         module.setExtendedRiffSize(riffSize);
 
         long dataSize = module.readSignedLong(_dstream);
-        module.addExtendedChunkSize("data", Long.valueOf(dataSize));
+        module.addExtendedChunkSize("data", dataSize);
 
         long sampleCount = module.readSignedLong(_dstream);
         module.setExtendedSampleLength(sampleCount);
 
-        long tableSize = module.readUnsignedInt(_dstream);
-        for (int i = 0; i < tableSize; i++) {
-            String chunkId = module.read4Chars(_dstream);
-            long chunkSize = module.readSignedLong(_dstream);
-            module.addExtendedChunkSize(chunkId, Long.valueOf(chunkSize));
+        if (chunkSize > MINIMUM_CHUNK_LENGTH) {
+            long tableSize = module.readUnsignedInt(_dstream);
+            for (int i = 0; i < tableSize; i++) {
+                String chunkId = module.read4Chars(_dstream);
+                long chunkSize = module.readSignedLong(_dstream);
+                module.addExtendedChunkSize(chunkId, chunkSize);
+            }
         }
 
         return true;

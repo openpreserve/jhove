@@ -14,7 +14,7 @@ import edu.harvard.hul.ois.jhove.module.PdfModule;
 /**
  * Class encapsulating PDF destination objects, which refer
  * to a page in the document.
- * 
+ *
  * We need to make two different kinds of distinctions: between
  * destinations that make an indirect and a direct reference to
  * a page; and between destinations that have been reached by
@@ -68,6 +68,9 @@ public final class Destination {
 	 */
 	public Destination(final PdfObject destObj, final PdfModule module,
 			final boolean named) throws PdfException {
+    	if (destObj == null) {
+    		throw new IllegalArgumentException("Parameter destObj cannot be null.");
+    	}
 		if (!named && destObj instanceof PdfSimpleObject) {
 			_indirect = true;
 			_indirectDest = (PdfSimpleObject) destObj;
@@ -92,7 +95,7 @@ public final class Destination {
 			JhoveMessage message = JhoveMessages.getMessageInstance(
 					MessageConstants.PDF_HUL_3.getId(),
 					String.format(MessageConstants.PDF_HUL_3.getMessage(), // PDF-HUL-3
-							Integer.valueOf(destArray._objNumber)));
+							e.getLocalizedMessage(), Integer.valueOf(destArray._objNumber)));
 			throw new PdfInvalidException(message);
 		}
 	}

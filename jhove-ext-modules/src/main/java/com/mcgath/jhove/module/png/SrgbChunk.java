@@ -26,32 +26,33 @@ public class SrgbChunk extends PNGChunk {
 	/** Process the data in the chunk.  */
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
-		final String badChunk = "Bad sRGB chunk";
 		processChunkCommon(info);
 		ErrorMessage msg = null;
 		int colorIntent = 0;
 		if (_module.isPlteSeen()) {
-			msg = new ErrorMessage ("sRGB chunk not allowed after PLTE chunk");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_48);
 		}
 		else if (_module.isIdatSeen()) {
-			msg = new ErrorMessage ("sRGB chunk not allowed after IDAT chunk");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_49);
 		}
 		else if (_module.isChunkSeen(PNGChunk.iCCP_HEAD_SIG)) {
-			msg = new ErrorMessage ("iCCP and sRGB chunks are not allowed in the same file");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_50);
 		}
 		else if (length == 0) {
-			msg = new ErrorMessage ("sRGB chunk too short");
+			msg = new ErrorMessage (MessageConstants.PNG_GDM_51);
 		}
 		else {
 			colorIntent = readUnsignedByte();
 			if (colorIntent > 3) {
-				msg = new ErrorMessage ("Invalid sRGB rendering intent: " + colorIntent);
+				msg = new ErrorMessage ( 
+						String.format(MessageConstants.PNG_GDM_52.getMessage(),  
+								colorIntent)); 
 			}
 		}
 		if (msg != null) {
 			info.setMessage (msg);
 			info.setWellFormed (false);
-			throw new PNGException (badChunk);
+			throw new PNGException (MessageConstants.PNG_GDM_53);
 		}
 		Property prop = new Property ("SRGB rendering intent",
 				PropertyType.STRING,

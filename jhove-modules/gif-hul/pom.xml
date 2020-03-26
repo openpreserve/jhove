@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.22.0</version>
+    <version>1.24.0</version>
   </parent>
   <artifactId>gif-hul</artifactId>
-  <version>1.4.1</version>
+  <version>1.4.2</version>
   <name>JHOVE GIF Module HUL</name>
   <description>GIF module developed by Harvard University Library</description>
 </project>

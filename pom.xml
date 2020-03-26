@@ -10,7 +10,7 @@
 
   <groupId>org.openpreservation.jhove</groupId>
   <artifactId>jhove</artifactId>
-  <version>1.22.0</version>
+  <version>1.24.0</version>
   <packaging>pom</packaging>
 
   <name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
@@ -64,17 +64,6 @@
   <prerequisites>
     <maven>3.0</maven>
   </prerequisites>
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -323,6 +312,38 @@
     </profile>
 
     <profile>
+      <id>license-header</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.mycila</groupId>
+            <artifactId>license-maven-plugin</artifactId>
+            <configuration>
+              <header>license/template/license.txt</header>
+              <properties>
+                <owner>veraPDF Consortium</owner>
+                <email>info@verapdf.org</email>
+              </properties>
+              <excludes>
+                <exclude>license/template/**</exclude>
+                <exclude>src/test/resources/**</exclude>
+                <exclude>src/main/resources/**</exclude>
+              </excludes>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
       <id>release-sign-artifacts</id>
       <activation>
         <property>
@@ -383,6 +404,51 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <id>ossrh</id>
+      <distributionManagement>
+        <snapshotRepository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+      </distributionManagement>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jarsigner-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign</id>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>opf</id>
+      <distributionManagement>
+        <snapshotRepository>
+          <id>opf-artefactory</id>
+          <url>https://artifactory.openpreservation.org/artifactory/vera-dev-local/</url>
+        </snapshotRepository>
+        <repository>
+          <id>opf-artefactory</id>
+          <url>https://artifactory.openpreservation.org/artifactory/vera-dev-local/</url>
+        </repository>
+      </distributionManagement>
+    </profile>
+
   </profiles>
 
 </project>

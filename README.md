@@ -194,6 +194,8 @@ these commands:
 
 to display the command-line usage message.
 
+It is also possible to use JHOVE with the openJDK, e. g. jdk-13. It might be necessary to set the java path in the Environment variables, for which one usually needs administration rights for the windows machine. 
+
 ### Mac OS
 *Currently only tested on OS X Mavericks.*
 
@@ -361,6 +363,7 @@ The `jhove-ext-modules` contains JHOVE modules developed by external parties, sp
  * PNG
  * WARC
  * GZIP
+ * EPUB
 
 These are all packaged in a single modules JAR:
 

@@ -23,9 +23,10 @@ import edu.harvard.hul.ois.jhove.module.iff.*;
  * and treated as an error.
  *
  * @author Gary McGath
- *
  */
 public class ListInfoChunk extends Superchunk {
+
+	private static final int TYPE_LENGTH = 4;
 
 	/**
 	 * Constructor.
@@ -50,12 +51,11 @@ public class ListInfoChunk extends Superchunk {
 	 * 
 	 * @return <code>false</code> if the chunk is structurally
 	 *         invalid, otherwise <code>true</code>
-	 * 
 	 */
 	@Override
 	public boolean readChunk(RepInfo info) throws IOException {
 		String typeID = ((WaveModule) _module).read4Chars(_dstream);
-		bytesLeft -= 4;
+		bytesLeft -= TYPE_LENGTH;
 		if ("INFO".equals(typeID)) {
 			return readInfoChunk(info);
 		} else if ("exif".equals(typeID)) {
@@ -63,12 +63,13 @@ public class ListInfoChunk extends Superchunk {
 		} else if ("adtl".equals(typeID)) {
 			return readAdtlChunk(info);
 		} else {
+			// Skip unrecognized list types
 			JhoveMessage message = JhoveMessages.getMessageInstance(
 					MessageConstants.WAVE_HUL_15.getId(), String.format(
 							MessageConstants.WAVE_HUL_15.getMessage(), typeID));
-			info.setMessage(new ErrorMessage(message, _module.getNByte()));
-			info.setWellFormed(false);
-			return false;
+			info.setMessage(new InfoMessage(message, chunkOffset));
+			_module.skipBytes(_dstream, bytesLeft, _module);
+			return true;
 		}
 	}
 
@@ -104,7 +105,7 @@ public class ListInfoChunk extends Superchunk {
 		return true;
 	}
 
-	/*
+	/**
 	 * The Exif chunk, unlike the Info chunk, has subchunks which aren't
 	 * homogeneous.
 	 */
@@ -164,11 +165,11 @@ public class ListInfoChunk extends Superchunk {
 			// Labelled Text.
 			String id = chunkh.getID();
 			int chunkSize = (int) chunkh.getSize();
-			if (id.equals("labl")) {
+			if ("labl".equals(id)) {
 				chunk = new LabelChunk(_module, chunkh, _dstream);
-			} else if (id.equals("note")) {
+			} else if ("note".equals(id)) {
 				chunk = new NoteChunk(_module, chunkh, _dstream);
-			} else if (id.equals("ltxt")) {
+			} else if ("ltxt".equals(id)) {
 				chunk = new LabeledTextChunk(_module, chunkh, _dstream);
 			}
 
