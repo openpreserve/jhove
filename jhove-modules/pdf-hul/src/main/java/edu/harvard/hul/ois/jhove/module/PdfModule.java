@@ -1497,8 +1497,6 @@ public class PdfModule extends ModuleBase {
 			_parser.seek(_startxref);
 			token = _parser.getNext();  // "xref" keyword or numeric
 			if (token instanceof Keyword) {
-				// Sam: if token is keyword we are in a cross-reference table
-				String test = ((Keyword) token).getValue();
 				while ((token = _parser.getNext()) != null) {
 					int firstObj = 0;
 					// Look for the start of a cross-ref subsection, which
