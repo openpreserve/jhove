@@ -1316,6 +1316,7 @@ public class PdfModule extends ModuleBase {
 			}
 
 			obj = _trailerDict.get(DICT_KEY_SIZE);
+			_docCatDictRef = (PdfIndirectObj) _trailerDict.get(DICT_KEY_ROOT);
 			if (obj != null) {
 				_numObjects = -1;
 				if (obj instanceof PdfSimpleObject) {
@@ -1336,7 +1337,7 @@ public class PdfModule extends ModuleBase {
 				throw new PdfInvalidException(MessageConstants.PDF_HUL_74, // PDF-HUL-74
 						_parser.getOffset());
 
-			_docCatDictRef = (PdfIndirectObj) _trailerDict.get(DICT_KEY_ROOT);
+			
 			if (_docCatDictRef == null) {
 				throw new PdfInvalidException(MessageConstants.PDF_HUL_75, // PDF-HUL-75
 						_parser.getOffset());
@@ -1496,6 +1497,8 @@ public class PdfModule extends ModuleBase {
 			_parser.seek(_startxref);
 			token = _parser.getNext();  // "xref" keyword or numeric
 			if (token instanceof Keyword) {
+				// Sam: if token is keyword we are in a cross-reference table
+				String test = ((Keyword) token).getValue();
 				while ((token = _parser.getNext()) != null) {
 					int firstObj = 0;
 					// Look for the start of a cross-ref subsection, which
@@ -1509,6 +1512,9 @@ public class PdfModule extends ModuleBase {
 						break;
 					}
 					_objCount = ((Numeric) _parser.getNext()).getIntegerValue();
+					if (_xref == null) {
+						_xref = new long[_objCount];
+					}
 					for (int i = 0; i < _objCount; i++) {
 						// In reading the cross-reference table, also check
 						// the extra syntactic requirements of PDF/A.
@@ -1527,6 +1533,7 @@ public class PdfModule extends ModuleBase {
 						// "f" signifies a free object. If we already
 						// have an entry for this object, don't replace it.
 						String keyval = ((Keyword) token).getValue();
+						
 						if ("n".equals(keyval)) {
 							if (_xref[firstObj + i] == 0) {
 								_xref[firstObj + i] = offset;
