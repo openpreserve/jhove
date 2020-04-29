@@ -155,6 +155,8 @@ public class PngModule extends ModuleBase {
     // Standard keyword for the creation timestamp
     private final static String CREATION_TIME_KEYWORD = "Creation Time";
 
+    private final static int MAX_INT = 0x7FFFFFFF
+
     /*------------------------------------------------------------------*
       |******************************************************************|
       |*                                                                *|
@@ -392,10 +394,10 @@ public class PngModule extends ModuleBase {
 		repInfo.setModule(this);
 		// First chunk MUST be IHDR
 		int declChunkLen = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)
-								 &0x7FFFFFFF);
+								 &MAX_INT);
 		chcks.reset();
 
-		int chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&0x7FFFFFFF);
+		int chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&MAX_INT);
 		chcks.update(int2byteArray(chunkSig));
 
 		if (chunkSig != IHDR_HEAD_SIG ) {
@@ -420,11 +422,11 @@ public class PngModule extends ModuleBase {
 
 		while (expectingIEND == RepInfo.TRUE) {
 			declChunkLen = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)
-								 &0x7FFFFFFF);
+								 &MAX_INT);
 			// Each chunk has its checsum;
 			chcks.reset();
 
-			chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&0x7FFFFFFF);
+			chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&MAX_INT);
 			chcks.update(int2byteArray(chunkSig));
 
 			switch (chunkSig) {
