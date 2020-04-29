@@ -370,7 +370,7 @@ public class PngModule extends ModuleBase {
 										   IdentifierType.URL));
 		_specification.add (doc);
 
-		Signature sig = new InternalSignature ("PNG", SignatureType.MAGIC,
+		Signature sig = new InternalSignature (COVERAGE, SignatureType.MAGIC,
 											   SignatureUseType.MANDATORY, 0);
 		_signature.add (sig);
 
@@ -385,7 +385,7 @@ public class PngModule extends ModuleBase {
 			repInfo.setWellFormed (RepInfo.FALSE);
 			return 0;
 		}
-		repInfo.setFormat("PNG");
+		repInfo.setFormat(COVERAGE);
 
 		// If we got this far, take note that the signature is OK.
 		repInfo.setSigMatch(_name);
