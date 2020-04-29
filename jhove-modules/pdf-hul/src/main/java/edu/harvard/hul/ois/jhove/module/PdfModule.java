@@ -1531,7 +1531,6 @@ public class PdfModule extends ModuleBase {
 						// "f" signifies a free object. If we already
 						// have an entry for this object, don't replace it.
 						String keyval = ((Keyword) token).getValue();
-						
 						if ("n".equals(keyval)) {
 							if (_xref[firstObj + i] == 0) {
 								_xref[firstObj + i] = offset;
