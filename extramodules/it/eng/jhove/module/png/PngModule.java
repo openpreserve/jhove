@@ -160,7 +160,7 @@ public class PngModule extends ModuleBase {
     // Color Type
 	private final static int EachPixel_GRAYSCALE = 0;
 	private final static int EachPixel_RGB = 2;
-	private final static int EachPixel_PALETTA = 3;
+	private final static int EachPixel_PALETTE = 3;
 	private final static int EachPixel_GRAYSCALE_ALPHA = 4;
 	private final static int EachPixel_RGB_ALPHA = 6;
 
@@ -964,7 +964,7 @@ public class PngModule extends ModuleBase {
 			repInfo.setProfile("PNG GrayScale");
 
 			expectingPLTE=RepInfo.FALSE;
-		case EachPixel_PALETTA:
+		case EachPixel_PALETTE:
 			if (tmp != 1 &&
 				tmp != 2 &&
 				tmp != 4 &&
