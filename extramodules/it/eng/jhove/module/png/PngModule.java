@@ -155,7 +155,14 @@ public class PngModule extends ModuleBase {
     // Standard keyword for the creation timestamp
     private final static String CREATION_TIME_KEYWORD = "Creation Time";
 
-    private final static int MAX_INT = 0x7FFFFFFF
+    private final static int MAX_INT = 0x7FFFFFFF;
+
+    // Color Type
+	private final static int EachPixel_GRAYSCALE = 0;
+	private final static int EachPixel_RGB = 2;
+	private final static int EachPixel_PALETTA = 3;
+	private final static int EachPixel_GRAYSCALE_ALPHA = 4;
+	private final static int EachPixel_RGB_ALPHA = 6;
 
     /*------------------------------------------------------------------*
       |******************************************************************|
@@ -942,7 +949,7 @@ public class PngModule extends ModuleBase {
 		chcks.update((byte)colorType);
 
 		switch (colorType) {
-		case 0:
+		case EachPixel_GRAYSCALE:
 			if (tmp != 1 &&
 				tmp != 2 &&
 				tmp != 4 &&
@@ -957,7 +964,7 @@ public class PngModule extends ModuleBase {
 			repInfo.setProfile("PNG GrayScale");
 
 			expectingPLTE=RepInfo.FALSE;
-		case 3:
+		case EachPixel_PALETTA:
 			if (tmp != 1 &&
 				tmp != 2 &&
 				tmp != 4 &&
@@ -974,7 +981,7 @@ public class PngModule extends ModuleBase {
 			repInfo.setProfile("PNG Indexed");
 
 			break;
-		case 4:
+		case EachPixel_GRAYSCALE_ALPHA:
 			expectingPLTE=RepInfo.FALSE;
 			if (tmp != 8 &&
 				tmp != 16) {
@@ -986,7 +993,7 @@ public class PngModule extends ModuleBase {
 
 			repInfo.setProfile("PNG GrayScale with Alpha");
 			break;
-		case 6:
+		case EachPixel_RGB_ALPHA:
 			expectingPLTE=RepInfo.FALSE;
 			expecting_tRNS=RepInfo.FALSE;
 			if (tmp != 8 &&
@@ -998,7 +1005,7 @@ public class PngModule extends ModuleBase {
 			}
 			repInfo.setProfile("PNG Truecolor with Alpha");
 			break;
-		case 2:
+		case EachPixel_RGB:
 			expectingPLTE=RepInfo.FALSE;
 			expecting_tRNS=RepInfo.FALSE;
 			if (tmp != 8 &&
