@@ -29,11 +29,11 @@ export SCRIPT_DIR
 . "$SCRIPT_DIR/inc/bb-utils.sh"
 
 # Globals to hold the checked param vals
-paramBaseline=""
+targetLoc=""
 paramCorpusLoc=""
 paramJhoveLoc=""
 paramOutputLoc=""
-paramKey=""
+MAJOR_MINOR_VER=""
 paramVerbose=false
 paramIgnoreRelease=false
 
@@ -41,19 +41,21 @@ paramIgnoreRelease=false
 checkParams () {
 	OPTIND=1	# Reset in case getopts previously used
 
-	while getopts "h?vib:j:k:o:c:" opt; do	# Grab the options
+	while getopts "h?vit:b:j:k:o:c:" opt; do	# Grab the options
 		case "$opt" in
 		h|\?)
 			showHelp
 			exit 0
 			;;
-		b)	paramBaseline=$OPTARG
+		b)	BASELINE_VER=$OPTARG
+			;;
+		t)	targetLoc=$OPTARG
 			;;
 		c)	paramCorpusLoc=$OPTARG
 			;;
 		j)	paramJhoveLoc=$OPTARG
 			;;
-		k)	paramKey=$OPTARG
+		k)	MAJOR_MINOR_VER=$OPTARG
 			;;
     o)	paramOutputLoc=$OPTARG
 			;;
@@ -65,49 +67,49 @@ checkParams () {
 		esac
 	done
 
-	if [ -z "$paramBaseline" ] || [ -z "$paramCorpusLoc" ] || [ -z "$paramJhoveLoc" ] || [ -z "$paramOutputLoc" ] || [ -z "$paramKey" ]
+	if [ -z "$targetLoc" ] || [ -z "$paramCorpusLoc" ] || [ -z "$paramJhoveLoc" ] || [ -z "$paramOutputLoc" ] || [ -z "$MAJOR_MINOR_VER" ]
 	then
 		showHelp
 		exit 0
 	fi
 
   # Check dest dir exists
-	[[ -d "$paramBaseline" ]] || mkdir -p "$paramBaseline"
+	[[ -d "$targetLoc" ]] || mkdir -p "$targetLoc"
 
   # Check dest dir exists
 	if  [[ ! -d "$paramCorpusLoc" ]]
 	then
 		echo "Corpus directory not found: $paramCorpusLoc"
-		exit 1;
+		exit 1
 	fi
 
   # Check dest dir exists
 	if  [[ ! -d "$paramJhoveLoc" ]]
 	then
 		echo "JHOVE project directory not found: $paramJhoveLoc"
-		exit 1;
+		exit 1
 	fi
 
   # Check dest dir exists
 	if  [[ ! -d "$paramOutputLoc" ]]
 	then
 		echo "Candidate directory not found: $paramOutputLoc"
-		exit 1;
+		exit 1
 	fi
 
-  if  [[ -d "${paramOutputLoc}/${paramKey}" ]]
+  if  [[ -d "${paramOutputLoc}/${MAJOR_MINOR_VER}" ]]
 	then
-    rm -rf "${paramOutputLoc:?}/${paramKey}"
+    rm -rf "${paramOutputLoc:?}/${MAJOR_MINOR_VER}"
 	fi
-  mkdir "${paramOutputLoc}/${paramKey}"
+  mkdir "${paramOutputLoc}/${MAJOR_MINOR_VER}"
 }
 
 
 # Show usage message
 showHelp() {
-	echo "usage: bbt-jhove [-b <baselineRoot>] [-c <corpusRoot>] [-j <jhoveRoot>] [-o <outputRoot>] [-k <key>] [-i] [-h|?]"
+	echo "usage: bbt-jhove [-t <targetRoot>] [-c <corpusRoot>] [-j <jhoveRoot>] [-o <outputRoot>] [-k <key>] [-i] [-h|?]"
 	echo ""
-	echo "  baselineRoot : The full path to a root folder of baseline test output."
+	echo "  targetRoot : The full path to a root folder of baseline test output."
 	echo "  corpusRoot   : The full path to a root folder of corpus to test."
   echo "  jhoveRoot    : The full path to a root folder of a JHOVE install to test."
   echo "  outputRoot   : The full path to a root folder for candidate test output."
@@ -122,26 +124,27 @@ showHelp() {
 ##
 
 # Check and setup parameters
-checkParams "$@";
-candidate="${paramOutputLoc:?}/${paramKey}"
-tempInstallLoc="/var/tmp/to-test";
+checkParams "$@"
+candidate="${paramOutputLoc:?}/${MAJOR_MINOR_VER}"
+tempInstallLoc="/tmp/to-test"
 sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.9\/org\.jacoco.agent-0\.7\.9-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -Xss2048k  -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
 bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${paramCorpusLoc}" -o "${candidate}"
 
-if [[ -f "${SCRIPT_DIR}/create-${paramKey}-target.sh" ]]
+if [[ -f "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" ]]
 then
-	echo " - INFO: applying the baseline patches for ${paramKey} at: ${TARGET_ROOT}/${paramKey}."
-	bash "${SCRIPT_DIR}/create-${paramKey}-target.sh" -b "1.22" -c "${paramKey}"
+	 " - INFO: applying the baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
+	echo "       ${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh -b ${BASELINE_VER} -c ${MAJOR_MINOR_VER}"
+	bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "${BASELINE_VER}" -c "${MAJOR_MINOR_VER}"
 else
-	echo " - ERROR: no bash script found for baseline patches for ${paramKey} at: ${TARGET_ROOT}/${paramKey}."
+	echo " - ERROR: no bash script found for baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
 	exit 1
 fi
 
-echo "java -Xms2g -Xmx8g -jar ${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar -b ${paramBaseline} -c ${candidate} -k ${paramKey} -i"
-if [ "$paramIgnoreRelease" =  true ] ;
+echo "java -Xms2g -Xmx8g -jar ${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar -b ${targetLoc} -c ${candidate} -k ${MAJOR_MINOR_VER} -i"
+if [ "$paramIgnoreRelease" =  true ]
 then
-	java -Xms2g -Xmx8g -jar "${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar" -b "${paramBaseline}" -c "${candidate}" -k "dev-${paramKey}" -i
+	java -Xms2g -Xmx8g -jar "${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar" -b "${targetLoc}" -c "${candidate}" -k "${MAJOR_MINOR_VER}" -i
 else
-	java -Xms2g -Xmx8g -jar "${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar" -b "${paramBaseline}" -c "${candidate}" -k "dev-${paramKey}"
+	java -Xms2g -Xmx8g -jar "${paramJhoveLoc:?}/jhove-bbt/jhove-bbt.jar" -b "${targetLoc}" -c "${candidate}" -k "${MAJOR_MINOR_VER}"
 fi
-exit "${?}";
+exit "${?}"
