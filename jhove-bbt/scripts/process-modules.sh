@@ -93,6 +93,11 @@ getCorpusModules() {
 	  # https://stackoverflow.com/questions/1371261/get-current-directory-name-without-full-path-in-a-bash-script
 	  moduleName="${DIR%"${DIR##*[!/]}"}" # extglob-free multi-trailing-/ trim
 	  moduleName="${moduleName##*/}"      # remove everything before the last /
+		echo "test $moduleName for EPUB-ptc"
+		if [ "$moduleName" = "EPUB-ptc" ]
+		then
+			 continue
+	  fi
 		if [[ ! -e "$paramOutputRootDir/audit-$moduleName.jhove.xml" ]]
 		then
 			bash "$SCRIPT_DIR/exec-with-to.sh" -t 10 "$paramJhoveLoc/jhove" -m "${moduleName}" -h xml -o "$paramOutputRootDir/audit-$moduleName.jhove.xml"
