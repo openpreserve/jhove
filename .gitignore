@@ -20,3 +20,7 @@ Gemfile.lock
 **/bin
 # Ignore VisualCode artefacts
 **/.vscode
+
+# Ignore IntelliJ
+.idea
+*.iml
