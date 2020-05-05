@@ -13,7 +13,7 @@ TEST_BASELINES_ROOT="${TEST_ROOT}/baselines"
 TEST_INSTALL_ROOT="${TEST_ROOT}/jhove"
 CANDIDATE_ROOT="${TEST_ROOT}/candidates"
 TARGET_ROOT="${TEST_ROOT}/targets"
-BASELINE_VERSION=1.22
+BASELINE_VERSION=1.24
 
 # Create the JHOVE test root if it doesn't exist
 [[ -d "${TEST_ROOT}" ]] || mkdir -p "${TEST_ROOT}"
@@ -44,7 +44,7 @@ fi
 [[ -d "${CANDIDATE_ROOT}" ]] || mkdir -p "${CANDIDATE_ROOT}"
 
 # Set up the temp install location for JHOVE development
-tempInstallLoc="/var/tmp/to-test";
+tempInstallLoc="/tmp/to-test";
 if [[ -d "${tempInstallLoc}" ]]; then
 	rm -rf "${tempInstallLoc}"
 fi
@@ -75,7 +75,8 @@ echo ""
 echo "Testing ${MAJOR_MINOR_VER}."
 echo "=========================="
 echo " - using development JHOVE installer: ${TEST_ROOT}/targets/${MAJOR_MINOR_VER}."
-bash "${SCRIPT_DIR}/bbt-jhove.sh" -b "${TEST_ROOT}/targets/${MAJOR_MINOR_VER}" -c "${TEST_ROOT}/corpora" -j . -o "${TEST_ROOT}/candidates" -k "${MAJOR_MINOR_VER}" -i
+echo "     bash ${SCRIPT_DIR}/bbt-jhove.sh -t ${TEST_ROOT}/targets/${MAJOR_MINOR_VER} -b ${BASELINE_VERSION} -c ${TEST_ROOT}/corpora -j . -o ${TEST_ROOT}/candidates -k ${MAJOR_MINOR_VER} -i"
+bash "${SCRIPT_DIR}/bbt-jhove.sh" -t "${TEST_ROOT}/targets/${MAJOR_MINOR_VER}" -b ${BASELINE_VERSION} -c "${TEST_ROOT}/corpora" -j . -o "${TEST_ROOT}/candidates" -k "${MAJOR_MINOR_VER}" -i
 exitStatus=$?
 echo ""
 echo "RESULTS"

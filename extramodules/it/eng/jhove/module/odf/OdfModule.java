@@ -386,7 +386,7 @@ public class OdfModule extends ModuleBase implements Module {
 
 					RepInfo subDoc = new RepInfo(subDocName);
 					subDoc.setModule(this);
-					subDoc.setFormat("ODF");
+					subDoc.setFormat(FORMAT[0]);
 					subDoc.setProfile((String)mimeTypeMap.get(mnfe.mediaType));
 					subDoc.setMimeType(mnfe.mediaType);
 					subDoc.setValid(true);
