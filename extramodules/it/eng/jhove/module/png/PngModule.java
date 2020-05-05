@@ -243,6 +243,17 @@ public class PngModule extends ModuleBase {
 					   "PNG Truecolor with Alpha"}; // 6
 
     public static final boolean PNG_ENDIANITY=true;
+
+    private final static String KEYWORD[] = { "Title",  //0
+                                              "Author", //1 
+                                              "Description", //2
+                                              "Copyright", //3
+                                              "Software", //4
+                                              "Disclaimer", //5
+                                              "Warning", //6
+                                              "Source", //7
+                                              "Comment"}; //8
+
     
     /**
      * Crea una nuova istanza di <code>PngModule</code> .
@@ -254,26 +265,26 @@ public class PngModule extends ModuleBase {
 
 		keywordList = new HashMap();
 
-		keywordList.put("Title",
-						new Booolean(false,"Title"));           //  Short (one line) title or caption for image
-		keywordList.put("Author",
-						new Booolean(false,"Author"));          //  Name of image's creator
-		keywordList.put("Description",
-						new Booolean(false,"Description"));     //  Description of image (possibly long)
-		keywordList.put("Copyright",
-						new Booolean(false,"Copyright"));       //  Copyright notice
+		keywordList.put(KEYWORD[0],
+						new Booolean(false,KEYWORD[0]));           //  Short (one line) title or caption for image
+		keywordList.put(KEYWORD[1],
+						new Booolean(false,KEYWORD[1]));          //  Name of image's creator
+		keywordList.put(KEYWORD[2],
+						new Booolean(false,KEYWORD[2]));     //  Description of image (possibly long)
+		keywordList.put(KEYWORD[3],
+						new Booolean(false,KEYWORD[3]));       //  Copyright notice
 		keywordList.put(CREATION_TIME_KEYWORD,
 						new Booolean(false,CREATION_TIME_KEYWORD)); //  Time of original image creation
-		keywordList.put("Software",
-						new Booolean(false,"Software"));        //  Software used to create the image
-		keywordList.put("Disclaimer",
-						new Booolean(false,"Disclaimer"));      //  Legal disclaimer
-		keywordList.put("Warning",
-						new Booolean(false,"Warning"));         //  Warning of nature of content
-		keywordList.put("Source",
-						new Booolean(false,"Source"));          //  Device used to create the image
-		keywordList.put("Comment",
-						new Booolean(false,"Comment"));         //  Miscellaneous comment
+		keywordList.put(KEYWORD[4],
+						new Booolean(false,KEYWORD[4]));        //  Software used to create the image
+		keywordList.put(KEYWORD[5],
+						new Booolean(false,KEYWORD[5]));      //  Legal disclaimer
+		keywordList.put(KEYWORD[6],
+						new Booolean(false,KEYWORD[6]));         //  Warning of nature of content
+		keywordList.put(KEYWORD[7],
+						new Booolean(false,KEYWORD[7]));          //  Device used to create the image
+		keywordList.put(KEYWORD[8],
+						new Booolean(false,KEYWORD[8]));         //  Miscellaneous comment
     }
     // Implementation of edu.harvard.hul.ois.jhove.Module
 
