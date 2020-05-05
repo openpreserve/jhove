@@ -244,15 +244,15 @@ public class PngModule extends ModuleBase {
 
     public static final boolean PNG_ENDIANITY=true;
 
-    private final static String KEYWORD[] = { "Title",  //0
-                                              "Author", //1 
-                                              "Description", //2
-                                              "Copyright", //3
-                                              "Software", //4
-                                              "Disclaimer", //5
-                                              "Warning", //6
-                                              "Source", //7
-                                              "Comment"}; //8
+    private final static String KEYWORD[] = {"Title",  //0
+                                             "Author", //1 
+                                             "Description", //2
+                                             "Copyright", //3
+                                             "Software", //4
+                                             "Disclaimer", //5
+                                             "Warning", //6
+                                             "Source", //7
+                                             "Comment"}; //8
 
     
     /**
