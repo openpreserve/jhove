@@ -90,6 +90,8 @@ public class JsonHandlerTest {
 		    "\"size\":1,\"format\":\"bytestream\",\"status\":\"Well-Formed and valid\",\"sigMatch\":[\"BYTESTREAM\"]," +
 		    "\"mimeType\":\"application/octet-stream\",\"properties\":[{\"checksum\":\"" +
 		    DUMMY_CK + "\",\"type\":\"MD5\"}]}";
+	/** Handler string "Find: " */
+	private static final String FIND = "Find: ";
 
 	private static App mockApp;
 	private static JhoveBase je;
@@ -172,7 +174,7 @@ public class JsonHandlerTest {
 				.replaceAll(CONF_PATTERN, CONF_REPLACEMENT)
 				.replaceAll(RIGHTS_PATTERN, RIGHTS_REPLACEMENT)
 				.replaceAll(DIR_PATTERN, DIR_REPLACEMENT);
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		String expected = "{\"jhove\":{" + APP_JSON + "," + API_JSON + "}}";
 
 	    assertEquals(expected, result);
@@ -193,7 +195,7 @@ public class JsonHandlerTest {
 				.replaceAll(CONF_PATTERN, CONF_REPLACEMENT)
 				.replaceAll(RIGHTS_PATTERN, RIGHTS_REPLACEMENT)
 				.replaceAll(DIR_PATTERN, DIR_REPLACEMENT);
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		String expected = "{\"jhove\":{" + APP_JSON + "," + HANDLER_JSON + "}}";
 		 
 	    assertEquals(expected, result);
@@ -215,7 +217,7 @@ public class JsonHandlerTest {
 				.replaceAll(RIGHTS_PATTERN, RIGHTS_REPLACEMENT)
 				.replaceAll(DIR_PATTERN, DIR_REPLACEMENT)
 				.replaceAll(VENDOR_PATTERN, VENDOR_REPLACEMENT);
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		String expected = "{\"jhove\":{" + APP_JSON + "," + MODULE_JSON + "}}";
 		 
 	    assertEquals(expected, result);
@@ -244,7 +246,7 @@ public class JsonHandlerTest {
 				.replaceAll(RIGHTS_PATTERN, RIGHTS_REPLACEMENT)
 				.replaceAll(DIR_PATTERN, DIR_REPLACEMENT)
 				.replaceAll(VENDOR_PATTERN, VENDOR_REPLACEMENT);
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		String expected = "{\"jhove\":{" + APP_JSON + "," + INFO_JSON + "}}";
 		 
 	    assertEquals(expected, result);
@@ -260,7 +262,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"kind\":\"OTHER\",\"name\":\"Bibliothèque nationale de France\"," +
 				"\"type\":\"Educational\",\"web\":\"http://www.bnf.fr\"}";
 		
@@ -275,7 +277,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"test\":2}";
 		
 	    assertEquals(expected, result);
@@ -290,7 +292,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"test\":[1.0,2.0]}";
 		
 	    assertEquals(expected, result);
@@ -307,7 +309,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"test\":[[300,1],[4,2]]}";
 		
 	    assertEquals(expected, result);
@@ -322,7 +324,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"test\":{\"mykey\":\"myvalue\"}}";
 		
 	    assertEquals(expected, result);
@@ -337,7 +339,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"test\":[true,false,true]}";
 		
 	    assertEquals(expected, result);
@@ -354,7 +356,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"textmd:charset\":\"UTF-8\",\"textmd:byte_order\":\"big\"," +
 				"\"textmd:linebreak\":\"CR/LF\",\"textmd:language\":\"fre\"}";
 
@@ -371,7 +373,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"aes:schemaVersion\":\"1.02b\",\"aes:format\":\"audio/wav\"," +
 				"\"aes:face\":{\"aes:timeline\":{\"tcf:startTime\":{\"tcf:frameCount\":30,\"tcf:timeBase\":1000," +
 				"\"tcf:videoField\":\"FIELD_1\",\"tcf:countingMode\":\"NTSC_NON_DROP_FRAME\",\"tcf:hours\":0," +
@@ -392,7 +394,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"ARRAY\":[1,2,3]}";
 		
 	    assertEquals(expected, result);
@@ -407,7 +409,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"ARRAY\":[-1.0,0.0,1.0]}";
 		
 	    assertEquals(expected, result);
@@ -422,7 +424,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"ARRAY\":[null,\"\",\"DUMMY\"]}";
 		
 	    assertEquals(expected, result);
@@ -438,7 +440,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"ARRAY\":[[1,1],[-1,2]]}";
 		
 	    assertEquals(expected, result);
@@ -453,7 +455,7 @@ public class JsonHandlerTest {
         handler.close();
         
 		String result = outString.toString();
-		LOGGER.info("Find: " + result);
+		LOGGER.info(FIND + result);
 		final String expected = "{\"ARRAY\":[123456,43211]}";
 		
 	    assertEquals(expected, result);
