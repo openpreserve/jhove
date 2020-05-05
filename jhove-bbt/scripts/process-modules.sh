@@ -93,7 +93,6 @@ getCorpusModules() {
 	  # https://stackoverflow.com/questions/1371261/get-current-directory-name-without-full-path-in-a-bash-script
 	  moduleName="${DIR%"${DIR##*[!/]}"}" # extglob-free multi-trailing-/ trim
 	  moduleName="${moduleName##*/}"      # remove everything before the last /
-		echo "test $moduleName for EPUB-ptc"
 		if [ "$moduleName" = "EPUB-ptc" ]
 		then
 			 continue
