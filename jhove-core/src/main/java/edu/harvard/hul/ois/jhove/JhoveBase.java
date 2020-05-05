@@ -14,7 +14,6 @@ import org.openpreservation.jhove.ReleaseDetails;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
 import javax.net.ssl.*;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
@@ -31,7 +30,6 @@ import java.util.Properties;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -39,18 +37,6 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.openpreservation.jhove.ReleaseDetails;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-import edu.harvard.hul.ois.jhove.Module;
-import edu.harvard.hul.ois.jhove.handler.AuditHandler;
-import edu.harvard.hul.ois.jhove.handler.TextHandler;
-import edu.harvard.hul.ois.jhove.handler.XmlHandler;
-import edu.harvard.hul.ois.jhove.module.BytestreamModule;
 
 /**
  * The JHOVE engine, providing all base services necessary to build an
