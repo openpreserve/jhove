@@ -23,7 +23,7 @@ public class NisoImageMetadata
     /** private String constants. */
     private static final String YES = "Yes";
     private static final String NO = "No";
-    private static final String COLON = ":";
+    private static final String TIME_STEP = ":";
 
     /******************************************************************
      * PUBLIC CLASS FIELDS.
@@ -2247,7 +2247,7 @@ public class NisoImageMetadata
                 String mi = date.substring (14, 16);
                 String se = date.substring (17, 19);
                 return yr + "-" + mo + "-" + da + "T" +
-                    hr + COLON + mi + COLON + se;
+                    hr + TIME_STEP + mi + TIME_STEP + se;
             }
             return date;  // default
         }
