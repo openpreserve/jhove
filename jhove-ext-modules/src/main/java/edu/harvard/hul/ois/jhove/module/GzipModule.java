@@ -98,7 +98,7 @@ public class GzipModule extends ModuleBase {
     private void setVendorAndSpecification() {
         _vendor = KB_AGENT;
 
-        Document doc = new Document("GZIP",
+        Document doc = new Document(FORMAT[0],
                 DocumentType.RFC);
         // Should probably have IIPC and others as authors
         Agent ietfAgent = new Agent.Builder("IETF", AgentType.STANDARD).web(
