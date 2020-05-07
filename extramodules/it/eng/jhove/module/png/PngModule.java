@@ -239,8 +239,7 @@ public class PngModule extends ModuleBase {
 					   "PNG Truecolor",             // 2
 					   "PNG Indexed",               // 3
 					   "PNG GrayScale with Alpha",  // 4
-					   "Unused",                    // 5
-					   "PNG Truecolor with Alpha"}; // 6
+					   "PNG Truecolor with Alpha"}; // 5
 
     public static final boolean PNG_ENDIANITY=true;
 
@@ -254,6 +253,13 @@ public class PngModule extends ModuleBase {
                                              "Source", //7
                                              "Comment"}; //8
 
+     private final static String PLTE_NOT_FOUND= "Expected PLTE chunk not found.";
+     private final static String GAMA_AFTER_IDAT= "gAMA chunk found after IDAT ones.";
+     private final static String EXTRA_GAMA= "Extra gAMA chunk found.";
+     private final static String TEXT= "tEXT";
+     private final static String ILLEGAL_BIT_DEPTH= "In IHDR, illegal value for bit depth for colour type ";
+     private final static String ILLEGALE_PROFONDITA_DEI_BIT= "In IHDR, valore illegale per la profondita` dei bit per il colour type ";
+     private final static String NO_ANCORA_W3C= " no ancora standardizzato dal W3C.";  
     
     /**
      * Crea una nuova istanza di <code>PngModule</code> .
@@ -390,7 +396,7 @@ public class PngModule extends ModuleBase {
 										   IdentifierType.URL));
 		_specification.add (doc);
 
-		Signature sig = new InternalSignature ("PNG", SignatureType.MAGIC,
+		Signature sig = new InternalSignature (FORMAT[0], SignatureType.MAGIC,
 											   SignatureUseType.MANDATORY, 0);
 		_signature.add (sig);
 
@@ -405,7 +411,7 @@ public class PngModule extends ModuleBase {
 			repInfo.setWellFormed (RepInfo.FALSE);
 			return 0;
 		}
-		repInfo.setFormat("PNG");
+		repInfo.setFormat(FORMAT[0]);
 
 		// If we got this far, take note that the signature is OK.
 		repInfo.setSigMatch(_name);
@@ -469,7 +475,7 @@ public class PngModule extends ModuleBase {
 			case IDAT_HEAD_SIG:
 				if (expectingPLTE == RepInfo.TRUE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Expected PLTE chunk not found." ));
+					repInfo.setMessage(new ErrorMessage(PLTE_NOT_FOUND ));
 
 					break;
 				}
@@ -481,7 +487,7 @@ public class PngModule extends ModuleBase {
 			case IEND_HEAD_SIG:
 				if (expectingPLTE == RepInfo.TRUE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Expected PLTE chunk not found." ));
+					repInfo.setMessage(new ErrorMessage(PLTE_NOT_FOUND));
 
 					break;
 				}
@@ -531,13 +537,13 @@ public class PngModule extends ModuleBase {
 				}
 				if (expectingIDAT == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("gAMA chunk found after IDAT ones." ));
+					repInfo.setMessage(new ErrorMessage(GAMA_AFTER_IDAT));
 
 					break;
 				}
 				if (expecting_gAMA == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Extra gAMA chunk found." ));
+					repInfo.setMessage(new ErrorMessage(EXTRA_GAMA ));
 
 					break;
 				}
@@ -639,7 +645,7 @@ public class PngModule extends ModuleBase {
 
 			case tEXt_HEAD_SIG:
 
-				checkChunk(dstream, repInfo, declChunkLen,"tEXT");
+				checkChunk(dstream, repInfo, declChunkLen, TEXT);
 				break;
 
 			case zTXt_HEAD_SIG:
@@ -663,13 +669,13 @@ public class PngModule extends ModuleBase {
 				}
 				if (expectingIDAT == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("gAMA chunk found after IDAT ones." ));
+					repInfo.setMessage(new ErrorMessage(GAMA_AFTER_IDAT ));
 
 					break;
 				}
 				if (expecting_gAMA == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Extra gAMA chunk found." ));
+					repInfo.setMessage(new ErrorMessage(EXTRA_GAMA ));
 
 					break;
 				}
@@ -967,7 +973,7 @@ public class PngModule extends ModuleBase {
 				tmp != 8 &&
 				tmp != 16) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, illegal value for bit depth for colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGAL_BIT_DEPTH +
 
 													colorType + ": " +tmp ));
 
@@ -981,7 +987,7 @@ public class PngModule extends ModuleBase {
 				tmp != 4 &&
 				tmp != 8 ) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, illegal value for bit depth for colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGAL_BIT_DEPTH +
 													colorType + ": " +tmp ));
 
 			}
@@ -997,7 +1003,7 @@ public class PngModule extends ModuleBase {
 			if (tmp != 8 &&
 				tmp != 16) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, valore illegale per la profondita` dei bit per il colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGALE_PROFONDITA_DEI_BIT +
 													colorType + ": " +tmp ));
 
 			}
@@ -1010,7 +1016,7 @@ public class PngModule extends ModuleBase {
 			if (tmp != 8 &&
 				tmp != 16) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, valore illegale per la profondita` dei bit per il colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGALE_PROFONDITA_DEI_BIT +
 													colorType + ": " +tmp ));
 
 			}
@@ -1022,7 +1028,7 @@ public class PngModule extends ModuleBase {
 			if (tmp != 8 &&
 				tmp != 16) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, valore illegale per la profondita` dei bit per il colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGALE_PROFONDITA_DEI_BIT +
 													colorType + ": " +tmp ));
 
 			}
@@ -1053,7 +1059,7 @@ public class PngModule extends ModuleBase {
 
 		if (tmp!=0) {
 			repInfo.setMessage(new InfoMessage("Attenzione, tipo di filtro " +
-											   tmp + " no ancora standardizzato dal W3C."));
+											   tmp + NO_ANCORA_W3C));
 		}
 
 		// interlace
@@ -1063,7 +1069,7 @@ public class PngModule extends ModuleBase {
 
 		if (tmp!=0 && tmp!=1) {
 			repInfo.setMessage(new InfoMessage("Attenzione, tipo di interlacciamento " +
-											   tmp + " no ancora standardizzato dal W3C."));
+											   tmp + NO_ANCORA_W3C));
 		}
 
 		long crc32 = readUnsignedInt(inputStream, PNG_ENDIANITY, this);
@@ -1231,7 +1237,7 @@ public class PngModule extends ModuleBase {
 				repInfo.setValid(RepInfo.FALSE);
 				repInfo.setMessage(new ErrorMessage("Missing 0 byte after keyword"));
 
-				checkChunk(inputStream, repInfo, declChunkLen, "tEXT");
+				checkChunk(inputStream, repInfo, declChunkLen, TEXT);
 				buf.append((char)c);
 
 			}
