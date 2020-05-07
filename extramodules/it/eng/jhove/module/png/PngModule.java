@@ -239,8 +239,7 @@ public class PngModule extends ModuleBase {
 					   "PNG Truecolor",             // 2
 					   "PNG Indexed",               // 3
 					   "PNG GrayScale with Alpha",  // 4
-					   "Unused",                    // 5
-					   "PNG Truecolor with Alpha"}; // 6
+					   "PNG Truecolor with Alpha"}; // 5
 
     public static final boolean PNG_ENDIANITY=true;
     
@@ -379,7 +378,7 @@ public class PngModule extends ModuleBase {
 										   IdentifierType.URL));
 		_specification.add (doc);
 
-		Signature sig = new InternalSignature ("PNG", SignatureType.MAGIC,
+		Signature sig = new InternalSignature (FORMAT[0], SignatureType.MAGIC,
 											   SignatureUseType.MANDATORY, 0);
 		_signature.add (sig);
 
@@ -394,7 +393,7 @@ public class PngModule extends ModuleBase {
 			repInfo.setWellFormed (RepInfo.FALSE);
 			return 0;
 		}
-		repInfo.setFormat("PNG");
+		repInfo.setFormat(FORMAT[0]);
 
 		// If we got this far, take note that the signature is OK.
 		repInfo.setSigMatch(_name);
@@ -961,7 +960,7 @@ public class PngModule extends ModuleBase {
 													colorType + ": " +tmp ));
 
 			}
-			repInfo.setProfile("PNG GrayScale");
+			repInfo.setProfile(PNG_PROFILES[0]);
 
 			expectingPLTE=RepInfo.FALSE;
 		case EachPixel_PALETTE:
@@ -978,7 +977,7 @@ public class PngModule extends ModuleBase {
 			expectingPLTE = RepInfo.TRUE;
 			colorDepth = tmp;
 			maxPaletteSize = 1 << tmp ;
-			repInfo.setProfile("PNG Indexed");
+			repInfo.setProfile(PNG_PROFILES[3]);
 
 			break;
 		case EachPixel_GRAYSCALE_ALPHA:
@@ -991,7 +990,7 @@ public class PngModule extends ModuleBase {
 
 			}
 
-			repInfo.setProfile("PNG GrayScale with Alpha");
+			repInfo.setProfile(PNG_PROFILES[4]);
 			break;
 		case EachPixel_RGB_ALPHA:
 			expectingPLTE=RepInfo.FALSE;
@@ -1003,7 +1002,7 @@ public class PngModule extends ModuleBase {
 													colorType + ": " +tmp ));
 
 			}
-			repInfo.setProfile("PNG Truecolor with Alpha");
+			repInfo.setProfile(PNG_PROFILES[5]);
 			break;
 		case EachPixel_RGB:
 			expectingPLTE=RepInfo.FALSE;
@@ -1016,7 +1015,7 @@ public class PngModule extends ModuleBase {
 
 			}
 
-			repInfo.setProfile("PNG Truecolor");
+			repInfo.setProfile(PNG_PROFILES[2]);
 			break;
 		default:
 			repInfo.setValid(RepInfo.FALSE);
