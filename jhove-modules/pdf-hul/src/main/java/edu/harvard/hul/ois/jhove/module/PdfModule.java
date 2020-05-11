@@ -53,6 +53,7 @@ import edu.harvard.hul.ois.jhove.Identifier;
 import edu.harvard.hul.ois.jhove.IdentifierType;
 import edu.harvard.hul.ois.jhove.InfoMessage;
 import edu.harvard.hul.ois.jhove.InternalSignature;
+import edu.harvard.hul.ois.jhove.Message;
 import edu.harvard.hul.ois.jhove.Module;
 import edu.harvard.hul.ois.jhove.ModuleBase;
 import edu.harvard.hul.ois.jhove.NisoImageMetadata;
@@ -1316,6 +1317,7 @@ public class PdfModule extends ModuleBase {
 			}
 
 			obj = _trailerDict.get(DICT_KEY_SIZE);
+			_docCatDictRef = (PdfIndirectObj) _trailerDict.get(DICT_KEY_ROOT);
 			if (obj != null) {
 				_numObjects = -1;
 				if (obj instanceof PdfSimpleObject) {
@@ -1336,7 +1338,7 @@ public class PdfModule extends ModuleBase {
 				throw new PdfInvalidException(MessageConstants.PDF_HUL_74, // PDF-HUL-74
 						_parser.getOffset());
 
-			_docCatDictRef = (PdfIndirectObj) _trailerDict.get(DICT_KEY_ROOT);
+			
 			if (_docCatDictRef == null) {
 				throw new PdfInvalidException(MessageConstants.PDF_HUL_75, // PDF-HUL-75
 						_parser.getOffset());
@@ -1509,6 +1511,9 @@ public class PdfModule extends ModuleBase {
 						break;
 					}
 					_objCount = ((Numeric) _parser.getNext()).getIntegerValue();
+					if (_xref == null) {
+						_xref = new long[_objCount];
+					}
 					for (int i = 0; i < _objCount; i++) {
 						// In reading the cross-reference table, also check
 						// the extra syntactic requirements of PDF/A.
@@ -3353,7 +3358,7 @@ public class PdfModule extends ModuleBase {
 				// Encryption messes up name trees
 				if (!_encrypted) {
 					int pageObjNum = resolveIndirectDest(
-							dest.getIndirectDest());
+							dest.getIndirectDest(), info);
 					if (pageObjNum == -1) {
 						// The scope of the reference is outside this
 						// file, so we just report it as such.
@@ -4045,7 +4050,7 @@ public class PdfModule extends ModuleBase {
 				Destination dest = new Destination(destObj, this, false);
 				if (dest.isIndirect()) {
 					itemList.add(new Property(PROP_NAME_DESTINATION,
-							PropertyType.STRING, dest.getIndirectDest()));
+							PropertyType.STRING, dest.getIndirectDest().getStringValue()));
 				} else {
 					int pageObjNum = dest.getPageDestObjNumber();
 					Integer destPg = _pageSeqMap.get(new Integer(pageObjNum));
@@ -4160,7 +4165,7 @@ public class PdfModule extends ModuleBase {
 	 * We return the page sequence number for the referenced page.
 	 * If we can't find a match for the reference, we return -1.
 	 */
-	protected int resolveIndirectDest(PdfSimpleObject key) throws PdfException {
+	protected int resolveIndirectDest(PdfSimpleObject key, RepInfo info) throws PdfException {
 		if (key == null) {
 			throw new IllegalArgumentException("Argument key can not be null");
 		}
@@ -4176,6 +4181,7 @@ public class PdfModule extends ModuleBase {
 					key.getStringValue());
 			JhoveMessage message = JhoveMessages.getMessageInstance(
 					MessageConstants.PDF_HUL_149.getId(), mess);
+			info.setMessage(new ErrorMessage(message));
 			throw new PdfInvalidException(message); // PDF-HUL-149
 			// OR if this is not considered invalid
 			// return -1;
