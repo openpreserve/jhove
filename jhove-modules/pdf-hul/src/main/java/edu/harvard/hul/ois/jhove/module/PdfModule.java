@@ -2997,8 +2997,15 @@ public class PdfModule extends ModuleBase {
 
 		try {
 			// Rotation property is inheritable
-			PdfSimpleObject rot = (PdfSimpleObject) page.get(DICT_KEY_ROTATE,
-					true);
+			PdfObject tempObj = page.get(DICT_KEY_ROTATE,
+							true);
+			PdfSimpleObject rot = null;
+			if (tempObj != null && tempObj instanceof PdfSimpleObject) {
+				rot = (PdfSimpleObject) tempObj;
+			} else if (tempObj != null && tempObj instanceof PdfIndirectObj) {
+				rot = (PdfSimpleObject) ((PdfIndirectObj) tempObj)
+						.getObject();
+			}
 			if (rot != null && rot.getIntValue() != 0) {
 				pagePropList.add(new Property(PROP_NAME_ROTATE,
 						PropertyType.INTEGER, new Integer(rot.getIntValue())));
