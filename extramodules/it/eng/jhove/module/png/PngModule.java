@@ -978,7 +978,7 @@ public class PngModule extends ModuleBase {
 													colorType + ": " +tmp ));
 
 			}
-			repInfo.setProfile("PNG GrayScale");
+			repInfo.setProfile(PNG_PROFILES[0]);
 
 			expectingPLTE=RepInfo.FALSE;
 		case EachPixel_PALETTE:
@@ -995,7 +995,7 @@ public class PngModule extends ModuleBase {
 			expectingPLTE = RepInfo.TRUE;
 			colorDepth = tmp;
 			maxPaletteSize = 1 << tmp ;
-			repInfo.setProfile("PNG Indexed");
+			repInfo.setProfile(PNG_PROFILES[3]);
 
 			break;
 		case EachPixel_GRAYSCALE_ALPHA:
@@ -1008,7 +1008,7 @@ public class PngModule extends ModuleBase {
 
 			}
 
-			repInfo.setProfile("PNG GrayScale with Alpha");
+			repInfo.setProfile(PNG_PROFILES[4]);
 			break;
 		case EachPixel_RGB_ALPHA:
 			expectingPLTE=RepInfo.FALSE;
@@ -1020,7 +1020,7 @@ public class PngModule extends ModuleBase {
 													colorType + ": " +tmp ));
 
 			}
-			repInfo.setProfile("PNG Truecolor with Alpha");
+			repInfo.setProfile(PNG_PROFILES[5]);
 			break;
 		case EachPixel_RGB:
 			expectingPLTE=RepInfo.FALSE;
@@ -1033,7 +1033,7 @@ public class PngModule extends ModuleBase {
 
 			}
 
-			repInfo.setProfile("PNG Truecolor");
+			repInfo.setProfile(PNG_PROFILES[2]);
 			break;
 		default:
 			repInfo.setValid(RepInfo.FALSE);
