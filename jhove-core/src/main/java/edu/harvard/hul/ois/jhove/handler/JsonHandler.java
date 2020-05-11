@@ -76,6 +76,8 @@ public class JsonHandler extends HandlerBase {
 	/** Handler release date. */
 	private static final int[] DATE = { 2019, 10, 18 };
 
+	private static final String DATE_CONSTANT = "date";
+
 	/** well-formed. */
 	private static final String WELL_FORMED = "Well-Formed";
 
@@ -94,7 +96,7 @@ public class JsonHandler extends HandlerBase {
 	/** Handler NTSC_NON_DROP_FRAME. */
 	private static final String NTSC_NON_DROP_FRAME = "NTSC_NON_DROP_FRAME";
 
-	/** Handler informative note. */
+	/** Handler note. */
 	private static final String NOTE = "";
 
 	/** Handler rights statement. */
@@ -151,7 +153,7 @@ public class JsonHandler extends HandlerBase {
 
 		JsonObjectBuilder apiBuilder = Json.createObjectBuilder();
 		apiBuilder.add("version", app.getRelease());
-		apiBuilder.add("date", date.format(_je.getDate()));
+		apiBuilder.add(DATE_CONSTANT, date.format(_je.getDate()));
 		appBuilder.add("api", apiBuilder);
 
 		String configFile = _je.getConfigFile();
@@ -207,7 +209,7 @@ public class JsonHandler extends HandlerBase {
 		JsonObjectBuilder outputHandlerBuilder = Json.createObjectBuilder();
 		outputHandlerBuilder.add("name", handler.getName());
 		outputHandlerBuilder.add(RELEASE_CONSTANT, handler.getRelease());
-		outputHandlerBuilder.add("date", date.format(handler.getDate()));
+		outputHandlerBuilder.add(DATE_CONSTANT, date.format(handler.getDate()));
 		List<Document> list = handler.getSpecification();
 		int n = list.size();
 		if (n > 0) {
@@ -240,7 +242,7 @@ public class JsonHandler extends HandlerBase {
 		JsonObjectBuilder modBuilder = Json.createObjectBuilder();
 		modBuilder.add("name", module.getName());
 		modBuilder.add(RELEASE_CONSTANT, module.getRelease());
-		modBuilder.add("date", HandlerBase.date.format(module.getDate()));
+		modBuilder.add(DATE_CONSTANT, HandlerBase.date.format(module.getDate()));
 
 		String[] ss = module.getFormat();
 		if (ss.length > 0) {
@@ -321,7 +323,7 @@ public class JsonHandler extends HandlerBase {
 
 		if (module != null) {
 			infoBuilder.add("reportingModule", Json.createObjectBuilder().add("name", module.getName())
-					.add(RELEASE_CONSTANT, module.getRelease()).add("date", date.format(module.getDate())));
+					.add(RELEASE_CONSTANT, module.getRelease()).add(DATE_CONSTANT, date.format(module.getDate())));
 		}
 		Date date = info.getCreated();
 		if (date != null) {
@@ -504,7 +506,7 @@ public class JsonHandler extends HandlerBase {
 			docBuilder.add("edition", s);
 		}
 		if ((s = document.getDate()) != null) {
-			docBuilder.add("date", s);
+			docBuilder.add(DATE_CONSTANT, s);
 		}
 		if ((s = document.getEnumeration()) != null) {
 			docBuilder.add("enumeration", s);
@@ -552,7 +554,7 @@ public class JsonHandler extends HandlerBase {
 		jhoveBuilder = Json.createObjectBuilder();
 		jhoveBuilder.add("name", _app.getName());
 		jhoveBuilder.add(RELEASE_CONSTANT, _app.getRelease());
-		jhoveBuilder.add("date", HandlerBase.date.format(_app.getDate()));
+		jhoveBuilder.add(DATE_CONSTANT, HandlerBase.date.format(_app.getDate()));
 		jhoveBuilder.add("executionTime", toDateTime(new Date()));
 	}
 
