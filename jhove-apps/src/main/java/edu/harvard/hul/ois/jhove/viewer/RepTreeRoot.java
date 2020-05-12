@@ -74,7 +74,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 	private static final String TEXT_MD_METADTA = "TextMDMetadata";
 	private static final String FORMAT = "Format: ";
 	private static final String VERSION = "Version: ";
-	private static final String BYTE_ORDER = "ByteOrder: "
+	private static final String BYTE_ORDER = "ByteOrder: ";
 	private static final String FRAME_COUNT_30 = "FrameCount: 30";
 	private static final String TIME_BASE_1000 = "TimeBase: 1000";
 	private static final String VIDEO_FIELD_FIELD_1 = "VideoField: FIELD_1";
