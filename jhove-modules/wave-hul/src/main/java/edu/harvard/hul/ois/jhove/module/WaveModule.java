@@ -88,7 +88,14 @@ public class WaveModule extends ModuleBase {
     private static final String RIGHTS = "Copyright 2004-2007 by JSTOR and the "
             + "President and Fellows of Harvard College. "
             + "Released under the GNU Lesser General Public License.";
-    private static final String MSLIB_URL = "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/"
+    
+    private static final String WAVE_FORM_TYPE = "WAVE";
+    private static final String EBU_TECH_SPEC_3285 = "EBU Technical Specification 3285";
+    private static final String EBU_TECH_SPEC_3306 = "EBU Technical Specification 3306";
+    private static final String MSLIB_URL = "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/";
+    private static final String PCMWAVEFORMAT_PROFILE = "PCMWAVEFORMAT";
+    private static final String WAVEFORMATEX_PROFILE = "WAVEFORMATEX";
+    private static final String WAVEFORMATEXTENSIBLE_PROFILE = "WAVEFORMATEXTENSIBLE";
 
     /** Fixed value for first four bytes of WAVE files */
     private static final String RIFF_SIGNATURE = "RIFF";
@@ -221,21 +228,21 @@ public class WaveModule extends ModuleBase {
 						.telephone("+1 (800) 426-9400")
 						.web("http://www.microsoft.com").build();
 
-		Document doc = new Document("PCMWAVEFORMAT", DocumentType.WEB);
+		Document doc = new Document(PCMWAVEFORMAT_PROFILE, DocumentType.WEB);
 		doc.setIdentifier(new Identifier(
 				MSLIB_URL + "multimed/htm/_win32_pcmwaveformat_str.asp",
 				IdentifierType.URL));
 		doc.setPublisher(msAgent);
 		_specification.add(doc);
 
-		doc = new Document("WAVEFORMATEX", DocumentType.WEB);
+		doc = new Document(WAVEFORMATEX_PROFILE, DocumentType.WEB);
 		doc.setIdentifier(new Identifier(
 				MSLIB_URL + "multimed/htm/_win32_waveformatex_str.asp",
 				IdentifierType.URL));
 		doc.setPublisher(msAgent);
 		_specification.add(doc);
 
-		doc = new Document("WAVEFORMATEXTENSIBLE", DocumentType.WEB);
+		doc = new Document(WAVEFORMATEXTENSIBLE_PROFILE, DocumentType.WEB);
 		doc.setIdentifier(new Identifier(
 				MSLIB_URL + "multimed/htm/_win32_waveformatextensible_str.asp",
 				IdentifierType.URL));
@@ -252,7 +259,7 @@ public class WaveModule extends ModuleBase {
 
 		doc = new Document("Specification of the Broadcast Wave Format (BWF)",
 				DocumentType.REPORT);
-		doc.setIdentifier(new Identifier(FORMAT[2],
+		doc.setIdentifier(new Identifier(EBU_TECH_SPEC_3285,
 				IdentifierType.OTHER));
 		doc.setIdentifier(
 				new Identifier("https://tech.ebu.ch/docs/tech/tech3285.pdf",
@@ -263,7 +270,7 @@ public class WaveModule extends ModuleBase {
 
 		doc = new Document("MBWF / RF64: An Extended File Format for Audio",
 				DocumentType.REPORT);
-		doc.setIdentifier(new Identifier(FORMAT[5],
+		doc.setIdentifier(new Identifier(EBU_TECH_SPEC_3306,
 				IdentifierType.OTHER));
 		doc.setIdentifier(new Identifier(
 				"https://tech.ebu.ch/docs/tech/tech3306-2009.pdf",
@@ -303,7 +310,7 @@ public class WaveModule extends ModuleBase {
 				SignatureUseType.MANDATORY_IF_APPLICABLE, 0);
 		_signature.add(sig);
 
-		sig = new InternalSignature(FORMATS[0], SignatureType.MAGIC,
+		sig = new InternalSignature(WAVE_FORM_TYPE, SignatureType.MAGIC,
 				SignatureUseType.MANDATORY, 8);
 		_signature.add(sig);
 
@@ -361,7 +368,7 @@ public class WaveModule extends ModuleBase {
 
 			// Read the RIFF form type
 			String formType = read4Chars(_dstream);
-			if (!FORMAT[0].equals(formType)) {
+			if (!WAVE_FORM_TYPE.equals(formType)) {
 				info.setMessage(new ErrorMessage(
 						MessageConstants.WAVE_HUL_2,
 						_nByte - RIFF_FORM_TYPE_LENGTH));
@@ -480,13 +487,13 @@ public class WaveModule extends ModuleBase {
 
 		// Indicate satisfied profiles.
 		if (flagPCMWaveFormat) {
-			info.setProfile("PCMWAVEFORMAT");
+			info.setProfile(PCMWAVEFORMAT_PROFILE);
 		}
 		if (flagWaveFormatEx) {
-			info.setProfile("WAVEFORMATEX");
+			info.setProfile(WAVEFORMATEX_PROFILE);
 		}
 		if (flagWaveFormatExtensible) {
-			info.setProfile("WAVEFORMATEXTENSIBLE");
+			info.setProfile(WAVEFORMATEXTENSIBLE_PROFILE);
 		}
 		if (broadcastExtChunkSeen && (
                         (waveCodec == FormatChunk.WAVE_FORMAT_MPEG && factChunkSeen)
@@ -678,7 +685,7 @@ public class WaveModule extends ModuleBase {
 		_aesMetadata = new AESAudioMetadata();
 		_aesMetadata.setByteOrder(AESAudioMetadata.LITTLE_ENDIAN);
 		_aesMetadata.setAnalogDigitalFlag("FILE_DIGITAL");
-		_aesMetadata.setFormat(FORMAT[0]);
+		_aesMetadata.setFormat(WAVE_FORM_TYPE);
 		_aesMetadata.setUse("OTHER", "JHOVE_validation");
 		_aesMetadata.setDirection("NONE");
 
