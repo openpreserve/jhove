@@ -62,10 +62,6 @@ public class ModuleInfoWindow extends InfoWindow {
 			}
 		});
 
-		
-		
-		
-
 		texta = new JTextArea();
 		texta.setColumns(72);
 		JScrollPane scrollpane = new JScrollPane(texta);
