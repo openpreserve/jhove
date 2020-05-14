@@ -243,23 +243,22 @@ public class PngModule extends ModuleBase {
 
     public static final boolean PNG_ENDIANITY=true;
 
-    private final static String KEYWORD[] = {"Title",  //0
-                                             "Author", //1 
-                                             "Description", //2
-                                             "Copyright", //3
-                                             "Software", //4
-                                             "Disclaimer", //5
-                                             "Warning", //6
-                                             "Source", //7
-                                             "Comment"}; //8
-
-     private final static String PLTE_NOT_FOUND= "Expected PLTE chunk not found.";
-     private final static String GAMA_AFTER_IDAT= "gAMA chunk found after IDAT ones.";
-     private final static String EXTRA_GAMA= "Extra gAMA chunk found.";
-     private final static String TEXT= "tEXT";
-     private final static String ILLEGAL_BIT_DEPTH= "In IHDR, illegal value for bit depth for colour type ";
-     private final static String ILLEGALE_PROFONDITA_DEI_BIT= "In IHDR, valore illegale per la profondita` dei bit per il colour type ";
-     private final static String NO_ANCORA_W3C= " no ancora standardizzato dal W3C.";  
+    private final static String TITLE_KEYWORD = "Title";
+    private final static String AUTHOR_KEYWORD = "Author";
+    private final static String DESCRIPTION_KEYWORD = "Description";
+    private final static String COPYRIGHT_KEYWORD = "Copyright";
+    private final static String SOFTWARE_KEYWORD = "Software";
+    private final static String DISCLAIMER_KEYWORD = "Disclaimer";
+    private final static String WARNING_KEYWORD = "Warning";
+    private final static String SOURCE_KEYWORD = "Source";
+    private final static String COMMENT_KEYWORD = "Comment";
+    private final static String PLTE_NOT_FOUND= "Expected PLTE chunk not found.";
+    private final static String GAMA_AFTER_IDAT= "gAMA chunk found after IDAT ones.";
+    private final static String EXTRA_GAMA= "Extra gAMA chunk found.";
+    private final static String TEXT= "tEXT";
+    private final static String ILLEGAL_BIT_DEPTH= "In IHDR, illegal value for bit depth for colour type ";
+    private final static String ILLEGALE_PROFONDITA_DEI_BIT= "In IHDR, valore illegale per la profondita` dei bit per il colour type ";
+    private final static String NO_ANCORA_W3C= " no ancora standardizzato dal W3C.";  
     
     /**
      * Crea una nuova istanza di <code>PngModule</code> .
@@ -271,26 +270,26 @@ public class PngModule extends ModuleBase {
 
 		keywordList = new HashMap();
 
-		keywordList.put(KEYWORD[0],
-						new Booolean(false,KEYWORD[0]));           //  Short (one line) title or caption for image
-		keywordList.put(KEYWORD[1],
-						new Booolean(false,KEYWORD[1]));          //  Name of image's creator
-		keywordList.put(KEYWORD[2],
-						new Booolean(false,KEYWORD[2]));     //  Description of image (possibly long)
-		keywordList.put(KEYWORD[3],
-						new Booolean(false,KEYWORD[3]));       //  Copyright notice
+		keywordList.put(TITLE_KEYWORD,
+						new Booolean(false,TITLE_KEYWORD));           //  Short (one line) title or caption for image
+		keywordList.put(AUTHOR_KEYWORD,
+						new Booolean(false,AUTHOR_KEYWORD));          //  Name of image's creator
+		keywordList.put(DESCRIPTION_KEYWORD,
+						new Booolean(false,DESCRIPTION_KEYWORD));     //  Description of image (possibly long)
+		keywordList.put(COPYRIGHT_KEYWORD,
+						new Booolean(false,COPYRIGHT_KEYWORD));       //  Copyright notice
 		keywordList.put(CREATION_TIME_KEYWORD,
 						new Booolean(false,CREATION_TIME_KEYWORD)); //  Time of original image creation
-		keywordList.put(KEYWORD[4],
-						new Booolean(false,KEYWORD[4]));        //  Software used to create the image
-		keywordList.put(KEYWORD[5],
-						new Booolean(false,KEYWORD[5]));      //  Legal disclaimer
-		keywordList.put(KEYWORD[6],
-						new Booolean(false,KEYWORD[6]));         //  Warning of nature of content
-		keywordList.put(KEYWORD[7],
-						new Booolean(false,KEYWORD[7]));          //  Device used to create the image
-		keywordList.put(KEYWORD[8],
-						new Booolean(false,KEYWORD[8]));         //  Miscellaneous comment
+		keywordList.put(SOFTWARE_KEYWORD,
+						new Booolean(false,SOFTWARE_KEYWORD));        //  Software used to create the image
+		keywordList.put(DISCLAIMER_KEYWORD,
+						new Booolean(false,DISCLAIMER_KEYWORD));      //  Legal disclaimer
+		keywordList.put(WARNING_KEYWORD,
+						new Booolean(false,WARNING_KEYWORD));         //  Warning of nature of content
+		keywordList.put(SOURCE_KEYWORD,
+						new Booolean(false,SOURCE_KEYWORD));          //  Device used to create the image
+		keywordList.put(COMMENT_KEYWORD,
+						new Booolean(false,COMMENT_KEYWORD));         //  Miscellaneous comment
     }
     // Implementation of edu.harvard.hul.ois.jhove.Module
 
