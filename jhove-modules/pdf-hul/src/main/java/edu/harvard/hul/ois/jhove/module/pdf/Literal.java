@@ -232,7 +232,13 @@ public class Literal
                 }
             }
             else if (_state == (State.LITERAL_PDF)) {
-                if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
+                if (ch == OPEN_PARENTHESIS) {
+                    // Count open parens to be matched by close parens.
+                    // Backslash-quoted parens won't get here.
+                    ++_parenLevel;
+                    buffer.append (PDFDOCENCODING[ch]);
+                }
+                else if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
                     setValue(buffer.toString());
                     return offset;
                 }
