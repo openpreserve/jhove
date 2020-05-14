@@ -30,6 +30,9 @@ public class ConfigWriter {
     private File _confFile;
     ConfigWindow _parent;
 
+    private final static String CLASS_TAG_START = "   <class>"; 
+    private final static String CLASS_TAG_CLOSE = "</class>";
+
     /**
      *  Constructor.
      *  Creates a temporary file for writing and creates an OutputStreamWriter
@@ -111,8 +114,8 @@ public class ConfigWriter {
             // write it out.
             if (!"".equals (minfo.clas)) {
                 _confOut.println (" <module>");
-                _confOut.println ("   <class>" + encodeContent (minfo.clas) +
-                         "</class>");
+                _confOut.println (CLASS_TAG_START + encodeContent (minfo.clas) +
+                         CLASS_TAG_CLOSE);
                 if (minfo.init != null && minfo.init.length () > 0) {
                     _confOut.println ("   <init>" + encodeContent (minfo.init) +
                          "</init>");
@@ -134,8 +137,8 @@ public class ConfigWriter {
             String handler = hiter.next ()[0];
             if (handler.length() > 0) {          // Don't write out blank handler names
                 _confOut.println (" <outputHandler>");
-                _confOut.println ("   <class>" + encodeContent (handler) +
-                         "</class>");
+                _confOut.println (CLASS_TAG_START + encodeContent (handler) +
+                         CLASS_TAG_CLOSE);
                 _confOut.println (" </outputHandler>");
             }
         }
