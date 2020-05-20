@@ -23,8 +23,15 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 @RunWith(JUnit4.class)
 public class WarcModuleTest {
 	@Test
+
+    private static final String VALID_WARC_UTF8_FILE = "src/test/resources/warc/valid-warcfile-utf8.warc";
+
+    private static final String INVALID_EMPTY_WARC_FILE = "src/test/resources/warc/invalid-empty.warc";
+
+    private static final String R_LOWERCASE = "r";
+
     public void parseValidUTF8File() throws Exception {
-	    File warcFile = new File("src/test/resources/warc/valid-warcfile-utf8.warc");
+	    File warcFile = new File(VALID_WARC_UTF8_FILE);
         assertTrue( warcFile.isFile() );
         
         WarcModule wm = new WarcModule();
@@ -38,7 +45,7 @@ public class WarcModuleTest {
 
 	@Test
     public void checkSignatureValidUTF8File() throws Exception {
-	    File warcFile = new File("src/test/resources/warc/valid-warcfile-utf8.warc");
+	    File warcFile = new File(VALID_WARC_UTF8_FILE);
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
@@ -51,7 +58,7 @@ public class WarcModuleTest {
 	
 	@Test
     public void parseInvalidEmptyFile() throws Exception {
-		File warcFile = new File("src/test/resources/warc/invalid-empty.warc");
+		File warcFile = new File(INVALID_EMPTY_WARC_FILE);
 
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
@@ -67,7 +74,7 @@ public class WarcModuleTest {
 
 	@Test
     public void checkSignatureInvalidEmptyFile() throws Exception {
-		File warcFile = new File("src/test/resources/warc/invalid-empty.warc");
+		File warcFile = new File(INVALID_EMPTY_WARC_FILE);
 		assertNotNull("Checking Empty file is invalid");
 		invalidWithClassCheck(warcFile);
 	}
@@ -998,7 +1005,7 @@ public class WarcModuleTest {
 	private static RepInfo generalInvalidChecks(File warcFile) throws IOException, FileNotFoundException {
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.parse(new RandomAccessFile(warcFile, "r"), info);
+        wm.parse(new RandomAccessFile(warcFile, R_LOWERCASE), info);
         
         invalidCheck(info);
 		return info;
@@ -1012,7 +1019,7 @@ public class WarcModuleTest {
 	private static void generalWellFormedChecks(File warcFile) throws IOException, FileNotFoundException {
 		WarcModule wm = new WarcModule();
         RepInfo info = new RepInfo(warcFile.getAbsolutePath());
-        wm.parse(new RandomAccessFile(warcFile, "r"), info);
+        wm.parse(new RandomAccessFile(warcFile, R_LOWERCASE), info);
         
         wellFormedCheck(info, wm);
         assertEquals(0, info.getMessage().size());
