@@ -40,6 +40,7 @@ public abstract class InfoWindow extends JFrame
         { "UTF-8", "ISO-8859-1", "Cp1252", "MacRoman"};
     protected SimpleDateFormat _dateFmt;
 
+    private static final String FILE_NOT_SAVED = "File not saved";
     
     /**
      * 
@@ -201,7 +202,7 @@ public abstract class InfoWindow extends JFrame
             catch (UnsupportedEncodingException e) {
                 JOptionPane.showMessageDialog(this,
                     "Unknown encoding ",
-                    "File not saved",
+                    FILE_NOT_SAVED,
                     JOptionPane.ERROR_MESSAGE);
                 // Get rid of the file
                 try {
@@ -217,7 +218,7 @@ public abstract class InfoWindow extends JFrame
             catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
                     e.getMessage (),
-                    "File not saved",
+                    FILE_NOT_SAVED,
                     JOptionPane.ERROR_MESSAGE);
                 // Get rid of the file
                 try {

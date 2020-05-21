@@ -42,6 +42,12 @@ public class Jhove
         throw new AssertionError("Should never enter private constructor");
     }
 
+    private static final String C_CONFIG_OPTION = "-c";
+    private static final String X_CONFIG_OPTION = "-x";
+    private static final String NOT_FOUND = "' not found";
+    private static final String HANDLER = "Handler '";
+
+
     /**
      * MAIN ENTRY POINT.
      */
@@ -75,12 +81,12 @@ public class Jhove
                     }
                 }
                 else {
-                    if ("-c".equals(args[i])) {
+                    if (C_CONFIG_OPTION.equals(args[i])) {
                         if (i < args.length - 1) {
                             configFile = args[++i];
                         }
                     }
-                    else if ("-x".equals(args[i])) {
+                    else if (X_CONFIG_OPTION.equals(args[i])) {
                         if (i < args.length - 1) {
                             saxClass = args[++i];
                         }
@@ -142,7 +148,7 @@ public class Jhove
                     }
                 }
                 else {
-                    if ("-c".equals(args[i])) {
+                    if (C_CONFIG_OPTION.equals(args[i])) {
                         i++;
                     }
                     else if ("-m".equals(args[i])) {
@@ -189,7 +195,7 @@ public class Jhove
                             outputFile = args[++i];
                         }
                     }
-                    else if ("-x".equals(args[i])) {
+                    else if (X_CONFIG_OPTION.equals(args[i])) {
                         i++;
                     }
                     else if ("-t".equals(args[i])) {
@@ -249,17 +255,17 @@ public class Jhove
             }
             Module module = je.getModule(moduleName);
             if (module == null && moduleName != null) {
-                LOGGER.log(Level.SEVERE, "Module '" + moduleName + "' not found");
+                LOGGER.log(Level.SEVERE, "Module '" + moduleName + NOT_FOUND);
                 System.exit(ExitCode.ERROR.getReturnCode());
             }
             OutputHandler about = je.getHandler(aboutHandler);
             if (about == null && aboutHandler != null) {
-                LOGGER.log(Level.SEVERE, "Handler '" + aboutHandler + "' not found");
+                LOGGER.log(Level.SEVERE, HANDLER + aboutHandler + NOT_FOUND);
                 System.exit(ExitCode.ERROR.getReturnCode());
             }
             OutputHandler handler = je.getHandler(handlerName);
             if (handler == null && handlerName != null) {
-                LOGGER.log(Level.SEVERE, "Handler '" + handlerName + "' not found");
+                LOGGER.log(Level.SEVERE, HANDLER + handlerName + NOT_FOUND);
                 System.exit(ExitCode.ERROR.getReturnCode());
             }
             String[] dirFileOrUri = null;

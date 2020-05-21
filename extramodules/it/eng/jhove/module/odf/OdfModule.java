@@ -102,6 +102,10 @@ public class OdfModule extends ModuleBase implements Module {
 											  "Open Document Format Global Text Document",
 											  "Open Document Format HTML Text Document Template"};
 
+    private static final String TEMP_ODF = "odfTemp";
+    private static final String INVALID_PACKAGE = "Invalid ODF Package, component ";
+    private static final String SAX_PARSER_NOT_FOUND = "SAX parser not found: ";
+
     private static final Map mimeTypeMap = new HashMap();
 
     static {
@@ -211,11 +215,11 @@ public class OdfModule extends ModuleBase implements Module {
 		String tempdir = _je.getTempDirectory();
 		File tempFile = null;
 		if (tempdir == null) {
-			tempFile = File.createTempFile("odfTemp", ".zip");
+			tempFile = File.createTempFile(TEMP_ODF, ".zip");
 
 		}
 		else {
-			tempFile = File.createTempFile("odfTemp", ".zip",
+			tempFile = File.createTempFile(TEMP_ODF, ".zip",
 										   new File(tempdir));
 
 		}
@@ -457,7 +461,7 @@ public class OdfModule extends ModuleBase implements Module {
 										repInfo.setProfile((String)mimeTypeMap.get(repInfo.getMimeType()));
 									}
 									else {
-										StringBuffer buf = new StringBuffer("Invalid ODF Package, component ");
+										StringBuffer buf = new StringBuffer(INVALID_PACKAGE);
 										buf.append(mnfe.fullPath);
 										buf.append(" failed both Relaxed NG and normal XML validation therefore" );
 										buf.append(" is not well formed.");
@@ -468,7 +472,7 @@ public class OdfModule extends ModuleBase implements Module {
 
 
 								} catch (Exception excptn) {
-									StringBuffer buf = new StringBuffer("Invalid ODF Package, component ");
+									StringBuffer buf = new StringBuffer(INVALID_PACKAGE);
 									buf.append(mnfe.fullPath);
 									buf.append(" failed both Relaxed NG and normal XML validation " );
 									buf.append(" due this error: ");
@@ -745,11 +749,11 @@ public class OdfModule extends ModuleBase implements Module {
 		}
 		catch (ParserConfigurationException e) {
 			// If we can't get a SAX parser, we're stuck.
-			throw new IOException ("SAX parser not found: " +
+			throw new IOException (SAX_PARSER_NOT_FOUND +
 								   saxClass +": "+ e.getMessage());
 		}
 		catch (SAXException excptn) {
-			throw new IOException ("SAX parser not found: " +
+			throw new IOException (SAX_PARSER_NOT_FOUND +
 								   saxClass +": "+ excptn.getMessage());
 		}
 
