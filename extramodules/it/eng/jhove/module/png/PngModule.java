@@ -242,6 +242,24 @@ public class PngModule extends ModuleBase {
 					   "PNG Truecolor with Alpha"}; // 5
 
     public static final boolean PNG_ENDIANITY=true;
+
+    private final static String KEYWORD[] = {"Title",  //0
+                                             "Author", //1 
+                                             "Description", //2
+                                             "Copyright", //3
+                                             "Software", //4
+                                             "Disclaimer", //5
+                                             "Warning", //6
+                                             "Source", //7
+                                             "Comment"}; //8
+
+     private final static String PLTE_NOT_FOUND= "Expected PLTE chunk not found.";
+     private final static String GAMA_AFTER_IDAT= "gAMA chunk found after IDAT ones.";
+     private final static String EXTRA_GAMA= "Extra gAMA chunk found.";
+     private final static String TEXT= "tEXT";
+     private final static String ILLEGAL_BIT_DEPTH= "In IHDR, illegal value for bit depth for colour type ";
+     private final static String ILLEGALE_PROFONDITA_DEI_BIT= "In IHDR, valore illegale per la profondita` dei bit per il colour type ";
+     private final static String NO_ANCORA_W3C= " no ancora standardizzato dal W3C.";  
     
     /**
      * Crea una nuova istanza di <code>PngModule</code> .
@@ -253,26 +271,26 @@ public class PngModule extends ModuleBase {
 
 		keywordList = new HashMap();
 
-		keywordList.put("Title",
-						new Booolean(false,"Title"));           //  Short (one line) title or caption for image
-		keywordList.put("Author",
-						new Booolean(false,"Author"));          //  Name of image's creator
-		keywordList.put("Description",
-						new Booolean(false,"Description"));     //  Description of image (possibly long)
-		keywordList.put("Copyright",
-						new Booolean(false,"Copyright"));       //  Copyright notice
+		keywordList.put(KEYWORD[0],
+						new Booolean(false,KEYWORD[0]));           //  Short (one line) title or caption for image
+		keywordList.put(KEYWORD[1],
+						new Booolean(false,KEYWORD[1]));          //  Name of image's creator
+		keywordList.put(KEYWORD[2],
+						new Booolean(false,KEYWORD[2]));     //  Description of image (possibly long)
+		keywordList.put(KEYWORD[3],
+						new Booolean(false,KEYWORD[3]));       //  Copyright notice
 		keywordList.put(CREATION_TIME_KEYWORD,
 						new Booolean(false,CREATION_TIME_KEYWORD)); //  Time of original image creation
-		keywordList.put("Software",
-						new Booolean(false,"Software"));        //  Software used to create the image
-		keywordList.put("Disclaimer",
-						new Booolean(false,"Disclaimer"));      //  Legal disclaimer
-		keywordList.put("Warning",
-						new Booolean(false,"Warning"));         //  Warning of nature of content
-		keywordList.put("Source",
-						new Booolean(false,"Source"));          //  Device used to create the image
-		keywordList.put("Comment",
-						new Booolean(false,"Comment"));         //  Miscellaneous comment
+		keywordList.put(KEYWORD[4],
+						new Booolean(false,KEYWORD[4]));        //  Software used to create the image
+		keywordList.put(KEYWORD[5],
+						new Booolean(false,KEYWORD[5]));      //  Legal disclaimer
+		keywordList.put(KEYWORD[6],
+						new Booolean(false,KEYWORD[6]));         //  Warning of nature of content
+		keywordList.put(KEYWORD[7],
+						new Booolean(false,KEYWORD[7]));          //  Device used to create the image
+		keywordList.put(KEYWORD[8],
+						new Booolean(false,KEYWORD[8]));         //  Miscellaneous comment
     }
     // Implementation of edu.harvard.hul.ois.jhove.Module
 
@@ -457,7 +475,7 @@ public class PngModule extends ModuleBase {
 			case IDAT_HEAD_SIG:
 				if (expectingPLTE == RepInfo.TRUE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Expected PLTE chunk not found." ));
+					repInfo.setMessage(new ErrorMessage(PLTE_NOT_FOUND ));
 
 					break;
 				}
@@ -469,7 +487,7 @@ public class PngModule extends ModuleBase {
 			case IEND_HEAD_SIG:
 				if (expectingPLTE == RepInfo.TRUE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Expected PLTE chunk not found." ));
+					repInfo.setMessage(new ErrorMessage(PLTE_NOT_FOUND));
 
 					break;
 				}
@@ -519,13 +537,13 @@ public class PngModule extends ModuleBase {
 				}
 				if (expectingIDAT == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("gAMA chunk found after IDAT ones." ));
+					repInfo.setMessage(new ErrorMessage(GAMA_AFTER_IDAT));
 
 					break;
 				}
 				if (expecting_gAMA == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Extra gAMA chunk found." ));
+					repInfo.setMessage(new ErrorMessage(EXTRA_GAMA ));
 
 					break;
 				}
@@ -627,7 +645,7 @@ public class PngModule extends ModuleBase {
 
 			case tEXt_HEAD_SIG:
 
-				checkChunk(dstream, repInfo, declChunkLen,"tEXT");
+				checkChunk(dstream, repInfo, declChunkLen, TEXT);
 				break;
 
 			case zTXt_HEAD_SIG:
@@ -651,13 +669,13 @@ public class PngModule extends ModuleBase {
 				}
 				if (expectingIDAT == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("gAMA chunk found after IDAT ones." ));
+					repInfo.setMessage(new ErrorMessage(GAMA_AFTER_IDAT ));
 
 					break;
 				}
 				if (expecting_gAMA == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Extra gAMA chunk found." ));
+					repInfo.setMessage(new ErrorMessage(EXTRA_GAMA ));
 
 					break;
 				}
@@ -955,7 +973,7 @@ public class PngModule extends ModuleBase {
 				tmp != 8 &&
 				tmp != 16) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, illegal value for bit depth for colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGAL_BIT_DEPTH +
 
 													colorType + ": " +tmp ));
 
@@ -969,7 +987,7 @@ public class PngModule extends ModuleBase {
 				tmp != 4 &&
 				tmp != 8 ) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, illegal value for bit depth for colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGAL_BIT_DEPTH +
 													colorType + ": " +tmp ));
 
 			}
@@ -985,7 +1003,7 @@ public class PngModule extends ModuleBase {
 			if (tmp != 8 &&
 				tmp != 16) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, valore illegale per la profondita` dei bit per il colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGALE_PROFONDITA_DEI_BIT +
 													colorType + ": " +tmp ));
 
 			}
@@ -998,7 +1016,7 @@ public class PngModule extends ModuleBase {
 			if (tmp != 8 &&
 				tmp != 16) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, valore illegale per la profondita` dei bit per il colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGALE_PROFONDITA_DEI_BIT +
 													colorType + ": " +tmp ));
 
 			}
@@ -1010,7 +1028,7 @@ public class PngModule extends ModuleBase {
 			if (tmp != 8 &&
 				tmp != 16) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, valore illegale per la profondita` dei bit per il colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGALE_PROFONDITA_DEI_BIT +
 													colorType + ": " +tmp ));
 
 			}
@@ -1041,7 +1059,7 @@ public class PngModule extends ModuleBase {
 
 		if (tmp!=0) {
 			repInfo.setMessage(new InfoMessage("Attenzione, tipo di filtro " +
-											   tmp + " no ancora standardizzato dal W3C."));
+											   tmp + NO_ANCORA_W3C));
 		}
 
 		// interlace
@@ -1051,7 +1069,7 @@ public class PngModule extends ModuleBase {
 
 		if (tmp!=0 && tmp!=1) {
 			repInfo.setMessage(new InfoMessage("Attenzione, tipo di interlacciamento " +
-											   tmp + " no ancora standardizzato dal W3C."));
+											   tmp + NO_ANCORA_W3C));
 		}
 
 		long crc32 = readUnsignedInt(inputStream, PNG_ENDIANITY, this);
@@ -1219,7 +1237,7 @@ public class PngModule extends ModuleBase {
 				repInfo.setValid(RepInfo.FALSE);
 				repInfo.setMessage(new ErrorMessage("Missing 0 byte after keyword"));
 
-				checkChunk(inputStream, repInfo, declChunkLen, "tEXT");
+				checkChunk(inputStream, repInfo, declChunkLen, TEXT);
 				buf.append((char)c);
 
 			}
