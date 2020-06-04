@@ -113,6 +113,9 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 	private static final int moduleInfoWinXPos = 100;
 	private static final int moduleInfoWinYPos = 90;
 
+	private static final String NEVER = "never";
+	private static final String CONFIG_ERROR = "Config Error";
+
 	/** Logger for a module class. */
 	protected Logger _logger;
 
@@ -365,8 +368,8 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 	public static void makeChooserOpaque(JFileChooser chooser) {
 		// Apple TN 2042 LIES; we need to set both properties.
 		chooser.putClientProperty("JFileChooser.appBundleIsTraversable",
-				"never");
-		chooser.putClientProperty("JFileChooser.packageIsTraversable", "never");
+				NEVER);
+		chooser.putClientProperty("JFileChooser.packageIsTraversable", NEVER);
 	}
 
 	/**
@@ -622,13 +625,13 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 			parser.setFeature("http://xml.org/sax/features/validation", true);
 			parser.parse(fileURL);
 		} catch (IOException e) {
-			reportError("Config Error", "Cannot read configuration file");
+			reportError(CONFIG_ERROR, "Cannot read configuration file");
 			return;
 		} catch (SAXException e) {
-			reportError("Config Error", "SAX parser not found: " + saxClass);
+			reportError(CONFIG_ERROR, "SAX parser not found: " + saxClass);
 			return;
 		} catch (ParserConfigurationException e) {
-			reportError("Config Error", "ParserConfigurationException");
+			reportError(CONFIG_ERROR, "ParserConfigurationException");
 		}
 		ConfigWindow confWin = new ConfigWindow(this, new File(configFile),
 				configHandler);
