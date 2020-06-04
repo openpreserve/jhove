@@ -152,7 +152,7 @@ public class Literal
         _rawBytes = new Vector<> (32);
         _state = State.LITERAL;
 
-	long offset = 0;
+       long offset = 0;
         for (;;) {
             ch = tok.readChar ();
             // If we get -1, then we've hit an EOF without proper termination of
@@ -162,7 +162,6 @@ public class Literal
             }
             offset++;
             _rawBytes.add (ch);
-
             if (_state == State.LITERAL) {
                 // We are still in a state of flux, determining the encoding
                 if (ch == FE) {
@@ -233,7 +232,13 @@ public class Literal
                 }
             }
             else if (_state == (State.LITERAL_PDF)) {
-                if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
+                if (ch == OPEN_PARENTHESIS) {
+                    // Count open parens to be matched by close parens.
+                    // Backslash-quoted parens won't get here.
+                    ++_parenLevel;
+                    buffer.append (PDFDOCENCODING[ch]);
+                }
+                else if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
                     setValue(buffer.toString());
                     return offset;
                 }
@@ -280,17 +285,18 @@ public class Literal
                     readUTFLanguageCode (tok);
                 }
                 else {
-		    /* It turns out that a backslash may be double-byte,
-		     * rather than the assumed single.byte.  The following
-		     * allows for this. Suggested by Justin Litman, Library
-		     * of Congress, 2006-03-17.
-		     */
-		    if (utfch == BACKSLASH) {
-			utfch = readBackslashSequence (false, tok);
-			if (utfch == 0) {
-			    continue;   /* Invalid character, ignore. */
-			}
-		    }
+                    /* It turns out that a backslash may be double-byte,
+                     * rather than the assumed single.byte.  The following
+                     * allows for this. Suggested by Justin Litman, Library
+                     * of Congress, 2006-03-17.
+                     */
+				    if (utfch == BACKSLASH) {
+					utfch = readBackslashSequence (false, tok);
+						if (utfch == 0) {
+							_state = State.LITERAL_UTF16_2; // skip the wrong char and reset to previous state
+						    continue;   /* Invalid character, ignore. */
+						}
+				    }
                     buffer.append ((char) utfch);
                 }
             }
@@ -631,6 +637,8 @@ public class Literal
                 return LF;
             case 0X72:   // r
                 return CR;
+            case 0xd: // this is an error for CR
+            	return 0;
             case 0X74:   // t
                 return HT;
             case 0X68:   // h

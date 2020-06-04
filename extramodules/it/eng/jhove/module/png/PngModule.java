@@ -155,6 +155,15 @@ public class PngModule extends ModuleBase {
     // Standard keyword for the creation timestamp
     private final static String CREATION_TIME_KEYWORD = "Creation Time";
 
+    private final static int MAX_INT = 0x7FFFFFFF;
+
+    // Color Type
+	private final static int EachPixel_GRAYSCALE = 0;
+	private final static int EachPixel_RGB = 2;
+	private final static int EachPixel_PALETTE = 3;
+	private final static int EachPixel_GRAYSCALE_ALPHA = 4;
+	private final static int EachPixel_RGB_ALPHA = 6;
+
     /*------------------------------------------------------------------*
       |******************************************************************|
       |*                                                                *|
@@ -230,8 +239,7 @@ public class PngModule extends ModuleBase {
 					   "PNG Truecolor",             // 2
 					   "PNG Indexed",               // 3
 					   "PNG GrayScale with Alpha",  // 4
-					   "Unused",                    // 5
-					   "PNG Truecolor with Alpha"}; // 6
+					   "PNG Truecolor with Alpha"}; // 5
 
     public static final boolean PNG_ENDIANITY=true;
     
@@ -370,7 +378,7 @@ public class PngModule extends ModuleBase {
 										   IdentifierType.URL));
 		_specification.add (doc);
 
-		Signature sig = new InternalSignature ("PNG", SignatureType.MAGIC,
+		Signature sig = new InternalSignature (FORMAT[0], SignatureType.MAGIC,
 											   SignatureUseType.MANDATORY, 0);
 		_signature.add (sig);
 
@@ -385,17 +393,17 @@ public class PngModule extends ModuleBase {
 			repInfo.setWellFormed (RepInfo.FALSE);
 			return 0;
 		}
-		repInfo.setFormat("PNG");
+		repInfo.setFormat(FORMAT[0]);
 
 		// If we got this far, take note that the signature is OK.
 		repInfo.setSigMatch(_name);
 		repInfo.setModule(this);
 		// First chunk MUST be IHDR
 		int declChunkLen = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)
-								 &0x7FFFFFFF);
+								 &MAX_INT);
 		chcks.reset();
 
-		int chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&0x7FFFFFFF);
+		int chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&MAX_INT);
 		chcks.update(int2byteArray(chunkSig));
 
 		if (chunkSig != IHDR_HEAD_SIG ) {
@@ -420,11 +428,11 @@ public class PngModule extends ModuleBase {
 
 		while (expectingIEND == RepInfo.TRUE) {
 			declChunkLen = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)
-								 &0x7FFFFFFF);
+								 &MAX_INT);
 			// Each chunk has its checsum;
 			chcks.reset();
 
-			chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&0x7FFFFFFF);
+			chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&MAX_INT);
 			chcks.update(int2byteArray(chunkSig));
 
 			switch (chunkSig) {
@@ -940,7 +948,7 @@ public class PngModule extends ModuleBase {
 		chcks.update((byte)colorType);
 
 		switch (colorType) {
-		case 0:
+		case EachPixel_GRAYSCALE:
 			if (tmp != 1 &&
 				tmp != 2 &&
 				tmp != 4 &&
@@ -952,10 +960,10 @@ public class PngModule extends ModuleBase {
 													colorType + ": " +tmp ));
 
 			}
-			repInfo.setProfile("PNG GrayScale");
+			repInfo.setProfile(PNG_PROFILES[0]);
 
 			expectingPLTE=RepInfo.FALSE;
-		case 3:
+		case EachPixel_PALETTE:
 			if (tmp != 1 &&
 				tmp != 2 &&
 				tmp != 4 &&
@@ -969,10 +977,10 @@ public class PngModule extends ModuleBase {
 			expectingPLTE = RepInfo.TRUE;
 			colorDepth = tmp;
 			maxPaletteSize = 1 << tmp ;
-			repInfo.setProfile("PNG Indexed");
+			repInfo.setProfile(PNG_PROFILES[3]);
 
 			break;
-		case 4:
+		case EachPixel_GRAYSCALE_ALPHA:
 			expectingPLTE=RepInfo.FALSE;
 			if (tmp != 8 &&
 				tmp != 16) {
@@ -982,21 +990,9 @@ public class PngModule extends ModuleBase {
 
 			}
 
-			repInfo.setProfile("PNG GrayScale with Alpha");
+			repInfo.setProfile(PNG_PROFILES[4]);
 			break;
-		case 6:
-			expectingPLTE=RepInfo.FALSE;
-			expecting_tRNS=RepInfo.FALSE;
-			if (tmp != 8 &&
-				tmp != 16) {
-				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, valore illegale per la profondita` dei bit per il colour type " +
-													colorType + ": " +tmp ));
-
-			}
-			repInfo.setProfile("PNG Truecolor with Alpha");
-			break;
-		case 2:
+		case EachPixel_RGB_ALPHA:
 			expectingPLTE=RepInfo.FALSE;
 			expecting_tRNS=RepInfo.FALSE;
 			if (tmp != 8 &&
@@ -1006,8 +1002,20 @@ public class PngModule extends ModuleBase {
 													colorType + ": " +tmp ));
 
 			}
+			repInfo.setProfile(PNG_PROFILES[5]);
+			break;
+		case EachPixel_RGB:
+			expectingPLTE=RepInfo.FALSE;
+			expecting_tRNS=RepInfo.FALSE;
+			if (tmp != 8 &&
+				tmp != 16) {
+				repInfo.setValid(RepInfo.FALSE);
+				repInfo.setMessage(new ErrorMessage("In IHDR, valore illegale per la profondita` dei bit per il colour type " +
+													colorType + ": " +tmp ));
 
-			repInfo.setProfile("PNG Truecolor");
+			}
+
+			repInfo.setProfile(PNG_PROFILES[2]);
 			break;
 		default:
 			repInfo.setValid(RepInfo.FALSE);
