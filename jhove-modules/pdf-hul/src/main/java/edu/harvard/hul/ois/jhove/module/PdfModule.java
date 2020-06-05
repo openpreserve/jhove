@@ -303,6 +303,8 @@ public class PdfModule extends ModuleBase {
 	private static final String PROP_NAME_REVISION = "Revision";
 	private static final String PROP_NAME_OWNER_STRING = "OwnerString";
 	private static final String PROP_NAME_USER_STRING = "UserString";
+	private static final String PROP_NAME_OWNERKEY_STRING = "OwnerEncryptionKey";
+	private static final String PROP_NAME_USERKEY_STRING = "UserEncryptionKey";
 	private static final String PROP_NAME_USER_UNIT = DICT_KEY_USER_UNIT;
 	private static final String PROP_NAME_STANDARD_SECURITY_HANDLER = "StandardSecurityHandler";
 	private static final String PROP_NAME_TITLE = DICT_KEY_TITLE;
@@ -1861,6 +1863,37 @@ public class PdfModule extends ModuleBase {
 						stdList.add(new Property(PROP_NAME_USER_STRING,
 								PropertyType.STRING,
 								toHex(((PdfSimpleObject) uObj).getRawBytes())));
+					}
+				}
+				// Required if ExtensionLevel 3 and Encryption Algorithm (V) is 5
+				// Defined in Adobe® Supplement to the ISO 32000
+				if (algValue == 5) {
+					PdfObject oeObj = dict.get("OE");
+					if (oeObj != null) {
+						if (oeObj instanceof PdfSimpleObject) {
+							stdList.add(new Property(PROP_NAME_OWNERKEY_STRING,
+									PropertyType.STRING,
+									toHex(((PdfSimpleObject) oeObj).getRawBytes())));
+						}
+					} else {
+						// if algValue is 5; OE is mandatory
+						throw new PdfInvalidException // PDF-HUL-15X
+						(MessageConstants.PDF_HUL_152, _parser.getOffset());
+					}
+				}
+				// Required if ExtensionLevel 3 and Encryption Algorithm (V) is 5
+				if (algValue == 5) {
+					PdfObject ueObj = dict.get("UE");
+					if (ueObj != null) {
+						if (ueObj instanceof PdfSimpleObject) {
+							stdList.add(new Property(PROP_NAME_USERKEY_STRING,
+									PropertyType.STRING,
+									toHex(((PdfSimpleObject) ueObj).getRawBytes())));
+						}
+					} else {
+						// if algValue is 5; UE is mandatory
+						throw new PdfInvalidException // PDF-HUL-15X
+						(MessageConstants.PDF_HUL_153, _parser.getOffset());
 					}
 				}
 				_encryptList.add(new Property(
