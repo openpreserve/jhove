@@ -1877,12 +1877,9 @@ public class PdfModule extends ModuleBase {
 						}
 					} else {
 						// if algValue is 5; OE is mandatory
-						throw new PdfInvalidException // PDF-HUL-15X
+						throw new PdfInvalidException 
 						(MessageConstants.PDF_HUL_152, _parser.getOffset());
 					}
-				}
-				// Required if ExtensionLevel 3 and Encryption Algorithm (V) is 5
-				if (algValue == 5) {
 					PdfObject ueObj = dict.get("UE");
 					if (ueObj != null) {
 						if (ueObj instanceof PdfSimpleObject) {
@@ -1892,7 +1889,7 @@ public class PdfModule extends ModuleBase {
 						}
 					} else {
 						// if algValue is 5; UE is mandatory
-						throw new PdfInvalidException // PDF-HUL-15X
+						throw new PdfInvalidException
 						(MessageConstants.PDF_HUL_153, _parser.getOffset());
 					}
 				}
