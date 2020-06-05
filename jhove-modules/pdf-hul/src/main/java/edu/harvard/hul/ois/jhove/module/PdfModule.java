@@ -2968,6 +2968,11 @@ public class PdfModule extends ModuleBase {
 					if (annot instanceof PdfDictionary) {
 						annotsList.add(buildAnnotProperty((PdfDictionary) annot,
 								info));
+					} else if (annot instanceof PdfSimpleObject 
+							&& ((PdfSimpleObject) annot).getToken() instanceof Comment) {
+						// ignore Comments
+						continue;
+						
 					} else {
 						// There are annotations which aren't dictionaries. I've
 						// run into this,
