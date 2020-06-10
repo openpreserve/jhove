@@ -29,6 +29,15 @@ public class WarcRecordProperties {
         data = new WarcRecordData(record);
     }
     
+    private final static String DATE_HEADER= "Warc-Date header value.";
+    private final static String TARGET_URI_HEADER = "Warc-Target-URI header value.";
+    private final static String WARCINFO_ID_HEADER= "Warc-Warcinfo-ID header value.";
+    private final static String REFERS_TO_HEADER= "Warc-Refers-To header value.";
+    private final static String CONCURRENT_TO_HEADER= "Warc-Concurrent-To header value.";
+    private final static String IP_ADDRESS_HEADER= "Warc-IP-Address header value.";
+    private final static String IP_ADDRESS_VERSION= "Ip-Address version.";
+    private final static String PROTOCOL_VERSION_HEADER="ProtocolVersion header value.";
+
     /**
      * Retrieves the WARC record properties as a map.
      * Starts by extracting the base properties for all WARC records, 
@@ -69,8 +78,8 @@ public class WarcRecordProperties {
      */
     private void setBaseProperties() {
         setProperty(data.startOffset, "Record offset in WARC file.");
-        setProperty(data.warcVersionStr, "Warc-Date header value.");
-        setProperty(data.warcDate, "Warc-Date header value.");
+        setProperty(data.warcVersionStr, DATE_HEADER);
+        setProperty(data.warcDate, DATE_HEADER);
         setProperty(data.warcRecordId, "Warc-Record-ID header value.");
         setProperty(data.recordIdScheme, "Record-ID-Scheme value.");
         setProperty(data.contentType, "Content-Type header value.");
@@ -104,43 +113,43 @@ public class WarcRecordProperties {
      * Set the properties for the Continuation WARC record.
      */
     private void setContinuationRecordProperties() {
-      setProperty(data.warcTargetUri, "Warc-Target-URI header value.");
+      setProperty(data.warcTargetUri, TARGET_URI_HEADER);
       setProperty(data.warcSegmentOriginId, "Warc-Segment-Origin-ID header value.");
       setProperty(data.warcSegmentTotalLength, "Warc-Segment-Total-Length header value.");
-      setProperty(data.warcWarcinfoId, "Warc-Warcinfo-ID header value.");
+      setProperty(data.warcWarcinfoId, WARCINFO_ID_HEADER);
     }
     
     /**
      * Set the properties for the Conversion WARC record.
      */
     private void setConversionRecordProperties() {
-      setProperty(data.warcTargetUri, "Warc-Target-URI header value.");
-      setProperty(data.warcRefersTo, "Warc-Refers-To header value.");
-      setProperty(data.warcWarcinfoId, "Warc-Warcinfo-ID header value.");        
+      setProperty(data.warcTargetUri, TARGET_URI_HEADER);
+      setProperty(data.warcRefersTo, REFERS_TO_HEADER);
+      setProperty(data.warcWarcinfoId, WARCINFO_ID_HEADER);        
     }
     
     /**
      * Set the properties for the Metadata WARC record.
      */
     private void setMetadataRecordProperties() {
-        setProperty(data.warcTargetUri, "Warc-Target-URI header value.");
-        setProperty(data.warcConcurrentToList, "Warc-Concurrent-To header value.");
-        setProperty(data.warcRefersTo, "Warc-Refers-To header value.");
-        setProperty(data.warcIpAddress, "Warc-IP-Address header value.");
-        setProperty(data.ipVersion, "Ip-Address version.");
-        setProperty(data.warcWarcinfoId, "Warc-Warcinfo-ID header value.");        
+        setProperty(data.warcTargetUri, TARGET_URI_HEADER);
+        setProperty(data.warcConcurrentToList, CONCURRENT_TO_HEADER);
+        setProperty(data.warcRefersTo, REFERS_TO_HEADER);
+        setProperty(data.warcIpAddress, IP_ADDRESS_HEADER);
+        setProperty(data.ipVersion, IP_ADDRESS_VERSION);
+        setProperty(data.warcWarcinfoId, WARCINFO_ID_HEADER);        
     }
     
     /**
      * Set the properties for the Request WARC record.
      */
     private void setRequestRecordProperties() {
-        setProperty(data.warcTargetUri, "Warc-Target-URI header value.");
-        setProperty(data.warcConcurrentToList, "Warc-Concurrent-To header value.");
-        setProperty(data.warcIpAddress, "Warc-IP-Address header value.");
-        setProperty(data.ipVersion, "Ip-Address version.");
-        setProperty(data.warcWarcinfoId, "Warc-Warcinfo-ID header value.");
-        setProperty(data.protocolVersion, "ProtocolVersion header value.");
+        setProperty(data.warcTargetUri, TARGET_URI_HEADER);
+        setProperty(data.warcConcurrentToList, CONCURRENT_TO_HEADER);
+        setProperty(data.warcIpAddress, IP_ADDRESS_HEADER);
+        setProperty(data.ipVersion, IP_ADDRESS_VERSION);
+        setProperty(data.warcWarcinfoId, WARCINFO_ID_HEADER);
+        setProperty(data.protocolVersion, PROTOCOL_VERSION_HEADER);
         setProperty(data.protocolUserAgent, "ProtocolUserAgent header value.");
     }
     
@@ -148,24 +157,24 @@ public class WarcRecordProperties {
      * Set the properties for the Resource WARC record.
      */
     private void setResourceRecordProperties() {
-        setProperty(data.warcTargetUri, "Warc-Target-URI header value.");
-        setProperty(data.warcConcurrentToList, "Warc-Concurrent-To header value.");
-        setProperty(data.warcIpAddress, "Warc-IP-Address header value.");
-        setProperty(data.ipVersion, "Ip-Address version.");
-        setProperty(data.warcWarcinfoId, "Warc-Warcinfo-ID header value.");        
+        setProperty(data.warcTargetUri, TARGET_URI_HEADER);
+        setProperty(data.warcConcurrentToList, CONCURRENT_TO_HEADER);
+        setProperty(data.warcIpAddress, IP_ADDRESS_HEADER);
+        setProperty(data.ipVersion, IP_ADDRESS_VERSION);
+        setProperty(data.warcWarcinfoId, WARCINFO_ID_HEADER);        
     }
 
     /**
      * Set the properties for the Response WARC record.
      */
     private void setResponseRecordProperties() {
-        setProperty(data.warcTargetUri, "Warc-Target-URI header value.");
-        setProperty(data.warcConcurrentToList, "Warc-Concurrent-To header value.");
-        setProperty(data.warcIpAddress, "Warc-IP-Address header value.");
-        setProperty(data.ipVersion, "Ip-Address version.");
-        setProperty(data.warcWarcinfoId, "Warc-Warcinfo-ID header value.");
+        setProperty(data.warcTargetUri, TARGET_URI_HEADER);
+        setProperty(data.warcConcurrentToList, CONCURRENT_TO_HEADER);
+        setProperty(data.warcIpAddress, IP_ADDRESS_HEADER);
+        setProperty(data.ipVersion, IP_ADDRESS_VERSION);
+        setProperty(data.warcWarcinfoId, WARCINFO_ID_HEADER);
         setProperty(data.resultCode, "ProtocolResultCode header value.");
-        setProperty(data.protocolVersion, "ProtocolVersion header value.");
+        setProperty(data.protocolVersion, PROTOCOL_VERSION_HEADER);
         setProperty(data.protocolContentType, "ProtocolContentType header value.");        
         setProperty(data.protocolServer, "ServerName header value.");
     }
@@ -174,12 +183,12 @@ public class WarcRecordProperties {
      * Set the properties for the Revisit WARC record.
      */
     private void setRevisitRecordProperties() {
-        setProperty(data.warcTargetUri, "Warc-Target-URI header value.");
+        setProperty(data.warcTargetUri, TARGET_URI_HEADER);
         setProperty(data.warcProfile, "Warc-Profile header value.");
-        setProperty(data.warcRefersTo, "Warc-Refers-To header value.");
-        setProperty(data.warcIpAddress, "Warc-IP-Address header value.");
-        setProperty(data.ipVersion, "Ip-Address version.");
-        setProperty(data.warcWarcinfoId, "Warc-Warcinfo-ID header value.");        
+        setProperty(data.warcRefersTo, REFERS_TO_HEADER);
+        setProperty(data.warcIpAddress, IP_ADDRESS_HEADER);
+        setProperty(data.ipVersion, IP_ADDRESS_VERSION);
+        setProperty(data.warcWarcinfoId, WARCINFO_ID_HEADER);        
     }
     
     /**

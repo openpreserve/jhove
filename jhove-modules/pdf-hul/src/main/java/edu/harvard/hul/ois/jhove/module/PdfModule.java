@@ -2302,8 +2302,8 @@ public class PdfModule extends ModuleBase {
 											if (parms != null) {
 												PdfSimpleObject kobj = null;
 												if (parms instanceof PdfDictionary) {
-													kobj = (PdfSimpleObject) ((PdfDictionary) parms)
-															.get(DICT_KEY_K);
+													PdfDictionary pdict = (PdfDictionary) parms;
+													kobj = (PdfSimpleObject) resolveIndirectObject(pdict.get(DICT_KEY_K));
 												}
 												/*
 												 * Note that the DecodeParms
