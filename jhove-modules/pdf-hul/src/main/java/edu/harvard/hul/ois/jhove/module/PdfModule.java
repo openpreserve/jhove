@@ -1556,8 +1556,10 @@ public class PdfModule extends ModuleBase {
 			return false;
 		} catch (Exception e) {
 			info.setValid(false);
+			String mess = MessageFormat.format(MessageConstants.PDF_HUL_151.getMessage(), e.getMessage());
+			JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.PDF_HUL_151.getId(), mess);
 			info.setMessage(
-					new ErrorMessage(e.getMessage(), _parser.getOffset()));
+					new ErrorMessage(message, _parser.getOffset())); //PDF-HUL-151
 		}
 		return true;
 	}
