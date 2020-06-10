@@ -28,9 +28,14 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 
 @RunWith(JUnit4.class)
 public class GzipModuleTest {
-	@Test
+	
+    private static final String TXT_GZIP_SAMPLE_FILE = "src/test/resources/gzip/sample.txt.gz";
+    private static final String RECORDS = "Records";
+    private static final String THREE_FILES_GZIP_SAMPLE_FILE = "src/test/resources/gzip/three-files.gz";
+    
+    @Test
     public void parseSampleTextGzipFile() throws Exception {
-	    File gzipFile = new File("src/test/resources/gzip/sample.txt.gz");
+	    File gzipFile = new File(TXT_GZIP_SAMPLE_FILE);
         assertTrue( gzipFile.isFile() );
         
         GzipModule gzm = new GzipModule();
@@ -45,15 +50,15 @@ public class GzipModuleTest {
         
         // Validate that it creates properties for each record
         assertEquals(1, info.getProperty().size());
-        assertNotNull(info.getProperty().get("Records"));
-        assertEquals(PropertyArity.LIST, info.getProperty().get("Records").getArity());
-        assertEquals(PropertyType.PROPERTY, info.getProperty().get("Records").getType());
-        assertEquals(1, ((List<Property>)info.getProperty().get("Records").getValue()).size());
+        assertNotNull(info.getProperty().get(RECORDS));
+        assertEquals(PropertyArity.LIST, info.getProperty().get(RECORDS).getArity());
+        assertEquals(PropertyType.PROPERTY, info.getProperty().get(RECORDS).getType());
+        assertEquals(1, ((List<Property>)info.getProperty().get(RECORDS).getValue()).size());
     }
 
     @Test
     public void checkSignatureSampleTextGzipFile() throws Exception {
-        File gzipFile = new File("src/test/resources/gzip/sample.txt.gz");
+        File gzipFile = new File(TXT_GZIP_SAMPLE_FILE);
 
         GzipModule gzm = new GzipModule();
         RepInfo info = new RepInfo(gzipFile.getAbsolutePath());
@@ -66,7 +71,7 @@ public class GzipModuleTest {
     
     @Test
     public void parseThreeFilesGzipFile() throws Exception {
-        File gzipFile = new File("src/test/resources/gzip/three-files.gz");
+        File gzipFile = new File(THREE_FILES_GZIP_SAMPLE_FILE);
         assertTrue( gzipFile.isFile() );
         
         GzipModule gzm = new GzipModule();
@@ -81,13 +86,13 @@ public class GzipModuleTest {
         
         // Validate that it creates properties for each record
         assertEquals(1, info.getProperty().size());
-        assertNotNull(info.getProperty().get("Records"));
-        assertEquals(3, ((List<Property>)info.getProperty().get("Records").getValue()).size());
+        assertNotNull(info.getProperty().get(RECORDS));
+        assertEquals(3, ((List<Property>)info.getProperty().get(RECORDS).getValue()).size());
     }
 
     @Test
     public void checkSignaturThreeFilesGzipFile() throws Exception {
-        File gzipFile = new File("src/test/resources/gzip/three-files.gz");
+        File gzipFile = new File(THREE_FILES_GZIP_SAMPLE_FILE);
 
         GzipModule gzm = new GzipModule();
         RepInfo info = new RepInfo(gzipFile.getAbsolutePath());
