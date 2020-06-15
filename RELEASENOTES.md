@@ -10,12 +10,12 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 
 JHOVE 1.24
 -------------
-2020-03-02
+2020-03-12
 
 ### General
 
 - Added a JSON output handler [[#515][]]
-- Fixed compatability issues for JDK 9 and greater [[#514][]]
+- Fixed compatibility issues for JDK 9 and greater [[#514][]]
 - SHA-256 Checksumming [[#497][], [#386][]]
 - Error ID node for GUI message display [[#546][]]
 - Improved formatting of error IDs by text handler [[#547][]]
@@ -30,10 +30,16 @@ JHOVE 1.24
 ### Error Message Translations
 
 - German error message translations [[#461][], [#462][], [#463][], [#464][], [#467][]]
-- Portuguese error message translations [[#490][], [#491][], [#492][], [#493][], [#496][]]
+- Portuguese error message translations [[#490][], [#491][], [#492][], [#493][], [#496][], [#557][]]
 - Dutch error message translations [[#503][], [#550][]]
 - Danish error message translations [[#551][]]
 - French error message translations [[#552][]]
+
+### AIFF Module
+
+- Check that chunk IDs only consist of characters in the printable ASCII range [[#468][]]
+- Check that spaces do not precede printable characters in chunk IDs [[#468][]]
+- Clarified error messages and improved offset reporting accuracy [[#468][]]
 
 ### EPUB Module
 
@@ -42,15 +48,15 @@ JHOVE 1.24
 
 ### GIF Module
 
-- Update gif Error.Message properties for Control Extensions [[#513][]]
+- Update error message properties for Control Extensions [[#513][]]
 
 ### JPEG Module
 
 - Enhanced to handle the APP14 marker segment [[#518][]]
 
-### JPEG2000 Module
+### JPEG 2000 Module
 
-- Enhancements to MIX format medatata [[#445][]]
+- Enhancements to MIX format metadata [[#445][]]
 
 ### PNG Module
 
@@ -68,8 +74,15 @@ JHOVE 1.24
 
 ### WAVE Module
 
-- WAVE / IFF: Accurate file offsets and new validation checks [[#468][]]
-- Documentation or missing chunks and additional references [[#501][]]
+- Check that chunk IDs only consist of characters in the printable ASCII range [[#468][]]
+- Check that spaces do not precede printable characters in chunk IDs [[#468][]]
+- Clarified error messages and greatly improved offset reporting accuracy [[#468][]]
+- Added reporting of unrecognized data in the top-level RIFF structure [[#468][]]
+- Made the Table Length field of `ds64` chunks optional to better align with the specification [[#468][]]
+- Reinstated WAVE-HUL-4 reporting which had been lost during refactoring [[#468][]]
+- Corrected WAVE-HUL-15 from an Error to an Informational message [[#468][]]
+- Retired WAVE-HUL-16, an unused duplicate of WAVE-HUL-19 [[#468][]]
+- Documented undocumented chunks and specification references [[#501][]]
 
 ### WARC Module
 
@@ -134,6 +147,7 @@ JHOVE 1.24
 [#550]: https://github.com/openpreserve/jhove/pull/550
 [#551]: https://github.com/openpreserve/jhove/pull/551
 [#552]: https://github.com/openpreserve/jhove/pull/552
+[#557]: https://github.com/openpreserve/jhove/pull/557
 
 JHOVE 1.22
 -------------

@@ -10,7 +10,7 @@
 
   <groupId>org.openpreservation.jhove</groupId>
   <artifactId>jhove</artifactId>
-  <version>1.24.0</version>
+  <version>1.25.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
@@ -440,11 +440,11 @@
       <distributionManagement>
         <snapshotRepository>
           <id>opf-artefactory</id>
-          <url>https://artifactory.openpreservation.org/artifactory/vera-dev-local/</url>
+          <url>https://artifactory.openpreservation.org/artifactory/opf-dev-local/</url>
         </snapshotRepository>
         <repository>
           <id>opf-artefactory</id>
-          <url>https://artifactory.openpreservation.org/artifactory/vera-dev-local/</url>
+          <url>https://artifactory.openpreservation.org/artifactory/opf-dev-local/</url>
         </repository>
       </distributionManagement>
     </profile>
