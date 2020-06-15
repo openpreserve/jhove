@@ -2946,8 +2946,8 @@ public class PdfModule extends ModuleBase {
 				if (!_skippedPagesReported) {
 					info.setMessage(
 							new InfoMessage(MessageConstants.PDF_HUL_112)); // PDF-HUL-112
+                                        _skippedPagesReported = true;
 				}
-				_skippedPagesReported = true;
 			}
 		} catch (PdfException e) {
 
