@@ -64,6 +64,12 @@ public class XmlHandlerTest {
 	private static final int EXPECTED_EXIF_APERTURE_DEN = 100;
 	private static final double EXPECTED_EXIT_FNUMBER = 2.2;
 
+	/** Additional constants   **/
+
+	private static final String MIX_V02_NOT_CONFORMANT = "Mix v0.2 generated not conformant";
+	private static final String MIX_V10_NOT_CONFORMANT = "Mix v1.0 generated not conformant";
+	private static final String MIX_V20_NOT_CONFORMANT = "Mix v2.0 generated not conformant";
+
 	/* Test instances to be serialized */
 	protected static NisoImageMetadata TEST_NISO_IMAGE_MD;
 	protected static NisoImageMetadata TEST_NISO_IMAGE2_MD;
@@ -222,7 +228,7 @@ public class XmlHandlerTest {
 		this.handler.close();
 
 		String generatedMix = readXmlFile(outputFile);
-		assertEquals("Mix v0.2 generated not conformant", expectedMix02,
+		assertEquals(MIX_V02_NOT_CONFORMANT, expectedMix02,
 				generatedMix);
 	}
 
@@ -238,7 +244,7 @@ public class XmlHandlerTest {
 		this.handler.close();
 
 		String generatedMix = readXmlFile(outputFile);
-		assertEquals("Mix v1.0 generated not conformant", expectedMix10,
+		assertEquals(MIX_V10_NOT_CONFORMANT, expectedMix10,
 				generatedMix);
 	}
 
@@ -254,7 +260,7 @@ public class XmlHandlerTest {
 		this.handler.close();
 
 		String generatedMix = readXmlFile(outputFile);
-		assertEquals("Mix v2.0 generated not conformant", expectedMix20,
+		assertEquals(MIX_V20_NOT_CONFORMANT, expectedMix20,
 				generatedMix);
 	}
 
@@ -270,7 +276,7 @@ public class XmlHandlerTest {
 		this.handler.close();
 
 		String generatedMix = readXmlFile(outputFile);
-		assertEquals("Mix v0.2 generated not conformant", expectedMix02,
+		assertEquals(MIX_V02_NOT_CONFORMANT, expectedMix02,
 				generatedMix);
 	}
 
@@ -286,7 +292,7 @@ public class XmlHandlerTest {
 		this.handler.close();
 
 		String generatedMix = readXmlFile(outputFile);
-		assertEquals("Mix v1.0 generated not conformant", expectedMix10,
+		assertEquals(MIX_V10_NOT_CONFORMANT, expectedMix10,
 				generatedMix);
 	}
 
@@ -302,7 +308,7 @@ public class XmlHandlerTest {
 		this.handler.close();
 
 		String generatedMix = readXmlFile(outputFile);
-		assertEquals("Mix v2.0 generated not conformant", expectedMix20,
+		assertEquals(MIX_V20_NOT_CONFORMANT, expectedMix20,
 				generatedMix);
 	}
 
@@ -318,7 +324,7 @@ public class XmlHandlerTest {
 		this.handler.close();
 
 		String generatedMix = readXmlFile(outputFile);
-		assertEquals("Mix v2.0 generated not conformant", expectedMix20,
+		assertEquals(MIX_V20_NOT_CONFORMANT, expectedMix20,
 				generatedMix);
 	}
 
