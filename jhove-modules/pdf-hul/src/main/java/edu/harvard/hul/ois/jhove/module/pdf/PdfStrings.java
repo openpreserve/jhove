@@ -5,6 +5,9 @@
 
 package edu.harvard.hul.ois.jhove.module.pdf;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *  A class for holding arrays of informative strings that will go into 
  *  properties of a PDF object. 
