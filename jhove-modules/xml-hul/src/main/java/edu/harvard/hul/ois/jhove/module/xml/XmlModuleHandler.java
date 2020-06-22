@@ -189,47 +189,37 @@ public class XmlModuleHandler extends DefaultHandler {
 			}
 		}
 		if (atts != null) {
-			int natts = atts.getLength();
-			for (int i = 0; i < natts; i++) {
+			for (int i = 0; i < atts.getLength(); i++) {
 				String name = atts.getLocalName(i);
-				String namespace = atts.getURI(i);  // namespace URI
+				String namespace = atts.getURI(i);
 				String val = atts.getValue(i);
 				if ("http://www.w3.org/2001/XMLSchema-instance"
 						.equals(namespace)) {
-					SchemaInfo schInfo = new SchemaInfo();
 					if ("schemaLocation".equals(name)) {
-						/*
-						 * val should consist of two tokens, giving the
-						 * URI and the location respectively.
-						 */
-						String[] toks = val.split("\\s", 2);
-						/*
-						 * Could be a length 0 or 1 array in pathological
-						 * cases, so convert it to a length-2 array.
-						 * Note that while the schemaLocation attribute
-						 * SHOULD have two white-space separated elements,
-						 * this may not be the case, so always check the
-						 * array length before referencing its elements.
-						 */
-						if (toks.length > 0 && toks[0] != null) {
-							schInfo.namespaceURI = toks[0].trim();
-						} else {
-							schInfo.namespaceURI = "";
-						}
-						if (toks.length > 1 && toks[1] != null) {
-							schInfo.location = toks[1].trim();
-						} else {
-							schInfo.location = "";
-						}
-						if (!hasSchemaURI(schInfo)) {
-							_schemas.add(schInfo);
+						// schemaLocation should contain pairs of namespace
+						// and location URIs separated by white space. Any
+						// number of such pairs may be declared in a single
+						// schemaLocation attribute.
+						String[] uris = val.split("\\s");
+						for (int j = 0; j < uris.length; j += 2) {
+							SchemaInfo schema = new SchemaInfo();
+							schema.namespaceURI = uris[j].trim();
+							if (uris.length > j + 1) {
+								schema.location = uris[j + 1].trim();
+							} else {
+								schema.location = "";
+							}
+							if (!hasSchemaURI(schema)) {
+								_schemas.add(schema);
+							}
 						}
 					}
 					if ("noNamespaceSchemaLocation".equals(name)) {
-						schInfo.location = "[None]";
-						schInfo.namespaceURI = val;
-						if (!hasSchemaURI(schInfo)) {
-							_schemas.add(schInfo);
+						SchemaInfo schema = new SchemaInfo();
+						schema.location = val;
+						schema.namespaceURI = "";
+						if (!hasSchemaURI(schema)) {
+							_schemas.add(schema);
 						}
 					}
 				}
