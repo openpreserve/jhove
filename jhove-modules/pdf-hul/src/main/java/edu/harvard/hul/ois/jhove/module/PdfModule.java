@@ -208,6 +208,12 @@ public class PdfModule extends ModuleBase {
 	private static final String DICT_KEY_PAGE_LABELS = "PageLabels";
 	private static final String DICT_KEY_TYPE = "Type";
 	private static final String DICT_KEY_VERSION = "Version";
+	private static final String DICT_KEY_EXTENSIONS = "Extensions";
+	private static final String DICT_KEY_EXTENSIONLEVEL = "ExtensionLevel";
+	private static final String DICT_KEY_BASEVERSION = "BaseVersion";
+	private static final String PROP_NAME_BASEVERSION = DICT_KEY_BASEVERSION;
+	private static final String PROP_NAME_EXTENSIONLEVEL = DICT_KEY_EXTENSIONLEVEL;
+	private static final String PROP_NAME_DEVELOPERPREFIX = "DeveloperPrefix";
 	private static final String DICT_KEY_NAME = "Name";
 	private static final String DICT_KEY_NAMES = DICT_KEY_NAME + "s";
 	private static final String DICT_KEY_EMBEDDED_FILES = "EmbeddedFiles";
@@ -1727,7 +1733,7 @@ public class PdfModule extends ModuleBase {
 									// There is an unknown developer prefix
 									info.setWellFormed(false);
 									info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_154, 
-											developerPrefixKey.toString())); // PDF-HUL-152
+											developerPrefixKey.toString())); // PDF-HUL-154
 								}
 							}
 						}
