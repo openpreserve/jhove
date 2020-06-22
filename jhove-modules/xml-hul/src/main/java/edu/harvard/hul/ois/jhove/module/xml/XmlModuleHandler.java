@@ -11,13 +11,7 @@ import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -25,7 +19,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-// import java.io.*;
 import edu.harvard.hul.ois.jhove.ErrorMessage;
 import edu.harvard.hul.ois.jhove.InfoMessage;
 import edu.harvard.hul.ois.jhove.Message;
@@ -33,11 +26,9 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /**
- *
  * This handler does the parsing work of the XML module.
  *
  * @author Gary McGath
- *
  */
 public class XmlModuleHandler extends DefaultHandler {
 
@@ -403,12 +394,10 @@ public class XmlModuleHandler extends DefaultHandler {
 	 * Processes a warning. We just add an InfoMessage.
 	 */
 	@Override
-	public void warning(SAXParseException e) {
-		JhoveMessage message = JhoveMessages.getMessageInstance(
-				MessageConstants.XML_HUL_1.getId(),
-				MessageFormat.format(MessageConstants.XML_HUL_1.getMessage(),
-						e.getMessage().toString()));
-		_messages.add(new InfoMessage(message));
+	public void warning(SAXParseException spe) {
+		_messages.add(new InfoMessage(
+				MessageConstants.XML_HUL_1,
+				spe.getMessage()));
 	}
 
 	/**
@@ -417,25 +406,24 @@ public class XmlModuleHandler extends DefaultHandler {
 	 * that any error here indicates only invalidity.
 	 */
 	@Override
-	public void error(SAXParseException e) {
+	public void error(SAXParseException spe) {
 		_valid = false;
 		if (_nErrors == MAXERRORS) {
 			JhoveMessage message = JhoveMessages.getMessageInstance(
 					MessageConstants.XML_HUL_2.getId(),
 					MessageFormat.format(
 							MessageConstants.XML_HUL_2.getMessage(),
-							Integer.valueOf(MAXERRORS)));
+							MAXERRORS));
 			_messages.add(new InfoMessage(message));
 		} else if (_nErrors < MAXERRORS) {
-			int line = e.getLineNumber();
-			int col = e.getColumnNumber();
-			JhoveMessage message = JhoveMessages.getMessageInstance(
-					MessageConstants.XML_HUL_1.getId(),
+			_messages.add(new ErrorMessage(
+					MessageConstants.XML_HUL_1,
 					MessageFormat.format(
-							MessageConstants.XML_HUL_1.getMessage(),
-							e.getMessage().toString()));
-			_messages.add(new ErrorMessage(message,
-					"Line = " + line + ", Column = " + col));
+							MessageConstants.XML_HUL_1_SUB.getMessage(),
+							spe.getMessage(),
+							spe.getLineNumber(),
+							spe.getColumnNumber()
+					)));
 		}
 		++_nErrors;
 	}

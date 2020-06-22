@@ -24,18 +24,19 @@ package edu.harvard.hul.ois.jhove.module;
 import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import edu.harvard.hul.ois.jhove.module.utf8.Utf8BlockMarker;
 import edu.harvard.hul.ois.jhove.module.xml.*;
-
-import org.xml.sax.XMLReader;
-import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.*;
 
 /**
  * Module for identification and validation of XML files.
@@ -369,42 +370,46 @@ public class XmlModule extends ModuleBase {
 		}
 		try {
 			parser.parse(src);
-		} catch (FileNotFoundException ef) {
+		} catch (FileNotFoundException fnfe) {
 			// Make this particular exception a little more user-friendly
 			info.setMessage(new ErrorMessage(MessageConstants.XML_HUL_10,
-					ef.getMessage().toString()));
+					fnfe.getMessage().toString()));
 			info.setWellFormed(false);
 			return 0;
-		} catch (UTFDataFormatException u) {
+		} catch (UTFDataFormatException udfe) {
 			if (handler.getSigFlag() && !_parseFromSig) {
 				info.setSigMatch(_name);
 			}
 			info.setMessage(new ErrorMessage(MessageConstants.XML_HUL_11));
 			info.setWellFormed(false);
 			return 0;
-		} catch (IOException e) {
+		} catch (IOException ioe) {
 			// We may get an IOException from trying to resolve an
 			// external entity.
 			if (handler.getSigFlag() && !_parseFromSig) {
 				info.setSigMatch(_name);
 			}
-			String mess = e.getClass().getName() + ": " + e.getMessage().toString();
-			info.setMessage(new ErrorMessage(CoreMessageConstants.ERR_FILE_READ, mess));
+			String mess = ioe.getClass().getName() + ": " + ioe.getMessage();
+			info.setMessage(new ErrorMessage(
+					CoreMessageConstants.ERR_FILE_READ, mess));
 			info.setWellFormed(false);
 			return 0;
-		} catch (SAXParseException e) {
+		} catch (SAXParseException spe) {
 			// Document failed to parse.
 			if (handler.getSigFlag() && !_parseFromSig) {
 				info.setSigMatch(_name);
 			}
-			int line = e.getLineNumber();
-			int col = e.getColumnNumber();
-			String mess = e.getMessage().toString() +
-					"Line = " + line + ", Column = " + col;
-			info.setMessage(new ErrorMessage(MessageConstants.XML_HUL_1, mess));
+			info.setMessage(new ErrorMessage(
+					MessageConstants.XML_HUL_1,
+					MessageFormat.format(
+							MessageConstants.XML_HUL_1_SUB.getMessage(),
+							spe.getMessage(),
+							spe.getLineNumber(),
+							spe.getColumnNumber()
+					)));
 			info.setWellFormed(false);
 			return 0;
-		} catch (SAXException e) {
+		} catch (SAXException se) {
 			// Other SAX error.
 			if (handler.getSigFlag()) {
 				info.setSigMatch(_name);
@@ -415,8 +420,8 @@ public class XmlModule extends ModuleBase {
 					MessageConstants.XML_HUL_3.getId(),
 					MessageFormat.format(
 							MessageConstants.XML_HUL_3.getMessage(),
-							e.getMessage() != null ? e.getMessage() : ""));
-			Throwable ee = e.getCause();
+							se.getMessage() != null ? se.getMessage() : ""));
+			Throwable ee = se.getCause();
 			String subMess = (ee != null)
 					? MessageFormat.format(
 							MessageConstants.XML_HUL_12.getMessage(),
@@ -1005,7 +1010,7 @@ public class XmlModule extends ModuleBase {
 	}
 
 	/**
-	 * Verification that the string contains something usefull.
+	 * Verification that the string contains something useful.
 	 *
 	 * @param value
 	 *            string to test
