@@ -5,6 +5,9 @@
 
 package edu.harvard.hul.ois.jhove.module.pdf;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *  A class for holding arrays of informative strings that will go into 
  *  properties of a PDF object. 
@@ -93,6 +96,66 @@ public class PdfStrings
         "ReadOnly"        // 7
     };
 
+    /** PDF Prefix names registry
+     *  * This is a list with Prefixes of the PDF Prefix Names register. It is used as a dictionary for the developer
+     *  prefix of developer extensions.
+     *  Described in 3.6.4 Extensions to PDF: 
+     *  https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/adobe_supplement_iso32000.pdf
+     *  Maintained in: https://github.com/adobe/pdf-names-list
+     * . */
+    public final static List<String> PREFIXNAMESREGISTY = new ArrayList<String>() {{
+		add("ADBE"); // Adobe
+    	add("ITXT"); // 1T3XT BVBA
+    	add("CIP4"); // International Cooperation for the Integration of Process in Prepress, Press and Postpress Association
+    	add("FOPN"); // FileOpen Systems Inc.
+    	add("SNLF"); // SNL Financial, LC
+    	add("K3SD"); // Kanrikogaku Kenkyusho, Ltd.,  Meguro Office
+    	add("CRDF"); // Autonomy Cardiff
+    	add("PDTH"); // PDF Thingys
+    	add("GURG"); // Gurnet Group LLC
+    	add("USCT"); // Administrative Office of the U.S. Courts
+    	add("MTSJ"); // Mekentosj BV
+    	add("AJIc"); // Aji, LLC
+    	add("GFSw"); // Goofyfootsoftware
+    	add("LTUd"); // Office of the Chief Archivist of Lithuania
+    	add("MSFT"); // Microsoft Corporation
+    	add("wgss"); // Wacom Co, Ltd
+    	add("bPRO"); // BiPRO e.V.
+    	add("HEBD"); // H-E-B Grocery
+    	add("iPDF"); // InteractivePDF.org
+    	add("CALS"); // Callas Software gmbh
+    	add("OOPS"); // JNJ
+    	add("KWSQ"); // Kawseq Consulting Pty Ltd
+    	add("PIER"); // Pierre Choutet
+    	add("SCIN"); // Scinaptic Communications
+    	add("VSMA"); // Visma Software International AS
+    	add("MSMO"); // Mortgage Industry Standards Maintenance Organization
+    	add("DUFF"); // Adlib Publishing Systems
+    	add("ADLB"); // ALSTOM (Switzerland) Ltd
+    	add("FNBC"); // Andrea Vacandio, Sejda.org
+    	add("sjda"); // ZETO Sp. z o.o. w Lublinie
+    	add("ZETO"); // Setasign
+    	add("SETA"); // SOFHA Gmbh
+    	add("SOFH"); // AcroScript
+    	add("ASGJ"); // UAB "Superita"
+    	add("WRPC"); // Instituto Nacional de Tecnologia da Informação
+    	add("PBAD"); // China Finacial Certification Authority Co.Ltd
+    	add("cfca"); // China Finacial Certification Authority Co.Ltd
+    	add("CFCA"); // Timeslice Ltd
+    	add("TMSL"); // Wacom Co, Ltd
+    	add("WGSS"); // Reindl-IT
+    	add("SRIT"); // Global Graphics
+    	add("GGSL"); // Evansco, LLC
+    	add("EVSC"); // PDFlib GmbH
+    	add("Plib"); // Walters Kluwer TeamMate
+    	add("WKTM"); // Normex s.r.o.
+    	add("NORM"); // PDF Association
+    	add("pdfa"); // Michael Klink
+    	add("MKLx"); // ISO (via the 3D PDF Consortium)
+    	add("ISO_"); // ISO TC130/WG2 as described in ISO 21812
+    	add("GTSm"); // 1T3XT BVBA
+    }};
+    
     /** A private constructor just to make sure nobody
        instantiates the class by mistake. */
     private PdfStrings ()
