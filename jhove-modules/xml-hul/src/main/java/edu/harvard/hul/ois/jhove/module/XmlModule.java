@@ -22,6 +22,8 @@
 package edu.harvard.hul.ois.jhove.module;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.*;
 import javax.xml.parsers.SAXParserFactory;
@@ -110,12 +112,13 @@ public class XmlModule extends ModuleBase {
 	 */
 	protected boolean _parseFromSig;
 
-	/* Flag to know if the property TextMDMetadata is to be added */
-	protected boolean _withTextMD = false;
-	/* Hold the information needed to generate a textMD metadata fragment */
+	/* Flag to indicate if TextMD metadata should be reported. */
+	protected boolean _withTextMD;
+
+	/* TextMD metadata for the file being processed. */
 	protected TextMDMetadata _textMD;
 
-	/* Map from URIs to locally stored schemas */
+	/* Map of URLs to locally stored schemas. */
 	protected Map<String, File> _localSchemas;
 
 	/******************************************************************
@@ -147,7 +150,9 @@ public class XmlModule extends ModuleBase {
 		Signature sig = new ExternalSignature(".xml", SignatureType.EXTENSION,
 				SignatureUseType.OPTIONAL);
 		_signature.add(sig);
-		_localSchemas = new HashMap<>();
+
+		// Initialize module parameters
+		resetParams();
 	}
 
 	/**
@@ -169,39 +174,54 @@ public class XmlModule extends ModuleBase {
 	@Override
 	public void resetParams() {
 		_baseURL = null;
-		_sigWantsDecl = false;
+		_localSchemas = new HashMap<>();
 		_parseFromSig = false;
+		_sigWantsDecl = false;
+		_withTextMD = false;
 	}
 
 	/**
-	 * Per-action initialization.
+	 * Parse configuration parameters for the module.
+	 *
+	 * If the parameter starts with "schema=", then the part to the
+	 * right of the equals sign specifies a schema location URI
+	 * followed by a path to a local copy of that schema to be used
+	 * in its place, separated by a semicolon. Example:
+	 *
+	 *   schema=http://example.com/schema.xsd;/schemas/example.xsd
+	 *
+	 * If the first character is "s" or "S", and the parameter isn't
+	 * "schema", then XML document declarations are required for
+	 * signature checks.
+	 *
+	 * If the parameter begins with "b" or "B", then the remainder of
+	 * the parameter is used as a base URL for relative URIs. Otherwise
+	 * it is ignored and there is no base URL. Example:
+	 *
+	 *   bhttp://example.com/schemas/
+	 *
+	 * If the parameter is "withtextmd=true", then textMD metadata is
+	 * included in the JHOVE report.
 	 *
 	 * @param param
-	 *            The module parameter; under command-line Jhove, the -p
-	 *            parameter.
-	 *            If the parameter starts with "schema", then the part to the
-	 *            right of the equal sign identifies a URI with a local path
-	 *            (URI, then semicolon, then path).
-	 *            If the first character is 's' and the parameter isn't
-	 *            "schema",
-	 *            then signature checking requires
-	 *            a document declaration, and the rest of the URL is considered
-	 *            as follows.
-	 *            If the parameter begins with 'b' or 'B', then the remainder of
-	 *            the parameter is used as a base URL. Otherwise it is ignored,
-	 *            and there is no base URL.
+	 *            the module parameter to parse.
 	 */
 	@Override
 	public void param(String param) {
 		if (param != null) {
-			param = param.toLowerCase();
-			if (param.startsWith("schema=")) {
+			param = param.trim();
+			String lowerCaseParam = param.toLowerCase();
+			if (lowerCaseParam.startsWith("schema=")) {
 				addLocalSchema(param);
-			} else if (param.indexOf('s') == 0) {
+			} else if (lowerCaseParam.startsWith("s")) {
 				_sigWantsDecl = true;
-				param = param.substring(1);
-			} else if (param.indexOf('b') == 0) {
+			} else if (lowerCaseParam.startsWith("b")) {
 				_baseURL = param.substring(1);
+			} else if (lowerCaseParam.equals("withtextmd=true")) {
+				_withTextMD = true;
+			} else {
+				_logger.warning("Ignoring unrecognized module parameter \""
+						+ param + "\"");
 			}
 		}
 	}
@@ -240,18 +260,6 @@ public class XmlModule extends ModuleBase {
 	 */
 	@Override
 	public int parse(InputStream stream, RepInfo info, int parseIndex) {
-		// Test if textMD is to be generated
-
-		if (_defaultParams != null) {
-			_withTextMD = false;
-			Iterator<String> iter = _defaultParams.iterator();
-			while (iter.hasNext()) {
-				String param = iter.next();
-				if ("withtextmd=true".equalsIgnoreCase(param)) {
-					_withTextMD = true;
-				}
-			}
-		}
 
 		boolean canValidate = true;
 		initParse();
@@ -285,10 +293,13 @@ public class XmlModule extends ModuleBase {
 			// If a SAX class was specified, use it, otherwise use
 			// the default parser.
 			src = new InputSource(xds);
-			// setSystemId may be helpful in resolving relative URI's,
-			// though its use is unclear. Its actual content is merely
-			// informative, not a part of any actual link
-			// src.setSystemId ("http://hul.harvard.edu/hul");
+			// To correctly resolve relative URIs in XML, we need to know the
+			// XML document's system identifier, i.e. its location, in order
+			// to derive the base URI other URIs should be relative to.
+			// Unfortunately JHOVE doesn't currently provide such information
+			// to its modules. In lieu of that, this module has a parameter
+			// which can be set to be used as the base URI for all relative
+			// URI resolution in the document being parsed.
 			if (_baseURL != null) {
 				src.setSystemId(new File(_baseURL).toURI().toURL().toString());
 			}
@@ -1022,20 +1033,37 @@ public class XmlModule extends ModuleBase {
 	}
 
 	/**
-	 * Add a mapping from a schema URI to a local file.
-	 * The parameter is of the form schema=[URI];[path]
+	 * Parse a "schema" configuration argument and map the schema
+	 * location URI to a local file after validating both components.
+	 *
+	 * @param param
+	 *            a module parameter string of the form
+	 *            "schema=[location-URI];[local-path]"
 	 */
 	private void addLocalSchema(String param) {
 		int eq = param.indexOf('=');
 		int semi = param.indexOf(';');
 		try {
-			String uri = param.substring(eq + 1, semi).trim();
-			String path = param.substring(semi + 1).trim();
-			File f = new File(path);
-			if (f.exists()) {
-				_localSchemas.put(uri, f);
+			String uriParam = param.substring(eq + 1, semi);
+			String localParam = param.substring(semi + 1);
+			try {
+				String locationUri = new URI(uriParam).toString();
+				File localFile = new File(localParam);
+				if (localFile.exists()) {
+					_localSchemas.put(locationUri, localFile);
+				} else {
+					_logger.warning("Ignoring module parameter with "
+							+ "unresolvable path: \"" + localParam + "\"");
+				}
 			}
-		} catch (Exception e) {
+			catch (URISyntaxException use) {
+				_logger.warning("Ignoring module parameter with "
+						+ "invalid URI syntax: \"" + uriParam + "\"");
+			}
+		}
+		catch (IndexOutOfBoundsException ioobe) {
+			_logger.warning("Ignoring malformed module parameter \""
+					+ param + "\"");
 		}
 	}
 }
