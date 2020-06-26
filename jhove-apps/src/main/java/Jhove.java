@@ -24,6 +24,7 @@ import edu.harvard.hul.ois.jhove.CoreMessageConstants;
 import edu.harvard.hul.ois.jhove.JhoveBase;
 import edu.harvard.hul.ois.jhove.Module;
 import edu.harvard.hul.ois.jhove.OutputHandler;
+import picocli.CommandLine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,15 @@ public class Jhove
             LOGGER.log(Level.SEVERE, CoreMessageConstants.EXC_JAVA_VER_INCMPT);
             System.exit(ExitCode.INCOMPATIBLE_VM.getReturnCode());
         }
+
+        // SHORT DEMO and OUT
+        // Set up config
+        JhoveConfig config = new JhoveConfig();
+        // Parse the args passed
+        new CommandLine(config).parseArgs(args);
+        // Test the use of -k for checksumming.
+        System.out.println("Checksum opt is: " + config.isCheckum);
+        System.exit(0);
 
         try {
 
