@@ -8,8 +8,10 @@ package edu.harvard.hul.ois.jhove.module.xml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -327,28 +329,26 @@ public class XmlModuleHandler extends DefaultHandler {
                     _xhtmlFlag = true;
 		}
 		InputSource ent = DTDMapper.publicIDToFile(publicId);
+
+		// Attempt to resolve redirected URLs.
 		if (ent == null) {
 			try {
-				URL obj = new URL(systemId);
-				HttpURLConnection conn = (HttpURLConnection) obj
-						.openConnection();
+				URLConnection conn = new URL(systemId).openConnection();
+				if (conn instanceof HttpURLConnection) {
+					int status = ((HttpURLConnection) conn).getResponseCode();
+					if (status == HttpURLConnection.HTTP_MOVED_TEMP
+							|| status == HttpURLConnection.HTTP_MOVED_PERM
+							|| status == HttpURLConnection.HTTP_SEE_OTHER) {
 
-				int status = conn.getResponseCode();
-				if (status == HttpURLConnection.HTTP_MOVED_TEMP
-						|| status == HttpURLConnection.HTTP_MOVED_PERM
-						|| status == HttpURLConnection.HTTP_SEE_OTHER) {
-
-					String newUrl = conn.getHeaderField("Location");
-					conn = (HttpURLConnection) new URL(newUrl).openConnection();
-					ent = new InputSource(conn.getInputStream());
+						String newUrl = conn.getHeaderField("Location");
+						conn = new URL(newUrl).openConnection();
+						ent = new InputSource(conn.getInputStream());
+					}
 				}
-
-			} catch (Exception e) {
-				// Depending on the JDK version, super.resolveEntity
-				// may or may not be formally capable of throwing an
-				// IOException.
-				// This hack allows compatibility in either case.
-				throw new SAXException(e);
+			}
+			catch (IOException ioe) {
+				// Malformed URL or bad connection.
+				throw new SAXException(ioe);
 			}
 		} else {
 			// A little magic so SAX won't give up in advance on
