@@ -34,79 +34,76 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
  */
 public class XmlModuleHandler extends DefaultHandler {
 
-	/* List of entities String[2], { public ID, system ID} */
-	private List<EntityInfo> _entities;
-
-	/* Map of namespaces, prefix (String) to URI (String) */
+	/** Map of namespace prefixes to URIs. */
 	private Map<String, String> _namespaces;
 
-	/*
+	/**
 	 * List of processing instructions. Each element
 	 * is an array of two strings, giving the target
 	 * and data respectively.
 	 */
 	private List<ProcessingInstructionInfo> _processingInsts;
 
-	/* List of generated Messages. */
+	/** List of generated Messages. */
 	private List<Message> _messages;
 
-	/* Validity flag. */
+	/** Validity flag. */
 	private boolean _valid;
 
-	/* Qualified name of the root element. */
+	/** Qualified name of the root element. */
 	private String _root;
 
-	/* URI for DTD specification */
+	/** URI for DTD specification. */
 	private String _dtdURI;
 
-	/*
+	/**
 	 * List of schema URI's. Each element is a String[2],
 	 * consisting of the namespace URI and the schema location.
 	 */
 	private List<SchemaInfo> _schemas;
 
-	/*
+	/**
 	 * List of unparsed entities. Each is an array String[4];
 	 * name, public ID, system ID and notation name
 	 * respectively.
 	 */
 	private List<String[]> _unparsedEntities;
 
-	/* Error counter. */
+	/** Error counter. */
 	private int _nErrors;
 
-	/*
+	/**
 	 * Notations list. Each is an array String[3]:
 	 * name, public ID, and system ID.
 	 */
 	private List<String[]> _notations;
 
-	/*
+	/**
 	 * List of all the attributes. This is used to
 	 * check on the use of unparsed entities.
 	 */
 	private Set<String> _attributeVals;
 
-	/* Limit on number of errors to report. */
+	/** Limit on number of errors to report. */
 	private static final int MAXERRORS = 2000;
 
-	/*
+	/**
 	 * XHTML flag, only for XHTML documents referred
 	 * by the HTML module.
 	 */
 	private boolean _xhtmlFlag;
 
-	/* HTMLMetadata object; used only with XHTML documents. */
+	/** HTMLMetadata object; used only with XHTML documents. */
 	private HtmlMetadata _htmlMetadata;
 
-	/*
+	/**
 	 * Flag set if we've seen any components. This is an indirect
 	 * way of checking if the "signature" (the XML declaration)
 	 * has been seen.
 	 */
 	private boolean _sigFlag;
 
-	/* Map from URIs to local schema files */
+	/** Map from URIs to local schema files. */
 	private Map<String, File> _localSchemas;
 
 	/**
@@ -115,7 +112,6 @@ public class XmlModuleHandler extends DefaultHandler {
 	public XmlModuleHandler() {
 		_xhtmlFlag = false;
 		_htmlMetadata = null;
-		_entities = new LinkedList<>();
 		_namespaces = new HashMap<>();
 		_processingInsts = new LinkedList<>();
 		_messages = new LinkedList<>();
@@ -299,35 +295,48 @@ public class XmlModuleHandler extends DefaultHandler {
 	}
 
 	/**
-	 * Overrides standard resolveEntity. First looks for DTD and
-	 * entity files that are stored as resources, and uses those
-	 * if available. (Faster and more reliable than grabbing them
-	 * over the Net.) If that fails, calls the superclass's resolveEntity.
-	 * Regardless, it then looks for anything
-	 * that appears to be a DTD and puts it in the DTD URI field.
-	 * If the superclass's attempt to resolve the entity results in
-	 * an IOException, we just ignore it.
+	 * Overrides standard <code>resolveEntity</code> method to
+	 * provide special-case handling for external entity resolution.
 	 *
+	 * First looks for external entities that are stored as
+	 * local resources and uses those if available (faster and
+	 * more reliable than using the internet), preferring
+	 * user-supplied resources over packaged resources. Then
+	 * attempts to resolve any URLs that result in redirection
+	 * requests.
+	 *
+	 * Finally, returns <code>null</code> if the entity doesn't
+	 * require special handling, allowing the SAX implementation
+	 * to attempt its own resolution.
 	 */
 	@Override
 	public InputSource resolveEntity(String publicId, String systemId)
 			throws SAXException
-
 	{
-		// Check any custom mapping from the config
+		// Check for XHTML DTDs
+		if (!_xhtmlFlag && DTDMapper.isXHTMLDTD(publicId)) {
+			_xhtmlFlag = true;
+		}
+		// Assume that the first system ID in the file with a .dtd
+		// extension is the actual DTD
+		if (systemId.endsWith(".dtd") && _dtdURI == null) {
+			_dtdURI = systemId;
+		}
+
+		// Attempt to resolve system identifiers to schemas from config.
+		// This takes precedence, allowing users to override JHOVE resources.
 		File fil = _localSchemas.get(systemId.toLowerCase());
 		if (fil != null) {
 			try {
 				FileInputStream inStrm = new FileInputStream(fil);
 				return new InputSource(inStrm);
-			} catch (FileNotFoundException e) {
+			} catch (FileNotFoundException fnfe) {
+				// File locations should be verified before
+				// being added to the list of local schemas.
 			}
 		}
 
-		// Do special-case checking for the XHTML DTD's
-		if (!_xhtmlFlag && DTDMapper.isXHTMLDTD(publicId)) {
-                    _xhtmlFlag = true;
-		}
+		// Attempt to resolve public identifiers to local JHOVE resources.
 		InputSource ent = DTDMapper.publicIDToFile(publicId);
 
 		// Attempt to resolve redirected URLs.
@@ -356,18 +365,6 @@ public class XmlModuleHandler extends DefaultHandler {
 			ent.setSystemId("http://hul.harvard.edu/hul");
 		}
 
-		// Report in entity properties
-		EntityInfo entArr = new EntityInfo();
-		entArr.publicID = publicId;
-		entArr.systemID = systemId;
-		_entities.add(entArr);
-                /*
-                 * Assume that the first system ID in the file with a .dtd
-                 * extension is the actual DTD
-                 */
-		if (systemId.endsWith(".dtd") && _dtdURI == null) {
-                    _dtdURI = systemId;
-		}
 		return ent;
 	}
 
@@ -375,7 +372,7 @@ public class XmlModuleHandler extends DefaultHandler {
 	 * Picks up unparsed entity declarations, after calling the
 	 * superclass's unparsedEntityDecl, and puts their information
 	 * into the unparsed entity declaration list as an array of
-	 * four strings: [ name, publicId, systemId, notationName].
+	 * four strings: [ name, publicId, systemId, notationName ].
 	 * Null values are converted into empty strings.
 	 */
 	@Override
@@ -511,19 +508,16 @@ public class XmlModuleHandler extends DefaultHandler {
 		return _sigFlag;
 	}
 
-	/*
-	 * Check if we already know about this schema URI. If we do but the new info
-	 * provides
-	 * a location, quietly stuff the old one into a sewer and pretend it was
-	 * never there.
+	/**
+	 * Check if we already know about this schema URI. If we do
+	 * but the new info provides a location, quietly stuff the
+	 * old one into a sewer and pretend it was never there.
 	 */
 	public boolean hasSchemaURI(SchemaInfo newinfo) {
-		Iterator<SchemaInfo> schmiter = _schemas.iterator();
-		while (schmiter.hasNext()) {
-			SchemaInfo schmi = schmiter.next();
-			if (newinfo.namespaceURI.equals(schmi.namespaceURI)) {
-				if (schmi.location.isEmpty() && !newinfo.location.isEmpty()) {
-					_schemas.remove(schmi);
+		for (SchemaInfo schema : _schemas) {
+			if (newinfo.namespaceURI.equals(schema.namespaceURI)) {
+				if (schema.location.isEmpty() && !newinfo.location.isEmpty()) {
+					_schemas.remove(schema);
 					return false;    // we like the new info better
 				}
 				return true;

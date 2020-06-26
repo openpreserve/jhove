@@ -11,8 +11,8 @@ import java.util.*;
 
 /**
  * This class is layered under the InputSource for the XmlModule
- * so that it can detect an XML declaration and character references,
- * which aren't reported by other API's.  
+ * so that it can detect any XML declaration and character references,
+ * which aren't reported by other APIs.
  * 
  * This is called XmlDeclStream for historical reasons, though it's
  * no longer limited to that function.
@@ -20,40 +20,39 @@ import java.util.*;
  * @author Gary McGath
  */
 public class XmlDeclStream extends FilterInputStream {
+
     private static final int CR = 0x0d; // '\r'
     private static final int LF = 0x0a; // '\n'
 
-    
-    private StringBuffer declBuf;
-    private StringBuffer refBuf;
+    private StringBuilder declBuf;
+    private StringBuilder refBuf;
     private boolean seenChars;
 
     private String _version;
     private String _encoding;
     private String _standalone;
-    
-    /* List of Integers giving character references */
+
+    /** List of Integers giving character references. */
     private List<Integer> _charRefs;
 
-    /* To try to determine line ending */
     protected boolean _lineEndCR;
     protected boolean _lineEndLF;
     protected boolean _lineEndCRLF;
     protected int _prevChar;
-    
+
     public XmlDeclStream (InputStream strm) {
         super (strm);
         declBuf = null;
         seenChars = false;
         _charRefs = new LinkedList<> ();
-        
+
         // No line end types have been discovered.
         _lineEndCR = false;
         _lineEndLF = false;
         _lineEndCRLF = false;
         _prevChar = 0;
     }
-    
+
     /**
      * Reads the next byte of data from this input stream.
      * Processes bytes as it reads them.
@@ -67,8 +66,7 @@ public class XmlDeclStream extends FilterInputStream {
         }
         return retval;
     }
-    
-    
+
     /**
      * Reads up to <code>byte.length</code> bytes of data from this 
      * input stream into an array of bytes.
@@ -83,7 +81,6 @@ public class XmlDeclStream extends FilterInputStream {
         }
         return nbytes;
     }
-    
 
     /**
      * Reads up to <code>len</code> bytes of data from this 
@@ -97,40 +94,32 @@ public class XmlDeclStream extends FilterInputStream {
         for (int i = off; i < off + nbytes; i++) {
             process (b[i]);
         }
-        
         return nbytes;
     }
-    
-   
+
     /**
-     *  Returns the character references as a List
-     *  of Integers.  No sorting or elimination of
-     *  duplicates is done; this is just all the
-     *  character references in the order they occurred. 
+     * Returns the character references as a List
+     * of Integers.  No sorting or elimination of
+     * duplicates is done; this is just all the
+     * character references in the order they occurred.
      */
     public List<Integer> getCharacterReferences ()
     {
         return _charRefs;
     }  
-    
-    
-      
-    /** Accessor functions. */
-    
+
     /** Returns the version string. May be null (though it shouldn't
      *  be in well-formed XML). */
     public String getVersion ()
     {
         return _version;
     }
-    
-    
+
     /** Returns the encoding string. May be null. */
     public String getEncoding ()
     {
         return _encoding;
     }
-    
 
     /** Returns the standalone string. May be null. */
     public String getStandalone ()
@@ -138,8 +127,8 @@ public class XmlDeclStream extends FilterInputStream {
         return _standalone;
     }
 
-    
-    /* Processes each byte which comes through, looking for an XML 
+    /**
+     * Processes each byte which comes through, looking for an XML
      * declaration.  When it has a complete one, parses out the
      * parameters and makes them available. 
      * 
@@ -147,13 +136,13 @@ public class XmlDeclStream extends FilterInputStream {
      */
     private void process (int b) 
     {
-        /* Determine the line ending type(s). */
+        // Determine the line ending type(s).
         checkLineEnd(b);
         _prevChar = b;
         
         if (!seenChars || declBuf != null) {
             if (declBuf == null && b == '<') {
-                declBuf = new StringBuffer ("<");
+                declBuf = new StringBuilder ("<");
             }
             else if (declBuf != null) {
                 declBuf.append ((char) b);
@@ -164,12 +153,12 @@ public class XmlDeclStream extends FilterInputStream {
             }
         }
         if (refBuf == null && b == '&') {
-            refBuf = new StringBuffer ("&");
+            refBuf = new StringBuilder ("&");
         }
         else if (refBuf != null) {
             if (refBuf.length() == 1 && b != '#') {
-                // If & isn't followed by #, it's not a character
-                // reference.
+                // If '&' isn't followed by '#',
+                // it's not a character reference.
                 refBuf = null;
             }
             else if (b == ';') {
@@ -182,8 +171,9 @@ public class XmlDeclStream extends FilterInputStream {
         }
         seenChars = true;
     }
-    
-    /* We have the first thing to be enclosed in angle
+
+    /**
+     * We have the first thing to be enclosed in angle
      * brackets in declBuf.  See if it's an XML declaration,
      * and if so, extract the interesting information. 
      */
@@ -195,7 +185,7 @@ public class XmlDeclStream extends FilterInputStream {
             declBuf = null;
         }
         else {
-            // get version, encoding, standalone
+            // Get version, encoding, standalone
             int off;
             int off1 = 0;
             off = decl.indexOf ("version");
@@ -203,23 +193,23 @@ public class XmlDeclStream extends FilterInputStream {
                 _version = extractParam (decl, off);
                 off1 = off;
             }
-            
+
             // Use of off1 enforces order of attributes
             off = decl.indexOf ("encoding", off1);
             if (off > 0) {
                 _encoding = extractParam (decl, off);
                 off1 = off;
             }
-            
+
             off = decl.indexOf ("standalone", off1);
             if (off > 0) {
                 _standalone = extractParam (decl, off);
             }
         }
     }
-    
-    
-    /* We have a character reference -- or at least something
+
+    /**
+     * We have a character reference -- or at least something
      * that looks vaguely like one -- in refBuf.  This includes
      * the initial &# but not the final semicolon.
      * 
@@ -233,7 +223,7 @@ public class XmlDeclStream extends FilterInputStream {
         int val = 0;
         // Copy refBuf to a local variable so we can make sure
         // it gets nulled however we return.
-        StringBuffer refBuf1 = refBuf;
+        StringBuilder refBuf1 = refBuf;
         refBuf = null;
         if (isHex) {
             for (int i = 3; i < refBuf1.length (); i++) {
@@ -245,7 +235,7 @@ public class XmlDeclStream extends FilterInputStream {
                     val = 16 * val + (ch - '0');
                 }
                 else {
-                    return;        // invalid character in hex ref
+                    return;        // Invalid character in hex ref
                 }
             }
         }
@@ -257,24 +247,24 @@ public class XmlDeclStream extends FilterInputStream {
                     val = 10 * val + (ch - '0');
                 }
                 else {
-                    return;        // invalid character in hex ref
+                    return;        // Invalid character in hex ref
                 }
             }
         }
-        _charRefs.add (new Integer (val));
+        _charRefs.add (val);
     }
-    
-    
-    
-    /* extract a parameter (after an equal sign)
-     * from a string, after the offset off. */
+
+    /**
+     * Extract a parameter (after an equal sign)
+     * from a string, after the offset <code>off</code>.
+     */
     private static String extractParam (String str, int off)
     {
         int equIdx = str.indexOf ('=', off);
         if (equIdx == -1) {
             return null;
         }
-        // The parameter may be in single or double quotes,
+        // The parameter may be in single or double quotes.
         boolean singleQuote = false;
         boolean doubleQuote = false;
         int startOff = -1;
@@ -285,7 +275,7 @@ public class XmlDeclStream extends FilterInputStream {
                     continue;
                 }
                 else if (!singleQuote && !doubleQuote) {
-                    // white space, and not in quotes.
+                    // Whitespace, and not in quotes.
                     return str.substring(startOff, i + 1);
                 }
             }
@@ -316,10 +306,13 @@ public class XmlDeclStream extends FilterInputStream {
                 startOff = i;
             }
         }
-        return null;        // fell off end without finding a valid string
+        return null;        // Fell off end without finding a valid string
     }
-    /* Accumulate information about line endings. ch is the
-    current character, and _prevChar the one before it. */
+
+    /**
+     * Accumulate information about line endings. ch is the
+     * current character, and _prevChar the one before it.
+     */
      protected void checkLineEnd (int ch)
      {
         if (ch == LF) {
@@ -349,6 +342,4 @@ public class XmlDeclStream extends FilterInputStream {
          }
          return null;
      }
-     
-    
 }
