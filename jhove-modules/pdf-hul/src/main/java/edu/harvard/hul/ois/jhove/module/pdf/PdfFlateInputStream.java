@@ -1,9 +1,9 @@
-/**********************************************************************
- * Jhove - JSTOR/Harvard Object Validation Environment
- * Copyright 2005 by JSTOR and the President and Fellows of Harvard College
+/**
+ * ******************************************************************** Jhove - JSTOR/Harvard Object
+ * Validation Environment Copyright 2005 by JSTOR and the President and Fellows of Harvard College
  *
- **********************************************************************/
-
+ * <p>********************************************************************
+ */
 package edu.harvard.hul.ois.jhove.module.pdf;
 
 import java.io.FilterInputStream;
@@ -12,344 +12,323 @@ import java.io.InputStream;
 import java.util.zip.InflaterInputStream;
 
 /**
- * An enhancement of InflaterInputStream to support Predictor and Columns.
- * How complicated does this get?  Do I need to read the whole thing before I can
- * "predict" anything?
+ * An enhancement of InflaterInputStream to support Predictor and Columns. How complicated does this
+ * get? Do I need to read the whole thing before I can "predict" anything?
  *
  * @author Gary McGath
- *
  */
 public class PdfFlateInputStream extends FilterInputStream {
 
-    private InflaterInputStream iis;
-    private int predictor;
-    private int columns;
-    /* bits per component */
-    private int bpc;
-    /* colors -- the term is being used in some idiosyncratic sense */
-    private int colors;
+  private InflaterInputStream iis;
+  private int predictor;
+  private int columns;
+  /* bits per component */
+  private int bpc;
+  /* colors -- the term is being used in some idiosyncratic sense */
+  private int colors;
 
-    /* Number of bytes to hold last column of previous row, if needed */
-    private int colBytes;
-    /* Length of the total row, including space for last column.
-     * (Actual length of a predictive row is rowLen - colBytes) */
-    private int rowLen;
-    /* Two row buffers for double buffering */
-    private byte[] rowBuf;
-    private byte[] rowBuf2;
-    private int rowBufOff;    // aka linei_
-    private boolean eof;
+  /* Number of bytes to hold last column of previous row, if needed */
+  private int colBytes;
+  /* Length of the total row, including space for last column.
+   * (Actual length of a predictive row is rowLen - colBytes) */
+  private int rowLen;
+  /* Two row buffers for double buffering */
+  private byte[] rowBuf;
+  private byte[] rowBuf2;
+  private int rowBufOff; // aka linei_
+  private boolean eof;
 
-    /* offset to next available byte */
-    private int iisBufOff;
-    /* byte array read from IIS */
-    private byte[] iisBuf;
-    /* Allocation size for iisBuf */
-    private final static int IISBUF_SIZE = 4096;
-    /* iisBufLen -- number of bytes of valid data in iisBuf */
-    private int iisBufLen;
-    /* End of file indicator for IIS stream */
-    private boolean iisEof;
+  /* offset to next available byte */
+  private int iisBufOff;
+  /* byte array read from IIS */
+  private byte[] iisBuf;
+  /* Allocation size for iisBuf */
+  private static final int IISBUF_SIZE = 4096;
+  /* iisBufLen -- number of bytes of valid data in iisBuf */
+  private int iisBufLen;
+  /* End of file indicator for IIS stream */
+  private boolean iisEof;
 
-    /**
-     * Constructor with null DecodeParms dictionary
-     *
-     * @param is    InputStream to be inflated
-     */
-    public PdfFlateInputStream(InputStream is) {
-        this (is, null);
+  /**
+   * Constructor with null DecodeParms dictionary
+   *
+   * @param is InputStream to be inflated
+   */
+  public PdfFlateInputStream(InputStream is) {
+    this(is, null);
+  }
+
+  /**
+   * Constructor with specified DecodeParms dictionary
+   *
+   * @param is InputStream to be inflated
+   * @param parms DecodeParms dictionary. May be null, in which case this is equivalent to the
+   *     one-parameter constructor.
+   */
+  public PdfFlateInputStream(InputStream is, PdfDictionary parms) {
+    super(is);
+    iis = new InflaterInputStream(is);
+    /* Set default values */
+    predictor = 1; // no prediction
+    columns = 1;
+    bpc = 8;
+    colors = 1;
+
+    iisBuf = new byte[IISBUF_SIZE];
+    iisBufLen = 0;
+    iisBufOff = 0;
+    iisEof = false;
+    eof = false;
+    if (parms != null) {
+      /* Extract relevant dictionary defs */
+      try {
+        PdfSimpleObject pred = (PdfSimpleObject) parms.get("Predictor");
+        if (pred != null) {
+          predictor = pred.getIntValue();
+        }
+      } catch (Exception e) {
+      }
+      try {
+        PdfSimpleObject col = (PdfSimpleObject) parms.get("Columns");
+        if (col != null) {
+          columns = col.getIntValue();
+        }
+      } catch (Exception e) {
+      }
+      try {
+        PdfSimpleObject bitsper = (PdfSimpleObject) parms.get("BitsPerComponent");
+        if (bitsper != null) {
+          bpc = bitsper.getIntValue();
+        }
+      } catch (Exception e) {
+      }
     }
-
-    /**
-     * Constructor with specified DecodeParms dictionary
-     *
-     * @param is    InputStream to be inflated
-     * @param parms DecodeParms dictionary.
-     *              May be null, in which case this is equivalent
-     *              to the one-parameter constructor.
-     *
-     */
-    public PdfFlateInputStream (InputStream is, PdfDictionary parms)
-    {
-        super(is);
-        iis = new InflaterInputStream (is);
-        /* Set default values */
-        predictor = 1;   // no prediction
-        columns = 1;
-        bpc = 8;
-        colors = 1;
-
-        iisBuf = new byte [IISBUF_SIZE];
-        iisBufLen = 0;
-        iisBufOff = 0;
-        iisEof = false;
-        eof = false;
-        if (parms != null) {
-            /* Extract relevant dictionary defs */
-            try {
-                PdfSimpleObject pred = (PdfSimpleObject) parms.get ("Predictor");
-                if (pred != null) {
-                    predictor = pred.getIntValue();
-                }
-            }
-            catch (Exception e) {}
-            try {
-                PdfSimpleObject col = (PdfSimpleObject) parms.get ("Columns");
-                if (col != null) {
-                    columns = col.getIntValue();
-                }
-            }
-            catch (Exception e) {}
-            try {
-                PdfSimpleObject bitsper = (PdfSimpleObject) parms.get ("BitsPerComponent");
-                if (bitsper != null) {
-                    bpc = bitsper.getIntValue();
-                }
-            }
-            catch (Exception e) {}
-        }
-        /* Calculate byte counts */
-        if (predictor != 1) {
-            colBytes = (colors * bpc + 7) / 8;
-            rowLen = (columns * colors * bpc + 7) / 8 + colBytes;
-            rowBuf = new byte[rowLen];
-            rowBuf2 = new byte[rowLen];
-            rowBufOff = rowLen;
-        }
+    /* Calculate byte counts */
+    if (predictor != 1) {
+      colBytes = (colors * bpc + 7) / 8;
+      rowLen = (columns * colors * bpc + 7) / 8 + colBytes;
+      rowBuf = new byte[rowLen];
+      rowBuf2 = new byte[rowLen];
+      rowBufOff = rowLen;
     }
+  }
 
-    /** Reads one byte from the stream.
-     *  Returns -1 if end of file is reached.
-     *
-     * @return number of bytes
-     * @throws IOException
-     */
-    @Override
-    public int read() throws IOException
-    {
-        if (eof) {
-            return -1;
-        }
-        if (predictor == 1) {
-            return readIISByte ();
-        }
-        if (rowBufOff == rowLen) {
-            // Starting out, or previous row exhausted.
-            readRow ();
-            if (eof) {
-                return -1;
-            }
-        }
-        return rowBuf[rowBufOff++] & 0xFF;
+  /**
+   * Reads one byte from the stream. Returns -1 if end of file is reached.
+   *
+   * @return number of bytes
+   * @throws IOException
+   */
+  @Override
+  public int read() throws IOException {
+    if (eof) {
+      return -1;
     }
-
-    /** *  Reads the specified number of bytes into a buffer.Returns the number of bytes actually read, or -1 if
-  end of file has been reached.
-     *
-     *  @param b: array of bytes in buffer
-     *  @return int: the number of bytes actually read or -1 if
-     *  end of file has been reached
-     *  @throws IOException
-     */
-    @Override
-    public int read (byte[] b) throws IOException
-    {
-        /* Need to read a byte at a time till we have something to expand */
-        return read (b, 0, b.length);
+    if (predictor == 1) {
+      return readIISByte();
     }
-
-    /** Reads the specified number of bytes into a buffer
-     *  with offset and length specified.
-     *  Returns -1 if end of file has been reached.
-     *  No matter how much is requested, this will only return one
-     *  row's worth of data at most.
-     *
-     *  @param b: array of bytes of file
-     *  @param off: the specified offset
-     *  @param len: the specified length
-     *  @return number of bytes or -1 if end of file is reached
-     *  @throws IOException
-     */
-    @Override
-    public int read (byte[] b, int off, int len) throws IOException
-    {
-        if (eof) {
-            return -1;
-        }
-        if (predictor == 1) {
-            // predictor of 1 means no predictor.
-            //return iis.read (b, off, len);
-            // That can't be right, can it?
-            return readIISBytes(b, off, len);
-        }
-        if (rowBufOff == rowLen) {
-            // Starting out, or previous row exhausted.
-            readRow ();
-            if (eof) {
-                return -1;
-            }
-        }
-        if (len > rowLen - rowBufOff) {
-            /* Return no more than a row's worth, regardless */
-            len = rowLen - rowBufOff;
-        }
-        for (int i = 0; i < len; i++) {
-            b[off + i] = rowBuf[rowBufOff++];
-        }
-        return len;
+    if (rowBufOff == rowLen) {
+      // Starting out, or previous row exhausted.
+      readRow();
+      if (eof) {
+        return -1;
+      }
     }
+    return rowBuf[rowBufOff++] & 0xFF;
+  }
 
-    @Override
-    public long skip (long n) throws IOException {
-        return skipIISBytes(n);
+  /**
+   * * Reads the specified number of bytes into a buffer.Returns the number of bytes actually read,
+   * or -1 if end of file has been reached.
+   *
+   * @param b: array of bytes in buffer
+   * @return int: the number of bytes actually read or -1 if end of file has been reached
+   * @throws IOException
+   */
+  @Override
+  public int read(byte[] b) throws IOException {
+    /* Need to read a byte at a time till we have something to expand */
+    return read(b, 0, b.length);
+  }
+
+  /**
+   * Reads the specified number of bytes into a buffer with offset and length specified. Returns -1
+   * if end of file has been reached. No matter how much is requested, this will only return one
+   * row's worth of data at most.
+   *
+   * @param b: array of bytes of file
+   * @param off: the specified offset
+   * @param len: the specified length
+   * @return number of bytes or -1 if end of file is reached
+   * @throws IOException
+   */
+  @Override
+  public int read(byte[] b, int off, int len) throws IOException {
+    if (eof) {
+      return -1;
     }
-
-    /* Reads a row's worth of data and stores in rowBuf. */
-    private void readRow () throws IOException
-    {
-        /* Swap rowBuf and rowBuf2 */
-        byte[] r = rowBuf;
-        rowBuf = rowBuf2;
-        rowBuf2 = r;
-        rowBufOff = colBytes;
-
-        // Ignore weird predictor of 15 for now
-        if (predictor >= 10) {
-            // throw one byte away
-            readIISByte ();
-        }
-        int off = colBytes;
-        while (off < rowLen) {
-            int n = readIISBytes(rowBuf, off, rowLen - off);
-            if (n > 0) {
-                off += n;
-            }
-            else {
-                eof = true;
-                return;
-            }
-        }
-        switch (predictor) {
-            case 1:
-            case 10:
-                break;
-            case 2:
-                // TIFF predictor
-            case 11:
-                // Sub -- left
-                for (int i = colBytes; i < rowLen; i++) {
-                    rowBuf[i] += rowBuf[i - colBytes];
-                }
-                break;
-            case 12:
-                // Up -- above
-                for (int i = colBytes; i < rowLen; i++) {
-                    rowBuf[i] += rowBuf2[i];
-                }
-                break;
-            case 13:
-                // Average -- (left + above) / 2
-                for (int i = colBytes; i < rowLen; i++) {
-                    rowBuf[i] += ((rowBuf[i - colBytes] & 0xFF) +
-                                  (rowBuf2[i] & 0xFF)) / 2;
-                }
-                break;
-            case 14:    // Paeth -- closest of left, above, upper-left
-                for (int i = colBytes; i < rowLen; i++) {
-                    int a = rowBuf[i - colBytes] & 0xFF;
-                    int b = rowBuf2[i] & 0xFF;
-                    int c = rowBuf2[i - colBytes] & 0xFF;
-                    int p = a + b - c;
-                    int pa = Math.abs(p - a);
-                    int pb = Math.abs(p - b);
-                    int pc = Math.abs(p - c);
-
-                    int val;
-                    if (pa<=pb && pa<=pc) {
-                        val = a;
-                    }
-                    else if (pb<=pc) {
-                        val = b;
-                    }
-                    else {
-                        val = c;
-                    }
-
-                    rowBuf[i] += (byte)val;
-                }
-                break;
-            case 15:    // optimum -- per line determination
-                break;
-            default:
-                break;
-        }
+    if (predictor == 1) {
+      // predictor of 1 means no predictor.
+      // return iis.read (b, off, len);
+      // That can't be right, can it?
+      return readIISBytes(b, off, len);
     }
-
-    /** Get an "inflated" byte.  We do buffering here
-     *  for efficiency. */
-    private int readIISByte ()
-             throws IOException
-    {
-        // iisBufOff -- offset to next available byte
-        // iisBuf -- byte array read from IIS
-        // iisBufLen -- number of bytes of valid data in iisBuf
-        if (iisBufOff >= iisBufLen && !iisEof) {
-            readIIS ();
-        }
-        if (iisEof) {
-            return -1;
-        }
-        return iisBuf[iisBufOff++] & 0xFF;
+    if (rowBufOff == rowLen) {
+      // Starting out, or previous row exhausted.
+      readRow();
+      if (eof) {
+        return -1;
+      }
     }
-
-    /** Get a bufferload of bytes. */
-    private int readIISBytes (byte[] buf, int off, int len)
-             throws IOException
-    {
-        if (iisBufOff >= iisBufLen && !iisEof) {
-            readIIS ();
-        }
-        if (iisEof) {
-            return -1;
-        }
-        /* We don't attempt to optimize across buffer boundaries */
-        if (iisBufLen - iisBufOff < len) {
-            len = iisBufLen - iisBufOff;
-        }
-        for (int i = off; i < off + len; i++) {
-            buf[i] = iisBuf[iisBufOff++];
-        }
-        return len;
+    if (len > rowLen - rowBufOff) {
+      /* Return no more than a row's worth, regardless */
+      len = rowLen - rowBufOff;
     }
-
-    /** Skip a specified number of bytes. */
-    private long skipIISBytes (long n) throws IOException {
-        if (iisBufOff >= iisBufLen && !iisEof) {
-            readIIS ();
-        }
-        if (iisEof) {
-            return -1;
-        }
-        if (iisBufLen - iisBufOff < n) {
-            n = iisBufLen - iisBufOff;
-        }
-        iisBufOff += n;
-        return n;
+    for (int i = 0; i < len; i++) {
+      b[off + i] = rowBuf[rowBufOff++];
     }
+    return len;
+  }
 
-    /** Fill up the IIS buffer.  Should be called only by
-     *  other IIS buffer-specific routines. */
-    private int readIIS () throws IOException
-    {
-        if (iisEof) {
-            return -1;
-        }
-        int n = iis.read (iisBuf);
-        iisBufOff = 0;
-        iisBufLen = n;
-        if (n <= 0) {
-            iisEof = true;
-        }
-        return n;
+  @Override
+  public long skip(long n) throws IOException {
+    return skipIISBytes(n);
+  }
+
+  /* Reads a row's worth of data and stores in rowBuf. */
+  private void readRow() throws IOException {
+    /* Swap rowBuf and rowBuf2 */
+    byte[] r = rowBuf;
+    rowBuf = rowBuf2;
+    rowBuf2 = r;
+    rowBufOff = colBytes;
+
+    // Ignore weird predictor of 15 for now
+    if (predictor >= 10) {
+      // throw one byte away
+      readIISByte();
     }
+    int off = colBytes;
+    while (off < rowLen) {
+      int n = readIISBytes(rowBuf, off, rowLen - off);
+      if (n > 0) {
+        off += n;
+      } else {
+        eof = true;
+        return;
+      }
+    }
+    switch (predictor) {
+      case 1:
+      case 10:
+        break;
+      case 2:
+        // TIFF predictor
+      case 11:
+        // Sub -- left
+        for (int i = colBytes; i < rowLen; i++) {
+          rowBuf[i] += rowBuf[i - colBytes];
+        }
+        break;
+      case 12:
+        // Up -- above
+        for (int i = colBytes; i < rowLen; i++) {
+          rowBuf[i] += rowBuf2[i];
+        }
+        break;
+      case 13:
+        // Average -- (left + above) / 2
+        for (int i = colBytes; i < rowLen; i++) {
+          rowBuf[i] += ((rowBuf[i - colBytes] & 0xFF) + (rowBuf2[i] & 0xFF)) / 2;
+        }
+        break;
+      case 14: // Paeth -- closest of left, above, upper-left
+        for (int i = colBytes; i < rowLen; i++) {
+          int a = rowBuf[i - colBytes] & 0xFF;
+          int b = rowBuf2[i] & 0xFF;
+          int c = rowBuf2[i - colBytes] & 0xFF;
+          int p = a + b - c;
+          int pa = Math.abs(p - a);
+          int pb = Math.abs(p - b);
+          int pc = Math.abs(p - c);
+
+          int val;
+          if (pa <= pb && pa <= pc) {
+            val = a;
+          } else if (pb <= pc) {
+            val = b;
+          } else {
+            val = c;
+          }
+
+          rowBuf[i] += (byte) val;
+        }
+        break;
+      case 15: // optimum -- per line determination
+        break;
+      default:
+        break;
+    }
+  }
+
+  /** Get an "inflated" byte. We do buffering here for efficiency. */
+  private int readIISByte() throws IOException {
+    // iisBufOff -- offset to next available byte
+    // iisBuf -- byte array read from IIS
+    // iisBufLen -- number of bytes of valid data in iisBuf
+    if (iisBufOff >= iisBufLen && !iisEof) {
+      readIIS();
+    }
+    if (iisEof) {
+      return -1;
+    }
+    return iisBuf[iisBufOff++] & 0xFF;
+  }
+
+  /** Get a bufferload of bytes. */
+  private int readIISBytes(byte[] buf, int off, int len) throws IOException {
+    if (iisBufOff >= iisBufLen && !iisEof) {
+      readIIS();
+    }
+    if (iisEof) {
+      return -1;
+    }
+    /* We don't attempt to optimize across buffer boundaries */
+    if (iisBufLen - iisBufOff < len) {
+      len = iisBufLen - iisBufOff;
+    }
+    for (int i = off; i < off + len; i++) {
+      buf[i] = iisBuf[iisBufOff++];
+    }
+    return len;
+  }
+
+  /** Skip a specified number of bytes. */
+  private long skipIISBytes(long n) throws IOException {
+    if (iisBufOff >= iisBufLen && !iisEof) {
+      readIIS();
+    }
+    if (iisEof) {
+      return -1;
+    }
+    if (iisBufLen - iisBufOff < n) {
+      n = iisBufLen - iisBufOff;
+    }
+    iisBufOff += n;
+    return n;
+  }
+
+  /** Fill up the IIS buffer. Should be called only by other IIS buffer-specific routines. */
+  private int readIIS() throws IOException {
+    if (iisEof) {
+      return -1;
+    }
+    int n = iis.read(iisBuf);
+    iisBufOff = 0;
+    iisBufLen = n;
+    if (n <= 0) {
+      iisEof = true;
+    }
+    return n;
+  }
 }

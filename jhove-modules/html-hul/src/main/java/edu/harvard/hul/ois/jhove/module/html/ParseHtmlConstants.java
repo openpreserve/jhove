@@ -60,5 +60,4 @@ public interface ParseHtmlConstants {
     "\">\"",
     "<token of kind 26>",
   };
-
 }

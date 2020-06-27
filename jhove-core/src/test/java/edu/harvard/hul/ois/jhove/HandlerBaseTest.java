@@ -3,7 +3,6 @@ package edu.harvard.hul.ois.jhove;
 import static org.junit.Assert.assertEquals;
 
 import java.util.logging.Logger;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -13,17 +12,13 @@ public class HandlerBaseTest {
   private static final Logger LOGGER = Logger.getLogger(HandlerBaseTest.class.getName());
   private static final String GIVES = " => ";
   private static final String DUMMY = "dummy";
-  
+
   @Test
   public void testEncodeContent() {
     /* Test values */
-    final String[] VALUES = {
-      DUMMY, "<<>>\"\"''&&"
-    };
+    final String[] VALUES = {DUMMY, "<<>>\"\"''&&"};
 
-    final String[] EXPECTED = {
-      DUMMY, "&lt;&lt;&gt;&gt;\"\"''&amp;&amp;"
-    };
+    final String[] EXPECTED = {DUMMY, "&lt;&lt;&gt;&gt;\"\"''&amp;&amp;"};
 
     String encodeValue;
     for (int i = 0; i < VALUES.length; i++) {
@@ -36,12 +31,8 @@ public class HandlerBaseTest {
   @Test
   public void testEncodeValue() {
     /* Test values */
-    final String[] VALUES = {
-      DUMMY, "<<>>\"'&", "" + (char)0xf + "\"\""
-    };
-    final String[] EXPECTED = {
-      DUMMY, "&lt;&lt;&gt;&gt;&quot;'&amp;", "&quot;&quot;"
-    };
+    final String[] VALUES = {DUMMY, "<<>>\"'&", "" + (char) 0xf + "\"\""};
+    final String[] EXPECTED = {DUMMY, "&lt;&lt;&gt;&gt;&quot;'&amp;", "&quot;&quot;"};
 
     String encodeValue;
     for (int i = 0; i < VALUES.length; i++) {
@@ -50,5 +41,4 @@ public class HandlerBaseTest {
       assertEquals(EXPECTED[i], encodeValue);
     }
   }
-
 }
