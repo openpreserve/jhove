@@ -14,10 +14,11 @@ import org.openpreservation.jhove.ReleaseDetails;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-import javax.net.ssl.*;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
@@ -223,7 +224,8 @@ public class JhoveBase {
             }
         } catch (Exception e) {
             // If we can't get a SAX parser, we're stuck.
-            throw new JhoveException(CoreMessageConstants.EXC_SAX_PRSR_MISS + saxClass, e);
+            throw new JhoveException(CoreMessageConstants.EXC_SAX_PRSR_MISS
+                    + saxClass, e);
         }
 
         _logger.info("Using SAX parser " + parser.getClass().getName());
@@ -305,7 +307,8 @@ public class JhoveBase {
             if (size != null) {
                 try {
                     _bufferSize = Integer.parseInt(size);
-                } catch (Exception e) {
+                } catch (NumberFormatException nfe) {
+                    // Not a valid integer, so ignore it.
                 }
             }
             if (_bufferSize < 0) {
@@ -313,7 +316,7 @@ public class JhoveBase {
             }
         }
 
-        // Retrieve the ordered lists of modules and output handlers
+        // Retrieve the ordered list of modules
         List<ModuleInfo> modList = configHandler.getModule();
         List<List<String>> params = configHandler.getModuleParams();
         for (int i = 0; i < modList.size(); i++) {
@@ -334,6 +337,7 @@ public class JhoveBase {
             }
         }
 
+        // Retrieve the list of output handlers
         List<String[]> hanList = configHandler.getHandler();
         params = configHandler.getHandlerParams();
         for (int i = 0; i < hanList.size(); i++) {
@@ -356,27 +360,27 @@ public class JhoveBase {
         // are always statically loaded.
 
         Module module = new BytestreamModule();
-        module.setDefaultParams(new ArrayList<String>());
+        module.setDefaultParams(new ArrayList<>());
         _moduleList.add(module);
         _moduleMap.put(module.getName().toLowerCase(), module);
 
         OutputHandler handler = new TextHandler();
-        handler.setDefaultParams(new ArrayList<String>());
+        handler.setDefaultParams(new ArrayList<>());
         _handlerList.add(handler);
         _handlerMap.put(handler.getName().toLowerCase(), handler);
 
         handler = new XmlHandler();
-        handler.setDefaultParams(new ArrayList<String>());
+        handler.setDefaultParams(new ArrayList<>());
         _handlerList.add(handler);
         _handlerMap.put(handler.getName().toLowerCase(), handler);
 
         handler = new JsonHandler();
-        handler.setDefaultParams(new ArrayList<String>());
+        handler.setDefaultParams(new ArrayList<>());
         _handlerList.add(handler);
         _handlerMap.put(handler.getName().toLowerCase(), handler);
 
         handler = new AuditHandler();
-        handler.setDefaultParams(new ArrayList<String>());
+        handler.setDefaultParams(new ArrayList<>());
         _handlerList.add(handler);
         _handlerMap.put(handler.getName().toLowerCase(), handler);
     }
@@ -478,7 +482,7 @@ public class JhoveBase {
         URI uri = null;
         try {
             uri = new URI(dirFileOrUri);
-        } catch (Exception e) {
+        } catch (URISyntaxException use) {
             // We may get an exception on Windows paths,
             // if so then fall through and try for a file.
         }
@@ -487,7 +491,7 @@ public class JhoveBase {
             URL url = null;
             try {
                 url = uri.toURL();
-            } catch (Exception e) {
+            } catch (MalformedURLException mue) {
                 throw new JhoveException(CoreMessageConstants.EXC_URI_CONV_FAIL
                         + dirFileOrUri);
             }
@@ -591,9 +595,10 @@ public class JhoveBase {
                     // module doesn't know how to validate, we don't want to
                     // throw arbitrary files at it, so we'll skip it.
                     for (Module mod : _moduleList) {
-                        RepInfo infc = (RepInfo) info.clone();
 
                         if (mod.hasFeature("edu.harvard.hul.ois.jhove.canValidate")) {
+                            RepInfo infc = (RepInfo) info.clone();
+
                             try {
                                 if (!processFile(app, mod, false, file, infc)) {
                                     return false;
@@ -1069,7 +1074,7 @@ public class JhoveBase {
         if (level != null) {
             try {
                 _logger.setLevel(Level.parse(_logLevel));
-            } catch (Exception e) {
+            } catch (SecurityException se) {
             }
         }
     }
@@ -1186,8 +1191,8 @@ public class JhoveBase {
                 osw = new OutputStreamWriter(stream, encoding);
                 output = new PrintWriter(osw);
             } catch (UnsupportedEncodingException uee) {
-                throw new JhoveException(CoreMessageConstants.EXC_CHAR_ENC_UNSPPTD
-                        + encoding);
+                throw new JhoveException(
+                        CoreMessageConstants.EXC_CHAR_ENC_UNSPPTD + encoding);
             } catch (FileNotFoundException fnfe) {
                 throw new JhoveException(CoreMessageConstants.EXC_FILE_OPEN
                         + outputFile);
@@ -1197,8 +1202,8 @@ public class JhoveBase {
             try {
                 osw = new OutputStreamWriter(System.out, encoding);
             } catch (UnsupportedEncodingException uee) {
-                throw new JhoveException(CoreMessageConstants.EXC_CHAR_ENC_UNSPPTD
-                        + encoding);
+                throw new JhoveException(
+                        CoreMessageConstants.EXC_CHAR_ENC_UNSPPTD + encoding);
             }
             output = new PrintWriter(osw);
         }
@@ -1217,7 +1222,7 @@ public class JhoveBase {
      * A HostnameVerifier for HTTPS connections that will never ask for
      * certificates.
      */
-    private class NaiveHostnameVerifier implements HostnameVerifier {
+    private static class NaiveHostnameVerifier implements HostnameVerifier {
         public boolean verify(String hostname, SSLSession session) {
             return true;
         }
@@ -1226,7 +1231,7 @@ public class JhoveBase {
     /**
      * A TrustManager which should accept all certificates.
      */
-    private class RelaxedX509TrustManager implements X509TrustManager {
+    private static class RelaxedX509TrustManager implements X509TrustManager {
         public boolean isClientTrusted(
                 java.security.cert.X509Certificate[] chain) {
             return true;
