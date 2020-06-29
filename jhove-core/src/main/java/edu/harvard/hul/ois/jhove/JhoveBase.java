@@ -327,7 +327,7 @@ public class JhoveBase {
 
                 _moduleList.add(module);
                 _moduleMap.put(module.getName().toLowerCase(), module);
-                _logger.info("Initialized " + module.getName());
+                _logger.fine("Initialized " + module.getName());
             } catch (Exception e) {
                 throw new JhoveException(CoreMessageConstants.EXC_MODL_INST_FAIL
                         + modInfo.clas, e);
@@ -425,10 +425,12 @@ public class JhoveBase {
         handler.reset();
         _outputFile = outputFile;
 
+        _logger.info("Preparing " + handler.getName()
+                + " handler to write to \""
+                + (_outputFile == null ? "STDOUT" : _outputFile) + "\"");
+
         handler.setApp(app);
         handler.setBase(this);
-        _logger.info("Handler " + handler.getClass().getName()
-                + " preparing to write to " + _outputFile);
         handler.setWriter(makeWriter(_outputFile, _encoding));
 
         handler.showHeader();
@@ -467,8 +469,7 @@ public class JhoveBase {
         if (_abort) {
             return false;
         }
-        _logger.info("Entering JhoveBase.process, file/uri = "
-                + dirFileOrUri);
+        _logger.info("Processing \"" + dirFileOrUri + "\"");
         File file = null;
         boolean isTemp = false;
         long lastModified = -1;
@@ -553,12 +554,12 @@ public class JhoveBase {
         } else {
 
             if (!file.exists()) {
-                _logger.info("File not found");
+                _logger.info("File not found: \"" + file.getPath() + "\"");
                 info.setMessage(new ErrorMessage(CoreMessageConstants.ERR_FILE_NOT_FOUND));
                 info.setWellFormed(RepInfo.UNDETERMINED);
                 info.show(handler);
             } else if (!file.isFile() || !file.canRead()) {
-                _logger.info("File cannot be read");
+                _logger.info("File cannot be read: \"" + file.getPath() + "\"");
                 info.setMessage(new ErrorMessage(CoreMessageConstants.ERR_FILE_READ));
                 info.setWellFormed(RepInfo.UNDETERMINED);
                 info.show(handler);
@@ -570,20 +571,21 @@ public class JhoveBase {
                 info.setLastModified(new Date(lastModified));
 
                 if (module != null) {
-
-                    // Invoke the specified module.
-                    _logger.info("Processing " + file.getName()
-                            + " with module " + module.getClass().getName());
                     try {
+                        // Invoke the specified module.
                         if (!processFile(app, module, false, file, info)) {
                             return false;
                         }
                     } catch (Exception e) {
-                        info.setMessage(new ErrorMessage(CoreMessageConstants.EXC_UNEXPECTED));
+                        _logger.log(Level.SEVERE,
+                                CoreMessageConstants.EXC_UNEXPECTED, e);
+                        info.setMessage(new ErrorMessage(
+                                CoreMessageConstants.EXC_UNEXPECTED));
                         info.setWellFormed(RepInfo.UNDETERMINED);
-                        _logger.log(Level.SEVERE, CoreMessageConstants.EXC_UNEXPECTED, e);
                     }
                 } else {
+
+                    _logger.info("Discovering compatible modules...");
 
                     // Invoke all modules until one returns well-formed. If a
                     // module doesn't know how to validate, we don't want to
@@ -610,7 +612,7 @@ public class JhoveBase {
                                 // the wrong type of file, the module may go off
                                 // its track and throw an exception, so we just
                                 // continue on to the next module.
-                                _logger.info("JHOVE caught exception: "
+                                _logger.fine("JHOVE caught exception: "
                                         + e.getClass().getName());
                             }
                         }
@@ -778,6 +780,10 @@ public class JhoveBase {
         if (!module.hasFeature("edu.harvard.hul.ois.jhove.canValidate")) {
             return false;
         }
+
+        _logger.info("Processing \"" + file.getPath() + "\" with "
+                + module.getName() + " module");
+
         if (_callback != null) {
             _callback.callback(2, info.getUri());
         }
