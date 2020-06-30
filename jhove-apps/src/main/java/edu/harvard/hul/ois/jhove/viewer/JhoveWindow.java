@@ -30,18 +30,15 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.ButtonGroup;
@@ -89,7 +86,6 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 	private boolean _doChecksum;
 
 	private ProgressWindow _progWind;
-	// private ConfigWindow _configWind;
 	private PrefsWindow _prefsWindow;
 
 	private File _lastDir;
@@ -109,55 +105,36 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		_logger = Logger.getLogger("edu.harvard.hul.ois.jhove.viewer");
 		_app = app;
 		_base = base;
-		_moduleMenuListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_selectedModule = e.getActionCommand();
-			}
-		};
+		_moduleMenuListener = e -> _selectedModule = e.getActionCommand();
 
 		_lastDir = null;
 		_moduleGroup = new ButtonGroup();
 		addMenus();
 		Container rootPane = getContentPane();
-		// rootPane.setLayout (new GridLayout (4, 2));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Define a Comparator function for Modules
-		Comparator<Module> modListComparator = new Comparator<Module>() {
-			@Override
-			public int compare(Module o1, Module o2) {
-				Module m1 = o1;
-				Module m2 = o2;
-				String name1 = m1.getName();
-				String name2 = m2.getName();
-				return String.CASE_INSENSITIVE_ORDER.compare(name1, name2);
-			}
-		};
+		Comparator<Module> modListComparator = (m1, m2) ->
+				String.CASE_INSENSITIVE_ORDER.compare(
+						m1.getName(), m2.getName());
 
 		// Build combo box of available modules
-		Vector<String> moduleItems = new Vector<>(10);
-		java.util.List<Module> moduleList = base.getModuleList();
+		List<Module> moduleList = base.getModuleList();
 		// Clone the list so we can display it in sorted order
 		// without munging the app's preferred order
-		java.util.List<Module> menuModuleList = new ArrayList<>(
-				moduleList.size());
+		List<Module> menuModuleList = new ArrayList<>(moduleList.size());
 		menuModuleList.addAll(moduleList);
-		Collections.sort(menuModuleList, modListComparator);
-		Iterator<Module> iter = menuModuleList.iterator();
-		moduleItems.add("(None selected)");
+		menuModuleList.sort(modListComparator);
 		JRadioButtonMenuItem modItem = null;
 		String itemName = null;
 
-		while (iter.hasNext()) {
-			Module mod = iter.next();
-			itemName = mod.getName();
+		for (Module module : menuModuleList) {
+			itemName = module.getName();
 			modItem = new JRadioButtonMenuItem(itemName);
 			modItem.setActionCommand(itemName);
 			modItem.addActionListener(_moduleMenuListener);
 			_moduleSubmenu.add(modItem);
 			_moduleGroup.add(modItem);
-			// moduleItems.add (mod.getName ());
 		}
 
 		logo = new JPanel();
@@ -184,23 +161,15 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 
 		// Set up a companion progress window. This will
 		// be hidden and displayed as needed.
-		ActionListener listener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_base.abort();
-			}
-		};
-		_progWind = new ProgressWindow(listener);
+		_progWind = new ProgressWindow(e -> _base.abort());
 		_progWind.setLocationRelativeTo(null);
 
 		// Set up a Handler which is tailored to this application.
 		_viewHandler = new ViewHandler(this, _app, _base);
 	}
 
-	/**
-	 * Set up the menu bar and menus.
-	 */
-	final private void addMenus() {
+	/** Set up the menu bar and menus. */
+	private void addMenus() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);
@@ -212,20 +181,10 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		_openFileItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
-		_openFileItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pickAndAnalyzeFile();
-			}
-		});
+		_openFileItem.addActionListener(e -> pickAndAnalyzeFile());
 		_openURLItem = new JMenuItem("Open URL...");
 		fileMenu.add(_openURLItem);
-		_openURLItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pickAndAnalyzeURL();
-			}
-		});
+		_openURLItem.addActionListener(e -> pickAndAnalyzeURL());
 
 		_closeAllItem = new JMenuItem("Close all document windows");
 		fileMenu.add(_closeAllItem);
@@ -238,12 +197,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 			fileMenu.add(quitItem);
 			quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
 					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-			quitItem.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					System.exit(0);
-				}
-			});
+			quitItem.addActionListener(e -> System.exit(0));
 		}
 
 		JMenu editMenu = new JMenu("Configuration");
@@ -264,12 +218,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 
 		JMenuItem editConfigItem = new JMenuItem("Edit configuration file...");
 		editMenu.add(editConfigItem);
-		editConfigItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				openConfigWindow();
-			}
-		});
+		editConfigItem.addActionListener(e -> openConfigWindow());
 
 		JMenuItem prefItem = new JMenuItem("Edit temporary preferences...");
 		editMenu.add(prefItem);
@@ -287,20 +236,10 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		menuBar.add(helpMenu);
 		JMenuItem aboutModuleItem = new JMenuItem("About module");
 		helpMenu.add(aboutModuleItem);
-		aboutModuleItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showModuleInfo();
-			}
-		});
+		aboutModuleItem.addActionListener(e -> showModuleInfo());
 		JMenuItem aboutAppItem = new JMenuItem("About JHOVE");
 		helpMenu.add(aboutAppItem);
-		aboutAppItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showAppInfo();
-			}
-		});
+		aboutAppItem.addActionListener(e -> showAppInfo());
 
 		setJMenuBar(menuBar);
 	}
@@ -344,14 +283,13 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 			} else {
 				_openFileItem.setEnabled(true);
 				_openURLItem.setEnabled(true);
-				return;
 			}
 		}
 	}
 
 	/**
-	 * Makes a JFileChooser dialog treat packages and applications as opaque
-	 * entities. Has no effect on other platforms.
+	 * Makes a JFileChooser dialog treat Mac OS packages and applications
+	 * as opaque entities. Has no effect on other platforms.
 	 */
 	public static void makeChooserOpaque(JFileChooser chooser) {
 		// Apple TN 2042 LIES; we need to set both properties.
@@ -372,7 +310,6 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		_progWind.setByteCount(-1, true);
 		_progWind.setVisible(true);
 
-		// RepInfo info = new RepInfo (name);
 		try {
 			List<File> files = new ArrayList<>(1);
 			files.add(file);
@@ -432,7 +369,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		return fileList;
 	}
 
-	/* Here we let the user pick a URL, then analyze it. */
+	/** Here we let the user pick a URL, then analyze it. */
 	public void pickAndAnalyzeURL() {
 		// There are multithreading issues which haven't been resolved.
 		// Rather than do a serious rewrite of the code, it's sufficient
@@ -469,7 +406,6 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		_progWind.setProgressState(ProgressWindow.DOWNLOADING, false);
 		_progWind.setContentLength(0, false);
 		_progWind.setByteCount(0, true);
-		// _progWind.show ();
 		_progWind.setVisible(true);
 		try {
 			_base.dispatch(_app, module, null, // AboutHandler
@@ -478,7 +414,6 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		} catch (Exception e) {
 			reportError("Error processing URL", e.getMessage());
 		}
-		// _progWind.hide ();
 		_progWind.setVisible(false);
 		_openFileItem.setEnabled(true);
 		_openURLItem.setEnabled(true);
@@ -500,14 +435,13 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 	public int callback(int selector, Object parm) {
 		switch (selector) {
 		case 1:
-			long bytecnt = ((Long) parm).longValue();
+			long bytecnt = (Long) parm;
 			_progWind.setByteCount(bytecnt, true);
 			break;
 		case 2:
 			String name = (String) parm;
 			if (name.length() > 48) {
-				name = "..."
-						+ name.substring(name.length() - 48, name.length());
+				name = "..." + name.substring(name.length() - 48);
 			}
 			_progWind.setDocName(name, true);
 			break;
@@ -532,9 +466,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		_doChecksum = checksum;
 	}
 
-	private void openAndParse(List<File> files, /* RepInfo info, */Module module) {
-		// InputStream stream = null;
-		// long lastModified = 0;
+	private void openAndParse(List<File> files, Module module) {
 
 		// Turn a list of files into an array of strings.
 		String[] paths = new String[files.size()];
@@ -568,10 +500,8 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		// // If no particular module is specified, we don't
 		// // set its verbosity as we should.
 		// }
-		/******************************************************
-		 * Parse formatted object.
-		 ******************************************************/
 
+		// Parse formatted object.
 		try {
 			_base.dispatch(_app, module, null, // AboutHandler
 					_viewHandler, null, // output file
@@ -584,7 +514,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		_progWind.setVisible(false);
 	}
 
-	/* Open a configuration dialog */
+	/** Open a configuration dialog. */
 	private void openConfigWindow() {
 		String configFile = _base.getConfigFile();
 		ConfigHandler configHandler = new ConfigHandler();
@@ -648,7 +578,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		if ("".equals(_selectedModule)) {
 			return null;
 		}
-		return (Module) _base.getModuleMap().get(_selectedModule.toLowerCase());
+		return _base.getModuleMap().get(_selectedModule.toLowerCase());
 	}
 
 	private void reportError(String title, String msg) {
@@ -743,11 +673,10 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		return _closeAllItem;
 	}
 
-	/* Called to see if the DropTargetEvent's data flavor is OK */
+	/** Called to see if the DropTargetEvent's data flavor is OK */
 	private boolean dataFlavorOK(DataFlavor[] flavors) {
-		// boolean haveFileFlavor = false;
-		for (int i = 0; i < flavors.length; i++) {
-			if (flavors[i].isFlavorJavaFileListType()) {
+		for (DataFlavor flavor : flavors) {
+			if (flavor.isFlavorJavaFileListType()) {
 				return true;
 			}
 		}

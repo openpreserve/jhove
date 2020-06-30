@@ -28,7 +28,6 @@ import edu.harvard.hul.ois.jhove.*;
  *   Dragging a directory to the main window will produce a single
  *   ViewWindow; dragging a group of files will produce
  *   multiple windows.
- *
  */
 public class ViewWindow extends InfoWindow {
 
@@ -37,7 +36,7 @@ public class ViewWindow extends InfoWindow {
     private ActionListener _closeAllListener;
     private DefaultMutableTreeNode _rootNode;
     private JTree tree;
-    
+
     /**
      *  Constructor.
      * 
@@ -48,13 +47,7 @@ public class ViewWindow extends InfoWindow {
     public ViewWindow (App app, JhoveBase base, JhoveWindow jhwin) 
     {
         super ("JHOVE Results", app, base);
-        setSaveActionListener ( 
-            new ActionListener() {
-                @Override
-                public void actionPerformed (ActionEvent e) {
-                    saveInfo ();
-                }
-            });
+        setSaveActionListener (e -> saveInfo ());
 
         _info = new LinkedList<> ();
         // The root element should no longer be a 
@@ -67,7 +60,6 @@ public class ViewWindow extends InfoWindow {
         tree = new JTree ();
         tree.setModel (treeModel);
         tree.setShowsRootHandles (true);
-        //tree.setCellRenderer (new ViewCellRenderer ());
         TreeCellRenderer rend = tree.getCellRenderer ();
         if (rend instanceof DefaultTreeCellRenderer) {
             // it should be
@@ -79,27 +71,22 @@ public class ViewWindow extends InfoWindow {
         }
         JScrollPane scrollPane = new JScrollPane (tree);
         getContentPane ().add (scrollPane, "Center");
-        
+
         // Add a small panel at the bottom, since on some OS's there
         // may be stuff near the bottom of a window which will conflict
         // with the scroll bar.
         JPanel panel = new JPanel ();
         panel.setMinimumSize (new Dimension (8, 8));
         getContentPane ().add (panel, "South");
-        
+
         setDefaultCloseOperation (WindowConstants.DISPOSE_ON_CLOSE);
         setSize (400, 600);
-        
+
         // Set up to handle "close all documents" from main window
         if (jhwin != null) {
             _closeAllItem = jhwin.getCloseAllItem ();
-            _closeAllListener = new ActionListener() {
-                @Override
-                public void actionPerformed (ActionEvent e) {
-                    closeFromMenu ();
-                }
-            };
-             _closeAllItem.addActionListener (_closeAllListener);
+            _closeAllListener = e -> closeFromMenu ();
+            _closeAllItem.addActionListener (_closeAllListener);
 
         }
     }
@@ -114,7 +101,7 @@ public class ViewWindow extends InfoWindow {
         RepTreeRoot node = new RepTreeRoot (info, base);
         _rootNode.add (node);
     }
-    
+
     /** Expands the tree appropriately when everything is build. */
     public void expandRows ()
     {
@@ -140,9 +127,7 @@ public class ViewWindow extends InfoWindow {
             handler.reset ();
             handler.setWriter (wtr);
             handler.showHeader ();
-            Iterator<RepInfo> iter =  _info.iterator ();
-            while (iter.hasNext ()) {
-                RepInfo info = iter.next ();
+            for (RepInfo info : _info) {
                 handler.show (info);
             }
             handler.showFooter ();
@@ -156,7 +141,7 @@ public class ViewWindow extends InfoWindow {
                 JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     /** Invoked when the "Close" menu item is selected.
      *  Overrides the parent class's method to delete
      *  the window rather than hiding it. */

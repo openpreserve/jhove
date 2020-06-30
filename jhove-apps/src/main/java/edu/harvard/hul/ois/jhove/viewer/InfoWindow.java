@@ -5,18 +5,19 @@
 
 package edu.harvard.hul.ois.jhove.viewer;
 
-import java.awt.HeadlessException;
-
-import java.util.*;
-import java.io.*;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
+import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.*;
-import edu.harvard.hul.ois.jhove.*;
+
+import edu.harvard.hul.ois.jhove.App;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.OutputHandler;
 
 /**
  * An abstract superclass for windows that display information
@@ -52,7 +53,7 @@ public abstract class InfoWindow extends JFrame
      * @param app     The associated App object.
      * @param base    The associated JhoveBase object.
      * 
-     * @throws java.awt.HeadlessException
+     * @throws HeadlessException
      */
     public InfoWindow(String title, App app, JhoveBase base) 
                 throws HeadlessException {
@@ -78,12 +79,7 @@ public abstract class InfoWindow extends JFrame
         // Make mnemonic control-W, command-W, or whatever-W
         _closeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,
                 Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        _closeItem.addActionListener (new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent e) {
-                closeFromMenu ();
-            }
-        });
+        _closeItem.addActionListener (e -> closeFromMenu ());
         
         setDefaultCloseOperation (WindowConstants.HIDE_ON_CLOSE);
         setJMenuBar (menuBar);
@@ -202,7 +198,7 @@ public abstract class InfoWindow extends JFrame
                 OutputStreamWriter writer = new OutputStreamWriter (os, encoding);
                 return new PrintWriter (writer);
             }
-            catch (UnsupportedEncodingException e) {
+            catch (UnsupportedEncodingException uee) {
                 JOptionPane.showMessageDialog(this,
                     "Unknown encoding ",
                     FILE_NOT_SAVED,
@@ -214,13 +210,13 @@ public abstract class InfoWindow extends JFrame
                     }
                     file.delete ();
                 }
-                catch (Exception f) {}
-                
+                catch (Exception e) {
+                }
                 return null;
             }
-            catch (IOException e) {
+            catch (IOException ioe) {
                 JOptionPane.showMessageDialog(this,
-                    e.getMessage (),
+                    ioe.getMessage(),
                     FILE_NOT_SAVED,
                     JOptionPane.ERROR_MESSAGE);
                 // Get rid of the file
@@ -230,7 +226,8 @@ public abstract class InfoWindow extends JFrame
                     }
                     file.delete ();
                 }
-                catch (Exception f) {}
+                catch (Exception e) {
+                }
                 return null;
             }
         }

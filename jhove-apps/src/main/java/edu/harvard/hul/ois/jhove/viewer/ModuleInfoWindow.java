@@ -8,8 +8,6 @@ package edu.harvard.hul.ois.jhove.viewer;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 
 import javax.swing.JOptionPane;
@@ -55,12 +53,7 @@ public class ModuleInfoWindow extends InfoWindow {
 	public ModuleInfoWindow(App app, JhoveBase base, Module module) {
 		super("Module Information", app, base);
 		_module = module;
-		setSaveActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveInfo();
-			}
-		});
+		setSaveActionListener(e -> saveInfo());
 
 		texta = new JTextArea();
 		texta.setColumns(72);
@@ -86,7 +79,6 @@ public class ModuleInfoWindow extends InfoWindow {
 
 		showModule(module);
 		pack();
-
 	}
 
 	/**
@@ -123,7 +115,6 @@ public class ModuleInfoWindow extends InfoWindow {
 				for (int i = 1; i < ss.length; i++) {
 					texta.append(", " + ss[i]);
 				}
-				;
 				texta.append(eol);
 			}
 			for (Signature sig : module.getSignature()) {
