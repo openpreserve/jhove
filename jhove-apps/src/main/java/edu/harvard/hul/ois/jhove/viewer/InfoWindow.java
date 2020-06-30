@@ -146,17 +146,17 @@ public abstract class InfoWindow extends JFrame
         
         // Build a list of encodings into a popup menu.
         // The default encoding must be the first.
-        Vector<String> encItems = new Vector<> (5);
-        String defEnc = _base.getEncoding ();
-        if (defEnc != null) {
-            encItems.add (defEnc);
-        }
-        for (int i = 0; i < encodings.length; i++) {
-            String enc = encodings[i];
-            if (!enc.equals (defEnc)) {
-                encItems.add (enc);
+        Vector<String> encItems = new Vector<>(encodings.length + 1);
+        String defaultEncoding = _base.getEncoding();
+        List<String> otherEncodings = new ArrayList<>(encodings.length);
+        for (String encoding : encodings) {
+            if (encoding.equalsIgnoreCase(defaultEncoding)) {
+                encItems.add(encoding);
+            } else {
+                otherEncodings.add(encoding);
             }
         }
+        encItems.addAll(otherEncodings);
         _encodingBox = new JComboBox<> (encItems);
         if (_lastEncoding != null) {
             _encodingBox.setSelectedItem (_lastEncoding);
