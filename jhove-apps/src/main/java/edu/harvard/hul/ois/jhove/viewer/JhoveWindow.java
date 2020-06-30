@@ -34,7 +34,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -118,9 +117,6 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 
 	/** Logger for a module class. */
 	protected Logger _logger;
-
-	/* Static instance of InvisibleFilenameFilter */
-	private final InvisibleFilenameFilter invisibleFilter = new JhoveWindow.InvisibleFilenameFilter();
 
 	public JhoveWindow(App app, JhoveBase base) {
 		super("Jhove");
@@ -219,7 +215,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		menuBar.add(fileMenu);
-		_openFileItem = new JMenuItem("Open file...");
+		_openFileItem = new JMenuItem("Open file or directory...");
 		fileMenu.add(_openFileItem);
 		// The following allows accelerator modifier keys to be set which are
 		// appropriate to the host OS
@@ -343,7 +339,8 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 			if (_lastDir != null) {
 				chooser.setCurrentDirectory(_lastDir);
 			}
-			chooser.setDialogTitle("Pick a file to analyze");
+			chooser.setDialogTitle("Pick a file or directory to analyze");
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			int ok = chooser.showOpenDialog(this);
 			if (ok == JFileChooser.APPROVE_OPTION) {
 				file = chooser.getSelectedFile();
@@ -424,26 +421,24 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 	}
 
 	/**
-	 * This method opens a directory, recursing through multiple levels if
-	 * possible, and feeding individual files to pickAndAnalyzeFile1.
+	 * Returns the list of files found by recursing through
+	 * the given directory and all of its subdirectories.
 	 */
-	public void analyzeDirectory(File file, Module module) {
-		// Construct list, excluding files that start with "."
-		String[] subfiles = file.list(invisibleFilter);
-		if (subfiles != null) {
+	public static List<File> getFileList(File directory) {
+		List<File> fileList = new ArrayList<>();
+		File[] files = directory.listFiles();
+		if (files != null) {
 			// Walk through the directory
-			for (int i = 0; i < subfiles.length; i++) {
-				File subfile = new File(file, subfiles[i]);
-				if (subfile != null) {
-					if (subfile.isDirectory()) {
-						// Recurse through subdirectories
-						analyzeDirectory(subfile, module);
-					} else {
-						pickAndAnalyzeFile1(subfile, module);
-					}
+			for (File file : files) {
+				if (file.isDirectory()) {
+					// Continue through to subdirectory
+					fileList.addAll(getFileList(file));
+				} else {
+					fileList.add(file);
 				}
 			}
 		}
+		return fileList;
 	}
 
 	/* Here we let the user pick a URL, then analyze it. */
@@ -796,11 +791,12 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 					_win.pickAndAnalyzeURL1(_uri, _module);
 				} else if (_file != null) {
 					if (_file.isDirectory()) {
-						analyzeDirectory(_file, _module);
+						_fileList = getFileList(_file);
 					} else {
 						_win.pickAndAnalyzeFile1(_file, _module);
 					}
-				} else if (_fileList != null) {
+				}
+				if (_fileList != null) {
 					_win.pickAndAnalyzeFileList1(_fileList, _module);
 				}
 				_base.setCurrentThread(null);
@@ -842,17 +838,5 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 			_module = module;
 		}
 
-	}
-
-	/**
-	 * Class to filter out filenames that start with a period. These are
-	 * "invisible" file names, at least under Unix, and generally shouldn't be
-	 * included when walking through a directory.
-	 */
-	protected class InvisibleFilenameFilter implements FilenameFilter {
-		@Override
-		public boolean accept(File dir, String name) {
-			return (!name.startsWith("."));
-		}
 	}
 }
