@@ -66,8 +66,11 @@ public abstract class InfoWindow extends JFrame
         _base = base;
         JMenuBar menuBar = new JMenuBar ();
         JMenu fileMenu = new JMenu ("File");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
         menuBar.add (fileMenu);
         _saveItem = new JMenuItem ("Save as...");
+        _saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         fileMenu.add (_saveItem);
         
         _closeItem = new JMenuItem ("Close");

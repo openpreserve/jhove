@@ -98,20 +98,6 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 	private JPanel logo;
 	private ViewHandler _viewHandler;
 
-	// Initial position for view windows.
-	// Stagger them by adding an increment each time.
-	// private static int viewWinXPos = 24;
-	// private static int viewWinYPos = 24;
-	// Original positions for cycling back to.
-	// private static final int viewWinOrigXPos = 24;
-	// private static final int viewWinOrigYPos = 24;
-	// private static final int viewWinXInc = 25;
-	// private static final int viewWinYInc = 22;
-	private static final int appInfoWinXPos = 50;
-	private static final int appInfoWinYPos = 45;
-	private static final int moduleInfoWinXPos = 100;
-	private static final int moduleInfoWinYPos = 90;
-
 	private static final String NEVER = "never";
 	private static final String CONFIG_ERROR = "Config Error";
 
@@ -119,7 +105,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 	protected Logger _logger;
 
 	public JhoveWindow(App app, JhoveBase base) {
-		super("Jhove");
+		super("JHOVE");
 		_logger = Logger.getLogger("edu.harvard.hul.ois.jhove.viewer");
 		_app = app;
 		_base = base;
@@ -181,7 +167,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		URL logoURL = JhoveWindow.class.getResource("jhovelogo.png");
 		if (logoURL != null) {
 			ImageIcon icn = new ImageIcon(logoURL);
-			icn.setDescription("Jhove logo");
+			icn.setDescription("JHOVE logo");
 			setNormalBackground();
 			JLabel logoLabel = new JLabel(icn);
 			logo.add(logoLabel);
@@ -193,6 +179,9 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		rootPane.add(logo);
 		pack();
 
+		// Center main window
+		setLocationRelativeTo(null);
+
 		// Set up a companion progress window. This will
 		// be hidden and displayed as needed.
 		ActionListener listener = new ActionListener() {
@@ -202,6 +191,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 			}
 		};
 		_progWind = new ProgressWindow(listener);
+		_progWind.setLocationRelativeTo(null);
 
 		// Set up a Handler which is tailored to this application.
 		_viewHandler = new ViewHandler(this, _app, _base);
@@ -211,9 +201,9 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 	 * Set up the menu bar and menus.
 	 */
 	final private void addMenus() {
-		final JhoveWindow jthis = this;
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
+		fileMenu.setMnemonic(KeyEvent.VK_F);
 		menuBar.add(fileMenu);
 		_openFileItem = new JMenuItem("Open file or directory...");
 		fileMenu.add(_openFileItem);
@@ -256,20 +246,23 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 			});
 		}
 
-		JMenu editMenu = new JMenu("Edit");
+		JMenu editMenu = new JMenu("Configuration");
+		editMenu.setMnemonic(KeyEvent.VK_C);
 		menuBar.add(editMenu);
 		_moduleSubmenu = new JMenu("Select module");
 		editMenu.add(_moduleSubmenu);
-		JRadioButtonMenuItem noModuleItem = new JRadioButtonMenuItem("(Any)");
+		JRadioButtonMenuItem noModuleItem =
+				new JRadioButtonMenuItem("Automatic");
 		noModuleItem.setActionCommand("");
 		noModuleItem.setSelected(true);
 		noModuleItem.addActionListener(_moduleMenuListener);
 		_moduleSubmenu.add(noModuleItem);
+		_moduleSubmenu.addSeparator();
 		_moduleGroup.add(noModuleItem);
 		_selectedModule = "";
 		// Modules will be added later
 
-		JMenuItem editConfigItem = new JMenuItem("Edit configuration...");
+		JMenuItem editConfigItem = new JMenuItem("Edit configuration file...");
 		editMenu.add(editConfigItem);
 		editConfigItem.addActionListener(new ActionListener() {
 			@Override
@@ -278,23 +271,21 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 			}
 		});
 
-		JMenuItem prefItem = new JMenuItem("Preferences...");
+		JMenuItem prefItem = new JMenuItem("Edit temporary preferences...");
 		editMenu.add(prefItem);
-		prefItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (_prefsWindow == null) {
-					_prefsWindow = new PrefsWindow(jthis);
-					_prefsWindow.setLocation(180, 160);
-					_prefsWindow.pack();
-				}
-				_prefsWindow.saveAndShow();
+		prefItem.addActionListener(e -> {
+			if (_prefsWindow == null) {
+				_prefsWindow = new PrefsWindow(this);
+				_prefsWindow.pack();
+				_prefsWindow.setLocationRelativeTo(this);
 			}
+			_prefsWindow.saveAndShow();
 		});
 
 		JMenu helpMenu = new JMenu("Help");
+		helpMenu.setMnemonic(KeyEvent.VK_H);
 		menuBar.add(helpMenu);
-		JMenuItem aboutModuleItem = new JMenuItem("About module...");
+		JMenuItem aboutModuleItem = new JMenuItem("About module");
 		helpMenu.add(aboutModuleItem);
 		aboutModuleItem.addActionListener(new ActionListener() {
 			@Override
@@ -302,7 +293,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 				showModuleInfo();
 			}
 		});
-		JMenuItem aboutAppItem = new JMenuItem("About Jhove...");
+		JMenuItem aboutAppItem = new JMenuItem("About JHOVE");
 		helpMenu.add(aboutAppItem);
 		aboutAppItem.addActionListener(new ActionListener() {
 			@Override
@@ -630,7 +621,7 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		}
 		ConfigWindow confWin = new ConfigWindow(this, new File(configFile),
 				configHandler);
-		confWin.setLocation(120, 40);
+		confWin.setLocationRelativeTo(this);
 		confWin.setVisible(true);
 	}
 
@@ -638,18 +629,18 @@ public class JhoveWindow extends JFrame implements Callback, DropTargetListener 
 		Module module = getSelectedModule();
 		if (_moduleInfoWin == null) {
 			_moduleInfoWin = new ModuleInfoWindow(_app, _base, module);
-			_moduleInfoWin.setLocation(moduleInfoWinXPos, moduleInfoWinYPos);
 		} else {
 			_moduleInfoWin.showModule(module);
 		}
+		_moduleInfoWin.setLocationRelativeTo(this);
 		_moduleInfoWin.setVisible(true);
 	}
 
 	private void showAppInfo() {
 		if (_appInfoWin == null) {
 			_appInfoWin = new AppInfoWindow(_app, _base);
-			_appInfoWin.setLocation(appInfoWinXPos, appInfoWinYPos);
 		}
+		_appInfoWin.setLocationRelativeTo(this);
 		_appInfoWin.setVisible(true);
 	}
 

@@ -47,10 +47,7 @@ public class ViewWindow extends InfoWindow {
      */  
     public ViewWindow (App app, JhoveBase base, JhoveWindow jhwin) 
     {
-        // Give the window a temporary title.  The title should probably
-        // be changed to the top-level directory, or else should be
-        // given a sequential number for each new window.
-        super ("RepInfo", app, base);
+        super ("JHOVE Results", app, base);
         setSaveActionListener ( 
             new ActionListener() {
                 @Override

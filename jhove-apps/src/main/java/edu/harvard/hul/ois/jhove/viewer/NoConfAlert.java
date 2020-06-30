@@ -22,7 +22,7 @@ public class NoConfAlert extends JDialog
 	// Create a panel with an informative message.
         JPanel mainPanel = new JPanel ();
         getContentPane ().add (mainPanel, "Center");
-	String infoString = new String ("Jhove could not find " +
+	String infoString = new String ("JHOVE could not find " +
 	 "a configuration file.  You must have one of the " +
          "following in jhove/conf under your home directory:\n\n" +
 	 "(1) A properties file called jhove.properties " +

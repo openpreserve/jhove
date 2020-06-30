@@ -53,7 +53,7 @@ public class ModuleInfoWindow extends InfoWindow {
 	 *            The Module whose information is to be presented.
 	 */
 	public ModuleInfoWindow(App app, JhoveBase base, Module module) {
-		super("Module Info", app, base);
+		super("Module Information", app, base);
 		_module = module;
 		setSaveActionListener(new ActionListener() {
 			@Override

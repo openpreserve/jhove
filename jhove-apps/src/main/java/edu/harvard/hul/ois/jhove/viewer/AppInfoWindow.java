@@ -33,7 +33,7 @@ public class AppInfoWindow extends InfoWindow {
 	private JTextArea texta;
 
 	public AppInfoWindow(App app, JhoveBase jbase) {
-		super("Application Info", app, jbase);
+		super("JHOVE Information", app, jbase);
 		setSaveActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
