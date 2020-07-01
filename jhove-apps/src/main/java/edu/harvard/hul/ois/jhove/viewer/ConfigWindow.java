@@ -92,7 +92,7 @@ public class ConfigWindow extends JDialog {
      */
     public ConfigWindow (JFrame parent, File configFile, ConfigHandler handler)
     {
-        super (parent, "Jhove Configuration", true);
+        super (parent, "JHOVE Configuration", true);
         setDefaultCloseOperation (WindowConstants.DISPOSE_ON_CLOSE);
         _configFile = configFile;
         if (handler != null) {

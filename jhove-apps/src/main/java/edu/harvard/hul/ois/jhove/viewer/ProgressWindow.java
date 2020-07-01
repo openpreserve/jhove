@@ -78,7 +78,6 @@ public class ProgressWindow extends JFrame{
         setTitle ("Progress");
         setDefaultCloseOperation (WindowConstants.DO_NOTHING_ON_CLOSE);
         pack ();
-        MainScreen.centerTopWindow (this);
 
         _contentLength = -1;
         _byteCount = -1;

@@ -8,11 +8,8 @@ package edu.harvard.hul.ois.jhove.viewer;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
@@ -33,13 +30,8 @@ public class AppInfoWindow extends InfoWindow {
 	private JTextArea texta;
 
 	public AppInfoWindow(App app, JhoveBase jbase) {
-		super("Application Info", app, jbase);
-		setSaveActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveInfo();
-			}
-		});
+		super("JHOVE Information", app, jbase);
+		setSaveActionListener(e -> saveInfo());
 
 		texta = new JTextArea();
 		texta.setColumns(72);
@@ -94,11 +86,9 @@ public class AppInfoWindow extends InfoWindow {
 		if (saxClass != null) {
 			texta.append("SAX parser: " + saxClass + eol);
 		}
-		Iterator<String> iter = jbase.getModuleMap().keySet().iterator();
-		while (iter.hasNext()) {
-			// Module module = jbase.getModuleMap ((String) iter.next ());
+		for (String moduleName : jbase.getModuleMap().keySet()) {
 			Map<String, Module> moduleMap = jbase.getModuleMap();
-			Module module = moduleMap.get(iter.next());
+			Module module = moduleMap.get(moduleName);
 			texta.append(" Module: " + module.getName() + " "
 					+ module.getRelease() + eol);
 		}
