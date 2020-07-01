@@ -108,7 +108,7 @@ public abstract class HandlerBase
         // action logically belongs in the handler package, so we name
         // this logger accordingly.
         _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.handler");
-        _logger.info ("Initializing " + name);
+        _logger.fine ("Initializing " + name);
         _name    = name;
         _release = release;
 	_encoding = "UTF-8";

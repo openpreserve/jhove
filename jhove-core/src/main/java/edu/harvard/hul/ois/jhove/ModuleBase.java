@@ -148,7 +148,7 @@ public abstract class ModuleBase implements Module {
 		// action logically belongs in the module package, so we name
 		// this logger accordingly.
 		_logger = Logger.getLogger("edu.harvard.hul.ois.jhove.module");
-		_logger.info("Initializing " + name);
+		_logger.fine("Initializing " + name);
 		_name = name;
 		_release = release;
 
@@ -774,7 +774,7 @@ public abstract class ModuleBase implements Module {
 	 * initParse() should call super.initParse().
 	 */
 	protected void initParse() {
-		_logger.info(_name + " called initParse");
+		_logger.fine(_name + " called initParse");
 		_checksumFinished = false;
 		_nByte = 0;
 		_crc32 = new CRC32();
