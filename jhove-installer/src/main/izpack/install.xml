@@ -75,6 +75,8 @@
       <executable targetfile="$INSTALL_PATH/bin/pdf-hul-1.12.2.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/tiff-hul-1.9.2.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/tiff-hul-1.9.2.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/tiff-opf-0.1.0.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/tiff-opf-0.1.0.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/utf8-hul-1.7.1.jar"/>
       <executable targetfile="$INSTALL_PATH/bin/utf8-hul-1.7.1.jar"/>
       <file targetdir="$INSTALL_PATH/bin" src="bin/wave-hul-1.8.1.jar"/>

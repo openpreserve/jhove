@@ -14,10 +14,6 @@
   <name>JHOVE Validation Modules</name>
   <description>The JHOVE HUL validation modules.</description>
 
-  <properties>
-    <jwat.version>1.0.3</jwat.version>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>
@@ -47,5 +43,6 @@
     <module>utf8-hul</module>
     <module>wave-hul</module>
     <module>xml-hul</module>
+    <module>tiff-opf</module>
   </modules>
 </project>
