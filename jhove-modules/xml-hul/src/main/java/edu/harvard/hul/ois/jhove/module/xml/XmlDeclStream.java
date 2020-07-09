@@ -26,7 +26,7 @@ public class XmlDeclStream extends FilterInputStream {
 
     private StringBuilder declBuf;
     private StringBuilder refBuf;
-    private boolean seenChars;
+    private boolean foundFirstDelimiter;
 
     private String _version;
     private String _encoding;
@@ -43,7 +43,7 @@ public class XmlDeclStream extends FilterInputStream {
     public XmlDeclStream (InputStream strm) {
         super (strm);
         declBuf = null;
-        seenChars = false;
+        foundFirstDelimiter = false;
         _charRefs = new LinkedList<> ();
 
         // No line end types have been discovered.
@@ -139,10 +139,11 @@ public class XmlDeclStream extends FilterInputStream {
         // Determine the line ending type(s).
         checkLineEnd(b);
         _prevChar = b;
-        
-        if (!seenChars || declBuf != null) {
+
+        if (!foundFirstDelimiter || declBuf != null) {
             if (declBuf == null && b == '<') {
                 declBuf = new StringBuilder ("<");
+                foundFirstDelimiter = true;
             }
             else if (declBuf != null) {
                 declBuf.append ((char) b);
@@ -169,7 +170,6 @@ public class XmlDeclStream extends FilterInputStream {
                 refBuf.append ((char) b);
             }
         }
-        seenChars = true;
     }
 
     /**
