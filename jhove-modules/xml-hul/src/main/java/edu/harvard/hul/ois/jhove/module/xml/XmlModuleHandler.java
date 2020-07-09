@@ -8,16 +8,12 @@ package edu.harvard.hul.ois.jhove.module.xml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -25,7 +21,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-// import java.io.*;
 import edu.harvard.hul.ois.jhove.ErrorMessage;
 import edu.harvard.hul.ois.jhove.InfoMessage;
 import edu.harvard.hul.ois.jhove.Message;
@@ -33,87 +28,82 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /**
- *
  * This handler does the parsing work of the XML module.
  *
  * @author Gary McGath
- *
  */
 public class XmlModuleHandler extends DefaultHandler {
 
-	/* List of entities String[2], { public ID, system ID} */
-	private List<EntityInfo> _entities;
-
-	/* Map of namespaces, prefix (String) to URI (String) */
+	/** Map of namespace prefixes to URIs. */
 	private Map<String, String> _namespaces;
 
-	/*
+	/**
 	 * List of processing instructions. Each element
 	 * is an array of two strings, giving the target
 	 * and data respectively.
 	 */
 	private List<ProcessingInstructionInfo> _processingInsts;
 
-	/* List of generated Messages. */
+	/** List of generated Messages. */
 	private List<Message> _messages;
 
-	/* Validity flag. */
+	/** Validity flag. */
 	private boolean _valid;
 
-	/* Qualified name of the root element. */
+	/** Qualified name of the root element. */
 	private String _root;
 
-	/* URI for DTD specification */
+	/** URI for DTD specification. */
 	private String _dtdURI;
 
-	/*
+	/**
 	 * List of schema URI's. Each element is a String[2],
 	 * consisting of the namespace URI and the schema location.
 	 */
 	private List<SchemaInfo> _schemas;
 
-	/*
+	/**
 	 * List of unparsed entities. Each is an array String[4];
 	 * name, public ID, system ID and notation name
 	 * respectively.
 	 */
 	private List<String[]> _unparsedEntities;
 
-	/* Error counter. */
+	/** Error counter. */
 	private int _nErrors;
 
-	/*
+	/**
 	 * Notations list. Each is an array String[3]:
 	 * name, public ID, and system ID.
 	 */
 	private List<String[]> _notations;
 
-	/*
+	/**
 	 * List of all the attributes. This is used to
 	 * check on the use of unparsed entities.
 	 */
 	private Set<String> _attributeVals;
 
-	/* Limit on number of errors to report. */
+	/** Limit on number of errors to report. */
 	private static final int MAXERRORS = 2000;
 
-	/*
+	/**
 	 * XHTML flag, only for XHTML documents referred
 	 * by the HTML module.
 	 */
 	private boolean _xhtmlFlag;
 
-	/* HTMLMetadata object; used only with XHTML documents. */
+	/** HTMLMetadata object; used only with XHTML documents. */
 	private HtmlMetadata _htmlMetadata;
 
-	/*
+	/**
 	 * Flag set if we've seen any components. This is an indirect
 	 * way of checking if the "signature" (the XML declaration)
 	 * has been seen.
 	 */
 	private boolean _sigFlag;
 
-	/* Map from URIs to local schema files */
+	/** Map from URIs to local schema files. */
 	private Map<String, File> _localSchemas;
 
 	/**
@@ -122,7 +112,6 @@ public class XmlModuleHandler extends DefaultHandler {
 	public XmlModuleHandler() {
 		_xhtmlFlag = false;
 		_htmlMetadata = null;
-		_entities = new LinkedList<>();
 		_namespaces = new HashMap<>();
 		_processingInsts = new LinkedList<>();
 		_messages = new LinkedList<>();
@@ -189,47 +178,37 @@ public class XmlModuleHandler extends DefaultHandler {
 			}
 		}
 		if (atts != null) {
-			int natts = atts.getLength();
-			for (int i = 0; i < natts; i++) {
+			for (int i = 0; i < atts.getLength(); i++) {
 				String name = atts.getLocalName(i);
-				String namespace = atts.getURI(i);  // namespace URI
+				String namespace = atts.getURI(i);
 				String val = atts.getValue(i);
 				if ("http://www.w3.org/2001/XMLSchema-instance"
 						.equals(namespace)) {
-					SchemaInfo schInfo = new SchemaInfo();
 					if ("schemaLocation".equals(name)) {
-						/*
-						 * val should consist of two tokens, giving the
-						 * URI and the location respectively.
-						 */
-						String[] toks = val.split("\\s", 2);
-						/*
-						 * Could be a length 0 or 1 array in pathological
-						 * cases, so convert it to a length-2 array.
-						 * Note that while the schemaLocation attribute
-						 * SHOULD have two white-space separated elements,
-						 * this may not be the case, so always check the
-						 * array length before referencing its elements.
-						 */
-						if (toks.length > 0 && toks[0] != null) {
-							schInfo.namespaceURI = toks[0].trim();
-						} else {
-							schInfo.namespaceURI = "";
-						}
-						if (toks.length > 1 && toks[1] != null) {
-							schInfo.location = toks[1].trim();
-						} else {
-							schInfo.location = "";
-						}
-						if (!hasSchemaURI(schInfo)) {
-							_schemas.add(schInfo);
+						// schemaLocation should contain pairs of namespace
+						// and location URIs separated by white space. Any
+						// number of such pairs may be declared in a single
+						// schemaLocation attribute.
+						String[] uris = val.split("\\s");
+						for (int j = 0; j < uris.length; j += 2) {
+							SchemaInfo schema = new SchemaInfo();
+							schema.namespaceURI = uris[j].trim();
+							if (uris.length > j + 1) {
+								schema.location = uris[j + 1].trim();
+							} else {
+								schema.location = "";
+							}
+							if (!hasSchemaURI(schema)) {
+								_schemas.add(schema);
+							}
 						}
 					}
 					if ("noNamespaceSchemaLocation".equals(name)) {
-						schInfo.location = "[None]";
-						schInfo.namespaceURI = val;
-						if (!hasSchemaURI(schInfo)) {
-							_schemas.add(schInfo);
+						SchemaInfo schema = new SchemaInfo();
+						schema.location = val;
+						schema.namespaceURI = "";
+						if (!hasSchemaURI(schema)) {
+							_schemas.add(schema);
 						}
 					}
 				}
@@ -316,58 +295,69 @@ public class XmlModuleHandler extends DefaultHandler {
 	}
 
 	/**
-	 * Overrides standard resolveEntity. First looks for DTD and
-	 * entity files that are stored as resources, and uses those
-	 * if available. (Faster and more reliable than grabbing them
-	 * over the Net.) If that fails, calls the superclass's resolveEntity.
-	 * Regardless, it then looks for anything
-	 * that appears to be a DTD and puts it in the DTD URI field.
-	 * If the superclass's attempt to resolve the entity results in
-	 * an IOException, we just ignore it.
+	 * Overrides standard <code>resolveEntity</code> method to
+	 * provide special-case handling for external entity resolution.
 	 *
+	 * First looks for external entities that are stored as
+	 * local resources and uses those if available (faster and
+	 * more reliable than using the internet), preferring
+	 * user-supplied resources over packaged resources. Then
+	 * attempts to resolve any URLs that result in redirection
+	 * requests.
+	 *
+	 * Finally, returns <code>null</code> if the entity doesn't
+	 * require special handling, allowing the SAX implementation
+	 * to attempt its own resolution.
 	 */
 	@Override
 	public InputSource resolveEntity(String publicId, String systemId)
 			throws SAXException
-
 	{
-		// Check any custom mapping from the config
+		// Check for XHTML DTDs
+		if (!_xhtmlFlag && DTDMapper.isXHTMLDTD(publicId)) {
+			_xhtmlFlag = true;
+		}
+		// Assume that the first system ID in the file with a .dtd
+		// extension is the actual DTD
+		if (systemId.endsWith(".dtd") && _dtdURI == null) {
+			_dtdURI = systemId;
+		}
+
+		// Attempt to resolve system identifiers to schemas from config.
+		// This takes precedence, allowing users to override JHOVE resources.
 		File fil = _localSchemas.get(systemId.toLowerCase());
 		if (fil != null) {
 			try {
 				FileInputStream inStrm = new FileInputStream(fil);
 				return new InputSource(inStrm);
-			} catch (FileNotFoundException e) {
+			} catch (FileNotFoundException fnfe) {
+				// File locations should be verified before
+				// being added to the list of local schemas.
 			}
 		}
 
-		// Do special-case checking for the XHTML DTD's
-		if (!_xhtmlFlag && DTDMapper.isXHTMLDTD(publicId)) {
-                    _xhtmlFlag = true;
-		}
+		// Attempt to resolve public identifiers to local JHOVE resources.
 		InputSource ent = DTDMapper.publicIDToFile(publicId);
+
+		// Attempt to resolve redirected URLs.
 		if (ent == null) {
 			try {
-				URL obj = new URL(systemId);
-				HttpURLConnection conn = (HttpURLConnection) obj
-						.openConnection();
+				URLConnection conn = new URL(systemId).openConnection();
+				if (conn instanceof HttpURLConnection) {
+					int status = ((HttpURLConnection) conn).getResponseCode();
+					if (status == HttpURLConnection.HTTP_MOVED_TEMP
+							|| status == HttpURLConnection.HTTP_MOVED_PERM
+							|| status == HttpURLConnection.HTTP_SEE_OTHER) {
 
-				int status = conn.getResponseCode();
-				if (status == HttpURLConnection.HTTP_MOVED_TEMP
-						|| status == HttpURLConnection.HTTP_MOVED_PERM
-						|| status == HttpURLConnection.HTTP_SEE_OTHER) {
-
-					String newUrl = conn.getHeaderField("Location");
-					conn = (HttpURLConnection) new URL(newUrl).openConnection();
-					ent = new InputSource(conn.getInputStream());
+						String newUrl = conn.getHeaderField("Location");
+						conn = new URL(newUrl).openConnection();
+						ent = new InputSource(conn.getInputStream());
+					}
 				}
-
-			} catch (Exception e) {
-				// Depending on the JDK version, super.resolveEntity
-				// may or may not be formally capable of throwing an
-				// IOException.
-				// This hack allows compatibility in either case.
-				throw new SAXException(e);
+			}
+			catch (IOException ioe) {
+				// Malformed URL or bad connection.
+				throw new SAXException(ioe);
 			}
 		} else {
 			// A little magic so SAX won't give up in advance on
@@ -375,18 +365,6 @@ public class XmlModuleHandler extends DefaultHandler {
 			ent.setSystemId("http://hul.harvard.edu/hul");
 		}
 
-		// Report in entity properties
-		EntityInfo entArr = new EntityInfo();
-		entArr.publicID = publicId;
-		entArr.systemID = systemId;
-		_entities.add(entArr);
-                /*
-                 * Assume that the first system ID in the file with a .dtd
-                 * extension is the actual DTD
-                 */
-		if (systemId.endsWith(".dtd") && _dtdURI == null) {
-                    _dtdURI = systemId;
-		}
 		return ent;
 	}
 
@@ -394,7 +372,7 @@ public class XmlModuleHandler extends DefaultHandler {
 	 * Picks up unparsed entity declarations, after calling the
 	 * superclass's unparsedEntityDecl, and puts their information
 	 * into the unparsed entity declaration list as an array of
-	 * four strings: [ name, publicId, systemId, notationName].
+	 * four strings: [ name, publicId, systemId, notationName ].
 	 * Null values are converted into empty strings.
 	 */
 	@Override
@@ -413,12 +391,10 @@ public class XmlModuleHandler extends DefaultHandler {
 	 * Processes a warning. We just add an InfoMessage.
 	 */
 	@Override
-	public void warning(SAXParseException e) {
-		JhoveMessage message = JhoveMessages.getMessageInstance(
-				MessageConstants.XML_HUL_1.getId(),
-				MessageFormat.format(MessageConstants.XML_HUL_1.getMessage(),
-						e.getMessage().toString()));
-		_messages.add(new InfoMessage(message));
+	public void warning(SAXParseException spe) {
+		_messages.add(new InfoMessage(
+				MessageConstants.XML_HUL_1,
+				spe.getMessage()));
 	}
 
 	/**
@@ -427,25 +403,24 @@ public class XmlModuleHandler extends DefaultHandler {
 	 * that any error here indicates only invalidity.
 	 */
 	@Override
-	public void error(SAXParseException e) {
+	public void error(SAXParseException spe) {
 		_valid = false;
 		if (_nErrors == MAXERRORS) {
 			JhoveMessage message = JhoveMessages.getMessageInstance(
 					MessageConstants.XML_HUL_2.getId(),
 					MessageFormat.format(
 							MessageConstants.XML_HUL_2.getMessage(),
-							Integer.valueOf(MAXERRORS)));
+							MAXERRORS));
 			_messages.add(new InfoMessage(message));
 		} else if (_nErrors < MAXERRORS) {
-			int line = e.getLineNumber();
-			int col = e.getColumnNumber();
-			JhoveMessage message = JhoveMessages.getMessageInstance(
-					MessageConstants.XML_HUL_1.getId(),
+			_messages.add(new ErrorMessage(
+					MessageConstants.XML_HUL_1,
 					MessageFormat.format(
-							MessageConstants.XML_HUL_1.getMessage(),
-							e.getMessage().toString()));
-			_messages.add(new ErrorMessage(message,
-					"Line = " + line + ", Column = " + col));
+							MessageConstants.XML_HUL_1_SUB.getMessage(),
+							spe.getMessage(),
+							spe.getLineNumber(),
+							spe.getColumnNumber()
+					)));
 		}
 		++_nErrors;
 	}
@@ -533,19 +508,16 @@ public class XmlModuleHandler extends DefaultHandler {
 		return _sigFlag;
 	}
 
-	/*
-	 * Check if we already know about this schema URI. If we do but the new info
-	 * provides
-	 * a location, quietly stuff the old one into a sewer and pretend it was
-	 * never there.
+	/**
+	 * Check if we already know about this schema URI. If we do
+	 * but the new info provides a location, quietly stuff the
+	 * old one into a sewer and pretend it was never there.
 	 */
 	public boolean hasSchemaURI(SchemaInfo newinfo) {
-		Iterator<SchemaInfo> schmiter = _schemas.iterator();
-		while (schmiter.hasNext()) {
-			SchemaInfo schmi = schmiter.next();
-			if (newinfo.namespaceURI.equals(schmi.namespaceURI)) {
-				if (schmi.location.isEmpty() && !newinfo.location.isEmpty()) {
-					_schemas.remove(schmi);
+		for (SchemaInfo schema : _schemas) {
+			if (newinfo.namespaceURI.equals(schema.namespaceURI)) {
+				if (schema.location.isEmpty() && !newinfo.location.isEmpty()) {
+					_schemas.remove(schema);
 					return false;    // we like the new info better
 				}
 				return true;

@@ -37,6 +37,8 @@ public enum MessageConstants {
 
 	public static final JhoveMessage XML_HUL_1 = messageFactory
 			.getMessage("XML-HUL-1");
+	public static final JhoveMessage XML_HUL_1_SUB = messageFactory
+			.getMessage("XML-HUL-1-SUB");
 	public static final JhoveMessage XML_HUL_2 = messageFactory
 			.getMessage("XML-HUL-2");
 	public static final JhoveMessage XML_HUL_3 = messageFactory
