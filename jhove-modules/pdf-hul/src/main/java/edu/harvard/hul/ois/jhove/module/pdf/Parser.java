@@ -220,6 +220,13 @@ public class Parser
             _pdfACompliant = false;
         }
         PdfObject obj = readObject (false);
+        
+         // skip comment
+        if (obj instanceof PdfSimpleObject
+                && ((PdfSimpleObject) obj).getToken() instanceof Comment) {
+        	obj = readObject (false);
+        	  
+        }
 
         // Now a special-case check to read a stream object, which
         // consists of a dictionary followed by a stream token.
