@@ -443,7 +443,7 @@ public class GifModule extends ModuleBase
         if (_globalColorTableFlag) {
             short[] gctArray = new short[_globalColorTableSize];
             for (int i = 0; i < _globalColorTableSize; i++) {
-                gctArray[i] = (short) _dstream.readUnsignedByte ();
+                gctArray[i] = (short) readUnsignedByte(_dstream, this);
             }
             _blocksList.add (new Property ("GlobalColorTable",
                     PropertyType.SHORT,
