@@ -3410,6 +3410,10 @@ public class PdfModule extends ModuleBase {
 							destPg));
 				}
 			}
+		} catch (PdfMalformedException e) {
+			propList.add(new Property(propName, PropertyType.STRING, PROP_VAL_NULL));
+			info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			info.setValid(false);
 		} catch (Exception e) {
 
 			String msg = e.getClass().getName();
