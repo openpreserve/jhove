@@ -487,7 +487,14 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 				break;
 			}
 			case DOUBLE: {
-				addToNode(node, (Double[]) pVal);
+				if (pVal instanceof double[]) {
+					Double[] vals = Arrays.stream((double[])pVal) // IntStream
+					                    .boxed()				// Stream<Double>
+					                    .toArray(Double[]::new);
+					addToNode(node, vals);
+				} else {
+					addToNode(node, (Double[]) pVal);
+				}
 				break;
 			}
 			case FLOAT: {
