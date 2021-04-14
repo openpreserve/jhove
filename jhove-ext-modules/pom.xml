@@ -13,7 +13,7 @@
 
   <properties>
     <jwat.version>1.0.3</jwat.version>
-    <epubcheck.version>4.2.4</epubcheck.version>
+    <epubcheck.version>4.2.5</epubcheck.version>
   </properties>
 
   <build>
