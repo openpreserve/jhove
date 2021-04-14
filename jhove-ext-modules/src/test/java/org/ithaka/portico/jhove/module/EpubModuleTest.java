@@ -5,7 +5,6 @@ import static org.ithaka.portico.jhove.module.epub.ReportPropertyNames.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -367,7 +366,10 @@ public class EpubModuleTest {
     public void parseEpubWithWrongExtensionTest() throws Exception {
         File epubFile = new File(EPUB_WRONG_EXT_FILEPATH);
         RepInfo info = parseAndCheckValidity(epubFile, RepInfo.TRUE, RepInfo.TRUE);
-        assertEquals(0, info.getMessage().size());
+        Message msg = info.getMessage().get(0);
+        assertEquals("PKG-024", msg.getId());
+        assertTrue(msg.getMessage().contains("INFO"));
+        assertEquals(1, info.getMessage().size());
     }
 
     /**
@@ -423,7 +425,8 @@ public class EpubModuleTest {
         File epubFile = new File(WRONG_EXT_NOT_AN_EPUB_FILEPATH);
         RepInfo info = parseAndCheckValidity(epubFile, RepInfo.FALSE, RepInfo.FALSE);
         List<Message> msgs = info.getMessage();
-        assertEquals(1, msgs.size());
+        final int expectedNumMessages = 3;
+        assertEquals(expectedNumMessages, msgs.size());
     }
 
     /**
