@@ -83,7 +83,7 @@
     <mvn.source.version>3.0.1</mvn.source.version>
     <mvn.surefire.version>2.19.1</mvn.surefire.version>
     <mvn.release.version>2.5.3</mvn.release.version>
-    <jacoco.version>0.7.9</jacoco.version>
+    <jacoco.version>0.8.7</jacoco.version>
     <java.source.version>1.8</java.source.version>
     <java.target.version>1.8</java.target.version>
     <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
