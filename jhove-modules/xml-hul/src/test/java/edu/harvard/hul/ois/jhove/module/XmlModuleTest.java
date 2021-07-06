@@ -16,13 +16,14 @@ public class XmlModuleTest {
 
     private static final String RESOURCE_DIR = "src/test/resources/edu/harvard/hul/ois/jhove/module/";
     private static final String MODULE_NAME = "XML-hul";
+    private static final int SIG_BYTES = 1024;
 
     private XmlModule module;
 
     @Before
     public void setup() throws JhoveException {
         JhoveBase base = new JhoveBase();
-        base.setSigBytes(1024);
+        base.setSigBytes(SIG_BYTES);
         module = new XmlModule();
         module.setBase(base);
     }
