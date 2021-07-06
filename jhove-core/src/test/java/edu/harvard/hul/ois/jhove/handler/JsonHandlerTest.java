@@ -48,7 +48,7 @@ public class JsonHandlerTest {
 	private static final Logger LOGGER = Logger.getLogger(JsonHandlerTest.class
 			.getName());
 
-	private static final String TIME_PATTERN = "\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\+[0-9]{2}:[0-9]{2})?\"";
+	private static final String TIME_PATTERN = "\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}([+-][0-9]{2}:[0-9]{2})?\"";
 	private static final String DATE_PATTERN = "\"date\":\"[^\"]+\"";
 	private static final String DATE_REPLACEMENT = "\"date\":\"2010-01-01\"";
 	private static final String RELEASE_PATTERN = "\"release\":\"[^\"]+\"";
