@@ -36,7 +36,7 @@ public class XmlModuleTest {
 
         assertEquals(1, info.getSigMatch().size());
         assertEquals(MODULE_NAME, info.getSigMatch().get(0));
-        assertEquals(1, info.getWellFormed());
+        assertEquals(RepInfo.TRUE, info.getWellFormed());
     }
 
 }
