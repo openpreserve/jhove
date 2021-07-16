@@ -452,6 +452,7 @@ public class XmlModule extends ModuleBase {
 		// It should be noted that latter on when we look at the namespace in
 		// relation with the Root element
 		// if a URI is defined with it, it will get the preference ...
+		boolean hasRootSchema = false;
 		if (!schemaList.isEmpty()) {
 			SchemaInfo schItems = schemaList.get(0);
 			// First NamespaceURI
@@ -461,13 +462,18 @@ public class XmlModule extends ModuleBase {
 			} else if (isNotEmpty(schItems.location)) {
 				_textMD.setMarkup_language(schItems.location);
 			}
+
+			if (isNotEmpty(schItems.location)
+					|| (isNotEmpty(schItems.namespaceURI) && _localSchemas.containsKey(schItems.namespaceURI))) {
+				hasRootSchema = true;
+			}
 		} else if (isNotEmpty(dtdURI)) {
 			_textMD.setMarkup_language(dtdURI);
+			hasRootSchema = true;
 		}
 
 		if (parseIndex == 0) {
-			if ((handler.getDTDURI() != null || !schemaList.isEmpty())
-					&& canValidate) {
+			if (canValidate && hasRootSchema) {
 				return 1;
 			}
 			info.setValid(RepInfo.UNDETERMINED);
