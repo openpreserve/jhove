@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.25.0-wisc</version>
+    <version>1.25.1-wisc-SNAPSHOT</version>
   </parent>
   <artifactId>ascii-hul</artifactId>
   <name>JHOVE ASCII Module HUL</name>

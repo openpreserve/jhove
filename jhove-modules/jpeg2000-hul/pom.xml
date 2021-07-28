@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.25.0-wisc</version>
+    <version>1.25.1-wisc-SNAPSHOT</version>
   </parent>
   <artifactId>jpeg2000-hul</artifactId>
   <name>JHOVE JPEG 2000 Module HUL</name>
