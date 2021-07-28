@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.25.0-wisc-SNAPSHOT</version>
+    <version>1.25.0-wisc</version>
   </parent>
   <artifactId>xml-hul</artifactId>
   <name>JHOVE XML Module HUL</name>
