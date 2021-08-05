@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.25.1-wisc</version>
+    <version>1.25.2-wisc-SNAPSHOT</version>
   </parent>
   <artifactId>pdf-hul</artifactId>
   <name>JHOVE PDF Module HUL</name>
