@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.25.1-wisc-SNAPSHOT</version>
+    <version>1.25.1-wisc</version>
   </parent>
   <artifactId>gif-hul</artifactId>
   <name>JHOVE GIF Module HUL</name>
