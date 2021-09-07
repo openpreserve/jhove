@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(JUnit4.class)
 public class JhoveMessagesTest {
     @Test
@@ -11,7 +13,7 @@ public class JhoveMessagesTest {
         System.getProperties().remove("module.language");
         JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
         JhoveMessage msg = messageFactory.getMessage("MSG");
-        assert "English".equals(msg.getMessage());
+        assertEquals("English", msg.getMessage());
     }
 
     @Test
@@ -19,7 +21,7 @@ public class JhoveMessagesTest {
         System.setProperty("module.language", "en");
         JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
         JhoveMessage msg = messageFactory.getMessage("MSG");
-        assert "English".equals(msg.getMessage());
+        assertEquals("English", msg.getMessage());
     }
 
     @Test
@@ -27,7 +29,7 @@ public class JhoveMessagesTest {
         System.setProperty("module.language", "jp");
         JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
         JhoveMessage msg = messageFactory.getMessage("MSG");
-        assert "English".equals(msg.getMessage());
+        assertEquals("English", msg.getMessage());
     }
 
     @Test
@@ -36,14 +38,14 @@ public class JhoveMessagesTest {
             System.setProperty("module.language", "da");
             JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
             JhoveMessage msg = messageFactory.getMessage("MSG");
-            assert "Danish".equals(msg.getMessage());
+            assertEquals("Danish", msg.getMessage());
         }
 
         {
             System.setProperty("module.language", "fr");
             JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
             JhoveMessage msg = messageFactory.getMessage("MSG");
-            assert "French".equals(msg.getMessage());
+            assertEquals("French", msg.getMessage());
         }
     }
 }
