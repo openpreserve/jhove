@@ -121,15 +121,4 @@ public enum JhoveMessages {
 				locale);
 		return JhoveMessageFactImpl.getInstance(messageBundle);
 	}
-
-	/**
-	 * To test with JVM parameter such as: -Dmodule.language=xx
-	 * @param args: arguments from command line
-	 */
-	public static void main(String[] args) {
-		//System.setProperty("module.language","en");
-		JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.ErrorMessages");
-		JhoveMessage msg = messageFactory.getMessage("EXC_CHAR_ENC_UNSPPTD");
-		System.out.println(msg.getId() + ": " + msg.getMessage());
-	}
 }
