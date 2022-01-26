@@ -33,6 +33,13 @@ public final class AProfile extends PdfProfile
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
 
+    /*
+     * Map of visited nodes when walking through an outline.- used to stop
+     * infinite loops. These may be caused by mishandled escape characters
+     * when loading objects.
+     */
+    protected Set<Integer> _visitedOutlineNodes;
+
     /* TaggedProfile to which this profile is linked. */
     private TaggedProfile _taggedProfile;
     private boolean _levelA;
@@ -822,6 +829,7 @@ public final class AProfile extends PdfProfile
        we save the time to do this test. */
     private boolean outlinesOK () 
     {
+        _visitedOutlineNodes = new HashSet<Integer>();
         if (!_module.getActionsExist ()) {
             return true;
         }
@@ -833,11 +841,16 @@ public final class AProfile extends PdfProfile
             PdfDictionary item = (PdfDictionary) _module.resolveIndirectObject
                        (outlineDict.get ("First"));
             while (item != null) {
+                _visitedOutlineNodes.add(item.getObjNumber());
                 if (!checkOutlineItem (item)) {
                     return false;
                 }
-                item = (PdfDictionary) _module.resolveIndirectObject 
+                PdfDictionary next = (PdfDictionary) _module.resolveIndirectObject 
                         (((PdfDictionary) item).get ("Next"));
+                if (_visitedOutlineNodes.contains(next.getObjNumber())) {
+                    throw new PdfInvalidException(MessageConstants.PDF_HUL_129);
+                }
+                item = next;
             }
         }
         catch (Exception e) {
@@ -861,12 +874,17 @@ public final class AProfile extends PdfProfile
                      _module.resolveIndirectObject (item.get ("First"));
             PdfDictionary next;
             while (child != null) {
+                _visitedOutlineNodes.add(child.getObjNumber());
                 if (!checkOutlineItem (child)) {
                     return false;
                 }
                 next = (PdfDictionary)
                     _module.resolveIndirectObject (child.get ("Next"));
-                if (next.getObjNumber() != child.getObjNumber()) {
+                Integer nextObjNum = next.getObjNumber();
+                if (nextObjNum != child.getObjNumber()) {
+                    if (_visitedOutlineNodes.contains(nextObjNum)) {
+                        throw new PdfInvalidException(MessageConstants.PDF_HUL_129);
+                    }
                     child = next;
                 } else {
                     child = null;
