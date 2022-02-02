@@ -22,7 +22,10 @@
 package edu.harvard.hul.ois.jhove.module;
 
 import java.io.*;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.*;
 import edu.harvard.hul.ois.jhove.*;
@@ -115,8 +118,8 @@ public class XmlModule extends ModuleBase {
 	/* Hold the information needed to generate a textMD metadata fragment */
 	protected TextMDMetadata _textMD;
 
-	/* Map from URIs to locally stored schemas */
-	protected Map<String, File> _localSchemas;
+	/* Map from URIs to local schema overrides */
+	protected Map<String, URI> _localSchemas;
 
 	/******************************************************************
 	 * CLASS CONSTRUCTOR.
@@ -1024,8 +1027,8 @@ public class XmlModule extends ModuleBase {
 	}
 
 	/**
-	 * Add a mapping from a schema URI to a local file.
-	 * The parameter is of the form schema=[URI];[path]
+	 * Add a mapping from a schema URI to a local override.
+	 * The parameter is of the form schema=[URI];[URI]
 	 */
 	private void addLocalSchema(String param) {
 		int eq = param.indexOf('=');
@@ -1033,10 +1036,7 @@ public class XmlModule extends ModuleBase {
 		try {
 			String uri = param.substring(eq + 1, semi).trim();
 			String path = param.substring(semi + 1).trim();
-			File f = new File(path);
-			if (f.exists()) {
-				_localSchemas.put(uri, f);
-			}
+			_localSchemas.put(uri.toLowerCase(), URI.create(path));
 		} catch (Exception e) {
 		}
 	}

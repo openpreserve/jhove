@@ -5,11 +5,13 @@
 
 package edu.harvard.hul.ois.jhove.module.xml;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -113,8 +115,8 @@ public class XmlModuleHandler extends DefaultHandler {
 	 */
 	private boolean _sigFlag;
 
-	/* Map from URIs to local schema files */
-	private Map<String, File> _localSchemas;
+	/* Map from URIs to local schema overrides */
+	private Map<String, URI> _localSchemas;
 
 	/**
 	 * Constructor.
@@ -146,10 +148,10 @@ public class XmlModuleHandler extends DefaultHandler {
 	}
 
 	/**
-	 * Sets a map of schema URIs to local files. This information
+	 * Sets a map of schema URIs to local overrides. This information
 	 * comes from jhove.conf parameters.
 	 */
-	public void setLocalSchemas(Map<String, File> schemas) {
+	public void setLocalSchemas(Map<String, URI> schemas) {
 		_localSchemas = schemas;
 	}
 
@@ -332,12 +334,11 @@ public class XmlModuleHandler extends DefaultHandler {
 
 	{
 		// Check any custom mapping from the config
-		File fil = _localSchemas.get(systemId.toLowerCase());
-		if (fil != null) {
+		URI uri = _localSchemas.get(systemId.toLowerCase());
+		if (uri != null) {
 			try {
-				FileInputStream inStrm = new FileInputStream(fil);
-				return new InputSource(inStrm);
-			} catch (FileNotFoundException e) {
+				return new InputSource(openUri(uri));
+			} catch (IOException e) {
 			}
 		}
 
@@ -348,20 +349,7 @@ public class XmlModuleHandler extends DefaultHandler {
 		InputSource ent = DTDMapper.publicIDToFile(publicId);
 		if (ent == null) {
 			try {
-				URL obj = new URL(systemId);
-				HttpURLConnection conn = (HttpURLConnection) obj
-						.openConnection();
-
-				int status = conn.getResponseCode();
-				if (status == HttpURLConnection.HTTP_MOVED_TEMP
-						|| status == HttpURLConnection.HTTP_MOVED_PERM
-						|| status == HttpURLConnection.HTTP_SEE_OTHER) {
-
-					String newUrl = conn.getHeaderField("Location");
-					conn = (HttpURLConnection) new URL(newUrl).openConnection();
-					ent = new InputSource(conn.getInputStream());
-				}
-
+				ent = new InputSource(openUri(URI.create(systemId)));
 			} catch (Exception e) {
 				// Depending on the JDK version, super.resolveEntity
 				// may or may not be formally capable of throwing an
@@ -553,4 +541,31 @@ public class XmlModuleHandler extends DefaultHandler {
 		}
 		return false;
 	}
+
+	private InputStream openUri(URI uri) throws IOException {
+		if (!uri.isAbsolute()) {
+			// treat relative URIs as filesystem paths
+			return Files.newInputStream(Paths.get(uri.getPath()));
+		} else if ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme())) {
+			return httpFetch(uri.toURL());
+		}
+
+		return uri.toURL().openStream();
+	}
+
+	private InputStream httpFetch(URL url) throws IOException {
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+		int status = conn.getResponseCode();
+		if (status == HttpURLConnection.HTTP_MOVED_TEMP
+				|| status == HttpURLConnection.HTTP_MOVED_PERM
+				|| status == HttpURLConnection.HTTP_SEE_OTHER) {
+			// redirects on the same protocol are followed automatically, but redirects across protocols are not
+			String newUrl = conn.getHeaderField("Location");
+			conn = (HttpURLConnection) new URL(newUrl).openConnection();
+		}
+
+		return conn.getInputStream();
+	}
+
 }
