@@ -190,7 +190,7 @@ public class StructureTree
 	    // Only one child
 	    StructureElement se = new StructureElement 
 		((PdfDictionary) kids, this);
-		se.buildSubtree(true, MAX_PAGE_TREE_DEPTH);
+		se.buildSubtree(MAX_PAGE_TREE_DEPTH);
 	    se.checkAttributes ();
 	    return;
 	}
@@ -209,7 +209,7 @@ public class StructureTree
 		}
 		StructureElement se = new StructureElement 
 			((PdfDictionary) kid, this);
-		se.buildSubtree(true, MAX_PAGE_TREE_DEPTH);
+		se.buildSubtree(MAX_PAGE_TREE_DEPTH);
 		se.checkAttributes ();
 		kidsList.add (se);
 	    }
