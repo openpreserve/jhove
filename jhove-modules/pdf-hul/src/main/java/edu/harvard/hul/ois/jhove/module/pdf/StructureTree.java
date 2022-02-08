@@ -21,6 +21,8 @@ public class StructureTree
 {    
     /** Logger for this class. */
     protected Logger _logger;
+    
+    public static final int MAX_PAGE_TREE_DEPTH = 100;
 
     private PdfModule _module;
     private PdfDictionary _rootDict;
@@ -188,7 +190,7 @@ public class StructureTree
 	    // Only one child
 	    StructureElement se = new StructureElement 
 		((PdfDictionary) kids, this);
-	    se.buildSubtree ();
+		se.buildSubtree(true, MAX_PAGE_TREE_DEPTH);
 	    se.checkAttributes ();
 	    return;
 	}
@@ -207,7 +209,7 @@ public class StructureTree
 		}
 		StructureElement se = new StructureElement 
 			((PdfDictionary) kid, this);
-		se.buildSubtree ();
+		se.buildSubtree(true, MAX_PAGE_TREE_DEPTH);
 		se.checkAttributes ();
 		kidsList.add (se);
 	    }
