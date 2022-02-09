@@ -666,6 +666,12 @@ public class Literal
         StringBuilder sb = new StringBuilder();
         for (;;) {
             int ch = tok.readChar1(true);
+            
+            // If we get -1, then we've hit an EOF without proper termination of
+            // the literal. Throw an exception.
+            if (ch < 0) {
+                throw new EOFException (MessageConstants.PDF_HUL_10.getMessage()); // PDF-HUL-10
+            }
             if (ch == ESC) {
                 break;
             }
