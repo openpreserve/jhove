@@ -294,6 +294,7 @@
                   <value>org.sonar.java.jacoco.JUnitListener</value>
                 </property>
               </properties>
+            	<forkCount>1.5C</forkCount>
 
             </configuration>
           </plugin>
