@@ -76,6 +76,8 @@ public class ConfigWindow extends JDialog {
     final static Color _tableColor = new Color (235, 230, 210);
     final static Font _pathFont = new Font (SANS_SERIF, Font.PLAIN, 10);
     final static Font _infoFont = new Font (SANS_SERIF, Font.PLAIN, 12);
+
+    final static int HEIGHT = 640;
     
     /**
      *  Constructor.
@@ -126,8 +128,8 @@ public class ConfigWindow extends JDialog {
         // Keep its size reasonable, taking screen size into account
         java.awt.Rectangle screenRect = MainScreen.mainBounds ();
         int maxHeight = screenRect.height - 200;
-        if (maxHeight > 640) {
-            maxHeight = 640;
+        if (maxHeight > HEIGHT) {
+            maxHeight = HEIGHT;
         }
         _mainBox.setMaximumSize (new Dimension (500, maxHeight));
         _mainBox.setPreferredSize (new Dimension (400, maxHeight));
