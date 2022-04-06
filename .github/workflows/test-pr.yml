@@ -22,15 +22,17 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
-      - name: script
+        run: mvn --batch-mode --update-snapshots install -DjacocoAgg
+      - name: Integration Tests
         run: ./bbt-jhove
         shell: bash
+      - name: Build with Maven
+        run: mvn --batch-mode verify -DjacocoAgg
       - name: Upload coverage report
         uses: actions/upload-artifact@master
         with:
           name: coverage-report
-          path: core/target/site/jacoco/
+          path: jhove-apps/target/site/jacoco-aggregate/
   coverage:
     name: Quality Assurance
     runs-on: ubuntu-20.04
@@ -45,13 +47,13 @@ jobs:
       - name: Codecov coverage reporting
         uses: codecov/codecov-action@v2
         with:
-          files: core/target/site/jacoco/jacoco.xml
+          files: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
           fail_ci_if_error: true # optional (default = false)
           verbose: true # optional (default = false)
       - name: Codacy coverage reporting
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: core/target/site/jacoco/jacoco.xml
+          coverage-reports: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
       - name: Codacy analysis reporting
         uses: codacy/codacy-analysis-cli-action@4.0.0
