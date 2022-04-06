@@ -1,5 +1,5 @@
-RELEASE NOTES
-=============
+# RELEASE NOTES
+
 JHOVE - JSTOR/Harvard Object Validation Environment
 Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
@@ -8,8 +8,76 @@ see the file LICENSE for details).
 Versions 1.7 to 1.11 of JHOVE released independently.
 Versions 1.12 onwards released by the Open Preservation Foundation.
 
-JHOVE 1.24
--------------
+## JHOVE 1.26-RC1
+
+2022-04-07
+
+### TODO
+
+- Fixed issue [[#][]]  [[#][]]
+
+
+### General
+
+- Refactoring and fixes for Java 11 compatibility. [[#688][]], [[#682][]], [[#716][]]
+- Java constants for various core classes. [[#426][]], [[#586][]], [[#594][]] - [[#598][]], [[#600][]], [[#603][]] - [[#606][]]
+- Minor refactorings to address Java warnings and similar. [[#577][]]
+- Third party module JARS added to documentation site.   [[#566][]]
+
+### PDF Module
+
+- Fixed issue [[#358][]] Parenthesis handling in Document Information Dictionary. [[#359][]]
+- Fixed issue [[#375][]] ClassCastException when handling indirect objects. [[#596][]]
+- Fixed issue [[#531][]] Missing error IDs for "Size entry missing in trailer dictionary." [[#579][]], [[#590][]], [[#597][]]
+- Added support of 256 bit AES encryption algorithm. [[#621][]]
+- Fixed bug in halding reporting of skipped pages. [[#620][]]
+- Improvements to reporting of cross-reference exceptions. [[#619][]]
+
+### PNG Module
+
+- Added Java constants for error strings, magic numbers, etc. [[#578][]] [[#587][]]
+- Fixed issue [[#148][]] null pointer exception. [[#580][]]
+
+### WAVE Module
+
+- Fixed variable formatting in message translations [[#557][]]
+
+[#148]: https://github.com/openpreserve/jhove/issues/148
+[#358]: https://github.com/openpreserve/jhove/issues/358
+[#375]: https://github.com/openpreserve/jhove/issues/375
+[#531]: https://github.com/openpreserve/jhove/issues/531
+
+[#359]: https://github.com/openpreserve/jhove/pull/359
+[#426]: https://github.com/openpreserve/jhove/pull/426
+[#557]: https://github.com/openpreserve/jhove/pull/557
+[#566]: https://github.com/openpreserve/jhove/pull/566
+[#577]: https://github.com/openpreserve/jhove/pull/577
+[#578]: https://github.com/openpreserve/jhove/pull/578
+[#579]: https://github.com/openpreserve/jhove/pull/579
+[#580]: https://github.com/openpreserve/jhove/pull/580
+[#586]: https://github.com/openpreserve/jhove/pull/586
+[#587]: https://github.com/openpreserve/jhove/pull/587
+[#590]: https://github.com/openpreserve/jhove/pull/590
+[#594]: https://github.com/openpreserve/jhove/pull/594
+[#595]: https://github.com/openpreserve/jhove/pull/595
+[#596]: https://github.com/openpreserve/jhove/pull/596
+[#597]: https://github.com/openpreserve/jhove/pull/597
+[#598]: https://github.com/openpreserve/jhove/pull/598
+[#602]: https://github.com/openpreserve/jhove/pull/600
+[#602]: https://github.com/openpreserve/jhove/pull/602
+[#603]: https://github.com/openpreserve/jhove/pull/603
+[#604]: https://github.com/openpreserve/jhove/pull/604
+[#605]: https://github.com/openpreserve/jhove/pull/605
+[#606]: https://github.com/openpreserve/jhove/pull/606
+[#619]: https://github.com/openpreserve/jhove/pull/619
+[#620]: https://github.com/openpreserve/jhove/pull/620
+[#621]: https://github.com/openpreserve/jhove/pull/621
+[#682]: https://github.com/openpreserve/jhove/pull/682
+[#688]: https://github.com/openpreserve/jhove/pull/688
+[#716]: https://github.com/openpreserve/jhove/pull/716
+
+## JHOVE 1.24
+
 2020-03-12
 
 ### General
@@ -149,8 +217,8 @@ JHOVE 1.24
 [#552]: https://github.com/openpreserve/jhove/pull/552
 [#557]: https://github.com/openpreserve/jhove/pull/557
 
-JHOVE 1.22
--------------
+## JHOVE 1.22
+
 2019-04-18
 
 ### General
@@ -252,8 +320,8 @@ JHOVE 1.22
 [#429]: https://github.com/openpreserve/jhove/pull/429
 
 
-JHOVE 1.20
--------------
+## JHOVE 1.20
+
 2018-03-29
 
 ### General
@@ -327,8 +395,8 @@ JHOVE 1.20
 [#324]: https://github.com/openpreserve/jhove/pull/324
 
 
-JHOVE 1.18.1
--------------
+## JHOVE 1.18.1
+
 2017-11-30
 
 ### General
@@ -404,8 +472,8 @@ JHOVE 1.18.1
 [#292]: https://github.com/openpreserve/jhove/pull/292
 
 
-JHOVE 1.16.7
-------------
+## JHOVE 1.16.7
+
 2017-07-20
 
 ### PDF Module
@@ -413,8 +481,8 @@ JHOVE 1.16.7
 - Fixed: Some PDFs being reported as "Well-formed and valid" while remaining
   largely unchecked [[#258](https://github.com/openpreserve/jhove/pull/258)]
 
-JHOVE 1.16.5
-------------
+## JHOVE 1.16.5
+
 2017-03-20
 
 ### General
@@ -422,8 +490,8 @@ JHOVE 1.16.5
 - Fixed: Core method causing modules to skip more bytes than expected
   [[#194](https://github.com/openpreserve/jhove/pull/194)]
 
-JHOVE 1.16.0
-------------
+## JHOVE 1.16.0
+
 2017-03-16
 
 ### General
@@ -448,8 +516,8 @@ JHOVE 1.16.0
 - Fixed: Skip Bytes issue for WAVE files larger than 100 MB
 
 
-JHOVE 1.14
-----------
+## JHOVE 1.14
+
 2016-05-12
 
 *Version 1.12 was never officially released, so to avoid confusion the
@@ -476,8 +544,8 @@ JHOVE 1.14
 - Support for Unicode 7.0.0
 
 
-JHOVE 1.11
-----------
+## JHOVE 1.11
+
 2013-09-30
 
 ### General
@@ -509,8 +577,8 @@ JHOVE 1.11
       to run out of heap space on some files.
 
 
-JHOVE 1.10
-----------
+## JHOVE 1.10
+
 2013-06-10
 
 ### General
@@ -561,8 +629,8 @@ JHOVE 1.10
       will try to give a specific error message.
 
 
-JHOVE 1.9
----------
+## JHOVE 1.9
+
 2012-12-17
 
 ### General
@@ -618,8 +686,8 @@ JHOVE 1.9
       files. These now report the file as not well-formed.
 
 
-JHOVE 1.8
----------
+## JHOVE 1.8
+
 2012-11-07
 
 ### General
@@ -654,8 +722,8 @@ JHOVE 1.8
       (BEXT) chunk, is now reported.
 
 
-JHOVE 1.7
----------
+## JHOVE 1.7
+
 2012-08-12
 
 ### General
@@ -678,8 +746,8 @@ JHOVE 1.7
       processing in some PDF files with malformed literals has been fixed.
 
 
-JHOVE 1.6
----------
+## JHOVE 1.6
+
 2011-01-04
 
 ### XML Handler and Text Handler
@@ -705,8 +773,8 @@ JHOVE 1.6
    1.  Updated to Unicode 6.0.0.
 
 
-JHOVE 1.5
----------
+## JHOVE 1.5
+
 2009-12-17
 
 ### PDF Module
@@ -732,8 +800,8 @@ JHOVE 1.5
    2. The TextMD feature was added by Thomas Ledoux.
 
 
-JHOVE 1.4
----------
+## JHOVE 1.4
+
 2009-07-31
 
 ### PDF Module
@@ -771,8 +839,8 @@ JHOVE 1.4
       it will return to a valid initial state.
 
 
-JHOVE 1.3
----------
+## JHOVE 1.3
+
 2009-06-04
 
 ### General
@@ -815,8 +883,8 @@ JHOVE 1.3
    1. Omissions in MIX 1.0 and 2.0 output have been fixed.
 
 
-JHOVE 1.2
----------
+## JHOVE 1.2
+
 2009-02-10
 
 ### General
@@ -856,8 +924,8 @@ JHOVE 1.2
       been fixed.
 
 
-JHOVE 1.1
----------
+## JHOVE 1.1
+
 2008-02-22
 
 ### Command-line Interface
@@ -1210,9 +1278,8 @@ JHOVE 1.0
       attribute of the `<audit>` element and individual files are reported
       as relative pathnames.
 
+## JHOVE 1.0 beta 3
 
-JHOVE 1.0 beta 3
-----------------
 2005-02-04
 
 ### General
@@ -1439,9 +1506,8 @@ JHOVE 1.0 beta 3
           00000058: 257 (ImageLength) LONG 1 = 4620
           ...
 
+## JHOVE 1.0 beta 2
 
-JHOVE 1.0 beta 2
-----------------
 2004-07-19
 
 ### General

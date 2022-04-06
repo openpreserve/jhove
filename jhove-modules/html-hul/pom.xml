@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.25.0-SNAPSHOT</version>
+    <version>1.26.0-alpha</version>
   </parent>
   <artifactId>html-hul</artifactId>
   <version>1.4.1</version>
