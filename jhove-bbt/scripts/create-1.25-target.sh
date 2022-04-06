@@ -57,20 +57,44 @@ echo " - copying ${baselineRoot} baseline to ${targetRoot}"
 cp -R "${baselineRoot}" "${targetRoot}"
 
 # Copy the full result of regression/modules/PDF-hul/pdf-hul-40-61501688X.pdf
+# and regression/modules/PDF-hul/issue_531.pdf
 # fixed by: https://github.com/openpreserve/jhove/pull/579
 if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-40-61501688X.pdf.jhove.xml" ]]; then
-	echo " - PR:579 result patch."
+	echo " - PR:579 PDF result patch 1."
 	cp "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-40-61501688X.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pdf-hul-40-61501688X.pdf.jhove.xml"
 fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_531.pdf.jhove.xml" ]]; then
+	echo " - ISSUE:531  PDF result patch 2."
+	cp "${candidateRoot}/regression/modules/PDF-hul/issue_531.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_531.pdf.jhove.xml"
+fi
 
-# Copy the full result of errors/modules/PDF-hul/pdf-hul-14-govdocs-489354.pdf and
-# errors/modules/PDF-hul/pdf-hul-81-govdocs-128112.pdf
+# Copy the full result of regression/modules/PDF-hul/issue_375.pdf
+# fixed by: https://github.com/openpreserve/jhove/pull/596
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_375.pdf.jhove.xml" ]]; then
+	echo " - ISSUE:375 PDF result patch."
+	cp "${candidateRoot}/regression/modules/PDF-hul/issue_375.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_375.pdf.jhove.xml"
+fi
+
+# Copy the full result of errors/modules/PDF-hul/pdf-hul-14-govdocs-489354.pdf,
+# errors/modules/PDF-hul/pdf-hul-81-govdocs-128112.pdf and regression/modules/PDF-hul/issue_358.pdf
 # fixed by: https://github.com/openpreserve/jhove/pull/359
 if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-14-govdocs-489354.pdf.jhove.xml" ]]; then
-	echo " - PR:359 result patch 1."
+	echo " - PR:359 PDF result patch 1."
 	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-14-govdocs-489354.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-14-govdocs-489354.pdf.jhove.xml"
 fi
 if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-81-govdocs-128112.pdf.jhove.xml" ]]; then
 	echo " - PR:359 result patch 2."
 	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-81-govdocs-128112.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-81-govdocs-128112.pdf.jhove.xml"
 fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_358.pdf.jhove.xml" ]]; then
+	echo " - ISSUE:358 PDF result patch 3."
+	cp "${candidateRoot}/regression/modules/PDF-hul/issue_358.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_358.pdf.jhove.xml"
+fi
+
+# Copy the full result of regression/modules/PNG-gdm/issue_148.png
+# fixed by: https://github.com/openpreserve/jhove/pull/580
+if [[ -f "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" ]]; then
+	echo " - ISSUE:148 PNG result patch."
+	cp "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" "${targetRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml"
+fi
+
