@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -10,7 +10,7 @@
 
   <groupId>org.openpreservation.jhove</groupId>
   <artifactId>jhove</artifactId>
-  <version>1.24.0</version>
+  <version>1.25.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
@@ -83,7 +83,7 @@
     <mvn.source.version>3.0.1</mvn.source.version>
     <mvn.surefire.version>2.19.1</mvn.surefire.version>
     <mvn.release.version>2.5.3</mvn.release.version>
-    <jacoco.version>0.7.9</jacoco.version>
+    <jacoco.version>0.8.7</jacoco.version>
     <java.source.version>1.8</java.source.version>
     <java.target.version>1.8</java.target.version>
     <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
@@ -271,12 +271,29 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.8.1</version>
+        <version>4.13.1</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
+  <dependencies>
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-core</artifactId>
+      <version>2.3.0.1</version>
+    </dependency>
+  </dependencies>
   <profiles>
     <profile>
       <id>sonar-coverage-per-test</id>
@@ -440,11 +457,11 @@
       <distributionManagement>
         <snapshotRepository>
           <id>opf-artefactory</id>
-          <url>https://artifactory.openpreservation.org/artifactory/vera-dev-local/</url>
+          <url>https://artifactory.openpreservation.org/artifactory/opf-dev-local/</url>
         </snapshotRepository>
         <repository>
           <id>opf-artefactory</id>
-          <url>https://artifactory.openpreservation.org/artifactory/vera-dev-local/</url>
+          <url>https://artifactory.openpreservation.org/artifactory/opf-dev-local/</url>
         </repository>
       </distributionManagement>
     </profile>

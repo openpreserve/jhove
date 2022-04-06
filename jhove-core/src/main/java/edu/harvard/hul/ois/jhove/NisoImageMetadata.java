@@ -20,6 +20,11 @@ public class NisoImageMetadata
 	/** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(NisoImageMetadata.class.getCanonicalName());
 
+    /** private String constants. */
+    private static final String YES = "Yes";
+    private static final String NO = "No";
+    private static final String TIME_SEP = ":";
+
     /******************************************************************
      * PUBLIC CLASS FIELDS.
      ******************************************************************/
@@ -133,7 +138,7 @@ public class NisoImageMetadata
 
     /** 7.7.3.10 flash value labels. */
     public static final String [] FLASH = {
-	"No", "Yes"
+	NO, YES
     };
     public static final String [] FLASH_20 = {
 	"Flash did not fire", "Flash fired"
@@ -141,7 +146,7 @@ public class NisoImageMetadata
 
     /** 7.7.3.12 flash return value labels. */
     public static final String [] FLASH_RETURN = {
-	"Yes", "No"
+	YES, NO
     };
 
     /** 8.2.6 gray response unit value labels for version 0.2. */
@@ -2242,7 +2247,7 @@ public class NisoImageMetadata
                 String mi = date.substring (14, 16);
                 String se = date.substring (17, 19);
                 return yr + "-" + mo + "-" + da + "T" +
-                    hr + ":" + mi + ":" + se;
+                    hr + TIME_SEP + mi + TIME_SEP + se;
             }
             return date;  // default
         }

@@ -71,6 +71,26 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 		snarfRepInfo();
 	}
 
+	private static final String TEXT_MD_METADTA = "TextMDMetadata";
+	private static final String FORMAT = "Format: ";
+	private static final String VERSION = "Version: ";
+	private static final String BYTE_ORDER = "ByteOrder: ";
+	private static final String FRAME_COUNT_30 = "FrameCount: 30";
+	private static final String TIME_BASE_1000 = "TimeBase: 1000";
+	private static final String VIDEO_FIELD_FIELD_1 = "VideoField: FIELD_1";
+	private static final String COUNTING_MODE_NTSC_NON_DROP_FRAME= "CountingMode: NTSC_NON_DROP_FRAME";
+    private static final String HOURS = "Hours: ";
+    private static final String MINUTES = "Minutes: ";
+    private static final String SECONDS = "Seconds: ";
+    private static final String FRAMES = "Frames: ";
+    private static final String SAMPLES = "Samples";
+    private static final String NUMBER_OF_SAMPLES = "NumberOfSamples: ";
+    private static final String FILM_FRAMING = "FilmFraming";
+    private static final String FRAMING_NOT_APPLICABLE = "Framing: NOT_APPLICABLE";
+    private static final String NTSC_FILM_FRAMING_TYPE = "Type: ntscFilmFramingType";
+    
+
+
 	/**
 	 * Constructs a DefaultMutableTreeNode representing a property
 	 */
@@ -102,7 +122,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 					return textMDToNode(tData);
 				case PROPERTY:
 
-					if ("TextMDMetadata".equals(pProp.getName())) {
+					if (TEXT_MD_METADTA.equals(pProp.getName())) {
 						tData = (TextMDMetadata) pValue;
 						return textMDToNode(tData);
 					}
@@ -282,11 +302,11 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 		}
 		String s = _info.getFormat();
 		if (s != null) {
-			infoNode.add(new DefaultMutableTreeNode("Format: " + s, false));
+			infoNode.add(new DefaultMutableTreeNode(FORMAT + s, false));
 		}
 		s = _info.getVersion();
 		if (s != null) {
-			infoNode.add(new DefaultMutableTreeNode("Version: " + s, false));
+			infoNode.add(new DefaultMutableTreeNode(VERSION + s, false));
 		}
 		String wfStr;
 		switch (_info.getWellFormed()) {
@@ -574,7 +594,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 		}
 		s = aes.getFormat();
 		if (s != null) {
-			DefaultMutableTreeNode fmt = new DefaultMutableTreeNode("Format: "
+			DefaultMutableTreeNode fmt = new DefaultMutableTreeNode(FORMAT
 					+ s, true);
 			val.add(fmt);
 			String v = aes.getSpecificationVersion();
@@ -593,7 +613,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 		}
 		int in = aes.getByteOrder();
 		if (in != AESAudioMetadata.NULL) {
-			val.add(new DefaultMutableTreeNode("ByteOrder: "
+			val.add(new DefaultMutableTreeNode(BYTE_ORDER
 					+ (in == AESAudioMetadata.BIG_ENDIAN ? "BIG_ENDIAN"
 							: "LITTLE_ENDIAN")));
 		}
@@ -726,22 +746,22 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 		// Put the start time in
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode("Start", true);
 		// Put in boilerplate to match the AES schema
-		node.add(new DefaultMutableTreeNode("FrameCount: 30", false));
-		node.add(new DefaultMutableTreeNode("TimeBase: 1000"));
-		node.add(new DefaultMutableTreeNode("VideoField: FIELD_1"));
+		node.add(new DefaultMutableTreeNode(FRAME_COUNT_30, false));
+		node.add(new DefaultMutableTreeNode(TIME_BASE_1000));
+		node.add(new DefaultMutableTreeNode(VIDEO_FIELD_FIELD_1));
 		node.add(new DefaultMutableTreeNode(
-				"CountingMode: NTSC_NON_DROP_FRAME", false));
-		node.add(new DefaultMutableTreeNode("Hours: " + start.getHours(), false));
-		node.add(new DefaultMutableTreeNode("Minutes: " + start.getMinutes(),
+				COUNTING_MODE_NTSC_NON_DROP_FRAME, false));
+		node.add(new DefaultMutableTreeNode(HOURS + start.getHours(), false));
+		node.add(new DefaultMutableTreeNode(MINUTES + start.getMinutes(),
 				false));
-		node.add(new DefaultMutableTreeNode("Seconds: " + start.getSeconds(),
+		node.add(new DefaultMutableTreeNode(SECONDS + start.getSeconds(),
 				false));
-		node.add(new DefaultMutableTreeNode("Frames: " + start.getFrames(),
+		node.add(new DefaultMutableTreeNode(FRAMES + start.getFrames(),
 				false));
 
 		// Do samples a bit more elaborately than is really necessary,
 		// to maintain parallelism with the xml schema.
-		DefaultMutableTreeNode snode = new DefaultMutableTreeNode("Samples",
+		DefaultMutableTreeNode snode = new DefaultMutableTreeNode(SAMPLES,
 				true);
 		double sr = start.getSampleRate();
 		if (sr == 1.0) {
@@ -749,13 +769,13 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 		}
 		snode.add(new DefaultMutableTreeNode("SampleRate: S"
 				+ Integer.toString((int) sr), false));
-		snode.add(new DefaultMutableTreeNode("NumberOfSamples: "
+		snode.add(new DefaultMutableTreeNode(NUMBER_OF_SAMPLES
 				+ start.getSamples(), false));
 		node.add(snode);
 
-		snode = new DefaultMutableTreeNode("FilmFraming", true);
-		snode.add(new DefaultMutableTreeNode("Framing: NOT_APPLICABLE", false));
-		snode.add(new DefaultMutableTreeNode("Type: ntscFilmFramingType", false));
+		snode = new DefaultMutableTreeNode(FILM_FRAMING, true);
+		snode.add(new DefaultMutableTreeNode(FRAMING_NOT_APPLICABLE, false));
+		snode.add(new DefaultMutableTreeNode(NTSC_FILM_FRAMING_TYPE, false));
 		node.add(snode);
 		parent.add(node);
 
@@ -763,37 +783,37 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 		if (duration != null) {
 			node = new DefaultMutableTreeNode("Duration", true);
 			// Put in boilerplate to match the AES schema
-			node.add(new DefaultMutableTreeNode("FrameCount: 30", false));
-			node.add(new DefaultMutableTreeNode("TimeBase: 1000"));
-			node.add(new DefaultMutableTreeNode("VideoField: FIELD_1"));
+			node.add(new DefaultMutableTreeNode(FRAME_COUNT_30, false));
+			node.add(new DefaultMutableTreeNode(TIME_BASE_1000));
+			node.add(new DefaultMutableTreeNode(VIDEO_FIELD_FIELD_1));
 			node.add(new DefaultMutableTreeNode(
-					"CountingMode: NTSC_NON_DROP_FRAME", false));
+					COUNTING_MODE_NTSC_NON_DROP_FRAME, false));
 			node.add(new DefaultMutableTreeNode(
-					"Hours: " + duration.getHours(), false));
-			node.add(new DefaultMutableTreeNode("Minutes: "
+					HOURS + duration.getHours(), false));
+			node.add(new DefaultMutableTreeNode(MINUTES
 					+ duration.getMinutes(), false));
-			node.add(new DefaultMutableTreeNode("Seconds: "
+			node.add(new DefaultMutableTreeNode(SECONDS
 					+ duration.getSeconds(), false));
-			node.add(new DefaultMutableTreeNode("Frames: "
+			node.add(new DefaultMutableTreeNode(FRAMES
 					+ duration.getFrames(), false));
 
 			// Do samples a bit more elaborately than is really necessary,
 			// to maintain parallelism with the xml schema.
-			snode = new DefaultMutableTreeNode("Samples", true);
+			snode = new DefaultMutableTreeNode(SAMPLES, true);
 			sr = duration.getSampleRate();
 			if (sr == 1.0) {
 				sr = _sampleRate;
 			}
 			snode.add(new DefaultMutableTreeNode("SamplesRate S"
 					+ Integer.toString((int) sr), false));
-			snode.add(new DefaultMutableTreeNode("NumberOfSamples: "
+			snode.add(new DefaultMutableTreeNode(NUMBER_OF_SAMPLES
 					+ duration.getSamples(), false));
 			node.add(snode);
 
-			snode = new DefaultMutableTreeNode("FilmFraming", true);
-			snode.add(new DefaultMutableTreeNode("Framing: NOT_APPLICABLE",
+			snode = new DefaultMutableTreeNode(FILM_FRAMING, true);
+			snode.add(new DefaultMutableTreeNode(FRAMING_NOT_APPLICABLE,
 					false));
-			snode.add(new DefaultMutableTreeNode("Type: ntscFilmFramingType",
+			snode.add(new DefaultMutableTreeNode(NTSC_FILM_FRAMING_TYPE,
 					false));
 			node.add(snode);
 			parent.add(node);
@@ -803,7 +823,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 	/* Function for turning the textMD metadata into a subtree. */
 	private DefaultMutableTreeNode textMDToNode(TextMDMetadata textMD) {
 		DefaultMutableTreeNode val = new DefaultMutableTreeNode(
-				"TextMDMetadata", true);
+				TEXT_MD_METADTA, true);
 
 		DefaultMutableTreeNode u = new DefaultMutableTreeNode("Character_info",
 				true);
@@ -840,7 +860,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 			val.add(basis);
 			s = textMD.getMarkup_basis_version();
 			if (s != null) {
-				basis.add(new DefaultMutableTreeNode("Version: " + s, false));
+				basis.add(new DefaultMutableTreeNode(VERSION + s, false));
 			}
 		}
 		s = textMD.getMarkup_language();
@@ -850,7 +870,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 			val.add(language);
 			s = textMD.getMarkup_language_version();
 			if (s != null) {
-				language.add(new DefaultMutableTreeNode("Version: " + s, false));
+				language.add(new DefaultMutableTreeNode(VERSION + s, false));
 			}
 		}
 		return val;
@@ -866,7 +886,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 		}
 		s = niso.getByteOrder();
 		if (s != null) {
-			val.add(new DefaultMutableTreeNode("ByteOrder: " + s, false));
+			val.add(new DefaultMutableTreeNode(BYTE_ORDER + s, false));
 		}
 
 		int n = niso.getCompressionScheme();

@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  **********************************************************************/
+package edu.harvard.hul.ois.jhove.viewer;
 
 import edu.harvard.hul.ois.jhove.App;
 import edu.harvard.hul.ois.jhove.ExitCode;
@@ -35,8 +36,7 @@ import java.util.logging.Logger;
 /**
  * JhoveView - JSTOR/Harvard Object Validation Environment.
  */
-public class JhoveView
-{
+public class JhoveView {
     private static final Logger LOGGER = Logger.getLogger(JhoveView.class.getCanonicalName());
 
     /** Application name. */
@@ -45,8 +45,7 @@ public class JhoveView
     private static final String ICON_PATH = "org/openpreservation/jhove/icon.png"; //$NON-NLS-1$
 
     /** Stub constructor. */
-    private JhoveView()
-    {
+    private JhoveView() {
     }
 
     /**
@@ -54,8 +53,7 @@ public class JhoveView
      *
      * @param args Command-line arguments
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         // Make sure we have a satisfactory version of Java.
         String version = System.getProperty("java.vm.version"); //$NON-NLS-1$
         if (version.compareTo("1.8.0") < 0) { //$NON-NLS-1$
@@ -83,19 +81,16 @@ public class JhoveView
                     if (args[i].charAt(len - 1) == '"') {
                         quoted = false;
                     }
-                }
-                else {
+                } else {
                     if ("-c".equals(args[i])) {
                         if (i < args.length - 1) {
                             configFile = args[++i];
                         }
-                    }
-                    else if ("-x".equals(args[i])) {
+                    } else if ("-x".equals(args[i])) {
                         if (i < args.length - 1) {
                             saxClass = args[++i];
                         }
-                    }
-                    else if (args[i].charAt(0) == '"') {
+                    } else if (args[i].charAt(0) == '"') {
                         quoted = true;
                     }
                 }
@@ -105,21 +100,19 @@ public class JhoveView
             JhoveBase je = new JhoveBase();
             try {
                 je.init(configFile, saxClass);
-            }
-            catch (JhoveException e) {
+            } catch (JhoveException e) {
                 errorAlert(e.getMessage());
                 // Keep going, so user can correct in editor
             }
 
             // Create the main window to select a file.
             JhoveWindow jwin = new JhoveWindow(app, je);
-            URL url = ClassLoader.getSystemResource(ICON_PATH); //$NON-NLS-1$
+            URL url = ClassLoader.getSystemResource(ICON_PATH); // $NON-NLS-1$
             Toolkit kit = Toolkit.getDefaultToolkit();
             jwin.setIconImage(kit.createImage(url));
-            jwin.setVisible (true);
+            jwin.setVisible(true);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace(System.err);
             LOGGER.log(Level.SEVERE, e.getMessage());
             System.exit(ExitCode.ERROR.getReturnCode());
@@ -127,8 +120,7 @@ public class JhoveView
     }
 
     /** Displays an error alert. */
-    private static void errorAlert(String msg)
-    {
+    private static void errorAlert(String msg) {
         JFrame hiddenFrame = new JFrame();
         // Truncate long messages so the alert isn't wider than the screen
         String message = (msg.length() > 80) ? msg.substring(0, 79) + "..." : msg;

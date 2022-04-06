@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
-    <version>1.24.0</version>
+    <version>1.25.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>jhove-installer</artifactId>
@@ -14,7 +14,7 @@
 
   <properties>
     <installer.output.filename>jhove-xplt-installer-${project.version}.jar</installer.output.filename>
-    <izpack.version>5.0.10</izpack.version>
+    <izpack.version>5.1.3</izpack.version>
     <izpack.staging>${project.build.directory}/staging</izpack.staging>
     <izpack.target>${project.build.directory}</izpack.target>
     <izpack.scripts>${project.build.scriptSourceDirectory}</izpack.scripts>
@@ -121,6 +121,8 @@
         <version>${izpack.version}</version>
         <configuration>
           <descriptorEncoding>UTF-8</descriptorEncoding>
+          <finalName>jhove-izpack-installer</finalName>
+          <classifier>${project.version}</classifier>
         </configuration>
         <executions>
           <execution>
