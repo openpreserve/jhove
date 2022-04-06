@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        java-version: [8]
+        java-version: [8, 11]
 
     steps:
       - uses: actions/checkout@v2
@@ -24,11 +24,14 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots install -DjacocoAgg
       - name: Integration Tests
+        if: matrix.java-version == 8
         run: ./bbt-jhove
         shell: bash
-      - name: Build with Maven
+      - name: Aggregate integration test results
+        if: matrix.java-version == 8
         run: mvn --batch-mode verify -DjacocoAgg
       - name: Upload coverage report
+        if: matrix.java-version == 8
         uses: actions/upload-artifact@master
         with:
           name: coverage-report
@@ -40,11 +43,13 @@ jobs:
 
     steps:
       - name: Download coverage report
+        if: matrix.java-version == 8
         uses: actions/download-artifact@master
         with:
           name: coverage-report
           path: core/target/site/jacoco/
       - name: Codecov coverage reporting
+        if: matrix.java-version == 8
         uses: codecov/codecov-action@v2
         with:
           files: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
@@ -52,8 +57,10 @@ jobs:
           verbose: true # optional (default = false)
       - name: Codacy coverage reporting
         uses: codacy/codacy-coverage-reporter-action@v1
+        if: matrix.java-version == 8
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
       - name: Codacy analysis reporting
+        if: matrix.java-version == 8
         uses: codacy/codacy-analysis-cli-action@4.0.0
