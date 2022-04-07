@@ -3193,50 +3193,42 @@ public class PdfModule extends ModuleBase {
 		// X, Y, D and A arrays.
 		itemObj = meas.get("X");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property("X", PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, "X"));
 		}
 		itemObj = meas.get("Y");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property("Y", PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, "Y"));
 		}
 		itemObj = meas.get("D");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property(PROP_NAME_DISTANCE, PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, PROP_NAME_DISTANCE));
 		}
 		itemObj = meas.get("A");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property(PROP_NAME_AREA, PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, PROP_NAME_AREA));
 		}
 		return new Property(PROP_NAME_MEASURE, PropertyType.PROPERTY,
 				PropertyArity.LIST, plist);
+	}
+
+	/* Build a subproperty for a number format array. */
+	private Property buildNumberFormatArrayProperty(PdfArray arr, String propertyName) {
+		Vector<PdfObject> v = arr.getContent();
+		List<Property> alist = new ArrayList<>();
+		for (int i = 0; i < v.size(); i++) {
+			PdfObject xobj = v.elementAt(i);
+			if (xobj instanceof PdfDictionary) {
+				PdfObject obj = ((PdfDictionary) xobj).get("U");
+				if (obj instanceof PdfSimpleObject) {
+					alist.add(new Property("Name", PropertyType.DOUBLE, ((PdfSimpleObject)obj).getDoubleValue()));
+				}
+				obj = ((PdfDictionary) xobj).get("C");
+				if (obj instanceof PdfSimpleObject) {
+					alist.add(new Property("Coefficient", PropertyType.STRING, ((PdfSimpleObject)obj).getStringValue()));
+				}
+			}
+		}
+		return new Property(propertyName, PropertyType.PROPERTY, PropertyArity.LIST, alist);
 	}
 
 	/* Build a subproperty of a subproperty for an annotation. */
