@@ -113,3 +113,9 @@ if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_646.pdf.jhove.xml" ]
 	echo " - ISSUE:645 & ISSUE:646 PDF result patch 2."
 	cp "${candidateRoot}/regression/modules/PDF-hul/issue_646.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_646.pdf.jhove.xml"
 fi
+
+# Patch the offset in regression/modules/PDF-hul/issue_662.pdf.jhove.xml
+# fixed by https://github.com/openpreserve/jhove/pull/665
+echo " - ISSUE:662 PDF result patch 1."
+find "${targetRoot}" -type f -name "issue_662.pdf.jhove.xml" -exec sed -i 's/^       <value>AutoCAD Architecture 2010 2010 (18.0s (LMS Tech<\/value>$/       <value>AutoCAD Architecture 2010 2010 (18.0s (LMS Tech))<\/value>/' {} \;
+
