@@ -33,7 +33,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>Jhove</mainClass>
+              <mainClass>edu.harvard.hul.ois.jhove.Jhove</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
