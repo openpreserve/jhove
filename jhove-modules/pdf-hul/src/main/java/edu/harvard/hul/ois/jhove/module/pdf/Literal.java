@@ -276,6 +276,18 @@ public class Literal
             }
             else if (_state == (State.LITERAL_UTF16_2)) {
                 // Second byte of a UTF16 character.
+                /* It turns out that a backslash may be double-byte,
+                * rather than the assumed single.byte.  The following
+                * allows for this. Suggested by Justin Litman, Library
+                * of Congress, 2006-03-17.
+                */
+                if (ch == BACKSLASH) {
+                    ch = readBackslashSequence (false, tok);
+                    if (ch == 0) {
+                        _state = State.LITERAL_UTF16_2; // skip the wrong char and reset to previous state
+                        continue;   /* Invalid character, ignore. */
+                    }
+                }
                 utfch = 256 * b1 + ch;
                 _state = State.LITERAL_UTF16_1;
                 // an ESC may appear at any point to signify
@@ -285,18 +297,6 @@ public class Literal
                     readUTFLanguageCode (tok);
                 }
                 else {
-                    /* It turns out that a backslash may be double-byte,
-                     * rather than the assumed single.byte.  The following
-                     * allows for this. Suggested by Justin Litman, Library
-                     * of Congress, 2006-03-17.
-                     */
-				    if (utfch == BACKSLASH) {
-					utfch = readBackslashSequence (false, tok);
-						if (utfch == 0) {
-							_state = State.LITERAL_UTF16_2; // skip the wrong char and reset to previous state
-						    continue;   /* Invalid character, ignore. */
-						}
-				    }
                     buffer.append ((char) utfch);
                 }
             }
@@ -641,7 +641,7 @@ public class Literal
             	return 0;
             case 0X74:   // t
                 return HT;
-            case 0X68:   // h
+            case 0X62:   // b
                 return BS;
             case 0X66:   // f
                 return FORMFEED;
@@ -666,6 +666,12 @@ public class Literal
         StringBuilder sb = new StringBuilder();
         for (;;) {
             int ch = tok.readChar1(true);
+            
+            // If we get -1, then we've hit an EOF without proper termination of
+            // the literal. Throw an exception.
+            if (ch < 0) {
+                throw new EOFException (MessageConstants.PDF_HUL_10.getMessage()); // PDF-HUL-10
+            }
             if (ch == ESC) {
                 break;
             }
