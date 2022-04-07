@@ -22,7 +22,8 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 - Refactoring and fixes for Java 11 compatibility. [[#688][]], [[#682][]], [[#716][]]
 - Java constants for various core classes. [[#426][]], [[#586][]], [[#594][]] - [[#598][]], [[#600][]], [[#603][]] - [[#606][]]
 - Minor refactorings to address Java warnings and similar. [[#577][]]
-- Third party module JARS added to documentation site.   [[#566][]]
+- Builds now performed by Github actions [[#718][]]
+- Third party module JARS added to documentation site. [[#566][]]
 
 ### PDF Module
 
@@ -75,6 +76,7 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 [#682]: https://github.com/openpreserve/jhove/pull/682
 [#688]: https://github.com/openpreserve/jhove/pull/688
 [#716]: https://github.com/openpreserve/jhove/pull/716
+[#718]: https://github.com/openpreserve/jhove/pull/718
 
 ## JHOVE 1.24
 
