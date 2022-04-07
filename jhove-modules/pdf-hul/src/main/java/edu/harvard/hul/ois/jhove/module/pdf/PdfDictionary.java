@@ -61,6 +61,12 @@ public class PdfDictionary extends PdfObject
     {
         return _entries.size() <= PDFA_IMPLEMENTATION_LIMIT;
     }
+    
+    /** Returns a KeySet with all keys of a dictionary **/
+    public Set<String> getKeys()
+    {
+        return _entries.keySet();
+    }
 
     /**
      *  Returns an iterator which will successively return
