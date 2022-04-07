@@ -303,6 +303,8 @@ public class PdfModule extends ModuleBase {
 	private static final String PROP_NAME_REVISION = "Revision";
 	private static final String PROP_NAME_OWNER_STRING = "OwnerString";
 	private static final String PROP_NAME_USER_STRING = "UserString";
+	private static final String PROP_NAME_OWNERKEY_STRING = "OwnerEncryptionKey";
+	private static final String PROP_NAME_USERKEY_STRING = "UserEncryptionKey";
 	private static final String PROP_NAME_USER_UNIT = DICT_KEY_USER_UNIT;
 	private static final String PROP_NAME_STANDARD_SECURITY_HANDLER = "StandardSecurityHandler";
 	private static final String PROP_NAME_TITLE = DICT_KEY_TITLE;
@@ -1863,6 +1865,34 @@ public class PdfModule extends ModuleBase {
 								toHex(((PdfSimpleObject) uObj).getRawBytes())));
 					}
 				}
+				// Required if ExtensionLevel 3 and Encryption Algorithm (V) is 5
+				// Defined in Adobe® Supplement to the ISO 32000
+				if (algValue == 5) {
+					PdfObject oeObj = dict.get("OE");
+					if (oeObj != null) {
+						if (oeObj instanceof PdfSimpleObject) {
+							stdList.add(new Property(PROP_NAME_OWNERKEY_STRING,
+									PropertyType.STRING,
+									toHex(((PdfSimpleObject) oeObj).getRawBytes())));
+						}
+					} else {
+						// if algValue is 5; OE is mandatory
+						throw new PdfInvalidException 
+						(MessageConstants.PDF_HUL_152, _parser.getOffset());
+					}
+					PdfObject ueObj = dict.get("UE");
+					if (ueObj != null) {
+						if (ueObj instanceof PdfSimpleObject) {
+							stdList.add(new Property(PROP_NAME_USERKEY_STRING,
+									PropertyType.STRING,
+									toHex(((PdfSimpleObject) ueObj).getRawBytes())));
+						}
+					} else {
+						// if algValue is 5; UE is mandatory
+						throw new PdfInvalidException
+						(MessageConstants.PDF_HUL_153, _parser.getOffset());
+					}
+				}
 				_encryptList.add(new Property(
 						PROP_NAME_STANDARD_SECURITY_HANDLER,
 						PropertyType.PROPERTY, PropertyArity.LIST, stdList));
@@ -2916,8 +2946,8 @@ public class PdfModule extends ModuleBase {
 				if (!_skippedPagesReported) {
 					info.setMessage(
 							new InfoMessage(MessageConstants.PDF_HUL_112)); // PDF-HUL-112
+                                        _skippedPagesReported = true;
 				}
-				_skippedPagesReported = true;
 			}
 		} catch (PdfException e) {
 
@@ -3163,50 +3193,42 @@ public class PdfModule extends ModuleBase {
 		// X, Y, D and A arrays.
 		itemObj = meas.get("X");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property("X", PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, "X"));
 		}
 		itemObj = meas.get("Y");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property("Y", PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, "Y"));
 		}
 		itemObj = meas.get("D");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property(PROP_NAME_DISTANCE, PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, PROP_NAME_DISTANCE));
 		}
 		itemObj = meas.get("A");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property(PROP_NAME_AREA, PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, PROP_NAME_AREA));
 		}
 		return new Property(PROP_NAME_MEASURE, PropertyType.PROPERTY,
 				PropertyArity.LIST, plist);
+	}
+
+	/* Build a subproperty for a number format array. */
+	private Property buildNumberFormatArrayProperty(PdfArray arr, String propertyName) {
+		Vector<PdfObject> v = arr.getContent();
+		List<Property> alist = new ArrayList<>();
+		for (int i = 0; i < v.size(); i++) {
+			PdfObject xobj = v.elementAt(i);
+			if (xobj instanceof PdfDictionary) {
+				PdfObject obj = ((PdfDictionary) xobj).get("U");
+				if (obj instanceof PdfSimpleObject) {
+					alist.add(new Property("Name", PropertyType.DOUBLE, ((PdfSimpleObject)obj).getDoubleValue()));
+				}
+				obj = ((PdfDictionary) xobj).get("C");
+				if (obj instanceof PdfSimpleObject) {
+					alist.add(new Property("Coefficient", PropertyType.STRING, ((PdfSimpleObject)obj).getStringValue()));
+				}
+			}
+		}
+		return new Property(propertyName, PropertyType.PROPERTY, PropertyArity.LIST, alist);
 	}
 
 	/* Build a subproperty of a subproperty for an annotation. */
@@ -3380,6 +3402,10 @@ public class PdfModule extends ModuleBase {
 							destPg));
 				}
 			}
+		} catch (PdfMalformedException e) {
+			propList.add(new Property(propName, PropertyType.STRING, PROP_VAL_NULL));
+			info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			info.setValid(false);
 		} catch (Exception e) {
 
 			String msg = e.getClass().getName();
