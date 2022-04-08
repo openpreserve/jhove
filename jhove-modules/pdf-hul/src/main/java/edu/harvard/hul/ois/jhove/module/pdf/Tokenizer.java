@@ -317,7 +317,7 @@ public abstract class Tokenizer
                         // Invalid character in a number
                         _state = State.WHITESPACE;
                         _wsString = EMPTY;
-                        throw new PdfMalformedException (MessageConstants.PDF_HUL_65, _offset); // PDF-HUL-65
+                        throw new PdfMalformedException (MessageConstants.PDF_HUL_66, _offset);
                     }
                 }
                 else if (_state == (State.GREATER_THAN)) {
