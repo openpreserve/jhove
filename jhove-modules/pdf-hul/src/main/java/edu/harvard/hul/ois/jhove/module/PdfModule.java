@@ -68,6 +68,7 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import edu.harvard.hul.ois.jhove.module.pdf.AProfile;
 import edu.harvard.hul.ois.jhove.module.pdf.AProfileLevelA;
+import edu.harvard.hul.ois.jhove.module.pdf.Comment;
 import edu.harvard.hul.ois.jhove.module.pdf.CrossRefStream;
 import edu.harvard.hul.ois.jhove.module.pdf.Destination;
 import edu.harvard.hul.ois.jhove.module.pdf.DictionaryStart;
@@ -2998,6 +2999,11 @@ public class PdfModule extends ModuleBase {
 					if (annot instanceof PdfDictionary) {
 						annotsList.add(buildAnnotProperty((PdfDictionary) annot,
 								info));
+					} else if (annot instanceof PdfSimpleObject 
+							&& ((PdfSimpleObject) annot).getToken() instanceof Comment) {
+						// ignore Comments
+						continue;
+						
 					} else {
 						// There are annotations which aren't dictionaries. I've
 						// run into this,
