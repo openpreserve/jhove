@@ -98,3 +98,24 @@ if [[ -f "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" ]
 	cp "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" "${targetRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml"
 fi
 
+# Patch the offset in errors/modules/PDF-hul/pdf-hul-76-372051162.pdf.jhove.xml
+# fixed by https://github.com/openpreserve/jhove/pull/652
+echo " - ISSUE:645 & ISSUE:646 PDF result patch 1."
+find "${targetRoot}" -type f -name "pdf-hul-76-372051162.pdf.jhove.xml" -exec sed -i 's/^   <message offset="268334" severity="error" id="PDF-HUL-66">Lexical error<\/message>$/   <message offset="268333" severity="error" id="PDF-HUL-66">Lexical error<\/message>/' {} \;
+# Copy the full result of regression/modules/PDF-hul/issue_645.pdf and
+# regression/modules/PDF-hul/issue_646.pdf
+# fixed by: https://github.com/openpreserve/jhove/pull/652
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_645.pdf.jhove.xml" ]]; then
+	echo " - ISSUE:645 & ISSUE:646 PDF result patch 2."
+	cp "${candidateRoot}/regression/modules/PDF-hul/issue_645.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_645.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_646.pdf.jhove.xml" ]]; then
+	echo " - ISSUE:645 & ISSUE:646 PDF result patch 2."
+	cp "${candidateRoot}/regression/modules/PDF-hul/issue_646.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_646.pdf.jhove.xml"
+fi
+
+# Patch the offset in regression/modules/PDF-hul/issue_662.pdf.jhove.xml
+# fixed by https://github.com/openpreserve/jhove/pull/665
+echo " - ISSUE:662 PDF result patch 1."
+find "${targetRoot}" -type f -name "issue_662.pdf.jhove.xml" -exec sed -i 's/^       <value>AutoCAD Architecture 2010 2010 (18.0s (LMS Tech<\/value>$/       <value>AutoCAD Architecture 2010 2010 (18.0s (LMS Tech))<\/value>/' {} \;
+
