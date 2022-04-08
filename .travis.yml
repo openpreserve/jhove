@@ -7,9 +7,12 @@ jdk:
   - oraclejdk8
 
 branches:
-  except:
-    - "/^v|d\\d+\\.\\d+\\.\\d+$/"
-    - "/^jenkins-jhove-v|d\\d+\\.\\d+\\.\\d+$/"
+  only:
+    - integration
+    - master
+  # except:
+  #   - "/^v|d\\d+\\.\\d+\\.\\d+$/"
+  #   - "/^jenkins-jhove-v|d\\d+\\.\\d+\\.\\d+$/"
 
 notifications:
   slack:

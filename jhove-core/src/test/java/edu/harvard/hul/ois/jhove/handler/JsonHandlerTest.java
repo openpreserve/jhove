@@ -48,7 +48,7 @@ public class JsonHandlerTest {
 	private static final Logger LOGGER = Logger.getLogger(JsonHandlerTest.class
 			.getName());
 
-	private static final String TIME_PATTERN = "\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\+[0-9]{2}:[0-9]{2})?\"";
+	private static final String TIME_PATTERN = "\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}([+-][0-9]{2}:[0-9]{2})?\"";
 	private static final String DATE_PATTERN = "\"date\":\"[^\"]+\"";
 	private static final String DATE_REPLACEMENT = "\"date\":\"2010-01-01\"";
 	private static final String RELEASE_PATTERN = "\"release\":\"[^\"]+\"";
@@ -63,6 +63,7 @@ public class JsonHandlerTest {
 	private static final String VENDOR_REPLACEMENT = "\"vendor\":{\"kind\":\"Vendor\"}";
 	private static final String DUMMY = "\"DUMMY\"";
 	private static final String DUMMY_CK = "8747e564eb53cb2f1dcb9aae0779c2aa";
+	private static final String BYTESTREAM = "BYTESTREAM";
 	private static final String APP_JSON = 
 			"\"name\":\"TEST\",\"release\":\"DUMMY\",\"date\":\"2010-01-01\",\"executionTime\":\"DUMMY\"";
 	private static final String API_JSON = 
@@ -203,7 +204,7 @@ public class JsonHandlerTest {
 	
 	@Test
 	public void testShowModule() {
-		Module module = je.getModule("BYTESTREAM");
+		Module module = je.getModule(BYTESTREAM);
 		
         handler.showHeader();
        	handler.show(module);
@@ -225,7 +226,7 @@ public class JsonHandlerTest {
 
 	@Test
 	public void testShowRepInfo() {
-		Module module = je.getModule("BYTESTREAM");
+		Module module = je.getModule(BYTESTREAM);
 		RepInfo info = new RepInfo("file://dummy.file");
 		info.setModule(module);
 		info.setFormat(module.getFormat()[0]);

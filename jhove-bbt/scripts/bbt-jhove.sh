@@ -132,7 +132,7 @@ bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${paramCorpusLoc
 
 if [[ -f "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" ]]
 then
-	 " - INFO: applying the baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
+	echo " - INFO: applying the baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
 	echo "       ${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh -b ${BASELINE_VER} -c ${MAJOR_MINOR_VER}"
 	bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "${BASELINE_VER}" -c "${MAJOR_MINOR_VER}"
 else

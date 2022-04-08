@@ -147,6 +147,11 @@ public abstract class Tokenizer
         StringBuilder buffer = null;
         _state = State.WHITESPACE;
         _wsString = EMPTY;
+
+        // create string builder for whitespace
+        StringBuilder ws_buffer = new StringBuilder();
+        ws_buffer.append(_wsString);
+
         // Numeric sign.
         boolean negative = false;
         // Floating value.
@@ -181,6 +186,7 @@ public abstract class Tokenizer
                     else {
                         token = null;
                     }
+                    _wsString = ws_buffer.toString();
                     return token;
                 }
 
@@ -188,6 +194,7 @@ public abstract class Tokenizer
                     _ch = readChar ();
                     if (_ch < 0) {
                         _state = State.WHITESPACE;
+                        _wsString = ws_buffer.toString();
                         throw new PdfMalformedException(MessageConstants.PDF_HUL_64, // PDF-HUL-64
 							_offset);
                     }
@@ -203,7 +210,7 @@ public abstract class Tokenizer
                     // or continues whitespace.
 
                     if (isWhitespace (_ch)) {
-                        _wsString += (char) _ch;
+                        ws_buffer.append((char) _ch);
                     }
                     else if (_ch == '[') {
                         _state = State.WHITESPACE;
@@ -271,7 +278,8 @@ public abstract class Tokenizer
 
                     if (_ch == CR || _ch == LF) {
                         _state = State.WHITESPACE;
-                        _wsString += (char) _ch;
+                        ws_buffer.append((char) _ch);
+                        _wsString = ws_buffer.toString();
                         ((StringValuedToken) token).setValue(buffer.toString());
                         if (!token.isPdfACompliant()) {
                             _pdfACompliant = false;
@@ -626,6 +634,13 @@ public abstract class Tokenizer
             else {
                 token = null;
             }
+
+            if (ws_buffer.length() > 0) {
+                _wsString = ws_buffer.toString();
+            } else {
+                _wsString = EMPTY;
+            }
+
         }
 
         return token;
