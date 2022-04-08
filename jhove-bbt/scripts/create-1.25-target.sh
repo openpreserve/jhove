@@ -119,3 +119,21 @@ fi
 echo " - ISSUE:662 PDF result patch 1."
 find "${targetRoot}" -type f -name "issue_662.pdf.jhove.xml" -exec sed -i 's/^       <value>AutoCAD Architecture 2010 2010 (18.0s (LMS Tech<\/value>$/       <value>AutoCAD Architecture 2010 2010 (18.0s (LMS Tech))<\/value>/' {} \;
 
+# Copy the XML result of examples/modules/XML-hul/jhoveconf.xml.jhove.xml
+# changed by https://github.com/openpreserve/jhove/pull/634
+if [[ -f "${candidateRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml" ]]; then
+echo " - PR:634 XML result patch 1."
+	cp "${candidateRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml" "${targetRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/examples/modules/XML-hul/external-parsed-entity.ent.jhove.xml" ]]; then
+	echo " - PR:634 XML result patch 2."
+	cp "${candidateRoot}/examples/modules/XML-hul/external-parsed-entity.ent.jhove.xml" "${targetRoot}/examples/modules/XML-hul/external-parsed-entity.ent.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/examples/modules/XML-hul/external-unparsed-entity.ent.jhove.xml" ]]; then
+	echo " - PR:634 XML result patch 3."
+	cp "${candidateRoot}/examples/modules/XML-hul/external-unparsed-entity.ent.jhove.xml" "${targetRoot}/examples/modules/XML-hul/external-unparsed-entity.ent.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml" ]]; then
+	echo " - PR:634 XML result patch 4."
+	cp "${candidateRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml" "${targetRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml"
+fi
