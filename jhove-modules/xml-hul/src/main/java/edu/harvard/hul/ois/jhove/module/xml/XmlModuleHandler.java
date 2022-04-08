@@ -8,6 +8,7 @@ package edu.harvard.hul.ois.jhove.module.xml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.MessageFormat;
@@ -349,19 +350,9 @@ public class XmlModuleHandler extends DefaultHandler {
 		if (ent == null) {
 			try {
 				URL obj = new URL(systemId);
-				HttpURLConnection conn = (HttpURLConnection) obj
-						.openConnection();
-
-				int status = conn.getResponseCode();
-				if (status == HttpURLConnection.HTTP_MOVED_TEMP
-						|| status == HttpURLConnection.HTTP_MOVED_PERM
-						|| status == HttpURLConnection.HTTP_SEE_OTHER) {
-
-					String newUrl = conn.getHeaderField("Location");
-					conn = (HttpURLConnection) new URL(newUrl).openConnection();
-					ent = new InputSource(conn.getInputStream());
-				}
-
+				ent = new InputSource(obj.openStream());
+			} catch (IOException e) {
+				return null;
 			} catch (Exception e) {
 				// Depending on the JDK version, super.resolveEntity
 				// may or may not be formally capable of throwing an
