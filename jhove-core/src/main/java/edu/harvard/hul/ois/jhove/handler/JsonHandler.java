@@ -70,10 +70,33 @@ public class JsonHandler extends HandlerBase {
 	/** Handler release identifier. */
 	private static final String RELEASE = "1.0";
 
+	/** String release. */
+	private static final String RELEASE_CONSTANT = "release";
+
 	/** Handler release date. */
 	private static final int[] DATE = { 2019, 10, 18 };
 
-	/** Handler informative note. */
+	private static final String DATE_CONSTANT = "date";
+
+	/** well-formed. */
+	private static final String WELL_FORMED = "Well-Formed";
+
+	/** not well-formed. */
+	private static final String NOT_WELL_FORMED = "Not well-formed";
+
+	/** mix:tiles. */
+	private static final String MIX_TILES = "mix:tiles";
+
+	/** mix:extraSamples. */
+	private static final String MIX_EXTRA_SAMPLES = "mix:extraSamples";
+
+	/** mix:grayResponseUnit. */
+	private static final String MIX_GRAY_RESPONSE_UNIT = "mix:grayResponseUnit";
+
+	/** Handler NTSC_NON_DROP_FRAME. */
+	private static final String NTSC_NON_DROP_FRAME = "NTSC_NON_DROP_FRAME";
+
+	/** Handler note. */
 	private static final String NOTE = "";
 
 	/** Handler rights statement. */
@@ -130,7 +153,7 @@ public class JsonHandler extends HandlerBase {
 
 		JsonObjectBuilder apiBuilder = Json.createObjectBuilder();
 		apiBuilder.add("version", app.getRelease());
-		apiBuilder.add("date", date.format(_je.getDate()));
+		apiBuilder.add(DATE_CONSTANT, date.format(_je.getDate()));
 		appBuilder.add("api", apiBuilder);
 
 		String configFile = _je.getConfigFile();
@@ -159,7 +182,7 @@ public class JsonHandler extends HandlerBase {
 		for (String modKey : _je.getModuleMap().keySet()) {
 			Module module = _je.getModule(modKey);
 			modulesBuilder.add(
-					Json.createObjectBuilder().add("module", module.getName()).add("release", module.getRelease()));
+					Json.createObjectBuilder().add("module", module.getName()).add(RELEASE_CONSTANT, module.getRelease()));
 
 		}
 		appBuilder.add("modules", modulesBuilder);
@@ -167,7 +190,7 @@ public class JsonHandler extends HandlerBase {
 		JsonArrayBuilder oHandlersBuilder = Json.createArrayBuilder();
 		for (String handlerKey : _je.getHandlerMap().keySet()) {
 			OutputHandler handler = _je.getHandler(handlerKey);
-			oHandlersBuilder.add(Json.createObjectBuilder().add("outputHandler", handler.getName()).add("release",
+			oHandlersBuilder.add(Json.createObjectBuilder().add("outputHandler", handler.getName()).add(RELEASE_CONSTANT,
 					handler.getRelease()));
 		}
 		appBuilder.add("outputHandlers", oHandlersBuilder);
@@ -185,8 +208,8 @@ public class JsonHandler extends HandlerBase {
 	public void show(OutputHandler handler) {
 		JsonObjectBuilder outputHandlerBuilder = Json.createObjectBuilder();
 		outputHandlerBuilder.add("name", handler.getName());
-		outputHandlerBuilder.add("release", handler.getRelease());
-		outputHandlerBuilder.add("date", date.format(handler.getDate()));
+		outputHandlerBuilder.add(RELEASE_CONSTANT, handler.getRelease());
+		outputHandlerBuilder.add(DATE_CONSTANT, date.format(handler.getDate()));
 		List<Document> list = handler.getSpecification();
 		int n = list.size();
 		if (n > 0) {
@@ -218,8 +241,8 @@ public class JsonHandler extends HandlerBase {
 	public void show(Module module) {
 		JsonObjectBuilder modBuilder = Json.createObjectBuilder();
 		modBuilder.add("name", module.getName());
-		modBuilder.add("release", module.getRelease());
-		modBuilder.add("date", HandlerBase.date.format(module.getDate()));
+		modBuilder.add(RELEASE_CONSTANT, module.getRelease());
+		modBuilder.add(DATE_CONSTANT, HandlerBase.date.format(module.getDate()));
 
 		String[] ss = module.getFormat();
 		if (ss.length > 0) {
@@ -300,7 +323,7 @@ public class JsonHandler extends HandlerBase {
 
 		if (module != null) {
 			infoBuilder.add("reportingModule", Json.createObjectBuilder().add("name", module.getName())
-					.add("release", module.getRelease()).add("date", date.format(module.getDate())));
+					.add(RELEASE_CONSTANT, module.getRelease()).add(DATE_CONSTANT, date.format(module.getDate())));
 		}
 		Date date = info.getCreated();
 		if (date != null) {
@@ -325,11 +348,11 @@ public class JsonHandler extends HandlerBase {
 		if (!_je.getSignatureFlag()) {
 			switch (info.getWellFormed()) {
 			case RepInfo.TRUE:
-				wfStr = "Well-Formed";
+				wfStr = WELL_FORMED;
 				break;
 
 			case RepInfo.FALSE:
-				wfStr = "Not well-formed";
+				wfStr = NOT_WELL_FORMED;
 				break;
 
 			default:
@@ -358,11 +381,11 @@ public class JsonHandler extends HandlerBase {
 			// If we aren't checking signatures, we still need to say something.
 			switch (info.getWellFormed()) {
 			case RepInfo.TRUE:
-				wfStr = "Well-Formed";
+				wfStr = WELL_FORMED;
 				break;
 
 			default:
-				wfStr = "Not well-formed";
+				wfStr = NOT_WELL_FORMED;
 				break;
 			}
 			infoBuilder.add("status", wfStr);
@@ -483,7 +506,7 @@ public class JsonHandler extends HandlerBase {
 			docBuilder.add("edition", s);
 		}
 		if ((s = document.getDate()) != null) {
-			docBuilder.add("date", s);
+			docBuilder.add(DATE_CONSTANT, s);
 		}
 		if ((s = document.getEnumeration()) != null) {
 			docBuilder.add("enumeration", s);
@@ -530,8 +553,8 @@ public class JsonHandler extends HandlerBase {
 	public void showHeader() {
 		jhoveBuilder = Json.createObjectBuilder();
 		jhoveBuilder.add("name", _app.getName());
-		jhoveBuilder.add("release", _app.getRelease());
-		jhoveBuilder.add("date", HandlerBase.date.format(_app.getDate()));
+		jhoveBuilder.add(RELEASE_CONSTANT, _app.getRelease());
+		jhoveBuilder.add(DATE_CONSTANT, HandlerBase.date.format(_app.getDate()));
 		jhoveBuilder.add("executionTime", toDateTime(new Date()));
 	}
 
@@ -1435,10 +1458,10 @@ public class JsonHandler extends HandlerBase {
 			JsonObjectBuilder jp2Builder = Json.createObjectBuilder();
 			if (sizTiles != null) {
 				if (bMix10) {
-					jp2Builder.add("mix:tiles", sizTiles);
+					jp2Builder.add(MIX_TILES, sizTiles);
 				} else {
 					String[] sizes = sizTiles.split("x");
-					jp2Builder.add("mix:tiles", showArray(sizes));
+					jp2Builder.add(MIX_TILES, showArray(sizes));
 				}
 			}
 			if (lay != NisoImageMetadata.NULL) {
@@ -1787,12 +1810,12 @@ public class JsonHandler extends HandlerBase {
 			n = iarray[0];
 			if (n >= 0 && n <= 3) {
 				if (bMix10) {
-					imeBuilder.add("mix:extraSamples", showArray(iarray));
+					imeBuilder.add(MIX_EXTRA_SAMPLES, showArray(iarray));
 				} else {
 					String[] sarray = new String[iarray.length];
 					for (int ii = 0; ii < iarray.length; ii++) {
 						sarray[ii] = NisoImageMetadata.EXTRA_SAMPLE_20[iarray[ii]];
-						imeBuilder.add("mix:extraSamples", showArray(sarray));
+						imeBuilder.add(MIX_EXTRA_SAMPLES, showArray(sarray));
 					}
 
 				}
@@ -1816,10 +1839,10 @@ public class JsonHandler extends HandlerBase {
 		n = niso.getGrayResponseUnit();
 		if (n != NisoImageMetadata.NULL) {
 			if (bMix10) {
-				imeBuilder.add("mix:grayResponseUnit", n);
+				imeBuilder.add(MIX_GRAY_RESPONSE_UNIT, n);
 			} else if (n > 0 && n <= 5) {
 				// Convert integer to text value; only values 1-5 are legal
-				imeBuilder.add("mix:grayResponseUnit", NisoImageMetadata.GRAY_RESPONSE_UNIT_20[n - 1]);
+				imeBuilder.add(MIX_GRAY_RESPONSE_UNIT, NisoImageMetadata.GRAY_RESPONSE_UNIT_20[n - 1]);
 			}
 			useColorEncBuf = true;
 		}
@@ -2174,7 +2197,7 @@ public class JsonHandler extends HandlerBase {
 		JsonObjectBuilder timerangeBuilder = Json.createObjectBuilder();
 		timerangeBuilder.add("tcf:startTime",
 				Json.createObjectBuilder().add("tcf:frameCount", 30).add("tcf:timeBase", 1000)
-						.add("tcf:videoField", "FIELD_1").add("tcf:countingMode", "NTSC_NON_DROP_FRAME")
+						.add("tcf:videoField", "FIELD_1").add("tcf:countingMode", NTSC_NON_DROP_FRAME)
 						.add("tcf:hours", start.getHours()).add("tcf:minutes", start.getMinutes())
 						.add("tcf:seconds", start.getSeconds()).add("tcf:frames", start.getFrames())
 						.add("tcf:samples",
@@ -2189,7 +2212,7 @@ public class JsonHandler extends HandlerBase {
 			}
 			timerangeBuilder.add("tcf:duration",
 					Json.createObjectBuilder().add("tcf:frameCount", 30).add("tcf:timeBase", 1000)
-							.add("tcf:videoField", "FIELD_1").add("tcf:countingMode", "NTSC_NON_DROP_FRAME")
+							.add("tcf:videoField", "FIELD_1").add("tcf:countingMode", NTSC_NON_DROP_FRAME)
 							.add("tcf:hours", duration.getHours()).add("tcf:minutes", duration.getMinutes())
 							.add("tcf:seconds", duration.getSeconds()).add("tcf:frames", duration.getFrames())
 							.add("tcf:samples",
