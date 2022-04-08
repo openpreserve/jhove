@@ -18,7 +18,8 @@ public class PdfStrings
         "40-bit RC4 or AES",
         "40-bit or greater RC4 or AES",
         "Unpublished",
-        "Document-defined"
+        "Document-defined",
+        "256-bit AES"
     };
 
     /** Flags for FontDescriptor.  In PDF notation, bit 1
