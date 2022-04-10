@@ -1116,6 +1116,17 @@ public class JhoveBase {
     }
 
     /**
+     * Sets the maximum number of bytes to check, for modules that look for
+     * an indefinitely positioned signature or check the first sigBytes bytes
+     * in lieu of a signature.
+     *
+     * @param sigBytes max number of bytes to check
+     */
+    public void setSigBytes(int sigBytes) {
+        _sigBytes = sigBytes;
+    }
+
+    /**
      * Resets the abort flag. This must be called at the beginning of any
      * activity for which the abort flag may subsequently be set.
      */
