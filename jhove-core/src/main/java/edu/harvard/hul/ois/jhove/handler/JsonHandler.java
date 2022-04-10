@@ -109,6 +109,7 @@ public class JsonHandler extends HandlerBase {
 
 	/** Main JSON builder */
 	private JsonObjectBuilder jhoveBuilder;
+	private JsonArrayBuilder repInfosBuilder;
 
 	/* Sample rate. */
 	private double _sampleRate;
@@ -126,7 +127,8 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	/** Constructor for use by subclasses. */
-	public JsonHandler(String name, String release, int[] date, String note, String rights) {
+	public JsonHandler(String name, String release, int[] date, String note,
+			String rights) {
 		super(name, release, date, note, rights);
 		_vendor = Agent.bnfInstance();
 	}
@@ -144,8 +146,8 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	/**
-	 * Outputs detailed information about the application, including configuration,
-	 * available modules and handlers, etc.
+	 * Outputs detailed information about the application, including
+	 * configuration, available modules and handlers, etc.
 	 */
 	@Override
 	public void show(App app) {
@@ -181,8 +183,9 @@ public class JsonHandler extends HandlerBase {
 		JsonArrayBuilder modulesBuilder = Json.createArrayBuilder();
 		for (String modKey : _je.getModuleMap().keySet()) {
 			Module module = _je.getModule(modKey);
-			modulesBuilder.add(
-					Json.createObjectBuilder().add("module", module.getName()).add(RELEASE_CONSTANT, module.getRelease()));
+			modulesBuilder.add(Json.createObjectBuilder()
+					.add("module", module.getName())
+					.add(RELEASE_CONSTANT, module.getRelease()));
 
 		}
 		appBuilder.add("modules", modulesBuilder);
@@ -190,8 +193,9 @@ public class JsonHandler extends HandlerBase {
 		JsonArrayBuilder oHandlersBuilder = Json.createArrayBuilder();
 		for (String handlerKey : _je.getHandlerMap().keySet()) {
 			OutputHandler handler = _je.getHandler(handlerKey);
-			oHandlersBuilder.add(Json.createObjectBuilder().add("outputHandler", handler.getName()).add(RELEASE_CONSTANT,
-					handler.getRelease()));
+			oHandlersBuilder.add(Json.createObjectBuilder()
+					.add("outputHandler", handler.getName())
+					.add(RELEASE_CONSTANT, handler.getRelease()));
 		}
 		appBuilder.add("outputHandlers", oHandlersBuilder);
 
@@ -242,7 +246,8 @@ public class JsonHandler extends HandlerBase {
 		JsonObjectBuilder modBuilder = Json.createObjectBuilder();
 		modBuilder.add("name", module.getName());
 		modBuilder.add(RELEASE_CONSTANT, module.getRelease());
-		modBuilder.add(DATE_CONSTANT, HandlerBase.date.format(module.getDate()));
+		modBuilder
+				.add(DATE_CONSTANT, HandlerBase.date.format(module.getDate()));
 
 		String[] ss = module.getFormat();
 		if (ss.length > 0) {
@@ -322,8 +327,11 @@ public class JsonHandler extends HandlerBase {
 		infoBuilder.add("uri", info.getUri());
 
 		if (module != null) {
-			infoBuilder.add("reportingModule", Json.createObjectBuilder().add("name", module.getName())
-					.add(RELEASE_CONSTANT, module.getRelease()).add(DATE_CONSTANT, date.format(module.getDate())));
+			infoBuilder.add(
+					"reportingModule",
+					Json.createObjectBuilder().add("name", module.getName())
+							.add(RELEASE_CONSTANT, module.getRelease())
+							.add(DATE_CONSTANT, date.format(module.getDate())));
 		}
 		Date date = info.getCreated();
 		if (date != null) {
@@ -446,7 +454,11 @@ public class JsonHandler extends HandlerBase {
 			infoBuilder.add("note", s);
 		}
 
-		jhoveBuilder.add("repInfo", infoBuilder);
+		// Store the infoBuilder in the array of repInfos
+		if (repInfosBuilder == null) {
+			repInfosBuilder = Json.createArrayBuilder();
+		}
+		repInfosBuilder.add(infoBuilder);
 	}
 
 	/******************************************************************
@@ -477,8 +489,8 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	protected JsonObjectBuilder showChecksum(Checksum checksum) {
-		return Json.createObjectBuilder().add("checksum", checksum.getValue()).add("type",
-				checksum.getType().toString());
+		return Json.createObjectBuilder().add("checksum", checksum.getValue())
+				.add("type", checksum.getType().toString());
 	}
 
 	protected JsonObjectBuilder showDocument(Document document) {
@@ -530,11 +542,15 @@ public class JsonHandler extends HandlerBase {
 
 	/**
 	 * Do the final output. This should be in a suitable format for including
-	 * multiple files between the header and the footer, and the XML of the header
-	 * and footer must balance out.
+	 * multiple files between the header and the footer, and the XML of the
+	 * header and footer must balance out.
 	 */
 	@Override
 	public void showFooter() {
+		if (repInfosBuilder != null) {
+			jhoveBuilder.add("repInfo", repInfosBuilder);
+		}
+
 		JsonObjectBuilder mainBuilder = Json.createObjectBuilder();
 		mainBuilder.add("jhove", jhoveBuilder);
 		JsonObject jsonObject = mainBuilder.build();
@@ -546,16 +562,18 @@ public class JsonHandler extends HandlerBase {
 
 	/**
 	 * Do the initial output. This should be in a suitable format for including
-	 * multiple files between the header and the footer, and the XML of the header
-	 * and footer must balance out.
+	 * multiple files between the header and the footer, and the XML of the
+	 * header and footer must balance out.
 	 */
 	@Override
 	public void showHeader() {
 		jhoveBuilder = Json.createObjectBuilder();
 		jhoveBuilder.add("name", _app.getName());
 		jhoveBuilder.add(RELEASE_CONSTANT, _app.getRelease());
-		jhoveBuilder.add(DATE_CONSTANT, HandlerBase.date.format(_app.getDate()));
+		jhoveBuilder
+				.add(DATE_CONSTANT, HandlerBase.date.format(_app.getDate()));
 		jhoveBuilder.add("executionTime", toDateTime(new Date()));
+		repInfosBuilder = null;
 	}
 
 	protected JsonObjectBuilder showIdentifier(Identifier identifier) {
@@ -602,8 +620,14 @@ public class JsonHandler extends HandlerBase {
 		}
 		sigBuilder.add("type", signature.getType().toString());
 		sigBuilder.add("value", sigValue);
-		if (SignatureType.MAGIC.equals(signature.getType()) && ((InternalSignature) signature).hasFixedOffset()) {
-			sigBuilder.add("offset", "0x" + Integer.toHexString(((InternalSignature) signature).getOffset()));
+		if (SignatureType.MAGIC.equals(signature.getType())
+				&& ((InternalSignature) signature).hasFixedOffset()) {
+			sigBuilder
+					.add("offset",
+							"0x"
+									+ Integer
+											.toHexString(((InternalSignature) signature)
+													.getOffset()));
 		}
 		String note = signature.getNote();
 		if (note != null) {
@@ -680,13 +704,19 @@ public class JsonHandler extends HandlerBase {
 			propBuilder.add(property.getName(), l.longValue());
 			break;
 		case AESAUDIOMETADATA:
-			propBuilder.add(property.getName(), showAESAudioMetadata((AESAudioMetadata) property.getValue()));
+			propBuilder
+					.add(property.getName(),
+							showAESAudioMetadata((AESAudioMetadata) property
+									.getValue()));
 			break;
 		case NISOIMAGEMETADATA:
-			propBuilder.add(property.getName(), showNisoImageMetadata((NisoImageMetadata) property.getValue()));
+			propBuilder.add(property.getName(),
+					showNisoImageMetadata((NisoImageMetadata) property
+							.getValue()));
 			break;
 		case TEXTMDMETADATA:
-			propBuilder.add(property.getName(), showTextMDMetadata((TextMDMetadata) property.getValue()));
+			propBuilder.add(property.getName(),
+					showTextMDMetadata((TextMDMetadata) property.getValue()));
 			break;
 		case SHORT:
 			Short s = (Short) property.getValue();
@@ -696,7 +726,8 @@ public class JsonHandler extends HandlerBase {
 			propBuilder.add(property.getName(), (String) property.getValue());
 			break;
 		case RATIONAL:
-			propBuilder.add(property.getName(), showRational((Rational) property.getValue()));
+			propBuilder.add(property.getName(),
+					showRational((Rational) property.getValue()));
 			break;
 		case PROPERTY:
 			Property property2 = (Property) property.getValue();
@@ -759,13 +790,18 @@ public class JsonHandler extends HandlerBase {
 				lPropBuilder.add(showProperty((Property) val));
 				break;
 			case NISOIMAGEMETADATA:
-				lPropBuilder.add(showNisoImageMetadata((NisoImageMetadata) property.getValue()));
+				lPropBuilder
+						.add(showNisoImageMetadata((NisoImageMetadata) property
+								.getValue()));
 				break;
 			case AESAUDIOMETADATA:
-				lPropBuilder.add(showAESAudioMetadata((AESAudioMetadata) property.getValue()));
+				lPropBuilder
+						.add(showAESAudioMetadata((AESAudioMetadata) property
+								.getValue()));
 				break;
 			case TEXTMDMETADATA:
-				lPropBuilder.add(showTextMDMetadata((TextMDMetadata) property.getValue()));
+				lPropBuilder.add(showTextMDMetadata((TextMDMetadata) property
+						.getValue()));
 				break;
 			default:
 				break;
@@ -825,13 +861,18 @@ public class JsonHandler extends HandlerBase {
 				lPropBuilder.add(showProperty((Property) val));
 				break;
 			case NISOIMAGEMETADATA:
-				lPropBuilder.add(showNisoImageMetadata((NisoImageMetadata) property.getValue()));
+				lPropBuilder
+						.add(showNisoImageMetadata((NisoImageMetadata) property
+								.getValue()));
 				break;
 			case AESAUDIOMETADATA:
-				lPropBuilder.add(showAESAudioMetadata((AESAudioMetadata) property.getValue()));
+				lPropBuilder
+						.add(showAESAudioMetadata((AESAudioMetadata) property
+								.getValue()));
 				break;
 			case TEXTMDMETADATA:
-				lPropBuilder.add(showTextMDMetadata((TextMDMetadata) property.getValue()));
+				lPropBuilder.add(showTextMDMetadata((TextMDMetadata) property
+						.getValue()));
 				break;
 			default:
 				break;
@@ -892,13 +933,20 @@ public class JsonHandler extends HandlerBase {
 				lPropBuilder.add(keystr, showProperty((Property) val));
 				break;
 			case NISOIMAGEMETADATA:
-				lPropBuilder.add(keystr, showNisoImageMetadata((NisoImageMetadata) property.getValue()));
+				lPropBuilder.add(keystr,
+						showNisoImageMetadata((NisoImageMetadata) property
+								.getValue()));
 				break;
 			case AESAUDIOMETADATA:
-				lPropBuilder.add(keystr, showAESAudioMetadata((AESAudioMetadata) property.getValue()));
+				lPropBuilder.add(keystr,
+						showAESAudioMetadata((AESAudioMetadata) property
+								.getValue()));
 				break;
 			case TEXTMDMETADATA:
-				lPropBuilder.add(keystr, showTextMDMetadata((TextMDMetadata) property.getValue()));
+				lPropBuilder
+						.add(keystr,
+								showTextMDMetadata((TextMDMetadata) property
+										.getValue()));
 				break;
 			default:
 				break;
@@ -983,15 +1031,18 @@ public class JsonHandler extends HandlerBase {
 					n = propArray.length;
 					break;
 				case NISOIMAGEMETADATA:
-					NisoImageMetadata[] nisoArray = (NisoImageMetadata[]) property.getValue();
+					NisoImageMetadata[] nisoArray = (NisoImageMetadata[]) property
+							.getValue();
 					n = nisoArray.length;
 					break;
 				case AESAUDIOMETADATA:
-					AESAudioMetadata[] aesArray = (AESAudioMetadata[]) property.getValue();
+					AESAudioMetadata[] aesArray = (AESAudioMetadata[]) property
+							.getValue();
 					n = aesArray.length;
 					break;
 				case TEXTMDMETADATA:
-					TextMDMetadata[] textMDArray = (TextMDMetadata[]) property.getValue();
+					TextMDMetadata[] textMDArray = (TextMDMetadata[]) property
+							.getValue();
 					n = textMDArray.length;
 					break;
 				default:
@@ -1009,15 +1060,16 @@ public class JsonHandler extends HandlerBase {
 				break;
 			}
 		} catch (Exception e) {
-			// If something goes seriously wrong, return true to punt the property
+			// If something goes seriously wrong, return true to punt the
+			// property
 			return 0;
 		}
 		return n;
 	}
 
 	/*
-	 * The array property has so many special cases of its own that we break it out
-	 * of showProperty
+	 * The array property has so many special cases of its own that we break it
+	 * out of showProperty
 	 */
 	protected JsonObjectBuilder showArrayProperty(Property property) {
 		boolean[] boolArray = null;
@@ -1208,11 +1260,12 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	/**
-	 * Display the NISO image metadata formatted according to the MIX schema. The
-	 * schema which is used may be 0.2 or 1.0 or 2.0, depending on the module
-	 * parameters.
+	 * Display the NISO image metadata formatted according to the MIX schema.
+	 * The schema which is used may be 0.2 or 1.0 or 2.0, depending on the
+	 * module parameters.
 	 * 
-	 * @param niso NISO image metadata
+	 * @param niso
+	 *            NISO image metadata
 	 */
 	protected JsonObjectBuilder showNisoImageMetadata(NisoImageMetadata niso) {
 		if ("0.2".equals(_je.getMixVersion())) {
@@ -1225,12 +1278,15 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	/**
-	 * Display the NISO image metadata formatted according to the MIX 1.0 schema.
+	 * Display the NISO image metadata formatted according to the MIX 1.0
+	 * schema.
 	 */
-	protected JsonObjectBuilder showNisoImageMetadata(NisoImageMetadata niso, boolean bMix10) {
+	protected JsonObjectBuilder showNisoImageMetadata(NisoImageMetadata niso,
+			boolean bMix10) {
 		JsonObjectBuilder mixBuilder = Json.createObjectBuilder();
 
-		JsonObjectBuilder ob = showNisoBasicDigitalObjectInformation(niso, bMix10);
+		JsonObjectBuilder ob = showNisoBasicDigitalObjectInformation(niso,
+				bMix10);
 		if (ob != null) {
 			mixBuilder.add("mix:BasicDigitalObjectInformation", ob);
 		}
@@ -1258,13 +1314,17 @@ public class JsonHandler extends HandlerBase {
 	 * merely outrageously big rather than disgustingly big
 	 */
 	/* Top level element 1 of 5: BasicDigitalObjectInformation */
-	protected JsonObjectBuilder showNisoBasicDigitalObjectInformation(NisoImageMetadata niso, boolean bMix10) {
+	protected JsonObjectBuilder showNisoBasicDigitalObjectInformation(
+			NisoImageMetadata niso, boolean bMix10) {
 		JsonObjectBuilder mixBuilder = Json.createObjectBuilder();
 
 		String s = niso.getImageIdentifier();
 		if (s != null) {
-			mixBuilder.add("mix:ObjectIdentifier", Json.createObjectBuilder().add("mix:objectIdentifierType", "JHOVE")
-					.add("mix:objectIdentifierValue", s));
+			mixBuilder.add(
+					"mix:ObjectIdentifier",
+					Json.createObjectBuilder()
+							.add("mix:objectIdentifierType", "JHOVE")
+							.add("mix:objectIdentifierValue", s));
 		}
 		long ln = niso.getFileSize();
 		if (ln != NisoImageMetadata.NULL) {
@@ -1319,7 +1379,8 @@ public class JsonHandler extends HandlerBase {
 		}
 		if (comp != NisoImageMetadata.NULL) {
 			if (comp == 34713 || comp == 34714) {
-				mixBuilder.add("mix:compressionScheme", compressionSchemeToString(comp));
+				mixBuilder.add("mix:compressionScheme",
+						compressionSchemeToString(comp));
 				if (level != NisoImageMetadata.NULL) {
 					mixBuilder.add("mix:compressionRatio", level);
 				}
@@ -1343,7 +1404,8 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	/* 1.0, Top level element 2 of 5: BasicImageInformation */
-	protected JsonObjectBuilder showNisoBasicImageInformation(NisoImageMetadata niso, boolean bMix10) {
+	protected JsonObjectBuilder showNisoBasicImageInformation(
+			NisoImageMetadata niso, boolean bMix10) {
 		JsonObjectBuilder mixBuilder = Json.createObjectBuilder();
 		boolean hasBuilder = false;
 		long ln = niso.getImageWidth();
@@ -1361,7 +1423,8 @@ public class JsonHandler extends HandlerBase {
 			if (bMix10) {
 				mixBuilder.add("mix:colorSpace", n);
 			} else {
-				mixBuilder.add("mix:colorSpace", photometricInterpretationToString(n));
+				mixBuilder.add("mix:colorSpace",
+						photometricInterpretationToString(n));
 			}
 			hasBuilder = true;
 		}
@@ -1384,8 +1447,11 @@ public class JsonHandler extends HandlerBase {
 		if (iarray != null || n != NisoImageMetadata.NULL || rarray != null) {
 			JsonObjectBuilder yccBuilder = Json.createObjectBuilder();
 			if (iarray != null && iarray.length >= 2) {
-				yccBuilder.add("mix:YCbCrSubSampling", Json.createObjectBuilder()
-						.add("mix:yCbCrSubsampleHoriz", iarray[0]).add("mix:yCbCrSubsampleVert", iarray[1]));
+				yccBuilder.add(
+						"mix:YCbCrSubSampling",
+						Json.createObjectBuilder()
+								.add("mix:yCbCrSubsampleHoriz", iarray[0])
+								.add("mix:yCbCrSubsampleVert", iarray[1]));
 			}
 			if (n != NisoImageMetadata.NULL) {
 				yccBuilder.add("mix:yCbCrPositioning", n);
@@ -1394,10 +1460,15 @@ public class JsonHandler extends HandlerBase {
 				if (bMix10) {
 					yccBuilder.add("mix:yCbCrCoefficients", showArray(rarray));
 				} else {
-					yccBuilder.add("mix:yCbCrCoefficients",
-							Json.createObjectBuilder().add("mix:lumaRed", showRational(rarray[0]))
-									.add("mix:lumaGreen", showRational(rarray[1]))
-									.add("mix:lumaBlue", showRational(rarray[2])));
+					yccBuilder
+							.add("mix:yCbCrCoefficients",
+									Json.createObjectBuilder()
+											.add("mix:lumaRed",
+													showRational(rarray[0]))
+											.add("mix:lumaGreen",
+													showRational(rarray[1]))
+											.add("mix:lumaBlue",
+													showRational(rarray[2])));
 				}
 			}
 			mixBuilder.add("mix:YCbCr", yccBuilder);
@@ -1454,7 +1525,8 @@ public class JsonHandler extends HandlerBase {
 		int lay = niso.getJp2Layers();
 		int lev = niso.getJp2ResolutionLevels();
 		String sizTiles = niso.getJp2Tiles();
-		if (sizTiles != null || lay != NisoImageMetadata.NULL || lev != NisoImageMetadata.NULL) {
+		if (sizTiles != null || lay != NisoImageMetadata.NULL
+				|| lev != NisoImageMetadata.NULL) {
 			JsonObjectBuilder jp2Builder = Json.createObjectBuilder();
 			if (sizTiles != null) {
 				if (bMix10) {
@@ -1482,7 +1554,8 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	/* 1.0, Top level element 3 of 5: ImageCaptureMetadata */
-	protected JsonObjectBuilder showNisoImageCaptureMetadata(NisoImageMetadata niso, boolean bMix10) {
+	protected JsonObjectBuilder showNisoImageCaptureMetadata(
+			NisoImageMetadata niso, boolean bMix10) {
 		JsonObjectBuilder mixBuilder = Json.createObjectBuilder();
 		boolean hasBuilder = false;
 
@@ -1566,9 +1639,12 @@ public class JsonHandler extends HandlerBase {
 			if (bMix10) {
 				mixBuilder.add("mix:maximumOpticalResolution", res);
 			} else {
-				mixBuilder.add("mix:MaximumOpticalResolution",
-						Json.createObjectBuilder().add("mix:xOpticalResolution", xres)
-								.add("mix:yOpticalResolution", yres).add("mix:resolutionUnit", ".in"));
+				mixBuilder.add(
+						"mix:MaximumOpticalResolution",
+						Json.createObjectBuilder()
+								.add("mix:xOpticalResolution", xres)
+								.add("mix:yOpticalResolution", yres)
+								.add("mix:resolutionUnit", ".in"));
 			}
 
 			hasBuilder = true;
@@ -1628,7 +1704,8 @@ public class JsonHandler extends HandlerBase {
 				if (n > 8 || n < 0) {
 					n = 0; // force "Not defined" for bad value
 				}
-				ccsBuilder.add("mix:exposureProgram", NisoImageMetadata.EXPOSURE_PROGRAM[n]);
+				ccsBuilder.add("mix:exposureProgram",
+						NisoImageMetadata.EXPOSURE_PROGRAM[n]);
 			}
 			useCcSetBuf = true;
 		}
@@ -1723,9 +1800,12 @@ public class JsonHandler extends HandlerBase {
 			if (bMix10) {
 				mixBuilder.add("mix:orientation", n);
 			} else {
-				final String[] orient = { "unknown", "normal*", "normal, image flipped", "normal, rotated 180\u00B0",
-						"normal, image flipped, rotated 180\u00B0", "normal, image flipped, rotated cw 90\u00B0",
-						"normal, rotated ccw 90\u00B0", "normal, image flipped, rotated ccw 90\u00B0",
+				final String[] orient = { "unknown", "normal*",
+						"normal, image flipped", "normal, rotated 180\u00B0",
+						"normal, image flipped, rotated 180\u00B0",
+						"normal, image flipped, rotated cw 90\u00B0",
+						"normal, rotated ccw 90\u00B0",
+						"normal, image flipped, rotated ccw 90\u00B0",
 						"normal, rotated cw 90\u00B0" };
 				if (n > 8 || n < 0) {
 					n = 0; // force "unknown" for bad value
@@ -1747,7 +1827,8 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	/* 1.0, Top level element 4 of 5: ImageAssessmentMetadata */
-	protected JsonObjectBuilder showNisoImageAssessmentMetadata(NisoImageMetadata niso, boolean bMix10) {
+	protected JsonObjectBuilder showNisoImageAssessmentMetadata(
+			NisoImageMetadata niso, boolean bMix10) {
 		JsonObjectBuilder mixBuilder = Json.createObjectBuilder();
 		boolean hasBuilder = false;
 
@@ -1764,7 +1845,8 @@ public class JsonHandler extends HandlerBase {
 			if (bMix10) {
 				smBuilder.add("mix:samplingFrequencyUnit", n);
 			} else {
-				final String sfu[] = { null, "no absolute unit of measurement", "in.", "cm" };
+				final String sfu[] = { null, "no absolute unit of measurement",
+						"in.", "cm" };
 				if (n < 1 || n > 3) {
 					n = 1;
 				}
@@ -1842,7 +1924,8 @@ public class JsonHandler extends HandlerBase {
 				imeBuilder.add(MIX_GRAY_RESPONSE_UNIT, n);
 			} else if (n > 0 && n <= 5) {
 				// Convert integer to text value; only values 1-5 are legal
-				imeBuilder.add(MIX_GRAY_RESPONSE_UNIT, NisoImageMetadata.GRAY_RESPONSE_UNIT_20[n - 1]);
+				imeBuilder.add(MIX_GRAY_RESPONSE_UNIT,
+						NisoImageMetadata.GRAY_RESPONSE_UNIT_20[n - 1]);
 			}
 			useColorEncBuf = true;
 		}
@@ -1850,8 +1933,11 @@ public class JsonHandler extends HandlerBase {
 		r = niso.getWhitePointXValue();
 		Rational r2 = niso.getWhitePointYValue();
 		if (r != null && r2 != null) {
-			imeBuilder.add("mix:WhitePoint", Json.createObjectBuilder().add("mix:whitePointXValue", showRational(r))
-					.add("mix:whitePointYValue", showRational(r2)));
+			imeBuilder.add(
+					"mix:WhitePoint",
+					Json.createObjectBuilder()
+							.add("mix:whitePointXValue", showRational(r))
+							.add("mix:whitePointYValue", showRational(r2)));
 			useColorEncBuf = true;
 		}
 
@@ -1949,7 +2035,8 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	/* 1.0, Top level element 5 of 5: ChangeHistory (without time travel) */
-	protected JsonObjectBuilder showChangeHistory(NisoImageMetadata niso, boolean bMix10) {
+	protected JsonObjectBuilder showChangeHistory(NisoImageMetadata niso,
+			boolean bMix10) {
 		JsonObjectBuilder mixBuilder = Json.createObjectBuilder();
 		boolean hasBuilder = false;
 
@@ -2004,7 +2091,8 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	/**
-	 * Convert the metering mode value to one of the suggested values for MIX 2.0
+	 * Convert the metering mode value to one of the suggested values for MIX
+	 * 2.0
 	 */
 	private String meteringModeToString(int n) {
 		String s = NisoImageMetadata.METERING_MODE[1];
@@ -2017,8 +2105,8 @@ public class JsonHandler extends HandlerBase {
 
 	/**
 	 * Convert the color space value (which is based on the TIFF
-	 * PhotometricInterpretation convention) to one of the suggested values for MIX
-	 * 2.0
+	 * PhotometricInterpretation convention) to one of the suggested values for
+	 * MIX 2.0
 	 */
 	private String photometricInterpretationToString(int n) {
 		switch (n) {
@@ -2052,8 +2140,8 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	/**
-	 * Convert compression scheme value (based on the TIFF compression convention)
-	 * to a label
+	 * Convert compression scheme value (based on the TIFF compression
+	 * convention) to a label
 	 */
 	private String compressionSchemeToString(int n) {
 		for (int i = 0; i < NisoImageMetadata.COMPRESSION_SCHEME_INDEX.length; i++) {
@@ -2066,7 +2154,8 @@ public class JsonHandler extends HandlerBase {
 	/**
 	 * Display the audio metadata formatted according to the AES schema.
 	 * 
-	 * @param aes AES audio metadata
+	 * @param aes
+	 *            AES audio metadata
 	 */
 	protected JsonObjectBuilder showAESAudioMetadata(AESAudioMetadata aes) {
 		JsonObjectBuilder aesBuilder = Json.createObjectBuilder();
@@ -2099,7 +2188,9 @@ public class JsonHandler extends HandlerBase {
 		}
 		int in = aes.getByteOrder();
 		if (in != AESAudioMetadata.NULL) {
-			aesBuilder.add("aes:byteOrder", (in == AESAudioMetadata.BIG_ENDIAN ? "BIG_ENDIAN" : "LITTLE_ENDIAN"));
+			aesBuilder.add("aes:byteOrder",
+					(in == AESAudioMetadata.BIG_ENDIAN ? "BIG_ENDIAN"
+							: "LITTLE_ENDIAN"));
 		}
 		long lin = aes.getFirstSampleOffset();
 		if (lin != AESAudioMetadata.NULL) {
@@ -2107,8 +2198,10 @@ public class JsonHandler extends HandlerBase {
 		}
 		String[] use = aes.getUse();
 		if (use != null) {
-			aesBuilder.add("aes:use",
-					Json.createObjectBuilder().add("aes:useType", use[0]).add("aes:otherType", use[1]));
+			aesBuilder.add(
+					"aes:use",
+					Json.createObjectBuilder().add("aes:useType", use[0])
+							.add("aes:otherType", use[1]));
 		}
 		s = aes.getPrimaryIdentifier();
 		if (s != null) {
@@ -2126,7 +2219,8 @@ public class JsonHandler extends HandlerBase {
 
 			AESAudioMetadata.TimeDesc startTime = f.getStartTime();
 			if (startTime != null) {
-				faceBuilder.add("aes:timeline", writeAESTimeRange(startTime, f.getDuration()));
+				faceBuilder.add("aes:timeline",
+						writeAESTimeRange(startTime, f.getDuration()));
 			}
 			int nchan = aes.getNumChannels();
 			if (nchan != AESAudioMetadata.NULL) {
@@ -2136,8 +2230,9 @@ public class JsonHandler extends HandlerBase {
 			JsonArrayBuilder streamsBuilder = Json.createArrayBuilder();
 			for (int ch = 0; ch < nchan; ch++) {
 				// write a stream description for each channel
-				streamsBuilder
-						.add(Json.createObjectBuilder().add("aes:channelNum", ch).add("aes:mapLocation", locs[ch]));
+				streamsBuilder.add(Json.createObjectBuilder()
+						.add("aes:channelNum", ch)
+						.add("aes:mapLocation", locs[ch]));
 			}
 			faceBuilder.add("aes:streams", streamsBuilder);
 			aesBuilder.add("aes:face", faceBuilder);
@@ -2158,7 +2253,8 @@ public class JsonHandler extends HandlerBase {
 			// that goes into it is present.
 			JsonArrayBuilder formatListBuilder = Json.createArrayBuilder();
 			JsonObjectBuilder formatRegionBuilder = Json.createObjectBuilder();
-			if (bitDepth != AESAudioMetadata.NULL || sampleRate != AESAudioMetadata.NILL
+			if (bitDepth != AESAudioMetadata.NULL
+					|| sampleRate != AESAudioMetadata.NILL
 					|| wordSize != AESAudioMetadata.NULL) {
 				if (bitDepth != AESAudioMetadata.NULL) {
 					formatRegionBuilder.add("aes:bitDepth", bitDepth);
@@ -2170,11 +2266,18 @@ public class JsonHandler extends HandlerBase {
 					formatRegionBuilder.add("aes:wordSize", wordSize);
 				}
 				if (bitRed != null) {
-					formatRegionBuilder.add("aes:bitrateReduction", Json.createObjectBuilder()
-							.add("aes:codecName", bitRed[0]).add("aes:codecNameVersion", bitRed[1])
-							.add("aes:codecCreatorApplication", bitRed[2])
-							.add("aes:codecCreatorApplicationVersion", bitRed[3]).add("aes:codecQuality", bitRed[4])
-							.add("aes:dataRate", bitRed[5]).add("aes:dataRateMode", bitRed[6]));
+					formatRegionBuilder.add(
+							"aes:bitrateReduction",
+							Json.createObjectBuilder()
+									.add("aes:codecName", bitRed[0])
+									.add("aes:codecNameVersion", bitRed[1])
+									.add("aes:codecCreatorApplication",
+											bitRed[2])
+									.add("aes:codecCreatorApplicationVersion",
+											bitRed[3])
+									.add("aes:codecQuality", bitRed[4])
+									.add("aes:dataRate", bitRed[5])
+									.add("aes:dataRateMode", bitRed[6]));
 				}
 
 				formatListBuilder.add(formatRegionBuilder);
@@ -2185,41 +2288,73 @@ public class JsonHandler extends HandlerBase {
 	}
 
 	/*
-	 * Break out the writing of a timeRangeType element. This always gives a start
-	 * time of 0. This is all FAKE DATA for the moment.
+	 * Break out the writing of a timeRangeType element. This always gives a
+	 * start time of 0. This is all FAKE DATA for the moment.
 	 */
-	private JsonObjectBuilder writeAESTimeRange(AESAudioMetadata.TimeDesc start, AESAudioMetadata.TimeDesc duration) {
+	private JsonObjectBuilder writeAESTimeRange(
+			AESAudioMetadata.TimeDesc start, AESAudioMetadata.TimeDesc duration) {
 		double sr = start.getSampleRate();
 		if (sr == 1.0) {
 			sr = _sampleRate;
 		}
 
 		JsonObjectBuilder timerangeBuilder = Json.createObjectBuilder();
-		timerangeBuilder.add("tcf:startTime",
-				Json.createObjectBuilder().add("tcf:frameCount", 30).add("tcf:timeBase", 1000)
-						.add("tcf:videoField", "FIELD_1").add("tcf:countingMode", NTSC_NON_DROP_FRAME)
-						.add("tcf:hours", start.getHours()).add("tcf:minutes", start.getMinutes())
-						.add("tcf:seconds", start.getSeconds()).add("tcf:frames", start.getFrames())
-						.add("tcf:samples",
-								Json.createObjectBuilder().add("tcf:sampleRate", "S" + Integer.toString((int) sr))
-										.add("tcf:numberOfSamples", start.getSamples()))
-						.add("tcf:filmFraming", Json.createObjectBuilder().add("tcf:framing", "NOT_APPLICABLE")
-								.add("tcf:framingType", "tcf:ntscFilmFramingType")));
+		timerangeBuilder
+				.add("tcf:startTime",
+						Json.createObjectBuilder()
+								.add("tcf:frameCount", 30)
+								.add("tcf:timeBase", 1000)
+								.add("tcf:videoField", "FIELD_1")
+								.add("tcf:countingMode", NTSC_NON_DROP_FRAME)
+								.add("tcf:hours", start.getHours())
+								.add("tcf:minutes", start.getMinutes())
+								.add("tcf:seconds", start.getSeconds())
+								.add("tcf:frames", start.getFrames())
+								.add("tcf:samples",
+										Json.createObjectBuilder()
+												.add("tcf:sampleRate",
+														"S"
+																+ Integer
+																		.toString((int) sr))
+												.add("tcf:numberOfSamples",
+														start.getSamples()))
+								.add("tcf:filmFraming",
+										Json.createObjectBuilder()
+												.add("tcf:framing",
+														"NOT_APPLICABLE")
+												.add("tcf:framingType",
+														"tcf:ntscFilmFramingType")));
 		if (duration != null) {
 			sr = duration.getSampleRate();
 			if (sr == 1.0) {
 				sr = _sampleRate;
 			}
-			timerangeBuilder.add("tcf:duration",
-					Json.createObjectBuilder().add("tcf:frameCount", 30).add("tcf:timeBase", 1000)
-							.add("tcf:videoField", "FIELD_1").add("tcf:countingMode", NTSC_NON_DROP_FRAME)
-							.add("tcf:hours", duration.getHours()).add("tcf:minutes", duration.getMinutes())
-							.add("tcf:seconds", duration.getSeconds()).add("tcf:frames", duration.getFrames())
-							.add("tcf:samples",
-									Json.createObjectBuilder().add("tcf:sampleRate", "S" + Integer.toString((int) sr))
-											.add("tcf:numberOfSamples", duration.getSamples()))
-							.add("tcf:filmFraming", Json.createObjectBuilder().add("tcf:framing", "NOT_APPLICABLE")
-									.add("tcf:framingType", "tcf:ntscFilmFramingType")));
+			timerangeBuilder
+					.add("tcf:duration",
+							Json.createObjectBuilder()
+									.add("tcf:frameCount", 30)
+									.add("tcf:timeBase", 1000)
+									.add("tcf:videoField", "FIELD_1")
+									.add("tcf:countingMode",
+											NTSC_NON_DROP_FRAME)
+									.add("tcf:hours", duration.getHours())
+									.add("tcf:minutes", duration.getMinutes())
+									.add("tcf:seconds", duration.getSeconds())
+									.add("tcf:frames", duration.getFrames())
+									.add("tcf:samples",
+											Json.createObjectBuilder()
+													.add("tcf:sampleRate",
+															"S"
+																	+ Integer
+																			.toString((int) sr))
+													.add("tcf:numberOfSamples",
+															duration.getSamples()))
+									.add("tcf:filmFraming",
+											Json.createObjectBuilder()
+													.add("tcf:framing",
+															"NOT_APPLICABLE")
+													.add("tcf:framingType",
+															"tcf:ntscFilmFramingType")));
 		}
 		return timerangeBuilder;
 	}

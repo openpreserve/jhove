@@ -86,11 +86,11 @@ public class JsonHandlerTest {
 			"\"vendor\":{\"kind\":\"Vendor\"}," +
 			"\"note\":\"This is the default format\",\"rights\":\"DUMMY\"}";  
 	private static final String INFO_JSON =
-			"\"repInfo\":{\"uri\":\"file://dummy.file\"," +
+			"\"repInfo\":[{\"uri\":\"file://dummy.file\"," +
 		    "\"reportingModule\":{\"name\":\"BYTESTREAM\",\"release\":\"DUMMY\",\"date\":\"2010-01-01\"}," +
 		    "\"size\":1,\"format\":\"bytestream\",\"status\":\"Well-Formed and valid\",\"sigMatch\":[\"BYTESTREAM\"]," +
 		    "\"mimeType\":\"application/octet-stream\",\"properties\":[{\"checksum\":\"" +
-		    DUMMY_CK + "\",\"type\":\"MD5\"}]}";
+		    DUMMY_CK + "\",\"type\":\"MD5\"}]}]";
 	/** Handler string "Find: " */
 	private static final String FIND = "Find: ";
 
