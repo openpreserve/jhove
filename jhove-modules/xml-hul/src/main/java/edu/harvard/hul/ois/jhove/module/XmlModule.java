@@ -24,6 +24,7 @@ package edu.harvard.hul.ois.jhove.module;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.*;
 import javax.xml.parsers.SAXParserFactory;
@@ -919,11 +920,11 @@ public class XmlModule extends ModuleBase {
 		int sigidx = 0;
 		JhoveBase jb = getBase();
 		int sigBytes = jb.getSigBytes();
-		DataInputStream dstream = new DataInputStream(stream);
+		Reader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
 		int charsRead = 0;
 		try {
 			while (charsRead < sigBytes) {
-				char ch = dstream.readChar();
+				char ch = (char) reader.read();
 				++charsRead;
 				// Skip over all whitespace till we reach "xml"
 				if (sigidx <= 2 && Character.isWhitespace(ch)) {
