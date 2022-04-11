@@ -1224,38 +1224,16 @@ public class JsonHandler extends HandlerBase {
 	 */
 	protected JsonObjectBuilder showTextMDMetadata(TextMDMetadata textMD) {
 		JsonObjectBuilder textmdBuilder = Json.createObjectBuilder();
-
-		String s = textMD.getCharset();
-		if (s != null) {
-			textmdBuilder.add("textmd:charset", s);
-		}
-		if ((s = textMD.getByte_orderString()) != null) {
-			textmdBuilder.add("textmd:byte_order", s);
-		}
-		if ((s = textMD.getByte_size()) != null) {
-			textmdBuilder.add("textmd:byte_size", s);
-		}
-		if ((s = textMD.getCharacter_size()) != null) {
-			textmdBuilder.add("textmd:character_size", s);
-		}
-		if ((s = textMD.getLinebreakString()) != null) {
-			textmdBuilder.add("textmd:linebreak", s);
-		}
-		if ((s = textMD.getLanguage()) != null) {
-			textmdBuilder.add("textmd:language", s);
-		}
-		if ((s = textMD.getMarkup_basis()) != null) {
-			textmdBuilder.add("textmd:markup_basis", s);
-		}
-		if ((s = textMD.getMarkup_basis_version()) != null) {
-			textmdBuilder.add("textmd:markup_basis_version", s);
-		}
-		if ((s = textMD.getMarkup_language()) != null) {
-			textmdBuilder.add("textmd:markup_language", s);
-		}
-		if ((s = textMD.getMarkup_language_version()) != null) {
-			textmdBuilder.add("textmd:markup_language_version", s);
-		}
+		addStringToJson(textmdBuilder, "textmd:charset", textMD.getCharset());
+		addStringToJson(textmdBuilder, "textmd:byte_order", textMD.getByte_orderString());
+		addStringToJson(textmdBuilder, "textmd:byte_size", textMD.getByte_size());
+		addStringToJson(textmdBuilder, "textmd:character_size", textMD.getCharacter_size());
+		addStringToJson(textmdBuilder, "textmd:linebreak", textMD.getLinebreakString());
+		addStringToJson(textmdBuilder, "textmd:language", textMD.getLanguage());
+		addStringToJson(textmdBuilder, "textmd:markup_basis", textMD.getMarkup_basis());
+		addStringToJson(textmdBuilder, "textmd:markup_basis_version", textMD.getMarkup_basis_version());
+		addStringToJson(textmdBuilder, "textmd:markup_language", textMD.getMarkup_language());
+		addStringToJson(textmdBuilder, "textmd:markup_language_version", textMD.getMarkup_language_version());
 		return textmdBuilder;
 	}
 
@@ -1432,12 +1410,8 @@ public class JsonHandler extends HandlerBase {
 		String s2 = niso.getProfileURL();
 		if (s != null || s2 != null) {
 			JsonObjectBuilder iccBuilder = Json.createObjectBuilder();
-			if (s != null) {
-				iccBuilder.add("mix:iccProfileName", s);
-			}
-			if (s2 != null) {
-				iccBuilder.add("mix:iccProfileURL", s2);
-			}
+			addStringToJson(iccBuilder, "mix:iccProfileName", s);
+			addStringToJson(iccBuilder, "mix:iccProfileURL", s2);
 			mixBuilder.add("mix:IccProfile", iccBuilder);
 			hasBuilder = true;
 		}
@@ -1453,9 +1427,7 @@ public class JsonHandler extends HandlerBase {
 								.add("mix:yCbCrSubsampleHoriz", iarray[0])
 								.add("mix:yCbCrSubsampleVert", iarray[1]));
 			}
-			if (n != NisoImageMetadata.NULL) {
-				yccBuilder.add("mix:yCbCrPositioning", n);
-			}
+			addNisoIntToJson(yccBuilder, "mix:yCbCrPositioning", n);
 			if (rarray != null) {
 				if (bMix10) {
 					yccBuilder.add("mix:yCbCrCoefficients", showArray(rarray));
@@ -1536,21 +1508,13 @@ public class JsonHandler extends HandlerBase {
 					jp2Builder.add(MIX_TILES, showArray(sizes));
 				}
 			}
-			if (lay != NisoImageMetadata.NULL) {
-				jp2Builder.add("mix:qualityLayers", lay);
-			}
-			if (lev != NisoImageMetadata.NULL) {
-				jp2Builder.add("mix:resolutionLevels", lev);
-			}
+			addNisoIntToJson(jp2Builder, "mix:qualityLayers", lay);
+			addNisoIntToJson(jp2Builder, "mix:resolutionLevels", lev);
 			mixBuilder.add("mix:JPEG2000", jp2Builder);
 			hasBuilder = true;
 		}
 
-		if (hasBuilder) {
-			return mixBuilder;
-		} else {
-			return null;
-		}
+		return hasBuilder?mixBuilder:null;
 	}
 
 	/* 1.0, Top level element 3 of 5: ImageCaptureMetadata */
@@ -1559,77 +1523,33 @@ public class JsonHandler extends HandlerBase {
 		JsonObjectBuilder mixBuilder = Json.createObjectBuilder();
 		boolean hasBuilder = false;
 
-		String s = niso.getSourceType();
-		if (s != null) {
-			mixBuilder.add("mix:sourceType", s);
-			hasBuilder = true;
-		}
-		s = niso.getSourceID();
-		if (s != null) {
-			mixBuilder.add("mix:sourceIDValue", s);
-			hasBuilder = true;
-		}
+		hasBuilder |= addStringToJson(mixBuilder, "mix:sourceType", niso.getSourceType());
+		hasBuilder |= addStringToJson(mixBuilder, "mix:sourceIDValue", niso.getSourceID());
 		double d = niso.getSourceXDimension();
 		int n = niso.getSourceXDimensionUnit();
 		if (d != NisoImageMetadata.NILL || n != NisoImageMetadata.NULL) {
 			// Assume that both X and Y exist, or neither
-			if (d != NisoImageMetadata.NILL) {
-				mixBuilder.add("mix:sourceXDimensionValue", d);
-			}
-			if (n != NisoImageMetadata.NULL) {
-				mixBuilder.add("mix:sourceXDimensionUnit", n);
-			}
-			d = niso.getSourceYDimension();
-			n = niso.getSourceYDimensionUnit();
-			if (d != NisoImageMetadata.NILL || n != NisoImageMetadata.NULL) {
-				if (d != NisoImageMetadata.NILL) {
-					mixBuilder.add("mix:sourceYDimensionValue", d);
-				}
-				if (n != NisoImageMetadata.NULL) {
-					mixBuilder.add("mix:sourceYDimensionUnit", n);
-				}
-			}
+			addNisoDoubleToJson(mixBuilder,"mix:sourceXDimensionValue", d);
+			addNisoIntToJson(mixBuilder,"mix:sourceXDimensionUnit", n);
+			addNisoDoubleToJson(mixBuilder,"mix:sourceYDimensionValue", niso.getSourceYDimension());
+			addNisoIntToJson(mixBuilder,"mix:sourceYDimensionUnit", niso.getSourceYDimensionUnit());
 			hasBuilder = true;
 		}
 
-		s = niso.getDateTimeCreated();
-		if (s != null) {
-			mixBuilder.add("mix:dateTimeCreated", s);
-			hasBuilder = true;
-		}
-		s = niso.getImageProducer();
-		if (s != null) {
-			mixBuilder.add("mix:imageProducer", s);
-			hasBuilder = true;
-		}
+		hasBuilder |= addStringToJson(mixBuilder, "mix:dateTimeCreated", niso.getDateTimeCreated());
+		hasBuilder |= addStringToJson(mixBuilder, "mix:imageProducer", niso.getImageProducer());
+		hasBuilder |= addStringToJson(mixBuilder, "mix:captureDevice", niso.getDeviceSource());
+		hasBuilder |= addStringToJson(mixBuilder, "mix:scannerManufacturer", niso.getScannerManufacturer());
 
-		s = niso.getDeviceSource();
-		if (s != null) {
-			mixBuilder.add("mix:captureDevice", s);
-			hasBuilder = true;
-		}
-
-		// Here's a chunk of XML for scanners.
-		String mfg = niso.getScannerManufacturer();
-		if (mfg != null) {
-			mixBuilder.add("mix:scannerManufacturer", mfg);
-			hasBuilder = true;
-		}
 		String model = niso.getScannerModelName();
 		String modelNum = niso.getScannerModelNumber();
 		String serNum = niso.getScannerModelSerialNo();
 		if (model != null || modelNum != null || serNum != null) {
 			hasBuilder = true;
 			JsonObjectBuilder smBuilder = Json.createObjectBuilder();
-			if (model != null) {
-				smBuilder.add("mix:scannerModelName", model);
-			}
-			if (modelNum != null) {
-				smBuilder.add("mix:scannerModelNumber", modelNum);
-			}
-			if (serNum != null) {
-				smBuilder.add("mix:scannerModelSerialNo", serNum);
-			}
+			addStringToJson(smBuilder, "mix:scannerModelName", model);
+			addStringToJson(smBuilder, "mix:scannerModelNumber", modelNum);
+			addStringToJson(smBuilder, "mix:scannerModelSerialNo", serNum);
 			mixBuilder.add("mix:ScannerModel", smBuilder);
 		}
 		double xres = niso.getXPhysScanResolution();
@@ -1646,56 +1566,32 @@ public class JsonHandler extends HandlerBase {
 								.add("mix:yOpticalResolution", yres)
 								.add("mix:resolutionUnit", ".in"));
 			}
-
 			hasBuilder = true;
 		}
-		s = niso.getScanningSoftware();
-		if (s != null) {
+		if (addStringToJson(mixBuilder, "mix:scanningSoftwareName", niso.getScanningSoftware())) {
 			hasBuilder = true;
-			mixBuilder.add("mix:scanningSoftwareName", s);
-			s = niso.getScanningSoftwareVersionNo();
-			if (s != null) {
-				mixBuilder.add("mix:scanningSoftwareVersionNo", s);
-			}
+			addStringToJson(mixBuilder, "mix:scanningSoftwareVersionNo", niso.getScanningSoftwareVersionNo());
 		}
 
 		// Now we'll hear from the digital cameras.
-		s = niso.getDigitalCameraManufacturer();
-		if (s != null) {
-			mixBuilder.add("mix:digitalCameraManufacturer", s);
-			hasBuilder = true;
-		}
+		hasBuilder |= addStringToJson(mixBuilder, "mix:digitalCameraManufacturer", niso.getDigitalCameraManufacturer());
 		String dcmodel = niso.getDigitalCameraModelName();
 		String dcmodelNum = niso.getDigitalCameraModelNumber();
 		String dcserNum = niso.getDigitalCameraModelSerialNo();
 		if (dcmodel != null || dcmodelNum != null || dcserNum != null) {
 			hasBuilder = true;
 			JsonObjectBuilder smBuilder = Json.createObjectBuilder();
-			if (dcmodel != null) {
-				smBuilder.add("mix:digitalCameraModelName", dcmodel);
-			}
-			if (dcmodelNum != null) {
-				smBuilder.add("mix:digitalCameraModelNumber", dcmodelNum);
-			}
-			if (dcserNum != null) {
-				smBuilder.add("mix:mix:digitalCameraModelSerialNo", dcserNum);
-			}
+			addStringToJson(smBuilder, "mix:digitalCameraModelName", dcmodel);
+			addStringToJson(smBuilder, "mix:digitalCameraModelNumber", dcmodelNum);
+			addStringToJson(smBuilder, "mix:mix:digitalCameraModelSerialNo", dcserNum);
 			mixBuilder.add("mix:DigitalCameraModel", smBuilder);
 		}
 
 		// Nest a buffer for CameraCaptureSettings
 		JsonObjectBuilder ccsBuilder = Json.createObjectBuilder();
 		boolean useCcSetBuf = false;
-		d = niso.getFNumber();
-		if (d != NisoImageMetadata.NULL) {
-			ccsBuilder.add("mix:fNumber", d);
-			useCcSetBuf = true;
-		}
-		d = niso.getExposureTime();
-		if (d != NisoImageMetadata.NULL) {
-			ccsBuilder.add("mix:exposureTime", d);
-			useCcSetBuf = true;
-		}
+		useCcSetBuf |= addNisoDoubleToJson(ccsBuilder, "mix:fNumber", niso.getFNumber());
+		useCcSetBuf |= addNisoDoubleToJson(ccsBuilder, "mix:exposureTime", niso.getExposureTime());
 		n = niso.getExposureProgram();
 		if (n != NisoImageMetadata.NULL) {
 			if (bMix10) {
@@ -1709,26 +1605,10 @@ public class JsonHandler extends HandlerBase {
 			}
 			useCcSetBuf = true;
 		}
-		s = niso.getExifVersion();
-		if (s != null) {
-			ccsBuilder.add("mix:exifVersion", s);
-			useCcSetBuf = true;
-		}
-		Rational r = niso.getBrightness();
-		if (r != null) {
-			ccsBuilder.add("mix:brightnessValue", showRational(r));
-			useCcSetBuf = true;
-		}
-		r = niso.getExposureBias();
-		if (r != null) {
-			ccsBuilder.add("mix:exposureBiasValue", showRational(r));
-			useCcSetBuf = true;
-		}
-		r = niso.getMaxApertureValue();
-		if (r != null) {
-			ccsBuilder.add("mix:maxApertureValue", showRational(r));
-			useCcSetBuf = true;
-		}
+		useCcSetBuf |= addStringToJson(ccsBuilder, "mix:exifVersion", niso.getExifVersion());
+		useCcSetBuf |= addRationalToJson(ccsBuilder, "mix:brightnessValue", niso.getBrightness());
+		useCcSetBuf |= addRationalToJson(ccsBuilder, "mix:exposureBiasValue", niso.getExposureBias());
+		useCcSetBuf |= addRationalToJson(ccsBuilder, "mix:maxApertureValue", niso.getMaxApertureValue());
 		double[] darray = niso.getSubjectDistance();
 		if (darray != null) {
 			ccsBuilder.add("mix:subjectDistance", showArray(darray));
@@ -1739,7 +1619,7 @@ public class JsonHandler extends HandlerBase {
 			if (bMix10) {
 				ccsBuilder.add("mix:meteringMode", n);
 			} else {
-				s = meteringModeToString(n);
+				String s = meteringModeToString(n);
 				if (s.startsWith("Center weighted")) {
 					s = "Center weighted Average";
 				}
@@ -1754,44 +1634,15 @@ public class JsonHandler extends HandlerBase {
 			ccsBuilder.add("mix:flash", NisoImageMetadata.FLASH_20[firstBit]);
 			useCcSetBuf = true;
 		}
-		d = niso.getFocalLength();
-		if (d != NisoImageMetadata.NULL) {
-			ccsBuilder.add("mix:focalLength", d);
-			useCcSetBuf = true;
-		}
-		r = niso.getFlashEnergy();
-		if (r != null) {
-			ccsBuilder.add("mix:flashEnergy", showRational(r));
-			useCcSetBuf = true;
-		}
-		n = niso.getBackLight();
-		if (n != NisoImageMetadata.NULL) {
-			ccsBuilder.add("mix:backLight", n);
-			useCcSetBuf = true;
-		}
-		d = niso.getExposureIndex();
-		if (d != NisoImageMetadata.NULL) {
-			ccsBuilder.add("mix:exposureIndex", d);
-			useCcSetBuf = true;
-		}
-		n = niso.getAutoFocus();
-		if (n != NisoImageMetadata.NULL) {
-			ccsBuilder.add("mix:autoFocus", n);
-			useCcSetBuf = true;
-		}
-		d = niso.getXPrintAspectRatio();
-		double d2 = niso.getYPrintAspectRatio();
-		if (d != NisoImageMetadata.NULL) {
-			ccsBuilder.add("mix:xPrintAspectRatio", d);
-			useCcSetBuf = true;
-		}
-		if (d2 != NisoImageMetadata.NULL) {
-			ccsBuilder.add("mix:yPrintAspectRatio", d);
-			useCcSetBuf = true;
-		}
+		useCcSetBuf |= addNisoDoubleToJson(ccsBuilder, "mix:focalLength", niso.getFocalLength());
+		useCcSetBuf |= addRationalToJson(ccsBuilder, "mix:flashEnergy", niso.getFlashEnergy());
+		useCcSetBuf |= addNisoIntToJson(ccsBuilder, "mix:backLight", niso.getBackLight());
+		useCcSetBuf |= addNisoDoubleToJson(ccsBuilder, "mix:exposureIndex", niso.getExposureIndex());
+		useCcSetBuf |= addNisoIntToJson(ccsBuilder, "mix:autoFocus", niso.getAutoFocus());
+		useCcSetBuf |= addNisoDoubleToJson(ccsBuilder, "mix:xPrintAspectRatio", niso.getXPrintAspectRatio());
+		useCcSetBuf |= addNisoDoubleToJson(ccsBuilder, "mix:yPrintAspectRatio", niso.getYPrintAspectRatio());
 		if (useCcSetBuf) {
 			mixBuilder.add("mix:CameraCaptureSettings", ccsBuilder);
-
 			hasBuilder = true;
 		}
 
@@ -1814,16 +1665,8 @@ public class JsonHandler extends HandlerBase {
 			}
 			hasBuilder = true;
 		}
-		s = niso.getMethodology();
-		if (s != null) {
-			mixBuilder.add("mix:methodology", s);
-			hasBuilder = true;
-		}
-		if (hasBuilder) {
-			return mixBuilder;
-		} else {
-			return null;
-		}
+		hasBuilder |= addStringToJson(mixBuilder, "mix:methodology", niso.getMethodology());
+		return hasBuilder?mixBuilder:null;
 	}
 
 	/* 1.0, Top level element 4 of 5: ImageAssessmentMetadata */
@@ -1834,13 +1677,8 @@ public class JsonHandler extends HandlerBase {
 
 		JsonObjectBuilder smBuilder = Json.createObjectBuilder();
 		boolean useMetricsBuf = false;
-
-		int n = niso.getSamplingFrequencyPlane();
-		if (n != NisoImageMetadata.NULL) {
-			smBuilder.add("mix:samplingFrequencyPlane", n);
-			useMetricsBuf = true;
-		}
-		n = niso.getSamplingFrequencyUnit();
+		useMetricsBuf |= addNisoIntToJson(smBuilder, "mix:samplingFrequencyPlane", niso.getSamplingFrequencyPlane());
+		int n = niso.getSamplingFrequencyUnit();
 		if (n != NisoImageMetadata.NULL) {
 			if (bMix10) {
 				smBuilder.add("mix:samplingFrequencyUnit", n);
@@ -1854,16 +1692,8 @@ public class JsonHandler extends HandlerBase {
 			}
 			useMetricsBuf = true;
 		}
-		Rational r = niso.getXSamplingFrequency();
-		if (r != null) {
-			smBuilder.add("mix:xSamplingFrequency", showRational(r));
-			useMetricsBuf = true;
-		}
-		r = niso.getYSamplingFrequency();
-		if (r != null) {
-			smBuilder.add("mix:ySamplingFrequency", showRational(r));
-			useMetricsBuf = true;
-		}
+		useMetricsBuf |= addRationalToJson(smBuilder, "mix:xSamplingFrequency", niso.getXSamplingFrequency());
+		useMetricsBuf |= addRationalToJson(smBuilder, "mix:ySamplingFrequency", niso.getYSamplingFrequency());
 		if (useMetricsBuf) {
 			mixBuilder.add("mix:SpatialMetrics", smBuilder);
 			hasBuilder = true;
@@ -1879,12 +1709,7 @@ public class JsonHandler extends HandlerBase {
 			// bitsPerSampleUnit can also be floating point. Don't ask me why.
 			useColorEncBuf = true;
 		}
-		n = niso.getSamplesPerPixel();
-		if (n != NisoImageMetadata.NULL) {
-			imeBuilder.add("mix:samplesPerPixel", n);
-			useColorEncBuf = true;
-		}
-
+		useColorEncBuf |= addNisoIntToJson(imeBuilder, "mix:samplesPerPixel", niso.getSamplesPerPixel());
 		iarray = niso.getExtraSamples();
 		if (iarray != null) {
 			// extraSamples must be limited to
@@ -1905,11 +1730,7 @@ public class JsonHandler extends HandlerBase {
 			}
 		}
 
-		String s = niso.getColormapReference();
-		if (s != null) {
-			imeBuilder.add("mix:colormapReference", s);
-			useColorEncBuf = true;
-		}
+		useColorEncBuf |= addStringToJson(imeBuilder, "mix:colormapReference", niso.getColormapReference());
 
 		// This is complete nonsense, but it's what the spec says
 		iarray = niso.getGrayResponseCurve();
@@ -1930,7 +1751,7 @@ public class JsonHandler extends HandlerBase {
 			useColorEncBuf = true;
 		}
 
-		r = niso.getWhitePointXValue();
+		Rational r = niso.getWhitePointXValue();
 		Rational r2 = niso.getWhitePointYValue();
 		if (r != null && r2 != null) {
 			imeBuilder.add(
@@ -1944,36 +1765,12 @@ public class JsonHandler extends HandlerBase {
 		// A chromaticities buffer to go in the color encoding buffer.
 		JsonObjectBuilder pcBuilder = Json.createObjectBuilder();
 		boolean useChromaBuf = false;
-		r = niso.getPrimaryChromaticitiesRedX();
-		if (r != null) {
-			pcBuilder.add("mix:primaryChromaticitiesRedX", showRational(r));
-			useChromaBuf = true;
-		}
-		r = niso.getPrimaryChromaticitiesRedY();
-		if (r != null) {
-			pcBuilder.add("mix:primaryChromaticitiesRedY", showRational(r));
-			useChromaBuf = true;
-		}
-		r = niso.getPrimaryChromaticitiesGreenX();
-		if (r != null) {
-			pcBuilder.add("mix:primaryChromaticitiesGreenX", showRational(r));
-			useChromaBuf = true;
-		}
-		r = niso.getPrimaryChromaticitiesGreenY();
-		if (r != null) {
-			pcBuilder.add("mix:primaryChromaticitiesGreenY", showRational(r));
-			useChromaBuf = true;
-		}
-		r = niso.getPrimaryChromaticitiesBlueX();
-		if (r != null) {
-			pcBuilder.add("mix:primaryChromaticitiesBlueX", showRational(r));
-			useChromaBuf = true;
-		}
-		r = niso.getPrimaryChromaticitiesBlueY();
-		if (r != null) {
-			pcBuilder.add("mix:primaryChromaticitiesBlueY", showRational(r));
-			useChromaBuf = true;
-		}
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesRedX", niso.getPrimaryChromaticitiesRedX());
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesRedY", niso.getPrimaryChromaticitiesRedY());
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesGreenX", niso.getPrimaryChromaticitiesGreenX());
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesGreenY", niso.getPrimaryChromaticitiesGreenY());
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesBlueX", niso.getPrimaryChromaticitiesBlueX());
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesBlueY", niso.getPrimaryChromaticitiesBlueY());
 		if (useChromaBuf) {
 			imeBuilder.add("mix:PrimaryChromaticities", pcBuilder);
 			useColorEncBuf = true;
@@ -1986,108 +1783,47 @@ public class JsonHandler extends HandlerBase {
 
 		JsonObjectBuilder tdBuilder = Json.createObjectBuilder();
 		boolean useTargetBuf = false;
-		n = niso.getTargetType();
-		if (n != NisoImageMetadata.NULL) {
-			tdBuilder.add("mix:targetType", n);
-			useTargetBuf = true;
-		}
-		s = niso.getTargetIDManufacturer();
-		if (s != null) {
-			tdBuilder.add("mix:targetManufacturer", s);
-			useTargetBuf = true;
-		}
-		s = niso.getTargetIDName();
-		if (s != null) {
-			tdBuilder.add("mix:targetName", s);
-			useTargetBuf = true;
-		}
-		s = niso.getTargetIDNo();
-		if (s != null) {
-			tdBuilder.add("mix:targetNo", s);
-			useTargetBuf = true;
-		}
-		s = niso.getTargetIDMedia();
-		if (s != null) {
-			tdBuilder.add("mix:targetMedia", s);
-			useTargetBuf = true;
-		}
-		s = niso.getImageData();
-		if (s != null) {
-			tdBuilder.add("mix:externalTarget", s);
-			useTargetBuf = true;
-		}
-		s = niso.getPerformanceData();
-		if (s != null) {
-			tdBuilder.add("mix:performanceData", s);
-			useTargetBuf = true;
-		}
-
+		useTargetBuf |= addNisoIntToJson(tdBuilder, "mix:targetType", niso.getTargetType());
+		useTargetBuf |= addStringToJson(tdBuilder, "mix:targetManufacturer", niso.getTargetIDManufacturer());
+		useTargetBuf |= addStringToJson(tdBuilder, "mix:targetName", niso.getTargetIDName());
+		useTargetBuf |= addStringToJson(tdBuilder, "mix:targetNo", niso.getTargetIDNo());
+		useTargetBuf |= addStringToJson(tdBuilder, "mix:targetMedia", niso.getTargetIDMedia());
+		useTargetBuf |= addStringToJson(tdBuilder, "mix:externalTarget", niso.getImageData());
+		useTargetBuf |= addStringToJson(tdBuilder, "mix:performanceData", niso.getPerformanceData());
 		if (useTargetBuf) {
 			mixBuilder.add("mix:TargetData", tdBuilder);
 			hasBuilder = true;
 		}
-
-		if (hasBuilder) {
-			return mixBuilder;
-		} else {
-			return null;
-		}
+		return hasBuilder?mixBuilder:null;
 	}
 
+	
 	/* 1.0, Top level element 5 of 5: ChangeHistory (without time travel) */
 	protected JsonObjectBuilder showChangeHistory(NisoImageMetadata niso,
 			boolean bMix10) {
 		JsonObjectBuilder mixBuilder = Json.createObjectBuilder();
 		boolean hasBuilder = false;
 
-		String s = niso.getSourceData();
-		if (s != null) {
-			mixBuilder.add("mix:sourceData", s);
-			hasBuilder = true;
-		}
-		s = niso.getProcessingAgency();
-		if (s != null) {
-			mixBuilder.add("mix:processingAgency", s);
-			hasBuilder = true;
-		}
-
+		hasBuilder |= addStringToJson(mixBuilder, "mix:sourceData", niso.getSourceData() );
+		hasBuilder |= addStringToJson(mixBuilder, "mix:processingAgency", niso.getProcessingAgency() );
+		
 		JsonObjectBuilder psBuilder = Json.createObjectBuilder();
 		boolean useSftwBuf = false;
-		s = niso.getProcessingSoftwareName();
-		if (s != null) {
-			psBuilder.add("mix:processingSoftwareName", s);
-			useSftwBuf = true;
-		}
-		s = niso.getProcessingSoftwareVersion();
-		if (s != null) {
-			psBuilder.add("mix:processingSoftwareVersion", s);
-			useSftwBuf = true;
-		}
-		s = niso.getOS();
-		if (s != null) {
-			psBuilder.add("mix:processingOperatingSystemName", s);
-			useSftwBuf = true;
-		}
-		s = niso.getOSVersion();
-		if (s != null) {
-			psBuilder.add("mix:processingOperatingSystemVersion", s);
-			useSftwBuf = true;
-		}
+		useSftwBuf |= addStringToJson(psBuilder, "mix:processingSoftwareName", niso.getProcessingSoftwareName() );
+		useSftwBuf |= addStringToJson(psBuilder, "mix:processingSoftwareVersion", niso.getProcessingSoftwareVersion() );
+		useSftwBuf |= addStringToJson(psBuilder, "mix:processingOperatingSystemName", niso.getOS() );
+		useSftwBuf |= addStringToJson(psBuilder, "mix:processingOperatingSystemVersion", niso.getOSVersion() );
 		if (useSftwBuf) {
 			mixBuilder.add("mix:ProcessingSoftware", psBuilder);
 			hasBuilder = true;
 		}
+
 		String[] sarray = niso.getProcessingActions();
 		if (sarray != null) {
 			mixBuilder.add("mix:processingActions", showArray(sarray));
 			hasBuilder = true;
 		}
-
-		if (hasBuilder) {
-			return mixBuilder;
-		} else {
-			return null;
-		}
+		return hasBuilder?mixBuilder:null;
 	}
 
 	/**
@@ -2154,38 +1890,20 @@ public class JsonHandler extends HandlerBase {
 	/**
 	 * Display the audio metadata formatted according to the AES schema.
 	 * 
-	 * @param aes
-	 *            AES audio metadata
+	 * @param aes AES audio metadata
+	 * @return Json
 	 */
 	protected JsonObjectBuilder showAESAudioMetadata(AESAudioMetadata aes) {
 		JsonObjectBuilder aesBuilder = Json.createObjectBuilder();
 
 		_sampleRate = aes.getSampleRate();
 
-		String s = aes.getAnalogDigitalFlag();
-		if (s != null) {
-			aesBuilder.add("aes:analogDigitalFlag", s);
-		}
-		s = aes.getSchemaVersion();
-		if (s != null) {
-			aesBuilder.add("aes:schemaVersion", s);
-		}
-		s = aes.getFormat();
-		if (s != null) {
-			aesBuilder.add("aes:format", s);
-		}
-		s = aes.getSpecificationVersion();
-		if (s != null) {
-			aesBuilder.add("aes:specificationVersion", s);
-		}
-		s = aes.getAppSpecificData();
-		if (s != null) {
-			aesBuilder.add("aes:appSpecificData", s);
-		}
-		s = aes.getAudioDataEncoding();
-		if (s != null) {
-			aesBuilder.add("aes:audioDataEncoding", s);
-		}
+		addStringToJson(aesBuilder, "aes:analogDigitalFlag", aes.getAnalogDigitalFlag());
+		addStringToJson(aesBuilder, "aes:schemaVersion", aes.getSchemaVersion());
+		addStringToJson(aesBuilder, "aes:format", aes.getFormat());
+		addStringToJson(aesBuilder, "aes:specificationVersion", aes.getSpecificationVersion());
+		addStringToJson(aesBuilder, "aes:appSpecificData", aes.getAppSpecificData());
+		addStringToJson(aesBuilder, "aes:audioDataEncoding", aes.getAudioDataEncoding());
 		int in = aes.getByteOrder();
 		if (in != AESAudioMetadata.NULL) {
 			aesBuilder.add("aes:byteOrder",
@@ -2203,13 +1921,8 @@ public class JsonHandler extends HandlerBase {
 					Json.createObjectBuilder().add("aes:useType", use[0])
 							.add("aes:otherType", use[1]));
 		}
-		s = aes.getPrimaryIdentifier();
-		if (s != null) {
-			String t = aes.getPrimaryIdentifierType();
-			aesBuilder.add("aes:primaryIdentifier", s);
-			if (t != null) {
-				aesBuilder.add("aes:primaryIdentifierType", t);
-			}
+		if (addStringToJson(aesBuilder, "aes:primaryIdentifier", aes.getPrimaryIdentifier())) {
+			addStringToJson(aesBuilder, "aes:primaryIdentifierType", aes.getPrimaryIdentifierType());
 		}
 		List<AESAudioMetadata.Face> facelist = aes.getFaceList();
 		if (facelist != null && !facelist.isEmpty()) {
@@ -2238,53 +1951,58 @@ public class JsonHandler extends HandlerBase {
 			aesBuilder.add("aes:face", faceBuilder);
 		}
 
+		showAesFormatList(aes.getFormatList(), aesBuilder);
+		return aesBuilder;
+	}
+
+	private void showAesFormatList(List<AESAudioMetadata.FormatRegion> flist ,
+			JsonObjectBuilder aesBuilder) {
+		if (flist == null || flist.isEmpty()) {
+			return;
+		}
 		// In the general case, a FormatList can contain multiple
 		// FormatRegions. This doesn't happen with any of the current
 		// modules; if it's needed in the future, simply set up an
 		// iteration loop on formatList.
-		List<AESAudioMetadata.FormatRegion> flist = aes.getFormatList();
-		if (flist != null && !flist.isEmpty()) {
-			AESAudioMetadata.FormatRegion rgn = flist.get(0);
-			int bitDepth = rgn.getBitDepth();
-			double sampleRate = rgn.getSampleRate();
-			int wordSize = rgn.getWordSize();
-			String[] bitRed = rgn.getBitrateReduction();
-			// Build a FormatRegion subtree if at least one piece of data
-			// that goes into it is present.
-			JsonArrayBuilder formatListBuilder = Json.createArrayBuilder();
-			JsonObjectBuilder formatRegionBuilder = Json.createObjectBuilder();
-			if (bitDepth != AESAudioMetadata.NULL
-					|| sampleRate != AESAudioMetadata.NILL
-					|| wordSize != AESAudioMetadata.NULL) {
-				if (bitDepth != AESAudioMetadata.NULL) {
-					formatRegionBuilder.add("aes:bitDepth", bitDepth);
-				}
-				if (sampleRate != AESAudioMetadata.NILL) {
-					formatRegionBuilder.add("aes:sampleRate", sampleRate);
-				}
-				if (wordSize != AESAudioMetadata.NULL) {
-					formatRegionBuilder.add("aes:wordSize", wordSize);
-				}
-				if (bitRed != null) {
-					formatRegionBuilder.add(
-							"aes:bitrateReduction",
-							Json.createObjectBuilder()
-									.add("aes:codecName", bitRed[0])
-									.add("aes:codecNameVersion", bitRed[1])
-									.add("aes:codecCreatorApplication",
-											bitRed[2])
-									.add("aes:codecCreatorApplicationVersion",
-											bitRed[3])
-									.add("aes:codecQuality", bitRed[4])
-									.add("aes:dataRate", bitRed[5])
-									.add("aes:dataRateMode", bitRed[6]));
-				}
-
-				formatListBuilder.add(formatRegionBuilder);
-				aesBuilder.add("aes:formatList", formatListBuilder);
+		AESAudioMetadata.FormatRegion rgn = flist.get(0);
+		int bitDepth = rgn.getBitDepth();
+		double sampleRate = rgn.getSampleRate();
+		int wordSize = rgn.getWordSize();
+		String[] bitRed = rgn.getBitrateReduction();
+		// Build a FormatRegion subtree if at least one piece of data
+		// that goes into it is present.
+		JsonArrayBuilder formatListBuilder = Json.createArrayBuilder();
+		JsonObjectBuilder formatRegionBuilder = Json.createObjectBuilder();
+		if (bitDepth != AESAudioMetadata.NULL
+				|| sampleRate != AESAudioMetadata.NILL
+				|| wordSize != AESAudioMetadata.NULL) {
+			if (bitDepth != AESAudioMetadata.NULL) {
+				formatRegionBuilder.add("aes:bitDepth", bitDepth);
 			}
+			if (sampleRate != AESAudioMetadata.NILL) {
+				formatRegionBuilder.add("aes:sampleRate", sampleRate);
+			}
+			if (wordSize != AESAudioMetadata.NULL) {
+				formatRegionBuilder.add("aes:wordSize", wordSize);
+			}
+			if (bitRed != null) {
+				formatRegionBuilder.add(
+						"aes:bitrateReduction",
+						Json.createObjectBuilder()
+								.add("aes:codecName", bitRed[0])
+								.add("aes:codecNameVersion", bitRed[1])
+								.add("aes:codecCreatorApplication",
+										bitRed[2])
+								.add("aes:codecCreatorApplicationVersion",
+										bitRed[3])
+								.add("aes:codecQuality", bitRed[4])
+								.add("aes:dataRate", bitRed[5])
+								.add("aes:dataRateMode", bitRed[6]));
+			}
+
+			formatListBuilder.add(formatRegionBuilder);
+			aesBuilder.add("aes:formatList", formatListBuilder);
 		}
-		return aesBuilder;
 	}
 
 	/*
@@ -2406,5 +2124,38 @@ public class JsonHandler extends HandlerBase {
 		rationalBuilder.add(numer);
 		rationalBuilder.add(denom);
 		return rationalBuilder;
+	}
+	
+	private boolean addStringToJson(JsonObjectBuilder objBuilder, String attr, String value) {
+		if (value == null) {
+			return false;
+		}
+		objBuilder.add(attr,  value);
+		return true;
+	}
+
+	private boolean addRationalToJson(JsonObjectBuilder objBuilder, String attr, Rational r) {
+		if (r == null) {
+			return false;
+		}
+		objBuilder.add(attr, showRational(r));
+		return true;
+	}
+
+	private boolean addNisoIntToJson(JsonObjectBuilder objBuilder, String attr, int n) {
+		if (n == NisoImageMetadata.NULL) {
+			return false;
+		}
+		objBuilder.add(attr, n);
+		return true;
+	}
+
+
+	private boolean addNisoDoubleToJson(JsonObjectBuilder objBuilder, String attr, double d) {
+		if (d == NisoImageMetadata.NILL) {
+			return false;
+		}
+		objBuilder.add(attr, d);
+		return true;
 	}
 }

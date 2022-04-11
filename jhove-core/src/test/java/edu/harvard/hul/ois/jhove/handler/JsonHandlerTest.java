@@ -86,11 +86,11 @@ public class JsonHandlerTest {
 			"\"vendor\":{\"kind\":\"Vendor\"}," +
 			"\"note\":\"This is the default format\",\"rights\":\"DUMMY\"}";  
 	private static final String INFO_JSON =
-			"\"repInfo\":[{\"uri\":\"file://dummy.file\"," +
+			"{\"uri\":\"file://dummy.file\"," +
 		    "\"reportingModule\":{\"name\":\"BYTESTREAM\",\"release\":\"DUMMY\",\"date\":\"2010-01-01\"}," +
 		    "\"size\":1,\"format\":\"bytestream\",\"status\":\"Well-Formed and valid\",\"sigMatch\":[\"BYTESTREAM\"]," +
 		    "\"mimeType\":\"application/octet-stream\",\"properties\":[{\"checksum\":\"" +
-		    DUMMY_CK + "\",\"type\":\"MD5\"}]}]";
+		    DUMMY_CK + "\",\"type\":\"MD5\"}]}";
 	/** Handler string "Find: " */
 	private static final String FIND = "Find: ";
 
@@ -119,7 +119,6 @@ public class JsonHandlerTest {
 		
 		outString = new StringWriter();
 	    writer = new PrintWriter(outString);
-		// PrintWriter writer = new PrintWriter(outputFile);
 		
 		this.handler = new JsonHandler();
 		this.handler.setApp(mockApp);
@@ -248,7 +247,37 @@ public class JsonHandlerTest {
 				.replaceAll(DIR_PATTERN, DIR_REPLACEMENT)
 				.replaceAll(VENDOR_PATTERN, VENDOR_REPLACEMENT);
 		LOGGER.info(FIND + result);
-		String expected = "{\"jhove\":{" + APP_JSON + "," + INFO_JSON + "}}";
+		String expected = "{\"jhove\":{" + APP_JSON + ",\"repInfo\":[" + INFO_JSON + "]}}";
+		 
+	    assertEquals(expected, result);
+	}
+
+	@Test
+	public void testShowRepInfos() {
+		Module module = je.getModule(BYTESTREAM);
+		RepInfo info = new RepInfo("file://dummy.file");
+		info.setModule(module);
+		info.setFormat(module.getFormat()[0]);
+		info.setMimeType(module.getMimeType()[0]);
+		info.setSigMatch(module.getName());
+		info.setChecksum(new Checksum(DUMMY_CK, ChecksumType.MD5));
+		info.setSize(1);
+		
+        handler.showHeader();
+       	handler.show(info);
+       	handler.show(info);
+        handler.showFooter();
+        handler.close();
+        
+		String result = outString.toString().replaceAll(TIME_PATTERN, DUMMY)
+				.replaceAll(DATE_PATTERN, DATE_REPLACEMENT)
+				.replaceAll(RELEASE_PATTERN, RELEASE_REPLACEMENT)
+				.replaceAll(CONF_PATTERN, CONF_REPLACEMENT)
+				.replaceAll(RIGHTS_PATTERN, RIGHTS_REPLACEMENT)
+				.replaceAll(DIR_PATTERN, DIR_REPLACEMENT)
+				.replaceAll(VENDOR_PATTERN, VENDOR_REPLACEMENT);
+		LOGGER.info(FIND + result);
+		String expected = "{\"jhove\":{" + APP_JSON + ",\"repInfo\":[" + INFO_JSON + "," + INFO_JSON + "]}}";
 		 
 	    assertEquals(expected, result);
 	}
