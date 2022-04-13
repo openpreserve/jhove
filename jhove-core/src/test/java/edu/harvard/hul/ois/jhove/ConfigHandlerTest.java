@@ -4,11 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -20,8 +22,11 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 @RunWith(JUnit4.class)
 public class ConfigHandlerTest {
-    private static JhoveMessage EXPECTED = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages")
-            .getMessage("MSG");
+    @BeforeClass
+    public static void setUp() {
+        // Ensure the default locale is English for testing on any platform
+        Locale.setDefault(Locale.ENGLISH);
+    }
 
     @Test
     public void testFrench() throws ParserConfigurationException, SAXException, IOException {
@@ -50,7 +55,7 @@ public class ConfigHandlerTest {
         JhoveMessageFactory messageFactory = JhoveMessages
                 .getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
         JhoveMessage msg = messageFactory.getMessage("MSG");
-        assertEquals(EXPECTED.getMessage(), msg.getMessage());
+        assertEquals("English", msg.getMessage());
     }
 
     @Test
@@ -60,7 +65,7 @@ public class ConfigHandlerTest {
         JhoveMessageFactory messageFactory = JhoveMessages
                 .getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
         JhoveMessage msg = messageFactory.getMessage("MSG");
-        assertEquals(EXPECTED.getMessage(), msg.getMessage());
+        assertEquals("English", msg.getMessage());
     }
 
     private ConfigHandler loadHandler(final String confFileName)
