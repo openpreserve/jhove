@@ -22,20 +22,24 @@
 package edu.harvard.hul.ois.jhove.module;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.*;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import edu.harvard.hul.ois.jhove.module.utf8.Utf8BlockMarker;
 import edu.harvard.hul.ois.jhove.module.xml.*;
-
-import org.xml.sax.XMLReader;
-import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.*;
 
 /**
  * Module for identification and validation of XML files.
@@ -43,23 +47,12 @@ import org.xml.sax.helpers.*;
  * @author Gary McGath
  */
 public class XmlModule extends ModuleBase {
-	/******************************************************************
-	 * PRIVATE CLASS FIELDS.
-	 ******************************************************************/
 
 	private static final String NAME = "XML-hul";
 	private static final String RELEASE = "1.5.1";
-  private static final int [] DATE = { 2019, 04, 17 };
+	private static final int [] DATE = { 2019, 04, 17 };
 	private static final String[] FORMAT = { "XML", "XHTML" };
 	private static final String COVERAGE = "XML 1.0";
-	/*
-	 * According to RFC 3023, text/xml should be used for human-readable
-	 * XML documents, and application/xml should be used for documents
-	 * that aren't easily read by humans. Since that determination
-	 * is beyond the scope of this project, we err on the side of
-	 * pessimism and use application/xml as the primary MIME type.
-	 * <code>MIMETYPE[2]</code> is only for XHTML.
-	 */
 	private static final String[] MIMETYPE = { "text/xml", "application/xml",
 			"text/html" };
 	private static final String WELLFORMED = "An XML file is well-formed if "
@@ -79,23 +72,19 @@ public class XmlModule extends ModuleBase {
 			+ "the President and Fellows of Harvard College. "
 			+ "Released under the GNU Lesser General Public License.";
 
-	/******************************************************************
-	 * PRIVATE INSTANCE FIELDS.
-	 ******************************************************************/
-
-	/* Top-level property list. */
+	/** Top-level property list. */
 	protected List<Property> _propList;
 
-	/* Top-level property. */
+	/** Top-level property. */
 	protected Property _metadata;
 
-	/* Doctype for XHTML documents only, otherwise null. */
+	/** Doctype for XHTML documents only, otherwise null. */
 	protected String _xhtmlDoctype;
 
-	/* Base URL for DTD's. If null, all DTD URL's are absolute. */
+	/** Base URL for DTDs. If null, all DTD URLs are absolute. */
 	protected String _baseURL;
 
-	/*
+	/**
 	 * Flag to control signature checking behavior. If true,
 	 * checkSignatures insists on an XML document declaration; if
 	 * false, it will parse the file if there is no document
@@ -103,25 +92,25 @@ public class XmlModule extends ModuleBase {
 	 */
 	protected boolean _sigWantsDecl;
 
-	/*
+	/**
 	 * Flag to indicate we're invoking the parser from checkSignatures.
 	 * When true, it's up to checkSignatures to mark a signature as present.
 	 */
 	protected boolean _parseFromSig;
 
-	/* Flag to know if the property TextMDMetadata is to be added */
-	protected boolean _withTextMD = false;
-	/* Hold the information needed to generate a textMD metadata fragment */
+	/** Flag to indicate if TextMD metadata should be reported. */
+	protected boolean _withTextMD;
+
+	/** TextMD metadata for the file being processed. */
 	protected TextMDMetadata _textMD;
 
-	/* Map from URIs to locally stored schemas */
+	/** Map of URLs to locally stored schemas. */
 	protected Map<String, File> _localSchemas;
 
-	/******************************************************************
-	 * CLASS CONSTRUCTOR.
-	 ******************************************************************/
 	/**
-	 * Instantiate an <tt>XmlModule</tt> object.
+	 * Class constructor.
+	 *
+	 * Instantiate an <code>XmlModule</code> object.
 	 */
 	public XmlModule() {
 		super(NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
@@ -130,7 +119,7 @@ public class XmlModule extends ModuleBase {
 		_vendor = Agent.harvardInstance();
 
 		Document doc = new Document(
-				"Extensible Markup Language (XML) 1.0 " + "(Third Edition)",
+				"Extensible Markup Language (XML) 1.0 (Third Edition)",
 				DocumentType.REPORT);
 		doc.setPublisher(Agent.newW3CInstance());
 		doc.setDate("2004-02-04");
@@ -146,7 +135,9 @@ public class XmlModule extends ModuleBase {
 		Signature sig = new ExternalSignature(".xml", SignatureType.EXTENSION,
 				SignatureUseType.OPTIONAL);
 		_signature.add(sig);
-		_localSchemas = new HashMap<>();
+
+		// Initialize module parameters
+		resetParams();
 	}
 
 	/**
@@ -168,39 +159,54 @@ public class XmlModule extends ModuleBase {
 	@Override
 	public void resetParams() {
 		_baseURL = null;
-		_sigWantsDecl = false;
+		_localSchemas = new HashMap<>();
 		_parseFromSig = false;
+		_sigWantsDecl = false;
+		_withTextMD = false;
 	}
 
 	/**
-	 * Per-action initialization.
+	 * Parse configuration parameters for the module.
+	 *
+	 * If the parameter starts with "schema=", then the part to the
+	 * right of the equals sign specifies a schema location URI
+	 * followed by a path to a local copy of that schema to be used
+	 * in its place, separated by a semicolon. Example:
+	 *
+	 *   schema=http://example.com/schema.xsd;/schemas/example.xsd
+	 *
+	 * If the first character is "s" or "S", and the parameter isn't
+	 * "schema", then XML document declarations are required for
+	 * signature checks.
+	 *
+	 * If the parameter begins with "b" or "B", then the remainder of
+	 * the parameter is used as a base URL for relative URIs. Otherwise
+	 * it is ignored and there is no base URL. Example:
+	 *
+	 *   bhttp://example.com/schemas/
+	 *
+	 * If the parameter is "withtextmd=true", then textMD metadata is
+	 * included in the JHOVE report.
 	 *
 	 * @param param
-	 *            The module parameter; under command-line Jhove, the -p
-	 *            parameter.
-	 *            If the parameter starts with "schema", then the part to the
-	 *            right of the equal sign identifies a URI with a local path
-	 *            (URI, then semicolon, then path).
-	 *            If the first character is 's' and the parameter isn't
-	 *            "schema",
-	 *            then signature checking requires
-	 *            a document declaration, and the rest of the URL is considered
-	 *            as follows.
-	 *            If the parameter begins with 'b' or 'B', then the remainder of
-	 *            the parameter is used as a base URL. Otherwise it is ignored,
-	 *            and there is no base URL.
+	 *            the module parameter to parse.
 	 */
 	@Override
 	public void param(String param) {
 		if (param != null) {
-			param = param.toLowerCase();
-			if (param.startsWith("schema=")) {
+			param = param.trim();
+			String lowerCaseParam = param.toLowerCase();
+			if (lowerCaseParam.startsWith("schema=")) {
 				addLocalSchema(param);
-			} else if (param.indexOf('s') == 0) {
+			} else if (lowerCaseParam.startsWith("s")) {
 				_sigWantsDecl = true;
-				param = param.substring(1);
-			} else if (param.indexOf('b') == 0) {
+			} else if (lowerCaseParam.startsWith("b")) {
 				_baseURL = param.substring(1);
+			} else if (lowerCaseParam.equals("withtextmd=true")) {
+				_withTextMD = true;
+			} else {
+				_logger.warning("Ignoring unrecognized module parameter \""
+						+ param + "\"");
 			}
 		}
 	}
@@ -210,8 +216,8 @@ public class XmlModule extends ModuleBase {
 	 * results in RepInfo.
 	 *
 	 * This is designed to be called in two passes. On the first pass,
-	 * a nonvalidating parse is done. If this succeeds, and the presence
-	 * of DTD's or schemas is detected, then parse returns 1 so that it
+	 * a non-validating parse is done. If this succeeds, and the presence
+	 * of DTDs or schemas is detected, then parse returns 1 so that it
 	 * will be called again to do a validating parse. If there is nothing
 	 * to validate, we consider it "valid."
 	 *
@@ -239,24 +245,13 @@ public class XmlModule extends ModuleBase {
 	 */
 	@Override
 	public int parse(InputStream stream, RepInfo info, int parseIndex) {
-		// Test if textMD is to be generated
-
-		if (_defaultParams != null) {
-			_withTextMD = false;
-			Iterator<String> iter = _defaultParams.iterator();
-			while (iter.hasNext()) {
-				String param = iter.next();
-				if ("withtextmd=true".equalsIgnoreCase(param)) {
-					_withTextMD = true;
-				}
-			}
-		}
 
 		boolean canValidate = true;
-		initParse();
+		super.initParse();
 		info.setFormat(_format[0]);
 		info.setMimeType(_mimeType[0]);
 		info.setModule(this);
+
 		if (_textMD == null || parseIndex == 0) {
 			_textMD = new TextMDMetadata();
 			_xhtmlDoctype = null;
@@ -284,10 +279,13 @@ public class XmlModule extends ModuleBase {
 			// If a SAX class was specified, use it, otherwise use
 			// the default parser.
 			src = new InputSource(xds);
-			// setSystemId may be helpful in resolving relative URI's,
-			// though its use is unclear. Its actual content is merely
-			// informative, not a part of any actual link
-			// src.setSystemId ("http://hul.harvard.edu/hul");
+			// To correctly resolve relative URIs in XML, we need to know the
+			// XML document's system identifier, i.e. its location, in order
+			// to derive the base URI other URIs should be relative to.
+			// Unfortunately JHOVE doesn't currently provide such information
+			// to its modules. In lieu of that, this module has a parameter
+			// which can be set to be used as the base URI for all relative
+			// URI resolution in the document being parsed.
 			if (_baseURL != null) {
 				src.setSystemId(new File(_baseURL).toURI().toURL().toString());
 			}
@@ -369,42 +367,46 @@ public class XmlModule extends ModuleBase {
 		}
 		try {
 			parser.parse(src);
-		} catch (FileNotFoundException ef) {
+		} catch (FileNotFoundException fnfe) {
 			// Make this particular exception a little more user-friendly
 			info.setMessage(new ErrorMessage(MessageConstants.XML_HUL_10,
-					ef.getMessage().toString()));
+					fnfe.getMessage()));
 			info.setWellFormed(false);
 			return 0;
-		} catch (UTFDataFormatException u) {
+		} catch (UTFDataFormatException udfe) {
 			if (handler.getSigFlag() && !_parseFromSig) {
 				info.setSigMatch(_name);
 			}
 			info.setMessage(new ErrorMessage(MessageConstants.XML_HUL_11));
 			info.setWellFormed(false);
 			return 0;
-		} catch (IOException e) {
+		} catch (IOException ioe) {
 			// We may get an IOException from trying to resolve an
 			// external entity.
 			if (handler.getSigFlag() && !_parseFromSig) {
 				info.setSigMatch(_name);
 			}
-			String mess = e.getClass().getName() + ": " + e.getMessage().toString();
-			info.setMessage(new ErrorMessage(CoreMessageConstants.ERR_FILE_READ, mess));
+			String mess = ioe.getClass().getName() + ": " + ioe.getMessage();
+			info.setMessage(new ErrorMessage(
+					CoreMessageConstants.ERR_FILE_READ, mess));
 			info.setWellFormed(false);
 			return 0;
-		} catch (SAXParseException e) {
+		} catch (SAXParseException spe) {
 			// Document failed to parse.
 			if (handler.getSigFlag() && !_parseFromSig) {
 				info.setSigMatch(_name);
 			}
-			int line = e.getLineNumber();
-			int col = e.getColumnNumber();
-			String mess = e.getMessage().toString() +
-					"Line = " + line + ", Column = " + col;
-			info.setMessage(new ErrorMessage(MessageConstants.XML_HUL_1, mess));
+			info.setMessage(new ErrorMessage(
+					MessageConstants.XML_HUL_1,
+					MessageFormat.format(
+							MessageConstants.XML_HUL_1_SUB.getMessage(),
+							spe.getMessage(),
+							spe.getLineNumber(),
+							spe.getColumnNumber()
+					)));
 			info.setWellFormed(false);
 			return 0;
-		} catch (SAXException e) {
+		} catch (SAXException se) {
 			// Other SAX error.
 			if (handler.getSigFlag()) {
 				info.setSigMatch(_name);
@@ -415,8 +417,8 @@ public class XmlModule extends ModuleBase {
 					MessageConstants.XML_HUL_3.getId(),
 					MessageFormat.format(
 							MessageConstants.XML_HUL_3.getMessage(),
-							e.getMessage() != null ? e.getMessage() : ""));
-			Throwable ee = e.getCause();
+							se.getMessage() != null ? se.getMessage() : ""));
+			Throwable ee = se.getCause();
 			String subMess = (ee != null)
 					? MessageFormat.format(
 							MessageConstants.XML_HUL_12.getMessage(),
@@ -436,27 +438,22 @@ public class XmlModule extends ModuleBase {
 			info.setSigMatch(_name);
 		}
 		// If it's the first pass, check if we found a DTD
-		// or schema.
-		// If so, reparse with validation enabled.
-		// (Validation with schemas may prove futile, as the
-		// Crimson parser understands only DTD and DOCTYPE
-		// declarations as contributing to validity.)
+		// or schema. If so, re-parse with validation enabled.
 		String dtdURI = handler.getDTDURI();
 		List<SchemaInfo> schemaList = handler.getSchemas();
 
-		// In order to find the "primary" markup language, we try 3 things :
-		// 1/ first, the first NamespaceURI
-		// 3/ then, the first SchemaLocation
-		// 1/ finally, the dtd URI
-		// It should be noted that latter on when we look at the namespace in
-		// relation with the Root element
-		// if a URI is defined with it, it will get the preference ...
+		// To find the "primary" markup language we check the following,
+		// in order of preference:
+		// 1) the first schema's namespace URI
+		// 2) the first schema's location URI
+		// 3) the DTD's URI
+		// It should be noted that later on, when we check the namespace
+		// of the root element, if it has an associated URI, that will
+		// be used instead.
 		if (!schemaList.isEmpty()) {
 			SchemaInfo schItems = schemaList.get(0);
-			// First NamespaceURI
 			if (isNotEmpty(schItems.namespaceURI)) {
 				_textMD.setMarkup_language(schItems.namespaceURI);
-				// Then SchemaLocation
 			} else if (isNotEmpty(schItems.location)) {
 				_textMD.setMarkup_language(schItems.location);
 			}
@@ -474,8 +471,7 @@ public class XmlModule extends ModuleBase {
 			// be upgraded to true.
 		}
 
-		// Take a deep breath. We parsed it. Now assemble the
-		// properties.
+		// Take a deep breath. We parsed it. Now assemble the properties.
 		info.setProperty(_metadata);
 
 		// If it's XHTML, add the HTML property.
@@ -514,18 +510,14 @@ public class XmlModule extends ModuleBase {
 		_propList.add(new Property("Encoding", PropertyType.STRING, encoding));
 
 		_textMD.setCharset(encoding);
-		String textMDEncoding = _textMD.getCharset();
-		if (textMDEncoding.indexOf("UTF") != -1) {
-			_textMD.setByte_order(_bigEndian ? TextMDMetadata.BYTE_ORDER_BIG
-					: TextMDMetadata.BYTE_ORDER_LITTLE);
-			_textMD.setByte_size("8");
-			_textMD.setCharacter_size("variable");
-		} else {
-			_textMD.setByte_order(_bigEndian ? TextMDMetadata.BYTE_ORDER_BIG
-					: TextMDMetadata.BYTE_ORDER_LITTLE);
-			_textMD.setByte_size("8");
-			_textMD.setCharacter_size("1");
-		}
+		_textMD.setByte_size("8");
+		_textMD.setByte_order(_bigEndian ?
+				TextMDMetadata.BYTE_ORDER_BIG :
+				TextMDMetadata.BYTE_ORDER_LITTLE);
+		_textMD.setCharacter_size(_textMD.getCharset().contains("UTF") ?
+				"variable" :
+				"1");
+
 		// CRLF from XmlDeclStream ...
 		String lineEnd = xds.getKindOfLineEnd();
 		if (lineEnd == null) {
@@ -554,25 +546,25 @@ public class XmlModule extends ModuleBase {
 			// Build a List of Properties, which will be the value
 			// of the Schemas Property.
 			List<Property> schemaPropList = new ArrayList<>(schemaList.size());
-			ListIterator<SchemaInfo> iter = schemaList.listIterator();
 			// Iterate through all the schemas.
-			while (iter.hasNext()) {
-				SchemaInfo schItems = iter.next();
+			for (SchemaInfo schema : schemaList) {
 				// Build a Property (Schema) whose value is an array
 				// of two Properties (NamespaceURI and SchemaLocation).
 				Property[] schItemProps = new Property[2];
 				schItemProps[0] = new Property("NamespaceURI",
-						PropertyType.STRING, schItems.namespaceURI);
+						PropertyType.STRING, schema.namespaceURI);
 				schItemProps[1] = new Property("SchemaLocation",
-						PropertyType.STRING, schItems.location);
-				schemaPropList.add(new Property("Schema", PropertyType.PROPERTY,
-						PropertyArity.ARRAY, schItemProps));
+						PropertyType.STRING, schema.location);
+				schemaPropList.add(new Property("Schema",
+						PropertyType.PROPERTY,
+						PropertyArity.ARRAY,
+						schItemProps));
 			}
-			// Now put the list into a Property, which goes into
-			// the metadata.
-			Property prop = new Property("Schemas", PropertyType.PROPERTY,
-					PropertyArity.LIST, schemaPropList);
-			_propList.add(prop);
+			// Now add the list to the metadata
+			_propList.add(new Property("Schemas",
+					PropertyType.PROPERTY,
+					PropertyArity.LIST,
+					schemaPropList));
 		}
 
 		// Add the root element.
@@ -598,7 +590,7 @@ public class XmlModule extends ModuleBase {
 
 		// Declare properties we're going to add. They have
 		// some odd interdependencies, so we create them all
-		// and them add them in the right (specified) order.
+		// and then add them in the right (specified) order.
 		Property namespaceProp = null;
 		Property notationsProp = null;
 		Property charRefsProp = null;
@@ -611,16 +603,17 @@ public class XmlModule extends ModuleBase {
 		if (!ns.isEmpty()) {
 			Set<String> keys = ns.keySet();
 			List<Property> nsList = new ArrayList<>(keys.size());
-			Iterator<String> iter = keys.iterator();
-			while (iter.hasNext()) {
-				String key = iter.next();
+			for (String key : keys) {
 				String val = ns.get(key);
 				Property[] supPropArr = new Property[2];
-				supPropArr[0] = new Property("Prefix", PropertyType.STRING,
-						key);
-				supPropArr[1] = new Property("URI", PropertyType.STRING, val);
+				supPropArr[0] = new Property("Prefix",
+						PropertyType.STRING, key);
+				supPropArr[1] = new Property("URI",
+						PropertyType.STRING, val);
 				Property onens = new Property("Namespace",
-						PropertyType.PROPERTY, PropertyArity.ARRAY, supPropArr);
+						PropertyType.PROPERTY,
+						PropertyArity.ARRAY,
+						supPropArr);
 				nsList.add(onens);
 
 				// Try to find the namespace URI of root
@@ -628,8 +621,10 @@ public class XmlModule extends ModuleBase {
 					_textMD.setMarkup_language(val);
 				}
 			}
-			namespaceProp = new Property("Namespaces", PropertyType.PROPERTY,
-					PropertyArity.LIST, nsList);
+			namespaceProp = new Property("Namespaces",
+					PropertyType.PROPERTY,
+					PropertyArity.LIST,
+					nsList);
 		}
 
 		// CharacterReferences property goes here.
@@ -640,15 +635,14 @@ public class XmlModule extends ModuleBase {
 		if (!refs.isEmpty()) {
 			Utf8BlockMarker utf8BM = new Utf8BlockMarker();
 			List<String> refList = new ArrayList<>(refs.size());
-			ListIterator<Integer> iter = refs.listIterator();
-			while (iter.hasNext()) {
-				Integer refi = iter.next();
-				int refint = refi.intValue();
+			for (Integer refint : refs) {
 				refList.add(intTo4DigitHex(refint));
 				utf8BM.markBlock(refint);
 			}
 			charRefsProp = new Property("CharacterReferences",
-					PropertyType.STRING, PropertyArity.LIST, refList);
+					PropertyType.STRING,
+					PropertyArity.LIST,
+					refList);
 			unicodeBlocksProp = utf8BM
 					.getBlocksUsedProperty("UnicodeCharRefBlocks");
 		}
@@ -661,24 +655,22 @@ public class XmlModule extends ModuleBase {
 		List<String[]> uent = handler.getUnparsedEntities();
 		List<String> unparsedNotationNames = new LinkedList<>();
 		if (!uent.isEmpty()) {
-			ListIterator<String[]> iter = uent.listIterator();
-			while (iter.hasNext()) {
+			for (String[] entarr : uent) {
 				// We check external parsed entities against
 				// the list of attribute values which we've
 				// accumulated. If a parsed entity name matches an
 				// attribute value, we assume it's used.
-				String[] entarr = iter.next();
 				String name = entarr[0];
-				if (nameInCollection(name, attributeVals)) {
+				if (attributeVals.contains(name)) {
 					// Add the notation name to the list
 					// unparsedNotationNames, so we can use it
 					// in determining which notations are used.
 					unparsedNotationNames.add(entarr[3]);
 					List<Property> subPropList = new ArrayList<>(6);
-					subPropList.add(
-							new Property("Name", PropertyType.STRING, name));
-					subPropList.add(new Property("Type", PropertyType.STRING,
-							"External unparsed"));
+					subPropList.add(new Property("Name",
+							PropertyType.STRING, name));
+					subPropList.add(new Property("Type",
+							PropertyType.STRING, "External unparsed"));
 					subPropList.add(new Property("PublicID",
 							PropertyType.STRING, entarr[1]));
 					subPropList.add(new Property("SystemID",
@@ -686,8 +678,10 @@ public class XmlModule extends ModuleBase {
 					subPropList.add(new Property("NotationName",
 							PropertyType.STRING, entarr[3]));
 
-					entProps.add(new Property("Entity", PropertyType.PROPERTY,
-							PropertyArity.LIST, subPropList));
+					entProps.add(new Property("Entity",
+							PropertyType.PROPERTY,
+							PropertyArity.LIST,
+							subPropList));
 				}
 			}
 		}
@@ -695,21 +689,21 @@ public class XmlModule extends ModuleBase {
 		// Internal entities
 		List<String[]> declEnts = declHandler.getInternalEntityDeclarations();
 		if (!declEnts.isEmpty()) {
-			ListIterator<String[]> iter = declEnts.listIterator();
-			while (iter.hasNext()) {
-				String[] entarr = iter.next();
+			for (String[] entarr : declEnts) {
 				String name = entarr[0];
 				// include only if the entity was actually used
-				if (nameInCollection(name, entNames)) {
+				if (entNames.contains(name)) {
 					List<Property> subPropList = new ArrayList<>(4);
-					subPropList.add(
-							new Property("Name", PropertyType.STRING, name));
-					subPropList.add(new Property("Type", PropertyType.STRING,
-							"Internal"));
-					subPropList.add(new Property("Value", PropertyType.STRING,
-							entarr[1]));
-					entProps.add(new Property("Entity", PropertyType.PROPERTY,
-							PropertyArity.LIST, subPropList));
+					subPropList.add(new Property("Name",
+							PropertyType.STRING, name));
+					subPropList.add(new Property("Type",
+							PropertyType.STRING, "Internal"));
+					subPropList.add(new Property("Value",
+							PropertyType.STRING, entarr[1]));
+					entProps.add(new Property("Entity",
+							PropertyType.PROPERTY,
+							PropertyArity.LIST,
+							subPropList));
 				}
 			}
 		}
@@ -717,17 +711,15 @@ public class XmlModule extends ModuleBase {
 		// External parsed entities
 		declEnts = declHandler.getExternalEntityDeclarations();
 		if (!declEnts.isEmpty()) {
-			ListIterator<String[]> iter = declEnts.listIterator();
-			while (iter.hasNext()) {
-				String[] entarr = iter.next();
+			for (String[] entarr : declEnts) {
 				String name = entarr[0];
 				// include only if the entity was actually used
-				if (nameInCollection(name, entNames)) {
+				if (entNames.contains(name)) {
 					List<Property> subPropList = new ArrayList<>(4);
-					subPropList.add(
-							new Property("Name", PropertyType.STRING, name));
-					subPropList.add(new Property("Type", PropertyType.STRING,
-							"External parsed"));
+					subPropList.add(new Property("Name",
+							PropertyType.STRING, name));
+					subPropList.add(new Property("Type",
+							PropertyType.STRING, "External parsed"));
 					if (entarr[1] != null) {
 						subPropList.add(new Property("PublicID",
 								PropertyType.STRING, entarr[1]));
@@ -737,15 +729,19 @@ public class XmlModule extends ModuleBase {
 								PropertyType.STRING, entarr[2]));
 					}
 
-					entProps.add(new Property("Entity", PropertyType.PROPERTY,
-							PropertyArity.LIST, subPropList));
+					entProps.add(new Property("Entity",
+							PropertyType.PROPERTY,
+							PropertyArity.LIST,
+							subPropList));
 				}
 			}
 		}
 
 		if (!entProps.isEmpty()) {
-			entitiesProp = new Property("Entities", PropertyType.PROPERTY,
-					PropertyArity.LIST, entProps);
+			entitiesProp = new Property("Entities",
+					PropertyType.PROPERTY,
+					PropertyArity.LIST,
+					entProps);
 		}
 
 		List<ProcessingInstructionInfo> pi = handler
@@ -757,25 +753,26 @@ public class XmlModule extends ModuleBase {
 			// two String properties, named Target and
 			// Data respectively.
 			List<Property> piPropList = new ArrayList<>(pi.size());
-			ListIterator<ProcessingInstructionInfo> pii = pi.listIterator();
-			while (pii.hasNext()) {
-				ProcessingInstructionInfo pistr = pii.next();
+			for (ProcessingInstructionInfo pistr : pi) {
 				Property[] subPropArr = new Property[2];
 				// Accumulate targets in a list, so we can tell
 				// which Notations use them.
-				// Wait a minute -- what we're doing here can't work!! TODO
-				// what's supposed to be happening?
+				// Wait a minute -- what we're doing here can't work!!
+				// TODO: What's supposed to be happening?
 				// piTargets.add (subPropArr[0]);
-				subPropArr[0] = new Property("Target", PropertyType.STRING,
-						pistr.target);
-				subPropArr[1] = new Property("Data", PropertyType.STRING,
-						pistr.data);
+				subPropArr[0] = new Property("Target",
+						PropertyType.STRING, pistr.target);
+				subPropArr[1] = new Property("Data",
+						PropertyType.STRING, pistr.data);
 				piPropList.add(new Property("ProcessingInstruction",
-						PropertyType.PROPERTY, PropertyArity.ARRAY,
+						PropertyType.PROPERTY,
+						PropertyArity.ARRAY,
 						subPropArr));
 			}
 			procInstProp = new Property("ProcessingInstructions",
-					PropertyType.PROPERTY, PropertyArity.LIST, piPropList);
+					PropertyType.PROPERTY,
+					PropertyArity.LIST,
+					piPropList);
 		}
 
 		// Notations property. We list notations only if they're
@@ -792,11 +789,11 @@ public class XmlModule extends ModuleBase {
 				String notName = notArray[0];
 				// Check for use of Notation before including
 				// TODO this is implemented wrong! Need to reinvestigate
-				if (nameInCollection(notName, piTargets)
-						|| nameInCollection(notName, unparsedNotationNames)) {
+				if (piTargets.contains(notName)
+						|| unparsedNotationNames.contains(notName)) {
 					// notArray has name, public ID, system ID
-					subPropList.add(
-							new Property("Name", PropertyType.STRING, notName));
+					subPropList.add(new Property("Name",
+							PropertyType.STRING, notName));
 					if (notArray[1] != null) {
 						subPropList.add(new Property("PublicID",
 								PropertyType.STRING, notArray[1]));
@@ -805,14 +802,18 @@ public class XmlModule extends ModuleBase {
 						subPropList.add(new Property("SystemID",
 								PropertyType.STRING, notArray[2]));
 					}
-					notProps.add(new Property("Notation", PropertyType.PROPERTY,
-							PropertyArity.LIST, subPropList));
+					notProps.add(new Property("Notation",
+							PropertyType.PROPERTY,
+							PropertyArity.LIST,
+							subPropList));
 				}
 			}
 			// Recheck emptiness in case only unprocessed notations were found
 			if (!notProps.isEmpty()) {
-				notationsProp = new Property("Notations", PropertyType.PROPERTY,
-						PropertyArity.LIST, notProps);
+				notationsProp = new Property("Notations",
+						PropertyType.PROPERTY,
+						PropertyArity.LIST,
+						notProps);
 			}
 		}
 
@@ -838,8 +839,10 @@ public class XmlModule extends ModuleBase {
 
 		List<String> comm = lexHandler.getComments();
 		if (!comm.isEmpty()) {
-			commentProp = new Property("Comments", PropertyType.STRING,
-					PropertyArity.LIST, comm);
+			commentProp = new Property("Comments",
+					PropertyType.STRING,
+					PropertyArity.LIST,
+					comm);
 		}
 		if (commentProp != null) {
 			_propList.add(commentProp);
@@ -859,27 +862,27 @@ public class XmlModule extends ModuleBase {
 		}
 
 		// Add any messages from the parse.
-		List msgs = handler.getMessages();
-		ListIterator msgi = msgs.listIterator();
-		while (msgi.hasNext()) {
-			info.setMessage((Message) msgi.next());
+		List<Message> msgs = handler.getMessages();
+		for (Message msg : msgs) {
+			info.setMessage(msg);
+		}
+
+		if (info.getVersion() == null) {
+			info.setVersion("1.0");
 		}
 
 		if (_withTextMD) {
 			_textMD.setMarkup_basis(info.getFormat());
 			_textMD.setMarkup_basis_version(info.getVersion());
 			Property property = new Property("TextMDMetadata",
-					PropertyType.TEXTMDMETADATA, PropertyArity.SCALAR, _textMD);
+					PropertyType.TEXTMDMETADATA,
+					PropertyArity.SCALAR, _textMD);
 			_propList.add(property);
 		}
 
 		// Set the checksums in the report if they're calculated
 		setChecksums(this._ckSummer, info);
 
-		if (info.getVersion() == null) {
-			info.setVersion("1.0");
-			_textMD.setMarkup_basis_version("1.0");
-		}
 		return 0;
 	}
 
@@ -917,11 +920,11 @@ public class XmlModule extends ModuleBase {
 		int sigidx = 0;
 		JhoveBase jb = getBase();
 		int sigBytes = jb.getSigBytes();
-		DataInputStream dstream = new DataInputStream(stream);
+		Reader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
 		int charsRead = 0;
 		try {
 			while (charsRead < sigBytes) {
-				char ch = dstream.readChar();
+				char ch = (char) reader.read();
 				++charsRead;
 				// Skip over all whitespace till we reach "xml"
 				if (sigidx <= 2 && Character.isWhitespace(ch)) {
@@ -940,8 +943,7 @@ public class XmlModule extends ModuleBase {
 			return;
 		}
 		if (_sigWantsDecl) {
-
-			// No XML declaration, and it's manadatory according to the param.
+			// No XML declaration, and it's mandatory according to the param.
 			info.setWellFormed(false);
 			return;
 		}
@@ -960,56 +962,31 @@ public class XmlModule extends ModuleBase {
 		}
 	}
 
-	@Override
-	protected void initParse() {
-		super.initParse();
-		// if (_defaultParams != null) {
-		// Iterator<String> iter = _defaultParams.iterator ();
-		// while (iter.hasNext ()) {
-		// String param = iter.next ();
-		// if (param.toLowerCase ().startsWith("localschema=")) {
-		// addLocalSchema(param);
-		// }
-		// }
-		// }
-	}
-
-	/* Checks if a String is .equals to any member of a Set of strings. */
-	protected static boolean nameInCollection(String name,
-			Collection<String> coll) {
-		Iterator<String> iter = coll.iterator();
-		while (iter.hasNext()) {
-			String s = iter.next();
-			if (name.equals(s)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/*
+	/**
 	 * Converts an int to a 4-digit hex value, e.g.,
 	 * 003F or F10A. This is used for Character References.
 	 */
 	protected static String intTo4DigitHex(int n) {
-		StringBuffer buf = new StringBuffer(4);
+		StringBuilder sb = new StringBuilder(4);
 		for (int i = 3; i >= 0; i--) {
 			int d = (n >> (4 * i)) & 0XF;  // extract a nybble
 			if (d < 10) {
-				buf.append((char) ('0' + d));
+				sb.append((char) ('0' + d));
 			} else {
-				buf.append((char) ('A' + (d - 10)));
+				sb.append((char) ('A' + (d - 10)));
 			}
 		}
-		return buf.toString();
+		return sb.toString();
 	}
 
 	/**
-	 * Verification that the string contains something usefull.
+	 * Check that a string contains something other than "[None]".
 	 *
 	 * @param value
 	 *            string to test
-	 * @return boolean
+	 * @return
+	 *            <code>true</code> if the string contains something
+	 *            other than "[None]", <code>false</code> otherwise
 	 */
 	protected static boolean isNotEmpty(String value) {
 		return ((value != null) && (value.length() != 0)
@@ -1017,20 +994,37 @@ public class XmlModule extends ModuleBase {
 	}
 
 	/**
-	 * Add a mapping from a schema URI to a local file.
-	 * The parameter is of the form schema=[URI];[path]
+	 * Parse a "schema" configuration argument and map the schema
+	 * location URI to a local file after validating both components.
+	 *
+	 * @param param
+	 *            a module parameter string of the form
+	 *            "schema=[location-URI];[local-path]"
 	 */
 	private void addLocalSchema(String param) {
 		int eq = param.indexOf('=');
 		int semi = param.indexOf(';');
 		try {
-			String uri = param.substring(eq + 1, semi).trim();
-			String path = param.substring(semi + 1).trim();
-			File f = new File(path);
-			if (f.exists()) {
-				_localSchemas.put(uri, f);
+			String uriParam = param.substring(eq + 1, semi);
+			String localParam = param.substring(semi + 1);
+			try {
+				String locationUri = new URI(uriParam).toString();
+				File localFile = new File(localParam);
+				if (localFile.exists()) {
+					_localSchemas.put(locationUri, localFile);
+				} else {
+					_logger.warning("Ignoring module parameter with "
+							+ "unresolvable path: \"" + localParam + "\"");
+				}
 			}
-		} catch (Exception e) {
+			catch (URISyntaxException use) {
+				_logger.warning("Ignoring module parameter with "
+						+ "invalid URI syntax: \"" + uriParam + "\"");
+			}
+		}
+		catch (IndexOutOfBoundsException ioobe) {
+			_logger.warning("Ignoring malformed module parameter \""
+					+ param + "\"");
 		}
 	}
 }

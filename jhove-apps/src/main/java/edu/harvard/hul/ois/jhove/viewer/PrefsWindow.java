@@ -33,7 +33,7 @@ public class PrefsWindow extends JDialog
      */
     public PrefsWindow (JhoveWindow owner) 
     {
-        super (owner, "Jhove Preferences", true);
+        super (owner, "JHOVE Preferences", true);
         addWindowListener (new PrefsWindowListener (this));
         jhoveWin = owner;
         JPanel mainPanel = new JPanel (new GridLayout (4, 1));    
