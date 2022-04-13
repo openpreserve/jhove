@@ -20,11 +20,15 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 @RunWith(JUnit4.class)
 public class ConfigHandlerTest {
+    private static JhoveMessage EXPECTED = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages")
+            .getMessage("MSG");
+
     @Test
     public void testFrench() throws ParserConfigurationException, SAXException, IOException {
         ConfigHandler configHandler = this.loadHandler("jhove_lang_fr_test.conf");
         System.setProperty("module.language", configHandler.getLanguage());
-        JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
+        JhoveMessageFactory messageFactory = JhoveMessages
+                .getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
         JhoveMessage msg = messageFactory.getMessage("MSG");
         assertEquals("French", msg.getMessage());
     }
@@ -33,7 +37,8 @@ public class ConfigHandlerTest {
     public void testDanish() throws ParserConfigurationException, SAXException, IOException {
         ConfigHandler configHandler = this.loadHandler("jhove_lang_da_test.conf");
         System.setProperty("module.language", configHandler.getLanguage());
-        JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
+        JhoveMessageFactory messageFactory = JhoveMessages
+                .getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
         JhoveMessage msg = messageFactory.getMessage("MSG");
         assertEquals("Danish", msg.getMessage());
     }
@@ -42,21 +47,24 @@ public class ConfigHandlerTest {
     public void testUnknown() throws ParserConfigurationException, SAXException, IOException {
         ConfigHandler configHandler = this.loadHandler("jhove_lang_jp_test.conf");
         System.setProperty("module.language", configHandler.getLanguage());
-        JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
+        JhoveMessageFactory messageFactory = JhoveMessages
+                .getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
         JhoveMessage msg = messageFactory.getMessage("MSG");
-        assertEquals("English", msg.getMessage());
+        assertEquals(EXPECTED.getMessage(), msg.getMessage());
     }
 
     @Test
     public void testBad() throws ParserConfigurationException, SAXException, IOException {
         ConfigHandler configHandler = this.loadHandler("jhove_lang_bad_test.conf");
         System.setProperty("module.language", configHandler.getLanguage());
-        JhoveMessageFactory messageFactory = JhoveMessages.getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
+        JhoveMessageFactory messageFactory = JhoveMessages
+                .getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
         JhoveMessage msg = messageFactory.getMessage("MSG");
-        assertEquals("English", msg.getMessage());
+        assertEquals(EXPECTED.getMessage(), msg.getMessage());
     }
 
-    private ConfigHandler loadHandler(final String confFileName) throws ParserConfigurationException, SAXException, IOException {
+    private ConfigHandler loadHandler(final String confFileName)
+            throws ParserConfigurationException, SAXException, IOException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxParser = factory.newSAXParser();
         ConfigHandler configHandler = new ConfigHandler();
