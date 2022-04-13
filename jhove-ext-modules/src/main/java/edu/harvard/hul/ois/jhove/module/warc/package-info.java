@@ -10,4 +10,4 @@
  * <li><a href="http://jhove.openpreservation.org/">JHOVE home page</a>
  * </ul>
  */
-package hul.ois.jhove.module.warc;
+package edu.harvard.hul.ois.jhove.module.warc;
