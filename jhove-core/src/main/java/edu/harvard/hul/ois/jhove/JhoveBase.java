@@ -262,6 +262,11 @@ public class JhoveBase {
         // if necessary.
         _jhoveHome = configHandler.getJhoveHome();
 
+        // Set language code if changed in properties
+        if (!configHandler.getLanguage().isEmpty()) {
+            System.setProperty("module.language", configHandler.getLanguage());
+        }
+
         _encoding = configHandler.getEncoding();
         if (_encoding == null) {
             _encoding = getFromProperties(ENCODING_PROPERTY);
