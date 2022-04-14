@@ -91,17 +91,23 @@ if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_358.pdf.jhove.xml" ]
 	cp "${candidateRoot}/regression/modules/PDF-hul/issue_358.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_358.pdf.jhove.xml"
 fi
 
-# Copy the full result of regression/modules/PNG-gdm/issue_148.png
+# Copy the full result of regression/modules/PNG-gdm/issue_148.png and
+# regression/modules/PNG-gdm/issue_694.png
 # fixed by: https://github.com/openpreserve/jhove/pull/580
 if [[ -f "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" ]]; then
-	echo " - ISSUE:148 PNG result patch."
+	echo " - ISSUE:148 PNG result patch 1."
 	cp "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" "${targetRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PNG-gdm/issue_694.png.jhove.xml" ]]; then
+	echo " - ISSUE:693 PNG result patch 1."
+	cp "${candidateRoot}/regression/modules/PNG-gdm/issue_694.png.jhove.xml" "${targetRoot}/regression/modules/PNG-gdm/issue_694.png.jhove.xml"
 fi
 
 # Patch the offset in errors/modules/PDF-hul/pdf-hul-76-372051162.pdf.jhove.xml
 # fixed by https://github.com/openpreserve/jhove/pull/652
 echo " - ISSUE:645 & ISSUE:646 PDF result patch 1."
 find "${targetRoot}" -type f -name "pdf-hul-76-372051162.pdf.jhove.xml" -exec sed -i 's/^   <message offset="268334" severity="error" id="PDF-HUL-66">Lexical error<\/message>$/   <message offset="268333" severity="error" id="PDF-HUL-66">Lexical error<\/message>/' {} \;
+
 # Copy the full result of regression/modules/PDF-hul/issue_645.pdf and
 # regression/modules/PDF-hul/issue_646.pdf
 # fixed by: https://github.com/openpreserve/jhove/pull/652
@@ -118,6 +124,25 @@ fi
 # fixed by https://github.com/openpreserve/jhove/pull/665
 echo " - ISSUE:662 PDF result patch 1."
 find "${targetRoot}" -type f -name "issue_662.pdf.jhove.xml" -exec sed -i 's/^       <value>AutoCAD Architecture 2010 2010 (18.0s (LMS Tech<\/value>$/       <value>AutoCAD Architecture 2010 2010 (18.0s (LMS Tech))<\/value>/' {} \;
+
+# Copy the full result of regression/modules/PDF-hul/issue_473_a.pdf and
+# regression/modules/PDF-hul/issue_473_b.pdf
+# fixed by: https://github.com/openpreserve/jhove/pull/652
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_473_a.pdf.jhove.xml" ]]; then
+	echo " - ISSUE:473 PDF result patch 1."
+	cp "${candidateRoot}/regression/modules/PDF-hul/issue_473_a.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_473_a.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_473_b.pdf.jhove.xml" ]]; then
+	echo " - ISSUE:473 PDF result patch 2."
+	cp "${candidateRoot}/regression/modules/PDF-hul/issue_473_b.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_473_b.pdf.jhove.xml"
+fi
+
+# Copy the full result of regression/modules/PDF-hul/issue_306.pdf
+# fixed by: https://github.com/openpreserve/jhove/pull/#708
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_306.pdf.jhove.xml" ]]; then
+	echo " - ISSUE:306 PDF result patch 1."
+	cp "${candidateRoot}/regression/modules/PDF-hul/issue_306.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_306.pdf.jhove.xml"
+fi
 
 # Copy the XML result of examples/modules/XML-hul/jhoveconf.xml.jhove.xml
 # changed by https://github.com/openpreserve/jhove/pull/634
