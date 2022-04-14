@@ -91,11 +91,16 @@ if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_358.pdf.jhove.xml" ]
 	cp "${candidateRoot}/regression/modules/PDF-hul/issue_358.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_358.pdf.jhove.xml"
 fi
 
-# Copy the full result of regression/modules/PNG-gdm/issue_148.png
+# Copy the full result of regression/modules/PNG-gdm/issue_148.png and
+# regression/modules/PNG-gdm/issue_694.png
 # fixed by: https://github.com/openpreserve/jhove/pull/580
 if [[ -f "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" ]]; then
-	echo " - ISSUE:148 PNG result patch."
+	echo " - ISSUE:148 PNG result patch 1."
 	cp "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" "${targetRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PNG-gdm/issue_694.png.jhove.xml" ]]; then
+	echo " - ISSUE:693 PNG result patch 1."
+	cp "${candidateRoot}/regression/modules/PNG-gdm/issue_694.png.jhove.xml" "${targetRoot}/regression/modules/PNG-gdm/issue_694.png.jhove.xml"
 fi
 
 # Patch the offset in errors/modules/PDF-hul/pdf-hul-76-372051162.pdf.jhove.xml
