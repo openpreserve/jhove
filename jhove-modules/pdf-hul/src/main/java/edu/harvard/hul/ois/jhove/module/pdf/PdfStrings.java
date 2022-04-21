@@ -11,14 +11,6 @@ package edu.harvard.hul.ois.jhove.module.pdf;
  */
 public class PdfStrings 
 {
-
-    /** A private constructor just to make sure nobody
-       instantiates the class by mistake. */
-    private PdfStrings ()
-    {
-    }
-
-
     /** Encryption algorithm strings. */
     public final static String[] ALGORITHM = 
     {
@@ -26,7 +18,8 @@ public class PdfStrings
         "40-bit RC4 or AES",
         "40-bit or greater RC4 or AES",
         "Unpublished",
-        "Document-defined"
+        "Document-defined",
+        "256-bit AES"
     };
 
     /** Flags for FontDescriptor.  In PDF notation, bit 1
@@ -100,5 +93,11 @@ public class PdfStrings
         "NoView",          // 6
         "ReadOnly"        // 7
     };
+
+    /** A private constructor just to make sure nobody
+       instantiates the class by mistake. */
+    private PdfStrings ()
+    {
+    }
 
 }

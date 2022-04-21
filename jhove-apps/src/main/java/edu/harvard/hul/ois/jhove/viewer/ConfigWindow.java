@@ -28,9 +28,19 @@ import edu.harvard.hul.ois.jhove.ModuleInfo;
  * @author Gary McGath
  *
  */
+
+
 public class ConfigWindow extends JDialog {
 
     private final static String tempDirDefault = "<Default>";
+    private final static String SANS_SERIF = "SansSerif";
+    private final static String CENTER = "Center";
+    private final static String CLASS = "Class";
+    private final static String WEST = "West";
+    private final static String EAST = "East";
+    private final static String ADD = "Add";
+    private final static String DELETE = "Delete";
+    private final static String NORTH = "North";
     
     /* The location of the config file. */
     private File _configFile;
@@ -64,8 +74,10 @@ public class ConfigWindow extends JDialog {
     private JTextField _encodingBox;
     
     final static Color _tableColor = new Color (235, 230, 210);
-    final static Font _pathFont = new Font ("SansSerif", Font.PLAIN, 10);
-    final static Font _infoFont = new Font ("SansSerif", Font.PLAIN, 12);
+    final static Font _pathFont = new Font (SANS_SERIF, Font.PLAIN, 10);
+    final static Font _infoFont = new Font (SANS_SERIF, Font.PLAIN, 12);
+
+    final static int HEIGHT = 640;
     
     /**
      *  Constructor.
@@ -80,7 +92,7 @@ public class ConfigWindow extends JDialog {
      */
     public ConfigWindow (JFrame parent, File configFile, ConfigHandler handler)
     {
-        super (parent, "Jhove Configuration", true);
+        super (parent, "JHOVE Configuration", true);
         setDefaultCloseOperation (WindowConstants.DISPOSE_ON_CLOSE);
         _configFile = configFile;
         if (handler != null) {
@@ -110,14 +122,14 @@ public class ConfigWindow extends JDialog {
         // Set up a Box container for the window top level
         _mainBox = Box.createVerticalBox ();
         getContentPane().setLayout (new BorderLayout ());
-        getContentPane().add (_mainBox, "Center");
+        getContentPane().add (_mainBox, CENTER);
         _mainBox.setBorder (BorderFactory.createLineBorder(Color.BLACK));
         
         // Keep its size reasonable, taking screen size into account
         java.awt.Rectangle screenRect = MainScreen.mainBounds ();
         int maxHeight = screenRect.height - 200;
-        if (maxHeight > 640) {
-            maxHeight = 640;
+        if (maxHeight > HEIGHT) {
+            maxHeight = HEIGHT;
         }
         _mainBox.setMaximumSize (new Dimension (500, maxHeight));
         _mainBox.setPreferredSize (new Dimension (400, maxHeight));
@@ -190,18 +202,18 @@ public class ConfigWindow extends JDialog {
         JScrollPane modScrollPane = new JScrollPane (_modTable);
 
         TableColumnModel colMod = _modTable.getColumnModel();
-        colMod.getColumn(0).setHeaderValue("Class");
+        colMod.getColumn(0).setHeaderValue(CLASS);
         colMod.getColumn(1).setHeaderValue("Init");
         _modTable.doLayout ();
         // Add a panel with the modules caption and a couple of buttons.
         JPanel topPanel = new JPanel ();
         topPanel.setLayout (new BorderLayout ());
-        topPanel.add (new JLabel ("Modules:"), "West");
+        topPanel.add (new JLabel ("Modules:"), WEST);
         
         // Squeeze the buttons over to the right
         JPanel rightPanel = new JPanel ();
-        topPanel.add (rightPanel, "East");
-        JButton addButton = new JButton ("Add");
+        topPanel.add (rightPanel, EAST);
+        JButton addButton = new JButton (ADD);
         addButton.addActionListener (
             new ActionListener () {
                 @Override
@@ -212,7 +224,7 @@ public class ConfigWindow extends JDialog {
             }
         );
         rightPanel.add (addButton);
-        JButton delButton = new JButton ("Delete");
+        JButton delButton = new JButton (DELETE);
         delButton.addActionListener (
             new ActionListener () {
                 @Override
@@ -228,8 +240,8 @@ public class ConfigWindow extends JDialog {
         addButton.setPreferredSize (delButton.getPreferredSize ());
 
         rightPanel.add (delButton);
-        panel.add (topPanel, "North");
-        panel.add (modScrollPane, "Center");  
+        panel.add (topPanel, NORTH);
+        panel.add (modScrollPane, CENTER);  
     }
 
 
@@ -287,17 +299,17 @@ public class ConfigWindow extends JDialog {
         JScrollPane hanScrollPane = new JScrollPane (_hanTable);
 
         TableColumnModel colMod = _hanTable.getColumnModel();
-        colMod.getColumn(0).setHeaderValue("Class");
+        colMod.getColumn(0).setHeaderValue(CLASS);
         _hanTable.doLayout ();
         // Add a panel with the modules caption and a couple of buttons.
         JPanel topPanel = new JPanel ();
         topPanel.setLayout (new BorderLayout ());
-        topPanel.add (new JLabel ("Handlers:"), "West");
+        topPanel.add (new JLabel ("Handlers:"), WEST);
         
         // Squeeze the buttons over to the right
         JPanel rightPanel = new JPanel ();
-        topPanel.add (rightPanel, "East");
-        JButton addButton = new JButton ("Add");
+        topPanel.add (rightPanel, EAST);
+        JButton addButton = new JButton (ADD);
         addButton.addActionListener (
             new ActionListener () {
                 @Override
@@ -308,7 +320,7 @@ public class ConfigWindow extends JDialog {
             }
         );
         rightPanel.add (addButton);
-        JButton delButton = new JButton ("Delete");
+        JButton delButton = new JButton (DELETE);
         delButton.addActionListener (
             new ActionListener () {
                 @Override
@@ -324,8 +336,8 @@ public class ConfigWindow extends JDialog {
         addButton.setPreferredSize (delButton.getPreferredSize ());
 
         rightPanel.add (delButton);
-        panel.add (topPanel, "North");
-        panel.add (hanScrollPane, "Center");  
+        panel.add (topPanel, NORTH);
+        panel.add (hanScrollPane, CENTER);  
     }
     
 
@@ -429,10 +441,10 @@ public class ConfigWindow extends JDialog {
         JLabel changesLabel = new JLabel 
                     ("Changes take effect on relaunch");
         changesLabel.setFont (_infoFont);
-        buttonPanel.add (changesLabel, "North");
+        buttonPanel.add (changesLabel, NORTH);
         
         JPanel panel = new JPanel ();
-        buttonPanel.add (panel, "Center");
+        buttonPanel.add (panel, CENTER);
         panel.setLayout (new GridLayout (1, 3));
         
         // Blank panel for positioning

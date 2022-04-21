@@ -74,8 +74,13 @@ public class StructureElement
      *   their own subtrees built, and these StructureElements
      *   are accumulated into <code>children</code>.
      */
-    public void buildSubtree () throws PdfException
+    public void buildSubtree(int recGuard) throws PdfException
     {
+        /* Guard against infinite recursion */
+        if (recGuard <= 0) {
+            throw new PdfMalformedException(MessageConstants.PDF_HUL_32); // PDF-HUL-32
+        }
+
         _logger.info(MessageConstants.LOG_SUBTREE_BUILDING);
         PdfObject k = null;
         try {
@@ -112,9 +117,9 @@ public class StructureElement
                         }
                     }
                 }
-                StructureElement se = 
-                    new StructureElement (kdict, _tree);
-                se.buildSubtree ();
+                StructureElement se = new StructureElement(kdict, _tree);
+                se.buildSubtree(recGuard - 1);
+
                 se.checkAttributes ();
                 children = new ArrayList<> (1);
                 children.add (se);
@@ -146,19 +151,18 @@ public class StructureElement
                                 if(kidsObject instanceof PdfSimpleObject) {
                                     PdfSimpleObject kids = (PdfSimpleObject)kidsObject;
                                     Token tok = kids.getToken();
-                                    if(tok instanceof Numeric) {
+                                    if (tok instanceof Numeric && ((Numeric)tok).getValue() == 0) {
                                         //if the kids value is zero then there are no child objects; exit method
-                                        if(((Numeric)tok).getValue()==0) {
-                                            _logger.info(MessageConstants.LOG_NO_CHILD_OBJS);
-                                            children = null;
-                                            return;
-                                        }
+                                        _logger.info(MessageConstants.LOG_NO_CHILD_OBJS);
+                                        children = null;
+                                        return;
+                                        
                                     }
-                                }                                StructureElement se = 
-                                    new StructureElement (kdict, _tree);
-                                se.buildSubtree ();
-                                se.checkAttributes ();
-                                children.add (se);
+                        }
+                        StructureElement se = new StructureElement(kdict, _tree);
+                        se.buildSubtree(recGuard - 1);
+                        se.checkAttributes();
+                        children.add(se);
                     }
                 }
             }
@@ -298,11 +302,9 @@ public class StructureElement
     {
         try {
             PdfObject typ = elem.get ("Type");
-            if (typ != null) {
-                if (!"StructElem".equals
+            if (typ != null && !"StructElem".equals
                       (((PdfSimpleObject) typ).getStringValue ())) {
-                    return false;
-                }
+                return false;
             }
 
             PdfObject s = _module.resolveIndirectObject (elem.get ("S"));
@@ -387,10 +389,7 @@ public class StructureElement
             PdfSimpleObject mcidObj =
                 (PdfSimpleObject) _module.resolveIndirectObject
                         (dict.get ("MCID"));
-            if (mcidObj == null) {
-                return false;
-            }
-            return true;
+            return mcidObj != null;
         }
         catch (Exception e) {
             return false;
@@ -410,10 +409,7 @@ public class StructureElement
             // An Obj entry is required. Must be an indirect object.
             PdfObject obj = _module.resolveIndirectObject
                         (dict.get ("Obj"));
-            if (obj == null) {
-                return false;
-            }
-            return true;
+            return obj != null;
         }
         catch (Exception e) {
             return false;

@@ -7,9 +7,12 @@ jdk:
   - oraclejdk8
 
 branches:
-  except:
-    - "/^v|d\\d+\\.\\d+\\.\\d+$/"
-    - "/^jenkins-jhove-v|d\\d+\\.\\d+\\.\\d+$/"
+  only:
+    - integration
+    - master
+  # except:
+  #   - "/^v|d\\d+\\.\\d+\\.\\d+$/"
+  #   - "/^jenkins-jhove-v|d\\d+\\.\\d+\\.\\d+$/"
 
 notifications:
   slack:
@@ -31,8 +34,8 @@ coverage:
         paths: null
 
 before_install:
-  - sudo apt-get install -y realpath
-  - sudo apt-get install jq
+  - sudo apt-get install -y realpath xmlstarlet
+  - sudo apt-get install -y jq
   - wget -O ~/codacy-coverage-reporter-assembly-latest.jar http://resources.openpreservation.org/codacy-coverage-reporter-assembly-latest.jar
 
 script:

@@ -71,8 +71,8 @@ public class WaveModule extends ModuleBase {
 
     /* Module metadata */
     private static final String NAME = "WAVE-hul";
-    private static final String RELEASE = "1.7.1";
-    private static final int [] DATE = { 2019, 04, 17 };
+    private static final String RELEASE = "1.8.1";
+    private static final int [] DATE = { 2019, 12, 10 };
     private static final String[] FORMATS = { "WAVE", "Audio for Windows",
             "EBU Technical Specification 3285", "Broadcast Wave Format", "BWF",
             "EBU Technical Specification 3306", "RF64" };
@@ -88,6 +88,14 @@ public class WaveModule extends ModuleBase {
     private static final String RIGHTS = "Copyright 2004-2007 by JSTOR and the "
             + "President and Fellows of Harvard College. "
             + "Released under the GNU Lesser General Public License.";
+    
+    private static final String WAVE_FORM_TYPE = "WAVE";
+    private static final String EBU_TECH_SPEC_3285 = "EBU Technical Specification 3285";
+    private static final String EBU_TECH_SPEC_3306 = "EBU Technical Specification 3306";
+    private static final String MSLIB_URL = "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/";
+    private static final String PCMWAVEFORMAT_PROFILE = "PCMWAVEFORMAT";
+    private static final String WAVEFORMATEX_PROFILE = "WAVEFORMATEX";
+    private static final String WAVEFORMATEXTENSIBLE_PROFILE = "WAVEFORMATEXTENSIBLE";
 
     /** Fixed value for first four bytes of WAVE files */
     private static final String RIFF_SIGNATURE = "RIFF";
@@ -97,9 +105,6 @@ public class WaveModule extends ModuleBase {
 
     /** Length of the RIFF form type field in bytes */
     private static final int RIFF_FORM_TYPE_LENGTH = 4;
-
-    /** Length of chunk headers in bytes */
-    private static final int CHUNK_HEADER_LENGTH = 8;
 
     /** Value indicating a required 64-bit data size lookup */
     public static final long LOOKUP_EXTENDED_DATA_SIZE = 0xFFFFFFFFL;
@@ -131,11 +136,8 @@ public class WaveModule extends ModuleBase {
 	/** AES audio metadata to go into WAVE metadata */
 	protected AESAudioMetadata _aesMetadata;
 
-	/**
-	 * Bytes of the RIFF chunk remaining to be read.
-	 * Value should be treated as unsigned.
-	 */
-	protected long bytesRemaining;
+	/** RIFF size as found in the RIFF chunk header. */
+	protected long riffSize;
 
 	/** Bytes needed to store a file */
 	protected int _blockAlign;
@@ -226,26 +228,23 @@ public class WaveModule extends ModuleBase {
 						.telephone("+1 (800) 426-9400")
 						.web("http://www.microsoft.com").build();
 
-		Document doc = new Document("PCMWAVEFORMAT", DocumentType.WEB);
+		Document doc = new Document(PCMWAVEFORMAT_PROFILE, DocumentType.WEB);
 		doc.setIdentifier(new Identifier(
-				"http://msdn.microsoft.com/library/default.asp?url=/library/en-us/"
-						+ "multimed/htm/_win32_pcmwaveformat_str.asp",
+				MSLIB_URL + "multimed/htm/_win32_pcmwaveformat_str.asp",
 				IdentifierType.URL));
 		doc.setPublisher(msAgent);
 		_specification.add(doc);
 
-		doc = new Document("WAVEFORMATEX", DocumentType.WEB);
+		doc = new Document(WAVEFORMATEX_PROFILE, DocumentType.WEB);
 		doc.setIdentifier(new Identifier(
-				"http://msdn.microsoft.com/library/default.asp?url=/library/en-us/"
-						+ "multimed/htm/_win32_waveformatex_str.asp",
+				MSLIB_URL + "multimed/htm/_win32_waveformatex_str.asp",
 				IdentifierType.URL));
 		doc.setPublisher(msAgent);
 		_specification.add(doc);
 
-		doc = new Document("WAVEFORMATEXTENSIBLE", DocumentType.WEB);
+		doc = new Document(WAVEFORMATEXTENSIBLE_PROFILE, DocumentType.WEB);
 		doc.setIdentifier(new Identifier(
-				"http://msdn.microsoft.com/library/default.asp?url=/library/en-us/"
-						+ "multimed/htm/_win32_waveformatextensible_str.asp",
+				MSLIB_URL + "multimed/htm/_win32_waveformatextensible_str.asp",
 				IdentifierType.URL));
 		doc.setPublisher(msAgent);
 		_specification.add(doc);
@@ -260,7 +259,7 @@ public class WaveModule extends ModuleBase {
 
 		doc = new Document("Specification of the Broadcast Wave Format (BWF)",
 				DocumentType.REPORT);
-		doc.setIdentifier(new Identifier("EBU Technical Specification 3285",
+		doc.setIdentifier(new Identifier(EBU_TECH_SPEC_3285,
 				IdentifierType.OTHER));
 		doc.setIdentifier(
 				new Identifier("https://tech.ebu.ch/docs/tech/tech3285.pdf",
@@ -271,7 +270,7 @@ public class WaveModule extends ModuleBase {
 
 		doc = new Document("MBWF / RF64: An Extended File Format for Audio",
 				DocumentType.REPORT);
-		doc.setIdentifier(new Identifier("EBU Technical Specification 3306",
+		doc.setIdentifier(new Identifier(EBU_TECH_SPEC_3306,
 				IdentifierType.OTHER));
 		doc.setIdentifier(new Identifier(
 				"https://tech.ebu.ch/docs/tech/tech3306-2009.pdf",
@@ -303,7 +302,7 @@ public class WaveModule extends ModuleBase {
 				SignatureUseType.OPTIONAL, "For RF64 profile");
 		_signature.add(sig);
 
-		sig = new InternalSignature("RIFF", SignatureType.MAGIC,
+		sig = new InternalSignature(RIFF_SIGNATURE, SignatureType.MAGIC,
 				SignatureUseType.MANDATORY_IF_APPLICABLE, 0);
 		_signature.add(sig);
 
@@ -311,7 +310,7 @@ public class WaveModule extends ModuleBase {
 				SignatureUseType.MANDATORY_IF_APPLICABLE, 0);
 		_signature.add(sig);
 
-		sig = new InternalSignature("WAVE", SignatureType.MAGIC,
+		sig = new InternalSignature(WAVE_FORM_TYPE, SignatureType.MAGIC,
 				SignatureUseType.MANDATORY, 8);
 		_signature.add(sig);
 
@@ -365,15 +364,14 @@ public class WaveModule extends ModuleBase {
 			// Get the length of the Form chunk. This includes all
 			// subsequent form fields and form subchunks, but excludes
 			// the form chunk's header (its ID and the its length).
-			long riffSize = readUnsignedInt(_dstream);
-			bytesRemaining = riffSize;
+			riffSize = readUnsignedInt(_dstream);
 
 			// Read the RIFF form type
 			String formType = read4Chars(_dstream);
-			bytesRemaining -= RIFF_FORM_TYPE_LENGTH;
-			if (!"WAVE".equals(formType)) {
-				info.setMessage(
-						new ErrorMessage(MessageConstants.WAVE_HUL_2, _nByte));
+			if (!WAVE_FORM_TYPE.equals(formType)) {
+				info.setMessage(new ErrorMessage(
+						MessageConstants.WAVE_HUL_2,
+						_nByte - RIFF_FORM_TYPE_LENGTH));
 				info.setWellFormed(false);
 				return 0;
 			}
@@ -397,27 +395,34 @@ public class WaveModule extends ModuleBase {
 							info.setWellFormed(RepInfo.UNDETERMINED);
 							return 0;
 						}
-						// Adjust the byte count with the new RIFF size
-						long bytesRead = riffSize - bytesRemaining;
-						bytesRemaining = extendedRiffSize - bytesRead;
 					}
 				} else {
 					info.setMessage(new ErrorMessage(
-							MessageConstants.WAVE_HUL_23, _nByte));
+							MessageConstants.WAVE_HUL_23,
+							Chunk.HEADER_LENGTH + RIFF_FORM_TYPE_LENGTH));
 					info.setWellFormed(false);
 					return 0;
 				}
 			}
 
-			while (bytesRemaining > 0) {
+			while (getBytesRemaining() > 0) {
 				if (!readChunk(info)) {
 					break;
 				}
 			}
+
+			if (getBytesRemaining() > 0) {
+				// The file has been truncated or there
+				// remains unexpected chunk data to skip
+				remainingDataInfo(_dstream, info, getBytesRemaining(),
+						firstFourChars);
+			}
+
 		} catch (EOFException eofe) {
 			info.setWellFormed(false);
-			String subMessage = MessageConstants.SUB_MESS_BYTES_MISSING
-					+ bytesRemaining;
+			String subMessage = String.format(
+					MessageConstants.WAVE_HUL_3_SUB.getMessage(),
+					getBytesRemaining());
 			if (eofe.getMessage() != null) {
 				subMessage += "; " + eofe.getMessage();
 			}
@@ -427,8 +432,8 @@ public class WaveModule extends ModuleBase {
 			e.printStackTrace();
 			info.setWellFormed(false);
 			JhoveMessage message = JhoveMessages.getMessageInstance(
-					MessageConstants.WAVE_HUL_3.getId(),
-					String.format(MessageConstants.WAVE_HUL_3.getMessage(),
+					MessageConstants.WAVE_HUL_4.getId(),
+					String.format(MessageConstants.WAVE_HUL_4.getMessage(),
 							e.getClass().getName() + ", " + e.getMessage()));
 			info.setMessage(new ErrorMessage(message, _nByte));
 			return 0;
@@ -482,22 +487,20 @@ public class WaveModule extends ModuleBase {
 
 		// Indicate satisfied profiles.
 		if (flagPCMWaveFormat) {
-			info.setProfile("PCMWAVEFORMAT");
+			info.setProfile(PCMWAVEFORMAT_PROFILE);
 		}
 		if (flagWaveFormatEx) {
-			info.setProfile("WAVEFORMATEX");
+			info.setProfile(WAVEFORMATEX_PROFILE);
 		}
 		if (flagWaveFormatExtensible) {
-			info.setProfile("WAVEFORMATEXTENSIBLE");
+			info.setProfile(WAVEFORMATEXTENSIBLE_PROFILE);
 		}
-		if (broadcastExtChunkSeen) {
-			if ((waveCodec == FormatChunk.WAVE_FORMAT_MPEG && factChunkSeen)
-					|| waveCodec == FormatChunk.WAVE_FORMAT_PCM) {
-				info.setProfile("BWF");
-			}
+		if (broadcastExtChunkSeen && (
+                        (waveCodec == FormatChunk.WAVE_FORMAT_MPEG && factChunkSeen)
+                        || waveCodec == FormatChunk.WAVE_FORMAT_PCM)) {
+                    info.setProfile("BWF");
 		}
-
-		return 0;
+                return 0;
 	}
 
 	/**
@@ -664,25 +667,25 @@ public class WaveModule extends ModuleBase {
 	@Override
 	protected void initParse() {
 		super.initParse();
-		_propList = new LinkedList<Property>();
-		_notes = new LinkedList<Property>();
-		_labels = new LinkedList<Property>();
-		_labeledText = new LinkedList<Property>();
-		_samples = new LinkedList<Property>();
+		_propList = new LinkedList<>();
+		_notes = new LinkedList<>();
+		_labels = new LinkedList<>();
+		_labeledText = new LinkedList<>();
+		_samples = new LinkedList<>();
 		firstSampleOffsetMarked = false;
 		waveCodec = -1;
 		sampleCount = 0;
-		bytesRemaining = 0;
+		riffSize = 0;
 		extendedRiffSize = 0;
 		extendedSampleLength = 0;
-		extendedChunkSizes = new HashMap<String, Long>();
+		extendedChunkSizes = new HashMap<>();
 
 		_metadata = new Property("WAVEMetadata", PropertyType.PROPERTY,
 				PropertyArity.LIST, _propList);
 		_aesMetadata = new AESAudioMetadata();
 		_aesMetadata.setByteOrder(AESAudioMetadata.LITTLE_ENDIAN);
 		_aesMetadata.setAnalogDigitalFlag("FILE_DIGITAL");
-		_aesMetadata.setFormat("WAVE");
+		_aesMetadata.setFormat(WAVE_FORM_TYPE);
 		_aesMetadata.setUse("OTHER", "JHOVE_validation");
 		_aesMetadata.setDirection("NONE");
 
@@ -719,36 +722,34 @@ public class WaveModule extends ModuleBase {
 			return false;
 		}
 
-		String chunkID = chunkh.getID();
+		String chunkId = chunkh.getID();
 		long chunkSize = chunkh.getSize();
 		if (hasExtendedDataSizes() && chunkSize == LOOKUP_EXTENDED_DATA_SIZE) {
-			Long extendedSize = extendedChunkSizes.get(chunkID);
+			Long extendedSize = extendedChunkSizes.get(chunkId);
 			if (extendedSize != null) {
 				chunkh.setSize(extendedSize);
 				chunkSize = extendedSize;
 			}
 		}
 
-		bytesRemaining -= CHUNK_HEADER_LENGTH;
-
 		// Check if the chunk size is greater than the RIFF's remaining length
-		if (Long.compareUnsigned(bytesRemaining, chunkSize) < 0) {
-			info.setMessage(
-					new ErrorMessage(MessageConstants.WAVE_HUL_6, _nByte));
+		if (Long.compareUnsigned(getBytesRemaining(), chunkSize) < 0) {
+			info.setMessage(new ErrorMessage(
+					MessageConstants.WAVE_HUL_6, _nByte - Chunk.SIZE_LENGTH));
 			info.setWellFormed(false);
 			return false;
 		}
 
-		if ("fmt ".equals(chunkID)) {
+		if ("fmt ".equals(chunkId)) {
 			if (formatChunkSeen) {
 				dupChunkError(info, "Format");
 			}
 			chunk = new FormatChunk(this, chunkh, _dstream);
 			formatChunkSeen = true;
-		} else if ("data".equals(chunkID)) {
+		} else if ("data".equals(chunkId)) {
 			if (!formatChunkSeen) {
-				info.setMessage(
-						new ErrorMessage(MessageConstants.WAVE_HUL_25, _nByte));
+				info.setMessage(new ErrorMessage(
+						MessageConstants.WAVE_HUL_25, chunkh.getOffset()));
 				info.setValid(false);
 			}
 			if (dataChunkSeen) {
@@ -756,68 +757,68 @@ public class WaveModule extends ModuleBase {
 			}
 			chunk = new DataChunk(this, chunkh, _dstream);
 			dataChunkSeen = true;
-		} else if ("ds64".equals(chunkID)) {
+		} else if ("ds64".equals(chunkId)) {
 			chunk = new DataSize64Chunk(this, chunkh, _dstream);
 			dataSize64ChunkSeen = true;
-		} else if ("fact".equals(chunkID)) {
+		} else if ("fact".equals(chunkId)) {
 			chunk = new FactChunk(this, chunkh, _dstream);
 			factChunkSeen = true;
 			// Are multiple 'fact' chunks allowed?
-		} else if ("note".equals(chunkID)) {
+		} else if ("note".equals(chunkId)) {
 			chunk = new NoteChunk(this, chunkh, _dstream);
 			// Multiple note chunks are allowed
-		} else if ("labl".equals(chunkID)) {
+		} else if ("labl".equals(chunkId)) {
 			chunk = new LabelChunk(this, chunkh, _dstream);
 			// Multiple label chunks are allowed
-		} else if ("list".equals(chunkID)) {
+		} else if ("list".equals(chunkId)) {
 			chunk = new AssocDataListChunk(this, chunkh, _dstream, info);
 			// Are multiple chunks allowed? Who knows?
-		} else if ("LIST".equals(chunkID)) {
+		} else if ("LIST".equals(chunkId)) {
 			chunk = new ListInfoChunk(this, chunkh, _dstream, info);
 			// Multiple list chunks must be OK, since there can
 			// be different types, e.g., an INFO list and an exif list.
-		} else if ("smpl".equals(chunkID)) {
+		} else if ("smpl".equals(chunkId)) {
 			chunk = new SampleChunk(this, chunkh, _dstream);
 			// Multiple sample chunks are allowed -- I think
-		} else if ("inst".equals(chunkID)) {
+		} else if ("inst".equals(chunkId)) {
 			if (instrumentChunkSeen) {
 				dupChunkError(info, "Instrument");
 			}
 			chunk = new InstrumentChunk(this, chunkh, _dstream);
 			// Only one instrument chunk is allowed
 			instrumentChunkSeen = true;
-		} else if ("mext".equals(chunkID)) {
+		} else if ("mext".equals(chunkId)) {
 			if (mpegChunkSeen) {
 				dupChunkError(info, "MPEG Audio Extension");
 			}
 			chunk = new MpegChunk(this, chunkh, _dstream);
 			// I think only one MPEG chunk is allowed
 			mpegChunkSeen = true;
-		} else if ("cart".equals(chunkID)) {
+		} else if ("cart".equals(chunkId)) {
 			if (cartChunkSeen) {
 				dupChunkError(info, "Cart");
 			}
 			chunk = new CartChunk(this, chunkh, _dstream);
 			cartChunkSeen = true;
-		} else if ("bext".equals(chunkID)) {
+		} else if ("bext".equals(chunkId)) {
 			if (broadcastExtChunkSeen) {
 				dupChunkError(info, "Broadcast Audio Extension");
 			}
 			chunk = new BroadcastExtChunk(this, chunkh, _dstream);
 			broadcastExtChunkSeen = true;
-		} else if ("levl".equals(chunkID)) {
+		} else if ("levl".equals(chunkId)) {
 			if (peakChunkSeen) {
 				dupChunkError(info, "Peak Envelope");
 			}
 			chunk = new PeakEnvelopeChunk(this, chunkh, _dstream);
 			peakChunkSeen = true;
-		} else if ("link".equals(chunkID)) {
+		} else if ("link".equals(chunkId)) {
 			if (linkChunkSeen) {
 				dupChunkError(info, "Link");
 			}
 			chunk = new LinkChunk(this, chunkh, _dstream);
 			linkChunkSeen = true;
-		} else if ("cue ".equals(chunkID)) {
+		} else if ("cue ".equals(chunkId)) {
 			if (cueChunkSeen) {
 				dupChunkError(info, "Cue Points");
 			}
@@ -827,8 +828,8 @@ public class WaveModule extends ModuleBase {
 			JhoveMessage message = JhoveMessages.getMessageInstance(
 					MessageConstants.WAVE_HUL_7.getId(),
 					String.format(MessageConstants.WAVE_HUL_7.getMessage(),
-							chunkID));
-			info.setMessage(new InfoMessage(message, _nByte));
+							chunkId));
+			info.setMessage(new InfoMessage(message, chunkh.getOffset()));
 		}
 
 		long dataRead = _nByte;
@@ -842,33 +843,69 @@ public class WaveModule extends ModuleBase {
 		}
 		dataRead = _nByte - dataRead;
 
-		bytesRemaining -= dataRead;
-
 		if (dataRead < chunkSize) {
 			// The file has been truncated or there
 			// remains unexpected chunk data to skip
-			if (_dstream.available() > 0) {
-				// Pass over any remaining chunk data so that
-				// we align with the start of any subsequent chunk
-				JhoveMessage message = JhoveMessages.getMessageInstance(
-						MessageConstants.WAVE_HUL_26.getId(),
-						String.format(MessageConstants.WAVE_HUL_26.getMessage(),
-								chunkID));
-				info.setMessage(new InfoMessage(message, _nByte));
-				bytesRemaining -= skipBytes(_dstream, chunkSize - dataRead,
-						this);
-			} else {
-				throw new EOFException(
-						MessageConstants.SUB_MESS_TRUNCATED_CHUNK + chunkID);
-			}
+			remainingDataInfo(_dstream, info, chunkSize - dataRead, chunkId);
 		}
 
 		if ((chunkSize & 1) != 0) {
 			// Must come out to an even byte boundary
-			bytesRemaining -= skipBytes(_dstream, 1, this);
+			skipBytes(_dstream, 1, this);
 		}
 
 		return true;
+	}
+
+	/**
+	 * Reports and passes over any data still remaining following an attempt
+	 * at reading a chunk. This ensures we align with the start of any
+	 * subsequent chunk.
+	 */
+	private void remainingDataInfo(DataInputStream stream, RepInfo info,
+								   long bytesToProcess, String chunkId)
+			throws IOException {
+
+		if (stream.available() > 0) {
+
+			boolean nullData = true;
+			long bytesProcessed = 0;
+
+			// Check for non-null data
+			while (nullData && bytesProcessed < bytesToProcess) {
+				int b = readUnsignedByte(stream, this);
+				if (b != 0) nullData = false;
+				bytesProcessed++;
+			}
+
+			// Skip any remaining data
+			bytesProcessed += skipBytes(stream,
+					bytesToProcess - bytesProcessed, this);
+
+			info.setMessage(new InfoMessage(
+					MessageConstants.WAVE_HUL_26,
+					String.format(MessageConstants.WAVE_HUL_26_SUB.getMessage(),
+							chunkId, bytesProcessed, nullData),
+					_nByte - bytesProcessed));
+
+		} else {
+			throw new EOFException(String.format(
+					MessageConstants.WAVE_HUL_3_SUB_2.getMessage(), chunkId));
+		}
+	}
+
+	/** Returns the number of RIFF bytes remaining to be read. */
+	private long getBytesRemaining() {
+
+		long totalBytes = Chunk.HEADER_LENGTH;
+
+		if (hasExtendedDataSizes()) {
+			totalBytes += extendedRiffSize;
+		} else {
+			totalBytes += riffSize;
+		}
+
+		return totalBytes - _nByte;
 	}
 
 	/** Returns the module's AES metadata. */
@@ -881,7 +918,8 @@ public class WaveModule extends ModuleBase {
 		JhoveMessage message = JhoveMessages.getMessageInstance(
 				MessageConstants.WAVE_HUL_8.getId(), String.format(
 						MessageConstants.WAVE_HUL_8.getMessage(), chunkName));
-		info.setMessage(new ErrorMessage(message, _nByte));
+		info.setMessage(new ErrorMessage(
+				message, _nByte - Chunk.HEADER_LENGTH));
 		info.setValid(false);
 	}
 
@@ -903,7 +941,7 @@ public class WaveModule extends ModuleBase {
 		if (_je != null && _je.getShowRawFlag()) {
 			return new Property(name, PropertyType.INTEGER, val);
 		}
-		List<String> slist = new LinkedList<String>();
+		List<String> slist = new LinkedList<>();
 		try {
 			for (int i = 0; i < oneValueNames.length; i++) {
 				String s;

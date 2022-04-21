@@ -78,10 +78,6 @@ public final class TiffProfileClassITBP extends TiffProfileClassIT
         else {
             valueVec = new int [] {0, 1, 2};
         }
-        if (!satisfiesBackgroundColorIndicator (tifd, valueVec)) {
-            return false;
-        }
-        
-        return true;
+        return satisfiesBackgroundColorIndicator (tifd, valueVec);
     }
 }

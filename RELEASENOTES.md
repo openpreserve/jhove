@@ -8,9 +8,150 @@ see the file LICENSE for details).
 Versions 1.7 to 1.11 of JHOVE released independently.
 Versions 1.12 onwards released by the Open Preservation Foundation.
 
+JHOVE 1.24
+-------------
+2020-03-12
+
+### General
+
+- Added a JSON output handler [[#515][]]
+- Fixed compatibility issues for JDK 9 and greater [[#514][]]
+- SHA-256 Checksumming [[#497][], [#386][]]
+- Error ID node for GUI message display [[#546][]]
+- Improved formatting of error IDs by text handler [[#547][]]
+- Improved handling of sub-messages [[#548][]]
+- Plugged Message ID assignation gaps in various modules [[#536][]]
+- Fixed bug with formatting of Rationals in MIX 2.0 [[#504][]]
+- Message properties defined for core constants [[#499][], [#500][]]
+- Fix for quote encoding error [[#472][]]
+- Addition of dedicated `Utils` class for rescoped encoding methods [[#465][], [#462][]]
+- Documentation clean up and improvement[[#488][], [#494][], [#495][]]
+
+### Error Message Translations
+
+- German error message translations [[#461][], [#462][], [#463][], [#464][], [#467][]]
+- Portuguese error message translations [[#490][], [#491][], [#492][], [#493][], [#496][], [#557][]]
+- Dutch error message translations [[#503][], [#550][]]
+- Danish error message translations [[#551][]]
+- French error message translations [[#552][]]
+
+### AIFF Module
+
+- Check that chunk IDs only consist of characters in the printable ASCII range [[#468][]]
+- Check that spaces do not precede printable characters in chunk IDs [[#468][]]
+- Clarified error messages and improved offset reporting accuracy [[#468][]]
+
+### EPUB Module
+
+- New EPUB validation module `EPUB-ptc` plus tests and examples [[#460][]]
+- Module documentation [[#466][]]
+
+### GIF Module
+
+- Update error message properties for Control Extensions [[#513][]]
+
+### JPEG Module
+
+- Enhanced to handle the APP14 marker segment [[#518][]]
+
+### JPEG 2000 Module
+
+- Enhancements to MIX format metadata [[#445][]]
+
+### PNG Module
+
+- Fixed issues with PNG module error messages [[#545][]]
+
+### PDF Module
+
+- Fixed issue with PDF version inconsistency reporting [[#486][]]
+- Fixed bug with PDF destination handling [[#498][]]
+- Corrected handling of empty date for CreationDate [[#549][]]
+
+### TIFF Module
+
+- Fixed issue with array instantiation [[#510][]]
+
+### WAVE Module
+
+- Check that chunk IDs only consist of characters in the printable ASCII range [[#468][]]
+- Check that spaces do not precede printable characters in chunk IDs [[#468][]]
+- Clarified error messages and greatly improved offset reporting accuracy [[#468][]]
+- Added reporting of unrecognized data in the top-level RIFF structure [[#468][]]
+- Made the Table Length field of `ds64` chunks optional to better align with the specification [[#468][]]
+- Reinstated WAVE-HUL-4 reporting which had been lost during refactoring [[#468][]]
+- Corrected WAVE-HUL-15 from an Error to an Informational message [[#468][]]
+- Retired WAVE-HUL-16, an unused duplicate of WAVE-HUL-19 [[#468][]]
+- Documented undocumented chunks and specification references [[#501][]]
+
+### WARC Module
+
+- Module documentation [[#489][]]
+
+### Code Quality Issues
+
+- Only one declaration per line [[#477][]]
+- Field declarations at the top of a class [[#484][]]
+- Default cases for switch statements [[#507][], [#485][]]
+- Fixed nested if statements [[#517][]]
+- Merged or refactored duplicate if statements [[#505][]]
+- Removed redundant imports [[#509][]]
+
+[#386]: https://github.com/openpreserve/jhove/pull/386
+[#445]: https://github.com/openpreserve/jhove/pull/445
+[#460]: https://github.com/openpreserve/jhove/pull/460
+[#461]: https://github.com/openpreserve/jhove/pull/461
+[#462]: https://github.com/openpreserve/jhove/pull/462
+[#463]: https://github.com/openpreserve/jhove/pull/463
+[#464]: https://github.com/openpreserve/jhove/pull/464
+[#465]: https://github.com/openpreserve/jhove/pull/465
+[#466]: https://github.com/openpreserve/jhove/pull/465
+[#467]: https://github.com/openpreserve/jhove/pull/467
+[#468]: https://github.com/openpreserve/jhove/pull/468
+[#472]: https://github.com/openpreserve/jhove/pull/472
+[#477]: https://github.com/openpreserve/jhove/pull/477
+[#484]: https://github.com/openpreserve/jhove/pull/484
+[#485]: https://github.com/openpreserve/jhove/pull/485
+[#486]: https://github.com/openpreserve/jhove/pull/486
+[#488]: https://github.com/openpreserve/jhove/pull/488
+[#489]: https://github.com/openpreserve/jhove/pull/489
+[#490]: https://github.com/openpreserve/jhove/pull/490
+[#491]: https://github.com/openpreserve/jhove/pull/491
+[#492]: https://github.com/openpreserve/jhove/pull/492
+[#493]: https://github.com/openpreserve/jhove/pull/493
+[#494]: https://github.com/openpreserve/jhove/pull/494
+[#495]: https://github.com/openpreserve/jhove/pull/495
+[#496]: https://github.com/openpreserve/jhove/pull/496
+[#497]: https://github.com/openpreserve/jhove/pull/497
+[#498]: https://github.com/openpreserve/jhove/pull/498
+[#499]: https://github.com/openpreserve/jhove/pull/499
+[#500]: https://github.com/openpreserve/jhove/pull/500
+[#501]: https://github.com/openpreserve/jhove/pull/501
+[#503]: https://github.com/openpreserve/jhove/pull/503
+[#504]: https://github.com/openpreserve/jhove/pull/504
+[#505]: https://github.com/openpreserve/jhove/pull/505
+[#507]: https://github.com/openpreserve/jhove/pull/507
+[#509]: https://github.com/openpreserve/jhove/pull/509
+[#510]: https://github.com/openpreserve/jhove/pull/510
+[#513]: https://github.com/openpreserve/jhove/pull/513
+[#514]: https://github.com/openpreserve/jhove/pull/514
+[#515]: https://github.com/openpreserve/jhove/pull/515
+[#517]: https://github.com/openpreserve/jhove/pull/517
+[#518]: https://github.com/openpreserve/jhove/pull/518
+[#536]: https://github.com/openpreserve/jhove/pull/536
+[#545]: https://github.com/openpreserve/jhove/pull/545
+[#546]: https://github.com/openpreserve/jhove/pull/546
+[#547]: https://github.com/openpreserve/jhove/pull/547
+[#548]: https://github.com/openpreserve/jhove/pull/548
+[#549]: https://github.com/openpreserve/jhove/pull/549
+[#550]: https://github.com/openpreserve/jhove/pull/550
+[#551]: https://github.com/openpreserve/jhove/pull/551
+[#552]: https://github.com/openpreserve/jhove/pull/552
+[#557]: https://github.com/openpreserve/jhove/pull/557
+
 JHOVE 1.22
 -------------
-2018-04-18
+2019-04-18
 
 ### General
 
@@ -55,7 +196,7 @@ JHOVE 1.22
 
 ### TIFF Module
 
-- Fixed typo in TIFF properties [[#361][]]
+- Fixed typo in TIFF properties [[#361]]
 - Error IDs and message constants as external resources [[#405]]
 
 ### UTF-8 Module
@@ -83,6 +224,7 @@ JHOVE 1.22
 [#352]: https://github.com/openpreserve/jhove/pull/352
 [#353]: https://github.com/openpreserve/jhove/pull/353
 [#360]: https://github.com/openpreserve/jhove/pull/360
+[#361]: https://github.com/openpreserve/jhove/pull/361
 [#363]: https://github.com/openpreserve/jhove/pull/363
 [#378]: https://github.com/openpreserve/jhove/pull/378
 [#379]: https://github.com/openpreserve/jhove/pull/379

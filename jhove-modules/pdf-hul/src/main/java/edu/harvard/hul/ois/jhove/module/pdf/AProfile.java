@@ -33,6 +33,13 @@ public final class AProfile extends PdfProfile
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
 
+    /*
+     * Map of visited nodes when walking through an outline.- used to stop
+     * infinite loops. These may be caused by mishandled escape characters
+     * when loading objects.
+     */
+    protected Set<Integer> _visitedOutlineNodes;
+
     /* TaggedProfile to which this profile is linked. */
     private TaggedProfile _taggedProfile;
     private boolean _levelA;
@@ -203,10 +210,8 @@ public final class AProfile extends PdfProfile
             // If it has an interactive form, it must meet certain criteria
             PdfDictionary form = (PdfDictionary) 
                 _module.resolveIndirectObject (cat.get ("AcroForm"));
-            if (form != null) {
-                if (!formOK (form)) {
-                    return false;
-                }
+            if (form != null && !formOK (form)) {
+                return false;
             }
 
             // It may not contain an AA entry or an OCProperties entry
@@ -276,11 +281,7 @@ public final class AProfile extends PdfProfile
                 if (desc == null) {
                     return false;    // The requirement mentioned above implies a FontDescriptor is needed.
                 }
-                if (desc.get ("CharSet") == null) {
-                    return false;
-                }
-                
-                return true;
+                return desc.get ("CharSet") != null;
             }
             if ("Type0".equals (fTypeStr)) {
                 // Type 0 fonts are OK if the descendant CIDFont uses
@@ -509,10 +510,8 @@ public final class AProfile extends PdfProfile
             // The NeedAppearances flag either shall not be present
             // or shall be false.
             PdfSimpleObject needapp = (PdfSimpleObject) form.get ("NeedAppearances");
-            if (needapp != null) {
-                if (!needapp.isFalse ()) {
-                    return false;
-                }
+            if (needapp != null && !needapp.isFalse ()) {
+                return false;
             }
         }
         catch (Exception e) {
@@ -552,10 +551,8 @@ public final class AProfile extends PdfProfile
                     PdfDictionary kid = (PdfDictionary) kidVec.elementAt (i);
                     // The safest way to check if this is a field seems
                     // to be to look for the required Parent entry.
-                    if (kid.get ("Parent") != null) {
-                        if (!fieldOK (kid)) {
-                            return false;
-                        }
+                    if (kid.get ("Parent") != null && !fieldOK (kid)) {
+                        return false;
                     }
                 }
             }
@@ -685,10 +682,8 @@ public final class AProfile extends PdfProfile
                             }
                             
                             // If it's a Widget, it can't have an AA entry
-                            if ("Widget".equals (subtypeVal)) {
-                                if (annDict.get ("AA") != null) {
-                                    return false;
-                                }
+                            if ("Widget".equals (subtypeVal) && annDict.get ("AA") != null) {
+                                return false;
                             }
                             // For non-text annotation types, the
                             // Contents key is RECOMMENDED, not required.
@@ -758,10 +753,8 @@ public final class AProfile extends PdfProfile
                 }
                 // If this is the first time we've hit an uncalibrated
                 // color space, check for an appropriate OutputIntent dict.
-                if (hasUncalCS && !oldHasUncalCS) {
-                    if (!checkUncalIntent ()) {
-                        return false;
-                    }
+                if (hasUncalCS && !oldHasUncalCS && !checkUncalIntent ()) {
+                    return false;
                 }
                 if (hasDevRGB && hasDevCMYK) {
                     return false;   // can't have both in same file
@@ -810,10 +803,9 @@ public final class AProfile extends PdfProfile
                             theOutProfile = outProfile;
                         }
                         PdfSimpleObject subtype = (PdfSimpleObject) intent.get ("S");
-                        if (subtype != null) {
-                            if ("GTS_PDFA1".equals (subtype.getStringValue())) {
-                                pdfaProfileSeen = true;
-                            }
+                        if (subtype != null && 
+                                "GTS_PDFA1".equals (subtype.getStringValue())) {
+                            pdfaProfileSeen = true;
                         }
                     }
                 }
@@ -837,6 +829,7 @@ public final class AProfile extends PdfProfile
        we save the time to do this test. */
     private boolean outlinesOK () 
     {
+        _visitedOutlineNodes = new HashSet<Integer>();
         if (!_module.getActionsExist ()) {
             return true;
         }
@@ -848,11 +841,16 @@ public final class AProfile extends PdfProfile
             PdfDictionary item = (PdfDictionary) _module.resolveIndirectObject
                        (outlineDict.get ("First"));
             while (item != null) {
+                _visitedOutlineNodes.add(item.getObjNumber());
                 if (!checkOutlineItem (item)) {
                     return false;
                 }
-                item = (PdfDictionary) _module.resolveIndirectObject 
+                PdfDictionary next = (PdfDictionary) _module.resolveIndirectObject 
                         (((PdfDictionary) item).get ("Next"));
+                if (_visitedOutlineNodes.contains(next.getObjNumber())) {
+                    throw new PdfInvalidException(MessageConstants.PDF_HUL_129);
+                }
+                item = next;
             }
         }
         catch (Exception e) {
@@ -869,21 +867,24 @@ public final class AProfile extends PdfProfile
         try {
             PdfDictionary action = (PdfDictionary) 
                      _module.resolveIndirectObject (item.get ("A"));
-            if (action != null) {
-                if (!actionOK (action)) {
-                    return false;
-                }
+            if (action != null && !actionOK (action)) {
+                return false;
             }
             PdfDictionary child = (PdfDictionary)
                      _module.resolveIndirectObject (item.get ("First"));
             PdfDictionary next;
             while (child != null) {
+                _visitedOutlineNodes.add(child.getObjNumber());
                 if (!checkOutlineItem (child)) {
                     return false;
                 }
                 next = (PdfDictionary)
                     _module.resolveIndirectObject (child.get ("Next"));
-                if (next.getObjNumber() != child.getObjNumber()) {
+                Integer nextObjNum = next.getObjNumber();
+                if (nextObjNum != child.getObjNumber()) {
+                    if (_visitedOutlineNodes.contains(nextObjNum)) {
+                        throw new PdfInvalidException(MessageConstants.PDF_HUL_129);
+                    }
                     child = next;
                 } else {
                     child = null;
@@ -1041,15 +1042,11 @@ public final class AProfile extends PdfProfile
                     // PS XObjects aren't allowed.
                     return false;
                 }
-                if ("Image".equals (subtypeVal)) {
-                    if (!imageObjectOK (xo)) {
-                        return false;   
-                    }
+                if ("Image".equals (subtypeVal) && !imageObjectOK (xo)) {
+                    return false;
                 }
-                if ("Form".equals (subtypeVal)) {
-                    if (!formObjectOK (xo)) {
-                        return false;   
-                    }
+                if ("Form".equals (subtypeVal) && !formObjectOK (xo)) {
+                    return false;
                 }
             }
         }
@@ -1064,10 +1061,8 @@ public final class AProfile extends PdfProfile
     protected boolean formObjectOK (PdfDictionary xo)
     {
         // PDF/A elements can't have an OPI or Ref key in Form xobjects.
-        if (xo.get ("OPI") != null || xo.get ("Ref") != null) {
-            return false;
-        }
-        return true;
+        
+        return !(xo.get ("OPI") != null || xo.get ("Ref") != null);
     }
 
 
@@ -1091,10 +1086,8 @@ public final class AProfile extends PdfProfile
             
             // Interpolate is allowed only if its value is false.
             PdfSimpleObject interp = (PdfSimpleObject) xo.get ("Interpolate");
-            if (interp != null) {
-                if (!interp.isFalse ()) {
-                    return false;
-                }
+            if (interp != null && !interp.isFalse ()) {
+                return false;
             }
             
             // Intent must be one of the four standard rendering intents,

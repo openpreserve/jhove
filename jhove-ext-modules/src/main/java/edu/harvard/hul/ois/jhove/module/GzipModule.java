@@ -46,8 +46,8 @@ import edu.harvard.hul.ois.jhove.module.gzip.MessageConstants;
  * in compliance with
  * <a href="http://www.ietf.org/rfc/rfc1952.txt">RFC 1952</a> (GZIP
  * file format specification version 4.3) and supports multiple member
- * GZIP files.</p>
- * 
+ * GZIP files.
+ * <p>
  * This is a non-recursive validation. It only validates the GZIP file format, 
  * not the actual content within the WARC records.
  * 
@@ -98,7 +98,7 @@ public class GzipModule extends ModuleBase {
     private void setVendorAndSpecification() {
         _vendor = KB_AGENT;
 
-        Document doc = new Document("GZIP",
+        Document doc = new Document(FORMAT[0],
                 DocumentType.RFC);
         // Should probably have IIPC and others as authors
         Agent ietfAgent = new Agent.Builder("IETF", AgentType.STANDARD).web(
@@ -217,7 +217,6 @@ public class GzipModule extends ModuleBase {
      * @param entry GZIP entry from GZIP reader
      * @throws EOFException if EOF occurs prematurely
      * @throws IOException if an IO error occurs while processing
-     * @throws JhoveException if a serious problem needs to be reported
      */
     protected void processEntry(GzipEntry entry) throws EOFException, IOException {
         GzipEntryProperties properties = new GzipEntryProperties(entry);
@@ -232,8 +231,6 @@ public class GzipModule extends ModuleBase {
      * Reports the results of the characterization.
      * @param reader The GZIP reader, which has read the GZIP-file. 
      * @param repInfo The representation info, where to report the results.
-     * @throws JhoveException
-     * @throws IOException
      */
     private void reportResults(GzipReader reader, RepInfo repInfo) {
         Diagnostics<Diagnosis> diagnostics = reader.diagnostics;
@@ -269,9 +266,9 @@ public class GzipModule extends ModuleBase {
      */
     private static String extractDiagnosisMessage(Diagnosis d) {
         StringBuilder res = new StringBuilder();
-        res.append("Entity: " + d.entity);
+        res.append("Entity: ").append(d.entity);
         for(String i : d.information) {
-            res.append(", " + i);           
+            res.append(", ").append(i);
         }
         return res.toString();
     }

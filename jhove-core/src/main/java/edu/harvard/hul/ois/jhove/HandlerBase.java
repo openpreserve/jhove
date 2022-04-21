@@ -108,7 +108,7 @@ public abstract class HandlerBase
         // action logically belongs in the handler package, so we name
         // this logger accordingly.
         _logger = Logger.getLogger ("edu.harvard.hul.ois.jhove.handler");
-        _logger.info ("Initializing " + name);
+        _logger.fine ("Initializing " + name);
         _name    = name;
         _release = release;
 	_encoding = "UTF-8";
@@ -475,7 +475,7 @@ public abstract class HandlerBase
      */
     protected static String element (String tag, String content)
     {
-        return elementStart (tag) + encodeContent (content) + elementEnd (tag);
+        return elementStart (tag) + Utils.encodeContent (content) + elementEnd (tag);
     }
 
     /**
@@ -497,7 +497,7 @@ public abstract class HandlerBase
 				buffer.append (" ");
 				buffer.append (attrs[i][0]);
 				buffer.append ("=\"");
-				buffer.append (encodeValue (attrs[i][1]));
+				buffer.append (Utils.encodeValue (attrs[i][1]));
 				buffer.append ("\"");
 			}
         }
@@ -529,12 +529,12 @@ public abstract class HandlerBase
 				buffer.append (" ");
 				buffer.append (attrs[i][0]);
 				buffer.append ("=\"");
-				buffer.append (encodeValue (attrs[i][1]));
+				buffer.append (Utils.encodeValue (attrs[i][1]));
 				buffer.append ("\"");
 			}
         }
         buffer.append (">");
-        buffer.append (encodeContent (content));
+        buffer.append (Utils.encodeContent (content));
         buffer.append (elementEnd (tag));
 
         return buffer.toString ();
@@ -578,96 +578,10 @@ public abstract class HandlerBase
             buffer.append (" ");
             buffer.append (attrs[i][0]);
             buffer.append ("=\"");
-            buffer.append (encodeValue (attrs[i][1]));
+            buffer.append (Utils.encodeValue (attrs[i][1]));
             buffer.append ("\"");
         }
         buffer.append (">");
-
-        return buffer.toString ();
-    }
-
-    /**
-     *   Encodes a content String in XML-clean form, converting characters
-     *   to entities as necessary and removing control characters disallowed
-     *   by XML.  The null string will be converted to an empty string.
-     */
-    private static String encodeContent (String content)
-    {
-        if (content == null) {
-            content = "";
-        }
-        StringBuffer buffer = new StringBuffer (content);
-
-	/* Remove disallowed control characters from the content string. */
-        int n = buffer.length ();
-	for (int i=0; i<n; i++) {
-	    char ch = buffer.charAt (i);
-	    if ((0x00 <= ch && ch <= 0x08) || (0x0b <= ch && ch <= 0x0c) ||
-		(0x0e <= ch && ch <= 0x1f) ||  0x7f == ch) {
-		buffer.deleteCharAt (i--);
-		n--;
-	    }
-	}
-	n = 0;
-        while ((n = buffer.indexOf ("&", n)) > -1) {
-            buffer.insert (n+1, "amp;");
-            n +=5;
-        }
-        n = 0;
-        while ((n = buffer.indexOf ("<", n)) > -1) {
-            buffer.replace (n, n+1, "&lt;");
-            n += 4;
-        }
-        n = 0;
-        while ((n = buffer.indexOf (">", n)) > -1) {
-            buffer.replace (n, n+1, "&gt;");
-            n += 4;
-        }
-
-        return buffer.toString ();
-    }
-
-    /**
-     *   Encodes an attribute value String in XML-clean form, 
-     *   converting quote characters to entities and removing control
-     *   characters disallowed by XML.
-     */
-    private static String encodeValue (String value)
-    {
-        StringBuffer buffer = new StringBuffer (value);
-
-	/* Remove disallowed control characters from the value string. */
-        int n = buffer.length ();
-	for (int i=0; i<n; i++) {
-	    char ch = buffer.charAt (i);
-	    if ((0x00 <= ch && ch <= 0x08) || (0x0b <= ch && ch <= 0x0c) ||
-		(0x0e <= ch && ch <= 0x1f) ||  0x7f == ch) {
-		buffer.deleteCharAt (i--);
-		n--;
-	    }
-	}
-	    // [CC], escape &, < and > characters which are disallowed in xml
-        n = 0;
-        while ((n = buffer.indexOf ("&", n)) > -1) {
-            buffer.insert (n+1, "amp;");
-            n +=5;
-        }
-     	n = 0;
-        while ((n = buffer.indexOf ("<", n)) > -1) {
-            buffer.replace (n, n+1, "&lt;");
-            n += 4;
-        }
-        n = 0;
-        while ((n = buffer.indexOf (">", n)) > -1) {
-            buffer.replace (n, n+1, "&gt;");
-            n += 4;
-        }
-		n = 0;
-        while ((n = buffer.indexOf ("\"", n)) > -1) {
-            // [LP] fix for invalid escaping, "" quotes were accidentally left in place.
-            buffer.replace (n, n+1, "&quot;");
-            n +=7;
-        }
 
         return buffer.toString ();
     }

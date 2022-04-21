@@ -108,10 +108,11 @@ public class Literal
     }
 
     /**
-     *  Append a hex character.  This is used only for hex literals
-     *  (those that start with '<'). 
+     *  Append a hex character.This is used only for hex literals
+     * (those that start with '<'). 
      *
      *  @param  ch	The integer 8-bit code for a hex character
+     *  @throws edu.harvard.hul.ois.jhove.module.pdf.PdfException
      */
     public void appendHex (int ch) throws PdfException
     {
@@ -119,7 +120,7 @@ public class Literal
             _rawBytes = new Vector<> (32);
         }
         if (haveHi) {
-            _rawBytes.add(new Integer (hexToInt (hi, ch)));
+            _rawBytes.add(hexToInt (hi, ch));
             haveHi = false;
         }
         else {
@@ -129,20 +130,20 @@ public class Literal
     }
     
     /**
-     *  Process the incoming characters into a string literal.  
-     *  This is used for literals delimited
-     *  by parentheses, as opposed to hex strings.
+     *  Process the incoming characters into a string literal.This is used for literals delimited
+  by parentheses, as opposed to hex strings.
      *
      *  @param  tok   The tokenizer, passed to give access to its getChar
      *               function.
      *  @return      <code>true</code> if the character was processed
      *               normally, <code>false</code> if a terminating
      *               parenthesis was reached.
+     *  @throws IOException
      */
     public long processLiteral (Tokenizer tok) throws IOException
     {
         /** Variable for UTF-16 chars. */
-        int utfch = 0;
+        int utfch;
         /** First byte of a UTF-16 character. */
         int b1 = 0x00;
         /*  Character read from tokenizer. */
@@ -151,7 +152,7 @@ public class Literal
         _rawBytes = new Vector<> (32);
         _state = State.LITERAL;
 
-	long offset = 0;
+       long offset = 0;
         for (;;) {
             ch = tok.readChar ();
             // If we get -1, then we've hit an EOF without proper termination of
@@ -160,8 +161,7 @@ public class Literal
                 throw new EOFException (MessageConstants.PDF_HUL_10.getMessage()); // PDF-HUL-10
             }
             offset++;
-            _rawBytes.add (new Integer (ch));
-
+            _rawBytes.add (ch);
             if (_state == State.LITERAL) {
                 // We are still in a state of flux, determining the encoding
                 if (ch == FE) {
@@ -175,16 +175,17 @@ public class Literal
                 }
                 else if (ch == BACKSLASH) {
                     ch = readBackslashSequence (false, tok);
-                    if (ch == 0) {
-                        continue;  // invalid character, ignore
-                    }
-                    else if (ch == FE) {
-                        _state = State.LITERAL_FE;
-                    }
-                    else {
-                        // any other char is treated nonspecially
-                        setPDFDocEncoding (true);
-                        buffer.append (PDFDOCENCODING[ch]);
+                    switch (ch) {
+                        case 0:
+                            continue;  // invalid character, ignore
+                        case FE:
+                            _state = State.LITERAL_FE;
+                            break;
+                        default:
+                            // any other char is treated nonspecially
+                            setPDFDocEncoding (true);
+                            buffer.append (PDFDOCENCODING[ch]);
+                            break;
                     }
                 }
                 else {
@@ -201,37 +202,43 @@ public class Literal
                 }
             }
             else if (_state == (State.LITERAL_FE)) {
-                if (ch == FF) {
-                    _state = State.LITERAL_UTF16_1;
-                    setPDFDocEncoding (false);
-                }
-                else if (ch == BACKSLASH) {
-                    ch = readBackslashSequence (false, tok);
-                    if (ch == 0) {
-                        continue;  // invalid character, ignore
-                    }
-                    if (ch == FF) {
+                switch (ch) {
+                    case FF:
                         _state = State.LITERAL_UTF16_1;
                         setPDFDocEncoding (false);
-                    }
-                    else {
-                        // any other char is treated nonspecially
+                        break;
+                    case BACKSLASH:
+                        ch = readBackslashSequence (false, tok);
+                        if (ch == 0) {
+                            continue;  // invalid character, ignore
+                        }   if (ch == FF) {
+                            _state = State.LITERAL_UTF16_1;
+                            setPDFDocEncoding (false);
+                        }
+                        else {
+                            // any other char is treated nonspecially
+                            setPDFDocEncoding (true);
+                            // The FE is just an FE, put it in the buffer
+                            buffer.append (PDFDOCENCODING[FE]);
+                            buffer.append (PDFDOCENCODING[ch]);
+                        }   break;
+                    default:
+                        _state = State.LITERAL_PDF;
                         setPDFDocEncoding (true);
                         // The FE is just an FE, put it in the buffer
                         buffer.append (PDFDOCENCODING[FE]);
                         buffer.append (PDFDOCENCODING[ch]);
-                    }
-                }
-                else {
-                    _state = State.LITERAL_PDF;
-                    setPDFDocEncoding (true);
-                    // The FE is just an FE, put it in the buffer
-                    buffer.append (PDFDOCENCODING[FE]);
-                    buffer.append (PDFDOCENCODING[ch]);
+                        break;
                 }
             }
             else if (_state == (State.LITERAL_PDF)) {
-                if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
+                if (ch == OPEN_PARENTHESIS) {
+                    // Count open parens to be matched by close parens.
+                    // Backslash-quoted parens won't get here.
+                    ++_parenLevel;
+                    buffer.append (PDFDOCENCODING[ch]);
+                }
+                else if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
                     setValue(buffer.toString());
                     return offset;
                 }
@@ -252,23 +259,35 @@ public class Literal
                 // paren or backslash is a single-byte character.
                 // Parens within the string are double-byte characters,
                 // so we don't have to worry about them.
-                if (ch == CLOSE_PARENTHESIS) {
-                    setValue(buffer.toString());
-                    return offset;
-                }
-                else if (ch == BACKSLASH) {
-                    utfch = readBackslashSequence (true, tok);
-                    if (utfch == 0) {
-                        continue;  // invalid character, ignore
-                    }
-                }
-                else {
-                    _state = State.LITERAL_UTF16_2;
-                    b1 = ch;
+                switch (ch) {
+                    case CLOSE_PARENTHESIS:
+                        setValue(buffer.toString());
+                        return offset;
+                    case BACKSLASH:
+                        utfch = readBackslashSequence (true, tok);
+                        if (utfch == 0) {
+                            continue;  // invalid character, ignore
+                        }   break;
+                    default:
+                        _state = State.LITERAL_UTF16_2;
+                        b1 = ch;
+                        break;
                 }
             }
             else if (_state == (State.LITERAL_UTF16_2)) {
                 // Second byte of a UTF16 character.
+                /* It turns out that a backslash may be double-byte,
+                * rather than the assumed single.byte.  The following
+                * allows for this. Suggested by Justin Litman, Library
+                * of Congress, 2006-03-17.
+                */
+                if (ch == BACKSLASH) {
+                    ch = readBackslashSequence (false, tok);
+                    if (ch == 0) {
+                        _state = State.LITERAL_UTF16_2; // skip the wrong char and reset to previous state
+                        continue;   /* Invalid character, ignore. */
+                    }
+                }
                 utfch = 256 * b1 + ch;
                 _state = State.LITERAL_UTF16_1;
                 // an ESC may appear at any point to signify
@@ -278,17 +297,6 @@ public class Literal
                     readUTFLanguageCode (tok);
                 }
                 else {
-		    /* It turns out that a backslash may be double-byte,
-		     * rather than the assumed single.byte.  The following
-		     * allows for this. Suggested by Justin Litman, Library
-		     * of Congress, 2006-03-17.
-		     */
-		    if (utfch == BACKSLASH) {
-			utfch = readBackslashSequence (false, tok);
-			if (utfch == 0) {
-			    continue;   /* Invalid character, ignore. */
-			}
-		    }
                     buffer.append ((char) utfch);
                 }
             }
@@ -298,18 +306,19 @@ public class Literal
 
 
     /**
-     *  Convert the raw hex data.  Two buffers are saved: _rawBytes
-     *  for the untranslated hex-encoded data, and _value for the
-     *  PDF or UTF encoded string.
+     *  Convert the raw hex data.Two buffers are saved: _rawBytes
+     * for the untranslated hex-encoded data, and _value for the
+     * PDF or UTF encoded string.
+     * @throws edu.harvard.hul.ois.jhove.module.pdf.PdfException
      */
     public void convertHex () throws PdfException
     {
         if (_rawBytes != null) {
             boolean utf = false;
-            StringBuffer localBuffer = new StringBuffer();
+            StringBuilder localBuffer = new StringBuilder();
             // If a high byte is left hanging, complete it with a '0'
             if (haveHi) {
-                _rawBytes.add(new Integer(hexToInt(hi, '0')));
+                _rawBytes.add(hexToInt(hi, '0'));
             }
             if (_rawBytes.size() >= 2 && rawByte(0) == 0XFE &&
                     rawByte(1) == 0XFF) {
@@ -365,13 +374,15 @@ public class Literal
         if (idx >= _rawBytes.size ()) {
             return 0;
         }
-        return _rawBytes.elementAt (idx).intValue();
+        return _rawBytes.elementAt(idx);
     }
 
 
     /**
      *  Returns <code>true</code> if this string is in PDFDocEncoding,
      *  false if UTF-16.
+     * 
+     *  @return isPdfDocEncoding
      */
     public boolean isPDFDocEncoding ()
     {
@@ -380,6 +391,7 @@ public class Literal
 
     /**
      *  Sets the value of pDFDocEncoding.
+     *  @param pdfDocEncoding: boolean if the is in PDFDocEncoding 
      */
     public void setPDFDocEncoding (boolean pdfDocEncoding)
     {
@@ -393,6 +405,8 @@ public class Literal
      *  If we take this literally, the format is frighteningly ambiguous
      *  (imagine, for instance, leaving out hours but not minutes and
      *  seconds), so the checking is a bit loose.
+     * 
+     * @return if it's a Date
      */
     public boolean isDate ()
     {
@@ -407,6 +421,8 @@ public class Literal
      *  Adobe doesn't actually say so, but I'm assuming that if a
      *  field is included, everything to its left must be included,
      *  e.g., you can't have seconds but leave out minutes.
+     * 
+     *  @return date of string value
      */
     public Date parseDate ()
     {
@@ -419,7 +435,7 @@ public class Literal
         char timezonechar = '?';    // +, -, or Z
         int timezonehour = 0;
         int timezoneminute = 0;
-        Calendar cal = null;
+        Calendar cal;
 
         String str = getValue ();
         if (str == null) {
@@ -572,6 +588,7 @@ public class Literal
     /** 
      *  Returns <code>true</code> if this token doesn't violate any
      *  PDF/A rules, <code>false</code> if it does.
+     * @return if it's PDF/A compliant
      */
     public boolean isPDFACompliant ()
     {
@@ -620,9 +637,11 @@ public class Literal
                 return LF;
             case 0X72:   // r
                 return CR;
+            case 0xd: // this is an error for CR
+            	return 0;
             case 0X74:   // t
                 return HT;
-            case 0X68:   // h
+            case 0X62:   // b
                 return BS;
             case 0X66:   // f
                 return FORMFEED;
@@ -644,9 +663,15 @@ public class Literal
      */
     private static void readUTFLanguageCode (Tokenizer tok) throws IOException
     {
-        StringBuffer sb = new StringBuffer ();
+        StringBuilder sb = new StringBuilder();
         for (;;) {
             int ch = tok.readChar1(true);
+            
+            // If we get -1, then we've hit an EOF without proper termination of
+            // the literal. Throw an exception.
+            if (ch < 0) {
+                throw new EOFException (MessageConstants.PDF_HUL_10.getMessage()); // PDF-HUL-10
+            }
             if (ch == ESC) {
                 break;
             }
@@ -730,5 +755,3 @@ public class Literal
     }
  */       
 }
-
-

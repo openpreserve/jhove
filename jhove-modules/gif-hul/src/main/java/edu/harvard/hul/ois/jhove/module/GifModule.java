@@ -83,8 +83,8 @@ public class GifModule extends ModuleBase
      ******************************************************************/
 
     private static final String NAME = "GIF-hul";
-    private static final String RELEASE = "1.4.1";
-    private static final int [] DATE = { 2019, 04, 17 };
+    private static final String RELEASE = "1.4.2";
+    private static final int [] DATE = { 2019, 12, 10 };
     private static final String [] FORMAT = {"GIF",
                                              "Graphics Interchange Format"};
     private static final String COVERAGE = "GIF87a, GIF89a";
@@ -443,7 +443,7 @@ public class GifModule extends ModuleBase
         if (_globalColorTableFlag) {
             short[] gctArray = new short[_globalColorTableSize];
             for (int i = 0; i < _globalColorTableSize; i++) {
-                gctArray[i] = (short) _dstream.readUnsignedByte ();
+                gctArray[i] = (short) readUnsignedByte(_dstream, this);
             }
             _blocksList.add (new Property ("GlobalColorTable",
                     PropertyType.SHORT,

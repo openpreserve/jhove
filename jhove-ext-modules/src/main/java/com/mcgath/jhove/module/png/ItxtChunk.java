@@ -3,7 +3,11 @@ package com.mcgath.jhove.module.png;
 import edu.harvard.hul.ois.jhove.ErrorMessage;
 import edu.harvard.hul.ois.jhove.RepInfo;
 
-/** Representation of the iTXt (internationalized text) chunk */
+/**
+ * Representation of the iTXt (internationalized text) chunk
+ *
+ * @see <a href="https://www.w3.org/TR/PNG/#11iTXt">https://www.w3.org/TR/PNG/#11iTXt</a>
+ **/
 public class ItxtChunk extends GeneralTextChunk {
 
 	/** Constructor */
@@ -13,14 +17,14 @@ public class ItxtChunk extends GeneralTextChunk {
 		ancillary = true;
 		duplicateAllowed = true;
 	}
-	
+
 	/** Process the data portion of the chunk. */
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
-		
+
 		//iTXt chunks may have either compressed or uncompressed values.
-		
+
 		// state values:
 		// 0 = getting keyword,
 		// 1 = compression flag
@@ -56,51 +60,51 @@ public class ItxtChunk extends GeneralTextChunk {
 				if (compressionFlag != 0) {
 					compressionType = c;
 					if (compressionType != 0) {
-						ErrorMessage msg = 
-								new ErrorMessage(MessageConstants.PNG_GDM_29, 
-										String.format(MessageConstants.PNG_GDM_29_SUB.getMessage(),  
-												compressionType));
-						info.setMessage (msg);
-						info.setWellFormed (false);
+						ErrorMessage msg =
+							new ErrorMessage(MessageConstants.PNG_GDM_29,
+							String.format(MessageConstants.PNG_GDM_29_SUB.getMessage(),compressionType));
+							info.setMessage (msg);
+							info.setWellFormed (false);
 						throw new PNGException (MessageConstants.PNG_GDM_30);
 					}
-					state = 3;
-					sb = new StringBuilder();	// set up for language
 				}
+				sb = new StringBuilder(); // set up for language
+				state = 3;
 				break;
 			case 3:		// getting language
 				if (c == 0) {
-					if (sb.length() > 0) {
-						language = sb.toString();
-					}
+					language = sb.toString();
 					state = 4;
-					sb = new StringBuilder();	// set up for translated keyword
+					sb = new StringBuilder(); // set up for translated keyword
+				} else {
+					sb.append((char) c);
 				}
 				break;
 			case 4:		// translated keyword
 				if (c == 0) {
-					if (sb.length() > 0) {
 						translatedKeyword = sb.toString();
-					}
-					state = 5;
-					valueData = new byte[(int) length - i];	// set up for value
+						state = 5;
+						// set up for text value. (i+1) because we started at 0
+						valueData = new byte[(int) length - (i + 1)];
+				} else {
+						sb.append((char) c);
 				}
 				break;
-			case 5:		// value
+			case 5: // value of text
 			default:
-				valueData[valueIdx++] = (byte) c;
-				break;
+					valueData[valueIdx++] = (byte) c;
+			break;
 			}
-			
-			// assemble value, decompressing if necessary
-			String value;
-			if (compressionFlag != 0) {
-				value = inflateToText(valueData);
-			} else {
-				value = new String (valueData, "ISO-8859-1");
-			}
-			_module.addKeyword(keyword, translatedKeyword, value,language);
 		}
+
+		// assemble value, decompressing if necessary
+		String value;
+		if (compressionFlag != 0) {
+			value = inflateToText(valueData);
+		} else {
+			value = new String(valueData, "ISO-8859-1");
+		}
+		_module.addKeyword(keyword, translatedKeyword, value, language);
 	}
 
 }

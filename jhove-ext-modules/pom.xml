@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
-    <version>1.23.0-SNAPSHOT</version>
+    <version>1.25.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>jhove-ext-modules</artifactId>
@@ -13,6 +13,7 @@
 
   <properties>
     <jwat.version>1.0.3</jwat.version>
+    <epubcheck.version>4.2.6</epubcheck.version>
   </properties>
 
   <build>
@@ -41,9 +42,15 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+            <argLine>-Xss1024k</argLine>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
-
   <dependencies>
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>
@@ -74,6 +81,12 @@
       <groupId>org.jwat</groupId>
       <artifactId>jwat-warc</artifactId>
       <version>${jwat.version}</version>
+    </dependency>
+    <!-- EPUBCheck for EPUB -->
+    <dependency>
+      <groupId>org.w3c</groupId>
+      <artifactId>epubcheck</artifactId>
+      <version>${epubcheck.version}</version>
     </dependency>
   </dependencies>
 </project>

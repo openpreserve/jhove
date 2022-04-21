@@ -53,6 +53,7 @@ import edu.harvard.hul.ois.jhove.Identifier;
 import edu.harvard.hul.ois.jhove.IdentifierType;
 import edu.harvard.hul.ois.jhove.InfoMessage;
 import edu.harvard.hul.ois.jhove.InternalSignature;
+import edu.harvard.hul.ois.jhove.Message;
 import edu.harvard.hul.ois.jhove.Module;
 import edu.harvard.hul.ois.jhove.ModuleBase;
 import edu.harvard.hul.ois.jhove.NisoImageMetadata;
@@ -67,6 +68,7 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import edu.harvard.hul.ois.jhove.module.pdf.AProfile;
 import edu.harvard.hul.ois.jhove.module.pdf.AProfileLevelA;
+import edu.harvard.hul.ois.jhove.module.pdf.Comment;
 import edu.harvard.hul.ois.jhove.module.pdf.CrossRefStream;
 import edu.harvard.hul.ois.jhove.module.pdf.Destination;
 import edu.harvard.hul.ois.jhove.module.pdf.DictionaryStart;
@@ -301,6 +303,8 @@ public class PdfModule extends ModuleBase {
 	private static final String PROP_NAME_REVISION = "Revision";
 	private static final String PROP_NAME_OWNER_STRING = "OwnerString";
 	private static final String PROP_NAME_USER_STRING = "UserString";
+	private static final String PROP_NAME_OWNERKEY_STRING = "OwnerEncryptionKey";
+	private static final String PROP_NAME_USERKEY_STRING = "UserEncryptionKey";
 	private static final String PROP_NAME_USER_UNIT = DICT_KEY_USER_UNIT;
 	private static final String PROP_NAME_STANDARD_SECURITY_HANDLER = "StandardSecurityHandler";
 	private static final String PROP_NAME_TITLE = DICT_KEY_TITLE;
@@ -372,8 +376,8 @@ public class PdfModule extends ModuleBase {
 	 ******************************************************************/
 
 	private static final String NAME = "PDF-hul";
-	private static final String RELEASE = "1.12.1";
-  private static final int [] DATE = { 2019, 04, 17 };
+	private static final String RELEASE = "1.12.2";
+  private static final int [] DATE = { 2019, 12, 10 };
 	private static final String[] FORMAT = { "PDF",
 			"Portable Document Format" };
 	private static final String COVERAGE = "PDF 1.0-1.6; "
@@ -432,9 +436,9 @@ public class PdfModule extends ModuleBase {
 	protected Map _objects;      // Map of the objects in the file
 	protected long[] _xref;      // Array of object offsets from XRef table
 	protected int[][] _xref2;    // Array of int[2], giving object stream and
-								   // offset when _xref[i] < 0
+								               // offset when _xref[i] < 0
 	protected boolean _xrefIsStream; // True if XRef streams rather than tables
-									 // are used
+									                 // are used
 	protected boolean _encrypted;    // Equivalent to _encryptDictRef != null
 	protected List<Property> _docCatalogList;  // Info extracted from doc cat dict
 	protected List<Property> _encryptList;     // Info from encryption dict
@@ -777,7 +781,7 @@ public class PdfModule extends ModuleBase {
 			throws IOException {
 		initParse();
 		initInfo(info);
-		_objects = new HashMap();
+		_objects = new HashMap<>();
 		_raf = raf;
 
 		Tokenizer tok = new FileTokenizer(_raf);
@@ -1319,6 +1323,7 @@ public class PdfModule extends ModuleBase {
 			}
 
 			obj = _trailerDict.get(DICT_KEY_SIZE);
+			_docCatDictRef = (PdfIndirectObj) _trailerDict.get(DICT_KEY_ROOT);
 			if (obj != null) {
 				_numObjects = -1;
 				if (obj instanceof PdfSimpleObject) {
@@ -1339,7 +1344,7 @@ public class PdfModule extends ModuleBase {
 				throw new PdfInvalidException(MessageConstants.PDF_HUL_74, // PDF-HUL-74
 						_parser.getOffset());
 
-			_docCatDictRef = (PdfIndirectObj) _trailerDict.get(DICT_KEY_ROOT);
+			
 			if (_docCatDictRef == null) {
 				throw new PdfInvalidException(MessageConstants.PDF_HUL_75, // PDF-HUL-75
 						_parser.getOffset());
@@ -1395,7 +1400,10 @@ public class PdfModule extends ModuleBase {
 		} catch (PdfException e) {
 
 			e.disparage(info);
-			info.setMessage(
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
 					new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// If it's merely invalid rather than ill-formed, keep going
 			return (e instanceof PdfInvalidException);
@@ -1474,7 +1482,10 @@ public class PdfModule extends ModuleBase {
 			} catch (PdfException e) {
 
 				e.disparage(info);
-				info.setMessage(
+				if (e.getJhoveMessage() != null)
+					info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+				else
+					info.setMessage(
 						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 				// If it's merely invalid rather than ill-formed, keep going
 				return (e instanceof PdfInvalidException);
@@ -1506,6 +1517,9 @@ public class PdfModule extends ModuleBase {
 						break;
 					}
 					_objCount = ((Numeric) _parser.getNext()).getIntegerValue();
+					if (_xref == null) {
+						_xref = new long[_objCount];
+					}
 					for (int i = 0; i < _objCount; i++) {
 						// In reading the cross-reference table, also check
 						// the extra syntactic requirements of PDF/A.
@@ -1540,7 +1554,10 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			info.setMessage(
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
 					new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			return false;
 		} catch (Exception e) {
@@ -1658,7 +1675,7 @@ public class PdfModule extends ModuleBase {
 					if (ver != infoVer) {
 						String mess = MessageFormat.format(
 								MessageConstants.PDF_HUL_87.getMessage(),
-								versString, infoVersString);
+								infoVersString, versString);
 						JhoveMessage message = JhoveMessages.getMessageInstance(
 								MessageConstants.PDF_HUL_87.getId(), mess);
 						info.setMessage(new InfoMessage(message));
@@ -1720,7 +1737,10 @@ public class PdfModule extends ModuleBase {
 
 		catch (PdfException e) {
 			e.disparage(info);  // clears Valid or WellFormed as appropriate
-			info.setMessage(
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
 					new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Keep going if it's only invalid
 			return (e instanceof PdfInvalidException);
@@ -1849,6 +1869,34 @@ public class PdfModule extends ModuleBase {
 								toHex(((PdfSimpleObject) uObj).getRawBytes())));
 					}
 				}
+				// Required if ExtensionLevel 3 and Encryption Algorithm (V) is 5
+				// Defined in Adobe® Supplement to the ISO 32000
+				if (algValue == 5) {
+					PdfObject oeObj = dict.get("OE");
+					if (oeObj != null) {
+						if (oeObj instanceof PdfSimpleObject) {
+							stdList.add(new Property(PROP_NAME_OWNERKEY_STRING,
+									PropertyType.STRING,
+									toHex(((PdfSimpleObject) oeObj).getRawBytes())));
+						}
+					} else {
+						// if algValue is 5; OE is mandatory
+						throw new PdfInvalidException 
+						(MessageConstants.PDF_HUL_152, _parser.getOffset());
+					}
+					PdfObject ueObj = dict.get("UE");
+					if (ueObj != null) {
+						if (ueObj instanceof PdfSimpleObject) {
+							stdList.add(new Property(PROP_NAME_USERKEY_STRING,
+									PropertyType.STRING,
+									toHex(((PdfSimpleObject) ueObj).getRawBytes())));
+						}
+					} else {
+						// if algValue is 5; UE is mandatory
+						throw new PdfInvalidException
+						(MessageConstants.PDF_HUL_153, _parser.getOffset());
+					}
+				}
 				_encryptList.add(new Property(
 						PROP_NAME_STANDARD_SECURITY_HANDLER,
 						PropertyType.PROPERTY, PropertyArity.LIST, stdList));
@@ -1856,7 +1904,10 @@ public class PdfModule extends ModuleBase {
 
 		} catch (PdfException e) {
 			e.disparage(info);
-			info.setMessage(
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
 					new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			return (e instanceof PdfInvalidException);
 		}
@@ -1896,8 +1947,11 @@ public class PdfModule extends ModuleBase {
 					PROP_NAME_TRAPPED);
 		} catch (PdfException e) {
 			e.disparage(info);
-			info.setMessage(
-					new ErrorMessage(e.getMessage(), _parser.getOffset()));
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
+						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Keep parsing if it's only invalid
 			return (e instanceof PdfInvalidException);
 		} catch (Exception e) {
@@ -1936,7 +1990,10 @@ public class PdfModule extends ModuleBase {
 			_docTreeRoot.buildSubtree(true, MAX_PAGE_TREE_DEPTH);
 		} catch (PdfException e) {
 			e.disparage(info);
-			info.setMessage(
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
 					new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Continue parsing if it's only invalid
 			return (e instanceof PdfInvalidException);
@@ -1968,7 +2025,10 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			info.setMessage(
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
 					new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Continue parsing if it's only invalid
 			return (e instanceof PdfInvalidException);
@@ -2030,7 +2090,10 @@ public class PdfModule extends ModuleBase {
 
 		} catch (PdfException e) {
 			e.disparage(info);
-			info.setMessage(
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
 					new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Continue parsing if it's only invalid
 			return (e instanceof PdfInvalidException);
@@ -2073,7 +2136,11 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			info.setMessage(new ErrorMessage(e.getMessage()));
+			if (e.getJhoveMessage() != null) {
+				info.setMessage(new ErrorMessage(e.getJhoveMessage()));
+			} else {
+				info.setMessage(new ErrorMessage(e.getMessage()));
+			}
 		} catch (Exception e) {
 			info.setWellFormed(false);
 			String mess = MessageFormat.format(
@@ -2118,7 +2185,10 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			info.setMessage(
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
 					new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Continue parsing if it's only invalid
 			return (e instanceof PdfInvalidException);
@@ -2266,8 +2336,8 @@ public class PdfModule extends ModuleBase {
 											if (parms != null) {
 												PdfSimpleObject kobj = null;
 												if (parms instanceof PdfDictionary) {
-													kobj = (PdfSimpleObject) ((PdfDictionary) parms)
-															.get(DICT_KEY_K);
+													PdfDictionary pdict = (PdfDictionary) parms;
+													kobj = (PdfSimpleObject) resolveIndirectObject(pdict.get(DICT_KEY_K));
 												}
 												/*
 												 * Note that the DecodeParms
@@ -2416,7 +2486,10 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			info.setMessage(
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
 					new ErrorMessage(e.getMessage(), _parser.getOffset()));
 		} catch (Exception e) {
 			info.setWellFormed(false);
@@ -2496,7 +2569,10 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			info.setMessage(
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
 					new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			return;
 		} catch (Exception e) {
@@ -2874,13 +2950,16 @@ public class PdfModule extends ModuleBase {
 				if (!_skippedPagesReported) {
 					info.setMessage(
 							new InfoMessage(MessageConstants.PDF_HUL_112)); // PDF-HUL-112
+                                        _skippedPagesReported = true;
 				}
-				_skippedPagesReported = true;
 			}
 		} catch (PdfException e) {
 
 			e.disparage(info);
-			info.setMessage(
+			if (e.getJhoveMessage() != null)
+				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			else
+				info.setMessage(
 					new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			return;
 		}
@@ -2923,6 +3002,11 @@ public class PdfModule extends ModuleBase {
 					if (annot instanceof PdfDictionary) {
 						annotsList.add(buildAnnotProperty((PdfDictionary) annot,
 								info));
+					} else if (annot instanceof PdfSimpleObject 
+							&& ((PdfSimpleObject) annot).getToken() instanceof Comment) {
+						// ignore Comments
+						continue;
+						
 					} else {
 						// There are annotations which aren't dictionaries. I've
 						// run into this,
@@ -2957,8 +3041,15 @@ public class PdfModule extends ModuleBase {
 
 		try {
 			// Rotation property is inheritable
-			PdfSimpleObject rot = (PdfSimpleObject) page.get(DICT_KEY_ROTATE,
-					true);
+			PdfObject tempObj = page.get(DICT_KEY_ROTATE,
+							true);
+			PdfSimpleObject rot = null;
+			if (tempObj != null && tempObj instanceof PdfSimpleObject) {
+				rot = (PdfSimpleObject) tempObj;
+			} else if (tempObj != null && tempObj instanceof PdfIndirectObj) {
+				rot = (PdfSimpleObject) ((PdfIndirectObj) tempObj)
+						.getObject();
+			}
 			if (rot != null && rot.getIntValue() != 0) {
 				pagePropList.add(new Property(PROP_NAME_ROTATE,
 						PropertyType.INTEGER, new Integer(rot.getIntValue())));
@@ -3111,50 +3202,42 @@ public class PdfModule extends ModuleBase {
 		// X, Y, D and A arrays.
 		itemObj = meas.get("X");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property("X", PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, "X"));
 		}
 		itemObj = meas.get("Y");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property("Y", PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, "Y"));
 		}
 		itemObj = meas.get("D");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property(PROP_NAME_DISTANCE, PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, PROP_NAME_DISTANCE));
 		}
 		itemObj = meas.get("A");
 		if (itemObj instanceof PdfArray) {
-			Vector<PdfObject> v = ((PdfArray) itemObj).getContent();
-			double[] x = new double[v.size()];
-			for (int i = 0; i < v.size(); i++) {
-				PdfSimpleObject xobj = (PdfSimpleObject) v.elementAt(i);
-				x[i] = xobj.getDoubleValue();
-			}
-			plist.add(new Property(PROP_NAME_AREA, PropertyType.DOUBLE,
-					PropertyArity.ARRAY, x));
+			plist.add(buildNumberFormatArrayProperty((PdfArray)itemObj, PROP_NAME_AREA));
 		}
 		return new Property(PROP_NAME_MEASURE, PropertyType.PROPERTY,
 				PropertyArity.LIST, plist);
+	}
+
+	/* Build a subproperty for a number format array. */
+	private Property buildNumberFormatArrayProperty(PdfArray arr, String propertyName) {
+		Vector<PdfObject> v = arr.getContent();
+		List<Property> alist = new ArrayList<>();
+		for (int i = 0; i < v.size(); i++) {
+			PdfObject xobj = v.elementAt(i);
+			if (xobj instanceof PdfDictionary) {
+				PdfObject obj = ((PdfDictionary) xobj).get("U");
+				if (obj instanceof PdfSimpleObject) {
+					alist.add(new Property("Name", PropertyType.DOUBLE, ((PdfSimpleObject)obj).getDoubleValue()));
+				}
+				obj = ((PdfDictionary) xobj).get("C");
+				if (obj instanceof PdfSimpleObject) {
+					alist.add(new Property("Coefficient", PropertyType.STRING, ((PdfSimpleObject)obj).getStringValue()));
+				}
+			}
+		}
+		return new Property(propertyName, PropertyType.PROPERTY, PropertyArity.LIST, alist);
 	}
 
 	/* Build a subproperty of a subproperty for an annotation. */
@@ -3306,7 +3389,7 @@ public class PdfModule extends ModuleBase {
 				// Encryption messes up name trees
 				if (!_encrypted) {
 					int pageObjNum = resolveIndirectDest(
-							dest.getIndirectDest());
+							dest.getIndirectDest(), info);
 					if (pageObjNum == -1) {
 						// The scope of the reference is outside this
 						// file, so we just report it as such.
@@ -3328,6 +3411,10 @@ public class PdfModule extends ModuleBase {
 							destPg));
 				}
 			}
+		} catch (PdfMalformedException e) {
+			propList.add(new Property(propName, PropertyType.STRING, PROP_VAL_NULL));
+			info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+			info.setValid(false);
 		} catch (Exception e) {
 
 			String msg = e.getClass().getName();
@@ -3998,7 +4085,7 @@ public class PdfModule extends ModuleBase {
 				Destination dest = new Destination(destObj, this, false);
 				if (dest.isIndirect()) {
 					itemList.add(new Property(PROP_NAME_DESTINATION,
-							PropertyType.STRING, dest.getIndirectDest()));
+							PropertyType.STRING, dest.getIndirectDest().getStringValue()));
 				} else {
 					int pageObjNum = dest.getPageDestObjNumber();
 					Integer destPg = _pageSeqMap.get(new Integer(pageObjNum));
@@ -4085,7 +4172,10 @@ public class PdfModule extends ModuleBase {
 					_skippedOutlinesReported = true;
 				}
 			} catch (PdfException e) {
-				info.setMessage(
+				if (e.getJhoveMessage() != null)
+					info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
+				else
+					info.setMessage(
 						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 				e.disparage(info);
 				// If it's just invalid, we can keep going
@@ -4110,31 +4200,29 @@ public class PdfModule extends ModuleBase {
 	 * We return the page sequence number for the referenced page.
 	 * If we can't find a match for the reference, we return -1.
 	 */
-	protected int resolveIndirectDest(PdfSimpleObject key) throws PdfException {
+	protected int resolveIndirectDest(PdfSimpleObject key, RepInfo info) throws PdfException {
+		if (key == null) {
+			throw new IllegalArgumentException("Argument key can not be null");
+		}
 		_logger.finest("Looking for indirectly referenced Dest: "
 				+ key.getStringValue());
-		if (_destNames != null) {
-			PdfObject destObj = _destNames.get(key.getRawBytes());
-			// Was the Dest this annotation refers to found in the document?
-			if (destObj == null) {
-				// Treat this condition as invalid:
-				String mess = MessageFormat.format(
-						MessageConstants.PDF_HUL_149.getMessage(),
-						key.getStringValue());
-				JhoveMessage message = JhoveMessages.getMessageInstance(
-						MessageConstants.PDF_HUL_149.getId(), mess);
-				throw new PdfInvalidException(message); // PDF-HUL-149
-				// OR if this is not considered invalid
-				// return -1;
-			} else {
-				Destination dest = new Destination(destObj, this, true);
-				// if (dest == null) {
-				// return -1;
-				// }
-				return dest.getPageDestObjNumber();
-			}
+		if (_destNames == null) return -1;
+		PdfObject destObj = _destNames.get(key.getRawBytes());
+		// Was the Dest this annotation refers to found in the document?
+		if (destObj == null) {
+			// Treat this condition as invalid:
+			String mess = MessageFormat.format(
+					MessageConstants.PDF_HUL_149.getMessage(),
+					key.getStringValue());
+			JhoveMessage message = JhoveMessages.getMessageInstance(
+					MessageConstants.PDF_HUL_149.getId(), mess);
+			info.setMessage(new ErrorMessage(message));
+			throw new PdfInvalidException(message); // PDF-HUL-149
+			// OR if this is not considered invalid
+			// return -1;
 		}
-		return -1;   // This is probably an error, actually
+		Destination dest = new Destination(destObj, this, true);
+		return dest.getPageDestObjNumber();
 	}
 
 	/* Build the user permission property., */
@@ -4178,13 +4266,13 @@ public class PdfModule extends ModuleBase {
 		if (propObject instanceof PdfSimpleObject) {
 			Token tok = ((PdfSimpleObject) propObject).getToken();
 			if (tok instanceof Literal) {
-				Date propDate = ((Literal) tok).parseDate();
+				Literal lit = (Literal) tok;
+				Date propDate = lit.parseDate();
 				if (propDate != null) {
-					propList.add(new Property(propName, PropertyType.DATE,
-							propDate));
-				} else {
-					throw new PdfInvalidException(MessageConstants.PDF_HUL_133,
-							0); // PDF-HUL-133
+					propList.add(new Property(propName, PropertyType.DATE, propDate));
+				// Ignore empty literals as this isn't an error
+				} else if (!lit.getValue().isEmpty()) {
+					throw new PdfInvalidException(MessageConstants.PDF_HUL_133, 0); // PDF-HUL-133
 				}
 			}
 		}

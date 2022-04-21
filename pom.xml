@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -10,7 +10,7 @@
 
   <groupId>org.openpreservation.jhove</groupId>
   <artifactId>jhove</artifactId>
-  <version>1.23.0-SNAPSHOT</version>
+  <version>1.25.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
@@ -65,17 +65,6 @@
     <maven>3.0</maven>
   </prerequisites>
 
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -94,7 +83,7 @@
     <mvn.source.version>3.0.1</mvn.source.version>
     <mvn.surefire.version>2.19.1</mvn.surefire.version>
     <mvn.release.version>2.5.3</mvn.release.version>
-    <jacoco.version>0.7.9</jacoco.version>
+    <jacoco.version>0.8.7</jacoco.version>
     <java.source.version>1.8</java.source.version>
     <java.target.version>1.8</java.target.version>
     <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
@@ -282,12 +271,29 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.8.1</version>
+        <version>4.13.1</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
+  <dependencies>
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-core</artifactId>
+      <version>2.3.0.1</version>
+    </dependency>
+  </dependencies>
   <profiles>
     <profile>
       <id>sonar-coverage-per-test</id>
@@ -320,6 +326,38 @@
         </dependency>
 
       </dependencies>
+    </profile>
+
+    <profile>
+      <id>license-header</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.mycila</groupId>
+            <artifactId>license-maven-plugin</artifactId>
+            <configuration>
+              <header>license/template/license.txt</header>
+              <properties>
+                <owner>veraPDF Consortium</owner>
+                <email>info@verapdf.org</email>
+              </properties>
+              <excludes>
+                <exclude>license/template/**</exclude>
+                <exclude>src/test/resources/**</exclude>
+                <exclude>src/main/resources/**</exclude>
+              </excludes>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
 
     <profile>
@@ -383,6 +421,51 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <id>ossrh</id>
+      <distributionManagement>
+        <snapshotRepository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+      </distributionManagement>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jarsigner-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign</id>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>opf</id>
+      <distributionManagement>
+        <snapshotRepository>
+          <id>opf-artefactory</id>
+          <url>https://artifactory.openpreservation.org/artifactory/opf-dev-local/</url>
+        </snapshotRepository>
+        <repository>
+          <id>opf-artefactory</id>
+          <url>https://artifactory.openpreservation.org/artifactory/opf-dev-local/</url>
+        </repository>
+      </distributionManagement>
+    </profile>
+
   </profiles>
 
 </project>

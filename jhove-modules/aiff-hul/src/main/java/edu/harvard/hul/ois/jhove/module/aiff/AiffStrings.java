@@ -13,17 +13,17 @@ package edu.harvard.hul.ois.jhove.module.aiff;
  *
  */
 public class AiffStrings {
+    
+    /** Strings for looping types in the Instrument Chunk */
+    public final static String[] LOOP_TYPE = 
+    { "No looping", 
+        "Forward looping",
+        "Forward/backward looping" };
 
     /** A private constructor just to make sure nobody
        instantiates the class by mistake. */
     private AiffStrings ()
     {
     }
-
-    /** Strings for looping types in the Instrument Chunk */
-    public final static String[] LOOP_TYPE = 
-    { "No looping", 
-        "Forward looping",
-        "Forward/backward looping" };
 
 }

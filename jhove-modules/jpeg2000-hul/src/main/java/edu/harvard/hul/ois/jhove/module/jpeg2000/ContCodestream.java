@@ -241,13 +241,12 @@ public class ContCodestream {
      * markers. */
     private static boolean isSegment (int marker) 
     {
-        if ((marker >= 0X30 && marker <= 0X3F) ||
+        // end of codestream
+        
+        return !((marker >= 0X30 && marker <= 0X3F) ||
                 marker == SOC ||       // start of codestream
                 marker == EPH ||       // end of packet header
                 marker == SOD ||       // start of data
-                marker == EOC) {       // end of codestream
-            return false;
-        }
-        return true;
+                marker == EOC);
     }
 }

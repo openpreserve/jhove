@@ -82,8 +82,184 @@ import java.util.zip.CRC32;
 // advisable since the data size could grow to invade the core of even
 // the stronger application servers.
 public class PngModule extends ModuleBase {
+    
+    //    private final Checksummer chcks = new Checksummer();
+
+    // Strangely, it seems it doesn't work with the other checksummer...
+    private final CRC32 chcks = new CRC32();
+
+    // PNG signature
+    private static final int SIGNATURE[] = {137, 80, 78, 71, 13, 10, 26, 10};
+
+    // Module instantiation constants.
+    private static final String NAME = "PNG-engineering";
+    private static final String RELEASE = "1.0";
+    private static final int DATE[] = {2006, 9, 25};
+    private static final String FORMAT[] = {
+		"PNG",
+		"Portable Network Graphics"
+	};
+    private static final String MIMETYPE[] = {"image/png"};
+    private static final String COVERAGE = "PNG";
+    private static final String WELLFORMED = null;
+    private static final String VALIDITY = null;
+    private static final String REPINFO = null;
+    private static final String NOTE = "Work in progress";
+    private static final String RIGHTS =
+		"Copyright 2006 Engineering Ingengeria Informatica S.p.a." +
+		"Released under the GNU Lesser General Public License." +
+		"Cryptoserver Library Copyright Engiweb Security, all rights reserved";
+    private static final boolean RANDOM = false;
+
+    /*
+     * Chunk signatures.
+     *
+     * Java *IS* Big Endian, PNG chunk signatures are 4 byte strings we
+     * *CAN* read into an int variable since all of them have bit 7
+     * set to 0.
+     *
+     * Therefore we can check each chunk signature against int
+     * constants (one opcode executed, no loops).
+     *
+     * About names: these name violate the Java naming rules for
+     * constants, but I prefer to keep the PNG chunk name cases, since
+     * they are meaningful for the properties of each chunk.
+     */
+    private final static int IHDR_HEAD_SIG = 0x49484452;
+    private final static int PLTE_HEAD_SIG = 0x504c5445;
+    private final static int IDAT_HEAD_SIG = 0x49444154;
+    private final static int IEND_HEAD_SIG = 0x49454e44;
+    private final static int cHRM_HEAD_SIG = 0x6348524d;
+    private final static int gAMA_HEAD_SIG = 0x67414d41;
+    private final static int iCCP_HEAD_SIG = 0x69434350;
+    private final static int sBIT_HEAD_SIG = 0x73424954;
+    private final static int sRGB_HEAD_SIG = 0x73524742;
+    private final static int tEXt_HEAD_SIG = 0x74455874;
+    private final static int zTXt_HEAD_SIG = 0x7a545874;
+    private final static int iTXt_HEAD_SIG = 0x69545874;
+    private final static int bKGD_HEAD_SIG = 0x624b4744;
+    private final static int hIST_HEAD_SIG = 0x68495354;
+    private final static int pHYs_HEAD_SIG = 0x70485973;
+    private final static int sPLT_HEAD_SIG = 0x73504c54;
+    private final static int tIME_HEAD_SIG = 0x74494d45;
+    private final static int tRNS_HEAD_SIG = 0x74524e53;
+    // Property bit masks
+    private final static int PROP_SAFE_TO_COPY = 0x00000020;
+    private final static int PROP_PRIVATE = 0x00002000;
+    private final static int PROP_RESERVED = 0x00200000;
+    private final static int PROP_ANCILLARY = 0x20000000;
+
+    // Maximum keyword lenght
+    private final static int MAX_KEYWORD_LEN = 79;
+
+    // Standard keyword for the creation timestamp
+    private final static String CREATION_TIME_KEYWORD = "Creation Time";
+
+    private final static int MAX_INT = 0x7FFFFFFF;
+
+    // Color Type
+	private final static int EachPixel_GRAYSCALE = 0;
+	private final static int EachPixel_RGB = 2;
+	private final static int EachPixel_PALETTE = 3;
+	private final static int EachPixel_GRAYSCALE_ALPHA = 4;
+	private final static int EachPixel_RGB_ALPHA = 6;
+
+    /*------------------------------------------------------------------*
+      |******************************************************************|
+      |*                                                                *|
+      |* Parser inner state flags.                                      *|
+      |*                                                                *|
+      |* The state is represented by a score of flags associated to the *|
+      |* chunks that should appear no more than once. The code uses the *|
+      |* flags to manage the partial ordering in the chunk layout       *|
+      |*                                                                *|
+      |* Flags have the  value RepInfo.UNDETERMINED  when the chunk may *|
+      |* either appear or not,  RepInfo.TRUE when the chunk is expected *|
+      |* but has  yet to be found, RepInfo.FALSE when  the chunk should *|
+      |* not appear any more. Istantiation values are for documentation *|
+      |* purpose only and are repeated in the initParse() method.       *|
+      |*                                                                *|
+      |******************************************************************|
+      *------------------------------------------------------------------*/
+
+    /*
+     * Starting chunk, must be the first one, expected.
+     */
+    private int expectingIHDR = RepInfo.TRUE;
+
+    /*
+     * This is 3 state flag: it is unknown until you know you need to
+     * find the PLTE chunk, when it turs to RepInfo.TRUE or/and you
+     * know you should not find such block any more (i.e. from color
+     * type and bit depth or because you already got this chunk.
+     */
+    private int expectingPLTE = RepInfo.UNDETERMINED;
+
+    /*
+     * Data chunk, turns to RepInfo.false upon finding the firs chunk
+     * of this type
+     */
+    private int expectingIDAT = RepInfo.TRUE;
+
+    /*
+     * Ending chunk, this flag is used to handle the end of file
+     * condition, if it happens when the flag is RepInfo.TRUE; then
+     * the file is not well formed.
+     */
+    private int expectingIEND = RepInfo.TRUE;
+
+    // non critical chunks
+
+    private int expecting_cHRM = RepInfo.UNDETERMINED;
+    private int expecting_gAMA = RepInfo.UNDETERMINED;
+    private int expecting_iCCP = RepInfo.UNDETERMINED;
+    private int expecting_sBIT = RepInfo.UNDETERMINED;
+    private int expecting_sRGB = RepInfo.UNDETERMINED;
+    private int expecting_tEXt = RepInfo.UNDETERMINED;
+    private int expecting_zTXt = RepInfo.UNDETERMINED;
+    private int expecting_iTXt = RepInfo.UNDETERMINED;
+    private int expecting_bKGD = RepInfo.UNDETERMINED;
+    private int expecting_hIST = RepInfo.UNDETERMINED;
+    private int expecting_pHYs = RepInfo.UNDETERMINED;
+    private int expecting_sPLT = RepInfo.UNDETERMINED;
+    private int expecting_tIME = RepInfo.UNDETERMINED;
+    private int expecting_tRNS = RepInfo.UNDETERMINED;
+
+    // Palette size, in colours
+    private int maxPaletteSize = 0;
+    private int paletteSize = 0;
+    private boolean shortPalette = false;
+    private int colorDepth = 0;
+
+    private Map keywordList;
+
+    private final static String PNG_PROFILES[] =
+		new String[] { "PNG GrayScale",             // 0
+					   "Unused",                    // 1
+					   "PNG Truecolor",             // 2
+					   "PNG Indexed",               // 3
+					   "PNG GrayScale with Alpha",  // 4
+					   "PNG Truecolor with Alpha"}; // 5
 
     public static final boolean PNG_ENDIANITY=true;
+
+    private final static String TITLE_KEYWORD = "Title";
+    private final static String AUTHOR_KEYWORD = "Author";
+    private final static String DESCRIPTION_KEYWORD = "Description";
+    private final static String COPYRIGHT_KEYWORD = "Copyright";
+    private final static String SOFTWARE_KEYWORD = "Software";
+    private final static String DISCLAIMER_KEYWORD = "Disclaimer";
+    private final static String WARNING_KEYWORD = "Warning";
+    private final static String SOURCE_KEYWORD = "Source";
+    private final static String COMMENT_KEYWORD = "Comment";
+    private final static String PLTE_NOT_FOUND= "Expected PLTE chunk not found.";
+    private final static String GAMA_AFTER_IDAT= "gAMA chunk found after IDAT ones.";
+    private final static String EXTRA_GAMA= "Extra gAMA chunk found.";
+    private final static String TEXT= "tEXT";
+    private final static String ILLEGAL_BIT_DEPTH= "In IHDR, illegal value for bit depth for colour type ";
+    private final static String ILLEGALE_PROFONDITA_DEI_BIT= "In IHDR, valore illegale per la profondita` dei bit per il colour type ";
+    private final static String NO_ANCORA_W3C= " no ancora standardizzato dal W3C.";  
+    
     /**
      * Crea una nuova istanza di <code>PngModule</code> .
      *
@@ -94,26 +270,26 @@ public class PngModule extends ModuleBase {
 
 		keywordList = new HashMap();
 
-		keywordList.put("Title",
-						new Booolean(false,"Title"));           //  Short (one line) title or caption for image
-		keywordList.put("Author",
-						new Booolean(false,"Author"));          //  Name of image's creator
-		keywordList.put("Description",
-						new Booolean(false,"Description"));     //  Description of image (possibly long)
-		keywordList.put("Copyright",
-						new Booolean(false,"Copyright"));       //  Copyright notice
+		keywordList.put(TITLE_KEYWORD,
+						new Booolean(false,TITLE_KEYWORD));           //  Short (one line) title or caption for image
+		keywordList.put(AUTHOR_KEYWORD,
+						new Booolean(false,AUTHOR_KEYWORD));          //  Name of image's creator
+		keywordList.put(DESCRIPTION_KEYWORD,
+						new Booolean(false,DESCRIPTION_KEYWORD));     //  Description of image (possibly long)
+		keywordList.put(COPYRIGHT_KEYWORD,
+						new Booolean(false,COPYRIGHT_KEYWORD));       //  Copyright notice
 		keywordList.put(CREATION_TIME_KEYWORD,
 						new Booolean(false,CREATION_TIME_KEYWORD)); //  Time of original image creation
-		keywordList.put("Software",
-						new Booolean(false,"Software"));        //  Software used to create the image
-		keywordList.put("Disclaimer",
-						new Booolean(false,"Disclaimer"));      //  Legal disclaimer
-		keywordList.put("Warning",
-						new Booolean(false,"Warning"));         //  Warning of nature of content
-		keywordList.put("Source",
-						new Booolean(false,"Source"));          //  Device used to create the image
-		keywordList.put("Comment",
-						new Booolean(false,"Comment"));         //  Miscellaneous comment
+		keywordList.put(SOFTWARE_KEYWORD,
+						new Booolean(false,SOFTWARE_KEYWORD));        //  Software used to create the image
+		keywordList.put(DISCLAIMER_KEYWORD,
+						new Booolean(false,DISCLAIMER_KEYWORD));      //  Legal disclaimer
+		keywordList.put(WARNING_KEYWORD,
+						new Booolean(false,WARNING_KEYWORD));         //  Warning of nature of content
+		keywordList.put(SOURCE_KEYWORD,
+						new Booolean(false,SOURCE_KEYWORD));          //  Device used to create the image
+		keywordList.put(COMMENT_KEYWORD,
+						new Booolean(false,COMMENT_KEYWORD));         //  Miscellaneous comment
     }
     // Implementation of edu.harvard.hul.ois.jhove.Module
 
@@ -219,7 +395,7 @@ public class PngModule extends ModuleBase {
 										   IdentifierType.URL));
 		_specification.add (doc);
 
-		Signature sig = new InternalSignature ("PNG", SignatureType.MAGIC,
+		Signature sig = new InternalSignature (COVERAGE, SignatureType.MAGIC,
 											   SignatureUseType.MANDATORY, 0);
 		_signature.add (sig);
 
@@ -234,17 +410,17 @@ public class PngModule extends ModuleBase {
 			repInfo.setWellFormed (RepInfo.FALSE);
 			return 0;
 		}
-		repInfo.setFormat("PNG");
+		repInfo.setFormat(COVERAGE);
 
 		// If we got this far, take note that the signature is OK.
 		repInfo.setSigMatch(_name);
 		repInfo.setModule(this);
 		// First chunk MUST be IHDR
 		int declChunkLen = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)
-								 &0x7FFFFFFF);
+								 &MAX_INT);
 		chcks.reset();
 
-		int chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&0x7FFFFFFF);
+		int chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&MAX_INT);
 		chcks.update(int2byteArray(chunkSig));
 
 		if (chunkSig != IHDR_HEAD_SIG ) {
@@ -269,11 +445,11 @@ public class PngModule extends ModuleBase {
 
 		while (expectingIEND == RepInfo.TRUE) {
 			declChunkLen = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)
-								 &0x7FFFFFFF);
+								 &MAX_INT);
 			// Each chunk has its checsum;
 			chcks.reset();
 
-			chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&0x7FFFFFFF);
+			chunkSig = (int)(readUnsignedInt(dstream, PNG_ENDIANITY, this)&MAX_INT);
 			chcks.update(int2byteArray(chunkSig));
 
 			switch (chunkSig) {
@@ -298,7 +474,7 @@ public class PngModule extends ModuleBase {
 			case IDAT_HEAD_SIG:
 				if (expectingPLTE == RepInfo.TRUE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Expected PLTE chunk not found." ));
+					repInfo.setMessage(new ErrorMessage(PLTE_NOT_FOUND ));
 
 					break;
 				}
@@ -310,7 +486,7 @@ public class PngModule extends ModuleBase {
 			case IEND_HEAD_SIG:
 				if (expectingPLTE == RepInfo.TRUE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Expected PLTE chunk not found." ));
+					repInfo.setMessage(new ErrorMessage(PLTE_NOT_FOUND));
 
 					break;
 				}
@@ -360,13 +536,13 @@ public class PngModule extends ModuleBase {
 				}
 				if (expectingIDAT == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("gAMA chunk found after IDAT ones." ));
+					repInfo.setMessage(new ErrorMessage(GAMA_AFTER_IDAT));
 
 					break;
 				}
 				if (expecting_gAMA == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Extra gAMA chunk found." ));
+					repInfo.setMessage(new ErrorMessage(EXTRA_GAMA ));
 
 					break;
 				}
@@ -468,7 +644,7 @@ public class PngModule extends ModuleBase {
 
 			case tEXt_HEAD_SIG:
 
-				checkChunk(dstream, repInfo, declChunkLen,"tEXT");
+				checkChunk(dstream, repInfo, declChunkLen, TEXT);
 				break;
 
 			case zTXt_HEAD_SIG:
@@ -492,13 +668,13 @@ public class PngModule extends ModuleBase {
 				}
 				if (expectingIDAT == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("gAMA chunk found after IDAT ones." ));
+					repInfo.setMessage(new ErrorMessage(GAMA_AFTER_IDAT ));
 
 					break;
 				}
 				if (expecting_gAMA == RepInfo.FALSE) {
 					repInfo.setWellFormed(RepInfo.FALSE);
-					repInfo.setMessage(new ErrorMessage("Extra gAMA chunk found." ));
+					repInfo.setMessage(new ErrorMessage(EXTRA_GAMA ));
 
 					break;
 				}
@@ -789,28 +965,28 @@ public class PngModule extends ModuleBase {
 		chcks.update((byte)colorType);
 
 		switch (colorType) {
-		case 0:
+		case EachPixel_GRAYSCALE:
 			if (tmp != 1 &&
 				tmp != 2 &&
 				tmp != 4 &&
 				tmp != 8 &&
 				tmp != 16) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, illegal value for bit depth for colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGAL_BIT_DEPTH +
 
 													colorType + ": " +tmp ));
 
 			}
-			repInfo.setProfile("PNG GrayScale");
+			repInfo.setProfile(PNG_PROFILES[0]);
 
 			expectingPLTE=RepInfo.FALSE;
-		case 3:
+		case EachPixel_PALETTE:
 			if (tmp != 1 &&
 				tmp != 2 &&
 				tmp != 4 &&
 				tmp != 8 ) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, illegal value for bit depth for colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGAL_BIT_DEPTH +
 													colorType + ": " +tmp ));
 
 			}
@@ -818,45 +994,45 @@ public class PngModule extends ModuleBase {
 			expectingPLTE = RepInfo.TRUE;
 			colorDepth = tmp;
 			maxPaletteSize = 1 << tmp ;
-			repInfo.setProfile("PNG Indexed");
+			repInfo.setProfile(PNG_PROFILES[3]);
 
 			break;
-		case 4:
+		case EachPixel_GRAYSCALE_ALPHA:
 			expectingPLTE=RepInfo.FALSE;
 			if (tmp != 8 &&
 				tmp != 16) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, valore illegale per la profondita` dei bit per il colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGALE_PROFONDITA_DEI_BIT +
 													colorType + ": " +tmp ));
 
 			}
 
-			repInfo.setProfile("PNG GrayScale with Alpha");
+			repInfo.setProfile(PNG_PROFILES[4]);
 			break;
-		case 6:
-			expectingPLTE=RepInfo.FALSE;
-			expecting_tRNS=RepInfo.FALSE;
-			if (tmp != 8 &&
-				tmp != 16) {
-				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, valore illegale per la profondita` dei bit per il colour type " +
-													colorType + ": " +tmp ));
-
-			}
-			repInfo.setProfile("PNG Truecolor with Alpha");
-			break;
-		case 2:
+		case EachPixel_RGB_ALPHA:
 			expectingPLTE=RepInfo.FALSE;
 			expecting_tRNS=RepInfo.FALSE;
 			if (tmp != 8 &&
 				tmp != 16) {
 				repInfo.setValid(RepInfo.FALSE);
-				repInfo.setMessage(new ErrorMessage("In IHDR, valore illegale per la profondita` dei bit per il colour type " +
+				repInfo.setMessage(new ErrorMessage(ILLEGALE_PROFONDITA_DEI_BIT +
+													colorType + ": " +tmp ));
+
+			}
+			repInfo.setProfile(PNG_PROFILES[5]);
+			break;
+		case EachPixel_RGB:
+			expectingPLTE=RepInfo.FALSE;
+			expecting_tRNS=RepInfo.FALSE;
+			if (tmp != 8 &&
+				tmp != 16) {
+				repInfo.setValid(RepInfo.FALSE);
+				repInfo.setMessage(new ErrorMessage(ILLEGALE_PROFONDITA_DEI_BIT +
 													colorType + ": " +tmp ));
 
 			}
 
-			repInfo.setProfile("PNG Truecolor");
+			repInfo.setProfile(PNG_PROFILES[2]);
 			break;
 		default:
 			repInfo.setValid(RepInfo.FALSE);
@@ -882,7 +1058,7 @@ public class PngModule extends ModuleBase {
 
 		if (tmp!=0) {
 			repInfo.setMessage(new InfoMessage("Attenzione, tipo di filtro " +
-											   tmp + " no ancora standardizzato dal W3C."));
+											   tmp + NO_ANCORA_W3C));
 		}
 
 		// interlace
@@ -892,7 +1068,7 @@ public class PngModule extends ModuleBase {
 
 		if (tmp!=0 && tmp!=1) {
 			repInfo.setMessage(new InfoMessage("Attenzione, tipo di interlacciamento " +
-											   tmp + " no ancora standardizzato dal W3C."));
+											   tmp + NO_ANCORA_W3C));
 		}
 
 		long crc32 = readUnsignedInt(inputStream, PNG_ENDIANITY, this);
@@ -1060,7 +1236,7 @@ public class PngModule extends ModuleBase {
 				repInfo.setValid(RepInfo.FALSE);
 				repInfo.setMessage(new ErrorMessage("Missing 0 byte after keyword"));
 
-				checkChunk(inputStream, repInfo, declChunkLen, "tEXT");
+				checkChunk(inputStream, repInfo, declChunkLen, TEXT);
 				buf.append((char)c);
 
 			}
@@ -1186,156 +1362,5 @@ public class PngModule extends ModuleBase {
 		return b;
 
     }
-
-
-//    private final Checksummer chcks = new Checksummer();
-
-    // Strangely, it seems it doesn't work with the other checksummer...
-    private final CRC32 chcks = new CRC32();
-
-    // PNG signature
-    private static final int SIGNATURE[] = {137, 80, 78, 71, 13, 10, 26, 10};
-
-    // Module instantiation constants.
-    private static final String NAME = "PNG-engineering";
-    private static final String RELEASE = "1.0";
-    private static final int DATE[] = {2006, 9, 25};
-    private static final String FORMAT[] = {
-		"PNG",
-		"Portable Network Graphics"
-	};
-    private static final String MIMETYPE[] = {"image/png"};
-    private static final String COVERAGE = "PNG";
-    private static final String WELLFORMED = null;
-    private static final String VALIDITY = null;
-    private static final String REPINFO = null;
-    private static final String NOTE = "Work in progress";
-    private static final String RIGHTS =
-		"Copyright 2006 Engineering Ingengeria Informatica S.p.a." +
-		"Released under the GNU Lesser General Public License." +
-		"Cryptoserver Library Copyright Engiweb Security, all rights reserved";
-    private static final boolean RANDOM = false;
-
-    /*
-     * Chunk signatures.
-     *
-     * Java *IS* Big Endian, PNG chunk signatures are 4 byte strings we
-     * *CAN* read into an int variable since all of them have bit 7
-     * set to 0.
-     *
-     * Therefore we can check each chunk signature against int
-     * constants (one opcode executed, no loops).
-     *
-     * About names: these name violate the Java naming rules for
-     * constants, but I prefer to keep the PNG chunk name cases, since
-     * they are meaningful for the properties of each chunk.
-     */
-    private final static int IHDR_HEAD_SIG = 0x49484452;
-    private final static int PLTE_HEAD_SIG = 0x504c5445;
-    private final static int IDAT_HEAD_SIG = 0x49444154;
-    private final static int IEND_HEAD_SIG = 0x49454e44;
-    private final static int cHRM_HEAD_SIG = 0x6348524d;
-    private final static int gAMA_HEAD_SIG = 0x67414d41;
-    private final static int iCCP_HEAD_SIG = 0x69434350;
-    private final static int sBIT_HEAD_SIG = 0x73424954;
-    private final static int sRGB_HEAD_SIG = 0x73524742;
-    private final static int tEXt_HEAD_SIG = 0x74455874;
-    private final static int zTXt_HEAD_SIG = 0x7a545874;
-    private final static int iTXt_HEAD_SIG = 0x69545874;
-    private final static int bKGD_HEAD_SIG = 0x624b4744;
-    private final static int hIST_HEAD_SIG = 0x68495354;
-    private final static int pHYs_HEAD_SIG = 0x70485973;
-    private final static int sPLT_HEAD_SIG = 0x73504c54;
-    private final static int tIME_HEAD_SIG = 0x74494d45;
-    private final static int tRNS_HEAD_SIG = 0x74524e53;
-    // Property bit masks
-    private final static int PROP_SAFE_TO_COPY = 0x00000020;
-    private final static int PROP_PRIVATE = 0x00002000;
-    private final static int PROP_RESERVED = 0x00200000;
-    private final static int PROP_ANCILLARY = 0x20000000;
-
-    // Maximum keyword lenght
-    private final static int MAX_KEYWORD_LEN = 79;
-
-    // Standard keyword for the creation timestamp
-    private final static String CREATION_TIME_KEYWORD = "Creation Time";
-
-    /*------------------------------------------------------------------*
-      |******************************************************************|
-      |*                                                                *|
-      |* Parser inner state flags.                                      *|
-      |*                                                                *|
-      |* The state is represented by a score of flags associated to the *|
-      |* chunks that should appear no more than once. The code uses the *|
-      |* flags to manage the partial ordering in the chunk layout       *|
-      |*                                                                *|
-      |* Flags have the  value RepInfo.UNDETERMINED  when the chunk may *|
-      |* either appear or not,  RepInfo.TRUE when the chunk is expected *|
-      |* but has  yet to be found, RepInfo.FALSE when  the chunk should *|
-      |* not appear any more. Istantiation values are for documentation *|
-      |* purpose only and are repeated in the initParse() method.       *|
-      |*                                                                *|
-      |******************************************************************|
-      *------------------------------------------------------------------*/
-
-    /*
-     * Starting chunk, must be the first one, expected.
-     */
-    private int expectingIHDR = RepInfo.TRUE;
-
-    /*
-     * This is 3 state flag: it is unknown until you know you need to
-     * find the PLTE chunk, when it turs to RepInfo.TRUE or/and you
-     * know you should not find such block any more (i.e. from color
-     * type and bit depth or because you already got this chunk.
-     */
-    private int expectingPLTE = RepInfo.UNDETERMINED;
-
-    /*
-     * Data chunk, turns to RepInfo.false upon finding the firs chunk
-     * of this type
-     */
-    private int expectingIDAT = RepInfo.TRUE;
-
-    /*
-     * Ending chunk, this flag is used to handle the end of file
-     * condition, if it happens when the flag is RepInfo.TRUE; then
-     * the file is not well formed.
-     */
-    private int expectingIEND = RepInfo.TRUE;
-
-    // non critical chunks
-
-    private int expecting_cHRM = RepInfo.UNDETERMINED;
-    private int expecting_gAMA = RepInfo.UNDETERMINED;
-    private int expecting_iCCP = RepInfo.UNDETERMINED;
-    private int expecting_sBIT = RepInfo.UNDETERMINED;
-    private int expecting_sRGB = RepInfo.UNDETERMINED;
-    private int expecting_tEXt = RepInfo.UNDETERMINED;
-    private int expecting_zTXt = RepInfo.UNDETERMINED;
-    private int expecting_iTXt = RepInfo.UNDETERMINED;
-    private int expecting_bKGD = RepInfo.UNDETERMINED;
-    private int expecting_hIST = RepInfo.UNDETERMINED;
-    private int expecting_pHYs = RepInfo.UNDETERMINED;
-    private int expecting_sPLT = RepInfo.UNDETERMINED;
-    private int expecting_tIME = RepInfo.UNDETERMINED;
-    private int expecting_tRNS = RepInfo.UNDETERMINED;
-
-    // Palette size, in colours
-    private int maxPaletteSize = 0;
-    private int paletteSize = 0;
-    private boolean shortPalette = false;
-    private int colorDepth = 0;
-
-    private Map keywordList;
-
-    private final static String PNG_PROFILES[] =
-		new String[] { "PNG GrayScale",             // 0
-					   "Unused",                    // 1
-					   "PNG Truecolor",             // 2
-					   "PNG Indexed",               // 3
-					   "PNG GrayScale with Alpha",  // 4
-					   "Unused",                    // 5
-					   "PNG Truecolor with Alpha"}; // 6
 
 }

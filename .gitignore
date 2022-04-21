@@ -10,7 +10,7 @@ release.properties
 Gemfile.lock
 
 # Ignore Test Root
-# /test-root/
+/test-root/
 
 # Ignore Eclipse artefacts
 **/.settings
@@ -18,3 +18,9 @@ Gemfile.lock
 **/.classpath
 **/*.class
 **/bin
+# Ignore VisualCode artefacts
+**/.vscode
+
+# Ignore IntelliJ
+.idea
+*.iml

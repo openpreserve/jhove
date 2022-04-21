@@ -14,10 +14,6 @@ final class JhoveMessageImpl implements JhoveMessage {
 	private final String message;
 	private final String subMessage;
 
-	private JhoveMessageImpl(final String id, final String message) {
-		this(id, message, "");
-	}
-
 	private JhoveMessageImpl(final String id, final String message, final String subMessage) {
 		this.id = id;
 		this.message = message;
@@ -25,7 +21,7 @@ final class JhoveMessageImpl implements JhoveMessage {
 	}
 
 	static JhoveMessage getInstance(final String id, final String message, final String subMessage) {
-		return new JhoveMessageImpl(id, message);
+		return new JhoveMessageImpl(id, message, subMessage);
 	}
 
 	@Override
@@ -110,6 +106,4 @@ final class JhoveMessageImpl implements JhoveMessage {
 		}
 		return true;
 	}
-
-
 }
