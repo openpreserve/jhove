@@ -113,6 +113,7 @@ import edu.harvard.hul.ois.jhove.module.pdf.X3Profile;
  * Module for identification and validation of PDF files.
  */
 public class PdfModule extends ModuleBase {
+
 	public static final String MIME_TYPE = "application/pdf";
 	public static final String EXT = ".pdf";
 	public static final int MAX_PAGE_TREE_DEPTH = 100;
@@ -192,10 +193,10 @@ public class PdfModule extends ModuleBase {
 	private static final String DICT_KEY_ID = "ID";
 	private static final String DICT_KEY_FONT_NAME = "FontName";
 	private static final String DICT_KEY_FONT_FILE = "FontFile";
-	private static final String DICT_KEY_FONT_FILE_2 = DICT_KEY_FONT_FILE + "2";
-	private static final String DICT_KEY_FONT_FILE_3 = DICT_KEY_FONT_FILE + "3";
+	private static final String DICT_KEY_FONT_FILE_2 = "FontFile2";
+	private static final String DICT_KEY_FONT_FILE_3 = "FontFile3";
 	private static final String DICT_KEY_BBOX = "BBox";
-	private static final String DICT_KEY_FONT_BBOX = "Font" + DICT_KEY_BBOX;
+	private static final String DICT_KEY_FONT_BBOX = "FontBBox";
 	private static final String DICT_KEY_XREF_STREAM = "XRefStm";
 	private static final String DICT_KEY_VIEWER_PREFS = "ViewerPreferences";
 	private static final String DICT_KEY_PAGE_LAYOUT = "PageLayout";
@@ -209,8 +210,14 @@ public class PdfModule extends ModuleBase {
 	private static final String DICT_KEY_PAGE_LABELS = "PageLabels";
 	private static final String DICT_KEY_TYPE = "Type";
 	private static final String DICT_KEY_VERSION = "Version";
+	private static final String DICT_KEY_EXTENSIONS = "Extensions";
+	private static final String DICT_KEY_EXTENSIONLEVEL = "ExtensionLevel";
+	private static final String DICT_KEY_BASEVERSION = "BaseVersion";
+	private static final String PROP_NAME_BASEVERSION = DICT_KEY_BASEVERSION;
+	private static final String PROP_NAME_EXTENSIONLEVEL = DICT_KEY_EXTENSIONLEVEL;
+	private static final String PROP_NAME_DEVELOPERPREFIX = "DeveloperPrefix";
 	private static final String DICT_KEY_NAME = "Name";
-	private static final String DICT_KEY_NAMES = DICT_KEY_NAME + "s";
+	private static final String DICT_KEY_NAMES = "Names";
 	private static final String DICT_KEY_EMBEDDED_FILES = "EmbeddedFiles";
 	private static final String DICT_KEY_DESTS = "Dests";
 	private static final String DICT_KEY_FILTER = "Filter";
@@ -219,8 +226,7 @@ public class PdfModule extends ModuleBase {
 	private static final String DICT_KEY_R = "R";
 	private static final String DICT_KEY_V = "V";
 	private static final String DICT_KEY_ENCODING = "Encoding";
-	private static final String DICT_KEY_BASE_ENCODING = "Base"
-			+ DICT_KEY_ENCODING;
+	private static final String DICT_KEY_BASE_ENCODING = "BaseEncoding";
 	private static final String DICT_KEY_LENGTH = "Length";
 	private static final String DICT_KEY_WIDTH = "Width";
 	private static final String DICT_KEY_HEIGHT = "Height";
@@ -265,13 +271,12 @@ public class PdfModule extends ModuleBase {
 	private static final String PROP_NAME_CALLOUT_LINE = "CalloutLine";
 	private static final String PROP_NAME_CMAP_DICT = "CMapDictionary";
 	private static final String PROP_NAME_CID_INFO = DICT_KEY_CID_INFO;
-	private static final String PROP_NAME_CID_INFOS = PROP_NAME_CID_INFO + "s";
+	private static final String PROP_NAME_CID_INFOS = "CIDSystemInfos";
 	private static final String PROP_NAME_CONTENTS = DICT_KEY_CONTENTS;
 	private static final String PROP_NAME_DISTANCE = "Distance";
 	private static final String PROP_NAME_DIFFERENCES = DICT_KEY_DIFFERENCES;
 	private static final String PROP_NAME_ENCODING = DICT_KEY_ENCODING;
-	private static final String PROP_NAME_ENCODING_DICTIONARY = PROP_NAME_ENCODING
-			+ "Dictionary";
+	private static final String PROP_NAME_ENCODING_DICTIONARY = "EncodingDictionary";
 	private static final String PROP_NAME_BASE_ENCODING = DICT_KEY_BASE_ENCODING;
 	private static final String PROP_NAME_EXTERNAL_STREAMS = "ExternalStreams";
 	private static final String PROP_NAME_FILTER = DICT_KEY_FILTER;
@@ -281,7 +286,7 @@ public class PdfModule extends ModuleBase {
 	private static final String PROP_NAME_FLAGS = DICT_KEY_FLAGS;
 	private static final String PROP_NAME_AREA = "Area";
 	private static final String PROP_NAME_IMAGE = "Image";
-	private static final String PROP_NAME_IMAGES = PROP_NAME_IMAGE + "s";
+	private static final String PROP_NAME_IMAGES = "Images";
 	private static final String PROP_NAME_OBJECTS = "Objects";
 	private static final String PROP_NAME_RESOURCES = DICT_KEY_RESOURCES;
 	private static final String PROP_NAME_SUBTYPE = DICT_KEY_XOBJ_SUBTYPE;
@@ -338,9 +343,8 @@ public class PdfModule extends ModuleBase {
 	private static final String PROP_NAME_FONT_CID_TYPE0 = FONT_CID_TYPE0;
 	private static final String PROP_NAME_FONT_CID_TYPE2 = FONT_CID_TYPE2;
 	private static final String PROP_NAME_FONT = "Font";
-	private static final String PROP_NAME_FONTS = PROP_NAME_FONT + "s";
-	private static final String PROP_NAME_FONT_SUBSET = PROP_NAME_FONT
-			+ "Subset";
+	private static final String PROP_NAME_FONTS = "Fonts";
+	private static final String PROP_NAME_FONT_SUBSET = "FontSubset";
 	private static final String PROP_NAME_FONT_BBOX = DICT_KEY_FONT_BBOX;
 	private static final String PROP_NAME_FONT_DESC = DICT_KEY_FONT_DESCRIPTOR;
 	private static final String PROP_NAME_FONT_FILE = DICT_KEY_FONT_FILE;
@@ -358,7 +362,7 @@ public class PdfModule extends ModuleBase {
 	private static final String PROP_NAME_ROTATE = DICT_KEY_ROTATE;
 	private static final String PROP_NAME_REPLY_TYPE = "ReplyType";
 	private static final String PROP_NAME_VIEWPORT = "Viewport";
-	private static final String PROP_NAME_VIEWPORTS = PROP_NAME_VIEWPORT + "s";
+	private static final String PROP_NAME_VIEWPORTS = "Viewports";
 	private static final String PROP_NAME_THUMB = DICT_KEY_THUMB;
 	private static final String PROP_NAME_TO_UNICODE = DICT_KEY_TO_UNICODE;
 	private static final String PROP_NAME_PAGE = "Page";
@@ -382,17 +386,18 @@ public class PdfModule extends ModuleBase {
   private static final int [] DATE = { 2019, 12, 10 };
 	private static final String[] FORMAT = { "PDF",
 			"Portable Document Format" };
-	private static final String COVERAGE = "PDF 1.0-1.6; PDF/X-1 (ISO 15930-1:2001), X-1a (ISO 15930-4:2003), "
-			+ "X-2 (ISO 15930-5:2003), and X-3 (ISO 15930-6:2003); Tagged PDF; "
-			+ "Linearized PDF; PDF/A (ISO/CD 19005-1)";
+	private static final String COVERAGE = "PDF 1.0-1.6; "
+			+ "PDF/X-1 (ISO 15930-1:2001), X-1a (ISO 15930-4:2003), "
+			+ "X-2 (ISO 15930-5:2003), and X-3 (ISO 15930-6:2003); "
+			+ "Tagged PDF; Linearized PDF";
 	private static final String[] MIMETYPE = { MIME_TYPE };
 	private static final String WELLFORMED = "A PDF file is "
 			+ "well-formed if it meets the criteria defined in Chapter "
 			+ "3 of the PDF Reference 1.6 (5th edition, 2004)";
 	private static final String VALIDITY = null;
 	private static final String REPINFO = null;
-	private static final String NOTE = "This module does *not* validate "
-			+ "data within content streams (including operators) or encrypted data";
+	private static final String NOTE = "This module does *not* validate data "
+			+ "within content streams (including operators) or encrypted data";
 	private static final String RIGHTS = "Copyright 2003-2007 by JSTOR and "
 			+ "the President and Fellows of Harvard College. "
 			+ "Released under the GNU Lesser General Public License.";
@@ -409,7 +414,7 @@ public class PdfModule extends ModuleBase {
 	 * PRIVATE INSTANCE FIELDS.
 	 ******************************************************************/
 
-	/*
+	/**
 	 * The maximum number of fonts that will be reported before we just
 	 * give up and report a stub to avoid running out of memory.
 	 */
@@ -434,41 +439,38 @@ public class PdfModule extends ModuleBase {
 	protected int _numObjects;   // Value of the "Size" entry in the trailer
 								   // dictionary
 	protected int _numTrailers;  // Count of the number of trailers (updates)
-	protected Map<Long, PdfObject> _objects; // Map of the objects in the file
-	protected long[] _xref;      // array of object offsets from xref table
-	protected int[][] _xref2;   // array of int[2], giving object stream and
-								   // offset when _xref[i] < 0
-	protected boolean _xrefIsStream; // true if xref streams rather than tables
-									 // are used
-	protected boolean _encrypted;    // equivalent to _encryptDictRef != null
-	protected List<Property> _docCatalogList;  // Info extracted from doc cat
-												  // dict
+	protected Map _objects;      // Map of the objects in the file
+	protected long[] _xref;      // Array of object offsets from XRef table
+	protected int[][] _xref2;    // Array of int[2], giving object stream and
+								               // offset when _xref[i] < 0
+	protected boolean _xrefIsStream; // True if XRef streams rather than tables
+									                 // are used
+	protected boolean _encrypted;    // Equivalent to _encryptDictRef != null
+	protected List<Property> _docCatalogList;  // Info extracted from doc cat dict
 	protected List<Property> _encryptList;     // Info from encryption dict
-	protected List<Property> _docInfoList;     // info from doc info dict
+	protected List<Property> _docInfoList;     // Info from doc info dict
 	protected List<Property> _extStreamsList;  // List of external streams
 	protected List<Property> _imagesList;      // List of image streams
 	protected List<Property> _filtersList;     // List of filters
 	protected List<Property> _pagesList;       // List of PageObjects
 
-	protected Map<Integer, PdfObject> _type0FontsMap;    // Map of type 0 font
-														    // dictionaries
-	protected Map<Integer, PdfObject> _type1FontsMap;    // Map of type 1 font
-														    // dictionaries
-	protected Map<Integer, PdfObject> _mmFontsMap;       // Map of multi master
-													       // font dictionaries
-	protected Map<Integer, PdfObject> _type3FontsMap;    // Map of type 3 font
-														    // dictionaries
-	protected Map<Integer, PdfObject> _trueTypeFontsMap;   // Map of TrueType
-														   // font dictionaries
-	protected Map<Integer, PdfObject> _cid0FontsMap;   // Map of CIDFont/Type1
-													   // dictionaries
-	protected Map<Integer, PdfObject> _cid2FontsMap;   // Map of
-													   // CIDFont/TrueType
-													   // dictionaries
+	/** Map of Type 0 font dictionaries. */
+	protected Map<Integer, PdfObject> _type0FontsMap;
+	/** Map of Type 1 font dictionaries. */
+	protected Map<Integer, PdfObject> _type1FontsMap;
+	/** Map of Multiple Master font dictionaries. */
+	protected Map<Integer, PdfObject> _mmFontsMap;
+	/** Map of Type 3 font dictionaries. */
+	protected Map<Integer, PdfObject> _type3FontsMap;
+	/** Map of TrueType font dictionaries. */
+	protected Map<Integer, PdfObject> _trueTypeFontsMap;
+	/** Map of CIDFont/Type 1 dictionaries. */
+	protected Map<Integer, PdfObject> _cid0FontsMap;
+	/** Map of CIDFont/TrueType dictionaries. */
+	protected Map<Integer, PdfObject> _cid2FontsMap;
 
-	protected Map<Integer, Integer> _pageSeqMap;     // Map associating page
-												     // object dicts with
-												     // sequence numbers
+	/** Map associating page object dictionaries with sequence numbers. */
+	protected Map<Integer, Integer> _pageSeqMap;
 
 	protected PdfIndirectObj _docCatDictRef;
 	protected PdfIndirectObj _encryptDictRef;
@@ -496,11 +498,11 @@ public class PdfModule extends ModuleBase {
 	protected boolean _actionsExist;
 	protected boolean _pdfACompliant;  // flag checking PDF/A compliance
 
-	protected boolean _recursionWarned;  // Check if warning has been issued on
-										  // recursive outlines.
+	/** True if warning has been issued on recursive outlines. */
+	protected boolean _recursionWarned;
 
 	/*
-	 * These three variables track whether a message has been posted
+	 * These three variables track whether certain messages have been posted
 	 * notifying the user of omitted information.
 	 */
 	protected boolean _skippedFontsReported;
@@ -508,7 +510,7 @@ public class PdfModule extends ModuleBase {
 	protected boolean _skippedAnnotationsReported;
 	protected boolean _skippedPagesReported;
 
-	/** List of profile checkers */
+	/** List of profile checkers. */
 	protected List<PdfProfile> _profile;
 
 	/** Cached object stream. */
@@ -520,7 +522,7 @@ public class PdfModule extends ModuleBase {
 	/** Map of visited nodes when walking through an outline. */
 	protected Set<Integer> _visitedOutlineNodes;
 
-	/** maximum number of fonts to report full information on. */
+	/** Maximum number of fonts to report full information on. */
 	protected int maxFonts;
 
 	/** Number of fonts reported so far. */
@@ -550,6 +552,7 @@ public class PdfModule extends ModuleBase {
 	 * information.
 	 */
 	public PdfModule() {
+
 		super(NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
 				VALIDITY, REPINFO, NOTE, RIGHTS, true);
 
@@ -655,6 +658,10 @@ public class PdfModule extends ModuleBase {
 		_profile.add(new LinearizedProfile(this));
 		TaggedProfile tpr = new TaggedProfile(this);
 		_profile.add(tpr);
+
+		/*
+		 * CURRENT PDF/A PROFILING UNFIT FOR PURPOSE; SEE GITHUB ISSUE #101.
+		 *
 		AProfile apr = new AProfile(this);
 		_profile.add(apr);
 		// Link AProfile to TaggedProfile to save checking
@@ -665,6 +672,7 @@ public class PdfModule extends ModuleBase {
 		_profile.add(apra);
 		// AProfileLevelA depends on AProfile
 		apra.setAProfile(apr);
+		*/
 
 		X1Profile x1 = new X1Profile(this);
 		_profile.add(x1);
@@ -675,6 +683,7 @@ public class PdfModule extends ModuleBase {
 		x1a.setX1Profile(x1);
 		_profile.add(new X2Profile(this));
 		_profile.add(new X3Profile(this));
+
 		_showAnnotations = false;
 		_showFonts = false;
 		_showOutlines = false;
@@ -1685,6 +1694,57 @@ public class PdfModule extends ModuleBase {
 					throw new PdfInvalidException(MessageConstants.PDF_HUL_88); // PDF-HUL-88
 				}
 			}
+			
+			// If extensions are defined get the extensionlevel information and the baseVersion from the extensions
+			PdfObject extensions = _docCatDict.get(DICT_KEY_EXTENSIONS);
+			if (extensions != null) {
+				if (extensions instanceof PdfDictionary) {
+					Iterator<PdfObject> extensionsIter = ((PdfDictionary) extensions).iterator();
+					while (extensionsIter.hasNext()) {
+							PdfDictionary  extension = (PdfDictionary) extensionsIter.next(); 
+							 Set<String> developerPrefixKeys = ((PdfDictionary) extensions).getKeys();
+							 for (String developerPrefixKey : developerPrefixKeys) {
+								 if (PdfStrings.PREFIXNAMESREGISTY.contains(developerPrefixKey.toString())) {
+									 p = new Property(PROP_NAME_DEVELOPERPREFIX, PropertyType.STRING, 
+											 developerPrefixKey.toString());
+									 _docCatalogList.add(p);
+									 PdfSimpleObject BaseVersion = (PdfSimpleObject) 
+												extension.get(DICT_KEY_BASEVERSION);
+										String infoVersString = _version;
+										String versString = BaseVersion.getStringValue();
+										double ver = Double.parseDouble(versString);
+										double infoVer = Double.parseDouble(infoVersString);
+										try {
+											if (infoVer != ver) {
+												String mess = MessageFormat.format(
+														MessageConstants.PDF_HUL_87.getMessage(),
+														infoVersString, ver);
+												JhoveMessage message = JhoveMessages.getMessageInstance(
+														MessageConstants.PDF_HUL_87.getId(), mess);
+												info.setMessage(new InfoMessage(message));
+											} else {
+												p = new Property(PROP_NAME_BASEVERSION, PropertyType.STRING, ver);
+												_docCatalogList.add(p);
+											}
+										} catch (NumberFormatException e) {
+											throw new PdfInvalidException(MessageConstants.PDF_HUL_88); // PDF-HUL-88
+										}
+										PdfSimpleObject extensionLevel = (PdfSimpleObject) extension.get(DICT_KEY_EXTENSIONLEVEL);
+										if (extensionLevel != null) {
+											p = new Property(PROP_NAME_EXTENSIONLEVEL, PropertyType.INTEGER,
+													extensionLevel.getIntValue());
+											_docCatalogList.add(p);
+										}
+								} else {
+									// There is an unknown developer prefix
+									info.setWellFormed(false);
+									info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_154, 
+											developerPrefixKey.toString())); // PDF-HUL-154
+								}
+							}
+						}
+					}
+				}
 
 			// Get the Names dictionary in order to grab the
 			// EmbeddedFiles and Dests entries.

@@ -161,7 +161,6 @@ public class Literal
                 throw new EOFException (MessageConstants.PDF_HUL_10.getMessage()); // PDF-HUL-10
             }
             offset++;
-            _rawBytes.add (ch);
             if (_state == State.LITERAL) {
                 // We are still in a state of flux, determining the encoding
                 if (ch == FE) {
@@ -300,6 +299,7 @@ public class Literal
                     buffer.append ((char) utfch);
                 }
             }
+            _rawBytes.add (ch);
         }
     }
 
