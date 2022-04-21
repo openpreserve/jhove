@@ -163,7 +163,21 @@ if [[ -f "${candidateRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml
 	cp "${candidateRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml" "${targetRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml"
 fi
 
-# Patch the coverage statement in audit-PDF-hul.jhove.xml
+# Patch the coverage statement in */audit-PDF-hul.jhove.xml
 # changed by https://github.com/openpreserve/jhove/pull/393
 echo " - PR:393 PDF result patch 1."
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/\; PDF\/A (ISO\/CD 19005-1)//' {} \;
+
+# Patch the text values in errors/modules/PDF-hul/pdf-hul-22-govdocs-000187.pdf.jhove.xml,
+# errors/modules/PDF-hul/pdf-hul-43-govdocs-486355.pdf.jhove.xml and
+# errors/modules/PDF-hul/pdf-hul-43-govdocs-486355.pdf.jhove.xml
+# fixed by https://github.com/openpreserve/jhove/pull/734
+echo " - PR:734 PDF result patch 1."
+find "${targetRoot}" -type f -name "pdf-hul-22-govdocs-000187.pdf.jhove.xml" -exec sed -i 's/0xb2715c537a8c9240e95cebdeafe6c4ed6afc6923d39cd860b782605cede5b39529/0xb27129537a8c9240e95cebdeafe6c4ed6afc6923d39cd860b782600dede5b395/' {} \;
+find "${targetRoot}" -type f -name "pdf-hul-22-govdocs-000187.pdf.jhove.xml" -exec sed -i 's/0x9f457103394b9dd97f14f1d233cbf0980000000000000000000000000000000029/0x9f457103394b9dd97f14f1d233cbf09800000000000000000000000000000000/' {} \;
+echo " - PR:734 PDF result patch 2."
+find "${targetRoot}" -type f -name "pdf-hul-43-govdocs-486355.pdf.jhove.xml" -exec sed -i 's/0x0fab5bbd5c432bae08db3a9454ea1897394f9f9ba09e6461dbf0d89ce7f1da6d29/0x0fab5bbd28432bae08db3a9454ea1897394f9f9ba09e6461dbf0d89ce7f1da6d/' {} \;
+find "${targetRoot}" -type f -name "pdf-hul-43-govdocs-486355.pdf.jhove.xml" -exec sed -i 's/0x403f07cb10c8eef28d625c1f596881110000000000000000000000000000000029/0x403f07cb10c8eef28d620d1f5968811100000000000000000000000000000000/' {} \;
+echo " - PR:734 PDF result patch 3."
+find "${targetRoot}" -type f -name "pdf-hul-10-govdocs-803945.pdf.jhove.xml" -exec sed -i 's/0x8431511c2cbf12475e48d0013e36c4c629/0x8431511c2cbf12475e48d0013e36c4c6/' {} \;
+find "${targetRoot}" -type f -name "pdf-hul-10-govdocs-803945.pdf.jhove.xml" -exec sed -i 's/0x5c951120e00faad182edc884a297d9bc29/0x5c951120e00faad182edc884a297d9bc/' {} \;
