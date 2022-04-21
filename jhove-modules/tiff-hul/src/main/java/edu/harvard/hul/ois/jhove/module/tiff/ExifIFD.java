@@ -278,7 +278,7 @@ public class ExifIFD
         _colorSpace = NULL;
         _contrast = 0;
         _customRendered = NULL;
-        _exifVersion = "0220";
+        _exifVersion = null;
         _exposureMode = NULL;
         _exposureProgram = NULL;
         _fileSource = NULL;
@@ -310,8 +310,10 @@ public class ExifIFD
     {
         List entries = new LinkedList ();
 
-        entries.add (new Property ("ExifVersion", PropertyType.STRING,
-                                   _exifVersion));
+        if (_exifVersion != null) {
+            entries.add (new Property ("ExifVersion", PropertyType.STRING,
+                    _exifVersion));
+        }
         entries.add (new Property ("FlashpixVersion", PropertyType.STRING,
                                    _flashpixVersion));
         if (_colorSpace != NULL) {

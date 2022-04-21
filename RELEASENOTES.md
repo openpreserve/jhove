@@ -196,7 +196,7 @@ JHOVE 1.22
 
 ### TIFF Module
 
-- Fixed typo in TIFF properties [[#361][]]
+- Fixed typo in TIFF properties [[#361]]
 - Error IDs and message constants as external resources [[#405]]
 
 ### UTF-8 Module
@@ -224,6 +224,7 @@ JHOVE 1.22
 [#352]: https://github.com/openpreserve/jhove/pull/352
 [#353]: https://github.com/openpreserve/jhove/pull/353
 [#360]: https://github.com/openpreserve/jhove/pull/360
+[#361]: https://github.com/openpreserve/jhove/pull/361
 [#363]: https://github.com/openpreserve/jhove/pull/363
 [#378]: https://github.com/openpreserve/jhove/pull/378
 [#379]: https://github.com/openpreserve/jhove/pull/379

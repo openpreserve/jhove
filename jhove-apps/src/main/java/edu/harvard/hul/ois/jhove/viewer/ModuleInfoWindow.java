@@ -8,8 +8,6 @@ package edu.harvard.hul.ois.jhove.viewer;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 
 import javax.swing.JOptionPane;
@@ -38,6 +36,10 @@ public class ModuleInfoWindow extends InfoWindow {
 	private int _level;
 	private Module _module;
 
+	private static final String DATE = "Date: ";
+	private static final String NOTE = "Note: ";
+	private static final String TYPE = "Type: ";
+
 	/**
 	 * Constructor.
 	 *
@@ -49,14 +51,9 @@ public class ModuleInfoWindow extends InfoWindow {
 	 *            The Module whose information is to be presented.
 	 */
 	public ModuleInfoWindow(App app, JhoveBase base, Module module) {
-		super("Module Info", app, base);
+		super("Module Information", app, base);
 		_module = module;
-		setSaveActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveInfo();
-			}
-		});
+		setSaveActionListener(e -> saveInfo());
 
 		texta = new JTextArea();
 		texta.setColumns(72);
@@ -82,7 +79,6 @@ public class ModuleInfoWindow extends InfoWindow {
 
 		showModule(module);
 		pack();
-
 	}
 
 	/**
@@ -98,7 +94,7 @@ public class ModuleInfoWindow extends InfoWindow {
 			String margin = getIndent(++_level);
 			texta.append(margin + "Module: " + module.getName() + eol);
 			texta.append(margin + "Release: " + module.getRelease() + eol);
-			texta.append(margin + "Date: " + _dateFmt.format(module.getDate())
+			texta.append(margin + DATE + _dateFmt.format(module.getDate())
 					+ eol);
 			String[] ss = module.getFormat();
 			if (ss.length > 0) {
@@ -119,7 +115,6 @@ public class ModuleInfoWindow extends InfoWindow {
 				for (int i = 1; i < ss.length; i++) {
 					texta.append(", " + ss[i]);
 				}
-				;
 				texta.append(eol);
 			}
 			for (Signature sig : module.getSignature()) {
@@ -147,7 +142,7 @@ public class ModuleInfoWindow extends InfoWindow {
 				showAgent(vendor, "Vendor");
 			}
 			if ((s = module.getNote()) != null) {
-				texta.append(margin + "Note: " + s + eol);
+				texta.append(margin + NOTE + s + eol);
 			}
 			if ((s = module.getRights()) != null) {
 				texta.append(margin + "Rights: " + s + eol);
@@ -179,7 +174,7 @@ public class ModuleInfoWindow extends InfoWindow {
 		}
 		String note = signature.getNote();
 		if (note != null) {
-			texta.append(margin + "Note: " + note + eol);
+			texta.append(margin + NOTE + note + eol);
 		}
 		String use = signature.getUse().toString();
 		if (use != null) {
@@ -192,7 +187,7 @@ public class ModuleInfoWindow extends InfoWindow {
 		String margin = getIndent(++_level);
 
 		texta.append(margin + label + ": " + document.getTitle() + eol);
-		texta.append(margin + "Type: " + document.getType() + eol);
+		texta.append(margin + TYPE + document.getType() + eol);
 		for (Agent agent : document.getAuthor()) {
 			showAgent(agent, "Author");
 		}
@@ -204,7 +199,7 @@ public class ModuleInfoWindow extends InfoWindow {
 			texta.append(margin + "Edition: " + s + eol);
 		}
 		if ((s = document.getDate()) != null) {
-			texta.append(margin + "Date: " + s + eol);
+			texta.append(margin + DATE + s + eol);
 		}
 		if ((s = document.getEnumeration()) != null) {
 			texta.append(margin + "Enumeration: " + s + eol);
@@ -216,7 +211,7 @@ public class ModuleInfoWindow extends InfoWindow {
 			showIdentifier(id);
 		}
 		if ((s = document.getNote()) != null) {
-			texta.append(margin + "Note: " + s + eol);
+			texta.append(margin + NOTE + s + eol);
 		}
 		_level--;
 	}
@@ -225,7 +220,7 @@ public class ModuleInfoWindow extends InfoWindow {
 		String margin = getIndent(++_level);
 
 		texta.append(margin + label + ": " + agent.getName() + eol);
-		texta.append(margin + "Type: " + agent.getType().toString() + eol);
+		texta.append(margin + TYPE + agent.getType().toString() + eol);
 		String s = agent.getAddress();
 		if (s != null) {
 			texta.append(margin + "Address: " + s + eol);
@@ -249,10 +244,10 @@ public class ModuleInfoWindow extends InfoWindow {
 		String margin = getIndent(++_level);
 
 		texta.append(margin + "Identifier: " + identifier.getValue() + eol);
-		texta.append(margin + "Type: " + identifier.getType().toString() + eol);
+		texta.append(margin + TYPE + identifier.getType().toString() + eol);
 		String note = identifier.getNote();
 		if (note != null) {
-			texta.append(margin + "Note: " + note + eol);
+			texta.append(margin + NOTE + note + eol);
 		}
 		_level--;
 	}

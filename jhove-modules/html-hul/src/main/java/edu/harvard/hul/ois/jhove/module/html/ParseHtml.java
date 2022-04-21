@@ -16,6 +16,8 @@ public class ParseHtml implements ParseHtmlConstants {
         {
             return elements;
         }
+        
+  private static final String MISSING_RETURN_ERR = "Missing return statement in function";
 
   final public List HtmlDoc() throws ParseException {
         elements = new LinkedList ();
@@ -35,7 +37,7 @@ public class ParseHtml implements ParseHtmlConstants {
     }
     jj_consume_token(0);
       {if (true) return elements;}
-    throw new Error("Missing return statement in function");
+    throw new Error(MISSING_RETURN_ERR);
   }
 
   final public JHElement Element(List elements) {
@@ -86,7 +88,7 @@ public class ParseHtml implements ParseHtmlConstants {
         {if (true) return new JHErrorElement(elements, MessageConstants.HTML_HUL_2, errText.toString(), true);}
     }
       {if (true) return elem;}
-    throw new Error("Missing return statement in function");
+    throw new Error(MISSING_RETURN_ERR);
   }
 
   final public JHOpenTag OpenTag() throws ParseException {
@@ -119,7 +121,7 @@ public class ParseHtml implements ParseHtmlConstants {
          {if (true) return new JHOpenTag (elements, name.image, attrs,
             name.beginLine, name.beginColumn);}
      }
-    throw new Error("Missing return statement in function");
+    throw new Error(MISSING_RETURN_ERR);
   }
 
   final public JHXmlDecl XMLDecl() throws ParseException {
@@ -142,7 +144,7 @@ public class ParseHtml implements ParseHtmlConstants {
     jj_consume_token(QMARK);
     jj_consume_token(RABRACKET);
            {if (true) return new JHXmlDecl (elements);}
-    throw new Error("Missing return statement in function");
+    throw new Error(MISSING_RETURN_ERR);
   }
 
   final public JHCloseTag CloseTag() throws ParseException {
@@ -153,14 +155,14 @@ public class ParseHtml implements ParseHtmlConstants {
     jj_consume_token(RABRACKET);
       {if (true) return new JHCloseTag (elements, name.image,
               name.beginLine, name.beginColumn);}
-    throw new Error("Missing return statement in function");
+    throw new Error(MISSING_RETURN_ERR);
   }
 
   final public JHPCData PCData() throws ParseException {
     Token tok = getToken(1);
     jj_consume_token(PCDATA);
                {if (true) return new JHPCData (elements, tok.image, tok.beginLine, tok.beginColumn);}
-    throw new Error("Missing return statement in function");
+    throw new Error(MISSING_RETURN_ERR);
   }
 
   final public JHDoctype Doctype() throws ParseException {
@@ -182,7 +184,7 @@ public class ParseHtml implements ParseHtmlConstants {
     }
     jj_consume_token(RABRACKET);
      {if (true) return new JHDoctype (elements, doctypeElements);}
-    throw new Error("Missing return statement in function");
+    throw new Error(MISSING_RETURN_ERR);
   }
 
   JHErrorElement ConsumeError() {
@@ -212,7 +214,7 @@ public class ParseHtml implements ParseHtmlConstants {
     Token tok = getToken(1);
     jj_consume_token(NAME);
              {if (true) return tok;}
-    throw new Error("Missing return statement in function");
+    throw new Error(MISSING_RETURN_ERR);
   }
 
   final public String AttrVal() throws ParseException {
@@ -233,7 +235,7 @@ public class ParseHtml implements ParseHtmlConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-    throw new Error("Missing return statement in function");
+    throw new Error(MISSING_RETURN_ERR);
   }
 
   final public void Attribute(List attrs) throws ParseException {
@@ -293,7 +295,7 @@ public class ParseHtml implements ParseHtmlConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-    throw new Error("Missing return statement in function");
+    throw new Error(MISSING_RETURN_ERR);
   }
 
   final private boolean jj_2_1(int xla) {

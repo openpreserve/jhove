@@ -491,7 +491,6 @@ public class TiffModule extends ModuleBase {
         }
 
         _raf = raf;
-        _logger.info("TiffModule parsing file");
         initParse();
         info.setModule(this);
         info.setMimeType(_mimeType[0]);
