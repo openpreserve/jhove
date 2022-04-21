@@ -162,3 +162,8 @@ if [[ -f "${candidateRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml
 	echo " - PR:634 XML result patch 4."
 	cp "${candidateRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml" "${targetRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml"
 fi
+
+# Patch the coverage statement in audit-PDF-hul.jhove.xml
+# changed by https://github.com/openpreserve/jhove/pull/393
+echo " - PR:393 PDF result patch 1."
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/\; PDF\/A (ISO\/CD 19005-1)//' {} \;
