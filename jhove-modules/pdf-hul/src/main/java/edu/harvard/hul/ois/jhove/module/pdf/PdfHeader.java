@@ -143,7 +143,7 @@ public final class PdfHeader {
 					try {
 						version = value.substring(4, 7);
 					} catch (IndexOutOfBoundsException e ){
-						 throw new PdfMalformedException(MessageConstants.PDF_HUL_155); // PDF-HUL-154
+						 throw new PdfMalformedException(MessageConstants.PDF_HUL_155); // PDF-HUL-155
 					}
 					isPdfACompliant = true;
 					break;
