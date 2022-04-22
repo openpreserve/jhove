@@ -162,3 +162,96 @@ if [[ -f "${candidateRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml
 	echo " - PR:634 XML result patch 4."
 	cp "${candidateRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml" "${targetRoot}/examples/modules/XML-hul/valid-external.dtd.jhove.xml"
 fi
+
+# Patch the coverage statement in */audit-PDF-hul.jhove.xml
+# changed by https://github.com/openpreserve/jhove/pull/393
+echo " - PR:393 PDF result patch 1."
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/\; PDF\/A (ISO\/CD 19005-1)//' {} \;
+
+# Patch the text values in errors/modules/PDF-hul/pdf-hul-22-govdocs-000187.pdf.jhove.xml,
+# errors/modules/PDF-hul/pdf-hul-43-govdocs-486355.pdf.jhove.xml and
+# errors/modules/PDF-hul/pdf-hul-43-govdocs-486355.pdf.jhove.xml
+# fixed by https://github.com/openpreserve/jhove/pull/734
+echo " - PR:734 PDF result patch 1."
+find "${targetRoot}" -type f -name "pdf-hul-22-govdocs-000187.pdf.jhove.xml" -exec sed -i 's/0xb2715c537a8c9240e95cebdeafe6c4ed6afc6923d39cd860b782605cede5b39529/0xb27129537a8c9240e95cebdeafe6c4ed6afc6923d39cd860b782600dede5b395/' {} \;
+find "${targetRoot}" -type f -name "pdf-hul-22-govdocs-000187.pdf.jhove.xml" -exec sed -i 's/0x9f457103394b9dd97f14f1d233cbf0980000000000000000000000000000000029/0x9f457103394b9dd97f14f1d233cbf09800000000000000000000000000000000/' {} \;
+echo " - PR:734 PDF result patch 2."
+find "${targetRoot}" -type f -name "pdf-hul-43-govdocs-486355.pdf.jhove.xml" -exec sed -i 's/0x0fab5bbd5c432bae08db3a9454ea1897394f9f9ba09e6461dbf0d89ce7f1da6d29/0x0fab5bbd28432bae08db3a9454ea1897394f9f9ba09e6461dbf0d89ce7f1da6d/' {} \;
+find "${targetRoot}" -type f -name "pdf-hul-43-govdocs-486355.pdf.jhove.xml" -exec sed -i 's/0x403f07cb10c8eef28d625c1f596881110000000000000000000000000000000029/0x403f07cb10c8eef28d620d1f5968811100000000000000000000000000000000/' {} \;
+echo " - PR:734 PDF result patch 3."
+find "${targetRoot}" -type f -name "pdf-hul-10-govdocs-803945.pdf.jhove.xml" -exec sed -i 's/0x8431511c2cbf12475e48d0013e36c4c629/0x8431511c2cbf12475e48d0013e36c4c6/' {} \;
+find "${targetRoot}" -type f -name "pdf-hul-10-govdocs-803945.pdf.jhove.xml" -exec sed -i 's/0x5c951120e00faad182edc884a297d9bc29/0x5c951120e00faad182edc884a297d9bc/' {} \;
+
+# Version and release date patches
+echo "Patching version numbers and release dates."
+find "${targetRoot}" -type f -name "*.aif.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.6.1" date="2019-12-10">AIFF-hul<\/reportingModule>$/  <reportingModule release="1.6.2" date="2022-04-22">AIFF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.AIF.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.6.1" date="2019-12-10">AIFF-hul<\/reportingModule>$/  <reportingModule release="1.6.2" date="2022-04-22">AIFF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.6.1">AIFF-hul<\/module>$/   <module release="1.6.2">AIFF-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-AIFF-hul.jhove.xml" -exec sed -i 's/^  <release>1.6.1<\/release>$/  <release>1.6.2<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-AIFF-hul.jhove.xml" -exec sed -i 's/2019-12-10/2022-04-22/' {} \;
+
+find "${targetRoot}" -type f -name "*.txt.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.4.1" date="2019-04-17">ASCII-hul<\/reportingModule>$/  <reportingModule release="1.4.2" date="2022-04-22">ASCII-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.md.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.4.1" date="2019-04-17">ASCII-hul<\/reportingModule>$/  <reportingModule release="1.4.2" date="2022-04-22">ASCII-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.4.1">ASCII-hul<\/module>$/   <module release="1.4.2">ASCII-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-ASCII-hul.jhove.xml" -exec sed -i 's/^  <release>1.4.1<\/release>$/  <release>1.4.2<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-ASCII-hul.jhove.xml" -exec sed -i 's/2019-04-17/2022-04-22/' {} \;
+
+find "${targetRoot}" -type f -name "*.gif.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.4.2" date="2019-12-10">GIF-hul<\/reportingModule>$/  <reportingModule release="1.4.3" date="2022-04-22">GIF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.4.2">GIF-hul<\/module>$/   <module release="1.4.3">GIF-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-GIF-hul.jhove.xml" -exec sed -i 's/^  <release>1.4.2<\/release>$/  <release>1.4.3<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-GIF-hul.jhove.xml" -exec sed -i 's/2019-12-10/2022-04-22/' {} \;
+
+find "${targetRoot}" -type f -name "*.html.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.4.1" date="2019-04-17">HTML-hul<\/reportingModule>$/  <reportingModule release="1.4.2" date="2022-04-22">HTML-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.4.1">HTML-hul<\/module>$/   <module release="1.4.2">HTML-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-HTML-hul.jhove.xml" -exec sed -i 's/^  <release>1.4.1<\/release>$/  <release>1.4.2<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-HTML-hul.jhove.xml" -exec sed -i 's/2019-04-17/2022-04-22/' {} \;
+
+find "${targetRoot}" -type f -name "*.md.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.4.2" date="2019-10-18">JPEG2000-hul<\/reportingModule>$/  <reportingModule release="1.4.3" date="2022-04-22">JPEG2000-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.4.2" date="2019-10-18">JPEG2000-hul<\/reportingModule>$/  <reportingModule release="1.4.3" date="2022-04-22">JPEG2000-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.jpx.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.4.2" date="2019-10-18">JPEG2000-hul<\/reportingModule>$/  <reportingModule release="1.4.3" date="2022-04-22">JPEG2000-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.4.2">JPEG2000-hul<\/module>$/   <module release="1.4.3">JPEG2000-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-JPEG2000-hul.jhove.xml" -exec sed -i 's/^  <release>1.4.2<\/release>$/  <release>1.4.3<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-JPEG2000-hul.jhove.xml" -exec sed -i 's/2019-10-18/2022-04-22/' {} \;
+
+find "${targetRoot}" -type f -name "*.jpg.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.5.2" date="2019-11-05">JPEG-hul<\/reportingModule>$/  <reportingModule release="1.5.3" date="2022-04-22">JPEG-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.5.2">JPEG-hul<\/module>$/   <module release="1.5.3">JPEG-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-JPEG-hul.jhove.xml" -exec sed -i 's/^  <release>1.5.2<\/release>$/  <release>1.5.3<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-JPEG-hul.jhove.xml" -exec sed -i 's/2019-11-05/2022-04-22/' {} \;
+
+find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.12.2" date="2019-12-10">PDF-hul<\/reportingModule>$/  <reportingModule release="1.12.3" date="2022-04-22">PDF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.12.2">PDF-hul<\/module>$/   <module release="1.12.3">PDF-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <release>1.12.2<\/release>$/  <release>1.12.3<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/2019-12-10/2022-04-22/' {} \;
+
+find "${targetRoot}" -type f -name "*.tif.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.9.2" date="2019-12-10">TIFF-hul<\/reportingModule>$/  <reportingModule release="1.9.3" date="2022-04-22">TIFF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.g3.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.9.2" date="2019-12-10">TIFF-hul<\/reportingModule>$/  <reportingModule release="1.9.3" date="2022-04-22">TIFF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.9.2">TIFF-hul<\/module>$/   <module release="1.9.3">TIFF-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-TIFF-hul.jhove.xml" -exec sed -i 's/^  <release>1.9.2<\/release>$/  <release>1.9.3<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-TIFF-hul.jhove.xml" -exec sed -i 's/2019-12-10/2022-04-22/' {} \;
+
+find "${targetRoot}" -type f -name "*.txt.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.7.1" date="2019-04-17">UTF8-hul<\/reportingModule>$/  <reportingModule release="1.7.2" date="2022-04-22">UTF8-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.7.1">UTF8-hul<\/module>$/   <module release="1.7.2">UTF8-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-UTF8-hul.jhove.xml" -exec sed -i 's/^  <release>1.7.1<\/release>$/  <release>1.7.2<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-UTF8-hul.jhove.xml" -exec sed -i 's/2019-04-17/2022-04-22/' {} \;
+
+find "${targetRoot}" -type f -name "*.wav.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.8.1" date="2019-12-10">WAVE-hul<\/reportingModule>$/  <reportingModule release="1.8.2" date="2022-04-22">WAVE-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.8.1">WAVE-hul<\/module>$/   <module release="1.8.2">WAVE-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-WAVE-hul.jhove.xml" -exec sed -i 's/^  <release>1.8.1<\/release>$/  <release>1.8.2<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-WAVE-hul.jhove.xml" -exec sed -i 's/2019-12-10/2022-04-22/' {} \;
+
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.5.1">XML-hul<\/module>$/   <module release="1.5.2">XML-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-XML-hul.jhove.xml" -exec sed -i 's/^  <release>1.5.1<\/release>$/  <release>1.5.2<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-XML-hul.jhove.xml" -exec sed -i 's/2019-04-17/2022-04-22/' {} \;
+
+find "${targetRoot}" -type f -name "*.png.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.0" date="2016-02-25">PNG-gdm<\/reportingModule>$/  <reportingModule release="1.1" date="2022-04-22">PNG-gdm<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit-PNG-gdm.jhove.xml" -exec sed -i 's/^  <release>1.0<\/release>$/  <release>1.1<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-PNG-gdm.jhove.xml" -exec sed -i 's/2016-02-25/2022-04-22/' {} \;
+
+
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/<outputHandler release="1.0">JSON/<outputHandler release="1.1">JSON/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/module release="1.0"/module release="1.1"/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/module release="0.1"/module release="0.2"/' {} \;
+
+
+find "${targetRoot}" -type f -name "audit-*-hul.jhove.xml" -exec sed -i 's/^  <date>2019-10-18<\/date>$/  <date>2022-04-22<\/date>/' {} \;
+
