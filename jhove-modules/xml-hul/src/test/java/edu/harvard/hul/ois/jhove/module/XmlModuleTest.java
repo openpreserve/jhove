@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import static org.junit.Assert.assertEquals;
 
@@ -44,21 +45,16 @@ public class XmlModuleTest {
     }
 
     @Test
-    public void validateXmlSucceedsWhenHasRootSchema() {
-        String xml = "<oai_dc:dc xmlns:oai_dc=\"http://www.openarchives.org/OAI/2.0/oai_dc/\"" +
-                " xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" +
-                " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
-                " xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd\">\n" +
-                "  <dc:identifier>1234:example</dc:identifier>\n" +
-                "</oai_dc:dc>";
+    public void validateXmlSucceedsWhenHasRootSchema() throws IOException {
+        File file = new File(RESOURCE_DIR + "mods-well-formed.xml");
         RepInfo info = new RepInfo("uri:test");
 
-        int parseIndex = module.parse(stream(xml), info, 0);
+        int parseIndex = parse(file, info, 0);
 
         assertEquals(1, parseIndex);
         assertEquals(RepInfo.TRUE, info.getWellFormed());
 
-        parseIndex = module.parse(stream(xml), info, parseIndex);
+        parseIndex = parse(file, info, parseIndex);
 
         assertEquals(0, parseIndex);
         assertEquals(RepInfo.TRUE, info.getWellFormed());
@@ -66,15 +62,11 @@ public class XmlModuleTest {
     }
 
     @Test
-    public void doNotValidateXmlWhenMissingRootSchema() {
-        String xml = "<oai_dc:dc xmlns:oai_dc=\"http://www.openarchives.org/OAI/2.0/oai_dc/\"" +
-                " xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" +
-                " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
-                "  <dc:identifier>1234:example</dc:identifier>\n" +
-                "</oai_dc:dc>";
+    public void doNotValidateXmlWhenMissingRootSchema() throws IOException {
+        File file = new File(RESOURCE_DIR + "mods-missing-root-schema.xml");
         RepInfo info = new RepInfo("uri:test");
 
-        int parseIndex = module.parse(stream(xml), info, 0);
+        int parseIndex = parse(file, info, 0);
 
         assertEquals(0, parseIndex);
         assertEquals(RepInfo.TRUE, info.getWellFormed());
@@ -96,25 +88,26 @@ public class XmlModuleTest {
     }
 
     @Test
-    public void validateXmlFailsWhenHasSchemaAndInvalid() {
-        String xml = "<oai_dc:dc xmlns:oai_dc=\"http://www.openarchives.org/OAI/2.0/oai_dc/\"" +
-                " xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" +
-                " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
-                " xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd\">\n" +
-                "  <dc:bogus>1234:example</dc:bogus>\n" +
-                "</oai_dc:dc>";
+    public void validateXmlFailsWhenHasSchemaAndInvalid() throws IOException {
+        File file = new File(RESOURCE_DIR + "mods-invalid.xml");
         RepInfo info = new RepInfo("uri:test");
 
-        int parseIndex = module.parse(stream(xml), info, 0);
+        int parseIndex = parse(file, info, 0);
 
         assertEquals(1, parseIndex);
         assertEquals(RepInfo.TRUE, info.getWellFormed());
 
-        parseIndex = module.parse(stream(xml), info, parseIndex);
+        parseIndex = parse(file, info, parseIndex);
 
         assertEquals(0, parseIndex);
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.FALSE, info.getValid());
+    }
+
+    private int parse(File file, RepInfo info, int parseIndex) throws IOException {
+        try (InputStream stream = Files.newInputStream(file.toPath())) {
+            return module.parse(stream, info, parseIndex);
+        }
     }
 
     private InputStream stream(String xml) {
