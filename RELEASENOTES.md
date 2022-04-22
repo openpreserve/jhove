@@ -56,6 +56,9 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 - Fixed issue [[#653][]] No document catalog dictionary (PDF-HUL-86) error reported even though document catalog exists [[#654][]]
 - Fixed issue [[#645][]] StackOverflowError in with 1.24.1 in PDF-hul. [[#652][]]
 - Fixed issue [[#646][]] TimeOut / stuck in loop (?) - 1.24.1 PDF-hul. [[#652][]]
+- Fixed issue [[#101][]] JHOVE reporting PDF as v1.3 and as ISO PDF/A-1, Level B, inadequate PDF/A disabled [[#393][]]
+- Added support for PDF extension levels [[#626][]]
+- Fixed issue[[#696][]] Close parenthesis included in Literal _rawBytes, causes incorrect NameTreeNode.compareKey() [[#734][]]
 - Replace += with StringBuilder for whitespace to speed up Tokenizer. [[#615][]]
 
 ### PNG Module
@@ -75,10 +78,12 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 ### XML Module
 
 - Fixed issue [[#681][]] XML Signature detection does not work. [[#683][]]
+- Fixed issue [[#680][]] XML should not be validated when no schema provided [[#685][]]
 - Assorted improvements to reporting of schema locations. [[#634][]]
 - Fixed XML version reporting for documents with byte-order marks (BOMs). [[#634][]]
 - Cleaned up unnecessary code, formatting and documentation. [[#634][]]
 
+[#101]: https://github.com/openpreserve/jhove/issues/101
 [#148]: https://github.com/openpreserve/jhove/issues/148
 [#358]: https://github.com/openpreserve/jhove/issues/358
 [#375]: https://github.com/openpreserve/jhove/issues/375
@@ -93,10 +98,13 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 [#662]: https://github.com/openpreserve/jhove/issues/662
 [#667]: https://github.com/openpreserve/jhove/issues/667
 [#669]: https://github.com/openpreserve/jhove/issues/669
+[#680]: https://github.com/openpreserve/jhove/issues/680
 [#681]: https://github.com/openpreserve/jhove/issues/681
 [#691]: https://github.com/openpreserve/jhove/issues/690
+[#696]: https://github.com/openpreserve/jhove/issues/696
 
 [#359]: https://github.com/openpreserve/jhove/pull/359
+[#393]: https://github.com/openpreserve/jhove/pull/393
 [#426]: https://github.com/openpreserve/jhove/pull/426
 [#557]: https://github.com/openpreserve/jhove/pull/557
 [#566]: https://github.com/openpreserve/jhove/pull/566
@@ -124,6 +132,7 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 [#621]: https://github.com/openpreserve/jhove/pull/621
 [#622]: https://github.com/openpreserve/jhove/pull/622
 [#623]: https://github.com/openpreserve/jhove/pull/623
+[#626]: https://github.com/openpreserve/jhove/pull/626
 [#634]: https://github.com/openpreserve/jhove/pull/634
 [#635]: https://github.com/openpreserve/jhove/pull/635
 [#636]: https://github.com/openpreserve/jhove/pull/636
@@ -135,8 +144,9 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 [#677]: https://github.com/openpreserve/jhove/pull/677
 [#682]: https://github.com/openpreserve/jhove/pull/682
 [#683]: https://github.com/openpreserve/jhove/pull/683
+[#685]: https://github.com/openpreserve/jhove/pull/685
 [#688]: https://github.com/openpreserve/jhove/pull/688
-[#688]: https://github.com/openpreserve/jhove/pull/689
+[#689]: https://github.com/openpreserve/jhove/pull/689
 [#693]: https://github.com/openpreserve/jhove/pull/693
 [#704]: https://github.com/openpreserve/jhove/pull/704
 [#709]: https://github.com/openpreserve/jhove/pull/709
@@ -144,6 +154,7 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 [#718]: https://github.com/openpreserve/jhove/pull/718
 [#728]: https://github.com/openpreserve/jhove/pull/728
 [#729]: https://github.com/openpreserve/jhove/pull/729
+[#734]: https://github.com/openpreserve/jhove/pull/734
 
 ## JHOVE 1.24
 
