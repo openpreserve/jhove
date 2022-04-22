@@ -1048,7 +1048,14 @@ public class PdfModule extends ModuleBase {
 	}
 
 	protected boolean parseHeader(RepInfo info) throws IOException {
-		PdfHeader header = PdfHeader.parseHeader(_parser);
+		PdfHeader header = null;
+		try {
+			header = PdfHeader.parseHeader(_parser);
+		} catch (PdfMalformedException e) {
+			info.setWellFormed(false);
+			info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_154, 0L)); // PDF-HUL-154
+			return false;
+		}
 		if (header == null) {
 			info.setWellFormed(false);
 			info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_137, 0L)); // PDF-HUL-137
