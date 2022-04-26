@@ -473,7 +473,7 @@ public class PdfModule extends ModuleBase {
 	protected Map<Integer, Integer> _pageSeqMap;
 
 	protected PdfIndirectObj _docCatDictRef;
-	protected PdfIndirectObj _encryptDictRef;
+	protected PdfObject _encryptDictRef;
 	protected PdfIndirectObj _docInfoDictRef;
 	protected PdfIndirectObj _pagesDictRef;
 
@@ -1362,9 +1362,16 @@ public class PdfModule extends ModuleBase {
 				throw new PdfInvalidException(MessageConstants.PDF_HUL_75, // PDF-HUL-75
 						_parser.getOffset());
 			}
-			_encryptDictRef = (PdfIndirectObj) _trailerDict
-					.get(DICT_KEY_ENCRYPT);  // This is at least v. 1.1
-			_encrypted = (_encryptDictRef != null);
+
+			PdfObject encryptDict = _trailerDict.get(DICT_KEY_ENCRYPT); 
+			if(encryptDict != null && encryptDict instanceof PdfIndirectObj)
+			{
+				_encryptDictRef = (PdfIndirectObj) encryptDict;  // This is at least v. 1.1
+				_encrypted = (_encryptDictRef != null);
+			} else if (encryptDict != null && encryptDict instanceof PdfDictionary) {
+				_encryptDictRef = (PdfDictionary) encryptDict;
+				_encrypted = (_encryptDictRef != null);
+			}
 
 			PdfObject infoObj = _trailerDict.get(DICT_KEY_INFO);
 			if (infoObj != null && !(infoObj instanceof PdfIndirectObj)) {
