@@ -1341,9 +1341,13 @@ public class PdfModule extends ModuleBase {
 				_numObjects = -1;
 				if (obj instanceof PdfSimpleObject) {
 					token = ((PdfSimpleObject) obj).getToken();
-					if (token instanceof Numeric)
+					if (token instanceof Numeric) {
 						_numObjects = ((Numeric) token).getIntegerValue();
-					_xref = new long[_numObjects];
+						_xref = new long[_numObjects];
+					} else {
+						throw new PdfInvalidException(MessageConstants.PDF_HUL_73, // PDF-HUL-73
+								_parser.getOffset());
+					}
 				}
 				if (_numObjects < 0) {
 					throw new PdfInvalidException(MessageConstants.PDF_HUL_73, // PDF-HUL-73
