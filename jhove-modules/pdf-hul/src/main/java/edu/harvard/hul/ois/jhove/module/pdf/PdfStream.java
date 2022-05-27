@@ -7,6 +7,8 @@ package edu.harvard.hul.ois.jhove.module.pdf;
 
 import java.util.*;
 
+import edu.harvard.hul.ois.jhove.module.PdfModule;
+
 /**
  *  A representation of a PDF stream object.
  *  A PdfStream consists of a dictionary and a stream token.
@@ -20,7 +22,7 @@ public class PdfStream extends PdfObject
     private PdfDictionary _dict;
     private Filter[] _filters;
     private boolean pdfaCompliant;
-    
+    protected PdfModule _module;
     /** 
      *  Creates a PdfStream
      *
@@ -40,7 +42,6 @@ public class PdfStream extends PdfObject
         extractFilters ();
     }
 
-
     /** 
      *  Creates a PdfStream.
      *
@@ -54,6 +55,24 @@ public class PdfStream extends PdfObject
         _stream = stream;
         _dict = dict;
         pdfaCompliant = true;             // assume compliance to start with
+        extractFilters ();
+    }
+    
+    /** 
+     *  Creates a PdfStream.
+     *
+     *  @param dict       A dictionary describing the stream
+     *  @param stream     A Stream token
+     *  @param module     Invoking the PdfModule
+     */
+    public PdfStream (PdfDictionary dict, Stream stream, PdfModule module)
+            throws PdfException
+    {
+        super ();
+        _stream = stream;
+        _dict = dict;
+        pdfaCompliant = true;   // assume compliance to start with
+        _module = module;
         extractFilters ();
     }
     
@@ -186,8 +205,17 @@ public class PdfStream extends PdfObject
             else {
                 /* Only other allowed value is a string */
                 Filter[] val = new Filter[1];
-                val[0] = new Filter 
-                    (((PdfSimpleObject) filter).getStringValue());
+                if(filter instanceof PdfSimpleObject) {
+                	val[0] = new Filter 
+                            (((PdfSimpleObject) filter).getStringValue());
+                } else {
+					System.out.println("we zijn er");
+					if (filter instanceof PdfIndirectObj) {
+						val[0] = new Filter 
+	                            (((PdfSimpleObject) _module.resolveIndirectObject(filter)).getStringValue());
+					}
+				}
+                
                 if (parms instanceof PdfDictionary) {
                     val[0].setDecodeParms((PdfDictionary) parms);
                 }

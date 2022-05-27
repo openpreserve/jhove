@@ -2819,7 +2819,7 @@ public class PdfModule extends ModuleBase {
 			return getObjectFromStream(objIndex, recGuard);
 		}
 		_parser.seek(offset);
-		PdfObject obj = _parser.readObjectDef();
+		PdfObject obj = _parser.readObjectDef(this);
 		//
 		// Experimental carl@openpreservation.org 2018-03-14
 		//
