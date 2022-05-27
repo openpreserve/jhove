@@ -349,7 +349,8 @@ public abstract class IFD
 				_info.setMessage(new InfoMessage(message, _offset + 10 + 12*i));
 			    }
 			    else {
-				throw new TiffException(message,_offset + 10 + 12*i);
+			        _info.setMessage(new ErrorMessage(message, _offset + 10 + 12*i));
+			        _info.setWellFormed(false);
 			    }
                         }
                     }
