@@ -8,9 +8,9 @@ see the file LICENSE for details).
 Versions 1.7 to 1.11 of JHOVE released independently.
 Versions 1.12 onwards released by the Open Preservation Foundation.
 
-## JHOVE 1.26-RC1
+## JHOVE 1.26
 
-2022-04-13
+2022-04-22
 
 ### General
 

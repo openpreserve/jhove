@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.26.0-RC2</version>
+    <version>1.26.0</version>
   </parent>
   <artifactId>wave-hul</artifactId>
-  <version>1.8.2-RC2</version>
+  <version>1.8.2</version>
   <name>JHOVE WAVE Module HUL</name>
   <description>WAVE module developed by Harvard University Library</description>
 
@@ -14,7 +14,7 @@
       <dependency>
         <groupId>org.openpreservation.jhove.modules</groupId>
         <artifactId>aiff-hul</artifactId>
-        <version>1.6.2-RC2</version>
+        <version>1.6.2</version>
       </dependency>
   </dependencies>
 
