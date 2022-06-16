@@ -5,18 +5,19 @@
 
 package edu.harvard.hul.ois.jhove.viewer;
 
-import java.awt.HeadlessException;
-
-import java.util.*;
-import java.io.*;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
+import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.*;
-import edu.harvard.hul.ois.jhove.*;
+
+import edu.harvard.hul.ois.jhove.App;
+import edu.harvard.hul.ois.jhove.JhoveBase;
+import edu.harvard.hul.ois.jhove.OutputHandler;
 
 /**
  * An abstract superclass for windows that display information
@@ -40,6 +41,7 @@ public abstract class InfoWindow extends JFrame
         { "UTF-8", "ISO-8859-1", "Cp1252", "MacRoman"};
     protected SimpleDateFormat _dateFmt;
 
+    private static final String FILE_NOT_SAVED = "File not saved";
     
     /**
      * 
@@ -51,7 +53,7 @@ public abstract class InfoWindow extends JFrame
      * @param app     The associated App object.
      * @param base    The associated JhoveBase object.
      * 
-     * @throws java.awt.HeadlessException
+     * @throws HeadlessException
      */
     public InfoWindow(String title, App app, JhoveBase base) 
                 throws HeadlessException {
@@ -65,8 +67,11 @@ public abstract class InfoWindow extends JFrame
         _base = base;
         JMenuBar menuBar = new JMenuBar ();
         JMenu fileMenu = new JMenu ("File");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
         menuBar.add (fileMenu);
         _saveItem = new JMenuItem ("Save as...");
+        _saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         fileMenu.add (_saveItem);
         
         _closeItem = new JMenuItem ("Close");
@@ -74,12 +79,7 @@ public abstract class InfoWindow extends JFrame
         // Make mnemonic control-W, command-W, or whatever-W
         _closeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,
                 Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        _closeItem.addActionListener (new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent e) {
-                closeFromMenu ();
-            }
-        });
+        _closeItem.addActionListener (e -> closeFromMenu ());
         
         setDefaultCloseOperation (WindowConstants.HIDE_ON_CLOSE);
         setJMenuBar (menuBar);
@@ -146,17 +146,17 @@ public abstract class InfoWindow extends JFrame
         
         // Build a list of encodings into a popup menu.
         // The default encoding must be the first.
-        Vector<String> encItems = new Vector<> (5);
-        String defEnc = _base.getEncoding ();
-        if (defEnc != null) {
-            encItems.add (defEnc);
-        }
-        for (int i = 0; i < encodings.length; i++) {
-            String enc = encodings[i];
-            if (!enc.equals (defEnc)) {
-                encItems.add (enc);
+        Vector<String> encItems = new Vector<>(encodings.length + 1);
+        String defaultEncoding = _base.getEncoding();
+        List<String> otherEncodings = new ArrayList<>(encodings.length);
+        for (String encoding : encodings) {
+            if (encoding.equalsIgnoreCase(defaultEncoding)) {
+                encItems.add(encoding);
+            } else {
+                otherEncodings.add(encoding);
             }
         }
+        encItems.addAll(otherEncodings);
         _encodingBox = new JComboBox<> (encItems);
         if (_lastEncoding != null) {
             _encodingBox.setSelectedItem (_lastEncoding);
@@ -198,10 +198,10 @@ public abstract class InfoWindow extends JFrame
                 OutputStreamWriter writer = new OutputStreamWriter (os, encoding);
                 return new PrintWriter (writer);
             }
-            catch (UnsupportedEncodingException e) {
+            catch (UnsupportedEncodingException uee) {
                 JOptionPane.showMessageDialog(this,
                     "Unknown encoding ",
-                    "File not saved",
+                    FILE_NOT_SAVED,
                     JOptionPane.ERROR_MESSAGE);
                 // Get rid of the file
                 try {
@@ -210,14 +210,14 @@ public abstract class InfoWindow extends JFrame
                     }
                     file.delete ();
                 }
-                catch (Exception f) {}
-                
+                catch (Exception e) {
+                }
                 return null;
             }
-            catch (IOException e) {
+            catch (IOException ioe) {
                 JOptionPane.showMessageDialog(this,
-                    e.getMessage (),
-                    "File not saved",
+                    ioe.getMessage(),
+                    FILE_NOT_SAVED,
                     JOptionPane.ERROR_MESSAGE);
                 // Get rid of the file
                 try {
@@ -226,7 +226,8 @@ public abstract class InfoWindow extends JFrame
                     }
                     file.delete ();
                 }
-                catch (Exception f) {}
+                catch (Exception e) {
+                }
                 return null;
             }
         }

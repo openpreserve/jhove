@@ -2,6 +2,8 @@ package edu.harvard.hul.ois.jhove.module.pdf;
 
 import java.io.IOException;
 
+import edu.harvard.hul.ois.jhove.ErrorMessage;
+
 /**
  * Simple class that is the a prototype of a proper header parser class. The aim
  * was to introduce a simple version check for the PDF/A minor version number,
@@ -110,8 +112,9 @@ public final class PdfHeader {
 	 * @return a new {@link PdfHeader} instance derived using the supplied
 	 *         {@link Parser} or <code>null</code> when no header could be found
 	 *         and parsed.
+	 * @throws PdfMalformedException 
 	 */
-	public static PdfHeader parseHeader(final Parser parser) {
+	public static PdfHeader parseHeader(final Parser parser) throws PdfMalformedException {
 		Token token = null;
 		String value = null;
 		boolean isPdfACompliant = false;
@@ -137,7 +140,11 @@ public final class PdfHeader {
 			if (token instanceof Comment) {
 				value = ((Comment) token).getValue();
 				if (value.indexOf(PDF_VER1_HEADER_PREFIX) == 0) {
-					version = value.substring(4, 7);
+					try {
+						version = value.substring(4, 7);
+					} catch (IndexOutOfBoundsException e ){
+						 throw new PdfMalformedException(MessageConstants.PDF_HUL_155); // PDF-HUL-155
+					}
 					isPdfACompliant = true;
 					break;
 				}

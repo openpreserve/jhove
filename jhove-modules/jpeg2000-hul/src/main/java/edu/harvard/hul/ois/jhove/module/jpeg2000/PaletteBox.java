@@ -27,6 +27,8 @@ public class PaletteBox extends JP2Box {
     {
         super (raf, parent);
     }
+	
+    private static final String VALUES_PROPERTY = "Values";
 
 
     /** Reads the box, putting appropriate information in
@@ -83,7 +85,7 @@ public class PaletteBox extends JP2Box {
         // Now the actual component value arrays.  Skip this if
         // ne is out of bounds.
         if (ne > 1024 || ne < 1) {
-            subProp[3] = new Property ("Values", PropertyType.STRING,
+            subProp[3] = new Property (VALUES_PROPERTY, PropertyType.STRING,
                     "Invalid");
         }
         else {
@@ -98,7 +100,7 @@ public class PaletteBox extends JP2Box {
                         PropertyArity.ARRAY,
                         c);
             }
-            subProp[3] = new Property ("Values", PropertyType.PROPERTY,
+            subProp[3] = new Property (VALUES_PROPERTY, PropertyType.PROPERTY,
                         PropertyArity.ARRAY,
                         cprop);
         }

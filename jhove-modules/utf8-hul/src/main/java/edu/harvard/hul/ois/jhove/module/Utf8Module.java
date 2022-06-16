@@ -63,8 +63,8 @@ public class Utf8Module extends ModuleBase {
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
     private static final String NAME = "UTF8-hul";
-    private static final String RELEASE = "1.7.1";
-    private static final int [] DATE = { 2019, 04, 17 };
+    private static final String RELEASE = "1.7.2";
+    private static final int[] DATE = { 2022, 04, 22 };
     private static final String[] FORMAT = { "UTF-8" };
     private static final String COVERAGE = "Unicode 7.0.0";
     private static final String[] MIMETYPE = { "text/plain; charset=UTF-8" };
@@ -156,22 +156,28 @@ public class Utf8Module extends ModuleBase {
      * RepInfo.
      *
      * @param stream
-     *            An InputStream, positioned at its beginning, which is
-     *            generated from the object to be parsed. If multiple calls to
-     *            <code>parse</code> are made on the basis of a nonzero value
-     *            being returned, a new InputStream must be provided each time.
+     *                   An InputStream, positioned at its beginning, which is
+     *                   generated from the object to be parsed. If multiple calls
+     *                   to
+     *                   <code>parse</code> are made on the basis of a nonzero value
+     *                   being returned, a new InputStream must be provided each
+     *                   time.
      *
      * @param info
-     *            A fresh (on the first call) RepInfo object which will be
-     *            modified to reflect the results of the parsing If multiple
-     *            calls to <code>parse</code> are made on the basis of a nonzero
-     *            value being returned, the same RepInfo object should be passed
-     *            with each call.
+     *                   A fresh (on the first call) RepInfo object which will be
+     *                   modified to reflect the results of the parsing If multiple
+     *                   calls to <code>parse</code> are made on the basis of a
+     *                   nonzero
+     *                   value being returned, the same RepInfo object should be
+     *                   passed
+     *                   with each call.
      *
      * @param parseIndex
-     *            Must be 0 in first call to <code>parse</code>. If
-     *            <code>parse</code> returns a nonzero value, it must be called
-     *            again with <code>parseIndex</code> equal to that return value.
+     *                   Must be 0 in first call to <code>parse</code>. If
+     *                   <code>parse</code> returns a nonzero value, it must be
+     *                   called
+     *                   again with <code>parseIndex</code> equal to that return
+     *                   value.
      *
      */
     @Override
@@ -238,7 +244,8 @@ public class Utf8Module extends ModuleBase {
                         || (0xf8 <= b[0] && b[0] <= 0xff)) {
                     ErrorMessage error = new ErrorMessage(MessageConstants.UTF8_HUL_2,
                             "Value = " + ((char) b[0]) + " (0x"
-                                    + Integer.toHexString(b[0]) + ")", this._nByte);
+                                    + Integer.toHexString(b[0]) + ")",
+                            this._nByte);
                     info.setMessage(error);
                     info.setWellFormed(false);
                     return 0;
@@ -257,12 +264,19 @@ public class Utf8Module extends ModuleBase {
                         String subMessage = "Value = " + ((char) b[i]) + " (0x" + Integer.toHexString(b[i]) + ")";
                         JhoveMessage errMessage = null;
                         switch (i) { // max(nBytes) is 4
-                            case 1: errMessage = MessageConstants.UTF8_HUL_3; break;
-                            case 2: errMessage = MessageConstants.UTF8_HUL_4; break;
-                            case 3: errMessage = MessageConstants.UTF8_HUL_5; break;
-                            default: break;
+                            case 1:
+                                errMessage = MessageConstants.UTF8_HUL_3;
+                                break;
+                            case 2:
+                                errMessage = MessageConstants.UTF8_HUL_4;
+                                break;
+                            case 3:
+                                errMessage = MessageConstants.UTF8_HUL_5;
+                                break;
+                            default:
+                                break;
                         }
-                        ErrorMessage error = new ErrorMessage(errMessage, subMessage , this._nByte);
+                        ErrorMessage error = new ErrorMessage(errMessage, subMessage, this._nByte);
                         info.setMessage(error);
                         info.setWellFormed(false);
                         return 0;
@@ -296,7 +310,8 @@ public class Utf8Module extends ModuleBase {
                 if (ControlChar.isLineEndChar(ctrlChar)) {
                     // Carry out the line endings test
                     LineEnding le = LineEnding.fromControlChars(ctrlChar, prevChar);
-                    if (le != null) this.usedLineEndings.add(le);
+                    if (le != null)
+                        this.usedLineEndings.add(le);
                 } else if (ctrlChar != null) {
                     // The passed char is a control char and not a line ending
                     this.usedCtrlChars.add(ctrlChar);
@@ -307,7 +322,8 @@ public class Utf8Module extends ModuleBase {
                 if (prevChar == ControlChar.CR && ctrlChar != ControlChar.LF) {
                     // Carry out the line endings test
                     LineEnding le = LineEnding.fromControlChars(ctrlChar, prevChar);
-                    if (le != null) this.usedLineEndings.add(le);
+                    if (le != null)
+                        this.usedLineEndings.add(le);
                 }
                 prevChar = ctrlChar;
 
@@ -316,7 +332,8 @@ public class Utf8Module extends ModuleBase {
                 eof = true;
                 /* Catch line endings at very end. */
                 LineEnding le = LineEnding.fromControlChars(ControlChar.NUL, prevChar);
-                if (le != null) this.usedLineEndings.add(le);
+                if (le != null)
+                    this.usedLineEndings.add(le);
             }
         }
 
@@ -394,13 +411,13 @@ public class Utf8Module extends ModuleBase {
      * of the file.
      *
      * @param file
-     *            A File object for the object being parsed
+     *               A File object for the object being parsed
      * @param stream
-     *            An InputStream, positioned at its beginning, which is
-     *            generated from the object to be parsed
+     *               An InputStream, positioned at its beginning, which is
+     *               generated from the object to be parsed
      * @param info
-     *            A fresh RepInfo object which will be modified to reflect the
-     *            results of the test
+     *               A fresh RepInfo object which will be modified to reflect the
+     *               results of the test
      */
     @Override
     public void checkSignatures(File file, InputStream stream, RepInfo info)
