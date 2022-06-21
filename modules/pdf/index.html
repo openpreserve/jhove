@@ -104,10 +104,6 @@ The PDF-hul module recognizes and validates the following public profiles:
   <li>
     Tagged PDF [<a href="/references#pdf1.4">PDF 1.4</a>]
   </li>
-  <li>
-    PDF/A (ISO/DIS 19005-1)
-    [<a href="/references#pdfa">PDF/A</a>]
-  </li>
 </ul>
 
 <a class="name" name="well-formedness">
@@ -313,31 +309,6 @@ The MIME type is reported as: application/pdf
       <li>Document catalog dictionary has MarkInfo dictionary</li>
       <li>A valid structure tree is present</li>
     </ul>
-  </li>
-  <li>
-    <strong>PDF/A</strong>
-    <p>
-      The PDF/A profile is for long-term preservation of electronic documents
-      [<a href="/references#pdfa">PDF/A</a>].
-    </p>
-    <ul>
-      <li>No encryption dictionary</li>
-      <li>No Encrypt or Info entries in trailer</li>
-      <li>Document catalog dictionary specifies RFC1766 language</li>
-      <li>Document catalog dictionary has no AA or OCProperties</li>
-      <li>Form fields do not have AA actions</li>
-      <li>No Launch, Sound, Movie, ResetForm, ImportData, or JavaScript actions</li>
-      <li>Fonts have recognized encoding</li>
-      <li>Uncalibrated color spaces have OutputIntent specified</li>
-      <li>Page objects do not have Movie, Sound, or FileAttachment</li>
-      <li>Non-text annotations have Contents key</li>
-      <li>Unfiltered metadata stream</li>
-    </ul>
-    <p>
-      Note that the PDF module does <em>not</em> parse the contents on streams,
-      so it <em>cannot</em> determine conformance to PDF/A to the degree required
-      by the ISO <a href="/references#pdfa">standard</a>.
-    </p>
   </li>
 </ul>
 
