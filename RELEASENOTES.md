@@ -8,9 +8,21 @@ see the file LICENSE for details).
 Versions 1.7 to 1.11 of JHOVE released independently.
 Versions 1.12 onwards released by the Open Preservation Foundation.
 
-## JHOVE 1.26
+## JHOVE 1.26.1
 
-2022-04-22
+2022-07-14
+
+### General
+
+- Fixed issue [[#757][]] GUI JSON output truncated. [[#758][]]
+
+[#757]: https://github.com/openpreserve/jhove/issues/757
+
+[#758]: https://github.com/openpreserve/jhove/pull/758
+
+## JHOVE 1.26.0
+
+2022-06-09
 
 ### General
 
