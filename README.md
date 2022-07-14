@@ -14,31 +14,34 @@ JHOVE
 
 Licensing
 ---------
+
 Copyright 2003-2012 by JSTOR and the President and Fellows of Harvard College,
-2015-2017 by the [Open Preservation Foundation](http://openpreservation.org).
+2015-2022 by the [Open Preservation Foundation](http://openpreservation.org).
 JHOVE is made available under the
 [GNU Lesser General Public License (LGPL)](http://www.gnu.org/licenses/lgpl.html).
 
-Rev. 1.24.0, 2022-06-11
+Rev. 1.26.1, 2022-07-14
 
 JHOVE Homepage
 --------------
+
 <http://jhove.openpreservation.org/>
 
 Overview
 --------
+
 JHOVE (the JSTOR/Harvard Object Validation Environment, pronounced "jove")
 is an extensible software framework for performing format identification,
 validation, and characterization of digital objects.
 
- * Format identification is the process of determining the format to which a
-   digital object conforms: "I have a digital object; what format is it?"
- * Format validation is the process of determining the level of compliance of a
-   digital object to the specification for its purported format: "I have an
-   object purportedly of format F; is it?"
- * Format characterization is the process of determining the format-specific
-   significant properties of an object of a given format: "I have an object of
-   format F; what are its salient properties?"
+* Format identification is the process of determining the format to which a
+  digital object conforms: "I have a digital object; what format is it?"
+* Format validation is the process of determining the level of compliance of a
+  digital object to the specification for its purported format: "I have an
+  object purportedly of format F; is it?"
+* Format characterization is the process of determining the format-specific
+  significant properties of an object of a given format: "I have an object of
+  format F; what are its salient properties?"
 
 These actions are frequently necessary during routine operation of digital
 repositories and for digital preservation activities.
@@ -60,32 +63,38 @@ JHOVE is currently being maintained by the
 
 Pre-requisites
 --------------
- 1. Java JRE 1.8  
-    Version 1.20 of JHOVE is built and tested against Oracle JDK 8,
-    and OpenJDK 8 on Travis. Releases are built using Oracle JDK 8
-    from the [OPF's Jenkins server](http://jenkins.openpreservation.org/).
 
- 2. If you would like to build JHOVE from source, then life will be easiest if
-    you use [Apache Maven](https://maven.apache.org/).
+1. Java JRE 1.8  
+  Version 1.20 of JHOVE is built and tested against Oracle JDK 8,
+  and OpenJDK 8 on Travis. Releases are built using Oracle JDK 8
+  from the [OPF's Jenkins server](http://jenkins.openpreservation.org/).
+
+2. If you would like to build JHOVE from source, then life will be easiest if
+  you use [Apache Maven](https://maven.apache.org/).
 
 Getting JHOVE
 -------------
 
 ### For Users: JHOVE Cross Platform Installer
+
 You can download the [latest version of JHOVE here](http://software.openpreservation.org/rel/jhove-latest.jar).
 
 ### For Developers: JHOVE JARs via Maven
+
 From v1.16 onwards all production releases of JHOVE are deployed to Maven
 Central. Add the version of JHOVE you'd like to use as a property in your Maven
 POM:
+
 ```xml
 <properties>
   ...
   <jhove.version>1.20.1</jhove.version>
 </properties>
 ```
+
 Use this dependency for the core classes Maven module (e.g. `JhoveBase`,
 `Module`, `ModuleBase`, etc.):
+
 ```xml
 <dependency>
   <groupId>org.openpreservation.jhove</groupId>
@@ -93,7 +102,9 @@ Use this dependency for the core classes Maven module (e.g. `JhoveBase`,
   <version>${jhove.version}</version>
 </dependency>
 ```
+
 this for the JHOVE internal module implementations:
+
 ```xml
 <dependency>
   <groupId>org.openpreservation.jhove</groupId>
@@ -101,7 +112,9 @@ this for the JHOVE internal module implementations:
   <version>${jhove.version}</version>
 </dependency>
 ```
+
 this for the JHOVE external module implementations:
+
 ```xml
 <dependency>
   <groupId>org.openpreservation.jhove</groupId>
@@ -109,7 +122,9 @@ this for the JHOVE external module implementations:
   <version>${jhove.version}</version>
 </dependency>
 ```
+
 and this for the JHOVE applications:
+
 ```xml
 <dependency>
   <groupId>org.openpreservation.jhove</groupId>
@@ -117,9 +132,11 @@ and this for the JHOVE applications:
   <version>${jhove.version}</version>
 </dependency>
 ```
+
 If you want the latest development packages you'll need to add the
 [Open Preservation Foundation's Maven repository](http://artifactory.openpreservation.org/artifactory/opf-dev)
 to your settings file:
+
 ```xml
   <profiles>
     <profile>
@@ -140,26 +157,32 @@ to your settings file:
     <activeProfile>opf-artifactory</activeProfile>
   </activeProfiles>
 ```
+
 You can then follow the instructions above to include particular Maven modules,
 but you can now also choose odd minor versioned development builds. At the time
 of writing the latest development version could be included by using the
 following property:
+
 ```xml
 <properties>
   ...
   <jhove.version>1.21.1</jhove.version>
 </properties>
 ```
+
 or even:
+
 ```xml
 <properties>
   ...
   <jhove.version>[1.21.0,1.22.0]</jhove.version>
 </properties>
 ```
+
 to always use the latest 1.21 build.
 
 ### For Developers: Building JHOVE from Source
+
 Clone this project, checkout the integration branch, and use Maven, e.g.:
 
     git clone git@github.com:openpreserve/jhove.git
@@ -174,10 +197,12 @@ Installation
 ------------
 
 ### Application Installation
+
 Download the JHOVE installer. The installer itself requires Java 1.6 or later
 to be pre-installed. Installation is OS dependant:
 
 #### Windows
+
 *Currently only tested on Windows 7.*
 
 Simply double-click the downloaded installer JAR. If Java is installed then the
@@ -197,6 +222,7 @@ to display the command-line usage message.
 It is also possible to use JHOVE with the openJDK, e. g. jdk-13. It might be necessary to set the java path in the Environment variables, for which one usually needs administration rights for the windows machine. 
 
 ### Mac OS
+
 *Currently only tested on OS X Mavericks.*
 
 Simply double-click the downloaded installer JAR. If Java is installed then the
@@ -213,6 +239,7 @@ open a Terminal command window and then issue these commands:
 to display the command-line usage message.
 
 ### Linux
+
 *Currently tested on Ubuntu 16.10 and Debian Jessie.*
 
 Once the installer has downloaded, start a terminal, e.g. `Ctrl+Alt+T`,
@@ -234,6 +261,7 @@ will run the GUI application.
 
 Distribution
 ------------
+
 We've moved to Maven and have taken the opportunity to update the distribution.
 For now we're producing:
  * a Maven package, for developers wishing to incorporate JHOVE into their
@@ -306,6 +334,7 @@ where `<configFile>` is the pathname of the JHOVE configuration file.
 
 Project Structure
 -----------------
+
 A quick introduction to the restructured Maven project. The project's been
 broken into three Maven modules with an additional installer module added.
 
@@ -320,6 +349,7 @@ i.e. `${artifactId}-${project.version}.jar`, where `${project.version}` defaults
 to `1.20.0` unless you explicitly set the version number.
 
 ### jhove
+
 The `jhove` project root acts as a Maven parent and reactor for the sub-modules.
 This simply builds sub-modules and doesn't produce any artifacts, but decides
 which sub-modules are built.
@@ -328,6 +358,7 @@ The `jhove-core` and `jhove-modules` are most likely all that are required for
 developers wishing to call and run JHOVE from their own code.
 
 ### jhove-core
+
 The `jhove-core` module contains all of the main data type definitions and the
 output handlers. This module produces a single JAR:
 
@@ -338,38 +369,41 @@ The `jhove-core` JAR contains a single module implementation, the default
 the `jhove-modules` JAR.
 
 ### jhove-modules
+
 The `jhove-modules` contains all of JHOVE's core format-specific module
 implementations, specifically:
 
- * AIFF
- * ASCII
- * GIF
- * HTML
- * JPEG
- * JPEG 2000
- * PDF
- * TIFF
- * UTF-8
- * WAVE
- * XML
+* AIFF
+* ASCII
+* GIF
+* HTML
+* JPEG
+* JPEG 2000
+* PDF
+* TIFF
+* UTF-8
+* WAVE
+* XML
 
 These are all packaged in a single modules JAR:
 
     ./jhove/jhove-modules/target/jhove-modules-${project.version}.jar
 
 ### jhove-ext-modules
+
 The `jhove-ext-modules` contains JHOVE modules developed by external parties, specifically:
 
- * PNG
- * WARC
- * GZIP
- * EPUB
+* PNG
+* WARC
+* GZIP
+* EPUB
 
 These are all packaged in a single modules JAR:
 
     ./jhove/jhove-ext-modules/target/jhove-ext-modules-${project.version}.jar
 
 ### jhove-apps
+
 The `jhove-apps` module contains the command-line and GUI application code and
 builds a fat JAR containing the entire Java application. This JAR can be used
 to execute the command-line app:
@@ -377,16 +411,17 @@ to execute the command-line app:
     ./jhove/jhove-apps/target/jhove-apps-${project.version}.jar
 
 ### jhove-installer
+
 Finally, the `jhove-installer` module takes the fat JAR and creates a Java-based
 installer for JHOVE. The installer bundles up invocation scripts and the like,
 installs them under `<userHome>/jhove/` (default, can be changed) while also
 looking after:
 
- * variable substitution to ensure that JHOVE_HOME and the like are set to
-   reflect a user's install location;
- * making sure that Windows users get batch scripts, while Mac and Linux users
-   get bash scripts; and
- * optionally generating unattended install and uninstall files.
+* variable substitution to ensure that JHOVE_HOME and the like are set to
+ reflect a user's install location;
+* making sure that Windows users get batch scripts, while Mac and Linux users
+ get bash scripts; and
+* optionally generating unattended install and uninstall files.
 
 The module produces two JARs, one called `jhove-installer-${project.version}`,
 which contains the JARs for the installer, and an executable JAR to install
