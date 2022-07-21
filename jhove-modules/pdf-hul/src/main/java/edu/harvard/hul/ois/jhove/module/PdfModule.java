@@ -1053,7 +1053,7 @@ public class PdfModule extends ModuleBase {
 			header = PdfHeader.parseHeader(_parser);
 		} catch (PdfMalformedException e) {
 			info.setWellFormed(false);
-			info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_154, 0L)); // PDF-HUL-154
+			info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_155, 0L)); // PDF-HUL-155
 			return false;
 		}
 		if (header == null) {
@@ -1283,6 +1283,9 @@ public class PdfModule extends ModuleBase {
 					throw new PdfInvalidException(MessageConstants.PDF_HUL_70, // PDF-HUL-70
 							_parser.getOffset());
 				}
+				_encryptDictRef = (PdfIndirectObj) dict
+						.get(DICT_KEY_ENCRYPT);  // This is at least v. 1.1
+				_encrypted = (_encryptDictRef != null);
 				/*
 				 * We don't need to see a trailer dictionary.
 				 * Move along, move along.
@@ -2036,6 +2039,9 @@ public class PdfModule extends ModuleBase {
 				throw new PdfInvalidException(MessageConstants.PDF_HUL_95); // PDF-HUL-95
 			}
 
+			if (_encrypted) {
+				return true;
+			}
 			PdfObject pagesObj = resolveIndirectObject(_pagesDictRef);
 			if (!(pagesObj instanceof PdfDictionary))
 				throw new PdfMalformedException(MessageConstants.PDF_HUL_97); // PDF-HUL-97
