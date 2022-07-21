@@ -3335,7 +3335,8 @@ public class PdfModule extends ModuleBase {
 			itemObj = annot.get("NM");
 			if (itemObj != null) {
 				propList.add(new Property(DICT_KEY_NAME, PropertyType.STRING,
-						((PdfSimpleObject) itemObj).getStringValue()));
+						_encrypted ? ENCRYPTED
+								: ((PdfSimpleObject) itemObj).getStringValue()));
 			}
 
 			// LastModified is optional. The documentation says that
@@ -3347,7 +3348,8 @@ public class PdfModule extends ModuleBase {
 						.getToken();
 				Property dateProp;
 				dateProp = new Property(PROP_NAME_LAST_MOD, PropertyType.STRING,
-						lastModLit.getValue());
+						_encrypted ? ENCRYPTED
+								: lastModLit.getValue());
 
 				propList.add(dateProp);
 			}
