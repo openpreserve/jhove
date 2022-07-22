@@ -1362,9 +1362,16 @@ public class PdfModule extends ModuleBase {
 				throw new PdfInvalidException(MessageConstants.PDF_HUL_75, // PDF-HUL-75
 						_parser.getOffset());
 			}
-			_encryptDictRef = (PdfIndirectObj) _trailerDict
-					.get(DICT_KEY_ENCRYPT);  // This is at least v. 1.1
-			_encrypted = (_encryptDictRef != null);
+			PdfObject encryptObj =  _trailerDict.get(DICT_KEY_ENCRYPT); 
+			if (encryptObj instanceof PdfIndirectObj) {
+				_encryptDictRef = (PdfIndirectObj) _trailerDict
+						.get(DICT_KEY_ENCRYPT);
+				_encrypted = (_encryptDictRef != null);
+			} else if (encryptObj instanceof PdfDictionary) {
+				_encryptDict = (PdfDictionary) _trailerDict
+						.get(DICT_KEY_ENCRYPT);
+				_encrypted = (_encryptDict != null);
+			}
 
 			PdfObject infoObj = _trailerDict.get(DICT_KEY_INFO);
 			if (infoObj != null && !(infoObj instanceof PdfIndirectObj)) {
