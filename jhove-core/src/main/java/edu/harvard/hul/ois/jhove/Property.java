@@ -77,7 +77,12 @@ public class Property
            types here may help avoid difficult chasing down
            of the bugs such mismatches cause. */
 	if (value == null) {
-	    throw new NullPointerException (CoreMessageConstants.EXC_PROP_VAL_NULL);
+		if (type == PropertyType.STRING) {
+			// a String value can be empty
+			value = "";
+		} else {
+			throw new NullPointerException (CoreMessageConstants.EXC_PROP_VAL_NULL);
+		}
 	}
 	if ((arity == PropertyArity.SCALAR) && !isObjScalarProp(value)) {
 		throw new IncompatibleClassChangeError
