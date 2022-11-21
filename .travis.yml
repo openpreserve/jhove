@@ -39,6 +39,7 @@ before_install:
   - wget -O ~/codacy-coverage-reporter-assembly-latest.jar http://resources.openpreservation.org/codacy-coverage-reporter-assembly-latest.jar
 
 script:
+  - sha256sum jhove-modules/xml-hul/src/test/resources/edu/harvard/hul/ois/jhove/module/mods-well-formed.xml
   - mvn clean install -DjacocoAgg
   - "./bbt-jhove"
   - mvn verify -DjacocoAgg
