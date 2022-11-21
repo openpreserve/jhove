@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Source: view-source:https://www.loc.gov/standards/mods/v3/modsbook-chapter.xml -->
-<mods xmlns:xlink="http://www.w3.org/1999/xlink" version="3.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+<mods xmlns:xlink="http://www.w3.org/1999/xlink" version="3.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" xsi:schemaLocation="http://www.loc.gov/mods/v3 https://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
     <titleInfo>
         <title>Models, Fantasies and Phantoms of Transition</title>
     </titleInfo>
