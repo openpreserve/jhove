@@ -398,6 +398,7 @@ public class XmlModuleHandler extends DefaultHandler {
      */
     @Override
     public void warning(SAXParseException spe) {
+        LOGGER.setLevel(Level.WARNING);
         LOGGER.log(Level.WARNING, "SAXParseException", spe);
         if (spe.getCause() != null) {
             LOGGER.log(Level.WARNING, "SAXParseException cause", spe.getCause());
