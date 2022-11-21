@@ -22,7 +22,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots install -DjacocoAgg
+        run: mvn -e -X --batch-mode --update-snapshots install -DjacocoAgg
       - name: Integration Tests
         if: matrix.java-version == 8
         run: ./bbt-jhove
