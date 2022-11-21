@@ -19,10 +19,8 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java-version }}
-          distribution: 'amazon'
+          distribution: 'temurin'
           cache: maven
-      - name: Test resource XML files
-        run: sha256sum jhove-modules/xml-hul/src/test/resources/edu/harvard/hul/ois/jhove/module/mods-well-formed.xml
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots install -DjacocoAgg
       - name: Integration Tests
