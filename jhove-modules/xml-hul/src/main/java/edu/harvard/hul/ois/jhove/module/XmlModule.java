@@ -395,7 +395,7 @@ public class XmlModule extends ModuleBase {
             info.setWellFormed(false);
             return 0;
         } catch (SAXParseException spe) {
-            LOGGER.log(Level.WARNING, "SAXParseException", spe);
+            LOGGER.log(Level.SEVERE, "SAXParseException", spe);
             // Document failed to parse.
             if (handler.getSigFlag() && !_parseFromSig) {
                 info.setSigMatch(_name);
