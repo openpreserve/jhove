@@ -398,7 +398,10 @@ public class XmlModuleHandler extends DefaultHandler {
      */
     @Override
     public void warning(SAXParseException spe) {
-        LOGGER.log(Level.SEVERE, "SAXParseException", spe);
+        LOGGER.log(Level.WARNING, "SAXParseException", spe);
+        if (spe.getCause() != null) {
+            LOGGER.log(Level.WARNING, "SAXParseException cause", spe.getCause());
+        }
         _messages.add(new InfoMessage(
                 MessageConstants.XML_HUL_1,
                 spe.getMessage()));
@@ -412,6 +415,9 @@ public class XmlModuleHandler extends DefaultHandler {
     @Override
     public void error(SAXParseException spe) {
         LOGGER.log(Level.SEVERE, "SAXParseException", spe);
+        if (spe.getCause() != null) {
+            LOGGER.log(Level.SEVERE, "SAXParseException cause", spe.getCause());
+        }
         _valid = false;
         if (_nErrors == MAXERRORS) {
             JhoveMessage message = JhoveMessages.getMessageInstance(
