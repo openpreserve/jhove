@@ -3,6 +3,8 @@ package edu.harvard.hul.ois.jhove.module;
 import edu.harvard.hul.ois.jhove.JhoveBase;
 import edu.harvard.hul.ois.jhove.JhoveException;
 import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.handler.XmlHandler;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
@@ -55,10 +58,13 @@ public class XmlModuleTest {
         assertEquals(RepInfo.TRUE, info.getWellFormed());
 
         parseIndex = parse(file, info, parseIndex);
-
+        XmlHandler handler = new XmlHandler();
+        handler.setWriter(new PrintWriter(System.err, true));
+        handler.show(info, false);
         assertEquals(0, parseIndex);
         assertEquals(RepInfo.TRUE, info.getWellFormed());
         assertEquals(RepInfo.TRUE, info.getValid());
+
     }
 
     @Test
@@ -70,7 +76,7 @@ public class XmlModuleTest {
 
         assertEquals(0, parseIndex);
         assertEquals(RepInfo.TRUE, info.getWellFormed());
-        assertEquals(RepInfo.UNDETERMINED, info.getValid());
+        assertEquals(String.format(""), RepInfo.UNDETERMINED, info.getValid());
     }
 
     @Test
