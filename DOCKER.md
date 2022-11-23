@@ -20,6 +20,10 @@ Please use [GitHub issues](https://github.com/openpreserve/jhove/issues/new/) to
 
     docker run --rm openpreserve/jhove -m JPEG-hul -h XML "https://openpreservation.org/wp-content/uploads/2019/12/veraPDF-shadow-160x83.jpg"
 
+### Grab output to a local file
+
+    docker run --rm openpreserve/jhove -m JPEG-hul -h XML "https://openpreservation.org/wp-content/uploads/2019/12/veraPDF-shadow-160x83.jpg" - > jhove-output.xml
+
 ## Building the Docker image
 
 You'll need Maven installed locally to wrangle the project version, otherwise pass your own. From the project root run:
