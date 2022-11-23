@@ -63,4 +63,4 @@ jobs:
           coverage-reports: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
       - name: Codacy analysis reporting
         if: matrix.java-version == 8
-        uses: codacy/codacy-analysis-cli-action@4.2.0
+        uses: codacy/codacy-analysis-cli-action@4.0.0
