@@ -14,9 +14,9 @@ jobs:
         java-version: [8, 11]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: JDK setup
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java-version }}
           distribution: 'temurin'
@@ -32,7 +32,7 @@ jobs:
         run: mvn --batch-mode verify -DjacocoAgg
       - name: Upload coverage report
         if: matrix.java-version == 8
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3
         with:
           name: coverage-report
           path: jhove-apps/target/site/jacoco-aggregate/
@@ -44,13 +44,13 @@ jobs:
     steps:
       - name: Download coverage report
         if: matrix.java-version == 8
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v3
         with:
           name: coverage-report
           path: core/target/site/jacoco/
       - name: Codecov coverage reporting
         if: matrix.java-version == 8
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           files: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
           fail_ci_if_error: true # optional (default = false)
@@ -63,4 +63,4 @@ jobs:
           coverage-reports: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
       - name: Codacy analysis reporting
         if: matrix.java-version == 8
-        uses: codacy/codacy-analysis-cli-action@4.0.0
+        uses: codacy/codacy-analysis-cli-action@4.2.0
