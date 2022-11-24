@@ -69,13 +69,17 @@ import edu.harvard.hul.ois.jhove.module.wave.SampleChunk;
  */
 public class WaveModule extends ModuleBase {
 
+    private static final String WAVE_FORM_TYPE = "WAVE";
+    private static final String EBU_TECH_SPEC_3285 = "EBU Technical Specification 3285";
+    private static final String EBU_TECH_SPEC_3306 = "EBU Technical Specification 3306";
+
     /* Module metadata */
     private static final String NAME = "WAVE-hul";
     private static final String RELEASE = "1.8.2";
 	private static final int [] DATE = { 2022, 04, 22 };
-    private static final String[] FORMATS = { "WAVE", "Audio for Windows",
-            "EBU Technical Specification 3285", "Broadcast Wave Format", "BWF",
-            "EBU Technical Specification 3306", "RF64" };
+    private static final String[] FORMATS = { WAVE_FORM_TYPE, "Audio for Windows",
+            EBU_TECH_SPEC_3285, "Broadcast Wave Format", "BWF",
+            EBU_TECH_SPEC_3306, "RF64" };
     private static final String COVERAGE = "WAVE (PCMWAVEFORMAT, WAVEFORMATEX, WAVEFORMATEXTENSIBLE); "
             + "Broadcast Wave Format (BWF) version 0, 1 and 2; RF64";
     private static final String[] MIMETYPES = { "audio/vnd.wave", "audio/wav",
@@ -89,9 +93,6 @@ public class WaveModule extends ModuleBase {
             + "President and Fellows of Harvard College. "
             + "Released under the GNU Lesser General Public License.";
     
-    private static final String WAVE_FORM_TYPE = "WAVE";
-    private static final String EBU_TECH_SPEC_3285 = "EBU Technical Specification 3285";
-    private static final String EBU_TECH_SPEC_3306 = "EBU Technical Specification 3306";
     private static final String MSLIB_URL = "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/";
     private static final String PCMWAVEFORMAT_PROFILE = "PCMWAVEFORMAT";
     private static final String WAVEFORMATEX_PROFILE = "WAVEFORMATEX";
@@ -306,7 +307,7 @@ public class WaveModule extends ModuleBase {
 				SignatureUseType.MANDATORY_IF_APPLICABLE, 0);
 		_signature.add(sig);
 
-		sig = new InternalSignature("RF64", SignatureType.MAGIC,
+        sig = new InternalSignature(RF64_SIGNATURE, SignatureType.MAGIC,
 				SignatureUseType.MANDATORY_IF_APPLICABLE, 0);
 		_signature.add(sig);
 
@@ -325,12 +326,15 @@ public class WaveModule extends ModuleBase {
 	 *            An InputStream, positioned at its beginning, which is
 	 *            generated from the object to be parsed
 	 * @param info
-	 *            A fresh RepInfo object which will be modified to reflect the
+     *                   A fresh RepInfo object which will be modified to reflect
+     *                   the
 	 *            results of the parsing
 	 * @param parseIndex
 	 *            Must be 0 in first call to <code>parse</code>. If
-	 *            <code>parse</code> returns a nonzero value, it must be called
-	 *            again with <code>parseIndex</code> equal to that return value.
+     *                   <code>parse</code> returns a nonzero value, it must be
+     *                   called
+     *                   again with <code>parseIndex</code> equal to that return
+     *                   value.
 	 */
 	@Override
 	public int parse(InputStream stream, RepInfo info, int parseIndex) {
@@ -384,22 +388,19 @@ public class WaveModule extends ModuleBase {
 			if (flagRF64) {
 				// For RF64 files the first chunk should be a Data Size 64 chunk
 				// containing the extended data sizes for a number of elements.
-				if (readChunk(info) && dataSize64ChunkSeen) {
-					if (riffSize == LOOKUP_EXTENDED_DATA_SIZE) {
+                if (readChunk(info) && dataSize64ChunkSeen && (riffSize == LOOKUP_EXTENDED_DATA_SIZE)
+                        && (Long.compareUnsigned(extendedRiffSize,
+                                Long.MAX_VALUE) > 0)) {
 						// Even though RF64 can support files larger than
 						// Long.MAX_VALUE, this module currently does not.
-						if (Long.compareUnsigned(extendedRiffSize,
-								Long.MAX_VALUE) > 0) {
 							info.setMessage(new InfoMessage(
 									MessageConstants.WAVE_HUL_22));
 							info.setWellFormed(RepInfo.UNDETERMINED);
 							return 0;
-						}
-					}
 				} else {
 					info.setMessage(new ErrorMessage(
 							MessageConstants.WAVE_HUL_23,
-							Chunk.HEADER_LENGTH + RIFF_FORM_TYPE_LENGTH));
+                            (long)Chunk.HEADER_LENGTH + RIFF_FORM_TYPE_LENGTH));
 					info.setWellFormed(false);
 					return 0;
 				}
@@ -418,7 +419,7 @@ public class WaveModule extends ModuleBase {
 						firstFourChars);
 			}
 
-		} catch (EOFException eofe) {
+        } catch (EOFException eofe) {
 			info.setWellFormed(false);
 			String subMessage = String.format(
 					MessageConstants.WAVE_HUL_3_SUB.getMessage(),
@@ -495,8 +496,7 @@ public class WaveModule extends ModuleBase {
 		if (flagWaveFormatExtensible) {
 			info.setProfile(WAVEFORMATEXTENSIBLE_PROFILE);
 		}
-		if (broadcastExtChunkSeen && (
-                        (waveCodec == FormatChunk.WAVE_FORMAT_MPEG && factChunkSeen)
+        if (broadcastExtChunkSeen && ((waveCodec == FormatChunk.WAVE_FORMAT_MPEG && factChunkSeen)
                         || waveCodec == FormatChunk.WAVE_FORMAT_PCM)) {
                     info.setProfile("BWF");
 		}
@@ -874,7 +874,8 @@ public class WaveModule extends ModuleBase {
 			// Check for non-null data
 			while (nullData && bytesProcessed < bytesToProcess) {
 				int b = readUnsignedByte(stream, this);
-				if (b != 0) nullData = false;
+                if (b != 0)
+                    nullData = false;
 				bytesProcessed++;
 			}
 
