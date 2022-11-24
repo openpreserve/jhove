@@ -14,10 +14,6 @@
   <name>JHOVE Validation Modules</name>
   <description>The JHOVE HUL validation modules.</description>
 
-  <properties>
-    <jwat.version>1.0.3</jwat.version>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>
@@ -31,7 +27,6 @@
     <dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
-      <version>2.3.1</version>
     </dependency>
   </dependencies>
 
