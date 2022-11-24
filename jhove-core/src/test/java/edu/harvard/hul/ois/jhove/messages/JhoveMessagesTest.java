@@ -1,5 +1,8 @@
 package edu.harvard.hul.ois.jhove.messages;
 
+import java.util.Locale;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -8,6 +11,12 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
 public class JhoveMessagesTest {
+	@BeforeClass
+	public static void setUp() {
+		// Ensure the default locale is English for testing on any platform
+		Locale.setDefault(Locale.ENGLISH);
+	}
+	
     @Test
     public void testDefault() {
         System.getProperties().remove("module.language");

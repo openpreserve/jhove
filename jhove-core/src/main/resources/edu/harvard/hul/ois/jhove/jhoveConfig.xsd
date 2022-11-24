@@ -21,6 +21,11 @@
       <xs:documentation>Default character encoding used by the output handlers.</xs:documentation>
      </xs:annotation>
     </xs:element>
+    <xs:element name="languageCode" type="xs:string" minOccurs="0" maxOccurs="1">
+     <xs:annotation>
+      <xs:documentation>Override the default localisation with your own internationalisation code.</xs:documentation>
+     </xs:annotation>
+    </xs:element>
     <xs:element name="tempDirectory" type="xs:string" minOccurs="0">
      <xs:annotation>
       <xs:documentation>Optional directory in which temporary files are created. Default value is the current working directory.</xs:documentation>

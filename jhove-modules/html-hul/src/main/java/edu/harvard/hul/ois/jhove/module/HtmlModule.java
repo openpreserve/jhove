@@ -104,8 +104,8 @@ public class HtmlModule extends ModuleBase {
 	private static final String XHTML_1_0 = "XHTML 1.0";
 
 	private static final String NAME = "HTML-hul";
-	private static final String RELEASE = "1.4.1";
-  private static final int [] DATE = { 2019, 04, 17 };
+	private static final String RELEASE = "1.4.2";
+	private static final int[] DATE = { 2022, 04, 22 };
 	private static final String[] FORMAT = { "HTML" };
 	private static final String COVERAGE = "HTML 3.2, HTML 4.0 Strict,"
 			+ "HTML 4.0 Transitional, HTML 4.0 Frameset, "
@@ -148,15 +148,15 @@ public class HtmlModule extends ModuleBase {
 
 	/* Profile names, matching the above indices */
 	private static final String[] PROFILENAMES = { null, null, // there are no
-																 // profiles for
-																 // HTML 3.2
+																// profiles for
+																// HTML 3.2
 			STRICT, FRAMESET, TRANSITIONAL, STRICT, FRAMESET, TRANSITIONAL,
 			STRICT, FRAMESET, TRANSITIONAL, null // there
-												 // are no
-												 // profiles
-												 // for
-												 // XHTML
-												 // 1.1
+													// are no
+													// profiles
+													// for
+													// XHTML
+													// 1.1
 	};
 
 	/* Version names, matching the above indices */
@@ -274,24 +274,30 @@ public class HtmlModule extends ModuleBase {
 	 *
 	 *
 	 * @param stream
-	 *            An InputStream, positioned at its beginning, which is
-	 *            generated from the object to be parsed. If multiple calls to
-	 *            <code>parse</code> are made on the basis of a nonzero value
-	 *            being returned, a new InputStream must be provided each time.
+	 *                   An InputStream, positioned at its beginning, which is
+	 *                   generated from the object to be parsed. If multiple calls
+	 *                   to
+	 *                   <code>parse</code> are made on the basis of a nonzero value
+	 *                   being returned, a new InputStream must be provided each
+	 *                   time.
 	 *
 	 * @param info
-	 *            A fresh (on the first call) RepInfo object which will be
-	 *            modified to reflect the results of the parsing If multiple
-	 *            calls to <code>parse</code> are made on the basis of a nonzero
-	 *            value being returned, the same RepInfo object should be passed
-	 *            with each call.
+	 *                   A fresh (on the first call) RepInfo object which will be
+	 *                   modified to reflect the results of the parsing If multiple
+	 *                   calls to <code>parse</code> are made on the basis of a
+	 *                   nonzero
+	 *                   value being returned, the same RepInfo object should be
+	 *                   passed
+	 *                   with each call.
 	 *
 	 * @param parseIndex
-	 *            Must be 0 in first call to <code>parse</code>. If
-	 *            <code>parse</code> returns a nonzero value, it must be called
-	 *            again with <code>parseIndex</code> equal to that return value.
-         *
-         * @return parseInt
+	 *                   Must be 0 in first call to <code>parse</code>. If
+	 *                   <code>parse</code> returns a nonzero value, it must be
+	 *                   called
+	 *                   again with <code>parseIndex</code> equal to that return
+	 *                   value.
+	 *
+	 * @return parseInt
 	 */
 	@Override
 	public int parse(InputStream stream, RepInfo info, int parseIndex) {
@@ -429,17 +435,17 @@ public class HtmlModule extends ModuleBase {
 				 * is "html"
 				 */
 				switch (seemsToBeXHTML(elements)) {
-				case 0: // Not XML
-					break; // fall through
-				case 1: // XML but not HTML
-					info.setMessage(new ErrorMessage(
-							MessageConstants.HTML_HUL_14));
-					info.setWellFormed(false);
-					return 0;
-				case 2: // probably XHTML
-					return 100;
-				default :
-		    			break;
+					case 0: // Not XML
+						break; // fall through
+					case 1: // XML but not HTML
+						info.setMessage(new ErrorMessage(
+								MessageConstants.HTML_HUL_14));
+						info.setWellFormed(false);
+						return 0;
+					case 2: // probably XHTML
+						return 100;
+					default:
+						break;
 				}
 				info.setMessage(new ErrorMessage(
 						MessageConstants.HTML_HUL_16));
@@ -449,46 +455,45 @@ public class HtmlModule extends ModuleBase {
 
 			HtmlDocDesc docDesc = null;
 			switch (type) {
-			case HTML_3_2:
+				case HTML_3_2:
 
-
-			case HTML_4_0_FRAMESET:
-				docDesc = new Html4_0FrameDocDesc();
-				_textMD.setMarkup_basis("HTML");
-				_textMD.setMarkup_basis_version("4.0");
-				break;
-			case HTML_4_0_TRANSITIONAL:
-				docDesc = new Html4_0TransDocDesc();
-				_textMD.setMarkup_basis("HTML");
-				_textMD.setMarkup_basis_version("4.0");
-				break;
-			case HTML_4_0_STRICT:
-				docDesc = new Html4_0StrictDocDesc();
-				_textMD.setMarkup_basis("HTML");
-				_textMD.setMarkup_basis_version("4.0");
-				break;
-			case HTML_4_01_FRAMESET:
-				docDesc = new Html4_01FrameDocDesc();
-				_textMD.setMarkup_basis("HTML");
-				_textMD.setMarkup_basis_version("4.01");
-				break;
-			case HTML_4_01_TRANSITIONAL:
-				docDesc = new Html4_01TransDocDesc();
-				_textMD.setMarkup_basis("HTML");
-				_textMD.setMarkup_basis_version("4.01");
-				break;
-			case HTML_4_01_STRICT:
-				docDesc = new Html4_01StrictDocDesc();
-				_textMD.setMarkup_basis("HTML");
-				_textMD.setMarkup_basis_version("4.01");
-				break;
-			case XHTML_1_0_STRICT:
-			case XHTML_1_0_TRANSITIONAL:
-			case XHTML_1_0_FRAMESET:
-			case XHTML_1_1:
-				// Force a second call to parse as XML. 100 is a
-				// magic code for the first XML call.
-				return 100;
+				case HTML_4_0_FRAMESET:
+					docDesc = new Html4_0FrameDocDesc();
+					_textMD.setMarkup_basis("HTML");
+					_textMD.setMarkup_basis_version("4.0");
+					break;
+				case HTML_4_0_TRANSITIONAL:
+					docDesc = new Html4_0TransDocDesc();
+					_textMD.setMarkup_basis("HTML");
+					_textMD.setMarkup_basis_version("4.0");
+					break;
+				case HTML_4_0_STRICT:
+					docDesc = new Html4_0StrictDocDesc();
+					_textMD.setMarkup_basis("HTML");
+					_textMD.setMarkup_basis_version("4.0");
+					break;
+				case HTML_4_01_FRAMESET:
+					docDesc = new Html4_01FrameDocDesc();
+					_textMD.setMarkup_basis("HTML");
+					_textMD.setMarkup_basis_version("4.01");
+					break;
+				case HTML_4_01_TRANSITIONAL:
+					docDesc = new Html4_01TransDocDesc();
+					_textMD.setMarkup_basis("HTML");
+					_textMD.setMarkup_basis_version("4.01");
+					break;
+				case HTML_4_01_STRICT:
+					docDesc = new Html4_01StrictDocDesc();
+					_textMD.setMarkup_basis("HTML");
+					_textMD.setMarkup_basis_version("4.01");
+					break;
+				case XHTML_1_0_STRICT:
+				case XHTML_1_0_TRANSITIONAL:
+				case XHTML_1_0_FRAMESET:
+				case XHTML_1_1:
+					// Force a second call to parse as XML. 100 is a
+					// magic code for the first XML call.
+					return 100;
 			}
 			_textMD.setMarkup_language(_doctype);
 			if (docDesc == null) {
@@ -566,15 +571,15 @@ public class HtmlModule extends ModuleBase {
 	 * within the first sigBytes bytes, and call that a signature check.
 	 *
 	 * @param file
-	 *            A File object for the object being parsed
+	 *               A File object for the object being parsed
 	 * @param stream
-	 *            An InputStream, positioned at its beginning, which is
-	 *            generated from the object to be parsed
+	 *               An InputStream, positioned at its beginning, which is
+	 *               generated from the object to be parsed
 	 * @param info
-	 *            A fresh RepInfo object which will be modified to reflect the
-	 *            results of the test
-         *
-         * @throws IOException
+	 *               A fresh RepInfo object which will be modified to reflect the
+	 *               results of the test
+	 *
+	 * @throws IOException
 	 */
 	@Override
 	public void checkSignatures(File file, InputStream stream, RepInfo info)
@@ -653,26 +658,26 @@ public class HtmlModule extends ModuleBase {
 			}
 			str = stripQuotes(((String) dt.get(2)).toUpperCase());
 			_doctype = str;
-			if (null
-					!= str) switch (str) {
-                        case "-//W3C//DTD HTML 3.2 FINAL//EN":
-                        case "-//W3C//DTD HTML 3.2//EN":
-                            return HTML_3_2;
-                        case "-//W3C//DTD HTML 4.0//EN":
-                            return HTML_4_0_STRICT;
-                        case "-//W3C//DTD HTML 4.0 TRANSITIONAL//EN":
-                            return HTML_4_0_TRANSITIONAL;
-                        case "-//W3C//DTD HTML 4.0 FRAMESET//EN":
-                            return HTML_4_0_FRAMESET;
-                        case "-//W3C//DTD HTML 4.01//EN":
-                            return HTML_4_01_STRICT;
-                        case "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN":
-                            return HTML_4_01_TRANSITIONAL;
-                        case "-//W3C//DTD HTML 4.01 FRAMESET//EN":
-                            return HTML_4_01_FRAMESET;
-                        default:
-                            break;
-                    }
+			if (null != str)
+				switch (str) {
+					case "-//W3C//DTD HTML 3.2 FINAL//EN":
+					case "-//W3C//DTD HTML 3.2//EN":
+						return HTML_3_2;
+					case "-//W3C//DTD HTML 4.0//EN":
+						return HTML_4_0_STRICT;
+					case "-//W3C//DTD HTML 4.0 TRANSITIONAL//EN":
+						return HTML_4_0_TRANSITIONAL;
+					case "-//W3C//DTD HTML 4.0 FRAMESET//EN":
+						return HTML_4_0_FRAMESET;
+					case "-//W3C//DTD HTML 4.01//EN":
+						return HTML_4_01_STRICT;
+					case "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN":
+						return HTML_4_01_TRANSITIONAL;
+					case "-//W3C//DTD HTML 4.01 FRAMESET//EN":
+						return HTML_4_01_FRAMESET;
+					default:
+						break;
+				}
 		} catch (Exception e) {
 			// Really shouldn't happen, but if it does we've got
 			// a bad doctype

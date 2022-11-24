@@ -40,8 +40,8 @@ public class AsciiModule extends ModuleBase {
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
     private static final String NAME = "ASCII-hul";
-    private static final String RELEASE = "1.4.1";
-    private static final int [] DATE = { 2019, 04, 17 };
+    private static final String RELEASE = "1.4.2";
+    private static final int[] DATE = { 2022, 04, 22 };
     private static final String[] FORMAT = { "ASCII", "US-ASCII", "ANSI X3.4",
             "ISO 646" };
     private static final String COVERAGE = null;
@@ -144,7 +144,6 @@ public class AsciiModule extends ModuleBase {
 
         boolean printableChars = false;
 
-
         // Setup the data stream, will determine if we use checksum stream
         setupDataStream(stream, info);
 
@@ -157,9 +156,9 @@ public class AsciiModule extends ModuleBase {
                 /* Only byte values 0x00 through 0x7f are valid. */
                 if (ch > MAX_CHAR) {
                     ErrorMessage error = new ErrorMessage(MessageConstants.ASCII_HUL_1,
-                             String.format(MessageConstants.ASCII_HUL_1_SUB.getMessage(),
-                                          Character.valueOf((char) ch),
-                                          Integer.valueOf(ch)),
+                            String.format(MessageConstants.ASCII_HUL_1_SUB.getMessage(),
+                                    Character.valueOf((char) ch),
+                                    Integer.valueOf(ch)),
                             _nByte - 1);
                     info.setMessage(error);
                     info.setWellFormed(RepInfo.FALSE);
@@ -169,7 +168,8 @@ public class AsciiModule extends ModuleBase {
                 if (ControlChar.isLineEndChar(ctrlChar)) {
                     // Carry out the line endings test
                     LineEnding le = LineEnding.fromControlChars(ctrlChar, prevChar);
-                    if (le != null) this.usedLineEndings.add(le);
+                    if (le != null)
+                        this.usedLineEndings.add(le);
                 } else if (ctrlChar != null) {
                     // The passed char is a control char and not a line ending
                     this.usedCtrlChars.add(ctrlChar);
@@ -180,14 +180,16 @@ public class AsciiModule extends ModuleBase {
                 if (prevChar == ControlChar.CR && ctrlChar != ControlChar.LF) {
                     // Carry out the line endings test
                     LineEnding le = LineEnding.fromControlChars(ctrlChar, prevChar);
-                    if (le != null) this.usedLineEndings.add(le);
+                    if (le != null)
+                        this.usedLineEndings.add(le);
                 }
                 prevChar = ctrlChar;
             } catch (EOFException e) {
                 eof = true;
                 /* Catch line endings at very end. */
                 LineEnding le = LineEnding.fromControlChars(ControlChar.NUL, prevChar);
-                if (le != null) usedLineEndings.add(le);
+                if (le != null)
+                    usedLineEndings.add(le);
             }
         }
 
@@ -262,13 +264,13 @@ public class AsciiModule extends ModuleBase {
      * dozens of kilobytes into it. But oh well.
      *
      * @param file
-     *            A File object for the object being parsed
+     *               A File object for the object being parsed
      * @param stream
-     *            An InputStream, positioned at its beginning, which is
-     *            generated from the object to be parsed
+     *               An InputStream, positioned at its beginning, which is
+     *               generated from the object to be parsed
      * @param info
-     *            A fresh RepInfo object which will be modified to reflect the
-     *            results of the test
+     *               A fresh RepInfo object which will be modified to reflect the
+     *               results of the test
      */
     @Override
     public void checkSignatures(File file, InputStream stream, RepInfo info)
