@@ -21,6 +21,44 @@
         <filtering>true</filtering>
       </resource>
     </resources>
+    <plugins>
+      <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>jaxb2-maven-plugin</artifactId>
+          <version>3.1.0</version>
+          <executions>
+              <execution>
+                  <goals>
+                      <goal>xjc</goal>
+                  </goals>
+              </execution>
+          </executions>
+          <configuration>
+              <outputDirectory>target/generated-sources/jaxb</outputDirectory>
+              <packageName>edu.harvard.hul.ois.jhove.jaxb</packageName>
+              <sources>
+                <source>src/main/resources/edu/harvard/hul/ois/jhove/jhoveConfig.xsd</source>
+              </sources>
+          </configuration>
+      </plugin>
+      <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <executions>
+              <execution>
+                  <phase>generate-sources</phase>
+                  <goals>
+                      <goal>add-source</goal>
+                  </goals>
+                  <configuration>
+                      <sources>
+                          <source>target/generated-sources/jaxb</source>
+                      </sources>
+                  </configuration>
+              </execution>
+          </executions>
+      </plugin>
+    </plugins>
   </build>
 
   <dependencies>
