@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
-    <version>1.25.0-SNAPSHOT</version>
+    <version>1.27.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>jhove-apps</artifactId>
@@ -33,7 +33,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>Jhove</mainClass>
+              <mainClass>edu.harvard.hul.ois.jhove.Jhove</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>

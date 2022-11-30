@@ -89,7 +89,10 @@ public enum JhoveMessages {
 	 */
 	public static JhoveMessageFactory getInstance(final String bundleName)
 			throws IllegalArgumentException {
-		return getInstance(bundleName, Locale.getDefault());
+		String moduleLanguage = System.getProperty("module.language");
+		Locale local = moduleLanguage == null || moduleLanguage.trim().length() == 0 ? Locale.getDefault() : Locale.forLanguageTag(moduleLanguage);
+
+		return getInstance(bundleName, local);
 	}
 
 	/**

@@ -66,7 +66,8 @@ public class JhoveRepInfoReport extends MasterReport {
     protected List<CheckMessage> warns = new ArrayList<CheckMessage>();
     protected List<CheckMessage> errors = new ArrayList<CheckMessage>();
     protected List<CheckMessage> fatalErrors = new ArrayList<CheckMessage>();
-    protected List<CheckMessage> hints = new ArrayList<CheckMessage>();
+    protected List<CheckMessage> usageMsgs = new ArrayList<CheckMessage>();
+    protected List<CheckMessage> infoMsgs = new ArrayList<CheckMessage>();
 
     protected static final String ISO_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     protected static final String FALLBACK_FORMAT = "application/octet-stream";
@@ -90,9 +91,10 @@ public class JhoveRepInfoReport extends MasterReport {
             CheckMessage.addCheckMessage(warns, message, location, args);
             break;
         case USAGE:
-            CheckMessage.addCheckMessage(hints, message, location, args);
+            CheckMessage.addCheckMessage(usageMsgs, message, location, args);
             break;
         case INFO:
+            CheckMessage.addCheckMessage(infoMsgs, message, location, args);
             break;
         case SUPPRESSED:
             break;
@@ -243,7 +245,8 @@ public class JhoveRepInfoReport extends MasterReport {
         messages.addAll(fatalErrors);
         messages.addAll(errors);
         messages.addAll(warns);
-        messages.addAll(hints);
+        messages.addAll(usageMsgs);
+        messages.addAll(infoMsgs);
         return messages;
     }
 
@@ -452,7 +455,12 @@ public class JhoveRepInfoReport extends MasterReport {
 
     @Override
     public int getUsageCount() {
-        return hints.size();
+        return usageMsgs.size();
+    }
+
+    @Override
+    public int getInfoCount() {
+        return infoMsgs.size();
     }
 
     /*
