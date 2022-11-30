@@ -68,13 +68,13 @@ public class JsonHandler extends HandlerBase {
 	private static final String NAME = "JSON";
 
 	/** Handler release identifier. */
-	private static final String RELEASE = "1.0";
+	private static final String RELEASE = "1.1";
 
 	/** String release. */
 	private static final String RELEASE_CONSTANT = "release";
 
 	/** Handler release date. */
-	private static final int[] DATE = { 2019, 10, 18 };
+	private static final int[] DATE = { 2022, 04, 22 };
 
 	private static final String DATE_CONSTANT = "date";
 
@@ -355,32 +355,32 @@ public class JsonHandler extends HandlerBase {
 		String wfStr;
 		if (!_je.getSignatureFlag()) {
 			switch (info.getWellFormed()) {
-			case RepInfo.TRUE:
-				wfStr = WELL_FORMED;
-				break;
+				case RepInfo.TRUE:
+					wfStr = WELL_FORMED;
+					break;
 
-			case RepInfo.FALSE:
-				wfStr = NOT_WELL_FORMED;
-				break;
+				case RepInfo.FALSE:
+					wfStr = NOT_WELL_FORMED;
+					break;
 
-			default:
-				wfStr = "Unknown";
-				break;
+				default:
+					wfStr = "Unknown";
+					break;
 			}
 			// If it's well-formed, append validity information
 			if (info.getWellFormed() == RepInfo.TRUE) {
 				switch (info.getValid()) {
-				case RepInfo.TRUE:
-					wfStr += " and valid";
-					break;
+					case RepInfo.TRUE:
+						wfStr += " and valid";
+						break;
 
-				case RepInfo.FALSE:
-					wfStr += ", but not valid";
-					break;
+					case RepInfo.FALSE:
+						wfStr += ", but not valid";
+						break;
 
-				default:
-					// case UNDETERMINED: add nothing
-					break;
+					default:
+						// case UNDETERMINED: add nothing
+						break;
 				}
 			}
 			_logger.info("Validity/WF status: " + wfStr);
@@ -388,13 +388,13 @@ public class JsonHandler extends HandlerBase {
 		} else {
 			// If we aren't checking signatures, we still need to say something.
 			switch (info.getWellFormed()) {
-			case RepInfo.TRUE:
-				wfStr = WELL_FORMED;
-				break;
+				case RepInfo.TRUE:
+					wfStr = WELL_FORMED;
+					break;
 
-			default:
-				wfStr = NOT_WELL_FORMED;
-				break;
+				default:
+					wfStr = NOT_WELL_FORMED;
+					break;
 			}
 			infoBuilder.add("status", wfStr);
 		}
@@ -654,18 +654,18 @@ public class JsonHandler extends HandlerBase {
 
 		PropertyArity arity = property.getArity();
 		switch (arity) {
-		case SCALAR:
-			return showScalarProperty(property);
-		case ARRAY:
-			return showArrayProperty(property);
-		case LIST:
-			return showListProperty(property);
-		case MAP:
-			return showMapProperty(property);
-		case SET:
-			return showSetProperty(property);
-		default:
-			return propBuilder;
+			case SCALAR:
+				return showScalarProperty(property);
+			case ARRAY:
+				return showArrayProperty(property);
+			case LIST:
+				return showListProperty(property);
+			case MAP:
+				return showMapProperty(property);
+			case SET:
+				return showSetProperty(property);
+			default:
+				return propBuilder;
 		}
 	}
 
@@ -674,68 +674,68 @@ public class JsonHandler extends HandlerBase {
 
 		PropertyType propType = property.getType();
 		switch (propType) {
-		case BOOLEAN:
-			Boolean b = (Boolean) property.getValue();
-			propBuilder.add(property.getName(), b.booleanValue());
-			break;
-		case BYTE:
-		case CHARACTER:
-		case OBJECT:
-			propBuilder.add(property.getName(), property.getValue().toString());
-			break;
-		case DATE:
-			Date dt = (Date) property.getValue();
-			propBuilder.add(property.getName(), toDateTime(dt));
-			break;
-		case DOUBLE:
-			Double d = (Double) property.getValue();
-			propBuilder.add(property.getName(), d.doubleValue());
-			break;
-		case FLOAT:
-			Float f = (Float) property.getValue();
-			propBuilder.add(property.getName(), f.floatValue());
-			break;
-		case INTEGER:
-			Integer i = (Integer) property.getValue();
-			propBuilder.add(property.getName(), i.intValue());
-			break;
-		case LONG:
-			Long l = (Long) property.getValue();
-			propBuilder.add(property.getName(), l.longValue());
-			break;
-		case AESAUDIOMETADATA:
-			propBuilder
-					.add(property.getName(),
-							showAESAudioMetadata((AESAudioMetadata) property
-									.getValue()));
-			break;
-		case NISOIMAGEMETADATA:
-			propBuilder.add(property.getName(),
-					showNisoImageMetadata((NisoImageMetadata) property
-							.getValue()));
-			break;
-		case TEXTMDMETADATA:
-			propBuilder.add(property.getName(),
-					showTextMDMetadata((TextMDMetadata) property.getValue()));
-			break;
-		case SHORT:
-			Short s = (Short) property.getValue();
-			propBuilder.add(property.getName(), s.shortValue());
-			break;
-		case STRING:
-			propBuilder.add(property.getName(), (String) property.getValue());
-			break;
-		case RATIONAL:
-			propBuilder.add(property.getName(),
-					showRational((Rational) property.getValue()));
-			break;
-		case PROPERTY:
-			Property property2 = (Property) property.getValue();
-			propBuilder.add(property.getName(), showProperty(property2));
-			break;
-		default:
-			propBuilder.add(property.getName(), property.getValue().toString());
-			break;
+			case BOOLEAN:
+				Boolean b = (Boolean) property.getValue();
+				propBuilder.add(property.getName(), b.booleanValue());
+				break;
+			case BYTE:
+			case CHARACTER:
+			case OBJECT:
+				propBuilder.add(property.getName(), property.getValue().toString());
+				break;
+			case DATE:
+				Date dt = (Date) property.getValue();
+				propBuilder.add(property.getName(), toDateTime(dt));
+				break;
+			case DOUBLE:
+				Double d = (Double) property.getValue();
+				propBuilder.add(property.getName(), d.doubleValue());
+				break;
+			case FLOAT:
+				Float f = (Float) property.getValue();
+				propBuilder.add(property.getName(), f.floatValue());
+				break;
+			case INTEGER:
+				Integer i = (Integer) property.getValue();
+				propBuilder.add(property.getName(), i.intValue());
+				break;
+			case LONG:
+				Long l = (Long) property.getValue();
+				propBuilder.add(property.getName(), l.longValue());
+				break;
+			case AESAUDIOMETADATA:
+				propBuilder
+						.add(property.getName(),
+								showAESAudioMetadata((AESAudioMetadata) property
+										.getValue()));
+				break;
+			case NISOIMAGEMETADATA:
+				propBuilder.add(property.getName(),
+						showNisoImageMetadata((NisoImageMetadata) property
+								.getValue()));
+				break;
+			case TEXTMDMETADATA:
+				propBuilder.add(property.getName(),
+						showTextMDMetadata((TextMDMetadata) property.getValue()));
+				break;
+			case SHORT:
+				Short s = (Short) property.getValue();
+				propBuilder.add(property.getName(), s.shortValue());
+				break;
+			case STRING:
+				propBuilder.add(property.getName(), (String) property.getValue());
+				break;
+			case RATIONAL:
+				propBuilder.add(property.getName(),
+						showRational((Rational) property.getValue()));
+				break;
+			case PROPERTY:
+				Property property2 = (Property) property.getValue();
+				propBuilder.add(property.getName(), showProperty(property2));
+				break;
+			default:
+				propBuilder.add(property.getName(), property.getValue().toString());
+				break;
 		}
 		return propBuilder;
 	}
@@ -750,61 +750,61 @@ public class JsonHandler extends HandlerBase {
 		while (iter.hasNext()) {
 			Object val = iter.next();
 			switch (type) {
-			case BOOLEAN:
-				lPropBuilder.add(((Boolean) val).booleanValue());
-				break;
-			case BYTE:
-				lPropBuilder.add(valueToString(val));
-				break;
-			case CHARACTER:
-				lPropBuilder.add(valueToString(val));
-				break;
-			case DATE:
-				lPropBuilder.add(valueToString(val));
-				break;
-			case DOUBLE:
-				lPropBuilder.add(((Double) val).doubleValue());
-				break;
-			case FLOAT:
-				lPropBuilder.add(((Float) val).floatValue());
-				break;
-			case INTEGER:
-				lPropBuilder.add(((Integer) val).intValue());
-				break;
-			case LONG:
-				lPropBuilder.add(((Long) val).longValue());
-				break;
-			case OBJECT:
-				lPropBuilder.add(valueToString(val));
-				break;
-			case SHORT:
-				lPropBuilder.add(((Short) val).shortValue());
-				break;
-			case STRING:
-				lPropBuilder.add(valueToString(val));
-				break;
-			case RATIONAL:
-				lPropBuilder.add(showRational((Rational) val));
-				break;
-			case PROPERTY:
-				lPropBuilder.add(showProperty((Property) val));
-				break;
-			case NISOIMAGEMETADATA:
-				lPropBuilder
-						.add(showNisoImageMetadata((NisoImageMetadata) property
-								.getValue()));
-				break;
-			case AESAUDIOMETADATA:
-				lPropBuilder
-						.add(showAESAudioMetadata((AESAudioMetadata) property
-								.getValue()));
-				break;
-			case TEXTMDMETADATA:
-				lPropBuilder.add(showTextMDMetadata((TextMDMetadata) property
-						.getValue()));
-				break;
-			default:
-				break;
+				case BOOLEAN:
+					lPropBuilder.add(((Boolean) val).booleanValue());
+					break;
+				case BYTE:
+					lPropBuilder.add(valueToString(val));
+					break;
+				case CHARACTER:
+					lPropBuilder.add(valueToString(val));
+					break;
+				case DATE:
+					lPropBuilder.add(valueToString(val));
+					break;
+				case DOUBLE:
+					lPropBuilder.add(((Double) val).doubleValue());
+					break;
+				case FLOAT:
+					lPropBuilder.add(((Float) val).floatValue());
+					break;
+				case INTEGER:
+					lPropBuilder.add(((Integer) val).intValue());
+					break;
+				case LONG:
+					lPropBuilder.add(((Long) val).longValue());
+					break;
+				case OBJECT:
+					lPropBuilder.add(valueToString(val));
+					break;
+				case SHORT:
+					lPropBuilder.add(((Short) val).shortValue());
+					break;
+				case STRING:
+					lPropBuilder.add(valueToString(val));
+					break;
+				case RATIONAL:
+					lPropBuilder.add(showRational((Rational) val));
+					break;
+				case PROPERTY:
+					lPropBuilder.add(showProperty((Property) val));
+					break;
+				case NISOIMAGEMETADATA:
+					lPropBuilder
+							.add(showNisoImageMetadata((NisoImageMetadata) property
+									.getValue()));
+					break;
+				case AESAUDIOMETADATA:
+					lPropBuilder
+							.add(showAESAudioMetadata((AESAudioMetadata) property
+									.getValue()));
+					break;
+				case TEXTMDMETADATA:
+					lPropBuilder.add(showTextMDMetadata((TextMDMetadata) property
+							.getValue()));
+					break;
+				default:
+					break;
 			}
 		}
 		propBuilder.add(property.getName(), lPropBuilder);
@@ -821,61 +821,61 @@ public class JsonHandler extends HandlerBase {
 		while (iter.hasNext()) {
 			Object val = iter.next();
 			switch (type) {
-			case BOOLEAN:
-				lPropBuilder.add(((Boolean) val).booleanValue());
-				break;
-			case BYTE:
-				lPropBuilder.add(valueToString(val));
-				break;
-			case CHARACTER:
-				lPropBuilder.add(valueToString(val));
-				break;
-			case DATE:
-				lPropBuilder.add(valueToString(val));
-				break;
-			case DOUBLE:
-				lPropBuilder.add(((Double) val).doubleValue());
-				break;
-			case FLOAT:
-				lPropBuilder.add(((Float) val).floatValue());
-				break;
-			case INTEGER:
-				lPropBuilder.add(((Integer) val).intValue());
-				break;
-			case LONG:
-				lPropBuilder.add(((Long) val).longValue());
-				break;
-			case OBJECT:
-				lPropBuilder.add(valueToString(val));
-				break;
-			case SHORT:
-				lPropBuilder.add(((Short) val).shortValue());
-				break;
-			case STRING:
-				lPropBuilder.add(valueToString(val));
-				break;
-			case RATIONAL:
-				lPropBuilder.add(showRational((Rational) val));
-				break;
-			case PROPERTY:
-				lPropBuilder.add(showProperty((Property) val));
-				break;
-			case NISOIMAGEMETADATA:
-				lPropBuilder
-						.add(showNisoImageMetadata((NisoImageMetadata) property
-								.getValue()));
-				break;
-			case AESAUDIOMETADATA:
-				lPropBuilder
-						.add(showAESAudioMetadata((AESAudioMetadata) property
-								.getValue()));
-				break;
-			case TEXTMDMETADATA:
-				lPropBuilder.add(showTextMDMetadata((TextMDMetadata) property
-						.getValue()));
-				break;
-			default:
-				break;
+				case BOOLEAN:
+					lPropBuilder.add(((Boolean) val).booleanValue());
+					break;
+				case BYTE:
+					lPropBuilder.add(valueToString(val));
+					break;
+				case CHARACTER:
+					lPropBuilder.add(valueToString(val));
+					break;
+				case DATE:
+					lPropBuilder.add(valueToString(val));
+					break;
+				case DOUBLE:
+					lPropBuilder.add(((Double) val).doubleValue());
+					break;
+				case FLOAT:
+					lPropBuilder.add(((Float) val).floatValue());
+					break;
+				case INTEGER:
+					lPropBuilder.add(((Integer) val).intValue());
+					break;
+				case LONG:
+					lPropBuilder.add(((Long) val).longValue());
+					break;
+				case OBJECT:
+					lPropBuilder.add(valueToString(val));
+					break;
+				case SHORT:
+					lPropBuilder.add(((Short) val).shortValue());
+					break;
+				case STRING:
+					lPropBuilder.add(valueToString(val));
+					break;
+				case RATIONAL:
+					lPropBuilder.add(showRational((Rational) val));
+					break;
+				case PROPERTY:
+					lPropBuilder.add(showProperty((Property) val));
+					break;
+				case NISOIMAGEMETADATA:
+					lPropBuilder
+							.add(showNisoImageMetadata((NisoImageMetadata) property
+									.getValue()));
+					break;
+				case AESAUDIOMETADATA:
+					lPropBuilder
+							.add(showAESAudioMetadata((AESAudioMetadata) property
+									.getValue()));
+					break;
+				case TEXTMDMETADATA:
+					lPropBuilder.add(showTextMDMetadata((TextMDMetadata) property
+							.getValue()));
+					break;
+				default:
+					break;
 			}
 		}
 		propBuilder.add(property.getName(), lPropBuilder);
@@ -893,63 +893,63 @@ public class JsonHandler extends HandlerBase {
 			String keystr = key.toString();
 			Object val = propMap.get(key);
 			switch (type) {
-			case BOOLEAN:
-				lPropBuilder.add(keystr, ((Boolean) val).booleanValue());
-				break;
-			case BYTE:
-				lPropBuilder.add(keystr, valueToString(val));
-				break;
-			case CHARACTER:
-				lPropBuilder.add(keystr, valueToString(val));
-				break;
-			case DATE:
-				lPropBuilder.add(keystr, valueToString(val));
-				break;
-			case DOUBLE:
-				lPropBuilder.add(keystr, ((Double) val).doubleValue());
-				break;
-			case FLOAT:
-				lPropBuilder.add(keystr, ((Float) val).floatValue());
-				break;
-			case INTEGER:
-				lPropBuilder.add(keystr, ((Integer) val).intValue());
-				break;
-			case LONG:
-				lPropBuilder.add(keystr, ((Long) val).longValue());
-				break;
-			case OBJECT:
-				lPropBuilder.add(keystr, valueToString(val));
-				break;
-			case SHORT:
-				lPropBuilder.add(keystr, ((Short) val).shortValue());
-				break;
-			case STRING:
-				lPropBuilder.add(keystr, valueToString(val));
-				break;
-			case RATIONAL:
-				lPropBuilder.add(keystr, showRational((Rational) val));
-				break;
-			case PROPERTY:
-				lPropBuilder.add(keystr, showProperty((Property) val));
-				break;
-			case NISOIMAGEMETADATA:
-				lPropBuilder.add(keystr,
-						showNisoImageMetadata((NisoImageMetadata) property
-								.getValue()));
-				break;
-			case AESAUDIOMETADATA:
-				lPropBuilder.add(keystr,
-						showAESAudioMetadata((AESAudioMetadata) property
-								.getValue()));
-				break;
-			case TEXTMDMETADATA:
-				lPropBuilder
-						.add(keystr,
-								showTextMDMetadata((TextMDMetadata) property
-										.getValue()));
-				break;
-			default:
-				break;
+				case BOOLEAN:
+					lPropBuilder.add(keystr, ((Boolean) val).booleanValue());
+					break;
+				case BYTE:
+					lPropBuilder.add(keystr, valueToString(val));
+					break;
+				case CHARACTER:
+					lPropBuilder.add(keystr, valueToString(val));
+					break;
+				case DATE:
+					lPropBuilder.add(keystr, valueToString(val));
+					break;
+				case DOUBLE:
+					lPropBuilder.add(keystr, ((Double) val).doubleValue());
+					break;
+				case FLOAT:
+					lPropBuilder.add(keystr, ((Float) val).floatValue());
+					break;
+				case INTEGER:
+					lPropBuilder.add(keystr, ((Integer) val).intValue());
+					break;
+				case LONG:
+					lPropBuilder.add(keystr, ((Long) val).longValue());
+					break;
+				case OBJECT:
+					lPropBuilder.add(keystr, valueToString(val));
+					break;
+				case SHORT:
+					lPropBuilder.add(keystr, ((Short) val).shortValue());
+					break;
+				case STRING:
+					lPropBuilder.add(keystr, valueToString(val));
+					break;
+				case RATIONAL:
+					lPropBuilder.add(keystr, showRational((Rational) val));
+					break;
+				case PROPERTY:
+					lPropBuilder.add(keystr, showProperty((Property) val));
+					break;
+				case NISOIMAGEMETADATA:
+					lPropBuilder.add(keystr,
+							showNisoImageMetadata((NisoImageMetadata) property
+									.getValue()));
+					break;
+				case AESAUDIOMETADATA:
+					lPropBuilder.add(keystr,
+							showAESAudioMetadata((AESAudioMetadata) property
+									.getValue()));
+					break;
+				case TEXTMDMETADATA:
+					lPropBuilder
+							.add(keystr,
+									showTextMDMetadata((TextMDMetadata) property
+											.getValue()));
+					break;
+				default:
+					break;
 			}
 		}
 		propBuilder.add(property.getName(), lPropBuilder);
@@ -963,101 +963,101 @@ public class JsonHandler extends HandlerBase {
 		int n = 0;
 		try {
 			switch (property.getArity()) {
-			case SET:
-				Set<?> propSet = (Set<?>) property.getValue();
-				n = propSet.size();
-				break;
-			case LIST:
-				List<?> propList = (List<?>) property.getValue();
-				n = propList.size();
-				break;
-			case MAP:
-				Map<?, ?> propMap = (Map<?, ?>) property.getValue();
-				n = propMap.size();
-				break;
-			case ARRAY:
-				// Ack! Is there any easy way to do this?
-				switch (property.getType()) {
-				case BOOLEAN:
-					boolean[] boolArray = (boolean[]) property.getValue();
-					n = boolArray.length;
+				case SET:
+					Set<?> propSet = (Set<?>) property.getValue();
+					n = propSet.size();
 					break;
-				case BYTE:
-					byte[] byteArray = (byte[]) property.getValue();
-					n = byteArray.length;
+				case LIST:
+					List<?> propList = (List<?>) property.getValue();
+					n = propList.size();
 					break;
-				case CHARACTER:
-					char[] charArray = (char[]) property.getValue();
-					n = charArray.length;
+				case MAP:
+					Map<?, ?> propMap = (Map<?, ?>) property.getValue();
+					n = propMap.size();
 					break;
-				case DATE:
-					Date[] dateArray = (Date[]) property.getValue();
-					n = dateArray.length;
-					break;
-				case DOUBLE:
-					double[] doubleArray = (double[]) property.getValue();
-					n = doubleArray.length;
-					break;
-				case FLOAT:
-					float[] floatArray = (float[]) property.getValue();
-					n = floatArray.length;
-					break;
-				case INTEGER:
-					int[] intArray = (int[]) property.getValue();
-					n = intArray.length;
-					break;
-				case LONG:
-					long[] longArray = (long[]) property.getValue();
-					n = longArray.length;
-					break;
-				case OBJECT:
-					Object[] objArray = (Object[]) property.getValue();
-					n = objArray.length;
-					break;
-				case SHORT:
-					short[] shortArray = (short[]) property.getValue();
-					n = shortArray.length;
-					break;
-				case STRING:
-					String[] stringArray = (String[]) property.getValue();
-					n = stringArray.length;
-					break;
-				case RATIONAL:
-					Rational[] rationalArray = (Rational[]) property.getValue();
-					n = rationalArray.length;
-					break;
-				case PROPERTY:
-					Property[] propArray = (Property[]) property.getValue();
-					n = propArray.length;
-					break;
-				case NISOIMAGEMETADATA:
-					NisoImageMetadata[] nisoArray = (NisoImageMetadata[]) property
-							.getValue();
-					n = nisoArray.length;
-					break;
-				case AESAUDIOMETADATA:
-					AESAudioMetadata[] aesArray = (AESAudioMetadata[]) property
-							.getValue();
-					n = aesArray.length;
-					break;
-				case TEXTMDMETADATA:
-					TextMDMetadata[] textMDArray = (TextMDMetadata[]) property
-							.getValue();
-					n = textMDArray.length;
+				case ARRAY:
+					// Ack! Is there any easy way to do this?
+					switch (property.getType()) {
+						case BOOLEAN:
+							boolean[] boolArray = (boolean[]) property.getValue();
+							n = boolArray.length;
+							break;
+						case BYTE:
+							byte[] byteArray = (byte[]) property.getValue();
+							n = byteArray.length;
+							break;
+						case CHARACTER:
+							char[] charArray = (char[]) property.getValue();
+							n = charArray.length;
+							break;
+						case DATE:
+							Date[] dateArray = (Date[]) property.getValue();
+							n = dateArray.length;
+							break;
+						case DOUBLE:
+							double[] doubleArray = (double[]) property.getValue();
+							n = doubleArray.length;
+							break;
+						case FLOAT:
+							float[] floatArray = (float[]) property.getValue();
+							n = floatArray.length;
+							break;
+						case INTEGER:
+							int[] intArray = (int[]) property.getValue();
+							n = intArray.length;
+							break;
+						case LONG:
+							long[] longArray = (long[]) property.getValue();
+							n = longArray.length;
+							break;
+						case OBJECT:
+							Object[] objArray = (Object[]) property.getValue();
+							n = objArray.length;
+							break;
+						case SHORT:
+							short[] shortArray = (short[]) property.getValue();
+							n = shortArray.length;
+							break;
+						case STRING:
+							String[] stringArray = (String[]) property.getValue();
+							n = stringArray.length;
+							break;
+						case RATIONAL:
+							Rational[] rationalArray = (Rational[]) property.getValue();
+							n = rationalArray.length;
+							break;
+						case PROPERTY:
+							Property[] propArray = (Property[]) property.getValue();
+							n = propArray.length;
+							break;
+						case NISOIMAGEMETADATA:
+							NisoImageMetadata[] nisoArray = (NisoImageMetadata[]) property
+									.getValue();
+							n = nisoArray.length;
+							break;
+						case AESAUDIOMETADATA:
+							AESAudioMetadata[] aesArray = (AESAudioMetadata[]) property
+									.getValue();
+							n = aesArray.length;
+							break;
+						case TEXTMDMETADATA:
+							TextMDMetadata[] textMDArray = (TextMDMetadata[]) property
+									.getValue();
+							n = textMDArray.length;
+							break;
+						default:
+							Object[] array2 = (Object[]) property.getValue();
+							n = array2.length;
+							break;
+					}
 					break;
 				default:
-					Object[] array2 = (Object[]) property.getValue();
-					n = array2.length;
+					if (property.getValue().toString().length() == 0) {
+						n = 0;
+					} else {
+						n = 1;
+					}
 					break;
-				}
-				break;
-			default:
-				if (property.getValue().toString().length() == 0) {
-					n = 0;
-				} else {
-					n = 1;
-				}
-				break;
 			}
 		} catch (Exception e) {
 			// If something goes seriously wrong, return true to punt the
@@ -1092,128 +1092,128 @@ public class JsonHandler extends HandlerBase {
 
 		PropertyType propType = property.getType();
 		switch (propType) {
-		case BOOLEAN:
-			boolArray = (boolean[]) property.getValue();
-			n = boolArray.length;
-			break;
-		case BYTE:
-			byteArray = (byte[]) property.getValue();
-			n = byteArray.length;
-			break;
-		case CHARACTER:
-			charArray = (char[]) property.getValue();
-			n = charArray.length;
-			break;
-		case DATE:
-			dateArray = (Date[]) property.getValue();
-			n = dateArray.length;
-			break;
-		case DOUBLE:
-			doubleArray = (double[]) property.getValue();
-			n = doubleArray.length;
-			break;
-		case FLOAT:
-			floatArray = (float[]) property.getValue();
-			n = floatArray.length;
-			break;
-		case INTEGER:
-			intArray = (int[]) property.getValue();
-			n = intArray.length;
-			break;
-		case LONG:
-			longArray = (long[]) property.getValue();
-			n = longArray.length;
-			break;
-		case OBJECT:
-			objArray = (Object[]) property.getValue();
-			n = objArray.length;
-			break;
-		case SHORT:
-			shortArray = (short[]) property.getValue();
-			n = shortArray.length;
-			break;
-		case STRING:
-			stringArray = (String[]) property.getValue();
-			n = stringArray.length;
-			break;
-		case RATIONAL:
-			rationalArray = (Rational[]) property.getValue();
-			n = rationalArray.length;
-			break;
-		case PROPERTY:
-			propArray = (Property[]) property.getValue();
-			n = propArray.length;
-			break;
-		case NISOIMAGEMETADATA:
-			nisoArray = (NisoImageMetadata[]) property.getValue();
-			n = nisoArray.length;
-			break;
-		case AESAUDIOMETADATA:
-			aesArray = (AESAudioMetadata[]) property.getValue();
-			n = aesArray.length;
-			break;
-		case TEXTMDMETADATA:
-			textMDArray = (TextMDMetadata[]) property.getValue();
-			n = textMDArray.length;
-			break;
-		default:
-			break;
+			case BOOLEAN:
+				boolArray = (boolean[]) property.getValue();
+				n = boolArray.length;
+				break;
+			case BYTE:
+				byteArray = (byte[]) property.getValue();
+				n = byteArray.length;
+				break;
+			case CHARACTER:
+				charArray = (char[]) property.getValue();
+				n = charArray.length;
+				break;
+			case DATE:
+				dateArray = (Date[]) property.getValue();
+				n = dateArray.length;
+				break;
+			case DOUBLE:
+				doubleArray = (double[]) property.getValue();
+				n = doubleArray.length;
+				break;
+			case FLOAT:
+				floatArray = (float[]) property.getValue();
+				n = floatArray.length;
+				break;
+			case INTEGER:
+				intArray = (int[]) property.getValue();
+				n = intArray.length;
+				break;
+			case LONG:
+				longArray = (long[]) property.getValue();
+				n = longArray.length;
+				break;
+			case OBJECT:
+				objArray = (Object[]) property.getValue();
+				n = objArray.length;
+				break;
+			case SHORT:
+				shortArray = (short[]) property.getValue();
+				n = shortArray.length;
+				break;
+			case STRING:
+				stringArray = (String[]) property.getValue();
+				n = stringArray.length;
+				break;
+			case RATIONAL:
+				rationalArray = (Rational[]) property.getValue();
+				n = rationalArray.length;
+				break;
+			case PROPERTY:
+				propArray = (Property[]) property.getValue();
+				n = propArray.length;
+				break;
+			case NISOIMAGEMETADATA:
+				nisoArray = (NisoImageMetadata[]) property.getValue();
+				n = nisoArray.length;
+				break;
+			case AESAUDIOMETADATA:
+				aesArray = (AESAudioMetadata[]) property.getValue();
+				n = aesArray.length;
+				break;
+			case TEXTMDMETADATA:
+				textMDArray = (TextMDMetadata[]) property.getValue();
+				n = textMDArray.length;
+				break;
+			default:
+				break;
 		}
 
 		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 		for (int i = 0; i < n; i++) {
 			switch (propType) {
-			case BOOLEAN:
-				arrayBuilder.add(boolArray[i]);
-				break;
-			case BYTE:
-				arrayBuilder.add(String.valueOf(byteArray[i]));
-				break;
-			case CHARACTER:
-				arrayBuilder.add(String.valueOf(charArray[i]));
-				break;
-			case DATE:
-				arrayBuilder.add(dateArray[i].toString());
-				break;
-			case DOUBLE:
-				arrayBuilder.add(doubleArray[i]);
-				break;
-			case FLOAT:
-				arrayBuilder.add(floatArray[i]);
-				break;
-			case INTEGER:
-				arrayBuilder.add(intArray[i]);
-				break;
-			case LONG:
-				arrayBuilder.add(longArray[i]);
-				break;
-			case OBJECT:
-				arrayBuilder.add(valueToString(objArray[i]));
-				break;
-			case SHORT:
-				arrayBuilder.add(shortArray[i]);
-				break;
-			case STRING:
-				arrayBuilder.add(stringArray[i]);
-				break;
-			case RATIONAL:
-				arrayBuilder.add(rationalArray[i].toString());
-				break;
-			case PROPERTY:
-				arrayBuilder.add(showProperty(propArray[i]));
-				break;
-			case NISOIMAGEMETADATA:
-				arrayBuilder.add(showNisoImageMetadata(nisoArray[i]));
-				break;
-			case AESAUDIOMETADATA:
-				arrayBuilder.add(showAESAudioMetadata(aesArray[i]));
-				break;
-			case TEXTMDMETADATA:
-				arrayBuilder.add(showTextMDMetadata(textMDArray[i]));
-				break;
-			default:
-				arrayBuilder.add("<error>");
-				break;
+				case BOOLEAN:
+					arrayBuilder.add(boolArray[i]);
+					break;
+				case BYTE:
+					arrayBuilder.add(String.valueOf(byteArray[i]));
+					break;
+				case CHARACTER:
+					arrayBuilder.add(String.valueOf(charArray[i]));
+					break;
+				case DATE:
+					arrayBuilder.add(dateArray[i].toString());
+					break;
+				case DOUBLE:
+					arrayBuilder.add(doubleArray[i]);
+					break;
+				case FLOAT:
+					arrayBuilder.add(floatArray[i]);
+					break;
+				case INTEGER:
+					arrayBuilder.add(intArray[i]);
+					break;
+				case LONG:
+					arrayBuilder.add(longArray[i]);
+					break;
+				case OBJECT:
+					arrayBuilder.add(valueToString(objArray[i]));
+					break;
+				case SHORT:
+					arrayBuilder.add(shortArray[i]);
+					break;
+				case STRING:
+					arrayBuilder.add(stringArray[i]);
+					break;
+				case RATIONAL:
+					arrayBuilder.add(rationalArray[i].toString());
+					break;
+				case PROPERTY:
+					arrayBuilder.add(showProperty(propArray[i]));
+					break;
+				case NISOIMAGEMETADATA:
+					arrayBuilder.add(showNisoImageMetadata(nisoArray[i]));
+					break;
+				case AESAUDIOMETADATA:
+					arrayBuilder.add(showAESAudioMetadata(aesArray[i]));
+					break;
+				case TEXTMDMETADATA:
+					arrayBuilder.add(showTextMDMetadata(textMDArray[i]));
+					break;
+				default:
+					arrayBuilder.add("<error>");
+					break;
 			}
 		}
 		return Json.createObjectBuilder().add(property.getName(), arrayBuilder);
@@ -1243,7 +1243,7 @@ public class JsonHandler extends HandlerBase {
 	 * module parameters.
 	 * 
 	 * @param niso
-	 *            NISO image metadata
+	 *             NISO image metadata
 	 */
 	protected JsonObjectBuilder showNisoImageMetadata(NisoImageMetadata niso) {
 		if ("0.2".equals(_je.getMixVersion())) {
@@ -1324,36 +1324,36 @@ public class JsonHandler extends HandlerBase {
 		int level = niso.getCompressionLevel();
 		String compStr;
 		switch (comp) {
-		case 1:
-			compStr = "Uncompressed";
-			break;
-		case 2:
-			compStr = "CCITT 1D";
-			break;
-		case 3:
-			compStr = "Group 3 Fax";
-			break;
-		case 4:
-			compStr = "Group 4 Fax";
-			break;
-		case 5:
-			compStr = "LZW";
-			break;
-		case 6:
-			compStr = "JPEG";
-			break;
-		case 32773:
-			compStr = "PackBits";
-			break;
-		case 34713:
-			compStr = "JPEG2000 Lossy";
-			break;
-		case 34714:
-			compStr = "JPEG2000 Lossless";
-			break;
-		default:
-			compStr = "Unknown";
-			break;
+			case 1:
+				compStr = "Uncompressed";
+				break;
+			case 2:
+				compStr = "CCITT 1D";
+				break;
+			case 3:
+				compStr = "Group 3 Fax";
+				break;
+			case 4:
+				compStr = "Group 4 Fax";
+				break;
+			case 5:
+				compStr = "LZW";
+				break;
+			case 6:
+				compStr = "JPEG";
+				break;
+			case 32773:
+				compStr = "PackBits";
+				break;
+			case 34713:
+				compStr = "JPEG2000 Lossy";
+				break;
+			case 34714:
+				compStr = "JPEG2000 Lossless";
+				break;
+			default:
+				compStr = "Unknown";
+				break;
 		}
 		if (comp != NisoImageMetadata.NULL) {
 			if (comp == 34713 || comp == 34714) {
@@ -1459,29 +1459,29 @@ public class JsonHandler extends HandlerBase {
 					String pi;
 					if (niso.getColorSpace() == 6) { // yCbCr
 						switch (i) {
-						case 0:
-							pi = "Y";
-							break;
-						case 2:
-							pi = "Cb";
-							break;
-						case 4:
-						default:
-							pi = "Cr";
-							break;
+							case 0:
+								pi = "Y";
+								break;
+							case 2:
+								pi = "Cb";
+								break;
+							case 4:
+							default:
+								pi = "Cr";
+								break;
 						}
 					} else {
 						switch (i) { // otherwise assume RGB
-						case 0:
-							pi = "R";
-							break;
-						case 2:
-							pi = "G";
-							break;
-						case 4:
-						default:
-							pi = "B";
-							break;
+							case 0:
+								pi = "R";
+								break;
+							case 2:
+								pi = "G";
+								break;
+							case 4:
+							default:
+								pi = "B";
+								break;
 						}
 					}
 					cBuilder.add("mix:componentPhotometricInterpretation", pi);
@@ -1514,7 +1514,7 @@ public class JsonHandler extends HandlerBase {
 			hasBuilder = true;
 		}
 
-		return hasBuilder?mixBuilder:null;
+		return hasBuilder ? mixBuilder : null;
 	}
 
 	/* 1.0, Top level element 3 of 5: ImageCaptureMetadata */
@@ -1529,10 +1529,10 @@ public class JsonHandler extends HandlerBase {
 		int n = niso.getSourceXDimensionUnit();
 		if (d != NisoImageMetadata.NILL || n != NisoImageMetadata.NULL) {
 			// Assume that both X and Y exist, or neither
-			addNisoDoubleToJson(mixBuilder,"mix:sourceXDimensionValue", d);
-			addNisoIntToJson(mixBuilder,"mix:sourceXDimensionUnit", n);
-			addNisoDoubleToJson(mixBuilder,"mix:sourceYDimensionValue", niso.getSourceYDimension());
-			addNisoIntToJson(mixBuilder,"mix:sourceYDimensionUnit", niso.getSourceYDimensionUnit());
+			addNisoDoubleToJson(mixBuilder, "mix:sourceXDimensionValue", d);
+			addNisoIntToJson(mixBuilder, "mix:sourceXDimensionUnit", n);
+			addNisoDoubleToJson(mixBuilder, "mix:sourceYDimensionValue", niso.getSourceYDimension());
+			addNisoIntToJson(mixBuilder, "mix:sourceYDimensionUnit", niso.getSourceYDimensionUnit());
 			hasBuilder = true;
 		}
 
@@ -1666,7 +1666,7 @@ public class JsonHandler extends HandlerBase {
 			hasBuilder = true;
 		}
 		hasBuilder |= addStringToJson(mixBuilder, "mix:methodology", niso.getMethodology());
-		return hasBuilder?mixBuilder:null;
+		return hasBuilder ? mixBuilder : null;
 	}
 
 	/* 1.0, Top level element 4 of 5: ImageAssessmentMetadata */
@@ -1765,12 +1765,18 @@ public class JsonHandler extends HandlerBase {
 		// A chromaticities buffer to go in the color encoding buffer.
 		JsonObjectBuilder pcBuilder = Json.createObjectBuilder();
 		boolean useChromaBuf = false;
-		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesRedX", niso.getPrimaryChromaticitiesRedX());
-		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesRedY", niso.getPrimaryChromaticitiesRedY());
-		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesGreenX", niso.getPrimaryChromaticitiesGreenX());
-		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesGreenY", niso.getPrimaryChromaticitiesGreenY());
-		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesBlueX", niso.getPrimaryChromaticitiesBlueX());
-		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesBlueY", niso.getPrimaryChromaticitiesBlueY());
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesRedX",
+				niso.getPrimaryChromaticitiesRedX());
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesRedY",
+				niso.getPrimaryChromaticitiesRedY());
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesGreenX",
+				niso.getPrimaryChromaticitiesGreenX());
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesGreenY",
+				niso.getPrimaryChromaticitiesGreenY());
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesBlueX",
+				niso.getPrimaryChromaticitiesBlueX());
+		useChromaBuf |= addRationalToJson(pcBuilder, "mix:primaryChromaticitiesBlueY",
+				niso.getPrimaryChromaticitiesBlueY());
 		if (useChromaBuf) {
 			imeBuilder.add("mix:PrimaryChromaticities", pcBuilder);
 			useColorEncBuf = true;
@@ -1794,25 +1800,24 @@ public class JsonHandler extends HandlerBase {
 			mixBuilder.add("mix:TargetData", tdBuilder);
 			hasBuilder = true;
 		}
-		return hasBuilder?mixBuilder:null;
+		return hasBuilder ? mixBuilder : null;
 	}
 
-	
 	/* 1.0, Top level element 5 of 5: ChangeHistory (without time travel) */
 	protected JsonObjectBuilder showChangeHistory(NisoImageMetadata niso,
 			boolean bMix10) {
 		JsonObjectBuilder mixBuilder = Json.createObjectBuilder();
 		boolean hasBuilder = false;
 
-		hasBuilder |= addStringToJson(mixBuilder, "mix:sourceData", niso.getSourceData() );
-		hasBuilder |= addStringToJson(mixBuilder, "mix:processingAgency", niso.getProcessingAgency() );
-		
+		hasBuilder |= addStringToJson(mixBuilder, "mix:sourceData", niso.getSourceData());
+		hasBuilder |= addStringToJson(mixBuilder, "mix:processingAgency", niso.getProcessingAgency());
+
 		JsonObjectBuilder psBuilder = Json.createObjectBuilder();
 		boolean useSftwBuf = false;
-		useSftwBuf |= addStringToJson(psBuilder, "mix:processingSoftwareName", niso.getProcessingSoftwareName() );
-		useSftwBuf |= addStringToJson(psBuilder, "mix:processingSoftwareVersion", niso.getProcessingSoftwareVersion() );
-		useSftwBuf |= addStringToJson(psBuilder, "mix:processingOperatingSystemName", niso.getOS() );
-		useSftwBuf |= addStringToJson(psBuilder, "mix:processingOperatingSystemVersion", niso.getOSVersion() );
+		useSftwBuf |= addStringToJson(psBuilder, "mix:processingSoftwareName", niso.getProcessingSoftwareName());
+		useSftwBuf |= addStringToJson(psBuilder, "mix:processingSoftwareVersion", niso.getProcessingSoftwareVersion());
+		useSftwBuf |= addStringToJson(psBuilder, "mix:processingOperatingSystemName", niso.getOS());
+		useSftwBuf |= addStringToJson(psBuilder, "mix:processingOperatingSystemVersion", niso.getOSVersion());
 		if (useSftwBuf) {
 			mixBuilder.add("mix:ProcessingSoftware", psBuilder);
 			hasBuilder = true;
@@ -1823,7 +1828,7 @@ public class JsonHandler extends HandlerBase {
 			mixBuilder.add("mix:processingActions", showArray(sarray));
 			hasBuilder = true;
 		}
-		return hasBuilder?mixBuilder:null;
+		return hasBuilder ? mixBuilder : null;
 	}
 
 	/**
@@ -1846,32 +1851,32 @@ public class JsonHandler extends HandlerBase {
 	 */
 	private String photometricInterpretationToString(int n) {
 		switch (n) {
-		case 0:
-			return "WhiteIsZero";
-		case 1:
-			return "BlackIsZero";
-		case 2:
-			return "RGB";
-		case 3:
-			return "PaletteColor";
-		case 4:
-			return "TransparencyMask";
-		case 5:
-			return "CMYK";
-		case 6:
-			return "YCbCr";
-		case 8:
-			return "CIELab";
-		case 9:
-			return "ICCLab";
-		case 10:
-			return "ITULab";
-		case 32803:
-			return "CFA";
-		case 34892:
-			return "LinearRaw";
-		default:
-			return "Unknown";
+			case 0:
+				return "WhiteIsZero";
+			case 1:
+				return "BlackIsZero";
+			case 2:
+				return "RGB";
+			case 3:
+				return "PaletteColor";
+			case 4:
+				return "TransparencyMask";
+			case 5:
+				return "CMYK";
+			case 6:
+				return "YCbCr";
+			case 8:
+				return "CIELab";
+			case 9:
+				return "ICCLab";
+			case 10:
+				return "ITULab";
+			case 32803:
+				return "CFA";
+			case 34892:
+				return "LinearRaw";
+			default:
+				return "Unknown";
 		}
 	}
 
@@ -1955,7 +1960,7 @@ public class JsonHandler extends HandlerBase {
 		return aesBuilder;
 	}
 
-	private void showAesFormatList(List<AESAudioMetadata.FormatRegion> flist ,
+	private void showAesFormatList(List<AESAudioMetadata.FormatRegion> flist,
 			JsonObjectBuilder aesBuilder) {
 		if (flist == null || flist.isEmpty()) {
 			return;
@@ -2125,12 +2130,12 @@ public class JsonHandler extends HandlerBase {
 		rationalBuilder.add(denom);
 		return rationalBuilder;
 	}
-	
+
 	private boolean addStringToJson(JsonObjectBuilder objBuilder, String attr, String value) {
 		if (value == null) {
 			return false;
 		}
-		objBuilder.add(attr,  value);
+		objBuilder.add(attr, value);
 		return true;
 	}
 
@@ -2149,7 +2154,6 @@ public class JsonHandler extends HandlerBase {
 		objBuilder.add(attr, n);
 		return true;
 	}
-
 
 	private boolean addNisoDoubleToJson(JsonObjectBuilder objBuilder, String attr, double d) {
 		if (d == NisoImageMetadata.NILL) {
