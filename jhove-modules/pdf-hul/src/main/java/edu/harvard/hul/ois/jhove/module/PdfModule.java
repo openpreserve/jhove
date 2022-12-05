@@ -1987,18 +1987,43 @@ public class PdfModule extends ModuleBase {
 			_docInfoDict = (PdfDictionary) resolveIndirectObject(
 					_docInfoDictRef);
 
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_TITLE,
-					PROP_NAME_TITLE);
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_AUTHOR,
-					PROP_NAME_AUTHOR);
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_SUBJECT,
-					PROP_NAME_SUBJECT);
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_KEYWORDS,
-					PROP_NAME_KEYWORDS);
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_CREATOR,
-					PROP_NAME_CREATOR);
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_PRODUCER,
-					PROP_NAME_PRODUCER);
+			try {
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_TITLE,
+						PROP_NAME_TITLE);
+			} catch (NullPointerException e) {
+				// ignore nullpointerexception
+			}
+			try {
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_AUTHOR,
+						PROP_NAME_AUTHOR);
+			} catch (Exception e) {
+				// ignore nullpointerexception
+			}
+			try {
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_SUBJECT,
+						PROP_NAME_SUBJECT);
+			} catch (Exception e) {
+				// ignore nullpointerexception
+			}
+			try {
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_KEYWORDS,
+						PROP_NAME_KEYWORDS);
+			} catch (Exception e) {
+				// ignore nullpointerexception
+			}
+			try {
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_CREATOR,
+						PROP_NAME_CREATOR);
+			} catch (Exception e) {
+				// ignore nullpointerexception
+			}
+			try {
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_PRODUCER,
+						PROP_NAME_PRODUCER);
+			} catch (Exception e) {
+				// ignore nullpointerexception
+			}
+			
 			// CreationDate requires string-to-date conversion
 			// ModDate does too
 			addDateProperty(_docInfoDict, _docInfoList, DICT_KEY_CREATION_DATE,
