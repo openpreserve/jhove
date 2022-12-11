@@ -55,3 +55,7 @@ echo "TEST BASELINE: Creating baseline"
 # Simply copy baseline for now we're not making any changes
 echo " - copying ${baselineRoot} baseline to ${targetRoot}"
 cp -R "${baselineRoot}" "${targetRoot}"
+
+# Modification of output due to
+# https://github.com/openpreserve/jhove/pull/804
+find "${targetRoot}" -type f -name "6mp_soft.tif.jhove.xml" -exec sed -i 's/>DSC</>digital still camera</' {} \;
