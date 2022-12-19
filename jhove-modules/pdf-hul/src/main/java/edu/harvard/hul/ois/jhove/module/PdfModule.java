@@ -1770,8 +1770,7 @@ public class PdfModule extends ModuleBase {
 									}
 								} else {
 									// There is an unknown developer prefix
-									info.setWellFormed(false);
-									info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_154,
+									info.setMessage(new InfoMessage(MessageConstants.PDF_HUL_154,
 											developerPrefixKey.toString())); // PDF-HUL-154
 								}
 							}
