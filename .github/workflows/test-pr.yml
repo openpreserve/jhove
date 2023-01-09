@@ -46,7 +46,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: coverage-report
-          path: core/target/site/jacoco/
+          path: jhove-apps/target/site/jacoco-aggregate/
       - name: Codecov coverage reporting
         uses: codecov/codecov-action@v3
         with:
