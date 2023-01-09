@@ -61,3 +61,13 @@ find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's/^  <reporti
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.12.3">PDF-hul<\/module>$/   <module release="1.12.4">PDF-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <release>1.12.3<\/release>$/  <release>1.12.4<\/release>/' {} \;
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/2022-04-22/2023-01-31/' {} \;
+
+# Copy examples for encrypted dictionaries
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/issue6010_1.pdf.jhove.xml" ]]; then
+	echo " - First example for non reference encryption dictionaries."
+	cp "${candidateRoot}/errors/modules/PDF-hul/issue6010_1.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/issue6010_1.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/issue6010_2.pdf.jhove.xml" ]]; then
+	echo " - Second example for non reference encryption dictionaries."
+	cp "${candidateRoot}/errors/modules/PDF-hul/issue6010_2.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/issue6010_2.pdf.jhove.xml"
+fi

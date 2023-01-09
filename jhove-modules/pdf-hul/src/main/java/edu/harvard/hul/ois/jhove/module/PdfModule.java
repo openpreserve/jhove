@@ -53,7 +53,6 @@ import edu.harvard.hul.ois.jhove.Identifier;
 import edu.harvard.hul.ois.jhove.IdentifierType;
 import edu.harvard.hul.ois.jhove.InfoMessage;
 import edu.harvard.hul.ois.jhove.InternalSignature;
-import edu.harvard.hul.ois.jhove.Message;
 import edu.harvard.hul.ois.jhove.Module;
 import edu.harvard.hul.ois.jhove.ModuleBase;
 import edu.harvard.hul.ois.jhove.NisoImageMetadata;
@@ -66,8 +65,6 @@ import edu.harvard.hul.ois.jhove.SignatureUseType;
 import edu.harvard.hul.ois.jhove.XMPHandler;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
-import edu.harvard.hul.ois.jhove.module.pdf.AProfile;
-import edu.harvard.hul.ois.jhove.module.pdf.AProfileLevelA;
 import edu.harvard.hul.ois.jhove.module.pdf.Comment;
 import edu.harvard.hul.ois.jhove.module.pdf.CrossRefStream;
 import edu.harvard.hul.ois.jhove.module.pdf.Destination;
@@ -402,7 +399,7 @@ public class PdfModule extends ModuleBase {
 			+ "the President and Fellows of Harvard College. "
 			+ "Released under the GNU Lesser General Public License.";
 	private static final String ENCRYPTED = "<May be encrypted>";
-
+    private static final String SPEC_DOC_TITLE = "PDF Reference: Adobe Portable Document Format, Version ";
 	/** Logger for this class. */
 	protected Logger _logger;
 
@@ -445,7 +442,7 @@ public class PdfModule extends ModuleBase {
 								// offset when _xref[i] < 0
 	protected boolean _xrefIsStream; // True if XRef streams rather than tables
 										// are used
-	protected boolean _encrypted; // Equivalent to _encryptDictRef != null
+    protected boolean _encrypted; // Equivalent to _encryptDictRef != null
 	protected List<Property> _docCatalogList; // Info extracted from doc cat dict
 	protected List<Property> _encryptList; // Info from encryption dict
 	protected List<Property> _docInfoList; // Info from doc info dict
@@ -473,7 +470,7 @@ public class PdfModule extends ModuleBase {
 	protected Map<Integer, Integer> _pageSeqMap;
 
 	protected PdfIndirectObj _docCatDictRef;
-	protected PdfIndirectObj _encryptDictRef;
+    protected PdfIndirectObj _encryptDictRef;
 	protected PdfIndirectObj _docInfoDictRef;
 	protected PdfIndirectObj _pagesDictRef;
 
@@ -560,8 +557,7 @@ public class PdfModule extends ModuleBase {
 
 		_vendor = Agent.harvardInstance();
 
-		Document doc = new Document("PDF Reference: Adobe Portable "
-				+ "Document Format, Version 1.4", DocumentType.BOOK);
+        Document doc = new Document(SPEC_DOC_TITLE + "1.4", DocumentType.BOOK);
 		Agent agent = Agent.newAdobeInstance();
 		doc.setPublisher(agent);
 		doc.setDate("2001-12");
@@ -573,8 +569,7 @@ public class PdfModule extends ModuleBase {
 				IdentifierType.URL));
 		_specification.add(doc);
 
-		doc = new Document("PDF Reference: Adobe Portable "
-				+ "Document Format, Version 1.5", DocumentType.BOOK);
+        doc = new Document(SPEC_DOC_TITLE + "1.5", DocumentType.BOOK);
 		doc.setPublisher(agent);
 		doc.setDate("2003");
 		doc.setEdition("4th edition");
@@ -583,8 +578,7 @@ public class PdfModule extends ModuleBase {
 				IdentifierType.URL));
 		_specification.add(doc);
 
-		doc = new Document("PDF Reference: Adobe Portable "
-				+ "Document Format, Version 1.6", DocumentType.BOOK);
+        doc = new Document(SPEC_DOC_TITLE + "1.6", DocumentType.BOOK);
 		doc.setPublisher(agent);
 		doc.setDate("2004-11");
 		doc.setEdition("5th edition");
@@ -1017,7 +1011,7 @@ public class PdfModule extends ModuleBase {
 		_cid0FontsMap = null;
 		_cid2FontsMap = null;
 		_docCatDictRef = null;
-		_encryptDictRef = null;
+        _encryptDictRef = null;
 		_docInfoDictRef = null;
 		_pagesDictRef = null;
 		_docCatDict = null;
@@ -1363,14 +1357,13 @@ public class PdfModule extends ModuleBase {
 			}
 			PdfObject encryptObj =  _trailerDict.get(DICT_KEY_ENCRYPT); 
 			if (encryptObj instanceof PdfIndirectObj) {
-				_encryptDictRef = (PdfIndirectObj) _trailerDict
-						.get(DICT_KEY_ENCRYPT);
-				_encrypted = (_encryptDictRef != null);
+                _encryptDictRef = (PdfIndirectObj) _trailerDict
+                        .get(DICT_KEY_ENCRYPT);
 			} else if (encryptObj instanceof PdfDictionary) {
-				_encryptDict = (PdfDictionary) _trailerDict
-						.get(DICT_KEY_ENCRYPT);
-				_encrypted = (_encryptDict != null);
+                _encryptDict = (PdfDictionary) _trailerDict
+                        .get(DICT_KEY_ENCRYPT);
 			}
+            _encrypted = (_encryptDictRef != null) || (_encryptDict != null);
 
 			PdfObject infoObj = _trailerDict.get(DICT_KEY_INFO);
 			if (infoObj != null && !(infoObj instanceof PdfIndirectObj)) {
@@ -1830,16 +1823,16 @@ public class PdfModule extends ModuleBase {
 		String effText = null;
 		// Get the reference which we had before, and
 		// resolve it to the dictionary object.
-		if (_encryptDictRef == null) {
+        if (_encryptDictRef == null && _encryptDict == null) {
 			return true; // encryption entry is optional
 		}
 		try {
 			_encryptList = new ArrayList<Property>(6);
-			PdfDictionary dict = (PdfDictionary) resolveIndirectObject(
-					_encryptDictRef);
-			_encryptDict = dict;
+            if (_encryptDict == null) {
+                _encryptDict = (PdfDictionary) resolveIndirectObject(_encryptDictRef);
+            }
 
-			PdfObject filter = dict.get(DICT_KEY_FILTER);
+            PdfObject filter = _encryptDict.get(DICT_KEY_FILTER);
 			if (filter instanceof PdfSimpleObject) {
 				Token tok = ((PdfSimpleObject) filter).getToken();
 				if (tok instanceof Name) {
@@ -1862,7 +1855,7 @@ public class PdfModule extends ModuleBase {
 			}
 
 			int algValue = 0;
-			PdfObject algorithm = dict.get(DICT_KEY_V);
+            PdfObject algorithm = _encryptDict.get(DICT_KEY_V);
 			if (algorithm instanceof PdfSimpleObject) {
 				Token tok = ((PdfSimpleObject) algorithm).getToken();
 				if (tok instanceof Numeric) {
@@ -1887,7 +1880,7 @@ public class PdfModule extends ModuleBase {
 			}
 
 			int keyLen = 40;
-			PdfObject length = dict.get(DICT_KEY_LENGTH);
+            PdfObject length = _encryptDict.get(DICT_KEY_LENGTH);
 			if (length instanceof PdfSimpleObject) {
 				Token tok = ((PdfSimpleObject) length).getToken();
 				if (tok instanceof Numeric) {
@@ -1904,8 +1897,8 @@ public class PdfModule extends ModuleBase {
 				List<Property> stdList = new ArrayList<Property>(4);
 				// Flags have a known meaning only if Standard
 				// security handler was specified
-				PdfObject flagObj = dict.get(DICT_KEY_P);
-				PdfObject revObj = dict.get(DICT_KEY_R);
+                PdfObject flagObj = _encryptDict.get(DICT_KEY_P);
+                PdfObject revObj = _encryptDict.get(DICT_KEY_R);
 				int rev = 2; // assume old rev if not present
 				if (revObj instanceof PdfSimpleObject) {
 					rev = ((PdfSimpleObject) revObj).getIntValue();
@@ -1924,7 +1917,7 @@ public class PdfModule extends ModuleBase {
 					stdList.add(new Property(PROP_NAME_REVISION,
 							PropertyType.INTEGER, new Integer(rev)));
 				}
-				PdfObject oObj = dict.get("O");
+                PdfObject oObj = _encryptDict.get("O");
 				if (oObj != null) {
 					if (oObj instanceof PdfSimpleObject) {
 						stdList.add(new Property(PROP_NAME_OWNER_STRING,
@@ -1932,7 +1925,7 @@ public class PdfModule extends ModuleBase {
 								toHex(((PdfSimpleObject) oObj).getRawBytes())));
 					}
 				}
-				PdfObject uObj = dict.get("U");
+                PdfObject uObj = _encryptDict.get("U");
 				if (uObj != null) {
 					if (uObj instanceof PdfSimpleObject) {
 						stdList.add(new Property(PROP_NAME_USER_STRING,
@@ -1943,7 +1936,7 @@ public class PdfModule extends ModuleBase {
 				// Required if ExtensionLevel 3 and Encryption Algorithm (V) is 5
 				// Defined in Adobe® Supplement to the ISO 32000
 				if (algValue == 5) {
-					PdfObject oeObj = dict.get("OE");
+                    PdfObject oeObj = _encryptDict.get("OE");
 					if (oeObj != null) {
 						if (oeObj instanceof PdfSimpleObject) {
 							stdList.add(new Property(PROP_NAME_OWNERKEY_STRING,
@@ -1954,7 +1947,7 @@ public class PdfModule extends ModuleBase {
 						// if algValue is 5; OE is mandatory
 						throw new PdfInvalidException(MessageConstants.PDF_HUL_152, _parser.getOffset());
 					}
-					PdfObject ueObj = dict.get("UE");
+                    PdfObject ueObj = _encryptDict.get("UE");
 					if (ueObj != null) {
 						if (ueObj instanceof PdfSimpleObject) {
 							stdList.add(new Property(PROP_NAME_USERKEY_STRING,
