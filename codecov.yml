@@ -18,7 +18,3 @@ coverage:
           - integration
         if_ci_failed: error #success, error
         only_pulls: false
-        flags:
-          - "unittests"
-        paths:
-          - "src"
