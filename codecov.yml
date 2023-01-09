@@ -6,3 +6,19 @@ coverage:
   precision: 2
   round: down
   range: "70...100"
+  status:
+    patch:
+      default:
+        # basic
+        target: auto
+        threshold: 0%
+        base: auto
+        # advanced
+        branches:
+          - integration
+        if_ci_failed: error #success, error
+        only_pulls: false
+        flags:
+          - "unit"
+        paths:
+          - "src"
