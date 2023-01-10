@@ -27,3 +27,20 @@ jobs:
         if: matrix.java-version == 8
         run: ./bbt-jhove
         shell: bash
+      - name: Aggregate integration test results
+        if: matrix.java-version == 8
+        run: mvn --batch-mode verify -DjacocoAgg
+      - name: Upload coverage report
+        if: matrix.java-version == 8
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: jhove-apps/target/site/jacoco-aggregate/
+  coverage:
+    name: Quality Assurance
+    runs-on: ubuntu-20.04
+    needs: [ build ]
+
+    steps:
+      - name: Codacy analysis reporting
+        uses: codacy/codacy-analysis-cli-action@4.0.0
