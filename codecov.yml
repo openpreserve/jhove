@@ -1,14 +1,26 @@
 codecov:
-  token: 8f43ae05-bde9-4f3d-9cc5-a49af1fed3e2
-  branch: integration
+  require_ci_to_pass: true
+  notify:
+    wait_for_ci: true
 
 coverage:
   precision: 2
   round: down
   range: "70...100"
+  project:
+    default:
+      enabled: yes
+      target: 1
+      threshold: 0.5
   status:
     patch:
       default:
         enabled: yes
         target: auto
         threshold: 0%
+ignore:
+  - doc
+  - .github
+  - .git
+  - test-root
+  - mac

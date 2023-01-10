@@ -48,13 +48,10 @@ jobs:
           name: coverage-report
           path: jhove-apps/target/site/jacoco-aggregate/
       - name: Codecov coverage reporting
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-          files: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
-          name: codecov-umbrella # optional
-          fail_ci_if_error: true # optional (default = false)
-          verbose: true # optional (default = false)
+        run: |
+          wget https://uploader.codecov.io/latest/alpine/codecov
+          chmod +x codecov
+          ./codecov -t ${{ secrets.CODECOV_TOKEN }}
       - name: Codacy coverage reporting
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
