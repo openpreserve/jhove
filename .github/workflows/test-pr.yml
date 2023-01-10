@@ -42,8 +42,14 @@ jobs:
         run: ./bbt-jhove
         shell: bash
       - name: Test with Maven
-        if: (steps.filter.outputs.jhove == 'true')
+        if: (matrix.java-version == 8)
         run: mvn --batch-mode verify -DjacocoAgg
+      - name: Upload coverage report
+        if: (matrix.java-version == 8)
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: jhove-apps/target/site/jacoco-aggregate/
 
   coverage:
     name: Quality Assurance
@@ -51,5 +57,11 @@ jobs:
     needs: [ build ]
 
     steps:
+      - uses: actions/checkout@v3
+      - name: Download coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: core/target/site/jacoco/
       - name: Codacy analysis reporting
         uses: codacy/codacy-analysis-cli-action@4.0.0
