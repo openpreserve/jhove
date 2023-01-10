@@ -71,6 +71,4 @@ jobs:
           verbose: true # optional (default = false)
       - name: Codacy analysis reporting
         uses: codacy/codacy-analysis-cli-action@4.0.0
-        with:
-          upload: true
           
