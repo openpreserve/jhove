@@ -15,6 +15,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            jhove:
+              - 'jhove-core/**'
+              - 'jhove-ext-modules/**'
+              - 'jhove-modules/**'
+              - 'jhove-apps/**'
+              - 'jhove-installer/**'
+              - 'pom.xml'
+            testing:
+              - 'jhove-bbt/scripts/**'
+              - 'test-root/corpora/**'
       - name: JDK setup
         uses: actions/setup-java@v3
         with:
@@ -24,18 +38,13 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots install -DjacocoAgg
       - name: Integration Tests
-        if: matrix.java-version == 8
+        if: (matrix.java-version == 8) && (steps.filter.outputs.jhove == 'true')
         run: ./bbt-jhove
         shell: bash
-      - name: Aggregate integration test results
-        if: matrix.java-version == 8
+      - name: Test with Maven
+        if: (steps.filter.outputs.jhove == 'true')
         run: mvn --batch-mode verify -DjacocoAgg
-      - name: Upload coverage report
-        if: matrix.java-version == 8
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: jhove-apps/target/site/jacoco-aggregate/
+
   coverage:
     name: Quality Assurance
     runs-on: ubuntu-20.04
