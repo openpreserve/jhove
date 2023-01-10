@@ -13,8 +13,4 @@ coverage:
         target: auto
         threshold: 0%
         base: auto
-        # advanced
-        branches:
-          - integration
         if_ci_failed: error #success, error
-        only_pulls: false
