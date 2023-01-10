@@ -43,24 +43,14 @@ jobs:
 
     steps:
       - name: Download coverage report
-        if: matrix.java-version == 8
         uses: actions/download-artifact@v3
         with:
           name: coverage-report
-          path: core/target/site/jacoco/
-      - name: Codecov coverage reporting
-        if: matrix.java-version == 8
-        uses: codecov/codecov-action@v3
-        with:
-          files: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
-          fail_ci_if_error: true # optional (default = false)
-          verbose: true # optional (default = false)
+          path: jhove-apps/target/site/jacoco-aggregate/
       - name: Codacy coverage reporting
         uses: codacy/codacy-coverage-reporter-action@v1
-        if: matrix.java-version == 8
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
       - name: Codacy analysis reporting
-        if: matrix.java-version == 8
         uses: codacy/codacy-analysis-cli-action@4.0.0
