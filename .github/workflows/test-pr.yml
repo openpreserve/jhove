@@ -58,8 +58,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Codacy analysis reporting
-        uses: codacy/codacy-analysis-cli-action@4.0.0
       - name: Download coverage report
         uses: actions/download-artifact@v3
         with:
@@ -71,3 +69,8 @@ jobs:
           files: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
           fail_ci_if_error: true # optional (default = false)
           verbose: true # optional (default = false)
+      - name: Codacy analysis reporting
+        uses: codacy/codacy-analysis-cli-action@4.0.0
+        with:
+          upload: true
+          
