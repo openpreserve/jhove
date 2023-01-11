@@ -121,8 +121,8 @@ public class TiffModule extends ModuleBase {
     protected Logger _logger;
 
     private static final String NAME = "TIFF-hul";
-    private static final String RELEASE = "1.9.2";
-    private static final int [] DATE = { 2019, 12, 10 };
+    private static final String RELEASE = "1.9.3";
+    private static final int[] DATE = { 2022, 04, 22 };
     private static final String[] FORMAT = { "TIFF", "Tagged Image File Format" };
     private static final String COVERAGE = "TIFF 4.0, 5.0, and 6.0; "
             + "TIFF/IT (ISO/DIS 12639:2003), including file types CT, LW, HC, MP, "
@@ -357,7 +357,8 @@ public class TiffModule extends ModuleBase {
                 + "still cameras: Exif Version 2.3", DocumentType.STANDARD);
         Agent jeitaAgent = new Agent.Builder(
                 "Japan Electronics and Information Technology "
-                        + "Industries Association", AgentType.STANDARD)
+                        + "Industries Association",
+                AgentType.STANDARD)
                 .web("http://www.jeita.or.jp/")
                 .address(
                         "Mitsui Sumitomo Kaijo Building Annex, "
@@ -473,9 +474,9 @@ public class TiffModule extends ModuleBase {
      * representation information.
      *
      * @param raf
-     *            Open TIFF file
+     *             Open TIFF file
      * @param info
-     *            Representation informatino
+     *             Representation informatino
      */
     @Override
     public final void parse(RandomAccessFile raf, RepInfo info)
@@ -572,7 +573,7 @@ public class TiffModule extends ModuleBase {
                 while (pter.hasNext()) {
                     TiffProfile prof = pter.next();
                     if (!prof.isAlreadyOK() && prof.satisfiesProfile(ifd)) {
-                            info.setProfile(prof.getText());
+                        info.setProfile(prof.getText());
                     }
                 }
 
@@ -625,9 +626,9 @@ public class TiffModule extends ModuleBase {
                     PropertyType.PROPERTY, PropertyArity.ARRAY, tiffMetadata));
         } catch (TiffException e) {
             if (e.getJhoveMessage() != null) { // try to keep the id
-              info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
+                info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
             } else {
-              info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+                info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
             }
             info.setWellFormed(false);
             return;
@@ -664,9 +665,9 @@ public class TiffModule extends ModuleBase {
      * Special-purpose, limited parser for embedded Exif files.
      *
      * @param raf
-     *            Open TIFF file
+     *             Open TIFF file
      * @param info
-     *            Representation information
+     *             Representation information
      */
     public final List<IFD> exifParse(RandomAccessFile raf, RepInfo info)
             throws IOException {
@@ -736,10 +737,10 @@ public class TiffModule extends ModuleBase {
             // For parsing EXIF, we don't want to make the enclosing
             // document invalid, so we don't declare the EXIF non-well-formed
             // even though it is.
-        	if (e.getJhoveMessage() != null)
-        		info.setMessage(new InfoMessage(e.getJhoveMessage(), e.getOffset()));
-        	else
-        		info.setMessage(new InfoMessage(e.getMessage(), e.getOffset()));
+            if (e.getJhoveMessage() != null)
+                info.setMessage(new InfoMessage(e.getJhoveMessage(), e.getOffset()));
+            else
+                info.setMessage(new InfoMessage(e.getMessage(), e.getOffset()));
             return ifds;
         } catch (IOException e) {
             JhoveMessage msg;
@@ -843,7 +844,7 @@ public class TiffModule extends ModuleBase {
                 if (e.getJhoveMessage() != null) { // try to keep the id
                     info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
                 } else {
-                	info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
+                    info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
                 }
                 info.setValid(false);
             }
@@ -911,7 +912,8 @@ public class TiffModule extends ModuleBase {
 
             int len = stripOffsets.length;
             if (len != stripByteCounts.length) {
-                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_28.getMessage(), len, stripByteCounts.length);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_28.getMessage(), len,
+                        stripByteCounts.length);
                 JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_28.getId(), mess);
                 reportInvalid(message, info);
             }
@@ -959,24 +961,28 @@ public class TiffModule extends ModuleBase {
             if (planarConfiguration == 2) {
                 long spp_tpi = samplesPerPixel * tilesPerImage;
                 if (tileOffsets != null && tileOffsets.length < spp_tpi) {
-                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_36.getMessage(), tileOffsets.length, spp_tpi);
+                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_36.getMessage(), tileOffsets.length,
+                            spp_tpi);
                     JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_36.getId(), mess);
                     reportInvalid(message, info);
                 }
                 if (tileByteCounts != null && tileByteCounts.length < spp_tpi) {
-                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_37.getMessage(), tileByteCounts.length, spp_tpi);
+                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_37.getMessage(), tileByteCounts.length,
+                            spp_tpi);
                     JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_37.getId(), mess);
                     reportInvalid(message, info);
                 }
             } else {
                 if (tileOffsets != null && tileOffsets.length < tilesPerImage) {
-                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_38.getMessage(), tileOffsets.length, tilesPerImage);
+                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_38.getMessage(), tileOffsets.length,
+                            tilesPerImage);
                     JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_38.getId(), mess);
                     reportInvalid(message, info);
                 }
                 if (tileByteCounts != null
                         && tileByteCounts.length < tilesPerImage) {
-                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_39.getMessage(), tileByteCounts.length, tilesPerImage);
+                    String mess = MessageFormat.format(MessageConstants.TIFF_HUL_39.getMessage(), tileByteCounts.length,
+                            tilesPerImage);
                     JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_39.getId(), mess);
                     reportInvalid(message, info);
                 }
@@ -993,7 +999,7 @@ public class TiffModule extends ModuleBase {
         }
         int[] bitsPerSample = niso.getBitsPerSample();
         if (photometricInterpretation == 4 && (samplesPerPixel < 1 || bitsPerSample[0] != 1)) {
-                reportInvalid(MessageConstants.TIFF_HUL_41, info);
+            reportInvalid(MessageConstants.TIFF_HUL_41, info);
         }
 
         /* Samples per pixel. */
@@ -1001,15 +1007,15 @@ public class TiffModule extends ModuleBase {
         if ((photometricInterpretation == 0 || photometricInterpretation == 1
                 || photometricInterpretation == 3
                 || photometricInterpretation == 4) && samplesPerPixel < 1) {
-                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_42.getMessage(), samplesPerPixel);
-                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_42.getId(), mess);
-                reportInvalid(message, info);
+            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_42.getMessage(), samplesPerPixel);
+            JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_42.getId(), mess);
+            reportInvalid(message, info);
         }
         if ((photometricInterpretation == 2 || photometricInterpretation == 6
                 || photometricInterpretation == 8) && samplesPerPixel < 3) {
-                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_43.getMessage(), samplesPerPixel);
-                JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_43.getId(), mess);
-                reportInvalid(message, info);
+            String mess = MessageFormat.format(MessageConstants.TIFF_HUL_43.getMessage(), samplesPerPixel);
+            JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_43.getId(), mess);
+            reportInvalid(message, info);
         }
 
         /* Palette color. */
@@ -1031,7 +1037,8 @@ public class TiffModule extends ModuleBase {
             }
             int len = (1 << bitsPerSample[0]);
             if (colormapBitCodeValue.length < len) {
-                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_46.getMessage(), colormapBitCodeValue.length, len);
+                String mess = MessageFormat.format(MessageConstants.TIFF_HUL_46.getMessage(),
+                        colormapBitCodeValue.length, len);
                 JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_46.getId(), mess);
                 reportInvalid(message, info);
             }
@@ -1086,7 +1093,7 @@ public class TiffModule extends ModuleBase {
 
         if (ifd.getClipPath() != null && ifd.getXClipPathUnits() == IFD.NULL) {
             reportInvalid(MessageConstants.TIFF_HUL_52,
-                        info);
+                    info);
         }
 
         /* Date. */
@@ -1140,9 +1147,9 @@ public class TiffModule extends ModuleBase {
      * Parse all IFDs in the file, accumulating representation information.
      *
      * @param offset
-     *            Starting byte offset
+     *               Starting byte offset
      * @param info
-     *            Representation information
+     *               Representation information
      */
     protected List<IFD> parseIFDs(long offset, RepInfo info)
             throws TiffException {
@@ -1153,11 +1160,11 @@ public class TiffModule extends ModuleBase {
      * Parse all IFDs in the file, accumulating representation information.
      *
      * @param offset
-     *            Starting byte offset
+     *                       Starting byte offset
      * @param info
-     *            Representation information
+     *                       Representation information
      * @param suppressErrors
-     *            If true, use IFD even if it has errors
+     *                       If true, use IFD even if it has errors
      */
     protected List<IFD> parseIFDs(long offset, RepInfo info,
             boolean suppressErrors, int ifdType) throws TiffException {
@@ -1195,20 +1202,20 @@ public class TiffModule extends ModuleBase {
             List<IFD> list, boolean suppressErrors) throws TiffException {
         IFD ifd = null;
         switch (type) {
-        case IFD.EXIF:
-            ifd = new ExifIFD(next, info, _raf, _bigEndian);
-            break;
-        case IFD.INTEROPERABILITY:
-            ifd = new InteroperabilityIFD(next, info, _raf, _bigEndian);
-            break;
-        case IFD.GPSINFO:
-            ifd = new GPSInfoIFD(next, info, _raf, _bigEndian);
-            break;
-        case IFD.GLOBALPARAMETERS:
-            ifd = new GlobalParametersIFD(next, info, _raf, _bigEndian);
-            break;
-        default:
-            ifd = new TiffIFD(next, info, _raf, _bigEndian);
+            case IFD.EXIF:
+                ifd = new ExifIFD(next, info, _raf, _bigEndian);
+                break;
+            case IFD.INTEROPERABILITY:
+                ifd = new InteroperabilityIFD(next, info, _raf, _bigEndian);
+                break;
+            case IFD.GPSINFO:
+                ifd = new GPSInfoIFD(next, info, _raf, _bigEndian);
+                break;
+            case IFD.GLOBALPARAMETERS:
+                ifd = new GlobalParametersIFD(next, info, _raf, _bigEndian);
+                break;
+            default:
+                ifd = new TiffIFD(next, info, _raf, _bigEndian);
         }
         ifd.parse(_byteOffsetIsValid, suppressErrors);
 
