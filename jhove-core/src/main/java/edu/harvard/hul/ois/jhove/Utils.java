@@ -38,8 +38,7 @@ public enum Utils {
       if ((0x00 <= ch && ch <= 0x08) || 
           (0x0b <= ch && ch <= 0x0c) || 
           (0x0e <= ch && ch <= 0x1f) || 
-          0x7f == ch ||
-          ch >= 0xd800
+          0x7f == ch
       ) {
         continue;
       }
@@ -74,8 +73,7 @@ public enum Utils {
       if ((0x00 <= ch && ch <= 0x08) || 
           (0x0b <= ch && ch <= 0x0c) || 
           (0x0e <= ch && ch <= 0x1f) || 
-          0x7f == ch ||
-          ch >= 0xd800
+          0x7f == ch
       ) {
         continue;
       }
