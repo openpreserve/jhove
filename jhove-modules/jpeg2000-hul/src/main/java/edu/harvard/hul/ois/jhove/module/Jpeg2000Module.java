@@ -105,8 +105,8 @@ public class Jpeg2000Module extends ModuleBase {
      ******************************************************************/
 
     private static final String NAME = "JPEG2000-hul";
-    private static final String RELEASE = "1.4.2";
-    private static final int [] DATE = { 2019, 10, 18 };
+    private static final String RELEASE = "1.4.3";
+    private static final int[] DATE = { 2022, 04, 22 };
     private static final String[] FORMAT = { "JPEG 2000", "JP2", "JPX" };
     private static final String COVERAGE = "JP2 (ISO/IEC 15444-1:2000/"
             + "ITU-T Rec. T.800 (200)), JPX (ISO/IEC 15444-2:2004)";
@@ -324,14 +324,14 @@ public class Jpeg2000Module extends ModuleBase {
      * compute relative positions in the stream based on _nByte.
      *
      * @param raf
-     *            A RandomAccessFile to be parsed.
+     *             A RandomAccessFile to be parsed.
      *
      * @param info
-     *            A fresh (on the first call) RepInfo object which will be
-     *            modified to reflect the results of the parsing If multiple
-     *            calls to <code>parse</code> are made on the basis of a nonzero
-     *            value being returned, the same RepInfo object should be passed
-     *            with each call.
+     *             A fresh (on the first call) RepInfo object which will be
+     *             modified to reflect the results of the parsing If multiple
+     *             calls to <code>parse</code> are made on the basis of a nonzero
+     *             value being returned, the same RepInfo object should be passed
+     *             with each call.
      */
     @Override
     public final void parse(RandomAccessFile raf, RepInfo info)
@@ -367,8 +367,7 @@ public class Jpeg2000Module extends ModuleBase {
             badhdr = true;
         }
         if (badhdr) {
-            info.setMessage(new
-                    ErrorMessage(MessageConstants.JPEG2000_HUL_35, i));
+            info.setMessage(new ErrorMessage(MessageConstants.JPEG2000_HUL_35, i));
             info.setWellFormed(false);
             return;
         }
@@ -419,15 +418,15 @@ public class Jpeg2000Module extends ModuleBase {
             // Can that happen?
             _defaultNiso.setMimeType(mime);
         }
-        
+
         // Calculate the compression level
         NisoImageMetadata niso = getCurrentNiso();
         int rate = calculateRatio(getFilePos(), // fileSize
-        		niso.getBitsPerSample(), niso.getImageLength(), niso.getImageWidth());
+                niso.getBitsPerSample(), niso.getImageLength(), niso.getImageWidth());
         if (rate != -1) {
-        	niso.setCompressionLevel(rate);
+            niso.setCompressionLevel(rate);
         }
-        		
+
         if (!colorSpecs.isEmpty()) {
             _propList.add(new Property("ColorSpecs", PropertyType.PROPERTY,
                     PropertyArity.LIST, colorSpecs));
@@ -482,16 +481,17 @@ public class Jpeg2000Module extends ModuleBase {
      * Return the compression ratio
      */
     public int calculateRatio(long fileSize, int[] bitsPerSample, long length, long width) {
-    	final double BITS_IN_BYTE = 8.0;
-    	long bits = 0;
-    	for (int bit:bitsPerSample) {
-    		bits += bit;
-    	}
-    	double bytes = (double)bits / BITS_IN_BYTE;
-    	double uncompressedSize = (double)length * (double)width * bytes;
-    	if (fileSize <= 0) return -1;
-    	double ratio = uncompressedSize / (double)fileSize;
-    	return (int)Math.round(ratio);
+        final double BITS_IN_BYTE = 8.0;
+        long bits = 0;
+        for (int bit : bitsPerSample) {
+            bits += bit;
+        }
+        double bytes = (double) bits / BITS_IN_BYTE;
+        double uncompressedSize = (double) length * (double) width * bytes;
+        if (fileSize <= 0)
+            return -1;
+        double ratio = uncompressedSize / (double) fileSize;
+        return (int) Math.round(ratio);
     }
 
     /**
@@ -789,9 +789,8 @@ public class Jpeg2000Module extends ModuleBase {
         hdr.readHeader();
         // 8 bytes have been read
         if (!"ftyp".equals(hdr.getType())) {
-            info.setMessage(new
-                    ErrorMessage(MessageConstants.JPEG2000_HUL_22,
-                        hdr.getType(), _nByte));
+            info.setMessage(new ErrorMessage(MessageConstants.JPEG2000_HUL_22,
+                    hdr.getType(), _nByte));
             info.setWellFormed(false);
             return false;
 

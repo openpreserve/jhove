@@ -49,8 +49,8 @@ import edu.harvard.hul.ois.jhove.module.xml.*;
 public class XmlModule extends ModuleBase {
 
 	private static final String NAME = "XML-hul";
-	private static final String RELEASE = "1.5.1";
-	private static final int [] DATE = { 2019, 04, 17 };
+	private static final String RELEASE = "1.5.2";
+	private static final int[] DATE = { 2022, 04, 22 };
 	private static final String[] FORMAT = { "XML", "XHTML" };
 	private static final String COVERAGE = "XML 1.0";
 	private static final String[] MIMETYPE = { "text/xml", "application/xml",
@@ -173,7 +173,7 @@ public class XmlModule extends ModuleBase {
 	 * followed by a path to a local copy of that schema to be used
 	 * in its place, separated by a semicolon. Example:
 	 *
-	 *   schema=http://example.com/schema.xsd;/schemas/example.xsd
+	 * schema=http://example.com/schema.xsd;/schemas/example.xsd
 	 *
 	 * If the first character is "s" or "S", and the parameter isn't
 	 * "schema", then XML document declarations are required for
@@ -183,13 +183,13 @@ public class XmlModule extends ModuleBase {
 	 * the parameter is used as a base URL for relative URIs. Otherwise
 	 * it is ignored and there is no base URL. Example:
 	 *
-	 *   bhttp://example.com/schemas/
+	 * bhttp://example.com/schemas/
 	 *
 	 * If the parameter is "withtextmd=true", then textMD metadata is
 	 * included in the JHOVE report.
 	 *
 	 * @param param
-	 *            the module parameter to parse.
+	 *              the module parameter to parse.
 	 */
 	@Override
 	public void param(String param) {
@@ -222,26 +222,26 @@ public class XmlModule extends ModuleBase {
 	 * to validate, we consider it "valid."
 	 *
 	 * @param stream
-	 *            An InputStream, positioned at its beginning,
-	 *            which is generated from the object to be parsed.
-	 *            If multiple calls to <code>parse</code> are made
-	 *            on the basis of a nonzero value being returned,
-	 *            a new InputStream must be provided each time.
+	 *                   An InputStream, positioned at its beginning,
+	 *                   which is generated from the object to be parsed.
+	 *                   If multiple calls to <code>parse</code> are made
+	 *                   on the basis of a nonzero value being returned,
+	 *                   a new InputStream must be provided each time.
 	 *
 	 * @param info
-	 *            A fresh (on the first call) RepInfo object
-	 *            which will be modified
-	 *            to reflect the results of the parsing
-	 *            If multiple calls to <code>parse</code> are made
-	 *            on the basis of a nonzero value being returned,
-	 *            the same RepInfo object should be passed with each
-	 *            call.
+	 *                   A fresh (on the first call) RepInfo object
+	 *                   which will be modified
+	 *                   to reflect the results of the parsing
+	 *                   If multiple calls to <code>parse</code> are made
+	 *                   on the basis of a nonzero value being returned,
+	 *                   the same RepInfo object should be passed with each
+	 *                   call.
 	 *
 	 * @param parseIndex
-	 *            Must be 0 in first call to <code>parse</code>. If
-	 *            <code>parse</code> returns a nonzero value, it must be
-	 *            called again with <code>parseIndex</code>
-	 *            equal to that return value.
+	 *                   Must be 0 in first call to <code>parse</code>. If
+	 *                   <code>parse</code> returns a nonzero value, it must be
+	 *                   called again with <code>parseIndex</code>
+	 *                   equal to that return value.
 	 */
 	@Override
 	public int parse(InputStream stream, RepInfo info, int parseIndex) {
@@ -321,7 +321,7 @@ public class XmlModule extends ModuleBase {
 
 		} catch (Exception f) {
 			info.setMessage(new ErrorMessage(f.getMessage()));
-			info.setWellFormed(false);  // actually not the file's fault
+			info.setWellFormed(false); // actually not the file's fault
 			return 0;
 		}
 		try {
@@ -402,8 +402,7 @@ public class XmlModule extends ModuleBase {
 							MessageConstants.XML_HUL_1_SUB.getMessage(),
 							spe.getMessage(),
 							spe.getLineNumber(),
-							spe.getColumnNumber()
-					)));
+							spe.getColumnNumber())));
 			info.setWellFormed(false);
 			return 0;
 		} catch (SAXException se) {
@@ -517,12 +516,8 @@ public class XmlModule extends ModuleBase {
 
 		_textMD.setCharset(encoding);
 		_textMD.setByte_size("8");
-		_textMD.setByte_order(_bigEndian ?
-				TextMDMetadata.BYTE_ORDER_BIG :
-				TextMDMetadata.BYTE_ORDER_LITTLE);
-		_textMD.setCharacter_size(_textMD.getCharset().contains("UTF") ?
-				"variable" :
-				"1");
+		_textMD.setByte_order(_bigEndian ? TextMDMetadata.BYTE_ORDER_BIG : TextMDMetadata.BYTE_ORDER_LITTLE);
+		_textMD.setCharacter_size(_textMD.getCharset().contains("UTF") ? "variable" : "1");
 
 		// CRLF from XmlDeclStream ...
 		String lineEnd = xds.getKindOfLineEnd();
@@ -907,13 +902,13 @@ public class XmlModule extends ModuleBase {
 	 * document declaration, we parse the whole file.
 	 *
 	 * @param file
-	 *            A File object for the object being parsed
+	 *               A File object for the object being parsed
 	 * @param stream
-	 *            An InputStream, positioned at its beginning,
-	 *            which is generated from the object to be parsed
+	 *               An InputStream, positioned at its beginning,
+	 *               which is generated from the object to be parsed
 	 * @param info
-	 *            A fresh RepInfo object which will be modified
-	 *            to reflect the results of the test
+	 *               A fresh RepInfo object which will be modified
+	 *               to reflect the results of the test
 	 */
 	@Override
 	public void checkSignatures(File file, InputStream stream, RepInfo info)
@@ -939,7 +934,7 @@ public class XmlModule extends ModuleBase {
 				if (ch == sigStr.charAt(sigidx)) {
 					if (++sigidx >= sigStr.length()) {
 						info.setSigMatch(_name);
-						return;     // sig matches
+						return; // sig matches
 					}
 				} else
 					break;
@@ -957,7 +952,7 @@ public class XmlModule extends ModuleBase {
 		// No XML signature, but we're allowed to parse the file now.
 		// This means rewinding back to the start of the file.
 		int parseIndex = 1;
-		_parseFromSig = true;    // we set the sig match ourselves
+		_parseFromSig = true; // we set the sig match ourselves
 		while (parseIndex != 0) {
 			stream.close();
 			stream = new FileInputStream(file);
@@ -975,7 +970,7 @@ public class XmlModule extends ModuleBase {
 	protected static String intTo4DigitHex(int n) {
 		StringBuilder sb = new StringBuilder(4);
 		for (int i = 3; i >= 0; i--) {
-			int d = (n >> (4 * i)) & 0XF;  // extract a nybble
+			int d = (n >> (4 * i)) & 0XF; // extract a nybble
 			if (d < 10) {
 				sb.append((char) ('0' + d));
 			} else {
@@ -989,10 +984,10 @@ public class XmlModule extends ModuleBase {
 	 * Check that a string contains something other than "[None]".
 	 *
 	 * @param value
-	 *            string to test
+	 *              string to test
 	 * @return
-	 *            <code>true</code> if the string contains something
-	 *            other than "[None]", <code>false</code> otherwise
+	 *         <code>true</code> if the string contains something
+	 *         other than "[None]", <code>false</code> otherwise
 	 */
 	protected static boolean isNotEmpty(String value) {
 		return ((value != null) && (value.length() != 0)
@@ -1004,8 +999,8 @@ public class XmlModule extends ModuleBase {
 	 * location URI to a local file after validating both components.
 	 *
 	 * @param param
-	 *            a module parameter string of the form
-	 *            "schema=[location-URI];[local-path]"
+	 *              a module parameter string of the form
+	 *              "schema=[location-URI];[local-path]"
 	 */
 	private void addLocalSchema(String param) {
 		int eq = param.indexOf('=');
@@ -1022,13 +1017,11 @@ public class XmlModule extends ModuleBase {
 					_logger.warning("Ignoring module parameter with "
 							+ "unresolvable path: \"" + localParam + "\"");
 				}
-			}
-			catch (URISyntaxException use) {
+			} catch (URISyntaxException use) {
 				_logger.warning("Ignoring module parameter with "
 						+ "invalid URI syntax: \"" + uriParam + "\"");
 			}
-		}
-		catch (IndexOutOfBoundsException ioobe) {
+		} catch (IndexOutOfBoundsException ioobe) {
 			_logger.warning("Ignoring malformed module parameter \""
 					+ param + "\"");
 		}

@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.25.0-SNAPSHOT</version>
+    <version>1.27.0-SNAPSHOT</version>
   </parent>
   <artifactId>ascii-hul</artifactId>
-  <version>1.4.1</version>
+  <version>1.4.2</version>
   <name>JHOVE ASCII Module HUL</name>
   <description>ASCII module developed by Harvard University Library</description>
 

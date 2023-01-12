@@ -15,6 +15,7 @@ import java.util.*;
 
 /**
  * Encapsulation of a GPSInfo IFD (for TIFF/EP and Exif).
+ * See https://exiftool.org/TagNames/GPS.html
  */
 public class GPSInfoIFD extends IFD {
 	/******************************************************************
@@ -83,6 +84,8 @@ public class GPSInfoIFD extends IFD {
 	private static final int GPSDATESTAMP = 29;
 	/** GPSDifferential tag. */
 	private static final int GPSDIFFERENTIAL = 30;
+	/** GPSHPositioningError tag. */
+	private static final int GPSHPOSITIONINGERROR = 31;
 
 	/******************************************************************
 	 * PRIVATE INSTANCE FIELDS.
@@ -153,6 +156,8 @@ public class GPSInfoIFD extends IFD {
 	private String _gpsDateStamp;
 	/** GPSDifferential (30). */
 	private int _gpsDifferential;
+	/** GPSHPositioningError (31). */
+	private Rational _gpsHPositioningError;
 
 	/******************************************************************
 	 * CLASS CONSTRUCTOR.
@@ -254,6 +259,11 @@ public class GPSInfoIFD extends IFD {
 	/** Get the GPSDOP (11). */
 	public Rational getGPSDOP() {
 		return _gpsDOP;
+	}
+
+	/** Get the GPSHPositioningError (31). */
+	public Rational getGPSHPositioningError() {
+		return _gpsHPositioningError;
 	}
 
 	/** Get the GPSImgDirection (17). */
@@ -461,6 +471,11 @@ public class GPSInfoIFD extends IFD {
 		entries.add(new Property("GPSDifferential", PropertyType.INTEGER,
 				new Integer(_gpsDifferential)));
 
+		if (_gpsHPositioningError != null) {
+			entries.add(new Property("GPSHPositioningError", PropertyType.RATIONAL,
+					_gpsHPositioningError));
+    }
+
 		return propertyHeader("GPSInfo", entries);
 	}
 
@@ -520,6 +535,10 @@ public class GPSInfoIFD extends IFD {
 				checkType(tag, type, RATIONAL);
 				checkCount(tag, count, 1);
 				_gpsDOP = readRational(count, value);
+			} else if (tag == GPSHPOSITIONINGERROR) {
+				checkType(tag, type, RATIONAL);
+				checkCount(tag, count, 1);
+				_gpsHPositioningError = readRational(count, value);
 			} else if (tag == GPSIMGDIRECTION) {
 				checkType(tag, type, RATIONAL);
 				checkCount(tag, count, 1);
