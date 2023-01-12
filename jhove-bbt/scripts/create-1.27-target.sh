@@ -75,3 +75,9 @@ if [[ -f "${candidateRoot}/errors/modules/PDF-hul/issue6010_2.pdf.jhove.xml" ]];
 	echo " - Second example for non reference encryption dictionaries."
 	cp "${candidateRoot}/errors/modules/PDF-hul/issue6010_2.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/issue6010_2.pdf.jhove.xml"
 fi
+
+# Copy example for bad size int in PDF
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-73-bug-size-int.pdf.jhove.xml" ]]; then
+	echo " - Bad size entry example."
+	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-73-bug-size-int.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-73-bug-size-int.pdf.jhove.xml"
+fi
