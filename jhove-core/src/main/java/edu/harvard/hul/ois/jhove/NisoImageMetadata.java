@@ -9,7 +9,8 @@ import java.awt.color.ICC_Profile;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Encapsulation of the NISO Z39.87-2002 / AIIM 20-2002 Data Dictionary --
@@ -1466,9 +1467,9 @@ public class NisoImageMetadata
      *  TIFF dates get converted to ISO 8601 format.
      * @param date Date/time created
      */
-    public void setDateTimeCreated (String date)
+    public void setDateTimeCreated(String date)
     {
-	_dateTimeCreated = make8601Valid (date);
+        _dateTimeCreated = make8601Valid(date);
     }
 
     /** Set 9.1.1  DateTimeProcessed.
@@ -1477,7 +1478,7 @@ public class NisoImageMetadata
      */
     public void setDateTimeProcessed (String date)
     {
-    	_dateTimeProcessed = make8601Valid (date);
+        _dateTimeProcessed = make8601Valid(date);
     }
 
     /** Set 7.5 Device source.
@@ -2229,32 +2230,26 @@ public class NisoImageMetadata
 	_viewerData = viewerData;
     }
 
-    /*  Canonicizes (canonizes? whatever) a date to ISO
+    /*  Normalizes a date to ISO
      *  8601 format.  Returns null if it can't make sense of
      *  it.  Returns the date unchanged if it's already
-     *  canonical. Initially this converts TIFF dates to ISO.
+     *  in ISO format. Initially this converts TIFF dates to ISO.
      */
-    private String make8601Valid (String date)
-    {
-        try {
-            if (date.charAt (4) == ':') {
-                // It's a TIFF date, or a good imitation of one.
-                // TIFF dates have exact offsets, making things easy.
-                String yr = date.substring (0, 4);
-                String mo = date.substring (5, 7);
-                String da = date.substring (8, 10);
-                String hr = date.substring (11, 13);
-                String mi = date.substring (14, 16);
-                String se = date.substring (17, 19);
-                return yr + "-" + mo + "-" + da + "T" +
-                    hr + TIME_SEP + mi + TIME_SEP + se;
+    protected static String make8601Valid(String date) {
+        final Pattern pIsoDate = Pattern.compile("(\\d{4})\\-([01]\\d)\\-([0-3]\\d)T([0-2]\\d):([0-5]\\d):([0-5]\\d)");
+        final Pattern pTiffDate = Pattern.compile("(\\d{4}).([01]\\d).([0-3]\\d).([0-2]\\d).([0-5]\\d).([0-5]\\d)");
+        if (pIsoDate.matcher(date).matches()) {
+          return date;
+        }
+        Matcher m = pTiffDate.matcher(date);
+        if (m.matches()) {
+            String isoDate = String.format("%s-%s-%sT%s:%s:%s", 
+                m.group(1), m.group(2), m.group(3), m.group(4), m.group(5), m.group(6));
+            if (pIsoDate.matcher(isoDate).matches()) {
+                return isoDate;
             }
-            return date;  // default
         }
-        catch (Exception e) {
-            // Malformed date
-            return null;
-        }
+        return null;
     }
 
     public static String extractIccProfileDescription(byte[] data) throws IllegalArgumentException {
