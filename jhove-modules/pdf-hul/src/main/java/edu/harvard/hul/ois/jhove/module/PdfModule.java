@@ -1990,19 +1990,19 @@ public class PdfModule extends ModuleBase {
 		try {
 			_docInfoDict = (PdfDictionary) resolveIndirectObject(
 					_docInfoDictRef);
-
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_TITLE,
-					PROP_NAME_TITLE);
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_AUTHOR,
-					PROP_NAME_AUTHOR);
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_SUBJECT,
-					PROP_NAME_SUBJECT);
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_KEYWORDS,
-					PROP_NAME_KEYWORDS);
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_CREATOR,
-					PROP_NAME_CREATOR);
-			addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_PRODUCER,
-					PROP_NAME_PRODUCER);
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_TITLE,
+						PROP_NAME_TITLE);
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_AUTHOR,
+						PROP_NAME_AUTHOR);
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_SUBJECT,
+						PROP_NAME_SUBJECT);
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_KEYWORDS,
+						PROP_NAME_KEYWORDS);
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_CREATOR,
+						PROP_NAME_CREATOR);
+				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_PRODUCER,
+						PROP_NAME_PRODUCER);
+			
 			// CreationDate requires string-to-date conversion
 			// ModDate does too
 			addDateProperty(_docInfoDict, _docInfoList, DICT_KEY_CREATION_DATE,
@@ -3339,7 +3339,8 @@ public class PdfModule extends ModuleBase {
 			itemObj = annot.get("NM");
 			if (itemObj != null) {
 				propList.add(new Property(DICT_KEY_NAME, PropertyType.STRING,
-						((PdfSimpleObject) itemObj).getStringValue()));
+						_encrypted ? ENCRYPTED
+								: ((PdfSimpleObject) itemObj).getStringValue()));
 			}
 
 			// LastModified is optional. The documentation says that
@@ -3351,7 +3352,8 @@ public class PdfModule extends ModuleBase {
 						.getToken();
 				Property dateProp;
 				dateProp = new Property(PROP_NAME_LAST_MOD, PropertyType.STRING,
-						lastModLit.getValue());
+						_encrypted ? ENCRYPTED
+								: lastModLit.getValue());
 
 				propList.add(dateProp);
 			}
@@ -4317,7 +4319,7 @@ public class PdfModule extends ModuleBase {
 					propText = ((Literal) tok).getValue();
 				}
 				propList.add(
-						new Property(propName, PropertyType.STRING, propText));
+                        new Property(propName, PropertyType.STRING, (propText == null) ? "" : propText));
 			}
 		}
 	}
@@ -4329,19 +4331,21 @@ public class PdfModule extends ModuleBase {
 	protected void addDateProperty(PdfDictionary dict, List<Property> propList,
 			String key, String propName) throws PdfException {
 		if (_encrypted) {
-			return; // can't decipher an encrypted date
-		}
-		PdfObject propObject = dict.get(key);
-		if (propObject instanceof PdfSimpleObject) {
-			Token tok = ((PdfSimpleObject) propObject).getToken();
-			if (tok instanceof Literal) {
-				Literal lit = (Literal) tok;
-				Date propDate = lit.parseDate();
-				if (propDate != null) {
-					propList.add(new Property(propName, PropertyType.DATE, propDate));
-					// Ignore empty literals as this isn't an error
-				} else if (!lit.getValue().isEmpty()) {
-					throw new PdfInvalidException(MessageConstants.PDF_HUL_133, 0); // PDF-HUL-133
+			String propText = ENCRYPTED;
+			propList.add(new Property(propName, PropertyType.STRING, propText));
+		} else {
+			PdfObject propObject = dict.get(key);
+			if (propObject instanceof PdfSimpleObject) {
+				Token tok = ((PdfSimpleObject) propObject).getToken();
+				if (tok instanceof Literal) {
+					Literal lit = (Literal) tok;
+					Date propDate = lit.parseDate();
+					if (propDate != null) {
+						propList.add(new Property(propName, PropertyType.DATE, propDate));
+						// Ignore empty literals as this isn't an error
+					} else if (!lit.getValue().isEmpty()) {
+						throw new PdfInvalidException(MessageConstants.PDF_HUL_133, 0); // PDF-HUL-133
+					}
 				}
 			}
 		}
