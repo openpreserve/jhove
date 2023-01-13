@@ -81,3 +81,19 @@ if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-73-bug-size-int.pdf.jh
 	echo " - Bad size entry example."
 	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-73-bug-size-int.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-73-bug-size-int.pdf.jhove.xml"
 fi
+
+# Copy the two existing error files changed by handling of empty strings in PDF
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-22-govdocs-000187.pdf.jhove.xml" ]]; then
+	echo " - Copied because result altered by fix to empty string handling."
+	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-22-govdocs-000187.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-22-govdocs-000187.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-43-govdocs-486355.pdf.jhove.xml" ]]; then
+	echo " - Copied because result altered by fix to empty string handling."
+	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-43-govdocs-486355.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-43-govdocs-486355.pdf.jhove.xml"
+fi
+
+# Copy Regression corpus result for empty string handling
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-94-false-positive.pdf.jhove.xml" ]]; then
+	echo " - Regression check for empty PDF string handling."
+	cp "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-94-false-positive.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pdf-hul-94-false-positive.pdf.jhove.xml"
+fi

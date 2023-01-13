@@ -1990,43 +1990,18 @@ public class PdfModule extends ModuleBase {
 		try {
 			_docInfoDict = (PdfDictionary) resolveIndirectObject(
 					_docInfoDictRef);
-
-			try {
 				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_TITLE,
 						PROP_NAME_TITLE);
-			} catch (NullPointerException e) {
-				// ignore nullpointerexception
-			}
-			try {
 				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_AUTHOR,
 						PROP_NAME_AUTHOR);
-			} catch (Exception e) {
-				// ignore nullpointerexception
-			}
-			try {
 				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_SUBJECT,
 						PROP_NAME_SUBJECT);
-			} catch (Exception e) {
-				// ignore nullpointerexception
-			}
-			try {
 				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_KEYWORDS,
 						PROP_NAME_KEYWORDS);
-			} catch (Exception e) {
-				// ignore nullpointerexception
-			}
-			try {
 				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_CREATOR,
 						PROP_NAME_CREATOR);
-			} catch (Exception e) {
-				// ignore nullpointerexception
-			}
-			try {
 				addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_PRODUCER,
 						PROP_NAME_PRODUCER);
-			} catch (Exception e) {
-				// ignore nullpointerexception
-			}
 			
 			// CreationDate requires string-to-date conversion
 			// ModDate does too
@@ -4344,7 +4319,7 @@ public class PdfModule extends ModuleBase {
 					propText = ((Literal) tok).getValue();
 				}
 				propList.add(
-						new Property(propName, PropertyType.STRING, propText));
+                        new Property(propName, PropertyType.STRING, (propText == null) ? "" : propText));
 			}
 		}
 	}

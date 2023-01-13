@@ -23,8 +23,7 @@ import java.util.*;
  *  @see PropertyType
  *  @see PropertyArity
  */
-public class Property
-{
+public class Property {
     /******************************************************************
      * PRIVATE INSTANCE FIELDS.
      ******************************************************************/
@@ -33,7 +32,6 @@ public class Property
     private PropertyType _type;
     private PropertyArity _arity;
     private Object _value;
-
 
     /******************************************************************
      * CLASS CONSTRUCTOR.
@@ -47,8 +45,7 @@ public class Property
 	 *  @param   value  The value of the property.  The type of the
 	 *                  parameter must agree with <code>type</code>.
 	 */
-    public Property (String name, PropertyType type, Object value)
-    {
+    public Property(String name, PropertyType type, Object value) {
 	init (name, type, PropertyArity.SCALAR, value);
     }
 
@@ -65,40 +62,32 @@ public class Property
 	 *              components must agree with <code>type</code>.
 	 */
     public Property (String name, PropertyType type, PropertyArity arity,
-		     Object value)
-    {
+            Object value) {
 	init (name, type, arity, value);
     }
 
     private void init (String name, PropertyType type, PropertyArity arity,
-		       Object value)
-    {
-	/* Some limited type checking. Checking for mismatched
-           types here may help avoid difficult chasing down
-           of the bugs such mismatches cause. */
+            Object value) {
+        /*
+         * Some limited type checking. Checking for mismatched
+         * types here may help avoid difficult chasing down
+         * of the bugs such mismatches cause.
+         */
 	if (value == null) {
-		if (type == PropertyType.STRING) {
-			// a String value can be empty
-			value = "";
-		} else {
 			throw new NullPointerException (CoreMessageConstants.EXC_PROP_VAL_NULL);
-		}
 	}
 	if ((arity == PropertyArity.SCALAR) && !isObjScalarProp(value)) {
-		throw new IncompatibleClassChangeError
-			(String.format(CoreMessageConstants.EXC_SCL_PROP_CLSS_INCMPT, CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
-	}
-	else if ((arity == PropertyArity.MAP) && (!(value instanceof Map))) {
-		throw new IncompatibleClassChangeError
-			(String.format(CoreMessageConstants.EXC_MAP_PROP_CLSS_INCMPT, CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
-	}
-	else if ((arity == PropertyArity.SET) && (!(value instanceof Set))) {
-		throw new IncompatibleClassChangeError
-			(String.format(CoreMessageConstants.EXC_SET_PROP_CLSS_INCMPT, CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
-	}
-	else if ((arity == PropertyArity.LIST) && (!(value instanceof List))) {
-		throw new IncompatibleClassChangeError
-			(String.format(CoreMessageConstants.EXC_LIST_PROP_CLSS_INCMPT, CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
+            throw new IncompatibleClassChangeError(String.format(CoreMessageConstants.EXC_SCL_PROP_CLSS_INCMPT,
+                    CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
+        } else if ((arity == PropertyArity.MAP) && (!(value instanceof Map))) {
+            throw new IncompatibleClassChangeError(String.format(CoreMessageConstants.EXC_MAP_PROP_CLSS_INCMPT,
+                    CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
+        } else if ((arity == PropertyArity.SET) && (!(value instanceof Set))) {
+            throw new IncompatibleClassChangeError(String.format(CoreMessageConstants.EXC_SET_PROP_CLSS_INCMPT,
+                    CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
+        } else if ((arity == PropertyArity.LIST) && (!(value instanceof List))) {
+            throw new IncompatibleClassChangeError(String.format(CoreMessageConstants.EXC_LIST_PROP_CLSS_INCMPT,
+                    CoreMessageConstants.EXC_PROP_CLSS_INCMPT));
 	}
 
 	_name  = name;
@@ -112,6 +101,7 @@ public class Property
                  toTest instanceof Map ||
                  toTest instanceof Set);
     }
+
     /******************************************************************
      * PUBLIC INSTANCE METHODS.
      *
@@ -121,19 +111,18 @@ public class Property
 	/**
 	 *   Returns the arity (type of structure) of this Property.
 	 */
-    public PropertyArity getArity ()
-    {
+    public PropertyArity getArity() {
 	return _arity;
     }
 
     /**
      * Return a property by its name, regardless of its position in the
      * structural hierarchy of properties.
+     * 
      * @param name Property name
      * @return Named property (or null)
      */
-    public Property getByName (String name)
-    {
+    public Property getByName(String name) {
 	if (_name.equals (name)) {
 	    return this;
 	}
@@ -148,8 +137,7 @@ public class Property
 			return prop;
 		    }
 		}
-	    }
-	    else if (_arity.equals (PropertyArity.LIST)) {
+            } else if (_arity.equals(PropertyArity.LIST)) {
 		List<Property> list = (List<Property>) _value;
 		int len = list.size ();
 		for (int i=0; i<len; i++) {
@@ -158,8 +146,7 @@ public class Property
 			return prop;
 		    }
 		}
-	    }
-	    else if (_arity.equals (PropertyArity.MAP)) {
+            } else if (_arity.equals(PropertyArity.MAP)) {
 		Collection<Property> coll = ((Map<?, Property>) _value).values ();
 		Iterator<Property> iter = coll.iterator ();
 		while (iter.hasNext ()) {
@@ -168,8 +155,7 @@ public class Property
 			return prop;
 		    }
 		}
-	    }
-	    else if (_arity.equals (PropertyArity.SET)) {
+            } else if (_arity.equals(PropertyArity.SET)) {
 		Iterator<Property> iter = ((Set<Property>) _value).iterator ();
 		while (iter.hasNext ()) {
 		    Property prop = iter.next ().getByName (name);
@@ -186,8 +172,7 @@ public class Property
 	/**
 	 *   Returns the displayable name of this Property.
 	 */
-    public String getName ()
-    {
+    public String getName() {
 	return _name;
     }
 
@@ -196,16 +181,14 @@ public class Property
 	 *  If the arity is other than SCALAR, the type refers to the
 	 *  compononents of the Property structure.
 	 */
-    public PropertyType getType ()
-    {
+    public PropertyType getType() {
 	return _type;
     }
 
 	/**
 	 *  Returns the Object which is the Property's value.
 	 */
-    public Object getValue ()
-    {
+    public Object getValue() {
 	return _value;
     }
 }
