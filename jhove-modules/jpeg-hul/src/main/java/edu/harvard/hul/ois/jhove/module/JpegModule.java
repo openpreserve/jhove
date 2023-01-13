@@ -109,8 +109,8 @@ public class JpegModule extends ModuleBase {
 	 ******************************************************************/
 	private static final String NISO_IMAGE_MD = "NisoImageMetadata";
 	private static final String NAME = "JPEG-hul";
-	private static final String RELEASE = "1.5.3";
-	private static final int [] DATE = { 2022, 04, 22 };
+    private static final String RELEASE = "1.5.4";
+    private static final int[] DATE = { 2023, 01, 31 };
 	private static final String[] FORMAT = { "JPEG", "ISO/IEC 10918-1:1994",
 			"Joint Photographic Experts Group", "JFIF",
 			"JPEG File Interchange Format", "SPIFF", "ISO/IEC 10918-3:1997",
@@ -368,7 +368,8 @@ public class JpegModule extends ModuleBase {
         doc = new Document(
                 "ISO/IEC 10918-6:2013(E), Digital compression"
                         + "and coding of continuous-tone still-images: "
-                        + "Application to printing systems", DocumentType.STANDARD);
+                        + "Application to printing systems",
+                DocumentType.STANDARD);
         doc.setPublisher(isoAgent);
         doc.setIdentifier(new Identifier("ITU-T Rec. T.872 (06/12)",
                 IdentifierType.CCITT));
@@ -503,12 +504,15 @@ public class JpegModule extends ModuleBase {
 	 *            An InputStream, positioned at its beginning, which is
 	 *            generated from the object to be parsed
 	 * @param info
-	 *            A fresh RepInfo object which will be modified to reflect the
+     *                   A fresh RepInfo object which will be modified to reflect
+     *                   the
 	 *            results of the parsing
 	 * @param parseIndex
 	 *            Must be 0 in first call to <code>parse</code>. If
-	 *            <code>parse</code> returns a nonzero value, it must be called
-	 *            again with <code>parseIndex</code> equal to that return value.
+     *                   <code>parse</code> returns a nonzero value, it must be
+     *                   called
+     *                   again with <code>parseIndex</code> equal to that return
+     *                   value.
 	 */
 	@Override
 	public int parse(InputStream stream, RepInfo info, int parseIndex)
