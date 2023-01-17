@@ -98,6 +98,16 @@ if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-94-false-positive.
 	cp "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-94-false-positive.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pdf-hul-94-false-positive.pdf.jhove.xml"
 fi
 
+# Copy Regression corpus results for files affected by fix for issue 672, filters as indirect objects
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-8-Secured.pdf.jhove.xml" ]]; then
+	echo " - Regression check for empty PDF string handling."
+	cp "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-8-Secured.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pdf-hul-8-Secured.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-11-govdocs-152588.pdf.jhove.xml" ]]; then
+	echo " - Regression check for empty PDF string handling."
+	cp "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-11-govdocs-152588.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pdf-hul-11-govdocs-152588.pdf.jhove.xml"
+fi
+
 # Update release details for PDF module
 find "${targetRoot}" -type f -name "*.jpg.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.5.3" date="2022-04-22">JPEG-hul<\/reportingModule>$/  <reportingModule release="1.5.4" date="2023-01-31">JPEG-hul<\/reportingModule>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.5.3">JPEG-hul<\/module>$/   <module release="1.5.4">JPEG-hul<\/module>/' {} \;
