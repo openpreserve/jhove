@@ -133,8 +133,7 @@ public class PdfStream extends PdfObject {
     }
 
     /* Constructs the _filters array. */
-    private void extractFilters () throws PdfException
-    {
+    private void extractFilters() throws PdfException {
         boolean ff = false;
         _filters = new Filter[] {};  // default value
         PdfObject filter = _dict.get ("Filter");
@@ -152,12 +151,12 @@ public class PdfStream extends PdfObject {
             if (parms != null) {
                 pdfaCompliant = false;
             }
-        }
-        else {
+        } else {
             parms = _dict.get ("DecodeParms");
         }
         
-        /* There may be a single filter, which will be a string,
+        /*
+         * There may be a single filter, which will be a string,
          * in which case the parms will be a single dictionary.
          * Or there may be an array, in which case the params will
          * be an array of dictionaries.  The parms are optional, so
@@ -188,17 +187,13 @@ public class PdfStream extends PdfObject {
                     }
                 }
                 _filters = val;
-            }
-            else {
+            } else {
                 /* Only other allowed value is a string */
                 Filter[] val = new Filter[1];
                 if(filter instanceof PdfSimpleObject) {
-                	val[0] = new Filter 
-                            (((PdfSimpleObject) filter).getStringValue());
+                    val[0] = new Filter(((PdfSimpleObject) filter).getStringValue());
                 } else if (filter instanceof PdfIndirectObj) {
-						val[0] = new Filter 
-	                            (((PdfSimpleObject) _module.resolveIndirectObject(filter)).getStringValue());
-					}
+                    val[0] = new Filter(((PdfSimpleObject) _module.resolveIndirectObject(filter)).getStringValue());
 				}
                 
                 if (parms instanceof PdfDictionary) {
