@@ -15,14 +15,14 @@ import edu.harvard.hul.ois.jhove.module.PdfModule;
  *  By default the content of the stream isn't loaded, but
  *  it can be loaded when necessary.
  */
-public class PdfStream extends PdfObject
-{
+public class PdfStream extends PdfObject {
 
     private Stream _stream;
     private PdfDictionary _dict;
     private Filter[] _filters;
     private boolean pdfaCompliant;
     protected PdfModule _module;
+
     /** 
      *  Creates a PdfStream
      *
@@ -33,8 +33,7 @@ public class PdfStream extends PdfObject
      */
     public PdfStream (PdfDictionary dict, Stream stream, 
             int objNumber, int genNumber)
-            throws PdfException
-    {
+            throws PdfException {
         super (objNumber, genNumber);
         _stream = stream;
         _dict = dict;
@@ -49,8 +48,7 @@ public class PdfStream extends PdfObject
      *  @param stream     A Stream token
      */
     public PdfStream (PdfDictionary dict, Stream stream)
-            throws PdfException
-    {
+            throws PdfException {
         super ();
         _stream = stream;
         _dict = dict;
@@ -66,8 +64,7 @@ public class PdfStream extends PdfObject
      *  @param module     Invoking the PdfModule
      */
     public PdfStream (PdfDictionary dict, Stream stream, PdfModule module)
-            throws PdfException
-    {
+            throws PdfException {
         super ();
         _stream = stream;
         _dict = dict;
@@ -76,31 +73,25 @@ public class PdfStream extends PdfObject
         extractFilters ();
     }
     
-
     /**
      *  Returns the stream's dictionary
      */
-    public PdfDictionary getDict ()
-    {
+    public PdfDictionary getDict() {
         return _dict;
     }
-
 
     /**
      *  Returns the stream's Stream portion
      */
-    public Stream getStream ()
-    {
+    public Stream getStream() {
         return _stream;
     }
-
 
     /**
      *  If the stream is external, returns the file specification
      *  for it, otherwise returns null.
      */
-    public String getFileSpecification () throws PdfInvalidException
-    {
+    public String getFileSpecification() throws PdfInvalidException {
         PdfObject spec = _dict.get ("F");
         if (spec == null) {
             return null;
@@ -109,30 +100,28 @@ public class PdfStream extends PdfObject
         return FileSpecification.getFileSpecString(spec);
     }
     
-    /** Returns true if no PDF/A compliance problems have been found, false if
-     *  problems have been found */
+    /**
+     * Returns true if no PDF/A compliance problems have been found, false if
+     * problems have been found
+     */
     public boolean isPdfaCompliant () {
         return pdfaCompliant;
     }
-    
     
     /**
      *  Returns an array (possibly empty but not null) of the filters for
      *  this Stream.  The elements of the array are Filter
      *  objects.
      */
-    public Filter[] getFilters ()
-    {
+    public Filter[] getFilters() {
         return _filters;
     }
     
-
     /**
      *  Return the name of the filter, if the DecodeParams dictionary
      *  is present and has a "Name" entry.
      */
-    public String getFilterName ()
-    {
+    public String getFilterName() {
         PdfObject decparms = _dict.get ("DecodeParams");
         if (decparms instanceof PdfDictionary) {
             PdfObject name = ((PdfDictionary) decparms).get ("Name");
@@ -142,8 +131,6 @@ public class PdfStream extends PdfObject
         }
         return null;
     }
-
-
 
     /* Constructs the _filters array. */
     private void extractFilters () throws PdfException
@@ -208,9 +195,7 @@ public class PdfStream extends PdfObject
                 if(filter instanceof PdfSimpleObject) {
                 	val[0] = new Filter 
                             (((PdfSimpleObject) filter).getStringValue());
-                } else {
-					System.out.println("we zijn er");
-					if (filter instanceof PdfIndirectObj) {
+                } else if (filter instanceof PdfIndirectObj) {
 						val[0] = new Filter 
 	                            (((PdfSimpleObject) _module.resolveIndirectObject(filter)).getStringValue());
 					}
@@ -221,8 +206,7 @@ public class PdfStream extends PdfObject
                 }
                 _filters = val;
             }
-        }
-        catch (Exception e) {
+        }catch(Exception e) {
             throw new PdfMalformedException (MessageConstants.PDF_HUL_45); // PDF-HUL-45
         }
     }
@@ -230,8 +214,7 @@ public class PdfStream extends PdfObject
     /**
      *  Returns <code>true</code> if this is an image stream.
      */
-    public boolean isImage ()
-    {
+    public boolean isImage() {
         // An image dictionary may not have a type, but must have a subtype
         // of Image.
         PdfObject subtype = _dict.get ("Subtype");
