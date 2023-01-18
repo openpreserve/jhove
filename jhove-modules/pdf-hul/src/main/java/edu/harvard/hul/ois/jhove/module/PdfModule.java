@@ -1049,7 +1049,7 @@ public class PdfModule extends ModuleBase {
 			header = PdfHeader.parseHeader(_parser);
 		} catch (PdfMalformedException e) {
 			info.setWellFormed(false);
-			info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_154, 0L)); // PDF-HUL-154
+			info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_155, 0L)); // PDF-HUL-155
 			return false;
 		}
 		if (header == null) {
