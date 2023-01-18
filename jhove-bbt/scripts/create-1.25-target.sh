@@ -181,3 +181,11 @@ find "${targetRoot}" -type f -name "pdf-hul-43-govdocs-486355.pdf.jhove.xml" -ex
 echo " - PR:734 PDF result patch 3."
 find "${targetRoot}" -type f -name "pdf-hul-10-govdocs-803945.pdf.jhove.xml" -exec sed -i 's/0x8431511c2cbf12475e48d0013e36c4c629/0x8431511c2cbf12475e48d0013e36c4c6/' {} \;
 find "${targetRoot}" -type f -name "pdf-hul-10-govdocs-803945.pdf.jhove.xml" -exec sed -i 's/0x5c951120e00faad182edc884a297d9bc29/0x5c951120e00faad182edc884a297d9bc/' {} \;
+
+# Copy the XML result of examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml
+# changed by https://github.com/openpreserve/jhove/pull/748
+if [[ -f "${candidateRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml" ]]; then
+echo " - PR:748 JPEG result patch 1."
+	cp "${candidateRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml" "${targetRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml"
+fi
+

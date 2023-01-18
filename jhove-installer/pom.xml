@@ -193,12 +193,12 @@
     <dependency>
       <groupId>org.openpreservation.jhove.modules</groupId>
       <artifactId>jpeg-hul</artifactId>
-      <version>1.5.3</version>
+      <version>1.5.4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.openpreservation.jhove.modules</groupId>
       <artifactId>pdf-hul</artifactId>
-      <version>1.12.3</version>
+      <version>1.12.4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.openpreservation.jhove.modules</groupId>
