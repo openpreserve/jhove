@@ -186,6 +186,7 @@ public class PdfModule extends ModuleBase {
 	private static final String DICT_KEY_TRAILER = "trailer";
 	private static final String DICT_KEY_SIZE = "Size";
 	private static final String DICT_KEY_ENCRYPT = "Encrypt";
+	private static final String DICT_KEY_STMF = "StmF";
 	private static final String DICT_KEY_INFO = "Info";
 	private static final String DICT_KEY_ID = "ID";
 	private static final String DICT_KEY_FONT_NAME = "FontName";
@@ -441,15 +442,16 @@ public class PdfModule extends ModuleBase {
 	protected int[][] _xref2; // Array of int[2], giving object stream and
 								// offset when _xref[i] < 0
 	protected boolean _xrefIsStream; // True if XRef streams rather than tables
-										// are used
-    protected boolean _encrypted; // Equivalent to _encryptDictRef != null
-	protected List<Property> _docCatalogList; // Info extracted from doc cat dict
-	protected List<Property> _encryptList; // Info from encryption dict
-	protected List<Property> _docInfoList; // Info from doc info dict
-	protected List<Property> _extStreamsList; // List of external streams
-	protected List<Property> _imagesList; // List of image streams
-	protected List<Property> _filtersList; // List of filters
-	protected List<Property> _pagesList; // List of PageObjects
+									                 // are used
+	protected boolean _encrypted;    // Equivalent to _encryptDictRef != null
+	protected boolean _streamsEncrypted;	// streams are encrypted and can't be parsed.
+	protected List<Property> _docCatalogList;  // Info extracted from doc cat dict
+	protected List<Property> _encryptList;     // Info from encryption dict
+	protected List<Property> _docInfoList;     // Info from doc info dict
+	protected List<Property> _extStreamsList;  // List of external streams
+	protected List<Property> _imagesList;      // List of image streams
+	protected List<Property> _filtersList;     // List of filters
+	protected List<Property> _pagesList;       // List of PageObjects
 
 	/** Map of Type 0 font dictionaries. */
 	protected Map<Integer, PdfObject> _type0FontsMap;
@@ -858,7 +860,7 @@ public class PdfModule extends ModuleBase {
 			return;
 		}
 		findExternalStreams(info);
-		if (!findFilters(info)) {
+		if (!findFilters(info) && !_streamsEncrypted) {
 			return;
 		}
 		findImages(info);
@@ -1277,6 +1279,11 @@ public class PdfModule extends ModuleBase {
 					throw new PdfInvalidException(MessageConstants.PDF_HUL_70, // PDF-HUL-70
 							_parser.getOffset());
 				}
+				// readEncryptDict is not enough to check encryption when exists.
+				_encryptDictRef = (PdfIndirectObj) dict.get(DICT_KEY_ENCRYPT);
+				if (_encryptDictRef != null) {
+					_encrypted = true;
+				}
 				/*
 				 * We don't need to see a trailer dictionary.
 				 * Move along, move along.
@@ -1655,10 +1662,12 @@ public class PdfModule extends ModuleBase {
 					pModeText);
 			_docCatalogList.add(p);
 
-			PdfObject outlines = resolveIndirectObject(
-					_docCatDict.get(DICT_KEY_OUTLINES));
-			if (outlines instanceof PdfDictionary) {
-				_outlineDict = (PdfDictionary) outlines;
+			if (!_encrypted) {
+				PdfObject outlines = resolveIndirectObject(
+						_docCatDict.get(DICT_KEY_OUTLINES));
+				if (outlines instanceof PdfDictionary) {
+					_outlineDict = (PdfDictionary) outlines;
+				}
 			}
 
 			PdfObject lang = resolveIndirectObject(
@@ -1674,9 +1683,11 @@ public class PdfModule extends ModuleBase {
 			// but this is a convenient time to grab it and the page label
 			// dictionary.
 			_pagesDictRef = (PdfIndirectObj) _docCatDict.get(DICT_KEY_PAGES);
-			_pageLabelDict = (PdfDictionary) resolveIndirectObject(
-					_docCatDict.get(DICT_KEY_PAGE_LABELS));
-
+			if (!_encrypted) {
+				_pageLabelDict = (PdfDictionary) resolveIndirectObject(
+						_docCatDict.get(DICT_KEY_PAGE_LABELS));
+			}
+			
 			// Grab the Version entry, and use it to override the
 			// file header IF it's later.
 			PdfObject vers = resolveIndirectObject(
@@ -1760,8 +1771,11 @@ public class PdfModule extends ModuleBase {
 			// Get the Names dictionary in order to grab the
 			// EmbeddedFiles and Dests entries.
 			try {
-				PdfDictionary namesDict = (PdfDictionary) resolveIndirectObject(
-						_docCatDict.get(DICT_KEY_NAMES));
+				PdfDictionary namesDict = null;
+				if (!_encrypted) {
+					namesDict = (PdfDictionary) resolveIndirectObject(
+							_docCatDict.get(DICT_KEY_NAMES));
+				}
 				if (namesDict != null) {
 					PdfDictionary embeddedDict = (PdfDictionary) resolveIndirectObject(
 							namesDict.get(DICT_KEY_EMBEDDED_FILES));
@@ -1967,6 +1981,10 @@ public class PdfModule extends ModuleBase {
 						PROP_NAME_STANDARD_SECURITY_HANDLER,
 						PropertyType.PROPERTY, PropertyArity.LIST, stdList));
 			}
+			PdfObject streamEncrypted = _encryptDict.get(DICT_KEY_STMF);
+			if (streamEncrypted instanceof PdfSimpleObject) {
+				_streamsEncrypted = true;
+			}
 
 		} catch (PdfException e) {
 			e.disparage(info);
@@ -2039,21 +2057,24 @@ public class PdfModule extends ModuleBase {
 			}
 
 			PdfObject pagesObj = resolveIndirectObject(_pagesDictRef);
-			if (!(pagesObj instanceof PdfDictionary))
+			if (pagesObj != null && !(pagesObj instanceof PdfDictionary)) { 
 				throw new PdfMalformedException(MessageConstants.PDF_HUL_97); // PDF-HUL-97
-			PdfDictionary pagesDict = (PdfDictionary) pagesObj;
-
-			// Check that the pages dict has a key type and the types value is
-			// Pages
-			if (!checkTypeKey(pagesDict, info, KEY_VAL_PAGES,
-					MessageConstants.PDF_HUL_146, // PDF-HUL-146
-					MessageConstants.PDF_HUL_144, // PDF-HUL-144
-					MessageConstants.PDF_HUL_145)) { // PDF-HUL-145
-				return false;
+			} else if (pagesObj != null) {
+				
+				PdfDictionary pagesDict = (PdfDictionary) pagesObj;
+	
+				// Check that the pages dict has a key type and the types value is
+				// Pages
+				if (!checkTypeKey(pagesDict, info, KEY_VAL_PAGES,
+						MessageConstants.PDF_HUL_146, // PDF-HUL-146
+						MessageConstants.PDF_HUL_144,  // PDF-HUL-144
+						MessageConstants.PDF_HUL_145)) { // PDF-HUL-145
+					return false;
+				}
+	
+				_docTreeRoot = new PageTreeNode(this, null, pagesDict);
+				_docTreeRoot.buildSubtree(true, MAX_PAGE_TREE_DEPTH);
 			}
-
-			_docTreeRoot = new PageTreeNode(this, null, pagesDict);
-			_docTreeRoot.buildSubtree(true, MAX_PAGE_TREE_DEPTH);
 		} catch (PdfException e) {
 			e.disparage(info);
 			if (e.getJhoveMessage() != null)
@@ -2317,6 +2338,10 @@ public class PdfModule extends ModuleBase {
 
 	protected void findImages(RepInfo info) throws IOException {
 		_imagesList = new LinkedList<Property>();
+		// needed if object streams are encrypted
+		if (_docTreeRoot == null) {
+			return;
+		}
 		_docTreeRoot.startWalk();
 		try {
 			for (;;) {
@@ -2590,6 +2615,10 @@ public class PdfModule extends ModuleBase {
 		_type3FontsMap = new HashMap<Integer, PdfObject>();
 		_cid0FontsMap = new HashMap<Integer, PdfObject>();
 		_cid2FontsMap = new HashMap<Integer, PdfObject>();
+		//needed if object streams are encrypted
+		if (_docTreeRoot == null) {
+			return;
+		}
 		try {
 			_docTreeRoot.startWalk();
 			for (;;) {
@@ -2782,7 +2811,7 @@ public class PdfModule extends ModuleBase {
 			return getObjectFromStream(objIndex, recGuard);
 		}
 		_parser.seek(offset);
-		PdfObject obj = _parser.readObjectDef();
+		PdfObject obj = _parser.readObjectDef(this);
 		//
 		// Experimental carl@openpreservation.org 2018-03-14
 		//
@@ -2971,6 +3000,10 @@ public class PdfModule extends ModuleBase {
 	protected void addPagesProperty(List<Property> metadataList, RepInfo info) {
 		_pagesList = new LinkedList<Property>();
 		_pageSeqMap = new HashMap<Integer, Integer>(500);
+		// needed if object streams are encrypted
+		if (_docTreeRoot == null) {
+			return;
+		}
 		try {
 			_docTreeRoot.startWalk();
 			int pageIndex = 0;
@@ -4485,29 +4518,34 @@ public class PdfModule extends ModuleBase {
 			int objStreamIndex = _xref2[objIndex][0];
 			PdfObject streamObj;
 			ObjectStream ostrm = null;
-			if (objStreamIndex == _cachedStreamIndex) {
-				ostrm = _cachedObjectStream;
-				// Reset it
-				if (ostrm.isValid()) {
-					ostrm.readIndex();
-				}
-			} else {
-				streamObj = resolveIndirectObject(
-						getObject(objStreamIndex, recGuard - 1));
-				if (streamObj instanceof PdfStream) {
-					ostrm = new ObjectStream((PdfStream) streamObj, _raf);
+			if (!_streamsEncrypted) {
+				if (objStreamIndex == _cachedStreamIndex) {
+					ostrm = _cachedObjectStream;
+					// Reset it
 					if (ostrm.isValid()) {
 						ostrm.readIndex();
-						_cachedObjectStream = ostrm;
-						_cachedStreamIndex = objStreamIndex;
-					} else {
-						throw new PdfMalformedException(
-								MessageConstants.PDF_HUL_108); // PDF-HUL-108
+					}
+				} else {
+					streamObj = resolveIndirectObject(
+							getObject(objStreamIndex, recGuard - 1));
+					if (streamObj instanceof PdfStream) {
+						ostrm = new ObjectStream((PdfStream) streamObj, _raf);
+						if (ostrm.isValid()) {
+							ostrm.readIndex();
+							_cachedObjectStream = ostrm;
+							_cachedStreamIndex = objStreamIndex;
+						} else {
+							throw new PdfMalformedException(
+									MessageConstants.PDF_HUL_108); // PDF-HUL-108
+						}
 					}
 				}
+				/* And finally extract the object from the object stream. */
+				return ostrm.getObject(objIndex);
+			}else {
+				return null;
 			}
-			/* And finally extract the object from the object stream. */
-			return ostrm.getObject(objIndex);
+			
 		} catch (ZipException excep) {
 			_logger.info(excep.getMessage());
 			throw new PdfMalformedException(MessageConstants.PDF_HUL_109); // PDF-HUL-109
