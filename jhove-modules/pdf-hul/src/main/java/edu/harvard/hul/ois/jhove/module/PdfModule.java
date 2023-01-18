@@ -1723,45 +1723,57 @@ public class PdfModule extends ModuleBase {
 				if (extensions instanceof PdfDictionary) {
 					Iterator<PdfObject> extensionsIter = ((PdfDictionary) extensions).iterator();
 					while (extensionsIter.hasNext()) {
-						PdfDictionary extension = (PdfDictionary) extensionsIter.next();
-						Set<String> developerPrefixKeys = ((PdfDictionary) extensions).getKeys();
-						for (String developerPrefixKey : developerPrefixKeys) {
-							if (PdfStrings.PREFIXNAMESREGISTY.contains(developerPrefixKey.toString())) {
-								p = new Property(PROP_NAME_DEVELOPERPREFIX, PropertyType.STRING,
-										developerPrefixKey.toString());
-								_docCatalogList.add(p);
-								PdfSimpleObject BaseVersion = (PdfSimpleObject) extension.get(DICT_KEY_BASEVERSION);
-								String infoVersString = _version;
-								String versString = BaseVersion.getStringValue();
-								double ver = Double.parseDouble(versString);
-								double infoVer = Double.parseDouble(infoVersString);
-								try {
-									if (infoVer != ver) {
-										String mess = MessageFormat.format(
-												MessageConstants.PDF_HUL_87.getMessage(),
-												infoVersString, ver);
-										JhoveMessage message = JhoveMessages.getMessageInstance(
-												MessageConstants.PDF_HUL_87.getId(), mess);
-										info.setMessage(new InfoMessage(message));
-									} else {
-										p = new Property(PROP_NAME_BASEVERSION, PropertyType.STRING, ver);
+
+						PdfObject extensionObj =  extensionsIter.next();
+						// Arlington PDF Model defines extension as a direct object 
+						// https://github.com/pdf-association/arlington-pdf-model/blob/master/tsv/latest/Extensions.tsv
+						if(extensionObj instanceof PdfIndirectObj) {
+							info.setWellFormed(false);
+							JhoveMessage message = JhoveMessages.getMessageInstance(
+									MessageConstants.PDF_HUL_156.getId(), 
+									MessageConstants.PDF_HUL_156.getMessage());
+							info.setMessage(new ErrorMessage(message)); // PDF-HUL-156
+						} else {
+							PdfDictionary extension = (PdfDictionary) extensionObj;
+							Set<String> developerPrefixKeys = ((PdfDictionary) extensions).getKeys();
+							for (String developerPrefixKey : developerPrefixKeys) {
+								if (PdfStrings.PREFIXNAMESREGISTY.contains(developerPrefixKey.toString())) {
+									p = new Property(PROP_NAME_DEVELOPERPREFIX, PropertyType.STRING,
+											developerPrefixKey.toString());
+									_docCatalogList.add(p);
+									PdfSimpleObject BaseVersion = (PdfSimpleObject) extension.get(DICT_KEY_BASEVERSION);
+									String infoVersString = _version;
+									String versString = BaseVersion.getStringValue();
+									double ver = Double.parseDouble(versString);
+									double infoVer = Double.parseDouble(infoVersString);
+									try {
+										if (infoVer != ver) {
+											String mess = MessageFormat.format(
+													MessageConstants.PDF_HUL_87.getMessage(),
+													infoVersString, ver);
+											JhoveMessage message = JhoveMessages.getMessageInstance(
+													MessageConstants.PDF_HUL_87.getId(), mess);
+											info.setMessage(new InfoMessage(message));
+										} else {
+											p = new Property(PROP_NAME_BASEVERSION, PropertyType.STRING, ver);
+											_docCatalogList.add(p);
+										}
+									} catch (NumberFormatException e) {
+										throw new PdfInvalidException(MessageConstants.PDF_HUL_88); // PDF-HUL-88
+									}
+									PdfSimpleObject extensionLevel = (PdfSimpleObject) extension
+											.get(DICT_KEY_EXTENSIONLEVEL);
+									if (extensionLevel != null) {
+										p = new Property(PROP_NAME_EXTENSIONLEVEL, PropertyType.INTEGER,
+												extensionLevel.getIntValue());
 										_docCatalogList.add(p);
 									}
-								} catch (NumberFormatException e) {
-									throw new PdfInvalidException(MessageConstants.PDF_HUL_88); // PDF-HUL-88
+								} else {
+									// There is an unknown developer prefix
+									info.setWellFormed(false);
+									info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_154,
+											developerPrefixKey.toString())); // PDF-HUL-154
 								}
-								PdfSimpleObject extensionLevel = (PdfSimpleObject) extension
-										.get(DICT_KEY_EXTENSIONLEVEL);
-								if (extensionLevel != null) {
-									p = new Property(PROP_NAME_EXTENSIONLEVEL, PropertyType.INTEGER,
-											extensionLevel.getIntValue());
-									_docCatalogList.add(p);
-								}
-							} else {
-								// There is an unknown developer prefix
-								info.setWellFormed(false);
-								info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_154,
-										developerPrefixKey.toString())); // PDF-HUL-154
 							}
 						}
 					}
