@@ -13,6 +13,7 @@ import java.util.Vector;
 
 import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+import edu.harvard.hul.ois.jhove.module.PdfModule;
 
 /**
  * The Parser class implements some limited syntactic analysis for PDF.
@@ -32,6 +33,7 @@ public class Parser
     private Map<Long, PdfObject> _objectMap;
     /** PDF/A compliance flag. */
     private boolean _pdfACompliant;
+	protected PdfModule _module;
 
 
     /**
@@ -241,7 +243,7 @@ public class Parser
             if (strm != null) {
                 // Assimilate the dictionary and the stream token into the
                 // object to be returned
-                PdfStream strmObj = new PdfStream ((PdfDictionary) obj, strm);
+                PdfStream strmObj = new PdfStream ((PdfDictionary) obj, strm, _module);
                 if (!strmObj.isPdfaCompliant()) {
                     _pdfACompliant = false;
                 }
@@ -467,4 +469,9 @@ public class Parser
     {
         _tokenizer.scanMode (flag);
     }
+
+	public PdfObject readObjectDef(PdfModule pdfModule) throws IOException, PdfException {
+		_module = pdfModule;
+		return this.readObjectDef();
+	}
 }
