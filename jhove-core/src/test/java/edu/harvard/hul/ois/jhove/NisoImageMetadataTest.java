@@ -11,6 +11,15 @@ import org.junit.Test;
 public class NisoImageMetadataTest {
 	private final static String ERROR_TEST = "Not a icc profile ";
 
+  @Test
+  public void testMake8601Valid() {
+     assertEquals("2020-10-20T23:58:45", NisoImageMetadata.make8601Valid("2020-10-20T23:58:45"));
+     assertEquals("2020-10-20T23:58:45", NisoImageMetadata.make8601Valid("2020:10:20 23:58:45"));
+     assertEquals("2020-10-20T23:58:45", NisoImageMetadata.make8601Valid("2020.10.20 23.58.45"));
+     assertNull(NisoImageMetadata.make8601Valid("2020:10:20 23:58:73"));
+     assertNull(NisoImageMetadata.make8601Valid("2020:10:20"));
+  }
+
 	@Test
 	public void testExtractIccProfileDescriptionBad() {
 		final byte ANY_BYTE_1 = (byte) 0xFF;
