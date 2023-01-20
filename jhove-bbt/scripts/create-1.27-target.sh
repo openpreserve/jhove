@@ -92,10 +92,22 @@ if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-43-govdocs-486355.pdf.
 	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-43-govdocs-486355.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-43-govdocs-486355.pdf.jhove.xml"
 fi
 
-# Copy Regression corpus result for empty string handling
+# Copy Regression corpus results for empty string handling
 if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-94-false-positive.pdf.jhove.xml" ]]; then
-	echo " - Regression check for empty PDF string handling."
+	echo " - Regression check for empty PDF string handling 1."
 	cp "${candidateRoot}/regression/modules/PDF-hul/pdf-hul-94-false-positive.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pdf-hul-94-false-positive.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/null-string-sig-1.pdf.jhove.xml" ]]; then
+	echo " - Regression check for empty PDF string handling 2."
+	cp "${candidateRoot}/regression/modules/PDF-hul/null-string-sig-1.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/null-string-sig-1.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/null-string-sig-2.pdf.jhove.xml" ]]; then
+	echo " - Regression check for empty PDF string handling 3."
+	cp "${candidateRoot}/regression/modules/PDF-hul/null-string-sig-2.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/null-string-sig-2.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/null-string.pdf.jhove.xml" ]]; then
+	echo " - Regression check for empty PDF string handling 4."
+	cp "${candidateRoot}/regression/modules/PDF-hul/null-string.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/null-string.pdf.jhove.xml"
 fi
 
 # Copy Regression corpus results for files affected by fix for issue 672, filters as indirect objects
