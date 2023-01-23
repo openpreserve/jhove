@@ -121,6 +121,7 @@ public class PdfStrings
         add("CLWN"); // pdfclown.org
         add("CRDF"); // Autonomy Cardiff
         add("diTe"); // disphere tech GmbH
+        add("DLLB"); // Dual Lab
         add("DMSK"); // DMS One Zrt.
         add("DUFF"); // Duff Johnson Consulting
         add("Esko"); // Esko Software bv
