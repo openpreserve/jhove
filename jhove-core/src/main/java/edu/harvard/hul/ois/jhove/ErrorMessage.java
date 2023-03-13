@@ -20,16 +20,6 @@ public class ErrorMessage extends Message {
 	 ******************************************************************/
 
 	/**
-	 * Creates an ErrorMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message describing the problem.
-	 */
-	public ErrorMessage(String message) {
-		super(message);
-	}
-
-	/**
 	 * Creates an ErrorMessage with an identifier.
 	 * 
 	 * @param message
@@ -37,19 +27,6 @@ public class ErrorMessage extends Message {
 	 */
 	public ErrorMessage(JhoveMessage message) {
 		super(message);
-	}
-
-	/**
-	 * Creates an ErrorMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message describing the problem.
-	 * @param offset
-	 *            The offset in the file at which the problem
-	 *            was detected.
-	 */
-	public ErrorMessage(String message, long offset) {
-		super(message, offset);
 	}
 
 	/**
@@ -66,18 +43,6 @@ public class ErrorMessage extends Message {
 	}
 
 	/**
-	 * Creates an ErrorMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message describing the problem.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 */
-	public ErrorMessage(String message, String subMessage) {
-		super(message, subMessage);
-	}
-
-	/**
 	 * Creates an ErrorMessage with an identifier.
 	 * 
 	 * @param message
@@ -87,21 +52,6 @@ public class ErrorMessage extends Message {
 	 */
 	public ErrorMessage(JhoveMessage message, String subMessage) {
 		super(message, subMessage);
-	}
-
-	/**
-	 * Creates an ErrorMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message describing the problem.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 * @param offset
-	 *            The offset in the file at which the problem
-	 *            was detected.
-	 */
-	public ErrorMessage(String message, String subMessage, long offset) {
-		super(message, subMessage, offset);
 	}
 
 	/**
