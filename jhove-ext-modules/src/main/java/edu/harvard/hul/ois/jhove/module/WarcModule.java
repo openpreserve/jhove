@@ -23,6 +23,7 @@ import org.jwat.warc.WarcRecord;
 
 import edu.harvard.hul.ois.jhove.Agent;
 import edu.harvard.hul.ois.jhove.Agent.Builder;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.AgentType;
 import edu.harvard.hul.ois.jhove.Document;
 import edu.harvard.hul.ois.jhove.DocumentType;
@@ -236,7 +237,8 @@ public class WarcModule extends ModuleBase {
                 info.setSigMatch(_name);
             }
         } catch (JhoveException e) {
-            info.setMessage(new ErrorMessage(e.getMessage()));
+            info.setMessage(new ErrorMessage(MessageConstants.WARC_KB_1,
+                    String.format("%s: %s", e.getClass().getName(), e.getMessage())));
             info.setValid(false);
             info.setWellFormed(false);
         } finally {
@@ -286,10 +288,10 @@ public class WarcModule extends ModuleBase {
      */
     protected void parseRecords(WarcReader reader) throws IOException, JhoveException {
         if (reader != null) {
-            WarcRecord record;
-            while ((record = reader.getNextRecord()) != null) {
-                processRecord(record);
-                reader.diagnostics.addAll(record.diagnostics);
+            WarcRecord warcRecord;
+            while ((warcRecord = reader.getNextRecord()) != null) {
+                processRecord(warcRecord);
+                reader.diagnostics.addAll(warcRecord.diagnostics);
             }
         } else {
             throw new JhoveException(MessageConstants.ERR_RECORD_NULL);
@@ -328,17 +330,18 @@ public class WarcModule extends ModuleBase {
      * @param repInfo The representation info, where to report the results.
      */
     private void reportResults(WarcReader reader, RepInfo repInfo) {
+        JwatJhoveIdMinter minter = JwatJhoveIdMinter.getInstance(NAME);
         Diagnostics<Diagnosis> diagnostics = reader.diagnostics;
         if (diagnostics.hasErrors()) {
             for (Diagnosis d : diagnostics.getErrors()) {
-                repInfo.setMessage(new ErrorMessage(extractDiagnosisType(d), extractDiagnosisMessage(d)));
+                repInfo.setMessage(new ErrorMessage(minter.mint(d)));
             }
             repInfo.setConsistent(false);
         }
         if (diagnostics.hasWarnings()) {
             // Report warnings on source object.
             for (Diagnosis d : diagnostics.getWarnings()) {
-                repInfo.setMessage(new InfoMessage(extractDiagnosisType(d), extractDiagnosisMessage(d)));
+                repInfo.setMessage(new InfoMessage(minter.mint(d)));
             }
         }
 
@@ -354,30 +357,5 @@ public class WarcModule extends ModuleBase {
 
         repInfo.setProperty(new Property("Records", PropertyType.PROPERTY, PropertyArity.LIST, recordProperties));
         repInfo.setSize(reader.getConsumed());
-    }
-
-    /**
-     * Extracts the diagnosis type.
-     * 
-     * @param d The diagnosis whose type should be extracted
-     * @return The type of diagnosis
-     */
-    private static String extractDiagnosisType(Diagnosis d) {
-        return d.type.name();
-    }
-
-    /**
-     * Extracts the message from the diagnosis.
-     * 
-     * @param d The diagnosis
-     * @return The message containing entity and informations.
-     */
-    private static String extractDiagnosisMessage(Diagnosis d) {
-        StringBuilder res = new StringBuilder();
-        res.append("Entity: ").append(d.entity);
-        for (String i : d.information) {
-            res.append(", ").append(i);
-        }
-        return res.toString();
     }
 }

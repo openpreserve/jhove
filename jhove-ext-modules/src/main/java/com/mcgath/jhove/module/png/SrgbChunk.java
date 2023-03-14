@@ -4,6 +4,8 @@ import edu.harvard.hul.ois.jhove.ErrorMessage;
 import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /** The sRGB chunk, specifying sRGB color intent */
 public class SrgbChunk extends PNGChunk {
@@ -27,30 +29,31 @@ public class SrgbChunk extends PNGChunk {
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
 		processChunkCommon(info);
-		ErrorMessage msg = null;
+        boolean chunkOk = true;
 		int colorIntent = 0;
 		if (_module.isPlteSeen()) {
-			msg = new ErrorMessage (MessageConstants.PNG_GDM_48);
-		}
-		else if (_module.isIdatSeen()) {
-			msg = new ErrorMessage (MessageConstants.PNG_GDM_49);
-		}
-		else if (_module.isChunkSeen(PNGChunk.iCCP_HEAD_SIG)) {
-			msg = new ErrorMessage (MessageConstants.PNG_GDM_50);
-		}
-		else if (length == 0) {
-			msg = new ErrorMessage (MessageConstants.PNG_GDM_51);
-		}
-		else {
+            info.setMessage(new ErrorMessage(MessageConstants.PNG_GDM_48));
+            chunkOk = false;
+        } else if (_module.isIdatSeen()) {
+            info.setMessage(new ErrorMessage(MessageConstants.PNG_GDM_49));
+            chunkOk = false;
+        } else if (_module.isChunkSeen(PNGChunk.iCCP_HEAD_SIG)) {
+            info.setMessage(new ErrorMessage(MessageConstants.PNG_GDM_50));
+            chunkOk = false;
+        } else if (length == 0) {
+            info.setMessage(new ErrorMessage(MessageConstants.PNG_GDM_51));
+            chunkOk = false;
+        } else {
 			colorIntent = readUnsignedByte();
 			if (colorIntent > 3) {
-				msg = new ErrorMessage ( 
+                JhoveMessage msg = JhoveMessages.getMessageInstance(MessageConstants.PNG_GDM_52.getId(),
 						String.format(MessageConstants.PNG_GDM_52.getMessage(),  
 								colorIntent)); 
+                                info.setMessage(new ErrorMessage(msg));
+                                chunkOk = false;
 			}
 		}
-		if (msg != null) {
-			info.setMessage (msg);
+        if (!chunkOk) {
 			info.setWellFormed (false);
 			throw new PNGException (MessageConstants.PNG_GDM_53);
 		}
