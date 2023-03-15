@@ -23,7 +23,6 @@ import org.jwat.warc.WarcRecord;
 
 import edu.harvard.hul.ois.jhove.Agent;
 import edu.harvard.hul.ois.jhove.Agent.Builder;
-import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.AgentType;
 import edu.harvard.hul.ois.jhove.Document;
 import edu.harvard.hul.ois.jhove.DocumentType;
