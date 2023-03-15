@@ -2,8 +2,11 @@ package com.mcgath.jhove.module.png;
 
 import edu.harvard.hul.ois.jhove.ErrorMessage;
 import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
-/** Representation of the PLTE chunk
+/**
+ * Representation of the PLTE chunk
  */
 public class PlteChunk extends PNGChunk {
 
@@ -16,23 +19,27 @@ public class PlteChunk extends PNGChunk {
 	
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
-		ErrorMessage msg = null;
 		processChunkCommon(info);
+        boolean chunkOk = true;
 		if (_module.isPlteSeen()) {
-			msg = new ErrorMessage (MessageConstants.PNG_GDM_34);
+            info.setMessage(new ErrorMessage (MessageConstants.PNG_GDM_34));
+            chunkOk = false;
 		}
 		_module.setPlteSeen(true);
 
 		if (_module.isIdatSeen()) {
-			msg = new ErrorMessage(MessageConstants.PNG_GDM_35);
+            info.setMessage(new ErrorMessage (MessageConstants.PNG_GDM_35));
+            chunkOk = false;
 		}
 		if ((length % 3) != 0) {
 			// must be a multiple of 3 bytes
-			msg = new ErrorMessage(String.format(MessageConstants.PNG_GDM_36.getMessage(),  
+            JhoveMessage msg = JhoveMessages.getMessageInstance(MessageConstants.PNG_GDM_36.getId(),
+                    String.format(MessageConstants.PNG_GDM_36.getMessage(),
 					length));
+            info.setMessage(new ErrorMessage (msg));
+            chunkOk = false;
 		}
-		if (msg != null) {
-			info.setMessage(msg);
+		if (!chunkOk) {
 			info.setWellFormed(false);
 			throw new PNGException (MessageConstants.PNG_GDM_37);
 		}

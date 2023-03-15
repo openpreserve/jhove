@@ -296,13 +296,13 @@ public class EpubModule extends ModuleBase {
 
             // check if any of the messages are on the customized not-well-formed
             // list of errors
-            int notWellFormedErrors = epubMessages.stream().filter(c -> triggerNotWellFormed(c))
+            int notWellFormedErrors = epubMessages.stream().filter(this::triggerNotWellFormed)
                     .collect(Collectors.toSet()).size();
 
             info.setWellFormed(report.getFatalErrorCount() == 0 && notWellFormedErrors == 0);
             info.setValid(info.getWellFormed() == RepInfo.TRUE && report.getErrorCount() == 0);
 
-            Set<Message> msgs = new TreeSet<Message>(new MessageComparator());
+            Set<Message> msgs = new TreeSet<>(new MessageComparator());
             for (CheckMessage msg : report.getAllMessages()) {
                 msgs.addAll(toJhoveMessages(msg));
             }
@@ -315,9 +315,10 @@ public class EpubModule extends ModuleBase {
         } catch (Exception f) {
             f.printStackTrace();
             if (f.getMessage() != null) {
-                info.setMessage(new ErrorMessage(f.getMessage()));
+                info.setMessage(new ErrorMessage(MessageConstants.EPUB_PTC_1,
+                String.format(MessageConstants.EPUB_PTC_1_SUB.getMessage(), f.getMessage())));
             } else {
-                info.setMessage(new ErrorMessage(MessageConstants.ERR_UNKNOWN));
+                info.setMessage(new ErrorMessage(MessageConstants.EPUB_PTC_2));
             }
             info.setWellFormed(false); // may not be the file's fault
             return 0;

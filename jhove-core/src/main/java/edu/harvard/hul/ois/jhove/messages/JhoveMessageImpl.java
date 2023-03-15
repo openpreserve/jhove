@@ -36,7 +36,7 @@ final class JhoveMessageImpl implements JhoveMessage {
 
 	@Override
 	public boolean hasSubMessage() {
-		return (this.subMessage == null || this.subMessage.isEmpty());
+		return (this.subMessage != null && !this.subMessage.isEmpty());
 	}
 
 	@Override

@@ -139,3 +139,12 @@ if [[ -f "${candidateRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.x
 echo " - PR:748 JPEG result patch 1."
 	cp "${candidateRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml" "${targetRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml"
 fi
+
+# Place IDs into all of the JP2K messages that have errors, there's only one code.
+find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="0" severity="error>"/offset="0" severity="error" id="JPEG2000-HUL-5">/' {} \;
+find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="11" severity="error>"/offset="11" severity="error" id="JPEG2000-HUL-5">/' {} \;
+find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="95" severity="error>"/offset="95" severity="error" id="JPEG2000-HUL-5">/' {} \;
+find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="594" severity="error>"/offset="594" severity="error" id="JPEG2000-HUL-5">/' {} \;
+find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/severity="error">/severity="error" id="JHOVE-CORE-5">/' {} \;
+
+ offset="95" severity="error"
