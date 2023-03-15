@@ -34,7 +34,7 @@ public class ReleaseDetailsTest {
     @Test
     public final void testGetVersion() {
         ReleaseDetails instance = ReleaseDetails.getInstance();
-        assertEquals(instance.getVersion(), "0.1.2-TESTER");
+        assertEquals("0.1.2-TESTER", instance.getVersion());
     }
 
     /**

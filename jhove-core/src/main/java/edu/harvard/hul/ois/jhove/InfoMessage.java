@@ -17,16 +17,6 @@ public class InfoMessage extends Message {
 	private static final String prefix = "Info";
 
 	/**
-	 * Creates an InfoMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message giving the information.
-	 */
-	public InfoMessage(String message) {
-		super(message);
-	}
-
-	/**
 	 * Creates an InfoMessage with an identifier.
 	 * 
 	 * @param message
@@ -34,19 +24,6 @@ public class InfoMessage extends Message {
 	 */
 	public InfoMessage(JhoveMessage message) {
 		super(message);
-	}
-
-	/**
-	 * Creates an InfoMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message giving the information.
-	 * @param offset
-	 *            The offset in the file relevant to the
-	 *            situation being described.
-	 */
-	public InfoMessage(String message, long offset) {
-		super(message, offset);
 	}
 
 	/**
@@ -63,18 +40,6 @@ public class InfoMessage extends Message {
 	}
 
 	/**
-	 * Creates an InfoMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message giving the information.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 */
-	public InfoMessage(String message, String subMessage) {
-		super(message, subMessage);
-	}
-
-	/**
 	 * Creates an InfoMessage with an identifier.
 	 * 
 	 * @param message
@@ -84,21 +49,6 @@ public class InfoMessage extends Message {
 	 */
 	public InfoMessage(JhoveMessage message, String subMessage) {
 		super(message, subMessage);
-	}
-
-	/**
-	 * Creates an InfoMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message giving the information.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 * @param offset
-	 *            The offset in the file relevant to the
-	 *            situation being described.
-	 */
-	public InfoMessage(String message, String subMessage, long offset) {
-		super(message, subMessage, offset);
 	}
 
 	/**
