@@ -7,6 +7,7 @@ package edu.harvard.hul.ois.jhove.module.html;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.harvard.hul.ois.jhove.ErrorMessage;
 import edu.harvard.hul.ois.jhove.module.HtmlModule;
 
 public class ParseHtml implements ParseHtmlConstants {
@@ -115,7 +116,7 @@ public class ParseHtml implements ParseHtmlConstants {
             the whole thing from falling apart, yet will generate an error */
          {if (true) return new JHOpenTag (elements, name.image, attrs,
            name.beginLine, name.beginColumn,
-           MessageConstants.HTML_HUL_1.getMessage());}
+           new ErrorMessage(MessageConstants.HTML_HUL_1));}
      }
      else {
          {if (true) return new JHOpenTag (elements, name.image, attrs,

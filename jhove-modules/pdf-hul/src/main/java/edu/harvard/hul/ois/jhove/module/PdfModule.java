@@ -1423,11 +1423,7 @@ public class PdfModule extends ModuleBase {
 		} catch (PdfException e) {
 
 			e.disparage(info);
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// If it's merely invalid rather than ill-formed, keep going
 			return (e instanceof PdfInvalidException);
 		}
@@ -1505,11 +1501,7 @@ public class PdfModule extends ModuleBase {
 			} catch (PdfException e) {
 
 				e.disparage(info);
-				if (e.getJhoveMessage() != null)
 					info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-				else
-					info.setMessage(
-							new ErrorMessage(e.getMessage(), _parser.getOffset()));
 				// If it's merely invalid rather than ill-formed, keep going
 				return (e instanceof PdfInvalidException);
 			}
@@ -1577,16 +1569,18 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			return false;
 		} catch (Exception e) {
 			info.setValid(false);
+            String mess = MessageFormat.format(
+                    MessageConstants.PDF_HUL_157.getMessage(),
+                    e.getClass().getName());
+            JhoveMessage message = JhoveMessages.getMessageInstance(
+                    MessageConstants.PDF_HUL_157.getId(), mess);
 			info.setMessage(
-					new ErrorMessage(e.getMessage(), _parser.getOffset()));
+                    new ErrorMessage(message, e.getMessage(), _parser.getOffset()));
+            return false;
 		}
 		return true;
 	}
@@ -1616,11 +1610,12 @@ public class PdfModule extends ModuleBase {
 		} else if (_docCatDict.getObjNumber() != _docCatDictRef
 				.getObjNumber()) {
 			// If the returned object nmumber is not the same as that requested
-			_logger.warning(String
-					.format("Inconsistent Document Catalog Object Number"));
+            if (_logger.isLoggable(Level.WARNING)) {
+                _logger.warning("Inconsistent Document Catalog Object Number");
 			_logger.warning(String.format(
 					" - /Root indirect reference number: %d, returned object ID: %d.",
 					_docCatDictRef.getObjNumber(), _docCatDict.getObjNumber()));
+            }
 			info.setWellFormed(false);
 			info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_140, 0)); // PDF-HUL-140
 			return false;
@@ -1830,18 +1825,20 @@ public class PdfModule extends ModuleBase {
 
 		catch (PdfException e) {
 			e.disparage(info); // clears Valid or WellFormed as appropriate
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Keep going if it's only invalid
 			return (e instanceof PdfInvalidException);
 		} catch (Exception e) {
 			// Unexpected exception -- declare not well-formed
 			info.setWellFormed(false);
+			info.setValid(false);
+			String mess = MessageFormat.format(
+					MessageConstants.PDF_HUL_158.getMessage(),
+					e.getClass().getName());
+			JhoveMessage message = JhoveMessages.getMessageInstance(
+					MessageConstants.PDF_HUL_158.getId(), mess);
 			info.setMessage(
-					new ErrorMessage(e.toString(), _parser.getOffset()));
+					new ErrorMessage(message, e.getMessage(), _parser.getOffset()));
 			return false;
 		}
 		return true;
@@ -1999,11 +1996,7 @@ public class PdfModule extends ModuleBase {
 
 		} catch (PdfException e) {
 			e.disparage(info);
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			return (e instanceof PdfInvalidException);
 		}
 		return true;
@@ -2042,11 +2035,7 @@ public class PdfModule extends ModuleBase {
 					PROP_NAME_TRAPPED);
 		} catch (PdfException e) {
 			e.disparage(info);
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Keep parsing if it's only invalid
 			return (e instanceof PdfInvalidException);
 		} catch (Exception e) {
@@ -2088,11 +2077,7 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Continue parsing if it's only invalid
 			return (e instanceof PdfInvalidException);
 		} catch (ArrayIndexOutOfBoundsException excep) {
@@ -2123,11 +2108,7 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Continue parsing if it's only invalid
 			return (e instanceof PdfInvalidException);
 		} catch (Exception e) {
@@ -2188,11 +2169,7 @@ public class PdfModule extends ModuleBase {
 
 		} catch (PdfException e) {
 			e.disparage(info);
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Continue parsing if it's only invalid
 			return (e instanceof PdfInvalidException);
 		} catch (Exception e) {
@@ -2234,11 +2211,7 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			if (e.getJhoveMessage() != null) {
 				info.setMessage(new ErrorMessage(e.getJhoveMessage()));
-			} else {
-				info.setMessage(new ErrorMessage(e.getMessage()));
-			}
 		} catch (Exception e) {
 			info.setWellFormed(false);
 			String mess = MessageFormat.format(
@@ -2283,11 +2256,7 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			// Continue parsing if it's only invalid
 			return (e instanceof PdfInvalidException);
 		}
@@ -2589,11 +2558,7 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 		} catch (Exception e) {
 			info.setWellFormed(false);
 			String mess = MessageFormat.format(
@@ -2676,11 +2641,7 @@ public class PdfModule extends ModuleBase {
 			}
 		} catch (PdfException e) {
 			e.disparage(info);
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			return;
 		} catch (Exception e) {
 			// Unexpected exception.
@@ -3067,11 +3028,7 @@ public class PdfModule extends ModuleBase {
 		} catch (PdfException e) {
 
 			e.disparage(info);
-			if (e.getJhoveMessage() != null)
 				info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-			else
-				info.setMessage(
-						new ErrorMessage(e.getMessage(), _parser.getOffset()));
 			return;
 		}
 	}
@@ -4286,11 +4243,7 @@ public class PdfModule extends ModuleBase {
 					_skippedOutlinesReported = true;
 				}
 			} catch (PdfException e) {
-				if (e.getJhoveMessage() != null)
 					info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
-				else
-					info.setMessage(
-							new ErrorMessage(e.getMessage(), _parser.getOffset()));
 				e.disparage(info);
 				// If it's just invalid, we can keep going
 				return (e instanceof PdfInvalidException);
