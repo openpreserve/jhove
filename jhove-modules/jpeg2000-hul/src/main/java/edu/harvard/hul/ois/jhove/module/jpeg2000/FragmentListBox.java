@@ -21,7 +21,6 @@ public class FragmentListBox extends JP2Box {
 
     private List<long[]> _fragmentList;
     
-
     /**
      *  Constructor with superbox.
      * 
@@ -33,7 +32,8 @@ public class FragmentListBox extends JP2Box {
         super (raf, parent);
     }
 
-    /** Reads the box, putting appropriate information in
+    /**
+     * Reads the box, putting appropriate information in
      *  the RepInfo object.  setModule, setBoxHeader,
      *  setRepInfo and setDataInputStream must be called
      *  before <code>readBox</code> is called. 
@@ -44,8 +44,7 @@ public class FragmentListBox extends JP2Box {
     @Override
 	public boolean readBox() throws IOException {
         if (!_module.isJP2HdrSeen()) {
-            _repInfo.setMessage (new ErrorMessage 
-                (MessageConstants.JPEG2000_HUL_34, _module.getFilePos ()));
+            _repInfo.setMessage(new ErrorMessage(MessageConstants.JPEG2000_HUL_34, _module.getFilePos()));
             return false;
         }
         initBytesRead ();
@@ -53,9 +52,7 @@ public class FragmentListBox extends JP2Box {
 
         int nFrags = _module.readUnsignedShort (_dstrm);
         if (_boxHeader.getLength () != 0 && len != 14 * nFrags + 2) {
-            _repInfo.setMessage 
-                (new ErrorMessage
-                 (MessageConstants.JPEG2000_HUL_23,
+            _repInfo.setMessage(new ErrorMessage(MessageConstants.JPEG2000_HUL_23,
                   _module.getFilePos ()));
             _repInfo.setWellFormed (false);
             return false;
@@ -74,11 +71,9 @@ public class FragmentListBox extends JP2Box {
 
             if (dataRef != 0) {
                 _fragmentList = null;   // no can do fragments
-                _repInfo.setMessage (new InfoMessage 
-                    (MessageConstants.INF_FRAGMENT_LIST_BOX_EXT_FILE_REFERENCE,
+                _repInfo.setMessage(new InfoMessage(MessageConstants.JPEG2000_HUL_2,
                      _module.getFilePos()));
-            }
-            else if (_fragmentList != null) {
+            } else if (_fragmentList != null) {
                 long[] frag = new long[2];
                 frag[0] = offset;
                 frag[1] = fragLen;
@@ -89,19 +84,18 @@ public class FragmentListBox extends JP2Box {
         return true;                
     }
 
-
-    /** Returns the fragment list.  If there are external references
+    /**
+     * Returns the fragment list. If there are external references
      *  to fragments, returns null; in this case, a warning message
-     *  has been added to the RepInfo object. */
-    protected List getFragmentList ()
-    {
+     * has been added to the RepInfo object.
+     */
+    protected List getFragmentList() {
         return _fragmentList;
     }
 
     /** Returns the name of the Box.  */
     @Override
-	protected String getSelfPropName ()
-    {
+    protected String getSelfPropName() {
         return "Fragment List Box";
     }
 }

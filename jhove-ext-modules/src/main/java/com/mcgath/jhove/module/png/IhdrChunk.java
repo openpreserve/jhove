@@ -5,6 +5,8 @@ import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.RepInfo;
 //import edu.harvard.hul.ois.jhove.module.PngModule;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /** Representation of the IHDR (header) chunk */
 public class IhdrChunk extends PNGChunk {
@@ -112,9 +114,9 @@ public class IhdrChunk extends PNGChunk {
 			ctErr = true;
 		}
 		if (ctErr || colorType == 1 || colorType == 5 || colorType > 6) {
-			ErrorMessage msg = 
-					new ErrorMessage("Invalid color type " + colorType);
-			info.setMessage(msg);
+			JhoveMessage msg = JhoveMessages.getMessageInstance(MessageConstants.PNG_GDM_28.getId(),
+                MessageConstants.PNG_GDM_28.getId() + colorType);
+			info.setMessage(new ErrorMessage(msg));
 			info.setWellFormed(false);
 			badChunk = true;
 		} else {

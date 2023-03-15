@@ -558,12 +558,12 @@ public class TiffModule extends ModuleBase {
                  * property. If so, the IFD is invalid.
                  */
 
-                List<String> errors = ifd.getErrors();
+                List<ErrorMessage> errors = ifd.getErrors();
                 if (!errors.isEmpty()) {
                     info.setValid(false);
-                    ListIterator<String> eter = errors.listIterator();
+                    ListIterator<ErrorMessage> eter = errors.listIterator();
                     while (eter.hasNext()) {
-                        info.setMessage(new ErrorMessage(eter.next()));
+                        info.setMessage(eter.next());
                     }
                 }
 
@@ -625,11 +625,7 @@ public class TiffModule extends ModuleBase {
             info.setProperty(new Property("TIFFMetadata",
                     PropertyType.PROPERTY, PropertyArity.ARRAY, tiffMetadata));
         } catch (TiffException e) {
-            if (e.getJhoveMessage() != null) { // try to keep the id
-                info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
-            } else {
-                info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
-            }
+            info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
             info.setWellFormed(false);
             return;
         } catch (IOException e) {
@@ -722,12 +718,12 @@ public class TiffModule extends ModuleBase {
                  * property. If so, the IFD is invalid.
                  */
 
-                List<String> errors = ifd.getErrors();
+                List<ErrorMessage> errors = ifd.getErrors();
                 if (!errors.isEmpty()) {
                     info.setValid(false);
-                    ListIterator<String> eter = errors.listIterator();
+                    ListIterator<ErrorMessage> eter = errors.listIterator();
                     while (eter.hasNext()) {
-                        info.setMessage(new ErrorMessage(eter.next()));
+                        info.setMessage(eter.next());
                     }
                 }
 
@@ -737,10 +733,7 @@ public class TiffModule extends ModuleBase {
             // For parsing EXIF, we don't want to make the enclosing
             // document invalid, so we don't declare the EXIF non-well-formed
             // even though it is.
-            if (e.getJhoveMessage() != null)
-                info.setMessage(new InfoMessage(e.getJhoveMessage(), e.getOffset()));
-            else
-                info.setMessage(new InfoMessage(e.getMessage(), e.getOffset()));
+            info.setMessage(new InfoMessage(e.getJhoveMessage(), e.getOffset()));
             return ifds;
         } catch (IOException e) {
             JhoveMessage msg;
@@ -841,11 +834,7 @@ public class TiffModule extends ModuleBase {
                     checkValidity((TiffIFD) ifd, info);
                 }
             } catch (TiffException e) {
-                if (e.getJhoveMessage() != null) { // try to keep the id
-                    info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
-                } else {
-                    info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
-                }
+                info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
                 info.setValid(false);
             }
         }

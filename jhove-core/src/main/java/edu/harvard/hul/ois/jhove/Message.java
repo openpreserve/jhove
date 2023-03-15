@@ -6,7 +6,6 @@
 package edu.harvard.hul.ois.jhove;
 
 import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
-import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /**
  * This class encapsulates a message to be displayed.
@@ -36,16 +35,6 @@ public abstract class Message {
 	 * CLASS CONSTRUCTOR.
 	 ******************************************************************/
 
-	/**
-	 * Creates a Message with an unknown identifier for backward compatibility.
-	 * This constructor cannot be invoked directly, since Message is abstract.
-	 * 
-	 * @param message
-	 *            Human-readable message text.
-	 */
-	protected Message(final String message) {
-		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, message));
-	}
 
 	/**
 	 * Creates a Message with an identifier.
@@ -56,24 +45,6 @@ public abstract class Message {
 	 */
 	protected Message(final JhoveMessage message) {
 		this(message, message.getSubMessage(), NULL);
-	}
-
-	/**
-	 * Creates a Message.
-	 * This constructor cannot be invoked directly,
-	 * since Message is abstract. The second argument
-	 * adds secondary details to the primary message;
-	 * the message will typically be displayed in the
-	 * form "message: subMessage".
-	 * 
-	 * @param message
-	 *            Human-readable message text.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 */
-	protected Message(final String message, final String subMessage) {
-		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, message),
-				subMessage);
 	}
 
 	/**
@@ -94,24 +65,6 @@ public abstract class Message {
 	}
 
 	/**
-	 * Creates a Message.
-	 * This constructor cannot be invoked directly,
-	 * since Message is abstract. The second argument
-	 * adds secondary details to the primary message;
-	 * the message will typically be displayed in the
-	 * form "message: subMessage".
-	 * 
-	 * @param message
-	 *            Human-readable message text.
-	 * @param offset
-	 *            Byte offset associated with the message.
-	 */
-	protected Message(final String message, final long offset) {
-		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, message),
-				offset);
-	}
-
-	/**
 	 * Creates a Message with an identifier.
 	 * This constructor cannot be invoked directly,
 	 * since Message is abstract. The second argument
@@ -126,27 +79,6 @@ public abstract class Message {
 	 */
 	protected Message(final JhoveMessage message, final long offset) {
 		this(message, message.getSubMessage(), offset);
-	}
-
-	/**
-	 * Creates a Message.
-	 * This constructor cannot be invoked directly,
-	 * since Message is abstract. The second argument
-	 * adds secondary details to the primary message;
-	 * the message will typically be displayed in the
-	 * form "message: subMessage".
-	 * 
-	 * @param message
-	 *            Human-readable message text.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 * @param offset
-	 *            Byte offset associated with the message.
-	 */
-	protected Message(final String message, final String subMessage,
-			final long offset) {
-		this(JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, message),
-				subMessage, offset);
 	}
 
 	/**

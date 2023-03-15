@@ -5,6 +5,8 @@ import edu.harvard.hul.ois.jhove.Property;
 import edu.harvard.hul.ois.jhove.PropertyArity;
 import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /** The Transparency chunk.
  * 
@@ -35,9 +37,10 @@ public class TrnsChunk extends PNGChunk {
 	@Override
 	public void processChunk(RepInfo info) throws Exception {
 				processChunkCommon(info);
-		ErrorMessage msg = null;
+        boolean chunkOk = true;
 		if (_module.isIdatSeen()) {
-			msg = new ErrorMessage (MessageConstants.PNG_GDM_59);
+			info.setMessage(new ErrorMessage (MessageConstants.PNG_GDM_59));
+            chunkOk = false;
 		}
 		
 		int colorType = _module.getColorType();
@@ -45,19 +48,21 @@ public class TrnsChunk extends PNGChunk {
 
 		// Make sure there are enough bytes
 		if ((colorType == 0 && length < 2) || (colorType == 2 && length < 6)) {
-			msg = new ErrorMessage (MessageConstants.PNG_GDM_60);
+			info.setMessage(new ErrorMessage (MessageConstants.PNG_GDM_60));
+            chunkOk = false;
 		}
 		
 		// tRNS chunk allowed only with certain color types
 		if (colorType != 0 && colorType != 2 && colorType != 3) {
-			msg = new ErrorMessage (
-					String.format(
-							MessageConstants.PNG_GDM_61.getMessage(), 
+            JhoveMessage msg = JhoveMessages.getMessageInstance(
+                    MessageConstants.PNG_GDM_61.getId(),
+                    String.format(MessageConstants.PNG_GDM_61.getMessage(),
 							colorType));
+			info.setMessage(new ErrorMessage(msg));
+            chunkOk = false;
 		}
 		
-		if (msg != null) {
-			info.setMessage (msg);
+		if (!chunkOk) {
 			info.setWellFormed(false);
 			throw new PNGException (MessageConstants.PNG_GDM_62);
 		}
