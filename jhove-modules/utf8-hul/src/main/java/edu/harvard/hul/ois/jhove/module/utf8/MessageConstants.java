@@ -48,4 +48,5 @@ public enum MessageConstants {
 	public static final JhoveMessage UTF8_HUL_7 = messageFactory.getMessage("UTF8-HUL-7");
 	public static final JhoveMessage UTF8_HUL_8 = messageFactory.getMessage("UTF8-HUL-8");
 	public static final JhoveMessage UTF8_HUL_9 = messageFactory.getMessage("UTF8-HUL-9");
+    public static final JhoveMessage UTF8_HUL_10 = messageFactory.getMessage("UTF8-HUL-10");
 }

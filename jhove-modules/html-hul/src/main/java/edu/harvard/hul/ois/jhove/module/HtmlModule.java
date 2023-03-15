@@ -418,7 +418,7 @@ public class HtmlModule extends ModuleBase {
 			String lineEnd = cstream.getKindOfLineEnd();
 			if (lineEnd == null) {
 				info.setMessage(
-						new InfoMessage(MessageConstants.INF_EOL_TYPE_UNDET));
+						new InfoMessage(MessageConstants.HTML_HUL_23));
 				_textMD.setLinebreak(TextMDMetadata.NILL);
 			} else if ("CR".equalsIgnoreCase(lineEnd)) {
 				_textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
@@ -498,7 +498,7 @@ public class HtmlModule extends ModuleBase {
 			_textMD.setMarkup_language(_doctype);
 			if (docDesc == null) {
 				info.setMessage(new InfoMessage(
-						MessageConstants.INF_HTML_VER_UNSPPRTD));
+						MessageConstants.HTML_HUL_22));
 				docDesc = new Html3_2DocDesc();
 			}
 			docDesc.validate(elements, info);

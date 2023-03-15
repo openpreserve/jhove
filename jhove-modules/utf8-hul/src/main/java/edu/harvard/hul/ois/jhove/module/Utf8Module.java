@@ -57,8 +57,6 @@ import edu.harvard.hul.ois.jhove.module.utf8.Utf8BlockMarker;
  */
 public class Utf8Module extends ModuleBase {
 
-    public final static String INF_PRINT_CHAR_MISS = "No printable characters";
-
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
@@ -399,7 +397,7 @@ public class Utf8Module extends ModuleBase {
         }
 
         if (!printableChars) {
-            info.setMessage(new InfoMessage(INF_PRINT_CHAR_MISS));
+            info.setMessage(new InfoMessage(MessageConstants.UTF8_HUL_10));
         }
 
         return 0;

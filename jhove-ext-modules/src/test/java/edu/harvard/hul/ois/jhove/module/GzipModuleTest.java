@@ -200,7 +200,7 @@ public class GzipModuleTest {
 
         // Validate the failures.
         assertEquals(1, info.getMessage().size());
-        Map<String, Integer> messages = extractMessages(info.getMessage());
+        Map<String, Integer> messages = extractSubMessages(info.getMessage());
         for(Map.Entry<String, Integer> e : messages.entrySet()) {
             System.out.println(e.getKey() + " : " + e.getValue());
         }
@@ -209,7 +209,8 @@ public class GzipModuleTest {
         String errorMessage = messageKeyIterator.next();
         assertNotNull(errorMessage);
 //        assertTrue("java.util.zip.DataFormatException");
-        assertTrue(errorMessage + " should contain " + DataFormatException.class.toString(), errorMessage.contains(DataFormatException.class.getCanonicalName()));
+        assertTrue(errorMessage + " should contain " + DataFormatException.class.toString(),
+                errorMessage.contains(DataFormatException.class.getCanonicalName()));
         assertFalse(messageKeyIterator.hasNext());
     }
     
@@ -224,4 +225,15 @@ public class GzipModuleTest {
 		}
 		return res;
 	}
+    private static Map<String, Integer> extractSubMessages(Collection<Message> messages) {
+        Map<String, Integer> res = new HashMap<>();
+        for (Message m : messages) {
+            if (res.containsKey(m.getSubMessage())) {
+                res.put(m.getSubMessage(), Integer.valueOf(res.get(m.getSubMessage()).intValue() + 1));
+            } else {
+                res.put(m.getSubMessage(), Integer.valueOf(1));
+            }
+        }
+        return res;
+    }
 }
