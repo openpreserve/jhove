@@ -106,7 +106,7 @@ public abstract class IFD
     protected boolean _bigEndian;
 
     /** List of errors. */
-    private List<String> _errors;
+    private List<ErrorMessage> _errors;
 
     /** True if this is the first IFD. */
     private boolean _first;
@@ -169,7 +169,7 @@ public abstract class IFD
     /** Get any errors discovered during parsing.
      * @return list of strings with errors
      */
-    public List<String> getErrors()
+    public List<ErrorMessage> getErrors()
     {
         return _errors;
     }
@@ -263,7 +263,7 @@ public abstract class IFD
             // but we can't follow the IFD chain further.
             if (suppressErrors) {
                 _info.setMessage
-                    (new InfoMessage(e.getMessage(), e.getOffset()));
+                    (new InfoMessage(e.getJhoveMessage(), e.getOffset()));
                 return 0;
             }
             throw e;
@@ -421,7 +421,8 @@ public abstract class IFD
                 }
             }
             catch (Exception e) {
-                _errors.add(MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value)));
+                final String mess = MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value));
+                _errors.add(new ErrorMessage(JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_66.getId(), mess)));
             }
             prop = new Property(name, PropertyType.STRING,
                                 PropertyArity.LIST, list);
@@ -458,7 +459,8 @@ public abstract class IFD
                 prop = new Property(name, PropertyType.STRING, labels[value]);
             }
             catch (ArrayIndexOutOfBoundsException aioobe) {
-                _errors.add(MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value)));
+                final String mess = MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value));
+                _errors.add(new ErrorMessage(JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_66.getId(), mess)));
             }
         }
         if (prop == null) {
@@ -503,7 +505,8 @@ public abstract class IFD
                 prop = new Property(name, PropertyType.STRING, labels[n]);
             }
             else {
-                _errors.add(MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value)));
+                final String mess = MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value));
+                _errors.add(new ErrorMessage(JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_66.getId(), mess)));
             }
         }
         if (prop == null) {
@@ -541,7 +544,8 @@ public abstract class IFD
                     s[i] = labels[value[i]];
                 }
                 catch (ArrayIndexOutOfBoundsException aioobe) {
-                    _errors.add(MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value[i])));
+                    final String mess = MessageFormat.format(MessageConstants.TIFF_HUL_66.getMessage(), name, Long.valueOf(value[i]));
+                    _errors.add(new ErrorMessage(JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_66.getId(), mess)));
                 }
             }
             prop = new Property(name, PropertyType.STRING,
