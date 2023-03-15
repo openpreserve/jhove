@@ -39,10 +39,13 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 public enum MessageConstants {
 	INSTANCE;
+
 	public static final JhoveMessageFactory messageFactory = JhoveMessages.getInstance(
 			"edu.harvard.hul.ois.jhove.module.jpeg.ErrorMessages");
-	public static final String INF_EXIF_REPORT_REQUIRES_TIFF = "TIFF-HUL module required to report Exif data";
 	public static final String INF_EXIF_APP2_MULTI_REPORT = "ICCProfile in multiple APP2 segments; not handled by JPEG-hul";
+
+    public static final JhoveMessage JPEG_HUL_14 = messageFactory.getMessage("JPEG-HUL-14");
+
 
 	public static final JhoveMessage JPEG_HUL_1 = messageFactory.getMessage("JPEG-HUL-1");
 	public static final JhoveMessage JPEG_HUL_2 = messageFactory.getMessage("JPEG-HUL-2");
@@ -59,5 +62,5 @@ public enum MessageConstants {
 	public static final JhoveMessage JPEG_HUL_12 = messageFactory.getMessage("JPEG-HUL-12");
 	public static final JhoveMessage JPEG_HUL_13 = messageFactory.getMessage("JPEG-HUL-13");
 
-	public static final JhoveMessage JHOVE_1 = messageFactory.getMessage("JHOVE-1");
+    public static final JhoveMessage JHOVE_SYS_1 = messageFactory.getMessage("JHOVE-SYS-1");
 }
