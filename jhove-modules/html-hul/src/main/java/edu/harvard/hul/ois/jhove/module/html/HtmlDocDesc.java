@@ -142,10 +142,9 @@ public abstract class HtmlDocDesc {
 		String name = tag.getName().toLowerCase();
 		boolean unknownTag = false;
 
-		String msg = tag.getErrorMessage();
+		ErrorMessage msg = tag.getErrorMessage();
 		if (msg != null) {
-			info.setMessage(new ErrorMessage(msg, "Name = " + name + ", Line = "
-					+ tag.getLine() + ", Column = " + tag.getColumn()));
+			info.setMessage(msg);
 			info.setWellFormed(false);
 			// But keep going anyway!
 		}
