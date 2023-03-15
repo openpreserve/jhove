@@ -1138,9 +1138,9 @@ public class JpegModule extends ModuleBase {
 			_seenExif = true;
 			if (!JpegExif.isTiffAvailable()) {
 				info.setMessage(new InfoMessage(
-						MessageConstants.INF_EXIF_REPORT_REQUIRES_TIFF,
+						MessageConstants.JPEG_HUL_14,
 						_nByte));
-				skipBytes(_dstream, length - 8, this);
+				skipBytes(_dstream, (long)length - 8, this);
 				return;
 			}
 			JpegExif je = new JpegExif(this);

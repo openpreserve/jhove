@@ -48,14 +48,12 @@ public enum MessageConstants {
 	/**
 	 * Information messages
 	 */
-	public static final String INF_BINARY_FILTER_BOX_NOT_GZIP = "Binary Filter Box of type other than Gzip, contents not processed";
-	public static final String INF_FRAGMENT_LIST_BOX_EXT_FILE_REFERENCE = "Document references an external file";
+	public static final JhoveMessage JPEG2000_HUL_1 = messageFactory.getMessage("JPEG2000-HUL-1");
+	public static final JhoveMessage JPEG2000_HUL_2 = messageFactory.getMessage("JPEG2000-HUL-2");
 
 	/**
 	 * Error messages
 	 */
-//	public static final JhoveMessage JPEG2000_HUL_1 = messageFactory.getMessage("JPEG2000-HUL-1");
-//	public static final JhoveMessage JPEG2000_HUL_2 = messageFactory.getMessage("JPEG2000-HUL-2");
 	public static final JhoveMessage JPEG2000_HUL_3 = messageFactory.getMessage("JPEG2000-HUL-3");
 	public static final JhoveMessage JPEG2000_HUL_4 = messageFactory.getMessage("JPEG2000-HUL-4");
 	public static final JhoveMessage JPEG2000_HUL_5 = messageFactory.getMessage("JPEG2000-HUL-5");

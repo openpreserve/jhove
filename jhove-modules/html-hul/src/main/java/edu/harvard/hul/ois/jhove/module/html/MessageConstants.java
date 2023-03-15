@@ -43,8 +43,6 @@ public enum MessageConstants {
 	// should never occur once the parser is correct...
 	// public static final String WRN_INCORRECT_AUTO_CLOSED_TAG = "Construction
 	// with \"/>\" is incorrect except in XHTML";
-	public static final String INF_HTML_VER_UNSPPRTD = "This HTML version is currently not supported, falling back to HTML 3.2";
-	public static final String INF_EOL_TYPE_UNDET = "Not able to determine type of end of line";
 
 	public static final JhoveMessage HTML_HUL_1 = messageFactory.getMessage("HTML-HUL-1");
 	public static final JhoveMessage HTML_HUL_2 = messageFactory.getMessage("HTML-HUL-2");
@@ -68,6 +66,9 @@ public enum MessageConstants {
 	public static final JhoveMessage HTML_HUL_19 = messageFactory.getMessage("HTML-HUL-19");
 	public static final JhoveMessage HTML_HUL_20 = messageFactory.getMessage("HTML-HUL-20");
 	public static final JhoveMessage HTML_HUL_21 = messageFactory.getMessage("HTML-HUL-21");
+    // Info messages
+    public static final JhoveMessage HTML_HUL_22 = messageFactory.getMessage("HTML-HUL-22");
+    public static final JhoveMessage HTML_HUL_23 = messageFactory.getMessage("HTML-HUL-23");
 
 	public static final JhoveMessage JHOVE_1 = messageFactory.getMessage("JHOVE-1");
 	public static final JhoveMessage JHOVE_2 = messageFactory.getMessage("JHOVE-2");
