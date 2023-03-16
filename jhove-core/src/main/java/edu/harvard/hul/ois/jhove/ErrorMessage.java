@@ -11,9 +11,7 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
  * This class encapsulates an error message from a Module, representing
  * a problem in the content being analyzed.
  */
-public class ErrorMessage extends Message {
-
-	private static final String prefix = "Error";
+public final class ErrorMessage extends Message {
 
 	/******************************************************************
 	 * CLASS CONSTRUCTOR.
@@ -26,7 +24,7 @@ public class ErrorMessage extends Message {
 	 *            The message text and its identifier.
 	 */
 	public ErrorMessage(JhoveMessage message) {
-		super(message);
+        this(message, NULL);
 	}
 
 	/**
@@ -39,7 +37,7 @@ public class ErrorMessage extends Message {
 	 *            was detected.
 	 */
 	public ErrorMessage(JhoveMessage message, long offset) {
-		super(message, offset);
+        this(message, message.getSubMessage(), offset);
 	}
 
 	/**
@@ -51,7 +49,7 @@ public class ErrorMessage extends Message {
 	 *            Human-readable additional information.
 	 */
 	public ErrorMessage(JhoveMessage message, String subMessage) {
-		super(message, subMessage);
+        this(message, subMessage, NULL);
 	}
 
 	/**
@@ -67,11 +65,6 @@ public class ErrorMessage extends Message {
 	 */
 	public ErrorMessage(JhoveMessage message, String subMessage,
 			long offset) {
-		super(message, subMessage, offset);
-	}
-
-	@Override
-	public String getPrefix() {
-		return prefix;
+        super(message, subMessage, offset, "Error");
 	}
 }
