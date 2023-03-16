@@ -140,11 +140,56 @@ echo " - PR:748 JPEG result patch 1."
 	cp "${candidateRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml" "${targetRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml"
 fi
 
-# Place IDs into all of the JP2K messages that have errors, there's only one code.
+# Place IDs into all of the JP2K messages that have errors, there's only one code. This is for https://github.com/openpreserve/jhove/pull/832
 find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="0" severity="error>"/offset="0" severity="error" id="JPEG2000-HUL-5">/' {} \;
 find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="11" severity="error>"/offset="11" severity="error" id="JPEG2000-HUL-5">/' {} \;
 find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="95" severity="error>"/offset="95" severity="error" id="JPEG2000-HUL-5">/' {} \;
 find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="594" severity="error>"/offset="594" severity="error" id="JPEG2000-HUL-5">/' {} \;
 find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/severity="error">/severity="error" id="JHOVE-CORE-5">/' {} \;
 
- offset="95" severity="error"
+# Copy the XML result of regression/modules/JPEG-hul/19_e190014.jpg.jhove.xml follwing https://github.com/openpreserve/jhove/pull/784
+if [[ -f "${candidateRoot}/regression/modules/JPEG-hul/19_e190014.jpg.jhove.xml" ]]; then
+echo " - PR:784 JPEG result patch 1."
+	cp "${candidateRoot}/regression/modules/JPEG-hul/19_e190014.jpg.jhove.xml" "${targetRoot}/regression/modules/JPEG-hul/19_e190014.jpg.jhove.xml"
+fi
+
+# Finally copy the files affected by the duplicate error removal
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-86-govdocs-445892.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-86-govdocs-445892.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-86-govdocs-445892.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-35-govdocs-156429.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-35-govdocs-156429.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-35-govdocs-156429.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-5-govdocs-659152.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-5-govdocs-659152.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-5-govdocs-659152.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/errors/modules/WAVE-hul/wf-pcm-44khz-8bit-mono-truncated-inner-chunk-by-2-bytes.wav.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/WAVE-hul/wf-pcm-44khz-8bit-mono-truncated-inner-chunk-by-2-bytes.wav.jhove.xml" "${targetRoot}/errors/modules/WAVE-hul/wf-pcm-44khz-8bit-mono-truncated-inner-chunk-by-2-bytes.wav.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/errors/modules/WAVE-hul/wf-pcm-44khz-8bit-mono-fmt-chunk-missing.wav.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/WAVE-hul/wf-pcm-44khz-8bit-mono-fmt-chunk-missing.wav.jhove.xml" "${targetRoot}/errors/modules/WAVE-hul/wf-pcm-44khz-8bit-mono-fmt-chunk-missing.wav.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/errors/modules/WAVE-hul/wf-pcm-44khz-8bit-mono-chunk-size-larger-than-bytes-remaining.wav.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/WAVE-hul/wf-pcm-44khz-8bit-mono-chunk-size-larger-than-bytes-remaining.wav.jhove.xml" "${targetRoot}/errors/modules/WAVE-hul/wf-pcm-44khz-8bit-mono-chunk-size-larger-than-bytes-remaining.wav.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/class-cast.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/regression/modules/PDF-hul/class-cast.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/class-cast.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_306.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/regression/modules/PDF-hul/issue_306.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_306.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/quad-tile.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/quad-tile.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/quad-tile.tif.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/peppers.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/peppers.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/peppers.tif.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/cramps-tile.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/cramps-tile.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/cramps-tile.tif.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/smallliz.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/smallliz.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/smallliz.tif.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/zackthecat.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/zackthecat.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/zackthecat.tif.jhove.xml"
+fi
