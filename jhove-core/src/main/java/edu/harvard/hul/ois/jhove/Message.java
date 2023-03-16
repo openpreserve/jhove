@@ -39,51 +39,6 @@ public abstract class Message {
 
 	/**
 	 * Creates a Message with an identifier.
-	 * This constructor cannot be invoked directly, since Message is abstract.
-	 * 
-	 * @param message
-	 *            The message text and its identifier.
-	 */
-	protected Message(final JhoveMessage message) {
-        this(message, message.getSubMessage());
-	}
-
-	/**
-	 * Creates a Message with an identifier.
-	 * This constructor cannot be invoked directly,
-	 * since Message is abstract. The second argument
-	 * adds secondary details to the primary message;
-	 * the message will typically be displayed in the
-	 * form "message: subMessage".
-	 * 
-	 * @param message
-	 *            The message text and its identifier.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 */
-	protected Message(final JhoveMessage message, final String subMessage) {
-        this(message, subMessage, NULL, "");
-	}
-
-	/**
-	 * Creates a Message with an identifier.
-	 * This constructor cannot be invoked directly,
-	 * since Message is abstract. The second argument
-	 * adds secondary details to the primary message;
-	 * the message will typically be displayed in the
-	 * form "message: subMessage".
-	 * 
-	 * @param message
-	 *            The message text and its identifier.
-	 * @param offset
-	 *            Byte offset associated with the message.
-	 */
-	protected Message(final JhoveMessage message, final long offset) {
-        this(message, message.getSubMessage(), offset, "");
-	}
-
-	/**
-	 * Creates a Message with an identifier.
 	 * This constructor cannot be invoked directly,
 	 * since Message is abstract. The second argument
 	 * adds secondary details to the primary message;
