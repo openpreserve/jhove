@@ -1174,7 +1174,12 @@ public class TiffModule extends ModuleBase {
             if ((next & 1) != 0) {
                 String mess = MessageFormat.format(MessageConstants.TIFF_HUL_59.getMessage(), next);
                 JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_59.getId(), mess);
-                throw new TiffException(message);
+                if (_byteOffsetIsValid) {
+                    info.setMessage(new InfoMessage(message));
+                } else {
+                    info.setMessage(new ErrorMessage(message));
+                    info.setWellFormed(false);
+                }
             }
             if (list.size() > 50) {
                 throw new TiffException(MessageConstants.TIFF_HUL_60);
