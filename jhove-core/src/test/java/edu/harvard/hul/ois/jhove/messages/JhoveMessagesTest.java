@@ -2,6 +2,7 @@ package edu.harvard.hul.ois.jhove.messages;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -122,6 +123,9 @@ public class JhoveMessagesTest {
     @Test
     public void testEqualsContract() {
         EqualsVerifier.forClass(JhoveMessageImpl.class).verify();
+        assertNotEquals(JhoveMessages.DEFAULT_MESSAGE, JhoveMessages.getMessageInstance("ID", "MSG"));
+        assertEquals(JhoveMessages.DEFAULT_MESSAGE,
+                JhoveMessages.getMessageInstance(JhoveMessages.NO_ID, JhoveMessages.EMPTY_MESSAGE));
     }
 
     @Test
@@ -173,6 +177,8 @@ public class JhoveMessagesTest {
             System.setProperty("module.language", "");
             JhoveMessageFactory messageFactory = JhoveMessages
                     .getInstance("edu.harvard.hul.ois.jhove.messages.ErrorMessages");
+            JhoveMessage msg = messageFactory.getMessage("MSG");
+            assertEquals("English", msg.getMessage());
         }
     }
 }
