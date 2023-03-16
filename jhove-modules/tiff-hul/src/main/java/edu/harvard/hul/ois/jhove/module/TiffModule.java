@@ -1223,6 +1223,10 @@ public class TiffModule extends ModuleBase {
             ifd.setThumbnail(true);
         }
         list.add(ifd);
+        
+        if (list.size() > 50) {
+            throw new TiffException(MessageConstants.TIFF_HUL_60);
+        }
 
         if (ifd instanceof TiffIFD) {
             TiffIFD tifd = (TiffIFD) ifd;
