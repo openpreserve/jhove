@@ -62,8 +62,8 @@ public class GzipModule extends ModuleBase {
             .web("http://kb.dk").build();
 
     private static final String NAME = "GZIP-kb";
-    private static final String RELEASE = "0.2";
-    private static final int[] DATE = { 2022, 04, 22 };
+    private static final String RELEASE = "0.3";
+    private static final int[] DATE = { 2023, 03, 16 };
     private static final String[] FORMAT = { "GZIP" };
     private static final String COVERAGE = "GZIP, https://tools.ietf.org/html/rfc1952";
     private static final String[] MIMETYPE = { "application/gzip", "application/x-gzip" };

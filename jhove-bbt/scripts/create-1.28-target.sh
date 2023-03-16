@@ -61,10 +61,10 @@ cp -R "${baselineRoot}" "${targetRoot}"
 find "${targetRoot}" -type f -name "6mp_soft.tif.jhove.xml" -exec sed -i 's/>DSC</>digital still camera</' {} \;
 
 # Update release details for PDF module
-find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.12.3" date="2022-04-22">PDF-hul<\/reportingModule>$/  <reportingModule release="1.12.4" date="2023-01-31">PDF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.12.3" date="2022-04-22">PDF-hul<\/reportingModule>$/  <reportingModule release="1.12.4" date="2023-03-16">PDF-hul<\/reportingModule>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.12.3">PDF-hul<\/module>$/   <module release="1.12.4">PDF-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <release>1.12.3<\/release>$/  <release>1.12.4<\/release>/' {} \;
-find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/2022-04-22/2023-01-31/' {} \;
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/2022-04-22/2023-03-16/' {} \;
 
 # Copy examples for encrypted dictionaries
 if [[ -f "${candidateRoot}/errors/modules/PDF-hul/issue6010_1.pdf.jhove.xml" ]]; then
@@ -128,10 +128,10 @@ fi
 
 
 # Update release details for PDF module
-find "${targetRoot}" -type f -name "*.jpg.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.5.3" date="2022-04-22">JPEG-hul<\/reportingModule>$/  <reportingModule release="1.5.4" date="2023-01-31">JPEG-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.jpg.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.5.3" date="2022-04-22">JPEG-hul<\/reportingModule>$/  <reportingModule release="1.5.4" date="2023-03-16">JPEG-hul<\/reportingModule>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.5.3">JPEG-hul<\/module>$/   <module release="1.5.4">JPEG-hul<\/module>/' {} \;
 find "${targetRoot}" -type f -name "audit-JPEG-hul.jhove.xml" -exec sed -i 's/^  <release>1.5.3<\/release>$/  <release>1.5.4<\/release>/' {} \;
-find "${targetRoot}" -type f -name "audit-JPEG-hul.jhove.xml" -exec sed -i 's/2022-04-22/2023-01-31/' {} \;
+find "${targetRoot}" -type f -name "audit-JPEG-hul.jhove.xml" -exec sed -i 's/2022-04-22/2023-03-16/' {} \;
 
 # Copy the XML result of examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml
 # changed by https://github.com/openpreserve/jhove/pull/748
@@ -140,12 +140,58 @@ echo " - PR:748 JPEG result patch 1."
 	cp "${candidateRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml" "${targetRoot}/examples/modules/JPEG-hul/20150213_140637.jpg.jhove.xml"
 fi
 
-# Place IDs into all of the JP2K messages that have errors, there's only one code. This is for https://github.com/openpreserve/jhove/pull/832
+# Place IDs into all of the JP2K messages that have errors, there's only one code.
 find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="0" severity="error>"/offset="0" severity="error" id="JPEG2000-HUL-5">/' {} \;
 find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="11" severity="error>"/offset="11" severity="error" id="JPEG2000-HUL-5">/' {} \;
 find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="95" severity="error>"/offset="95" severity="error" id="JPEG2000-HUL-5">/' {} \;
 find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/offset="594" severity="error>"/offset="594" severity="error" id="JPEG2000-HUL-5">/' {} \;
 find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/severity="error">/severity="error" id="JHOVE-CORE-5">/' {} \;
+
+
+# Update release details for JP2K module
+find "${targetRoot}" -type f -name "*.md.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.4.3" date="2022-04-22">JPEG2000-hul<\/reportingModule>$/  <reportingModule release="1.4.4" date="2023-03-16">JPEG2000-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.jpx.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.4.3" date="2022-04-22">JPEG2000-hul<\/reportingModule>$/  <reportingModule release="1.4.4" date="2023-03-16">JPEG2000-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.jp2.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.4.3" date="2022-04-22">JPEG2000-hul<\/reportingModule>$/  <reportingModule release="1.4.4" date="2023-03-16">JPEG2000-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.4.3">JPEG2000-hul<\/module>$/   <module release="1.4.4">JPEG2000-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-JPEG2000-hul.jhove.xml" -exec sed -i 's/^  <release>1.4.3<\/release>$/  <release>1.4.4<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-JPEG2000-hul.jhove.xml" -exec sed -i 's/2022-04-22/2023-03-16/' {} \;
+
+# Update release details for TIFF module
+find "${targetRoot}" -type f -name "*.tif.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.9.3" date="2022-04-22">TIFF-hul<\/reportingModule>$/  <reportingModule release="1.9.4" date="2023-03-16">TIFF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.g3.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.9.3" date="2022-04-22">TIFF-hul<\/reportingModule>$/  <reportingModule release="1.9.4" date="2023-03-16">TIFF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.9.3">TIFF-hul<\/module>$/   <module release="1.9.4">TIFF-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-TIFF-hul.jhove.xml" -exec sed -i 's/^  <release>1.9.3<\/release>$/  <release>1.9.4<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-TIFF-hul.jhove.xml" -exec sed -i 's/2022-04-22/2023-03-16/' {} \;
+
+# Update release details for HTML module
+find "${targetRoot}" -type f -name "*.html.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.4.2" date="2022-04-22">HTML-hul<\/reportingModule>$/  <reportingModule release="1.4.3" date="2023-03-16">HTML-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.4.2">HTML-hul<\/module>$/   <module release="1.4.3">HTML-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-HTML-hul.jhove.xml" -exec sed -i 's/^  <release>1.4.2<\/release>$/  <release>1.4.3<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-HTML-hul.jhove.xml" -exec sed -i 's/2022-04-22/2023-03-16/' {} \;
+
+# Update release details for UTF8 module
+find "${targetRoot}" -type f -name "*.txt.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.7.2" date="2022-04-22">UTF8-hul<\/reportingModule>$/  <reportingModule release="1.7.3" date="2023-03-16">UTF8-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.7.2">UTF8-hul<\/module>$/   <module release="1.7.3">UTF8-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-UTF8-hul.jhove.xml" -exec sed -i 's/^  <release>1.7.2<\/release>$/  <release>1.7.3<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-UTF8-hul.jhove.xml" -exec sed -i 's/2022-04-22/2023-03-16/' {} \;
+
+# Update release details for XML module
+find "${targetRoot}" -type f -name "*.xml.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.5.2" date="2022-04-22">XML-hul<\/reportingModule>$/  <reportingModule release="1.5.3" date="2023-03-16">XML-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.ent.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.5.2" date="2022-04-22">XML-hul<\/reportingModule>$/  <reportingModule release="1.5.3" date="2023-03-16">XML-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.dtd.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.5.2" date="2022-04-22">XML-hul<\/reportingModule>$/  <reportingModule release="1.5.3" date="2023-03-16">XML-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.5.2">XML-hul<\/module>$/   <module release="1.5.3">XML-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-XML-hul.jhove.xml" -exec sed -i 's/^  <release>1.5.2<\/release>$/  <release>1.5.3<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-XML-hul.jhove.xml" -exec sed -i 's/2022-04-22/2023-03-16/' {} \;
+
+# Update release details for PNG module
+find "${targetRoot}" -type f -name "*.png.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.1" date="2022-04-22">PNG-gdm<\/reportingModule>$/  <reportingModule release="1.2" date="2023-03-16">PNG-gdm<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.1">PNG-gdm<\/module>$/   <module release="1.2">PNG-gdm<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-PNG-gdm.jhove.xml" -exec sed -i 's/^  <release>1.1<\/release>$/  <release>1.2<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-PNG-gdm.jhove.xml" -exec sed -i 's/2022-04-22/2023-03-16/' {} \;
+
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.1">EPUB-ptc<\/module>$/   <module release="1.2">EPUB-ptc<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="0.2">GZIP-kb<\/module>$/   <module release="0.3">GZIP-kb<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.1">WARC-kb<\/module>$/   <module release="1.2">WARC-kb<\/module>/' {} \;
 
 # Copy the XML result of regression/modules/JPEG-hul/19_e190014.jpg.jhove.xml follwing https://github.com/openpreserve/jhove/pull/784
 if [[ -f "${candidateRoot}/regression/modules/JPEG-hul/19_e190014.jpg.jhove.xml" ]]; then

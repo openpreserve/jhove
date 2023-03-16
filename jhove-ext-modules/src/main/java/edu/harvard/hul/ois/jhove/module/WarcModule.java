@@ -63,8 +63,8 @@ public class WarcModule extends ModuleBase {
             .web("http://kb.dk").build();
 
     private static final String NAME = "WARC-kb";
-    private static final String RELEASE = "1.1";
-    private static final int[] DATE = { 2022, 04, 22 };
+    private static final String RELEASE = "1.2";
+    private static final int[] DATE = { 2022, 03, 16 };
     private static final String[] FORMAT = {
             "WARC", "WARC, Web ARChive file format"
     };
