@@ -43,8 +43,8 @@ public class PngModule extends ModuleBase {
      ******************************************************************/
 
     private static final String NAME = "PNG-gdm";
-    private static final String RELEASE = "1.1";
-    private static final int[] DATE = { 2022, 04, 22 };
+    private static final String RELEASE = "1.2";
+    private static final int[] DATE = { 2023, 03, 16 };
     private static final String[] FORMAT = {
             "PNG", " ISO/IEC 15948:2003", "Portable Network Graphics"
     };
