@@ -23,18 +23,19 @@ public abstract class Message {
 	 * PRIVATE INSTANCE FIELDS.
 	 ******************************************************************/
 
-	protected final JhoveMessage message;
+    protected final JhoveMessage jhoveMessage;
 
 	/** Additional information. */
-	protected final String _subMessage;
+    protected final String subMessage;
 
 	/** Byte offset to which message applies. */
-	protected final long _offset;
+    protected final long offset;
+
+    protected final String prefix;
 
 	/******************************************************************
 	 * CLASS CONSTRUCTOR.
 	 ******************************************************************/
-
 
 	/**
 	 * Creates a Message with an identifier.
@@ -44,7 +45,7 @@ public abstract class Message {
 	 *            The message text and its identifier.
 	 */
 	protected Message(final JhoveMessage message) {
-		this(message, message.getSubMessage(), NULL);
+        this(message, message.getSubMessage());
 	}
 
 	/**
@@ -61,7 +62,7 @@ public abstract class Message {
 	 *            Human-readable additional information.
 	 */
 	protected Message(final JhoveMessage message, final String subMessage) {
-		this(message, subMessage, NULL);
+        this(message, subMessage, NULL, "");
 	}
 
 	/**
@@ -78,7 +79,7 @@ public abstract class Message {
 	 *            Byte offset associated with the message.
 	 */
 	protected Message(final JhoveMessage message, final long offset) {
-		this(message, message.getSubMessage(), offset);
+        this(message, message.getSubMessage(), offset, "");
 	}
 
 	/**
@@ -96,12 +97,13 @@ public abstract class Message {
 	 * @param offset
 	 *            Byte offset associated with the message.
 	 */
-	protected Message(final JhoveMessage message, String subMessage,
-			long offset) {
+    protected Message(final JhoveMessage message, final String subMessage,
+            final long offset, final String prefix) {
 		super();
-		this.message = message;
-		this._subMessage = (subMessage.isEmpty()) ? null : subMessage;
-		this._offset = offset;
+        this.jhoveMessage = message;
+        this.subMessage = (subMessage.isEmpty()) ? null : subMessage;
+        this.offset = offset;
+        this.prefix = prefix;
 	}
 
 	/******************************************************************
@@ -114,36 +116,81 @@ public abstract class Message {
 	 * Returns the message text.
 	 */
 	public String getMessage() {
-		return this.message.getMessage();
+        return this.jhoveMessage.getMessage();
 	}
 
 	/**
 	 * Returns the submessage text.
 	 */
 	public String getSubMessage() {
-		return this._subMessage;
+        return this.subMessage;
 	}
 
 	/**
 	 * Returns the offset to which this message is related.
 	 */
 	public long getOffset() {
-		return this._offset;
+        return this.offset;
 	}
 
 	/**
 	 * Returns the message's identifier.
 	 */
 	public String getId() {
-		return this.message.getId();
+        return this.jhoveMessage.getId();
 	}
 
 	public JhoveMessage getJhoveMessage() {
-		return this.message;
+        return this.jhoveMessage;
 	}
 
-	@SuppressWarnings("static-method")
 	public String getPrefix() {
-		return "";
+        return this.prefix;
 	}
+
+    @Override
+    public String toString() {
+        return "Message [message=" + jhoveMessage + ", _subMessage=" + subMessage + ", _offset=" + offset + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((jhoveMessage == null) ? 0 : jhoveMessage.hashCode());
+        result = prime * result + ((subMessage == null) ? 0 : subMessage.hashCode());
+        result = prime * result + (int) (offset ^ (offset >>> 32));
+        result = prime * result + ((prefix == null) ? 0 : prefix.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Message other = (Message) obj;
+        if (jhoveMessage == null) {
+            if (other.jhoveMessage != null)
+                return false;
+        } else if (!jhoveMessage.equals(other.jhoveMessage))
+            return false;
+        if (subMessage == null) {
+            if (other.subMessage != null)
+                return false;
+        } else if (!subMessage.equals(other.subMessage))
+            return false;
+        if (offset != other.offset)
+            return false;
+        if (prefix == null) {
+            if (other.prefix != null)
+                return false;
+        } else if (!prefix.equals(other.prefix))
+            return false;
+        return true;
+    }
+
 }

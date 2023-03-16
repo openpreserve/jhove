@@ -11,11 +11,11 @@ import java.util.*;
  *  This class encapsulates representation information, as defined 
  *  by ISO/IEC 14721, about a content stream.
  *
- *  @see <a href="http://wwwclassic.ccsds.org/documents/pdf/CCSDS-650.0-B-1.pdf">ISO/IEC
+ * @see <a href=
+ *      "http://wwwclassic.ccsds.org/documents/pdf/CCSDS-650.0-B-1.pdf">ISO/IEC
  *       14721 (PDF)</a>
  */
-public class RepInfo implements Cloneable
-{
+public class RepInfo implements Cloneable {
     /******************************************************************
      * PRIVATE INSTANCE FIELDS.
      ******************************************************************/
@@ -26,13 +26,14 @@ public class RepInfo implements Cloneable
     /** Consistency flag. */
     private boolean _consistent;
 
-    /** Validity flag.  A ternary variable which can have a value
-     *  of TRUE, FALSE, or UNDETERMINED. */
+    /**
+     * Validity flag. A ternary variable which can have a value
+     * of TRUE, FALSE, or UNDETERMINED.
+     */
     private int _valid;
     
     /** Values for _valid */
-    public final static int
-        TRUE = 1,
+    public final static int TRUE = 1,
         FALSE = 0,
         UNDETERMINED = -1;
 
@@ -49,7 +50,7 @@ public class RepInfo implements Cloneable
     private Date _lastModified;
 
     /** List of diagnostic and informative messages. */
-    private List<Message> _message;
+    private Set<Message> _message;
 
     /** MIME media type. */
     private String _mimeType;
@@ -75,8 +76,10 @@ public class RepInfo implements Cloneable
     /** Flag indicating _uri is a URL if true. */
     private boolean _urlFlag;
 
-    /** Well-formed flag. A ternary variable which can have a value
-     *  of TRUE, FALSE, or UNDETERMINED. */
+    /**
+     * Well-formed flag. A ternary variable which can have a value
+     * of TRUE, FALSE, or UNDETERMINED.
+     */
     private int _wellFormed;
 
     /** Version of format which applies. */
@@ -94,8 +97,7 @@ public class RepInfo implements Cloneable
      *
      *  @param uri   Object file pathname or URI
      */
-    public RepInfo (String uri)
-    {
+    public RepInfo(String uri) {
 	init (uri);
     }
 
@@ -107,14 +109,12 @@ public class RepInfo implements Cloneable
      *  @param uri       Object file pathname or URI
      *  @param external  External representation information
      */
-    public RepInfo (String uri, RepInfo external)
-    {
+    public RepInfo(String uri, RepInfo external) {
 	init (uri);
 	_external = external;
     }
 
-    private void init (String uri)
-    {
+    private void init(String uri) {
         _uri = uri;
         _size = -1;
         _wellFormed = TRUE;
@@ -123,7 +123,7 @@ public class RepInfo implements Cloneable
         _valid = TRUE;
         
         _checksum = new ArrayList<> ();
-        _message  = new ArrayList<> ();
+        _message = new HashSet<>();
         _profile  = new ArrayList<> ();
         _property = new TreeMap<> ();
         _sigMatch = new ArrayList<> ();
@@ -141,18 +141,16 @@ public class RepInfo implements Cloneable
      *  is attached directly to the clone.
      */
     @Override
-    public Object clone () 
-    {
+    public Object clone() {
 	RepInfo newri;
 	try {
 	    newri = (RepInfo) super.clone ();
-	}
-	catch (CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
 	    return null;   // should never happen
 	}
 
         newri._checksum = new ArrayList<> (_checksum);
-        newri._message = new ArrayList<>(_message);
+        newri._message = new HashSet<>(_message);
         newri._profile = new ArrayList<> (_profile);
         newri._sigMatch = new ArrayList<> (_sigMatch);
         newri._property = new TreeMap<> (_property);
@@ -165,8 +163,7 @@ public class RepInfo implements Cloneable
      *  This is a "shallow" copy; it is assumed that the parameter
      *  object is a temporary one that will not be further modified.
      */
-    public void copy (RepInfo info)
-    {
+    public void copy(RepInfo info) {
         _checksum = info._checksum;
         _consistent = info._consistent;
         _created = info._created;
@@ -196,8 +193,7 @@ public class RepInfo implements Cloneable
     /**
      *   Returns this object's list of Checksums
      */
-    public List<Checksum> getChecksum ()
-    {
+    public List<Checksum> getChecksum() {
         return _checksum;
     }
 
@@ -206,16 +202,14 @@ public class RepInfo implements Cloneable
      *   date is not automatically generated, but must be explicitly
      *   stored.
      **/
-    public Date getCreated ()
-    {
+    public Date getCreated() {
         return _created;
     }
 
     /**
      *   Return the format identifier
      */
-    public String getFormat ()
-    {
+    public String getFormat() {
         return _format;
     }
 
@@ -224,40 +218,35 @@ public class RepInfo implements Cloneable
      *   date is not automatically generated, but must be explicitly
      *   stored.
      **/
-    public Date getLastModified ()
-    {
+    public Date getLastModified() {
         return _lastModified;
     }
 
     /**
      *  Returns the message list stored in this object
      */
-    public List<Message> getMessage ()
-    {
-        return _message;
+    public List<Message> getMessage() {
+        return Collections.unmodifiableList(new ArrayList<Message>(_message));
     }
 
     /**
      *  Returns the MIME type string stored in this object
      */
-    public String getMimeType ()
-    {
+    public String getMimeType() {
         return _mimeType;
     }
 
     /**
      * Return the module.
      */
-    public Module getModule ()
-    {
+    public Module getModule() {
         return _module;
     }
 
     /**
      *  Returns the list of profiles (Strings) stored in this object
      */
-    public List<String> getProfile ()
-    {
+    public List<String> getProfile() {
         return _profile;
     }
 
@@ -266,8 +255,7 @@ public class RepInfo implements Cloneable
      *  Property map contains key-value pairs whose key is a 
      *  <code>String</code> and whose value is a <code>Property</code>.
      */
-    public Map<String, Property> getProperty ()
-    {
+    public Map<String, Property> getProperty() {
         return _property;
     }
 
@@ -276,8 +264,7 @@ public class RepInfo implements Cloneable
      *
      *  @param name  The name of the Property.
      */
-    public Property getProperty (String name)
-    {
+    public Property getProperty(String name) {
         Property property = null;
         if (_property.size () > 0) {
             property = _property.get (name);
@@ -289,16 +276,14 @@ public class RepInfo implements Cloneable
     /**
      *  Returns the size property stored in this object.
      */
-    public long getSize ()
-    {
+    public long getSize() {
         return _size;
     }
 
     /**
      *  Returns the URI property stored in this object.
      */
-    public String getUri ()
-    {
+    public String getUri() {
         return _uri;
     }
 
@@ -306,16 +291,14 @@ public class RepInfo implements Cloneable
      *  Returns a flag which, if <code>true</code>, indicates
      *  the object is a URL.
      */
-    public boolean getURLFlag ()
-    {
+    public boolean getURLFlag() {
         return _urlFlag;
     }
 
     /**
      *  Returns the value of the consistency flag.
      */
-    public boolean isConsistent ()
-    {
+    public boolean isConsistent() {
         return _consistent;
     }
 
@@ -323,8 +306,7 @@ public class RepInfo implements Cloneable
      *  Returns the value of the well-formed flag.
      *  Can return TRUE, FALSE, or UNDETERMINED.
      */
-    public int getWellFormed ()
-    {
+    public int getWellFormed() {
         return _wellFormed;
     }
 
@@ -332,24 +314,21 @@ public class RepInfo implements Cloneable
      *  Returns the value of the validity flag.
      *  Can return TRUE, FALSE, or UNDETERMINED.
      */
-    public int getValid ()
-    {
+    public int getValid() {
         return _valid;
     }
 
     /**
      *  Returns the version property stored in this object
      */
-    public String getVersion ()
-    {
+    public String getVersion() {
 	return _version;
     }
 
     /**
      *  Returns the note property stored in this object
      */
-    public String getNote ()
-    {
+    public String getNote() {
 	return _note;
     }
     
@@ -360,19 +339,18 @@ public class RepInfo implements Cloneable
      *  returned will reflect all modules that have looked
      *  at the document so far.
      */
-    public List<String> getSigMatch ()
-    {
+    public List<String> getSigMatch() {
         return _sigMatch;
     }
 
     /**
      * Return property by name, regardless of its position in the
      * property hierarchy.
+     * 
      * @param name Property name
      * @return Named property (or null)
      */
-    public Property getByName (String name)
-    {
+    public Property getByName(String name) {
         Property prop = null;
 
         Collection<Property> coll = _property.values ();
@@ -394,72 +372,63 @@ public class RepInfo implements Cloneable
     /**
      *  Append a Checksum object to the checksum list.
      */
-    public void setChecksum (Checksum checksum)
-    {
+    public void setChecksum(Checksum checksum) {
         _checksum.add (checksum);
     }
 
     /**
      *  Set the value of the consistency flag
      */
-    public void setConsistent (boolean consistent)
-    {
+    public void setConsistent(boolean consistent) {
 	_consistent = consistent;
     }
 
     /**
      *  Set the creation date
      */
-    public void setCreated (Date created)
-    {
+    public void setCreated(Date created) {
 	_created = created;
     }
 
     /**
      *  Set the format identifier
      */
-    public void setFormat (String format)
-    {
+    public void setFormat(String format) {
 	_format = format;
     }
 
     /**
      *  Set the last modified date
      */
-    public void setLastModified (Date lastModified)
-    {
+    public void setLastModified(Date lastModified) {
         _lastModified = lastModified;
     }
 
     /**
      *  Append a Message object to the message list
      */
-    public void setMessage (Message message)
-    {
+    public void setMessage(Message message) {
         _message.add (message);
     }
 
     /**
      *  Set the MIME type string
      */
-    public void setMimeType (String mimeType)
-    {
+    public void setMimeType(String mimeType) {
         _mimeType = mimeType;
     }
 
     /**
      * Add the module.
      */
-    public void setModule (Module module)
-    {
+    public void setModule(Module module) {
         _module = module;
     }
 
     /**
      *  Append a profile String to the profile list
      */
-    public void setProfile (String profile)
-    {
+    public void setProfile(String profile) {
         _profile.add (profile);
     }
 
@@ -467,16 +436,14 @@ public class RepInfo implements Cloneable
      *   Add a Property to the property map.  The name of the Property
      *   becomes its key in the map.
      */
-    public void setProperty (Property property)
-    {
+    public void setProperty(Property property) {
         _property.put (property.getName (), property);
     }
 
     /**
      *  Set the size property
      */
-    public void setSize (long size)
-    {
+    public void setSize(long size) {
         _size = size;
     }
     
@@ -484,8 +451,7 @@ public class RepInfo implements Cloneable
      *  Set the flag to indicate whether this is a URL (true)
      *  or a file (false)
      */
-    public void setURLFlag (boolean flag)
-    {
+    public void setURLFlag(boolean flag) {
         _urlFlag = flag;
     }
 
@@ -496,8 +462,7 @@ public class RepInfo implements Cloneable
      *                  an integer value:
      *                  true maps to TRUE, and false to FALSE.
      */
-    public void setWellFormed (boolean wellFormed) 
-    {
+    public void setWellFormed(boolean wellFormed) {
         _wellFormed = wellFormed ? TRUE : FALSE;
         if (!wellFormed) {
             _consistent = false;
@@ -510,8 +475,7 @@ public class RepInfo implements Cloneable
      *  Setting wellFormed to false forces the consistent and
      *  valid flags to be false as well.
      */
-    public void setWellFormed (int wellFormed)
-    {
+    public void setWellFormed(int wellFormed) {
         _wellFormed = wellFormed;
 	if (wellFormed == FALSE) {
 	    _consistent = false;
@@ -529,8 +493,7 @@ public class RepInfo implements Cloneable
      *                  an integer value:
      *                  true maps to TRUE, and false to FALSE.
      */
-    public void setValid (boolean valid) 
-    {
+    public void setValid(boolean valid) {
         _valid = valid ? TRUE : FALSE;
     }
 
@@ -541,45 +504,42 @@ public class RepInfo implements Cloneable
      *                  UNDETERMINED.  The effect of using 
      *                  other values is undefined.
      */
-    public void setValid (int valid) 
-    {
+    public void setValid(int valid) {
         _valid = valid;
     }
 
     /**
      *  Set the version string
      */
-    public void setVersion (String version) 
-    {
+    public void setVersion(String version) {
         _version = version;
     }
 
     /**
      *  Set the note string
      */
-    public void setNote (String note)
-    {
+    public void setNote(String note) {
 	_note = note;
     }
     
-    /** Adds the name of a module, signifying that the document
+    /**
+     * Adds the name of a module, signifying that the document
      *  signature matched the module's requirements.
      *  JhoveBase will make this value persistent across
      *  module invocations for a given document.
      */
-    public void setSigMatch (String modname)
-    {
+    public void setSigMatch(String modname) {
         _sigMatch.add (modname);
     }
     
-    /** Adds a list of module names, signifying that the document
+    /**
+     * Adds a list of module names, signifying that the document
      *  signature matched the module's requirements.
      *  Any previous list is lost.
      *  JhoveBase will make this value persistent across
      *  module invocations for a given document.
      */
-    public void setSigMatch (List<String> modnames)
-    {
+    public void setSigMatch(List<String> modnames) {
         _sigMatch = modnames;
     }
 
@@ -592,8 +552,7 @@ public class RepInfo implements Cloneable
      *  destination of the output are determined by the
      *  OutputHandler.
      */
-    public void show (OutputHandler handler)
-    {
+    public void show(OutputHandler handler) {
 	handler.analyze (this);
 	handler.show    (this);
     }

@@ -12,10 +12,7 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
  * information (not necessarily a problem) about the content being analyzed
  * or the way that JHOVE deals with it.
  */
-public class InfoMessage extends Message {
-
-	private static final String prefix = "Info";
-
+public final class InfoMessage extends Message {
 	/**
 	 * Creates an InfoMessage with an identifier.
 	 * 
@@ -63,11 +60,6 @@ public class InfoMessage extends Message {
 	 *            situation being described.
 	 */
 	public InfoMessage(JhoveMessage message, String subMessage, long offset) {
-		super(message, subMessage, offset);
-	}
-
-	@Override
-	public String getPrefix() {
-		return prefix;
+        super(message, subMessage, offset, "Info");
 	}
 }

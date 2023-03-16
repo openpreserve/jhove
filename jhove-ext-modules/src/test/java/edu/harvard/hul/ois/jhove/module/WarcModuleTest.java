@@ -99,10 +99,10 @@ public class WarcModuleTest {
 
 		RepInfo info = generalInvalidChecks(warcFile);
         
-        assertEquals(7, info.getMessage().size());
+        assertEquals(1, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
-        assertEquals(7, messages.get(DiagnosisType.RECOMMENDED_MISSING.name()).intValue());
+        assertEquals(1, messages.get(DiagnosisType.RECOMMENDED_MISSING.name()).intValue());
 	}
 
 	@Test
@@ -216,10 +216,10 @@ public class WarcModuleTest {
 
 		RepInfo info = generalInvalidChecks(warcFile);
 
-        assertEquals(16, info.getMessage().size());
+        assertEquals(4, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
-        assertEquals(16, messages.get(DiagnosisType.REQUIRED_INVALID.name()).intValue());
+        assertEquals(4, messages.get(DiagnosisType.REQUIRED_INVALID.name()).intValue());
 	}
 
 	@Test
@@ -240,10 +240,10 @@ public class WarcModuleTest {
 
 		RepInfo info = generalInvalidChecks(warcFile);
 
-        assertEquals(6, info.getMessage().size());
+        assertEquals(3, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
-        assertEquals(6, messages.get(DiagnosisType.REQUIRED_INVALID.name()).intValue());
+        assertEquals(3, messages.get(DiagnosisType.REQUIRED_INVALID.name()).intValue());
 	}
 
 	@Test
@@ -264,10 +264,10 @@ public class WarcModuleTest {
 
 		RepInfo info = generalInvalidChecks(warcFile);
 
-        assertEquals(3, info.getMessage().size());
+        assertEquals(2, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
-        assertEquals(3, messages.get(DiagnosisType.INVALID_EXPECTED.name()).intValue());
+        assertEquals(2, messages.get(DiagnosisType.INVALID_EXPECTED.name()).intValue());
 	}
 
 	@Test
@@ -797,12 +797,12 @@ public class WarcModuleTest {
 
 		RepInfo info = generalInvalidChecks(warcFile);
 
-        assertEquals(7, info.getMessage().size());
+        assertEquals(6, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(5, messages.size());
         assertEquals(2, messages.get(DiagnosisType.INVALID.name()).intValue());
         assertEquals(1, messages.get(DiagnosisType.INVALID_EXPECTED.name()).intValue());
-        assertEquals(2, messages.get(DiagnosisType.REQUIRED_INVALID.name()).intValue());
+        assertEquals(1, messages.get(DiagnosisType.REQUIRED_INVALID.name()).intValue());
         assertEquals(1, messages.get(DiagnosisType.RECOMMENDED_MISSING.name()).intValue());
         assertEquals(1, messages.get(DiagnosisType.RECOMMENDED.name()).intValue());
 	}
@@ -813,10 +813,10 @@ public class WarcModuleTest {
 
 		RepInfo info = generalInvalidChecks(warcFile);
 
-        assertEquals(2, info.getMessage().size());
+        assertEquals(1, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(1, messages.size());
-        assertEquals(2, messages.get(DiagnosisType.ERROR.name()).intValue());
+        assertEquals(1, messages.get(DiagnosisType.ERROR.name()).intValue());
 	}
 	
 	@Test
@@ -825,11 +825,11 @@ public class WarcModuleTest {
 
 		RepInfo info = generalInvalidChecks(warcFile);
 
-        assertEquals(8, info.getMessage().size());
+        assertEquals(4, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
         assertEquals(3, messages.size());
-        assertEquals(4, messages.get(DiagnosisType.INVALID.name()).intValue());
-        assertEquals(3, messages.get(DiagnosisType.INVALID_EXPECTED.name()).intValue());
+        assertEquals(2, messages.get(DiagnosisType.INVALID.name()).intValue());
+        assertEquals(1, messages.get(DiagnosisType.INVALID_EXPECTED.name()).intValue());
         assertEquals(1, messages.get(DiagnosisType.INVALID_DATA.name()).intValue());
 	}
 
