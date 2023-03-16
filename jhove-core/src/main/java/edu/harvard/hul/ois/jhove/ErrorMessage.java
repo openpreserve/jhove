@@ -11,23 +11,11 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
  * This class encapsulates an error message from a Module, representing
  * a problem in the content being analyzed.
  */
-public class ErrorMessage extends Message {
-
-	private static final String prefix = "Error";
+public final class ErrorMessage extends Message {
 
 	/******************************************************************
 	 * CLASS CONSTRUCTOR.
 	 ******************************************************************/
-
-	/**
-	 * Creates an ErrorMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message describing the problem.
-	 */
-	public ErrorMessage(String message) {
-		super(message);
-	}
 
 	/**
 	 * Creates an ErrorMessage with an identifier.
@@ -36,20 +24,7 @@ public class ErrorMessage extends Message {
 	 *            The message text and its identifier.
 	 */
 	public ErrorMessage(JhoveMessage message) {
-		super(message);
-	}
-
-	/**
-	 * Creates an ErrorMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message describing the problem.
-	 * @param offset
-	 *            The offset in the file at which the problem
-	 *            was detected.
-	 */
-	public ErrorMessage(String message, long offset) {
-		super(message, offset);
+        this(message, NULL);
 	}
 
 	/**
@@ -62,19 +37,7 @@ public class ErrorMessage extends Message {
 	 *            was detected.
 	 */
 	public ErrorMessage(JhoveMessage message, long offset) {
-		super(message, offset);
-	}
-
-	/**
-	 * Creates an ErrorMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message describing the problem.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 */
-	public ErrorMessage(String message, String subMessage) {
-		super(message, subMessage);
+        this(message, message.getSubMessage(), offset);
 	}
 
 	/**
@@ -86,22 +49,7 @@ public class ErrorMessage extends Message {
 	 *            Human-readable additional information.
 	 */
 	public ErrorMessage(JhoveMessage message, String subMessage) {
-		super(message, subMessage);
-	}
-
-	/**
-	 * Creates an ErrorMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message describing the problem.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 * @param offset
-	 *            The offset in the file at which the problem
-	 *            was detected.
-	 */
-	public ErrorMessage(String message, String subMessage, long offset) {
-		super(message, subMessage, offset);
+        this(message, subMessage, NULL);
 	}
 
 	/**
@@ -117,11 +65,6 @@ public class ErrorMessage extends Message {
 	 */
 	public ErrorMessage(JhoveMessage message, String subMessage,
 			long offset) {
-		super(message, subMessage, offset);
-	}
-
-	@Override
-	public String getPrefix() {
-		return prefix;
+        super(message, subMessage, offset, "Error");
 	}
 }

@@ -42,49 +42,44 @@ public final class JpegExif {
     private NisoImageMetadata _exifNiso;
     private JpegModule module;
     
-    public JpegExif (final JpegModule module)
-    {
+    public JpegExif(final JpegModule module) {
         this.module = module;
         _exifProfileOK = false;
         _profileText = null;
         _exifNiso = null;
     }
 
-
-
-    /** Checks if the TIFF module is available. 
+    /**
+     * Checks if the TIFF module is available.
      */
-    public static boolean isTiffAvailable ()
-    {
+    public static boolean isTiffAvailable() {
         try {
             Class.forName ("edu.harvard.hul.ois.jhove.module.TiffModule");
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
     
-    /** Reads the Exif data from the current point at the data stream,
+    /**
+     * Reads the Exif data from the current point at the data stream,
      *  puts it into a temporary file, and makes a RepInfo object
      *  available.  This should be called only if isTiffAvailable()
      *  has returned <code>true</code>.
      */
     public RepInfo readExifData (DataInputStream dstream, JhoveBase je, 
-				 int length)
-    {
+            int length) {
         File tiffFile = null;
         RepInfo info = new RepInfo ("tempfile");
-        /* We're now at the beginning of the TIFF data.
+        /*
+         * We're now at the beginning of the TIFF data.
 	 * Copy it into a temporary file, then parse that
 	 * as a TIFF file. 
 	 */
         try {
             tiffFile = je.tempFile ();
-        }
-        catch (IOException e) {
-            info.setMessage (new ErrorMessage
-                    (MessageConstants.JHOVE_1,
+        } catch (IOException e) {
+            info.setMessage(new ErrorMessage(MessageConstants.JHOVE_SYS_1,
                      e.getMessage ()));
             return info;
         }
@@ -106,8 +101,7 @@ public final class JpegExif {
 	                int sz;
 	                if (tiffLen < bufSize) {
 	                    sz = tiffLen;
-	                }
-	                else {
+                    } else {
 	                    sz = bufSize;
 	                }
 	                sz = dstream.read (buf, 0, sz);
@@ -116,8 +110,7 @@ public final class JpegExif {
 	            }
             }
             fos.flush ();
-            edu.harvard.hul.ois.jhove.module.TiffModule tiffMod = 
-                new edu.harvard.hul.ois.jhove.module.TiffModule ();
+            edu.harvard.hul.ois.jhove.module.TiffModule tiffMod = new edu.harvard.hul.ois.jhove.module.TiffModule();
             tiffMod.setByteOffsetValid(true);
             // Now parse the file, using a special parsing method.
             // Close only after we're all done.
@@ -191,39 +184,34 @@ public final class JpegExif {
                 }
                 first = false;
             }
-        }
-        catch (IOException e) {
-            info.setMessage (new ErrorMessage
-                (MessageConstants.JPEG_HUL_3,
+        } catch (IOException e) {
+            info.setMessage(new ErrorMessage(MessageConstants.JPEG_HUL_3,
 		 e.getMessage ()));
             // Maybe should put this directly in the parent's
             // RepInfo, otherwise I have to copy the message afterwards.
-        }
-        finally {
+        } finally {
             if (tiffFile != null) {
                 try {
                     tiffFile.delete();
+                } catch (Exception e) {
                 }
-                catch (Exception e) {}
             }
         }
         return info;
     }
     
-    
-    /** Returns <code>true</code> if the Exif IFD is present and satisfies
+    /**
+     * Returns <code>true</code> if the Exif IFD is present and satisfies
      *  the profile requirements.
      */
-    public boolean isExifProfileOK ()
-    {
+    public boolean isExifProfileOK() {
         return _exifProfileOK;
     }
 
     /**
      *  Returns the text which describes the exif profile.
      */
-    public String getProfileText () 
-    {
+    public String getProfileText() {
         return _profileText;
     }
 

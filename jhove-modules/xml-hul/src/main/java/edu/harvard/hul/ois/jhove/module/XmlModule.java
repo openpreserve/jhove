@@ -320,7 +320,7 @@ public class XmlModule extends ModuleBase {
 			}
 
 		} catch (Exception f) {
-			info.setMessage(new ErrorMessage(f.getMessage()));
+            info.setMessage(new ErrorMessage(CoreMessageConstants.JHOVE_CORE_5, f.getMessage()));
 			info.setWellFormed(false); // actually not the file's fault
 			return 0;
 		}
@@ -388,7 +388,7 @@ public class XmlModule extends ModuleBase {
 			}
 			String mess = ioe.getClass().getName() + ": " + ioe.getMessage();
 			info.setMessage(new ErrorMessage(
-					CoreMessageConstants.ERR_FILE_READ, mess));
+                    CoreMessageConstants.JHOVE_CORE_2, mess));
 			info.setWellFormed(false);
 			return 0;
 		} catch (SAXParseException spe) {

@@ -105,7 +105,7 @@ public final class BytestreamModule
         }
         info.setSize (this._nByte);
         if (this._nByte == 0) {
-            info.setMessage (new InfoMessage (CoreMessageConstants.INF_FILE_EMPTY));
+            info.setMessage (new InfoMessage (CoreMessageConstants.JHOVE_CORE_3));
         }
         // Set the checksums in the report if they're calculated
         setChecksums(this._ckSummer, info);
