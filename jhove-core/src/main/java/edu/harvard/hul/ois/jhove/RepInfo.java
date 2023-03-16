@@ -226,7 +226,13 @@ public class RepInfo implements Cloneable {
      *  Returns the message list stored in this object
      */
     public List<Message> getMessage() {
-        return Collections.unmodifiableList(new ArrayList<Message>(_message));
+        List<Message> messages = new ArrayList<Message>(_message);
+        Collections.sort(messages, new Comparator<Message>() {
+            public int compare(Message m1, Message m2) {
+                return (int) m1.getOffset() - (int) m2.getOffset();
+            }
+        });
+        return messages;
     }
 
     /**

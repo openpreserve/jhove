@@ -24,7 +24,7 @@ public final class ErrorMessage extends Message {
 	 *            The message text and its identifier.
 	 */
 	public ErrorMessage(JhoveMessage message) {
-		super(message);
+        this(message, NULL);
 	}
 
 	/**
@@ -37,7 +37,7 @@ public final class ErrorMessage extends Message {
 	 *            was detected.
 	 */
 	public ErrorMessage(JhoveMessage message, long offset) {
-		super(message, offset);
+        this(message, message.getSubMessage(), offset);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public final class ErrorMessage extends Message {
 	 *            Human-readable additional information.
 	 */
 	public ErrorMessage(JhoveMessage message, String subMessage) {
-		super(message, subMessage);
+        this(message, subMessage, NULL);
 	}
 
 	/**

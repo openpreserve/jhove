@@ -20,7 +20,7 @@ public final class InfoMessage extends Message {
 	 *            The message text and its identifier.
 	 */
 	public InfoMessage(JhoveMessage message) {
-		super(message);
+        this(message, NULL);
 	}
 
 	/**
@@ -33,7 +33,7 @@ public final class InfoMessage extends Message {
 	 *            situation being described.
 	 */
 	public InfoMessage(JhoveMessage message, long offset) {
-		super(message, offset);
+        this(message, message.getSubMessage(), offset);
 	}
 
 	/**
@@ -45,7 +45,7 @@ public final class InfoMessage extends Message {
 	 *            Human-readable additional information.
 	 */
 	public InfoMessage(JhoveMessage message, String subMessage) {
-		super(message, subMessage);
+        this(message, subMessage, NULL);
 	}
 
 	/**
