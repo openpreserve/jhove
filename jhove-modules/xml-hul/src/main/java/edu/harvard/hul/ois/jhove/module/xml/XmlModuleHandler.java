@@ -13,7 +13,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -392,9 +397,7 @@ public class XmlModuleHandler extends DefaultHandler {
 	 */
 	@Override
 	public void warning(SAXParseException spe) {
-		_messages.add(new InfoMessage(
-				MessageConstants.XML_HUL_1,
-				spe.getMessage()));
+		_messages.add(new InfoMessage(MessageConstants.INSTANCE.makeSaxParseMessage(spe)));
 	}
 
 	/**
@@ -413,14 +416,7 @@ public class XmlModuleHandler extends DefaultHandler {
 							MAXERRORS));
 			_messages.add(new InfoMessage(message));
 		} else if (_nErrors < MAXERRORS) {
-			_messages.add(new ErrorMessage(
-					MessageConstants.XML_HUL_1,
-					MessageFormat.format(
-							MessageConstants.XML_HUL_1_SUB.getMessage(),
-							spe.getMessage(),
-							spe.getLineNumber(),
-							spe.getColumnNumber()
-					)));
+			_messages.add(new ErrorMessage(MessageConstants.INSTANCE.makeSaxParseMessage(spe)));
 		}
 		++_nErrors;
 	}
