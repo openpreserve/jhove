@@ -239,3 +239,7 @@ fi
 if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/zackthecat.tif.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/TIFF-hul/zackthecat.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/zackthecat.tif.jhove.xml"
 fi
+
+# Patch release details of the reporting module.
+find "${targetRoot}" -type f -name "*.jhove.xml" -exec sed -i 's/jhove\/1.8\/jhove.xsd/jhove\/1.9\/jhove.xsd/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/outputHandler release="1.9"/outputHandler release="1.10"/' {} \;
