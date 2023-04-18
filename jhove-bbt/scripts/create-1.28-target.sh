@@ -243,3 +243,9 @@ fi
 # Patch release details of the reporting module.
 find "${targetRoot}" -type f -name "*.jhove.xml" -exec sed -i 's/jhove\/1.8\/jhove.xsd/jhove\/1.9\/jhove.xsd/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/outputHandler release="1.9"/outputHandler release="1.10"/' {} \;
+
+# Patch XML reporting tweak differences
+find "${targetRoot}" -type f -name "valid-external.dtd.jhove.xml" -exec sed -i 's/The markup in the document preceding the root element must be well-formed. Line = 1/Line = 1/' {} \;
+find "${targetRoot}" -type f -name "valid-external.dtd.jhove.xml" -exec sed -i 's/SAXParseException/SAXParseException: The markup in the document preceding the root element must be well-formed./' {} \;
+find "${targetRoot}" -type f -name "*parsed-entity.ent.jhove.xml" -exec sed -i 's/Content is not allowed in prolog. Line = 1/Line = 1/' {} \;
+find "${targetRoot}" -type f -name "*parsed-entity.ent.jhove.xml" -exec sed -i 's/SAXParseException/SAXParseException: Content is not allowed in prolog./' {} \;

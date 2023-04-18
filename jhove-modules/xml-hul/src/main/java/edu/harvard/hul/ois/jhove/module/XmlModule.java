@@ -396,13 +396,7 @@ public class XmlModule extends ModuleBase {
 			if (handler.getSigFlag() && !_parseFromSig) {
 				info.setSigMatch(_name);
 			}
-			info.setMessage(new ErrorMessage(
-					MessageConstants.XML_HUL_1,
-					MessageFormat.format(
-							MessageConstants.XML_HUL_1_SUB.getMessage(),
-							spe.getMessage(),
-							spe.getLineNumber(),
-							spe.getColumnNumber())));
+            info.setMessage(new ErrorMessage(MessageConstants.INSTANCE.makeSaxParseMessage(spe)));
 			info.setWellFormed(false);
 			return 0;
 		} catch (SAXException se) {
