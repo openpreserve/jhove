@@ -8,7 +8,22 @@ see the file LICENSE for details).
 Versions 1.7 to 1.11 of JHOVE released independently.
 Versions 1.12 onwards released by the Open Preservation Foundation.
 
-## JHOVE 1.28.0
+## JHOVE 1.28.0-RC2
+
+2023-04-20
+
+## General
+
+- Fixed small issue in generated reports where schema version wasn't incremented to 1.9. [[#849][]]
+
+### XML Module 1.5.3
+
+- Reverted reporting of XmlParseExceptions so that exception detail is part of message body. [[#850][]]
+
+[#849]: https://github.com/openpreserve/jhove/pull/849
+[#850]: https://github.com/openpreserve/jhove/pull/850
+
+## JHOVE 1.28.0-RC1
 
 2023-03-16
 
