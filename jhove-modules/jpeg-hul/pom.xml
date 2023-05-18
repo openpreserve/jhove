@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.28.0-RC2</version>
+    <version>1.28.0</version>
   </parent>
   <artifactId>jpeg-hul</artifactId>
-  <version>1.5.4-RC1</version>
+  <version>1.5.4</version>
   <name>JHOVE JPEG Module HUL</name>
   <description>JPEG module developed by Harvard University Library</description>
 
@@ -14,7 +14,7 @@
       <dependency>
         <groupId>org.openpreservation.jhove.modules</groupId>
         <artifactId>tiff-hul</artifactId>
-        <version>1.9.4-RC1</version>
+        <version>1.9.4</version>
       </dependency>
   </dependencies>
 
