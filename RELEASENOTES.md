@@ -8,24 +8,9 @@ see the file LICENSE for details).
 Versions 1.7 to 1.11 of JHOVE released independently.
 Versions 1.12 onwards released by the Open Preservation Foundation.
 
-## JHOVE 1.28.0-RC2
+## JHOVE 1.28.0
 
-2023-04-20
-
-## General
-
-- Fixed small issue in generated reports where schema version wasn't incremented to 1.9. [[#849][]]
-
-### XML Module 1.5.3
-
-- Reverted reporting of XmlParseExceptions so that exception detail is part of message body. [[#850][]]
-
-[#849]: https://github.com/openpreserve/jhove/pull/849
-[#850]: https://github.com/openpreserve/jhove/pull/850
-
-## JHOVE 1.28.0-RC1
-
-2023-03-16
+2023-05-19
 
 ### General
 
@@ -37,6 +22,7 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 - NISO Image metadata gets a new GPSHPositioningError tag [[#801][]], fixes [[#787][]]
 - NISO Image metadata, date validation [[#800][]], fixes [[#799][]]
 - Array added to JSON reporting to support multi file reporting [[#728][]], fixes [[#667][]]
+- Fixed small issue in generated reports where schema version wasn't incremented to 1.9. [[#849][]]
 
 ### JPEG Module 1.54
 
@@ -85,6 +71,7 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 ### XML Module 1.5.3
 
 - Purged string constant message [[#827][]]
+- Reverted reporting of XmlParseExceptions so that exception detail is part of message body. [[#850][]]
 
 ### EPUB Module 1.2
 
@@ -93,7 +80,6 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 ### WARC Module 1.3 & GZIP Module 0.3
 
 - Added mechanism to mint errors with IDs and removed plain text messages [[#836][]]
-
 
 [#630]: https://github.com/openpreserve/jhove/pull/630
 [#672]: https://github.com/openpreserve/jhove/pull/672
@@ -140,6 +126,8 @@ Versions 1.12 onwards released by the Open Preservation Foundation.
 [#835]: https://github.com/openpreserve/jhove/pull/835
 [#836]: https://github.com/openpreserve/jhove/pull/836
 [#839]: https://github.com/openpreserve/jhove/pull/839
+[#849]: https://github.com/openpreserve/jhove/pull/849
+[#850]: https://github.com/openpreserve/jhove/pull/850
 [#817]: https://github.com/openpreserve/jhove/issues/817
 [#809]: https://github.com/openpreserve/jhove/issues/809
 [#799]: https://github.com/openpreserve/jhove/issues/799
