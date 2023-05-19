@@ -1,7 +1,8 @@
 # RELEASE NOTES
 
 JHOVE - JSTOR/Harvard Object Validation Environment
-Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.
+Copyright 2003-2015 by JSTOR and the President and Fellows of Harvard College.
+Copyright 2015-2023 by [The Open Preservation Foundation](https://openpreservation.org).
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details).
 
