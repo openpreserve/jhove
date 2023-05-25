@@ -62,3 +62,29 @@ Leave this window, if you close it you'll stop the GUI process.
 5. You can check what metadata extractors (HUL modules) are installed by selecting the ‘Help’ menu and  ‘About JHOVE’.
 
 6. This will open a new window. JHOVE works by incorporating different ‘HUL’ modules that extract metadata from different types of files. Each of the HUL modules represents a different set of common file types (e.g. PDFs) that it can extract metadata from.
+
+The HUL modules should include:
+* AIFF-hul 1.3
+* ASCII-hul 1.3
+* BYTESTREAM 1.3
+* GIF-hul 1.3
+* GZIP-kb 0.1
+* HTML-hul 1.3
+* JPEG-hul 1.2
+* JPEG2000-hul 1.3
+* PDF-hul 1.7
+* PNG-gdm 1.0
+* TIFF-hul 1.7
+* UTF8-hul 1.6
+* WARC-kb 1.0
+* WAVE-hul 1.3
+* XML-hul 1.4
+
+### Using the JHOVE GUI on a Windows PC
+1. To begin using the JHOVE GUI, there are two options: you can either drag and drop your file(s) or folder(s) onto the JHOVE Window
+
+2. Or you can select the File menu and open a file from its folder location. Using this method you can only analyse a single file at a time.
+
+3. Either method will then open a ‘RepInfo’ window that displays the metadata held inside the file. You can expand each of the sections by clicking on the blue toggle.
+
+For example, you might want to find out whether a file is well-formed, or which version number of the file format it relates to. 
