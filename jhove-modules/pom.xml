@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
-    <version>1.26.1</version>
+    <version>1.28.0</version>
   </parent>
 
   <groupId>org.openpreservation.jhove.modules</groupId>
@@ -14,15 +14,11 @@
   <name>JHOVE Validation Modules</name>
   <description>The JHOVE HUL validation modules.</description>
 
-  <properties>
-    <jwat.version>1.0.3</jwat.version>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>
       <artifactId>jhove-core</artifactId>
-      <version>1.26.1</version>
+      <version>1.28.0</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -31,7 +27,6 @@
     <dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
-      <version>2.3.1</version>
     </dependency>
   </dependencies>
 

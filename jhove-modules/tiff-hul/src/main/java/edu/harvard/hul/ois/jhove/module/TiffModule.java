@@ -121,8 +121,8 @@ public class TiffModule extends ModuleBase {
     protected Logger _logger;
 
     private static final String NAME = "TIFF-hul";
-    private static final String RELEASE = "1.9.3";
-    private static final int[] DATE = { 2022, 04, 22 };
+    private static final String RELEASE = "1.9.4";
+    private static final int[] DATE = { 2023, 03, 16 };
     private static final String[] FORMAT = { "TIFF", "Tagged Image File Format" };
     private static final String COVERAGE = "TIFF 4.0, 5.0, and 6.0; "
             + "TIFF/IT (ISO/DIS 12639:2003), including file types CT, LW, HC, MP, "
@@ -558,12 +558,12 @@ public class TiffModule extends ModuleBase {
                  * property. If so, the IFD is invalid.
                  */
 
-                List<String> errors = ifd.getErrors();
+                List<ErrorMessage> errors = ifd.getErrors();
                 if (!errors.isEmpty()) {
                     info.setValid(false);
-                    ListIterator<String> eter = errors.listIterator();
+                    ListIterator<ErrorMessage> eter = errors.listIterator();
                     while (eter.hasNext()) {
-                        info.setMessage(new ErrorMessage(eter.next()));
+                        info.setMessage(eter.next());
                     }
                 }
 
@@ -625,11 +625,7 @@ public class TiffModule extends ModuleBase {
             info.setProperty(new Property("TIFFMetadata",
                     PropertyType.PROPERTY, PropertyArity.ARRAY, tiffMetadata));
         } catch (TiffException e) {
-            if (e.getJhoveMessage() != null) { // try to keep the id
-                info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
-            } else {
-                info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
-            }
+            info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
             info.setWellFormed(false);
             return;
         } catch (IOException e) {
@@ -722,12 +718,12 @@ public class TiffModule extends ModuleBase {
                  * property. If so, the IFD is invalid.
                  */
 
-                List<String> errors = ifd.getErrors();
+                List<ErrorMessage> errors = ifd.getErrors();
                 if (!errors.isEmpty()) {
                     info.setValid(false);
-                    ListIterator<String> eter = errors.listIterator();
+                    ListIterator<ErrorMessage> eter = errors.listIterator();
                     while (eter.hasNext()) {
-                        info.setMessage(new ErrorMessage(eter.next()));
+                        info.setMessage(eter.next());
                     }
                 }
 
@@ -737,10 +733,7 @@ public class TiffModule extends ModuleBase {
             // For parsing EXIF, we don't want to make the enclosing
             // document invalid, so we don't declare the EXIF non-well-formed
             // even though it is.
-            if (e.getJhoveMessage() != null)
-                info.setMessage(new InfoMessage(e.getJhoveMessage(), e.getOffset()));
-            else
-                info.setMessage(new InfoMessage(e.getMessage(), e.getOffset()));
+            info.setMessage(new InfoMessage(e.getJhoveMessage(), e.getOffset()));
             return ifds;
         } catch (IOException e) {
             JhoveMessage msg;
@@ -841,11 +834,7 @@ public class TiffModule extends ModuleBase {
                     checkValidity((TiffIFD) ifd, info);
                 }
             } catch (TiffException e) {
-                if (e.getJhoveMessage() != null) { // try to keep the id
-                    info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
-                } else {
-                    info.setMessage(new ErrorMessage(e.getMessage(), e.getOffset()));
-                }
+                info.setMessage(new ErrorMessage(e.getJhoveMessage(), e.getOffset()));
                 info.setValid(false);
             }
         }
@@ -1185,7 +1174,12 @@ public class TiffModule extends ModuleBase {
             if ((next & 1) != 0) {
                 String mess = MessageFormat.format(MessageConstants.TIFF_HUL_59.getMessage(), next);
                 JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.TIFF_HUL_59.getId(), mess);
-                throw new TiffException(message);
+                if (_byteOffsetIsValid) {
+                    info.setMessage(new InfoMessage(message));
+                } else {
+                    info.setMessage(new ErrorMessage(message));
+                    info.setWellFormed(false);
+                }
             }
             if (list.size() > 50) {
                 throw new TiffException(MessageConstants.TIFF_HUL_60);
@@ -1234,6 +1228,10 @@ public class TiffModule extends ModuleBase {
             ifd.setThumbnail(true);
         }
         list.add(ifd);
+        
+        if (list.size() > 50) {
+            throw new TiffException(MessageConstants.TIFF_HUL_60);
+        }
 
         if (ifd instanceof TiffIFD) {
             TiffIFD tifd = (TiffIFD) ifd;

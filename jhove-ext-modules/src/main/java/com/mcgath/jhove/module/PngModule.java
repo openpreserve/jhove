@@ -14,6 +14,8 @@ import com.mcgath.jhove.module.png.*;
 //import java.util.Vector;
 
 import edu.harvard.hul.ois.jhove.*;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /**
  * Module for validation and metadata extraction on PNG files.
@@ -41,14 +43,13 @@ public class PngModule extends ModuleBase {
      ******************************************************************/
 
     private static final String NAME = "PNG-gdm";
-    private static final String RELEASE = "1.1";
-    private static final int[] DATE = { 2022, 04, 22 };
+    private static final String RELEASE = "1.2";
+    private static final int[] DATE = { 2023, 03, 16 };
     private static final String[] FORMAT = {
             "PNG", " ISO/IEC 15948:2003", "Portable Network Graphics"
     };
     private static final String COVERAGE = "PNG (ISO/IEC 15948:2003)";
     private static final String[] MIMETYPE = { "image/png" };
-    // private static final String [] ALT_MIMETYPE = {"image/x-png"};
     private static final String WELLFORMED = "Put well-formedness criteria here";
     private static final String VALIDITY = "Put validity criteria here";
     private static final String REPINFO = "Put repinfo note here";
@@ -188,7 +189,7 @@ public class PngModule extends ModuleBase {
          */
         _ckSummer = null;
         if (_je != null && _je.getChecksumFlag() &&
-                info.getChecksum().size() == 0) {
+                info.getChecksum().isEmpty()) {
             _ckSummer = new Checksummer();
             _cstream = new ChecksumInputStream(stream, _ckSummer);
             _dstream = getBufferedDataStream(_cstream, _je != null ? _je.getBufferSize() : 0);
@@ -206,14 +207,12 @@ public class PngModule extends ModuleBase {
         _propList.add(nisoProp);
         _keywordPropList = new LinkedList<>();
         _spltList = new LinkedList<>();
-        ErrorMessage msg;
 
         // Check that the file header matching the PNG magic numbers
         for (int i = 0; i < _sigBytes.length; i++) {
             int byt = readUnsignedByte(_dstream);
             if (byt != _sigBytes[i]) {
-                msg = new ErrorMessage(MessageConstants.PNG_GDM_66);
-                info.setMessage(msg);
+                info.setMessage(new ErrorMessage(MessageConstants.PNG_GDM_66));
                 info.setWellFormed(false);
                 return 0;
             }
@@ -227,8 +226,7 @@ public class PngModule extends ModuleBase {
                     break;
                 }
                 if (iendSeen) {
-                    msg = new ErrorMessage(MessageConstants.PNG_GDM_67);
-                    info.setMessage(msg);
+                    info.setMessage(new ErrorMessage(MessageConstants.PNG_GDM_67));
                     info.setWellFormed(false);
                     return 0;
                 }
@@ -243,10 +241,10 @@ public class PngModule extends ModuleBase {
                 long storedCRC = chunk.readCRC();
                 long calculatedCRC = chunk.getCRC();
                 if (storedCRC != calculatedCRC) {
-                    msg = new ErrorMessage(String.format(
-                            MessageConstants.PNG_GDM_68.getMessage(),
-                            chunk.chunkTypeString()));
-                    info.setMessage(msg);
+                    JhoveMessage msg = JhoveMessages.getMessageInstance(
+                            MessageConstants.PNG_GDM_68.getId(),
+                            String.format(MessageConstants.PNG_GDM_68.getMessage(), chunk.chunkTypeString()));
+                    info.setMessage(new ErrorMessage(msg));
                     info.setWellFormed(false);
                     return 0;
                 }
@@ -255,22 +253,20 @@ public class PngModule extends ModuleBase {
             // We've already reported a problem, so we just clean up here.
             return 0;
         } catch (EOFException e) {
-            msg = new ErrorMessage(
-                    String.format(
-                            MessageConstants.PNG_GDM_69.getMessage(),
-                            _nByte));
-            info.setMessage(msg);
+            JhoveMessage msg = JhoveMessages.getMessageInstance(
+                MessageConstants.PNG_GDM_69.getId(),
+                String.format(MessageConstants.PNG_GDM_69.getMessage(), _nByte));
+            info.setMessage(new ErrorMessage(msg));
             info.setWellFormed(false);
             return 0;
         } catch (Exception e) {
             // Miscellaneous exceptions really shouldn't come here.
             // But it's better to catch them than let them fall through.
             // Treat them as bugs.
-            msg = new ErrorMessage(
-                    String.format(
-                            MessageConstants.PNG_GDM_70.getMessage(),
-                            e.getClass().getName()));
-            info.setMessage(msg);
+            JhoveMessage msg = JhoveMessages.getMessageInstance(
+                MessageConstants.PNG_GDM_70.getId(),
+                String.format(MessageConstants.PNG_GDM_70.getMessage(), e.getClass().getName()));
+            info.setMessage(new ErrorMessage(msg));
             info.setWellFormed(false);
             return 0;
         }
@@ -278,18 +274,15 @@ public class PngModule extends ModuleBase {
         /* Check for required chunks. */
         boolean criticalMissing = false;
         if (!ihdrSeen) {
-            msg = new ErrorMessage(MessageConstants.PNG_GDM_71);
-            info.setMessage(msg);
+            info.setMessage(new ErrorMessage(MessageConstants.PNG_GDM_71));
             criticalMissing = true;
         }
         if (!idatSeen) {
-            msg = new ErrorMessage(MessageConstants.PNG_GDM_72);
-            info.setMessage(msg);
+            info.setMessage(new ErrorMessage(MessageConstants.PNG_GDM_72));
             criticalMissing = true;
         }
         if (!iendSeen) {
-            msg = new ErrorMessage(MessageConstants.PNG_GDM_73);
-            info.setMessage(msg);
+            info.setMessage(new ErrorMessage(MessageConstants.PNG_GDM_73));
             criticalMissing = true;
         }
         if (criticalMissing) {
@@ -299,15 +292,13 @@ public class PngModule extends ModuleBase {
 
         /** PLTE is required with color type 3 and forbidden with types 0 and 4 */
         if (_colorType == 3 && !plteSeen) {
-            msg = new ErrorMessage(MessageConstants.PNG_GDM_74);
-            info.setMessage(msg);
+            info.setMessage(new ErrorMessage(MessageConstants.PNG_GDM_74));
             info.setWellFormed(false);
             return 0;
         }
 
         if ((_colorType == 0 || _colorType == 4) && plteSeen) {
-            msg = new ErrorMessage(MessageConstants.PNG_GDM_75);
-            info.setMessage(msg);
+            info.setMessage(new ErrorMessage(MessageConstants.PNG_GDM_75));
             info.setWellFormed(false);
             return 0;
         }
@@ -352,7 +343,6 @@ public class PngModule extends ModuleBase {
 
     /** Add a keyword, value, and language. */
     public void addKeyword(String keywd, String translatedKeywd, String val, String language) {
-        // HashMap<String, String> map = new HashMap<String, String>();
         List<Property> props = new ArrayList<>();
         Property prop = new Property("Keyword",
                 PropertyType.PROPERTY,
@@ -416,7 +406,6 @@ public class PngModule extends ModuleBase {
      */
     private PNGChunk readChunkHead(DataInputStream dstrm) throws IOException {
         long chunkLength;
-        // String typeStr;
 
         try {
             chunkLength = readUnsignedInt(dstrm, true);

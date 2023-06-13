@@ -57,14 +57,12 @@ import edu.harvard.hul.ois.jhove.module.utf8.Utf8BlockMarker;
  */
 public class Utf8Module extends ModuleBase {
 
-    public final static String INF_PRINT_CHAR_MISS = "No printable characters";
-
     /******************************************************************
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
     private static final String NAME = "UTF8-hul";
-    private static final String RELEASE = "1.7.2";
-    private static final int[] DATE = { 2022, 04, 22 };
+    private static final String RELEASE = "1.7.3";
+    private static final int[] DATE = { 2023, 03, 16 };
     private static final String[] FORMAT = { "UTF-8" };
     private static final String COVERAGE = "Unicode 7.0.0";
     private static final String[] MIMETYPE = { "text/plain; charset=UTF-8" };
@@ -399,7 +397,7 @@ public class Utf8Module extends ModuleBase {
         }
 
         if (!printableChars) {
-            info.setMessage(new InfoMessage(INF_PRINT_CHAR_MISS));
+            info.setMessage(new InfoMessage(MessageConstants.UTF8_HUL_10));
         }
 
         return 0;

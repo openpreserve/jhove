@@ -12,20 +12,7 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
  * information (not necessarily a problem) about the content being analyzed
  * or the way that JHOVE deals with it.
  */
-public class InfoMessage extends Message {
-
-	private static final String prefix = "Info";
-
-	/**
-	 * Creates an InfoMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message giving the information.
-	 */
-	public InfoMessage(String message) {
-		super(message);
-	}
-
+public final class InfoMessage extends Message {
 	/**
 	 * Creates an InfoMessage with an identifier.
 	 * 
@@ -33,20 +20,7 @@ public class InfoMessage extends Message {
 	 *            The message text and its identifier.
 	 */
 	public InfoMessage(JhoveMessage message) {
-		super(message);
-	}
-
-	/**
-	 * Creates an InfoMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message giving the information.
-	 * @param offset
-	 *            The offset in the file relevant to the
-	 *            situation being described.
-	 */
-	public InfoMessage(String message, long offset) {
-		super(message, offset);
+        this(message, NULL);
 	}
 
 	/**
@@ -59,19 +33,7 @@ public class InfoMessage extends Message {
 	 *            situation being described.
 	 */
 	public InfoMessage(JhoveMessage message, long offset) {
-		super(message, offset);
-	}
-
-	/**
-	 * Creates an InfoMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message giving the information.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 */
-	public InfoMessage(String message, String subMessage) {
-		super(message, subMessage);
+        this(message, message.getSubMessage(), offset);
 	}
 
 	/**
@@ -83,22 +45,7 @@ public class InfoMessage extends Message {
 	 *            Human-readable additional information.
 	 */
 	public InfoMessage(JhoveMessage message, String subMessage) {
-		super(message, subMessage);
-	}
-
-	/**
-	 * Creates an InfoMessage.
-	 * 
-	 * @param message
-	 *            Human-readable message giving the information.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 * @param offset
-	 *            The offset in the file relevant to the
-	 *            situation being described.
-	 */
-	public InfoMessage(String message, String subMessage, long offset) {
-		super(message, subMessage, offset);
+        this(message, subMessage, NULL);
 	}
 
 	/**
@@ -113,11 +60,6 @@ public class InfoMessage extends Message {
 	 *            situation being described.
 	 */
 	public InfoMessage(JhoveMessage message, String subMessage, long offset) {
-		super(message, subMessage, offset);
-	}
-
-	@Override
-	public String getPrefix() {
-		return prefix;
+        super(message, subMessage, offset, "Info");
 	}
 }

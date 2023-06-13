@@ -104,8 +104,8 @@ public class HtmlModule extends ModuleBase {
 	private static final String XHTML_1_0 = "XHTML 1.0";
 
 	private static final String NAME = "HTML-hul";
-	private static final String RELEASE = "1.4.2";
-	private static final int[] DATE = { 2022, 04, 22 };
+    private static final String RELEASE = "1.4.3";
+    private static final int[] DATE = { 2023, 03, 16 };
 	private static final String[] FORMAT = { "HTML" };
 	private static final String COVERAGE = "HTML 3.2, HTML 4.0 Strict,"
 			+ "HTML 4.0 Transitional, HTML 4.0 Frameset, "
@@ -418,7 +418,7 @@ public class HtmlModule extends ModuleBase {
 			String lineEnd = cstream.getKindOfLineEnd();
 			if (lineEnd == null) {
 				info.setMessage(
-						new InfoMessage(MessageConstants.INF_EOL_TYPE_UNDET));
+						new InfoMessage(MessageConstants.HTML_HUL_23));
 				_textMD.setLinebreak(TextMDMetadata.NILL);
 			} else if ("CR".equalsIgnoreCase(lineEnd)) {
 				_textMD.setLinebreak(TextMDMetadata.LINEBREAK_CR);
@@ -498,7 +498,7 @@ public class HtmlModule extends ModuleBase {
 			_textMD.setMarkup_language(_doctype);
 			if (docDesc == null) {
 				info.setMessage(new InfoMessage(
-						MessageConstants.INF_HTML_VER_UNSPPRTD));
+						MessageConstants.HTML_HUL_22));
 				docDesc = new Html3_2DocDesc();
 			}
 			docDesc.validate(elements, info);

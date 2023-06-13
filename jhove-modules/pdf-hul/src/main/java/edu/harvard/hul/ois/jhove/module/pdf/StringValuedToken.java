@@ -13,7 +13,7 @@ import java.util.Vector;
 public abstract class StringValuedToken
     extends Token
 {
-    protected String _value;
+    protected String _value = "";
     protected Vector<Integer> _rawBytes;
 
     public StringValuedToken ()

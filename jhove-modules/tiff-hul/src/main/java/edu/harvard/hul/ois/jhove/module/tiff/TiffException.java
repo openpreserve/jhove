@@ -13,15 +13,8 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
  */
 public final class TiffException extends Exception {
 	private final JhoveMessage message;
-	private final long _offset;     // File offset at which the exception
+	private final long offset;     // File offset at which the exception
 								     // occurred
-
-	/**
-	 * Create a TiffException.
-	 */
-	public TiffException(final String m) {
-		this(JhoveMessages.getMessageInstance(m));
-	}
 
 	/**
 	 * Create a TiffException.
@@ -33,17 +26,10 @@ public final class TiffException extends Exception {
 	/**
 	 * Create a TiffException with specified offset.
 	 */
-	public TiffException(String m, long offset) {
-		this(JhoveMessages.getMessageInstance(m), -1);
-	}
-
-	/**
-	 * Create a TiffException with specified offset.
-	 */
 	public TiffException(final JhoveMessage message, long offset) {
 		super(message.getMessage());
 		this.message = message;
-		this._offset = offset;
+		this.offset = offset;
 	}
 
 	/**
@@ -57,6 +43,6 @@ public final class TiffException extends Exception {
 	 * Returns the offset at which the exception occurred.
 	 */
 	public long getOffset() {
-		return this._offset;
+		return this.offset;
 	}
 }

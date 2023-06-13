@@ -49,8 +49,8 @@ import edu.harvard.hul.ois.jhove.module.xml.*;
 public class XmlModule extends ModuleBase {
 
 	private static final String NAME = "XML-hul";
-	private static final String RELEASE = "1.5.2";
-	private static final int[] DATE = { 2022, 04, 22 };
+    private static final String RELEASE = "1.5.3";
+    private static final int[] DATE = { 2023, 03, 16 };
 	private static final String[] FORMAT = { "XML", "XHTML" };
 	private static final String COVERAGE = "XML 1.0";
 	private static final String[] MIMETYPE = { "text/xml", "application/xml",
@@ -320,7 +320,7 @@ public class XmlModule extends ModuleBase {
 			}
 
 		} catch (Exception f) {
-			info.setMessage(new ErrorMessage(f.getMessage()));
+            info.setMessage(new ErrorMessage(CoreMessageConstants.JHOVE_CORE_5, f.getMessage()));
 			info.setWellFormed(false); // actually not the file's fault
 			return 0;
 		}
@@ -388,7 +388,7 @@ public class XmlModule extends ModuleBase {
 			}
 			String mess = ioe.getClass().getName() + ": " + ioe.getMessage();
 			info.setMessage(new ErrorMessage(
-					CoreMessageConstants.ERR_FILE_READ, mess));
+                    CoreMessageConstants.JHOVE_CORE_2, mess));
 			info.setWellFormed(false);
 			return 0;
 		} catch (SAXParseException spe) {

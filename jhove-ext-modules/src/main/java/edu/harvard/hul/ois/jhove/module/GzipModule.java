@@ -62,8 +62,8 @@ public class GzipModule extends ModuleBase {
             .web("http://kb.dk").build();
 
     private static final String NAME = "GZIP-kb";
-    private static final String RELEASE = "0.2";
-    private static final int[] DATE = { 2022, 04, 22 };
+    private static final String RELEASE = "0.3";
+    private static final int[] DATE = { 2023, 03, 16 };
     private static final String[] FORMAT = { "GZIP" };
     private static final String COVERAGE = "GZIP, https://tools.ietf.org/html/rfc1952";
     private static final String[] MIMETYPE = { "application/gzip", "application/x-gzip" };
@@ -186,7 +186,8 @@ public class GzipModule extends ModuleBase {
                 info.setSigMatch(_name);
             }
         } catch (Exception e) {
-            info.setMessage(new ErrorMessage(e.getMessage()));
+            info.setMessage(new ErrorMessage(MessageConstants.GZIP_KB_1,
+                    String.format("%s: %s", e.getClass().getName(), e.getMessage())));
             info.setValid(false);
             info.setWellFormed(false);
         }
@@ -239,45 +240,21 @@ public class GzipModule extends ModuleBase {
      * @param repInfo The representation info, where to report the results.
      */
     private void reportResults(GzipReader reader, RepInfo repInfo) {
+        JwatJhoveIdMinter minter = JwatJhoveIdMinter.getInstance(NAME);
         Diagnostics<Diagnosis> diagnostics = reader.diagnostics;
         if (diagnostics.hasErrors()) {
             for (Diagnosis d : diagnostics.getErrors()) {
-                repInfo.setMessage(new ErrorMessage(extractDiagnosisType(d), extractDiagnosisMessage(d)));
+                repInfo.setMessage(new ErrorMessage(minter.mint(d)));
             }
             repInfo.setConsistent(false);
         }
         if (diagnostics.hasWarnings()) {
             // Report warnings on source object.
             for (Diagnosis d : diagnostics.getWarnings()) {
-                repInfo.setMessage(new InfoMessage(extractDiagnosisType(d), extractDiagnosisMessage(d)));
+                repInfo.setMessage(new InfoMessage(minter.mint(d)));
             }
         }
         repInfo.setProperty(new Property("Records", PropertyType.PROPERTY, PropertyArity.LIST, entryProperties));
         repInfo.setSize(reader.getConsumed());
-    }
-
-    /**
-     * Extracts the diagnosis type.
-     * 
-     * @param d The diagnosis whose type should be extracted
-     * @return The type of diagnosis
-     */
-    private static String extractDiagnosisType(Diagnosis d) {
-        return d.type.name();
-    }
-
-    /**
-     * Extracts the message from the diagnosis.
-     * 
-     * @param d The diagnosis
-     * @return The message containing entity and information.
-     */
-    private static String extractDiagnosisMessage(Diagnosis d) {
-        StringBuilder res = new StringBuilder();
-        res.append("Entity: ").append(d.entity);
-        for (String i : d.information) {
-            res.append(", ").append(i);
-        }
-        return res.toString();
     }
 }

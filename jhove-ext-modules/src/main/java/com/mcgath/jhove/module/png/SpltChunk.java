@@ -2,6 +2,8 @@ package com.mcgath.jhove.module.png;
 
 import edu.harvard.hul.ois.jhove.ErrorMessage;
 import edu.harvard.hul.ois.jhove.RepInfo;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 /** The suggested palette (sPLT) chunk */
 public class SpltChunk extends PNGChunk {
@@ -14,7 +16,8 @@ public class SpltChunk extends PNGChunk {
 		duplicateAllowed = true;
 	}
 	
-	/** Process the chunk. We add a property for the suggested 
+    /**
+     * Process the chunk. We add a property for the suggested
 	 *  palette by adding it to the module's list of sPLT's.
 	 */
 	@Override
@@ -58,10 +61,10 @@ public class SpltChunk extends PNGChunk {
 		int sampleDepth = readUnsignedByte();
 		--lengthLeft;
 		if (sampleDepth != 8 && sampleDepth != 16) {
-			ErrorMessage msg = new ErrorMessage (MessageConstants.PNG_GDM_46.getMessage(), 
+            JhoveMessage msg = JhoveMessages.getMessageInstance(MessageConstants.PNG_GDM_46.getId(),
 					String.format(MessageConstants.PNG_GDM_46_SUB.getMessage(),  
 							sampleDepth));
-			info.setMessage (msg);
+            info.setMessage(new ErrorMessage(msg));
 			info.setWellFormed (false);
 			throw new PNGException (MessageConstants.PNG_GDM_44);
 		}
