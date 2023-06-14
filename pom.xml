@@ -10,7 +10,7 @@
 
   <groupId>org.openpreservation.jhove</groupId>
   <artifactId>jhove</artifactId>
-  <version>1.28.0-RC1</version>
+  <version>1.29.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
@@ -68,27 +68,27 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <mvn.antrun.version>1.8</mvn.antrun.version>
-    <mvn.assembly.version>3.0.0</mvn.assembly.version>
-    <mvn.clean.version>3.0.0</mvn.clean.version>
-    <mvn.compiler.version>3.6.1</mvn.compiler.version>
-    <mvn.dependency.version>3.0.0</mvn.dependency.version>
-    <mvn.deploy.version>2.8.2</mvn.deploy.version>
-    <mvn.install.version>2.5.2</mvn.install.version>
-    <mvn.resources.version>3.0.2</mvn.resources.version>
-    <mvn.site.version>3.6</mvn.site.version>
-    <mvn.gpg.version>1.6</mvn.gpg.version>
-    <mvn.jar.version>3.0.2</mvn.jar.version>
-    <mvn.javadoc.version>3.1.0</mvn.javadoc.version>
-    <mvn.source.version>3.0.1</mvn.source.version>
-    <mvn.surefire.version>2.19.1</mvn.surefire.version>
-    <mvn.release.version>2.5.3</mvn.release.version>
-    <jacoco.version>0.8.7</jacoco.version>
+    <mvn.antrun.version>3.1.0</mvn.antrun.version>
+    <mvn.assembly.version>3.6.0</mvn.assembly.version>
+    <mvn.clean.version>3.2.0</mvn.clean.version>
+    <mvn.compiler.version>3.11.0</mvn.compiler.version>
+    <mvn.dependency.version>3.6.0</mvn.dependency.version>
+    <mvn.deploy.version>3.1.1</mvn.deploy.version>
+    <mvn.install.version>3.1.1</mvn.install.version>
+    <mvn.resources.version>3.3.1</mvn.resources.version>
+    <mvn.site.version>4.0.0-M8</mvn.site.version>
+    <mvn.gpg.version>3.1.0</mvn.gpg.version>
+    <mvn.jar.version>3.3.0</mvn.jar.version>
+    <mvn.javadoc.version>3.5.0</mvn.javadoc.version>
+    <mvn.source.version>3.3.0</mvn.source.version>
+    <mvn.surefire.version>3.1.2</mvn.surefire.version>
+    <mvn.release.version>3.0.1</mvn.release.version>
+    <jacoco.version>0.8.10</jacoco.version>
     <java.source.version>1.8</java.source.version>
     <java.target.version>1.8</java.target.version>
     <jaxb.api.version>2.4.0-b180830.0359</jaxb.api.version>
-    <jaxb.impl.version>4.0.1</jaxb.impl.version>
-    <jaxb.core.version>4.0.1</jaxb.core.version>
+    <jaxb.impl.version>4.0.3</jaxb.impl.version>
+    <jaxb.core.version>4.0.3</jaxb.core.version>
     <junit.version>4.13.2</junit.version>
     <mvn.target.release>8</mvn.target.release>
     <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
