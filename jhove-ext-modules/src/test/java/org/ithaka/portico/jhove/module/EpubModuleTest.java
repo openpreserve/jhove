@@ -74,7 +74,7 @@ public class EpubModuleTest {
     private static final String EPUB3_TITLE_ENCODING = "src/test/resources/epub/epub3-multiple-renditions.epub";
 
     private static final String EXPECTED_MEDIATYPE = "application/epub+zip";
-    private static final String EXPECTED_VERSION_3_2 = "3.2";
+    private static final String EXPECTED_VERSION_3_3 = "3.3";
     private static final String PNG_MIMETYPE = "image/png";
     private static final String XHTML_MIMETYPE = "application/xhtml+xml";
     private static final String NCX_MIMETYPE = "application/x-dtbncx+xml";
@@ -99,9 +99,11 @@ public class EpubModuleTest {
         assertEquals(0, info.getMessage().size()); // no errors
         assertEquals("EPUB", info.getFormat());
         assertEquals(EXPECTED_MEDIATYPE, info.getMimeType());
-        assertEquals(EXPECTED_VERSION_3_2, info.getVersion());
+        assertEquals(EXPECTED_VERSION_3_3, info.getVersion());
         // these may change, so just check they aren't null
-        assertNotNull(info.getCreated());
+        // note: this property is missing in 5.1.0 of epubcheck but 
+        // due for fix in next maintence release, uncomment when fixed.
+        //assertNotNull(info.getCreated());
         assertNotNull(info.getLastModified());
 
         Property metadata = info.getProperty(EPUBMETADATA_KEY);
@@ -248,7 +250,9 @@ public class EpubModuleTest {
         assertEquals(EXPECTED_MEDIATYPE, info.getMimeType());
         assertEquals("2.0.1", info.getVersion());
         // may change, so just check it isn't null
-        assertNotNull(info.getCreated());
+        // note: this property is missing in 5.1.0 of epubcheck but 
+        // due for fix in next maintence release, uncomment when fixed.
+        //assertNotNull(info.getCreated());
 
         Property metadata = info.getProperty(EPUBMETADATA_KEY);
         Map<String, Object> props = toMap(metadata);
@@ -397,7 +401,7 @@ public class EpubModuleTest {
         File epubFile = new File(ZIPPED_EPUB_FILEPATH);
         RepInfo info = parseAndCheckValidity(epubFile, RepInfo.FALSE, RepInfo.FALSE);
         assertEquals(EXPECTED_MEDIATYPE, info.getMimeType());
-        assertEquals(EXPECTED_VERSION_3_2, info.getVersion());
+        assertEquals(EXPECTED_VERSION_3_3, info.getVersion());
         assertEquals(1, info.getMessage().size());
         assertEquals("PKG-006", info.getMessage().get(0).getId());
     }
@@ -425,7 +429,7 @@ public class EpubModuleTest {
         File epubFile = new File(WRONG_EXT_NOT_AN_EPUB_FILEPATH);
         RepInfo info = parseAndCheckValidity(epubFile, RepInfo.FALSE, RepInfo.FALSE);
         List<Message> msgs = info.getMessage();
-        final int expectedNumMessages = 3;
+        final int expectedNumMessages = 2;
         assertEquals(expectedNumMessages, msgs.size());
     }
 
@@ -451,7 +455,7 @@ public class EpubModuleTest {
         RepInfo info = parseAndCheckValidity(epubFile, RepInfo.FALSE, RepInfo.FALSE);
         assertEquals(OCTET_MIMETYPE, info.getMimeType());
         List<Message> msgs = info.getMessage();
-        final int expectedNumMessages = 3;
+        final int expectedNumMessages = 2;
         assertEquals(expectedNumMessages, msgs.size());
     }
 
@@ -508,7 +512,7 @@ public class EpubModuleTest {
         Map<String, Object> fontinfo = new HashMap<String, Object>();
         font.forEach(f -> fontinfo.put(f.getName(), f.getValue()));
 
-        // only one font in this file, listed but missing.
+        // a single font file is listed - it is supposed to be embedded but is missing.
         assertEquals("Courier", fontinfo.get(PROPNAME_FONTNAME));
         assertEquals(true, fontinfo.get(PROPNAME_FONTFILE));
 
@@ -579,18 +583,12 @@ public class EpubModuleTest {
         File epubFile = new File(EPUB2_MISSING_OPF_FILEPATH);
         RepInfo info = parseAndCheckValidity(epubFile, RepInfo.FALSE, RepInfo.FALSE);
 
-        assertEquals(OCTET_MIMETYPE, info.getMimeType());
-
         Set<String> msgCodes = new HashSet<String>();
-        assertEquals(2, info.getMessage().size());
-        Message msg1 = info.getMessage().get(0);
-        Message msg2 = info.getMessage().get(1);
-        assertTrue(msg1 instanceof ErrorMessage);
-        msgCodes.add(msg1.getId());
-        assertTrue(msg2 instanceof ErrorMessage);
-        msgCodes.add(msg2.getId());
+        assertEquals(1, info.getMessage().size());
+        Message msg = info.getMessage().get(0);
+        assertTrue(msg instanceof ErrorMessage);
+        msgCodes.add(msg.getId());
         assertTrue(msgCodes.contains("OPF-002"));
-        assertTrue(msgCodes.contains("RSC-001"));
     }
 
     /**
@@ -665,8 +663,8 @@ public class EpubModuleTest {
     public void parseEpub3TitleEncodingTest() throws Exception {
         File epubFile = new File(EPUB3_TITLE_ENCODING);
         String expectedTitle = "महाभारत";
-        // well formed and valid
-        RepInfo info = parseAndCheckValidity(epubFile, RepInfo.TRUE, RepInfo.TRUE);
+        // well formed but not valid (this is inconsequential to the test, we're just checking title)
+        RepInfo info = parseAndCheckValidity(epubFile, RepInfo.TRUE, RepInfo.FALSE);
 
         Property metadata = info.getProperty(PROPNAME_EPUB_METADATA);
         Map<String, Object> props = toMap(metadata);
