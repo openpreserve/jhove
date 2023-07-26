@@ -1,8 +1,8 @@
 - title: "Getting started"
-  href: "/getting-started/"
+  href: "getting-started/"
 
 - title: "Documentation"
-  href: "/documentation/"
+  href: "./documentation/"
 
 - title: "Modules"
   href: "/modules/"
