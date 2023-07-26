@@ -1,0 +1,113 @@
+---
+title: WARC-kb Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+<h1>WARC-kb Module</h1>
+<a class="name" name="introduction">
+<h2>1 Introduction</h2>
+</a>
+<p>
+  The WARC-kb module recognizes and validates the WARC (Web ARChive) format.
+  [<a href="/references#warciso">WARC</a>]. It only validates the WARC file format and WARC headers, not the actual payload of the WARC records.
+  This module uses the <a href="/references#jwat">JWAT</a> library for WARC parsing.
+  For Compressed WARC files the JWAT library is also used to parse compressed WARCs (.warc.gz)
+</p>
+<p>
+  The module is invoked by the:
+</p>
+<blockquote>
+  <pre>
+    jhove ... -m WARC-kb ...
+  </pre>
+</blockquote>
+<p>
+  command line option.
+</p>
+<p>
+  The WARC-kb module recognizes <a href="/references#warciso">ISO28500:2009</a>.
+</p>
+
+<p>
+This module doesn't have configurable parameters.
+</p>
+
+<a class="name" name="coverage">
+  <h2>2 Coverage</h2>
+</a>
+<p>
+  The WARC-kb module recognizes and validates the following profiles:
+</p>
+<ul>
+  <li>
+    <a href="/references#warciso">ISO28500:2009</a>
+  </li>
+</ul>
+
+<a class="name" name="well-formedness">
+  <h2>3 Well-Formedness</h2>
+</a>
+<p>
+ The WARC module doesn't check the well-formedness
+</p>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+<p>
+  The WARC module only validates the WARC file format, WARC headers. It doesn't check the payload of the WARC records.
+</p>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+<p>
+  The MIME type is reported as: application/warc
+  [<a href="https://iipc.github.io/warc-specifications/specifications/warc-format/warc-1.1/#warc-file-name-size-and-compression">application/warc, application/warc-fields</a>].
+</p>
+<p>
+  In addition to the standard JHOVE
+  <a href="/documentation#repinfo">representation information</a>, the following
+  WARC-specific properties are reported:
+</p>
+<ul>
+    <li>
+    Property "WarcRecordProperties"
+    <ul>
+      <li>Property "Record offset" of type STRING</li>
+      <li>Property "Warc-Date" of type STRING</li>
+      <li>Property "Warc-Record-ID" of type STRING</li>
+      <li>Property "Record-ID-Scheme" of type STRING</li>
+      <li>Property "Content-Type" of type STRING</li>
+      <li>Property "Content-Length" of type STRING</li>
+      <li>Property "Warc-Type" of type STRING</li>
+      <li>Property "Warc-Block-Digest" of type STRING</li>
+      <li>Property "Block-Digest-Algorithm" of type STRING</li>
+      <li>Property "Block-Digest-Encoding" of type STRING</li>
+      <li>Property "isValidBlockDigest" of type STRING</li>
+      <li>Property "Warc-Payload-Digest" of type STRING</li>
+      <li>Property "Payload-Digest-Algorithm" of type STRING</li>
+      <li>Property "Payload-Digest-Encoding" of type STRING</li>
+      <li>Property "isValidPayloadDigest" of type STRING</li>
+      <li>Property "Warc-Truncated" of type STRING</li>
+      <li>Property "hasPayload" of type STRING</li>
+      <li>Property "PayloadLength" of type STRING</li>
+      <li>Property "Warc-Identified-Payload-Type" of type STRING</li>
+      <li>Property "Warc-Segment-Number" of type STRING</li>
+      <li>Property "isNonCompliant value" of type STRING</li>
+      <li>Property "Computed Block-Digest" of type STRING</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>6 Additional Module Properties</h2>
+<ul>
+  <li>Nominal file extension: .warc, <a href="https://iipc.github.io/warc-specifications/specifications/warc-format/warc-1.1/#annex-c-informative-warc-file-size-and-name-recommendations">.warc.gz</a></li>
+</ul>
+</div>
+{% include footer.html %}
+</body>
+</html>

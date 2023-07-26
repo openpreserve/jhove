@@ -1,0 +1,26 @@
+---
+title: Architecture
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
+  <main>
+    <h1>Architecture</h1>
+    <p>
+      JHOVE is designed as a layered architecture with an API (with well-defined,
+      public interfaces) invoked by a thin application layer for a stand-alone,
+      command line tool, applicable for batch and interactive operation.
+      The API can be used on its own to create other compatible tools.
+    </p>
+    <p>
+      <img src="/img/architecture.gif" alt="JHOVE architecture overview">
+    </p>
+  </main>
+</div>
+{% include footer.html %}
+</body>
+</html>
