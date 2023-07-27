@@ -55,3 +55,7 @@ echo "TEST BASELINE: Creating baseline"
 # Simply copy baseline for now we're not making any changes
 echo " - copying ${baselineRoot} baseline to ${targetRoot}"
 cp -R "${baselineRoot}" "${targetRoot}"
+
+# Add the OPF-TIFF Hul module to the audit information
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i '/TIFF-hul<\/module>$/a \ \ \ <module release="0.1.0">TIFF-opf</module>' {} \;
+

@@ -64,7 +64,22 @@
   <prerequisites>
     <maven>3.0</maven>
   </prerequisites>
-
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>opf-artefactory</id>
+      <name>opf-dev</name>
+      <url>https://artifactory.openpreservation.org/artifactory/opf-dev</url>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>snapshots</id>
+      <name>opf-dev</name>
+      <url>https://artifactory.openpreservation.org/artifactory/opf-dev</url>
+    </repository>
+  </repositories>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

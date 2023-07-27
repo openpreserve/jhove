@@ -42,5 +42,6 @@
     <module>utf8-hul</module>
     <module>wave-hul</module>
     <module>xml-hul</module>
+    <module>tiff-opf</module>
   </modules>
 </project>
