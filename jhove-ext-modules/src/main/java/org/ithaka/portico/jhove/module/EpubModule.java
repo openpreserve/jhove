@@ -82,8 +82,8 @@ public class EpubModule extends ModuleBase {
     private static final String FORMATNAME = "EPUB";
 
     private static final String NAME = "EPUB-ptc";
-    private static final String RELEASE = "1.0";
-    private static final int[] DATE = {2019, 5, 15};
+    private static final String RELEASE = "1.2";
+    private static final int[] DATE = { 2023, 03, 16 };
     private static final String RIGHTS_YEAR = "2019";
     private static final String[] FORMAT = { FORMATNAME };
     private static final String COVERAGE = FORMATNAME;
@@ -93,7 +93,7 @@ public class EpubModule extends ModuleBase {
     private static final String REPINFO = "";
     private static final String NOTE = "This module uses EPUBCheck for testing of EPUB files.";
 
-    //EPUB agent information
+    // EPUB agent information
     private static final String EPUB_AGENTNAME = "International Digital Publishing Forum";
     private static final AgentType EPUB_AGENTTYPE = AgentType.STANDARD;
     private static final String EPUB_AGENTADDRESS = "International Digital Publishing Forum (IDPF), "
@@ -102,12 +102,12 @@ public class EpubModule extends ModuleBase {
     private static final String EPUB_AGENTEMAIL = "membership@idpf.org";
     private static final String EPUB_AGENTPHONE = "+1-206-451-7250";
 
-    //EPUB format doc information
+    // EPUB format doc information
     private static final String EPUB_FORMATDOCTITLE = FORMATNAME;
     private static final String EPUB_FORMATDOCDATE = "2019-05-15";
     private static final String EPUB_FORMATDOCURL = "http://www.idpf.org/epub/dir/";
 
-    //Signatures
+    // Signatures
     private static final String EPUB_EXTENSION = ".epub";
     private static final int FIRST_SIG_POSITION = 0;
     private static final String FIRST_SIG_VALUE = "PK";
@@ -210,15 +210,18 @@ public class EpubModule extends ModuleBase {
         // and https://www.loc.gov/preservation/digital/formats/fdd/fdd000278.shtml#sign
 
         // this first one will also match other kinds of zip files
-        sig = new InternalSignature(FIRST_SIG_VALUE, SignatureType.MAGIC, SignatureUseType.MANDATORY, FIRST_SIG_POSITION, "");
+        sig = new InternalSignature(FIRST_SIG_VALUE, SignatureType.MAGIC, SignatureUseType.MANDATORY,
+                FIRST_SIG_POSITION, "");
         _signature.add(sig);
 
         // "mimetype" at 30
-        sig = new InternalSignature(SECOND_SIG_VALUE, SignatureType.MAGIC, SignatureUseType.MANDATORY, SECOND_SIG_POSITION, "");
+        sig = new InternalSignature(SECOND_SIG_VALUE, SignatureType.MAGIC, SignatureUseType.MANDATORY,
+                SECOND_SIG_POSITION, "");
         _signature.add(sig);
 
         // this will also match other kinds of zip files
-        sig = new InternalSignature(THIRD_SIG_VALUE, SignatureType.MAGIC, SignatureUseType.MANDATORY, THIRD_SIG_POSITION, "");
+        sig = new InternalSignature(THIRD_SIG_VALUE, SignatureType.MAGIC, SignatureUseType.MANDATORY,
+                THIRD_SIG_POSITION, "");
         _signature.add(sig);
 
     }
@@ -279,7 +282,7 @@ public class EpubModule extends ModuleBase {
         _ckSummer = null;
         setupDataStream(stream, info);
 
-        //Call tool and calculate stats
+        // Call tool and calculate stats
         try {
             JhoveRepInfoReport report = new JhoveRepInfoReport(info.getUri());
             EpubCheck epubCheck = new EpubCheck(_dstream, report, info.getUri());
@@ -293,13 +296,13 @@ public class EpubModule extends ModuleBase {
 
             // check if any of the messages are on the customized not-well-formed
             // list of errors
-            int notWellFormedErrors = epubMessages.stream().filter(c -> triggerNotWellFormed(c))
+            int notWellFormedErrors = epubMessages.stream().filter(this::triggerNotWellFormed)
                     .collect(Collectors.toSet()).size();
 
             info.setWellFormed(report.getFatalErrorCount() == 0 && notWellFormedErrors == 0);
             info.setValid(info.getWellFormed() == RepInfo.TRUE && report.getErrorCount() == 0);
 
-            Set<Message> msgs = new TreeSet<Message>(new MessageComparator());
+            Set<Message> msgs = new TreeSet<>(new MessageComparator());
             for (CheckMessage msg : report.getAllMessages()) {
                 msgs.addAll(toJhoveMessages(msg));
             }
@@ -312,9 +315,10 @@ public class EpubModule extends ModuleBase {
         } catch (Exception f) {
             f.printStackTrace();
             if (f.getMessage() != null) {
-                info.setMessage(new ErrorMessage(f.getMessage()));
+                info.setMessage(new ErrorMessage(MessageConstants.EPUB_PTC_1,
+                String.format(MessageConstants.EPUB_PTC_1_SUB.getMessage(), f.getMessage())));
             } else {
-                info.setMessage(new ErrorMessage(MessageConstants.ERR_UNKNOWN));
+                info.setMessage(new ErrorMessage(MessageConstants.EPUB_PTC_2));
             }
             info.setWellFormed(false); // may not be the file's fault
             return 0;
@@ -325,14 +329,13 @@ public class EpubModule extends ModuleBase {
             return 0;
         }
 
-        // We parsed it.  Now assemble the properties.
+        // We parsed it. Now assemble the properties.
         info.setProperty(_metadata);
 
         setChecksums(_ckSummer, info);
 
         return 0;
     }
-
 
     @Override
     public void parse(RandomAccessFile file, RepInfo info) throws IOException {
@@ -342,7 +345,9 @@ public class EpubModule extends ModuleBase {
     }
 
     /**
-     * Generates a set of properties collected using EPUBCheck to be added to the JHOVE report
+     * Generates a set of properties collected using EPUBCheck to be added to the
+     * JHOVE report
+     * 
      * @param report
      * @return
      */
@@ -383,10 +388,10 @@ public class EpubModule extends ModuleBase {
     }
 
     private static void addProperty(Set<Property> props, Property prop) {
-      if (prop == null) {
-		    return;
-	    }
-      props.add(prop);
+        if (prop == null) {
+            return;
+        }
+        props.add(prop);
     }
 
     /**
@@ -434,10 +439,9 @@ public class EpubModule extends ModuleBase {
 
     }
 
-
-
     /**
      * Generate a JHOVE String {@link Property}
+     * 
      * @param name
      * @param value
      * @return
@@ -451,6 +455,7 @@ public class EpubModule extends ModuleBase {
 
     /**
      * Generate a JHOVE Long {@link Property}
+     * 
      * @param name
      * @param value
      * @param hideIfZero when true the method will return null if the value is zero
@@ -465,6 +470,7 @@ public class EpubModule extends ModuleBase {
 
     /**
      * Generate JHOVE boolean {@link Property}
+     * 
      * @param name
      * @param value
      * @return
@@ -476,6 +482,7 @@ public class EpubModule extends ModuleBase {
     /**
      * Generate a JHOVE String Array {@link Property}. If the array length=1, the
      * property will be a SCALAR rather than an ARRAY.
+     * 
      * @param name
      * @param value
      * @return
@@ -497,6 +504,7 @@ public class EpubModule extends ModuleBase {
 
     /**
      * Generate a JHOVE Set {@link Property}
+     * 
      * @param name
      * @param value
      * @return
@@ -531,14 +539,14 @@ public class EpubModule extends ModuleBase {
                 addJhoveMessage(msgs, toJhoveMessage(msgId, msgText, severity, location));
             }
         } else {
-          addJhoveMessage(msgs, toJhoveMessage(msgId, msgText, severity, null));
+            addJhoveMessage(msgs, toJhoveMessage(msgId, msgText, severity, null));
         }
         return msgs;
     }
 
     private static void addJhoveMessage(Set<Message> msgs, Message msg) {
         if (msg == null) {
-          return;
+            return;
         }
         msgs.add(msg);
     }
@@ -584,6 +592,7 @@ public class EpubModule extends ModuleBase {
 
     /**
      * Make sure the string contains valid UTF-8 characters
+     * 
      * @param inputString
      * @return escaped String
      */
@@ -600,14 +609,15 @@ public class EpubModule extends ModuleBase {
     static class PropertyComparator implements Comparator<Property> {
         public int compare(final Property firstProp, final Property secondProp) {
             int compVal = firstProp.getName().compareTo(secondProp.getName());
-            return (compVal == 0) ? firstProp.getValue().toString().compareTo(secondProp.getValue().toString()) : compVal;
+            return (compVal == 0) ? firstProp.getValue().toString().compareTo(secondProp.getValue().toString())
+                    : compVal;
         }
     }
 
     static class MessageComparator implements Comparator<Message> {
-      public int compare(final Message firstMess, final Message secondMess) {
-        int compVal = firstMess.getId().compareTo(secondMess.getId()) ;
-        return (compVal == 0) ? firstMess.getMessage().compareTo(secondMess.getMessage()) : compVal;
-      }
+        public int compare(final Message firstMess, final Message secondMess) {
+            int compVal = firstMess.getId().compareTo(secondMess.getId());
+            return (compVal == 0) ? firstMess.getMessage().compareTo(secondMess.getMessage()) : compVal;
+        }
     }
 }

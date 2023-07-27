@@ -1,0 +1,137 @@
+---
+title: Getting started
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
+
+<h1>JHOVE  Installation Guide for Windows XP<br>
+<span class="note">[Contributed 2006-08-22 by Michael Stuart, UCSD]</span></h1>
+
+<h2>1 Download and install a J2SE 6 Java Runtime Environment (JRE)</h2>
+
+<ol type="a">
+  <li>
+    <p>
+      The Sun J2SE 6 SDK (including a JRE and all code packages
+      necessary for re-compilation) is available
+      <a href="http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html">here</a>.
+    </p>
+  </li>
+  <li>
+    <p>Exectute the downloaded file, installing the SDK in the folder</p>
+    <pre>C:\Program Files\Java</pre>
+  </li>
+</ol>
+
+<h2>2 Download and install JHOVE</h2>
+
+<ol type="a">
+  <li><p>JHOVE is available <a href="https://github.com/openpreserve/jhove">here</a>.</p></li>
+  <li>
+    <p>Extract the ZIP file to a new folder named</p>
+    <pre>
+      C:\Documents and Settings\<em>USERNAME</em>\jhove</pre>
+    <p>
+      where <em>USERNAME</em> is the user name of your Windows XP account on the
+      installation machine. Note the name of the installation directory. In this
+      example, we use C:\Program Files\java\/jre1.6.0_10.
+    </p>
+  </li>
+  <li>
+    <p>Edit the JHOVE configuration file</p>
+    <pre>C:\Documents and Settings\<em>USERNAME</em>\jhove\conf\jhove.conf</pre>
+    <p>and</p>
+    <ol type="i">
+      <li>
+        <p>
+          Change the value of the <code>&lt;jhoveHome&gt;</code> tag
+          so that it reads as follows:
+        </p>
+        <pre>
+          &lt;jhoveHome&gt;&quot;C:\Documents and Settings\<em>USERNAME</em>\jhove&quot;&lt;/jhoveHome&gt;
+        </pre>
+        <p>
+          Make sure to include the quotation marks at the beginning and end of the tag
+          value.
+        </p>
+      </li>
+      <li>
+        <p>
+          Change the value of the <code>&lt;tempDirectory&gt;</code> tag
+          so that it reads  as follows:
+        </p>
+        <pre>&lt;tempDirectory&gt;C:\temp&lt;/tempDirectory&gt;</pre>
+      </li>
+    </ol>
+    <p>
+      where <em>USERNAME</em> is the user name of your Windows XP account on the
+      installation machine.
+    </p>
+  </li>
+  <li>
+    <p>Edit the JHOVE batch file</p>
+    <pre>C:\Documents and Settings\<em>USERNAME</em>\jhove\jhove.bat</pre>
+    <p>
+      and change the following parameters to these values
+      (making sure to include the quotation marks, and adjusting JAVA_HOME to match
+      your downloaded JRE):
+    </p>
+    <pre>
+      JHOVE_HOME=&quot;C:\Documents and Settings\<em>USERNAME</em>\jhove&quot;
+      JAVA_HOME=&quot;C:\Program Files\java\/jre1.6.0_10&quot;
+      JAVA=%JAVA_HOME%\bin\java
+    </pre>
+    <p>
+      where <em>USERNAME</em> is the user name of your Windows XP account on the
+      installation machine.
+    </p>
+  </li>
+</ol>
+
+<h2>3 Using the JHOVE GUI Interface</h2>
+
+<ol type="a">
+  <li>
+    <p>There are two ways to launch the JHOVE GUI interface:</p>
+    <ol type="i">
+      <li>
+        <p>
+          From a DOS command line navigate to the JHOVE folder
+        </p>
+        <pre>C:\Documents and Settings\<em>USERNAME</em>\jhove</pre>
+        <p>
+          and issue the following command:
+        </p>
+        <pre>java &ndash;jar bin/JhoveView.jar</pre>
+        <p>
+          where <em>USERNAME</em> is the user name of your Windows XP account on the
+          installation machine.
+        </p>
+      </li>
+      <li>
+        <p>
+          Double-click the &ldquo;My computer&rdquo; icon on the desktop,
+          then type the folder name
+        </p>
+        <pre>C:\Documents and Settings\<em>USERNAME</em>\jhove\bin</pre>
+        <p>
+          in the Address box,then double-Click on <code>JhoveView.jar</code> icon to launch JHOVE.
+        </p>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p>
+Please refer to the
+<a href="/documentation/">documentation</a>
+for further information on using JHOVE.
+</p>
+</div>
+    {% include footer.html %}
+</body>
+</html>

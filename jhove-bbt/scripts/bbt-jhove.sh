@@ -127,12 +127,12 @@ showHelp() {
 checkParams "$@"
 candidate="${paramOutputLoc:?}/${MAJOR_MINOR_VER}"
 tempInstallLoc="/tmp/to-test"
-sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.7.9\/org\.jacoco.agent-0\.7\.9-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -Xss2048k  -classpath "$CP" Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
+sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.8.10\/org\.jacoco.agent-0\.8\.10-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -Xss2048k  -classpath "$CP" edu.harvard.hul.ois.jhove.Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
 bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${paramCorpusLoc}" -o "${candidate}"
 
 if [[ -f "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" ]]
 then
-	 " - INFO: applying the baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
+	echo " - INFO: applying the baseline patches for ${MAJOR_MINOR_VER} at: ${TARGET_ROOT}/${MAJOR_MINOR_VER}."
 	echo "       ${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh -b ${BASELINE_VER} -c ${MAJOR_MINOR_VER}"
 	bash "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" -b "${BASELINE_VER}" -c "${MAJOR_MINOR_VER}"
 else

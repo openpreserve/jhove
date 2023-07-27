@@ -63,13 +63,13 @@ public class WarcModule extends ModuleBase {
             .web("http://kb.dk").build();
 
     private static final String NAME = "WARC-kb";
-    private static final String RELEASE = "1.0";
-    private static final int[] DATE = {2015, 12, 07};
+    private static final String RELEASE = "1.2";
+    private static final int[] DATE = { 2022, 03, 16 };
     private static final String[] FORMAT = {
             "WARC", "WARC, Web ARChive file format"
     };
     private static final String COVERAGE = "WARC, 28500:2009";
-    private static final String[] MIMETYPE = {"application/warc", "application/warc-fields"};
+    private static final String[] MIMETYPE = { "application/warc", "application/warc-fields" };
     private static final String WELLFORMED = "";
     private static final String VALIDITY = "The file is well-formed";
     private static final String REPINFO = "";
@@ -137,12 +137,12 @@ public class WarcModule extends ModuleBase {
         _specification.add(doc);
 
         // Add optional external signatures (.warc or .warc.gz)
-        Signature sig = new ExternalSignature (".warc", SignatureType.EXTENSION,
+        Signature sig = new ExternalSignature(".warc", SignatureType.EXTENSION,
                 SignatureUseType.OPTIONAL);
-        _signature.add (sig);
-        sig = new ExternalSignature (".warc.gz", SignatureType.EXTENSION,
+        _signature.add(sig);
+        sig = new ExternalSignature(".warc.gz", SignatureType.EXTENSION,
                 SignatureUseType.OPTIONAL, "when compressed");
-        _signature.add (sig);
+        _signature.add(sig);
     }
 
     /**
@@ -164,8 +164,9 @@ public class WarcModule extends ModuleBase {
         bStrictUriValidation = DEFAULT_STRICT_URI_VALIDATION;
     }
 
-    /** Reset parameter settings.
-     *  Returns to a default state without any parameters.
+    /**
+     * Reset parameter settings.
+     * Returns to a default state without any parameters.
      */
     @Override
     public void resetParams() {
@@ -173,40 +174,40 @@ public class WarcModule extends ModuleBase {
     }
 
     @Override
-    public void checkSignatures (File file,
+    public void checkSignatures(File file,
             InputStream stream,
             RepInfo info)
-    throws IOException  {
-        info.setFormat (_format[0]);
-        info.setMimeType (_mimeType[0]);
-        info.setModule (this);
+            throws IOException {
+        info.setFormat(_format[0]);
+        info.setMimeType(_mimeType[0]);
+        info.setModule(this);
 
-        ByteCountingPushBackInputStream pbin = new ByteCountingPushBackInputStream(stream, GzipReader.DEFAULT_INPUT_BUFFER_SIZE);
-    	// First try warc uncompressed
-    	boolean checkIsWarc = WarcReaderFactory.isWarcFile(pbin);
+        ByteCountingPushBackInputStream pbin = new ByteCountingPushBackInputStream(stream,
+                GzipReader.DEFAULT_INPUT_BUFFER_SIZE);
+        // First try warc uncompressed
+        boolean checkIsWarc = WarcReaderFactory.isWarcFile(pbin);
         if (checkIsWarc) {
             info.setSigMatch(_name);
             return;
         }
-    	// Then try warc compressed
-    	boolean checkIsGzip = GzipReader.isGzipped(pbin);
+        // Then try warc compressed
+        boolean checkIsGzip = GzipReader.isGzipped(pbin);
         if (checkIsGzip) {
             info.setSigMatch(_name);
             return;
         }
         // Not a warc or a gzip
-        info.setWellFormed (false);
+        info.setWellFormed(false);
     }
 
     @Override
-    public void checkSignatures (File file,
+    public void checkSignatures(File file,
             RandomAccessFile raf,
             RepInfo info) throws IOException {
         try (InputStream stream = new RandomAccessFileInputStream(raf)) {
             checkSignatures(file, stream, info);
         }
     }
-
 
     @Override
     public void parse(RandomAccessFile file, RepInfo info) throws IOException {
@@ -232,14 +233,15 @@ public class WarcModule extends ModuleBase {
             reportResults(reader, info);
 
             if (reader.isCompliant()) {
-            	info.setSigMatch(_name);
+                info.setSigMatch(_name);
             }
         } catch (JhoveException e) {
-            info.setMessage(new ErrorMessage(e.getMessage()));
+            info.setMessage(new ErrorMessage(MessageConstants.WARC_KB_1,
+                    String.format("%s: %s", e.getClass().getName(), e.getMessage())));
             info.setValid(false);
             info.setWellFormed(false);
         } finally {
-            if(reader != null) {
+            if (reader != null) {
                 reader.close();
                 reader = null;
             }
@@ -249,6 +251,7 @@ public class WarcModule extends ModuleBase {
 
     /**
      * Set digest options for WARC reader.
+     * 
      * @param reader WARC reader instance
      */
     protected void setReaderOptions(WarcReader reader) throws JhoveException {
@@ -275,17 +278,19 @@ public class WarcModule extends ModuleBase {
     }
 
     /**
-     * Parse WARC records. Parsing should be straight forward with all records accessible through the same source.
+     * Parse WARC records. Parsing should be straight forward with all records
+     * accessible through the same source.
+     * 
      * @param reader WARC reader used to parse records
-     * @throws IOException if an IO error occurs while processing
+     * @throws IOException    if an IO error occurs while processing
      * @throws JhoveException if a serious problem needs to be reported
      */
     protected void parseRecords(WarcReader reader) throws IOException, JhoveException {
         if (reader != null) {
-            WarcRecord record;
-            while ((record = reader.getNextRecord()) != null) {
-                processRecord(record);
-                reader.diagnostics.addAll(record.diagnostics);
+            WarcRecord warcRecord;
+            while ((warcRecord = reader.getNextRecord()) != null) {
+                processRecord(warcRecord);
+                reader.diagnostics.addAll(warcRecord.diagnostics);
             }
         } else {
             throw new JhoveException(MessageConstants.ERR_RECORD_NULL);
@@ -295,6 +300,7 @@ public class WarcModule extends ModuleBase {
     /**
      * Process a WARC record.
      * Does not characterize the record payload.
+     * 
      * @param record WARC record from WARC reader
      * @throws IOException if an IO error occurs while processing
      */
@@ -318,27 +324,29 @@ public class WarcModule extends ModuleBase {
 
     /**
      * Report the results of the characterization.
-     * @param reader The WARC reader, which has read the WARC-file.
+     * 
+     * @param reader  The WARC reader, which has read the WARC-file.
      * @param repInfo The representation info, where to report the results.
      */
     private void reportResults(WarcReader reader, RepInfo repInfo) {
+        JwatJhoveIdMinter minter = JwatJhoveIdMinter.getInstance(NAME);
         Diagnostics<Diagnosis> diagnostics = reader.diagnostics;
         if (diagnostics.hasErrors()) {
             for (Diagnosis d : diagnostics.getErrors()) {
-                repInfo.setMessage(new ErrorMessage(extractDiagnosisType(d), extractDiagnosisMessage(d)));
+                repInfo.setMessage(new ErrorMessage(minter.mint(d)));
             }
             repInfo.setConsistent(false);
         }
         if (diagnostics.hasWarnings()) {
             // Report warnings on source object.
             for (Diagnosis d : diagnostics.getWarnings()) {
-                repInfo.setMessage(new InfoMessage(extractDiagnosisType(d), extractDiagnosisMessage(d)));
+                repInfo.setMessage(new InfoMessage(minter.mint(d)));
             }
         }
 
         int maxCount = -1;
-        for(Entry<String, Integer> e : versions.entrySet()) {
-            if(e.getValue() > maxCount) {
+        for (Entry<String, Integer> e : versions.entrySet()) {
+            if (e.getValue() > maxCount) {
                 maxCount = e.getValue();
                 repInfo.setVersion(e.getKey());
             }
@@ -348,28 +356,5 @@ public class WarcModule extends ModuleBase {
 
         repInfo.setProperty(new Property("Records", PropertyType.PROPERTY, PropertyArity.LIST, recordProperties));
         repInfo.setSize(reader.getConsumed());
-    }
-
-    /**
-     * Extracts the diagnosis type.
-     * @param d The diagnosis whose type should be extracted
-     * @return The type of diagnosis
-     */
-    private static String extractDiagnosisType(Diagnosis d) {
-        return d.type.name();
-    }
-
-    /**
-     * Extracts the message from the diagnosis.
-     * @param d The diagnosis
-     * @return The message containing entity and informations.
-     */
-    private static String extractDiagnosisMessage(Diagnosis d) {
-        StringBuilder res = new StringBuilder();
-        res.append("Entity: ").append(d.entity);
-        for(String i : d.information) {
-            res.append(", ").append(i);
-        }
-        return res.toString();
     }
 }

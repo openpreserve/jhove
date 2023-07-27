@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.25.0-SNAPSHOT</version>
+    <version>1.29.0-SNAPSHOT</version>
   </parent>
   <artifactId>tiff-opf</artifactId>
   <version>0.1.0</version>

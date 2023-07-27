@@ -1,5 +1,9 @@
 package edu.harvard.hul.ois.jhove;
 
+import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessageFactory;
+import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
+
 /**
  * @author  <a href="mailto:carl@openpreservation.org">Carl Wilson</a>
  *          <a href="https://github.com/carlwilson">carlwilson AT github</a>
@@ -11,6 +15,20 @@ package edu.harvard.hul.ois.jhove;
 
 public enum CoreMessageConstants {
 	INSTANCE;
+
+    public static final JhoveMessageFactory messageFactory = JhoveMessages
+            .getInstance("edu.harvard.hul.ois.jhove.ErrorMessages");
+
+    public static final JhoveMessage JHOVE_CORE_1 = messageFactory
+            .getMessage("JHOVE-CORE-1");
+    public static final JhoveMessage JHOVE_CORE_2 = messageFactory
+            .getMessage("JHOVE-CORE-2");
+    public static final JhoveMessage JHOVE_CORE_3 = messageFactory
+            .getMessage("JHOVE-CORE-3");
+    public static final JhoveMessage JHOVE_CORE_4 = messageFactory
+            .getMessage("JHOVE-CORE-4");
+    public static final JhoveMessage JHOVE_CORE_5 = messageFactory
+            .getMessage("JHOVE-CORE-5");
 
 	public static final String EXC_CHAR_ENC_UNSPPTD = "Unsupported character encoding: ";
 	public static final String EXC_CONF_FILE_LOC_MISS = "Initialization exception; location not specified for configuration file.";
@@ -32,12 +50,7 @@ public enum CoreMessageConstants {
 	public static final String EXC_TEMP_FILE_CRT = "Cannot create temporary file";
 	public static final String EXC_URI_CONV_FAIL = "Cannot convert URI to URL: ";
 	public static final String EXC_URL_NOT_FND = "URL not found: ";
-	public static final String EXC_UNEXPECTED = "Validation ended prematurely due to an unhandled exception.";
 
 	public static final String ERR_APP_PROP_MISS = "No application properties found for: ";
 	public static final String ERR_ICC_PRFL_DESC_MISS = "No description in ICC profile v4";
-	public static final String ERR_FILE_NOT_FOUND = "File not found";
-	public static final String ERR_FILE_READ = "File cannot be read";
-
-	public static final String INF_FILE_EMPTY = "Zero-length file";
 }

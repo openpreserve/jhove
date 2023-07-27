@@ -94,7 +94,7 @@ public class DocCatTests {
 	public final void testPageRefIncorrect() throws URISyntaxException {
 		TestUtils.testValidateResource(this.module, catPageRefIncorrectPath,
 				RepInfo.FALSE, RepInfo.FALSE,
-				MessageConstants.PDF_HUL_95.getMessage());
+				MessageConstants.PDF_HUL_96.getMessage());
 	}
 
 	/**

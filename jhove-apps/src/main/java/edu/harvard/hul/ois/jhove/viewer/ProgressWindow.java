@@ -39,6 +39,8 @@ public class ProgressWindow extends JFrame{
      */
     public final static int PROCESSING = 2;
 
+    private final static String DIALOG = "Dialog";
+
 
     /**
      *  Constructor.
@@ -48,8 +50,8 @@ public class ProgressWindow extends JFrame{
      */
     public ProgressWindow (ActionListener canceler)
     {
-        Font fileFont = new Font ("Dialog", Font.PLAIN, 14);
-        Font progFont = new Font ("Dialog", Font.PLAIN, 12);
+        Font fileFont = new Font (DIALOG, Font.PLAIN, 14);
+        Font progFont = new Font (DIALOG, Font.PLAIN, 12);
         Dimension labelDim = new Dimension (460, 24);
         _docNameLabel = new JLabel ();
         _docNameLabel.setHorizontalAlignment (SwingConstants.CENTER);
@@ -76,7 +78,6 @@ public class ProgressWindow extends JFrame{
         setTitle ("Progress");
         setDefaultCloseOperation (WindowConstants.DO_NOTHING_ON_CLOSE);
         pack ();
-        MainScreen.centerTopWindow (this);
 
         _contentLength = -1;
         _byteCount = -1;

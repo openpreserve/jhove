@@ -74,8 +74,13 @@ public class StructureElement
      *   their own subtrees built, and these StructureElements
      *   are accumulated into <code>children</code>.
      */
-    public void buildSubtree () throws PdfException
+    public void buildSubtree(int recGuard) throws PdfException
     {
+        /* Guard against infinite recursion */
+        if (recGuard <= 0) {
+            throw new PdfMalformedException(MessageConstants.PDF_HUL_32); // PDF-HUL-32
+        }
+
         _logger.info(MessageConstants.LOG_SUBTREE_BUILDING);
         PdfObject k = null;
         try {
@@ -112,9 +117,9 @@ public class StructureElement
                         }
                     }
                 }
-                StructureElement se = 
-                    new StructureElement (kdict, _tree);
-                se.buildSubtree ();
+                StructureElement se = new StructureElement(kdict, _tree);
+                se.buildSubtree(recGuard - 1);
+
                 se.checkAttributes ();
                 children = new ArrayList<> (1);
                 children.add (se);
@@ -153,11 +158,11 @@ public class StructureElement
                                         return;
                                         
                                     }
-                                }                                StructureElement se = 
-                                    new StructureElement (kdict, _tree);
-                                se.buildSubtree ();
-                                se.checkAttributes ();
-                                children.add (se);
+                        }
+                        StructureElement se = new StructureElement(kdict, _tree);
+                        se.buildSubtree(recGuard - 1);
+                        se.checkAttributes();
+                        children.add(se);
                     }
                 }
             }

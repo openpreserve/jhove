@@ -1,0 +1,220 @@
+---
+title: GIF-hul Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+<h1>GIF-hul Module</h1>
+
+<h2>1 Introduction</h2>
+
+<p>
+The GIF-hul module recognizes and validates the GIF (Tagged Interchange Format)
+format
+[<a href="/references#gif89a">GIF89a</a>].
+</p><p>
+The module is invoked by the:
+</p><blockquote>
+<pre>
+jhove ... -m gif-hul ...
+</pre>
+</blockquote>
+command line option.
+
+<a class="name" name="coverage">
+<h2>2 Coverage</h2></a>
+
+<p>
+The GIF-hul module recognizes and validates the following public profiles:
+</p>
+<ul>
+<li> GIF version 87a and 89a
+[<a href="/references#gif87a">GIF87a</a>,
+<a href="/references#gif89a">GIF89a</a>]
+</ul>
+
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2></a>
+
+<p>
+The following criteria must be met by a GIF object for JHOVE to consider it
+well-formed:
+</p>
+<ul>
+<li> Properly formed signature ("GIF" at byte offset 0) and version identifier
+("87a" or "89a" at byte offset 3)
+<li> A sequence of properly formed (as defined by the relevant specifications)
+control, graphic-rendering, and special purpose blocks
+<li> GIF terminator (0x00) at end of the content stream
+</ul>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+
+<p>
+The following criteria must be met by a GIF file for JHOVE to consider it
+valid:
+</p>
+<ul>
+<li> The file is well-formed
+<li> At most one global color map
+<li> At most one graphic control extension preceding an image descriptor
+or a plain text extension
+</ul>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+
+<p>
+The MIME type is reported as: image/gif
+</p>
+
+<p>
+In addition to the standard JHOVE
+<a href="index.html#repinfo">representation information</a>, the following
+GIF-specific properties are reported:
+<ul>
+<li> Property "GIFMetadata" of type PROPERTY and arity ARRAY
+<ul>
+<li> Property "GraphicRenderingBlocks" of type INTEGER and arity SCALAR<br>
+indicating the total number of Image Descriptor and Plain Text Extension blocks
+<li> Property "Blocks" of type PROPERTY and arity LIST<br>
+The block types are "LogicalScreenDescriptor", "GlobalColorTable",
+"GraphicControlExtension", "ImageDescriptor", "PlainTextExtension",
+"ApplicationExtension", "CommentExtension"
+<p></p>
+<ul>
+<li> Property "LogicalScreenDescriptor" of type PROPERTY and arity ARRAY
+<ul>
+<li> Property "LogicalScreenWidth" of type INTEGER and arity SCALAR
+<li> Property "LogicalScreenHeight" of type INTEGER and arity SCALAR
+<li> Property "ColorResolution" of type SHORT and arity SCALAR
+<li> Property "BackgroundColorIndex" of type SHORT and arity SCALAR
+<li> Property "PixelAspectRatio" of type SHORT and arity SCALAR
+<li> Property "GlobalColorTableFlag" of type BYTE and arity SCALAR<br>
+=0 "No global color table; background color index meaningless";<br>
+=1 "Global color table follows; background color index meaningful"
+<li> Property "GlobalColorTableSortFlag" of type BYTE and arity SCALAR<br>
+=0 "Not ordered";
+=1 "Ordered by decreasing importance"
+<li> Property "GlobalColorTableSize" of type SHORT and arity SCALAR
+</ul>
+</ul>
+<p></p>
+
+<ul>
+<li> (Optional) property "GlobalColorTable" of type SHORT and arity ARRAY
+<p></p>
+
+
+<li> (Optional) property "GraphicControlExtension" of type PROPERTY and arity
+ARRAY
+<ul>
+<li> Property "DisposalMethod" of type BYTE and arity SCALAR<br>
+=0 "No disposal specified"; =1 "Do not dispose"; =2 "Restor to background
+color; =3 "Restore to previous"
+<li> Property "UserInputFlag" of type BYTE and arity SCALAR<br>
+=0 "User input not expected"; =1 "User input expected"
+<li> Property "TransparencyFlag" of type BYTE and arity SCALAR<br>
+=0 "Transparent index is not given"; =1 "Transparent index given"
+<li> Property "DelayTime" of type INTEGER and arity SCALAR
+<li> Property "TransparentColorIndex" of type SHORT and arity SCALAR
+</ul>
+<p></p>
+
+<li> (Optional) property "ImageDescriptor" of type PROPERTY and arity ARRAY
+<ul>
+<li> Property "ImageLeftPosition" of type INTEGER and arity SCALAR
+<li> Property "ImageRightPosition" of type INTEGER and arity SCALAR
+<li> Property "InterlaceFlag" of type BYTE and arity SCALAR<br>
+=0 "Image is not interlaced"; =1 "Image is interlaced"
+<li> Property "LocalColorTableFlag" of type BYTE and arity SCALAR<br>
+=0 "No local color table; use global table if available";<br>
+=1 "Local color table follows"
+<li> Property "LocalColorTableSortFlag" of type BYTE and arity SCALAR<br>
+=0 "Not ordered"; =1 "Order by decreasing importance"
+<li> Property "LocalColorTableSize" of type SHORT and arity SCALAR
+
+<li> Property "NisoImageMetadata" of type NISOIMAGEMETADATA and arity
+SCALAR<br>
+MIMEType = "image/gif";<br>
+ByteOrder = "little_endian";<br>
+CompressionScheme = 5 "LZW";<br>
+ColorSpace = 3 "Palette color";<br>
+Orientation = 1 "Normal";<br>
+ImageWidth = ImageWidth; ImageLength = ImageHeight;<br>
+SamplesPerPixel = 1;<br>
+ColorMap = local color table (if supplied)
+</ul>
+<p></p>
+
+<li> (Optional) property "PlainTextExtension" of type PROPERTY and arity ARRAY
+<ul>
+<li> Property "TextGridLeftPosition" of type INTEGER and type SCALAR
+<li> Property "TextGridTopPosition" of type INTEGER and type SCALAR
+<li> Property "TextGridWidth" of type INTEGER and type SCALAR
+<li> Property "TextGridHeight" of type INTEGER and type SCALAR
+<li> Property "CharacterCellWidth" of type SHORT and type SCALAR
+<li> Property "CharacterCellHeight" of type SHORT and type SCALAR
+<li> Property "TextForegroundColorIndex" of type SHORT and type SCALAR
+<li> Property "TextBackgroundColorIndex" of type SHORT and type SCALAR
+<li> Property "PlainTextData" of type STRING and type SCALAR
+</ul>
+<p></p>
+
+<li> (Optional) property "ApplicationExtension" of type PROPERTY and arity
+ARRAY
+<ul>
+<li> Property "ApplicationIdentifier" of type STRING and arity SCALAR
+<li> Property "ApplicationAuthenticationCode" of type SHORT and type ARRAY
+<li> Property "ApplicationDataSize" of type INTEGER and type SCALAR<br>
+use the block size to determine the length of the application data
+</ul>
+<p></p>
+
+<li> (Optional) property "CommentExtension" of type STRING and arity SCALAR
+<p></p>
+
+</ul>
+</ul>
+</ul>
+<p>
+Image technical properties are reported in terms of the NISO
+<a href="/references#z39.87">Z39.87</a>
+data dictionary.
+</p>
+
+<h3>5.1 Profiles</h3>
+
+<ul>
+<li> <strong>GIF 87a</strong>
+<p>
+The presence of the version identifier "87a" indicates version 87a.
+</p>
+<li> <strong>GIF 89a</strong>
+<p>
+The presence of the version identifier "89a" indicates version 89a.
+</p>
+</ul>
+
+<h2>6 Additional Module Properties</h2>
+
+<p></p>
+<ul>
+<li> Nominal file extension: .gif
+</ul>
+
+<p>
+<strong>Note</strong> "GIF" and "Graphics Interchange Format" are trademarks of
+<a href="http://www.compuserve.com">CompuServe Interactive Services, Inc.</a>
+</p>
+</div>
+
+{% include footer.html %}
+
+</body>
+</html>

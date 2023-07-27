@@ -1,0 +1,79 @@
+---
+title: Selecting an XML parser
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
+<h1>Selecting an XML parser (<em>draft</em>, 2007-03-30)</h1>
+
+<p>
+The default XML parser provided with Java 1.4 does not support
+schema validation. For this or other reasons, you may want
+to use a different XML parser with JHOVE.
+<a href="http://xerces.apache.org/xerces2-j/">Xerces2</a> is
+a widely used parser which provides schema validation; any
+parser which conforms to Java's XML API may also be used.
+To use an XML parser with JHOVE, take the following steps:
+<p>
+<b>1.</b> Obtain the necessary <code>jar</code> files for
+the parser. In the case of Xerces, this will be
+<code>xercesImpl.jar</code>.
+<p>
+<b>2.</b> Add the <code>jar</code> file or files to the classpath
+that will be used when you invoke JHOVE.
+If you are invoking <code>jhove</code> (Unix/Linux) or
+<code>jhove.bat</code> (Windows) from the command line, then add the
+path to the parser jar file to <code>EXTRA_JARS</code>.
+<p>
+If you have been invoking JhoveViewer.jar by double-clicking
+it, you will need to create a command line file to run it with
+a third-party XML parser. The simplest way to do this is to
+make a modified copy of <code>jhove</code> or <code>jhove.bat</code>
+and change the line which runs JHOVE (the last line of the file) to:<br>
+&nbsp;<br>
+<code>${JAVA} -classpath $CP JhoveView</code>&nbsp;&nbsp; <span style="color:red; font-style:italic">(Unix/Linux)</span><br>
+or<br>
+<code>%JAVA% -classpath %CP% JhoveView</code>&nbsp;&nbsp; <span style="color:red; font-style:italic">(Windows)</span><br>
+&nbsp;<br>
+Then make the changes as with command line JHOVE.
+<p>
+If you are currently invoking JHOVE with a custom command-line script
+that uses the <code>java -jar</code> option, your classpath will not
+be recognized. Instead, put JhoveApp.jar or JhoveViewer.jar into your
+classpath and invoke the main class, <code>Jhove</code> or
+<code>JhoveView</code>. For example:<br>
+&nbsp;<br>
+<code>java -classpath bin/xerces-impl.jar:bin/JhoveApp.jar Jhove [parameters]</code>
+<p>
+<b>3.</b> Specify the parser class in your command line or configuration file.
+The class to specify must be a subclass of <code>org.xml.sax.XMLReader</code>.
+If you're using Xerces and not creating your own subclass, this would
+usually be <code>org.apache.xerces.parsers.SAXParser</code>.
+<p>
+In the JHOVE command line, you would specify this as<br>
+&nbsp;<br>
+&nbsp;&nbsp;<code>-x <i>[sax-class]</i></code>
+<p>
+You can do this permanently by setting the value of <code>$ARGS</code> in
+the <code>jhove</code> or <code>jhove.bat</code> script file. Ignore
+the warning against not editing below the line.
+<p>
+Alternatively, you can specify the name of the parser in the
+Java properties used by the application. The name of the property
+is <code>edu.harvard.hul.ois.jhove.saxClass</code>. This can be
+specified in the command line, e.g.,<br>
+&nbsp;<br>
+&nbsp;&nbsp;<code>java -Dedu.harvard.hul.ois.jhove.saxClass=org.apache.xerces.parsers.SAXParser ...</code><br>
+<p>
+Since the viewer does not recognize JHOVE command line parameters, you
+must use a property to specify the parser when running the viewer.
+</p>
+
+</div>
+    {% include footer.html %}
+</body>
+</html>

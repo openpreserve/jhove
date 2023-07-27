@@ -1,15 +1,306 @@
-RELEASE NOTES
-=============
+# RELEASE NOTES
+
 JHOVE - JSTOR/Harvard Object Validation Environment
-Copyright 2003-2009 by JSTOR and the President and Fellows of Harvard College.
+Copyright 2003-2015 by JSTOR and the President and Fellows of Harvard College.
+Copyright 2015-2023 by [The Open Preservation Foundation](https://openpreservation.org).
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details).
 
 Versions 1.7 to 1.11 of JHOVE released independently.
 Versions 1.12 onwards released by the Open Preservation Foundation.
 
-JHOVE 1.24
--------------
+## JHOVE 1.28.0
+
+2023-05-19
+
+### General
+
+- Don't report duplicate messages [[#839][]]
+- GitHub action build and QA. [[#811][]], [[#812][]], [[#813][]], [[#814][]], [[#815][]], [[#816][]]
+- Make only one pass to xml-encode the values [[#818][]], adresses [[#817][]]
+- Update build dependencies, and tidied POMs with minor build fixes [[#798][]]
+- Removed erroneous test file that prevented Windows checkouts [[#630][]]
+- NISO Image metadata gets a new GPSHPositioningError tag [[#801][]], fixes [[#787][]]
+- NISO Image metadata, date validation [[#800][]], fixes [[#799][]]
+- Array added to JSON reporting to support multi file reporting [[#728][]], fixes [[#667][]]
+- Fixed small issue in generated reports where schema version wasn't incremented to 1.9. [[#849][]]
+
+### JPEG Module 1.54
+
+- Copy the orientation info from the Exif structure [[#748][]] and [[#821][]], fixes [[#747][]]
+- Purged string constant message [[#831][]]
+  
+### PDF Module 1.12.4
+
+- Fixed bug with string-valued token initialisation [[#806][]], mitigates [[#668][]]
+- Only inform about unknown PDF Name prefixes [[#807][]], mitigates [[#668][]]
+- Now report PDF Encryption for non-references [[#743][]], and [[#810][]]
+- Fixed unhandled exception when Size is not an integer [[#744][]] and [[#819][]]
+- Improved handling of empty string properties [[#782][]], [[#820][]]. Fixes [[#809][]]
+- Now handle Filters which are indirect objects [[#672][]] and [[#822][]]
+- Updated the Prefix Registry with new Prefixes [[#779][]]
+- Remove references to defunct PDF/A profile [[#759][]]
+- Now handle dictionary encryption objects [[#783][]]
+- Caught unhandled exception when size is not an| integer [[#744][]]
+- Fixed minor duplicate error issue [[#778][]]
+- Check added to ensure that an Extension is a direct object [[#780][]]
+- Handle encrypted Name and LastMod properties found in Annotation [[#781][]]
+- Regression tests for empty string cases [[#825][]]
+- Purged string constant message [[#830][]], [[#835][]]
+- Updated dependencies [[#803][]]
+
+### TIFF Module 1.9.4
+
+- descriptions for the `FILESOURCE` tag. [[#804][]], closing [[#767][]]
+- break out of parseIFDChain() infinite loop [[#784][]]
+- Fix incorrect 'byteoffset' config. description [[#751][]]
+- Fix to handle unaligned TIFF data [[#750][]]
+- Purged string constant message [[#829][]]
+
+### UTF-8 Module 1.7.3
+
+- Purged string constant message [[#828][]]
+
+### HTML Module 1.4.3
+
+- Purged string constant message [[#833][]]
+
+### JPEG2000 Module 1.4.4
+
+- Purged string constant message [[#832][]]
+  
+### XML Module 1.5.3
+
+- Purged string constant message [[#827][]]
+- Reverted reporting of XmlParseExceptions so that exception detail is part of message body. [[#850][]]
+
+### EPUB Module 1.2
+
+- Purged string constant message [[#836][]]
+
+### WARC Module 1.3 & GZIP Module 0.3
+
+- Added mechanism to mint errors with IDs and removed plain text messages [[#836][]]
+
+[#630]: https://github.com/openpreserve/jhove/pull/630
+[#672]: https://github.com/openpreserve/jhove/pull/672
+[#728]: https://github.com/openpreserve/jhove/pull/728
+[#744]: https://github.com/openpreserve/jhove/pull/744
+[#748]: https://github.com/openpreserve/jhove/pull/748
+[#751]: https://github.com/openpreserve/jhove/pull/751
+[#750]: https://github.com/openpreserve/jhove/pull/750
+[#759]: https://github.com/openpreserve/jhove/pull/759
+[#778]: https://github.com/openpreserve/jhove/pull/778
+[#779]: https://github.com/openpreserve/jhove/pull/779
+[#780]: https://github.com/openpreserve/jhove/pull/780
+[#781]: https://github.com/openpreserve/jhove/pull/781
+[#782]: https://github.com/openpreserve/jhove/pull/782
+[#783]: https://github.com/openpreserve/jhove/pull/783
+[#784]: https://github.com/openpreserve/jhove/pull/784
+[#798]: https://github.com/openpreserve/jhove/pull/798
+[#800]: https://github.com/openpreserve/jhove/pull/800
+[#801]: https://github.com/openpreserve/jhove/pull/801
+[#803]: https://github.com/openpreserve/jhove/pull/803
+[#804]: https://github.com/openpreserve/jhove/pull/804
+[#806]: https://github.com/openpreserve/jhove/pull/806
+[#807]: https://github.com/openpreserve/jhove/pull/807
+[#810]: https://github.com/openpreserve/jhove/pull/810
+[#811]: https://github.com/openpreserve/jhove/pull/811
+[#812]: https://github.com/openpreserve/jhove/pull/812
+[#813]: https://github.com/openpreserve/jhove/pull/813
+[#814]: https://github.com/openpreserve/jhove/pull/814
+[#815]: https://github.com/openpreserve/jhove/pull/815
+[#816]: https://github.com/openpreserve/jhove/pull/816
+[#818]: https://github.com/openpreserve/jhove/pull/818
+[#819]: https://github.com/openpreserve/jhove/pull/819
+[#820]: https://github.com/openpreserve/jhove/pull/820
+[#821]: https://github.com/openpreserve/jhove/pull/821
+[#822]: https://github.com/openpreserve/jhove/pull/822
+[#825]: https://github.com/openpreserve/jhove/pull/825
+[#827]: https://github.com/openpreserve/jhove/pull/827
+[#828]: https://github.com/openpreserve/jhove/pull/828
+[#829]: https://github.com/openpreserve/jhove/pull/829
+[#830]: https://github.com/openpreserve/jhove/pull/830
+[#831]: https://github.com/openpreserve/jhove/pull/831
+[#832]: https://github.com/openpreserve/jhove/pull/832
+[#833]: https://github.com/openpreserve/jhove/pull/833
+[#835]: https://github.com/openpreserve/jhove/pull/835
+[#836]: https://github.com/openpreserve/jhove/pull/836
+[#839]: https://github.com/openpreserve/jhove/pull/839
+[#849]: https://github.com/openpreserve/jhove/pull/849
+[#850]: https://github.com/openpreserve/jhove/pull/850
+[#817]: https://github.com/openpreserve/jhove/issues/817
+[#809]: https://github.com/openpreserve/jhove/issues/809
+[#799]: https://github.com/openpreserve/jhove/issues/799
+[#787]: https://github.com/openpreserve/jhove/issues/787
+[#767]: https://github.com/openpreserve/jhove/issues/767
+[#747]: https://github.com/openpreserve/jhove/issues/747
+[#743]: https://github.com/openpreserve/jhove/issues/743
+[#668]: https://github.com/openpreserve/jhove/issues/668
+[#667]: https://github.com/openpreserve/jhove/issues/667
+
+## JHOVE 1.26.1
+
+2022-07-14
+
+### General
+
+- Fixed issue [[#757][]] GUI JSON output truncated. [[#758][]]
+
+[#757]: https://github.com/openpreserve/jhove/issues/757
+
+[#758]: https://github.com/openpreserve/jhove/pull/758
+
+## JHOVE 1.26.0
+
+2022-06-09
+
+### General
+
+- GUI improvements including keyboard shortcuts and code clarifications. [[#635][]]
+- Fixed issue [[#667][]] GUI JSON output truncated. [[#728][]]
+- Fixed issue [[#628][]] Allow for folder analysis from GUI. [[#635][]]
+- Fixed issue [[#627][]] GUI: in character encoding options, "UTF-8" appearing twice. [[#635][]]
+- Fixed issue [[#643][]] Language changeable using Java property and configuration file. [[#693][]], [[#729][]]
+  For example:
+  ```xml
+  <languageCode>de</languageCode>
+  ```
+- Refactoring and fixes for Java 11 compatibility. [[#688][]], [[#682][]], [[#716][]]
+- Java constants for various core classes. [[#426][]], [[#586][]], [[#594][]] - [[#598][]], [[#600][]], [[#603][]] - [[#606][]]
+- Minor refactorings to address Java warnings and similar. [[#577][]]
+- Builds now performed by Github actions. [[#718][]]
+- Third party module JARS added to documentation site. [[#566][]]
+- Re-prioritize logging levels for core events. [[#636][]]
+
+### EPUB Module
+
+- Remove extra "s" from "fonts" in Representation Info [[#677][]]
+- Bump EPUBCheck in extension modules from 4.2.2 to 4.2.6 [[#650][]]
+  
+### GIF Module
+
+- Use ModuleBase#readUnsignedByte to read global color table [[#663][]]
+  
+### PDF Module
+
+- Fixed issue [[#358][]] Parenthesis handling in Document Information Dictionary. [[#359][]]
+- Fixed issue [[#375][]] ClassCastException when handling indirect objects. [[#596][]]
+- Fixed issue [[#531][]] Missing error IDs for "Size entry missing in trailer dictionary." [[#579][]], [[#590][]], [[#597][]]
+- Added support of 256 bit AES encryption algorithm. [[#621][]]
+- Fixed bug in halding reporting of skipped pages. [[#620][]]
+- Improvements to reporting of cross-reference exceptions. [[#619][]]
+- Ignore comments in PDF annotations. [[#622][]]
+- Fixed issue [[#669][]] Inconsistent double entries in pdf module's errormessages.properties and translations [[#689][]]
+- Safely exit infinite loops on AProfile.outlinesOK / checkItemOutline [[#704][]]
+- Prevent infinite loop in Literal.readUTFLanguageCode() [[#709][]]
+- Fixed German translation of PDF-HUL-18 [[#673][]]
+- Fixed issue [[#662][]] PDF-Hul produces Invalid Page Dictionary for PDF's with VP dictionaries. [[#665][]]
+- Fixed issue [[#653][]] No document catalog dictionary (PDF-HUL-86) error reported even though document catalog exists [[#654][]]
+- Fixed issue [[#645][]] StackOverflowError in with 1.24.1 in PDF-hul. [[#652][]]
+- Fixed issue [[#646][]] TimeOut / stuck in loop (?) - 1.24.1 PDF-hul. [[#652][]]
+- Fixed issue [[#101][]] JHOVE reporting PDF as v1.3 and as ISO PDF/A-1, Level B, inadequate PDF/A disabled [[#393][]]
+- Added support for PDF extension levels [[#626][]]
+- Fixed issue[[#696][]] Close parenthesis included in Literal _rawBytes, causes incorrect NameTreeNode.compareKey() [[#734][]]
+- Replace += with StringBuilder for whitespace to speed up Tokenizer. [[#615][]]
+
+### PNG Module
+
+- Added Java constants for error strings, magic numbers, etc. [[#578][]] [[#587][]]
+- Fixed issue [[#148][]] null pointer exception. [[#580][]]
+
+### TIFF Module
+
+- Fixed issue [[#624][]] Codes missing for several Geographic CS Types. [[#623][]]
+- Fixed issue [[#690][]] JHOVE inappropriately defaults the TIFF Exif Version tag to 0220. [[#691][]]
+
+### WAVE Module
+
+- Fixed variable formatting in message translations. [[#557][]]
+
+### XML Module
+
+- Fixed issue [[#681][]] XML Signature detection does not work. [[#683][]]
+- Fixed issue [[#680][]] XML should not be validated when no schema provided [[#685][]]
+- Assorted improvements to reporting of schema locations. [[#634][]]
+- Fixed XML version reporting for documents with byte-order marks (BOMs). [[#634][]]
+- Cleaned up unnecessary code, formatting and documentation. [[#634][]]
+
+[#101]: https://github.com/openpreserve/jhove/issues/101
+[#148]: https://github.com/openpreserve/jhove/issues/148
+[#358]: https://github.com/openpreserve/jhove/issues/358
+[#375]: https://github.com/openpreserve/jhove/issues/375
+[#531]: https://github.com/openpreserve/jhove/issues/531
+[#624]: https://github.com/openpreserve/jhove/issues/624
+[#627]: https://github.com/openpreserve/jhove/issues/627
+[#628]: https://github.com/openpreserve/jhove/issues/628
+[#643]: https://github.com/openpreserve/jhove/issues/643
+[#645]: https://github.com/openpreserve/jhove/issues/645
+[#646]: https://github.com/openpreserve/jhove/issues/646
+[#653]: https://github.com/openpreserve/jhove/issues/653
+[#662]: https://github.com/openpreserve/jhove/issues/662
+[#667]: https://github.com/openpreserve/jhove/issues/667
+[#669]: https://github.com/openpreserve/jhove/issues/669
+[#680]: https://github.com/openpreserve/jhove/issues/680
+[#681]: https://github.com/openpreserve/jhove/issues/681
+[#691]: https://github.com/openpreserve/jhove/issues/690
+[#696]: https://github.com/openpreserve/jhove/issues/696
+
+[#359]: https://github.com/openpreserve/jhove/pull/359
+[#393]: https://github.com/openpreserve/jhove/pull/393
+[#426]: https://github.com/openpreserve/jhove/pull/426
+[#557]: https://github.com/openpreserve/jhove/pull/557
+[#566]: https://github.com/openpreserve/jhove/pull/566
+[#577]: https://github.com/openpreserve/jhove/pull/577
+[#578]: https://github.com/openpreserve/jhove/pull/578
+[#579]: https://github.com/openpreserve/jhove/pull/579
+[#580]: https://github.com/openpreserve/jhove/pull/580
+[#586]: https://github.com/openpreserve/jhove/pull/586
+[#587]: https://github.com/openpreserve/jhove/pull/587
+[#590]: https://github.com/openpreserve/jhove/pull/590
+[#594]: https://github.com/openpreserve/jhove/pull/594
+[#595]: https://github.com/openpreserve/jhove/pull/595
+[#596]: https://github.com/openpreserve/jhove/pull/596
+[#597]: https://github.com/openpreserve/jhove/pull/597
+[#598]: https://github.com/openpreserve/jhove/pull/598
+[#600]: https://github.com/openpreserve/jhove/pull/600
+[#602]: https://github.com/openpreserve/jhove/pull/602
+[#603]: https://github.com/openpreserve/jhove/pull/603
+[#604]: https://github.com/openpreserve/jhove/pull/604
+[#605]: https://github.com/openpreserve/jhove/pull/605
+[#606]: https://github.com/openpreserve/jhove/pull/606
+[#615]: https://github.com/openpreserve/jhove/pull/615
+[#619]: https://github.com/openpreserve/jhove/pull/619
+[#620]: https://github.com/openpreserve/jhove/pull/620
+[#621]: https://github.com/openpreserve/jhove/pull/621
+[#622]: https://github.com/openpreserve/jhove/pull/622
+[#623]: https://github.com/openpreserve/jhove/pull/623
+[#626]: https://github.com/openpreserve/jhove/pull/626
+[#634]: https://github.com/openpreserve/jhove/pull/634
+[#635]: https://github.com/openpreserve/jhove/pull/635
+[#636]: https://github.com/openpreserve/jhove/pull/636
+[#650]: https://github.com/openpreserve/jhove/pull/650
+[#652]: https://github.com/openpreserve/jhove/pull/652
+[#654]: https://github.com/openpreserve/jhove/pull/654
+[#663]: https://github.com/openpreserve/jhove/pull/663
+[#665]: https://github.com/openpreserve/jhove/pull/665
+[#677]: https://github.com/openpreserve/jhove/pull/677
+[#682]: https://github.com/openpreserve/jhove/pull/682
+[#683]: https://github.com/openpreserve/jhove/pull/683
+[#685]: https://github.com/openpreserve/jhove/pull/685
+[#688]: https://github.com/openpreserve/jhove/pull/688
+[#689]: https://github.com/openpreserve/jhove/pull/689
+[#693]: https://github.com/openpreserve/jhove/pull/693
+[#704]: https://github.com/openpreserve/jhove/pull/704
+[#709]: https://github.com/openpreserve/jhove/pull/709
+[#716]: https://github.com/openpreserve/jhove/pull/716
+[#718]: https://github.com/openpreserve/jhove/pull/718
+[#728]: https://github.com/openpreserve/jhove/pull/728
+[#729]: https://github.com/openpreserve/jhove/pull/729
+[#734]: https://github.com/openpreserve/jhove/pull/734
+
+## JHOVE 1.24
+
 2020-03-12
 
 ### General
@@ -149,8 +440,8 @@ JHOVE 1.24
 [#552]: https://github.com/openpreserve/jhove/pull/552
 [#557]: https://github.com/openpreserve/jhove/pull/557
 
-JHOVE 1.22
--------------
+## JHOVE 1.22
+
 2019-04-18
 
 ### General
@@ -196,7 +487,7 @@ JHOVE 1.22
 
 ### TIFF Module
 
-- Fixed typo in TIFF properties [[#361][]]
+- Fixed typo in TIFF properties [[#361]]
 - Error IDs and message constants as external resources [[#405]]
 
 ### UTF-8 Module
@@ -213,7 +504,6 @@ JHOVE 1.22
 - Fix for premature end of file error [[#378][]]
 - Fix internal DTD and entity problems [[#378][]]
 
-
 [#342]: https://github.com/openpreserve/jhove/pull/342
 [#343]: https://github.com/openpreserve/jhove/pull/343
 [#347]: https://github.com/openpreserve/jhove/pull/347
@@ -224,6 +514,7 @@ JHOVE 1.22
 [#352]: https://github.com/openpreserve/jhove/pull/352
 [#353]: https://github.com/openpreserve/jhove/pull/353
 [#360]: https://github.com/openpreserve/jhove/pull/360
+[#361]: https://github.com/openpreserve/jhove/pull/361
 [#363]: https://github.com/openpreserve/jhove/pull/363
 [#378]: https://github.com/openpreserve/jhove/pull/378
 [#379]: https://github.com/openpreserve/jhove/pull/379
@@ -252,8 +543,8 @@ JHOVE 1.22
 [#429]: https://github.com/openpreserve/jhove/pull/429
 
 
-JHOVE 1.20
--------------
+## JHOVE 1.20
+
 2018-03-29
 
 ### General
@@ -326,9 +617,8 @@ JHOVE 1.20
 [#323]: https://github.com/openpreserve/jhove/pull/323
 [#324]: https://github.com/openpreserve/jhove/pull/324
 
+## JHOVE 1.18.1
 
-JHOVE 1.18.1
--------------
 2017-11-30
 
 ### General
@@ -403,9 +693,8 @@ JHOVE 1.18.1
 [#291]: https://github.com/openpreserve/jhove/pull/291
 [#292]: https://github.com/openpreserve/jhove/pull/292
 
+## JHOVE 1.16.7
 
-JHOVE 1.16.7
-------------
 2017-07-20
 
 ### PDF Module
@@ -413,8 +702,8 @@ JHOVE 1.16.7
 - Fixed: Some PDFs being reported as "Well-formed and valid" while remaining
   largely unchecked [[#258](https://github.com/openpreserve/jhove/pull/258)]
 
-JHOVE 1.16.5
-------------
+## JHOVE 1.16.5
+
 2017-03-20
 
 ### General
@@ -422,8 +711,8 @@ JHOVE 1.16.5
 - Fixed: Core method causing modules to skip more bytes than expected
   [[#194](https://github.com/openpreserve/jhove/pull/194)]
 
-JHOVE 1.16.0
-------------
+## JHOVE 1.16.0
+
 2017-03-16
 
 ### General
@@ -447,9 +736,8 @@ JHOVE 1.16.0
 - Fixed: Validation of WAVE files larger than 2 GB
 - Fixed: Skip Bytes issue for WAVE files larger than 100 MB
 
+## JHOVE 1.14
 
-JHOVE 1.14
-----------
 2016-05-12
 
 *Version 1.12 was never officially released, so to avoid confusion the
@@ -475,9 +763,8 @@ JHOVE 1.14
 
 - Support for Unicode 7.0.0
 
+## JHOVE 1.11
 
-JHOVE 1.11
-----------
 2013-09-30
 
 ### General
@@ -508,9 +795,8 @@ JHOVE 1.11
    1. Fix to PDF module, submitted by willp-bl, may reduce tendency
       to run out of heap space on some files.
 
+## JHOVE 1.10
 
-JHOVE 1.10
-----------
 2013-06-10
 
 ### General
@@ -560,9 +846,8 @@ JHOVE 1.10
    6. If an object uses a compression scheme which JHOVE can't deal with, JHOVE
       will try to give a specific error message.
 
+## JHOVE 1.9
 
-JHOVE 1.9
----------
 2012-12-17
 
 ### General
@@ -617,9 +902,8 @@ JHOVE 1.9
       back to JhoveBase and not report any result for certain defective
       files. These now report the file as not well-formed.
 
+## JHOVE 1.8
 
-JHOVE 1.8
----------
 2012-11-07
 
 ### General
@@ -653,9 +937,8 @@ JHOVE 1.8
    1. The Originator Reference property, found in the Broadcast Wave Extension
       (BEXT) chunk, is now reported.
 
+## JHOVE 1.7
 
-JHOVE 1.7
----------
 2012-08-12
 
 ### General
@@ -677,9 +960,8 @@ JHOVE 1.7
    1. A situation that caused an infinite loop and eventual memory exhaustion
       processing in some PDF files with malformed literals has been fixed.
 
+## JHOVE 1.6
 
-JHOVE 1.6
----------
 2011-01-04
 
 ### XML Handler and Text Handler
@@ -702,11 +984,10 @@ JHOVE 1.6
 
 ### UTF-8 Module
 
-   1.  Updated to Unicode 6.0.0.
+   1. Updated to Unicode 6.0.0.
 
+## JHOVE 1.5
 
-JHOVE 1.5
----------
 2009-12-17
 
 ### PDF Module
@@ -731,9 +1012,8 @@ JHOVE 1.5
 
    2. The TextMD feature was added by Thomas Ledoux.
 
+## JHOVE 1.4
 
-JHOVE 1.4
----------
 2009-07-31
 
 ### PDF Module
@@ -770,9 +1050,8 @@ JHOVE 1.4
    1. A reset() function has been added so that if the handler is reused,
       it will return to a valid initial state.
 
+## JHOVE 1.3
 
-JHOVE 1.3
----------
 2009-06-04
 
 ### General
@@ -814,9 +1093,8 @@ JHOVE 1.3
 
    1. Omissions in MIX 1.0 and 2.0 output have been fixed.
 
+## JHOVE 1.2
 
-JHOVE 1.2
----------
 2009-02-10
 
 ### General
@@ -855,9 +1133,8 @@ JHOVE 1.2
       AESAudioMetadata property had an empty value or not. This has
       been fixed.
 
+## JHOVE 1.1
 
-JHOVE 1.1
----------
 2008-02-22
 
 ### Command-line Interface
@@ -1025,18 +1302,18 @@ JHOVE 1.1
    1. Corrected error parsing pyramidal TIFF using the SubIFDs tag with a
       type of IFD (13) rather than LONG (4).
 
-   7. Correct parsing of the EXIF "subsecTimeOriginal" (37251) and
+   2. Correct parsing of the EXIF "subsecTimeOriginal" (37251) and
       "subsecTimeDigitized" (37522) properties.
 
-   2. All sub-IFDs of a pyramidal TIFF are now properly parsed.
+   3. All sub-IFDs of a pyramidal TIFF are now properly parsed.
 
-   3. The EXIF GainControl tag (41991) is now correctly identified as
+   4. The EXIF GainControl tag (41991) is now correctly identified as
       a SHORT, not a RATIONAL, value.
 
-   4. Corrected error in which valid files were reported as being only
+   5. Corrected error in which valid files were reported as being only
       well-formed due to an incorrect parsing of the DateTime (306) tag.
 
-   5. Byte-aligned offsets can be considered well-formed if the module
+   6. Byte-aligned offsets can be considered well-formed if the module
       parameter "byteoffset=true" is set in the configuration file:
 
       ```xml
@@ -1046,16 +1323,16 @@ JHOVE 1.1
       </module>
       ```
 
-   6. All non-final instance fields and methods are protected, rather than
+   7. All non-final instance fields and methods are protected, rather than
       private.
 
-   7. Correct parsing of the EXIF "subsecTimeOriginal" (37251) and
+   8. Correct parsing of the EXIF "subsecTimeOriginal" (37251) and
       "subsecTimeDigitized" (37522) properties.
 
-   8. Using the `-s` option, the TIFF module was incorrectly reporting
+   9. Using the `-s` option, the TIFF module was incorrectly reporting
       signature matches for text files starting with "II".
 
-   9. Validation errors in embedded EXIF metadata were not being fully
+   10. Validation errors in embedded EXIF metadata were not being fully
       reported.
 
 ### UTF-8 Module
@@ -1148,9 +1425,8 @@ JHOVE 1.1
       configuration file.  This utility can be invoked by the driver scripts
       "userhome" (Bourne shell) or "userhome.bat" (Windows).
 
+## JHOVE 1.0
 
-JHOVE 1.0
----------
 2005-05-26
 
 ### General
@@ -1210,9 +1486,8 @@ JHOVE 1.0
       attribute of the `<audit>` element and individual files are reported
       as relative pathnames.
 
+## JHOVE 1.0 beta 3
 
-JHOVE 1.0 beta 3
-----------------
 2005-02-04
 
 ### General
@@ -1439,9 +1714,8 @@ JHOVE 1.0 beta 3
           00000058: 257 (ImageLength) LONG 1 = 4620
           ...
 
+## JHOVE 1.0 beta 2
 
-JHOVE 1.0 beta 2
-----------------
 2004-07-19
 
 ### General

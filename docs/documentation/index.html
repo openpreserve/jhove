@@ -1,0 +1,153 @@
+---
+title: Documentation
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
+  <h1>Documentation</h1>
+  <a class="name" name="introduction">
+    <h2>An introduction to JHOVE</h2>
+  </a>
+  <p>
+    JHOVE provides functions to perform format-specific identification,
+    validation, and characterization of digital objects.
+  </p>
+  <ul>
+    <li>
+      Format <em>identification</em> is the process of determining the format to
+      which a digital object conforms; in other words, it answers the question:
+      "I have a digital object; what format is it?"
+    </li>
+    <li>
+      Format <em>validation</em> is the process of determining the level of
+      compliance of a digital object to the specification for its purported format,
+      e.g.:
+      "I have an object purportedly of format <em>F</em>; is it?"
+      <br/>
+      Format validation conformance is determined at two levels:
+      <em>well-formedness</em> and <em>validity</em>.
+      <ol>
+        <li>
+          A digital object is well-formed if it meets the purely
+          syntactic requirements for its format.
+        </li>
+        <li>
+          An object is valid if it is well-formed and it meets additional
+          semantic-level requirements.
+        </li>
+      </ol>
+      <p>
+        For example, a <a href="/references#tiff6">TIFF</a> object is
+        well-formed if it starts with an 8 byte header followed by a sequence of
+        Image File Directories (IFDs), each composed of a 2 byte entry count and
+        a series of 8 byte tagged entries.
+        The object is valid if it meets certain additional
+        semantic-level rules, such as that an RGB file must have at least three sample
+        values per pixel.
+      </p>
+    </li>
+    <li>
+      Format <em>characterization</em> is the process of determining the
+      format-specific significant properties of an object of a given format, e.g.:
+      "I have an object of format <em>F</em>; what are its salient properties?"
+      <p>
+        <a class="name" name="repinfo">The set</a> of characteristics reported
+        by JHOVE about a digital object is known as the object's
+        <em>representation information</em>, a concept introduced by the Open
+        Archival Information System (OAIS) reference model
+        [<a href="/references#oais">ISO/IEC 14721</a>].
+        The standard representation information reported by JHOVE includes:
+        file pathname or URI, last modification date, byte size, format,
+        format version, MIME type, format profiles, and optionally, CRC32, MD5,
+        and SHA-1 checksums [<a href="/references#crc32">CRC32</a>,
+        <a href="/references#md5">MD5</a>,
+        <a href="/references#sha1">SHA-1</a>].
+        Additional media type-specific representation information is consistent with
+        the <a href="/references#z39.87">NISO Z39.87</a>
+        Data Dictionary for digital still images and
+        the draft AES metadata standard for digital audio.
+      </p>
+    </li>
+  </ul>
+  <p>
+    Identification, validation, and characterization actions are frequently
+    necessary during routine operation of
+    digital repositories and for digital preservation activities.
+    These actions are performed by <em>modules</em>.
+    The output from JHOVE is controlled by <em>output handlers</em>.
+    JHOVE uses an extensible plug-in architecture; it can be configured at the
+    time of its invocation to include whatever specific format modules and
+    output handlers that are desired.
+    The initial release of JHOVE includes <a href="/modules/" title="JHOVE modules list">modules</a> for
+    <a href="/modules/bytestream">arbitrary byte streams</a>,
+    <a href="/modules/ascii">ASCII</a> and
+    <a href="/modules/utf8">UTF-8</a> encoded text,
+    <a href="/modules/gif">GIF</a>,
+    <a href="/modules/jpeg2000">JPEG2000</a>, and
+    <a href="/modules/jpeg">JPEG</a>, and
+    <a href="/modules/tiff">TIFF</a> images,
+    <a href="/modules/aiff">AIFF</a> and
+    <a href="/modules/wave">WAVE</a> audio,
+    <a href="/modules/pdf">PDF</a>,
+    <a href="/modules/html">HTML</a>, and
+    <a href="/modules/xml">XML</a>; and
+    text and XML output handlers.
+  </p>
+
+<h2>Tutorial</h2>
+
+<ul>
+<li> <a href="/getting-started/">Getting started with JHOVE</a> (2015-10-20)
+<li> <a href="/documentation/parser/">Selecting an XML parser</a> (2007-04-04)
+</ul>
+
+<h2>For JHOVE Developers</h2>
+
+<ul>
+  <li>A guide to <a href="/documentation/build/">building JHOVE from source.</a></li>
+  <li>JHOVE <a href="/javadoc/"> JavaDoc for all packages and classes</a>
+  <li>A UML class <a href="/img/api.gif">diagram</a>
+  <li>A guide to <a href="/documentation/dev-module/">writing a JHOVE Module</a> (2005-02-07)</li>
+  <li>A guide to <a href="/documentation/logging/">logging in JHOVE</a></li>
+</ul>
+
+<h2>Schemas</h2>
+
+<ul>
+<li> JHOVE output schema <a href="http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd">jhove.xsd</a>
+<li> JHOVE configuration file schema
+<a href="http://hul.harvard.edu/ois/xml/xsd/jhove/jhoveConfig.xsd">jhoveConfig.xsd</a>
+</ul>
+
+<h2>Modules and Format Specifications</h2>
+
+<p>
+Standard JHOVE modules:
+</p>
+<ul>
+<li> The <a href="/modules/aiff/">AIFF-hul</a> module (2005-05-09)
+<li> The <a href="/modules/ascii/">ASCII-hul</a> module (2004-03-03)
+<li> The <a href="/modules/bytestream/">BYTESTREAM</a> module (2004-03-03)
+<li> The <a href="/modules/gif/">GIF-hul</a> module (2005-05-09)
+<li> The <a href="/modules/html/">HTML-hul</a> module (2005-05-09)
+<li> The <a href="/modules/jpeg/">JPEG-hul</a> module (2005-05-26)
+<li> The <a href="/modules/jpeg2000/">JPEG2000-hul</a> module (2005-05-26)
+<li> The <a href="/modules/pdf/">PDF-hul</a> module (2008-02-25)
+<li> The <a href="/modules/tiff/">TIFF-hul</a> module (2005-05-09)
+<li> The <a href="/modules/utf8/">UTF8-hul</a> module (2005-05-09)
+<li> The <a href="/modules/wave/">WAVE-hul</a> module (2004-12-17)
+<li> The <a href="/modules/xml/">XML-hul</a> module (2005-05-09)
+</ul>
+
+<ul>
+<li> <a href="/references/">References</a> (2005-05-09)
+</ul>
+
+</div>
+    {% include footer.html %}
+</body>
+</html>

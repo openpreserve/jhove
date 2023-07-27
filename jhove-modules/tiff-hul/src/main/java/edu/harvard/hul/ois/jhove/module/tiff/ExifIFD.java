@@ -106,8 +106,10 @@ public class ExifIFD
         "shutter priority", "program creative", "program action", 
         "portrait mode", "landscape mode"
     };
+    // 1 = Film Scanner, 2 = Reflection Print Scanner, 3 = Digital Camera
+    // cf https://exiftool.org/TagNames/EXIF.html
     public static final String [] FILESOURCE_L = {
-        "", "", "", "DSC"
+        "", "film scanner", "reflection print scanner", "digital still camera"
     };
     public static final String [] FLASH_L = {
         "did not fire",
@@ -177,7 +179,7 @@ public class ExifIFD
     public static final String [] SENSINGMETHOD_L = {
         "", "not defined", "one-chip color area", 
         "two-chip color area", "three-chip color area",
-        "color sequential area", "", "trilinear", "colour sequential linear"
+        "color sequential area", "", "trilinear", "color sequential linear"
     };
     public static final String [] SHARPNESS_L = {
         "normal", "soft", "hard"
@@ -278,7 +280,7 @@ public class ExifIFD
         _colorSpace = NULL;
         _contrast = 0;
         _customRendered = NULL;
-        _exifVersion = "0220";
+        _exifVersion = null;
         _exposureMode = NULL;
         _exposureProgram = NULL;
         _fileSource = NULL;
@@ -310,8 +312,10 @@ public class ExifIFD
     {
         List entries = new LinkedList ();
 
-        entries.add (new Property ("ExifVersion", PropertyType.STRING,
-                                   _exifVersion));
+        if (_exifVersion != null) {
+            entries.add (new Property ("ExifVersion", PropertyType.STRING,
+                    _exifVersion));
+        }
         entries.add (new Property ("FlashpixVersion", PropertyType.STRING,
                                    _flashpixVersion));
         if (_colorSpace != NULL) {
