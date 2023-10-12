@@ -3486,6 +3486,12 @@ public class PdfModule extends ModuleBase {
 			propList.add(new Property(propName, PropertyType.STRING, PROP_VAL_NULL));
 			info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
 			info.setValid(false);
+		} catch (PdfInvalidException e) {
+			 if (e.getJhoveMessage() != null) {
+				info.setMessage(new ErrorMessage(
+						JhoveMessages.getMessageInstance(
+								e.getJhoveMessage().getId(), e.getJhoveMessage().getMessage(),e.getJhoveMessage().getSubMessage() )));
+			 } 
 		} catch (Exception e) {
 
 			String msg = e.getClass().getName();
