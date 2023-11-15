@@ -1531,7 +1531,10 @@ public class PdfModule extends ModuleBase {
 						// (Most likely we've hit the keyword "trailer".
 						break;
 					}
-					_objCount = ((Numeric) _parser.getNext()).getIntegerValue();
+					token = _parser.getNext();
+					if (token instanceof Numeric) {
+						_objCount = ((Numeric) token).getIntegerValue();
+					}
 					if (_xref == null) {
 						_xref = new long[_objCount];
 					}
