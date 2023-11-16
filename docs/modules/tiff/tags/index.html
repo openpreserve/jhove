@@ -1,0 +1,377 @@
+---
+title: TIFF Tags
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
+  <a class="name" name="tags">
+    <h1>TIFF Tags</h1>
+  </a>
+  <table border="1">
+  <tr><th>Tag</th><th>Tag Name</th><th>Type</th><th>Count</th><th>Definition</th><th>Note</th></tr>
+  <tr><td>254</td><td>NewSubFileType</td><td>LONG</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>255</td><td>SubFileType</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>256</td><td>ImageWidth</td><td>SHORT / LONG</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>257</td><td>ImageLength</td><td>SHORT / LONG</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>258</td><td>BitsPerSample</td><td>SHORT</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>259</td><td>Compression</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>262</td><td>PhotometricInterpretation</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>263</td><td>Thresholding</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>264</td><td>CellWidth</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>265</td><td>CellLength</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>266</td><td>FillOrder</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>269</td><td>DocumentName</td><td>ASCII</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>270</td><td>ImageDescription</td><td>ASCII</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>271</td><td>Make</td><td>ASCII</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>272</td><td>Model</td><td>ASCII</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>273</td><td>StripOffsets</td><td>SHORT / LONG</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>274</td><td>Orientation</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>277</td><td>SamplesPerPixel</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>278</td><td>RowsPerStrip</td><td>SHORT / LONG</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>279</td><td>StripByteCounts</td><td>SHORT / LONG</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>280</td><td>MinSampleValue</td><td>SHORT</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>281</td><td>MaxSampleValue</td><td>SHORT</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>282</td><td>XResolution</td><td>RATIONAL</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>283</td><td>YResolution</td><td>RATIONAL</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>284</td><td>PlanarConfiguration</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>285</td><td>PageName</td><td>ASCII</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>286</td><td>XPosition</td><td>RATIONAL</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>287</td><td>YPosition</td><td>RATIONAL</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>288</td><td>FreeOffsets</td><td>LONG</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>289</td><td>FreeByteCounts</td><td>LONG</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>290</td><td>GrayResponseUnit</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>291</td><td>GrayResponseCurve</td><td>SHORT</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>292</td><td>Group3Options</td><td>LONG</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>293</td><td>Group4Options</td><td>LONG</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>296</td><td>ResolutionUnit</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>297</td><td>PageNumber</td><td>SHORT</td><td>2</td><td>TIFF</td></tr>
+  <tr><td>300</td><td>ColorResponseUnit</td><td>SHORT</td><td>1</td><td>TIFF 4.0</td></tr>
+  <tr><td>301</td><td>TransferFunction</td><td>SHORT</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>305</td><td>Software</td><td>ASCII</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>306</td><td>DateTime</td><td>ASCII</td><td>20</td><td>TIFF</td></tr>
+  <tr><td>315</td><td>Artist</td><td>ASCII</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>316</td><td>HostComputer</td><td>ASCII</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>317</td><td>Predictor</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>318</td><td>WhitePoint</td><td>RATIONAL</td><td>2</td><td>TIFF</td></tr>
+  <tr><td>319</td><td>PrimaryChromacities</td><td>RATIONAL</td><td>6</td><td>TIFF</td></tr>
+  <tr><td>320</td><td>ColorMap</td><td>SHORT</td><td>3*N</td><td>TIFF</td></tr>
+  <tr><td>321</td><td>HalftoneHints</td><td>SHORT</td><td>2</td><td>TIFF</td></tr>
+  <tr><td>322</td><td>TileWidth</td><td>SHORT / LONG</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>323</td><td>TileLength</td><td>SHORT / LONG</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>324</td><td>TileOffsets</td><td>LONG</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>325</td><td>TileByteCounts</td><td>SHORT / LONG</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>326</td><td>BadFaxLines</td><td>LONG</td><td>1</td><td>ClassF / RFC1314</td></tr>
+  <tr><td>327</td><td>CleanFaxData</td><td>SHORT</td><td>1</td><td>ClassF / RFC1314</td></tr>
+  <tr><td>328</td><td>ConsecutiveBadFaxLines</td><td>LONG</td><td>1</td><td>ClassF / RFC1314</td></tr>
+  <tr><td>330</td><td>SubIFDs</td><td>LONG / IFD</td><td>N</td><td>PageMaker</td></tr>
+  <tr><td>332</td><td>InkSet</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>333</td><td>InkNames</td><td>ASCII</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>334</td><td>NumberOfInks</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>336</td><td>DotRange</td><td>BYTE / SHORT</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>337</td><td>TargetPrinter</td><td>ASCII</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>338</td><td>ExtraSamples</td><td>BYTE</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>339</td><td>SampleFormat</td><td>SHORT</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>340</td><td>SMinSampleValue</td><td>Any</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>341</td><td>SMaxSampleValue</td><td>Any</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>342</td><td>TransferRange</td><td>SHORT</td><td>6</td><td>TIFF</td></tr>
+  <tr><td>343</td><td>ClipPath</td><td>BYTE</td><td>N</td><td>PageMaker</td></tr>
+  <tr><td>344</td><td>XClipPathUnits</td><td>LONG</td><td>1</td><td>PageMaker</td></tr>
+  <tr><td>345</td><td>YClipPathUnits</td><td>LONG</td><td>1</td><td>PageMaker</td></tr>
+  <tr><td>346</td><td>Indexed</td><td>SHORT</td><td>1</td><td>PageMaker</td></tr>
+  <tr><td>351</td><td>OPIProxy</td><td>SHORT</td><td>1</td><td>PageMaker</td></tr>
+  <tr><td>437</td><td>JPEG tables</td><td>UNDEFINED</td><td>N</td><td>Photoshop</td></tr>
+  <tr><td>512</td><td>JPEGProc</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>513</td><td>JPEGInterchangeFormat</td><td>LONG</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>514</td><td>JPEGInterchangeFormatLength</td><td>LONG</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>515</td><td>JPEGRestartInterval</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>517</td><td>JPEGLosslessPredictors</td><td>SHORT</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>518</td><td>JPEGPointTransforms</td><td>SHORT</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>519</td><td>JPEGQTables</td><td>LONG</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>520</td><td>JPEGDCTables</td><td>LONG</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>521</td><td>JPEGACTables</td><td>LONG</td><td>N</td><td>TIFF</td></tr>
+  <tr><td>529</td><td>YCbCrCoefficients</td><td>RATIONAL</td><td>3</td><td>TIFF</td></tr>
+  <tr><td>530</td><td>YCbCrSubsampling</td><td>SHORT</td><td>2</td><td>TIFF</td></tr>
+  <tr><td>531</td><td>YCbCrPositioning</td><td>SHORT</td><td>1</td><td>TIFF</td></tr>
+  <tr><td>532</td><td>ReferenceBlackWhite</td><td>LONG</td><td>2*N</td><td>TIFF</td></tr>
+  <tr><td>700</td><td>XMP</td><td>BYTE</td><td>N</td><td>XMP</td></tr>
+  <tr><td>32781</td><td>ImageID</td><td>ASCII</td><td>N</td><td>PageMaker</td></tr>
+  <tr><td>32995</td><td>Matteing</td><td>-</td><td>-</td><td>-</td><td>deprecated; use ExtraSamples</td></tr>
+  <tr><td>32996</td><td>DataType</td><td>-</td><td>-</td><td>-</td><td>deprecated; use SampleFormat</td></tr>
+  <tr><td>32997</td><td>ImageDepth</td><td>-</td><td>-</td><td>-</td></tr>
+  <tr><td>32998</td><td>TileDepth</td><td>-</td><td>-</td><td>-</td></tr>
+  <tr><td>33421</td><td>CFARepeatPatternDim</td><td>SHORT</td><td>2</td><td>TIFF/EP</td></tr>
+  <tr><td>33422</td><td>CFAPattern</td><td>BYTE</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>33423</td><td>BatteryLevel</td><td>RATIONAL / ASCII</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>33432</td><td>Copyright</td><td>ASCII</td><td>any</td><td>TIFF/EP</td></tr>
+  <tr><td>33434</td><td>ExposureTime</td><td>RATIONAL</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>33437</td><td>Fnumber</td><td>RATIONAL</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>33723</td><td>IPTC/NAA</td><td>LONG / ASCII</td><td></td><td>TIFF/EP</td></tr>
+  <tr><td>33550</td><td>ModelPixelScaleTag</td><td>DOUBLE</td><td>3</td><td>GeoTIFF</td></tr>
+  <tr><td>33920</td><td>IntergraphMatrixTag</td><td>DOUBLE</td><td>17</td><td>GeoTIFF</td><td>deprecated</td></tr>
+  <tr><td>33922</td><td>ModelTiepointTag</td><td>DOUBLE</td><td>6*N</td><td>GeoTIFF</td></tr>
+  <tr><td>34016</td><td>Site</td><td>ASCII</td><td>N</td><td>TIFF/IT</td></tr>
+  <tr><td>34017</td><td>ColorSequence</td><td>ASCII</td><td>N</td><td>TIFF/IT</td></tr>
+  <tr><td>34018</td><td>IT8Header</td><td>ASCII</td><td>N</td><td>TIFF/IT</td></tr>
+  <tr><td>34019</td><td>RasterPadding</td><td>SHORT</td><td>1</td><td>TIFF/IT</td></tr>
+  <tr><td>34020</td><td>BitsPerRunLength</td><td>SHORT</td><td>1</td><td>TIFF/IT</td></tr>
+  <tr><td>34021</td><td>BitsPerExtendedRunLength</td><td>SHORT</td><td>1</td><td>TIFF/IT</td></tr>
+  <tr><td>34022</td><td>ColorTable</td><td>BYTE</td><td>N</td><td>TIFF/IT</td></tr>
+  <tr><td>34023</td><td>ImageColorIndicator</td><td>BYTE</td><td>1</td><td>TIFF/IT</td></tr>
+  <tr><td>34024</td><td>BackgroundColorIndicator</td><td>BYTE</td><td>1</td><td>TIFF/IT</td></tr>
+  <tr><td>34025</td><td>ImageColorValue</td><td>BYTE</td><td>1</td><td>TIFF/IT</td></tr>
+  <tr><td>34026</td><td>BackgroundColorValue</td><td>BYTE</td><td>1</td><td>TIFF/IT</td></tr>
+  <tr><td>34027</td><td>PixelInensityRange</td><td>BYTE</td><td>2</td><td>TIFF/IT</td></tr>
+  <tr><td>34028</td><td>TransparencyIndicator</td><td>BYTE</td><td>1</td><td>TIFF/IT</td></tr>
+  <tr><td>34029</td><td>ColorCharacterization</td><td>ASCII</td><td>N</td><td>TIFF/IT</td></tr>
+  <tr><td>34030</td><td>HCUsage</td><td>LONG</td><td>1</td><td>TIFF/IT</td></tr>
+  <tr><td>34264</td><td>ModelTransformationTag</td><td>DOUBLE</td><td>16</td><td>GeoTIFF</td></tr>
+  <tr><td>34377</td><td>PhotoshopImageResources</td><td>UNDEFINED</td><td></td><td>Photoshop</td></tr>
+  <tr><td>34665</td><td>ExifIFD</td><td>LONG</td><td>1</td><td>Exif</td></tr>
+  <tr><td>34675</td><td>InterColourProfile</td><td>UNDEFINED</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>34732</td><td>ImageLayer</td><td>SHORT or LONG</td><td>2</td><td>RFC 2301</td></tr>
+  <tr><td>34735</td><td>GeoKeyDirectoryTag</td><td>SHORT</td><td>4*N</td><td>GeoTIFF</td></tr>
+  <tr><td>34736</td><td>GeoDoubleParamsTag</td><td>DOUBLE</td><td>N</td><td>GeoTIFF</td></tr>
+  <tr><td>34737</td><td>GeoAsciiParamsTag</td><td>ASCII</td><td>N</td><td>GeoTIFF</td></tr>
+  <tr><td>34850</td><td>ExposureProgram</td><td>SHORT</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>34852</td><td>SpectralSensitivity</td><td>ASCII</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>34853</td><td>GPSInfo</td><td>LONG</td><td>1</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>34855</td><td>ISOSpeedRatings</td><td>SHORT</td><td>3</td><td>TIFF/EP</td></tr>
+  <tr><td>34856</td><td>OECF</td><td>UNDEFINED</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>34857</td><td>Interlace</td><td>SHORT</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>34858</td><td>TimeZoneOffset</td><td>SSHORT</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>34859</td><td>SelfTimerMode</td><td>SHORT</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>34908</td><td>FaxRecvParams</td><td>-</td><td>-</td><td>-</td></tr>
+  <tr><td>34909</td><td>FaxSubAddress</td><td>-</td><td>-</td><td>-</td></tr>
+  <tr><td>34910</td><td>FaxRecvTime</td><td>-</td><td>-</td><td>-</td></tr>
+  <tr><td>36867</td><td>DateTimeOriginal</td><td>ASCII</td><td>20</td><td>TIFF/EP</td></tr>
+  <tr><td>37122</td><td>CompressedBitsPerPixel</td><td>RATIONAL</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37377</td><td>ShutterSpeedValue</td><td>RATIONAL</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37378</td><td>ApertureValue</td><td>RATIONAL</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37379</td><td>BrightnessValue</td><td>SRATIONAL</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>37380</td><td>ExposureBiasValue</td><td>SRATIONAL</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>37381</td><td>MaxApertureValue</td><td>RATIONAL</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37382</td><td>SubjectDistance</td><td>SRATIONAL</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>37383</td><td>MeteringMode</td><td>SHORT</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37384</td><td>LightSource</td><td>SHORT</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37385</td><td>Flash</td><td>SHORT</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37386</td><td>FocalLength</td><td>RATIONAL</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>37387</td><td>FlashEnergy</td><td>RATIONAL</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>37388</td><td>SpatialFrequencyResponse</td><td>UNDEFINED</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>37389</td><td>Noise</td><td>UNDEFINED</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>37390</td><td>FocalPlaneXResolution</td><td>RATIONAL</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37391</td><td>FocalPlaneYResolution</td><td>RATIONAL</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37392</td><td>FocalPlaneResolutionUnit</td><td>SHORT</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37393</td><td>ImageNumber</td><td>LONG</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37394</td><td>SecurityClassification</td><td>ASCII</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>37395</td><td>ImageHistory</td><td>ASCII</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>37396</td><td>SubjectLocation</td><td>SHORT</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>37397</td><td>ExposureIndex</td><td>RATIONAL</td><td>N</td><td>TIFF/EP</td></tr>
+  <tr><td>37398</td><td>TIFF/EPStandardID</td><td>BYTE</td><td>4</td><td>TIFF/EP</td></tr>
+  <tr><td>37399</td><td>SensingMethod</td><td>SHORT</td><td>1</td><td>TIFF/EP</td></tr>
+  <tr><td>37439</td><td>StoNits</td><td>-</td><td>-</td><td>-</td></tr>
+  <tr><td>37724</td><td>ImageSourceData</td><td>UNDEFINED</td><td>N</td><td>Photoshop</td></tr>
+  <tr><td>40965</td><td>InteroperabilityIFD</td><td>LONG</td><td>1</td><td>Exif</td></tr>
+  <tr><td>50255</td><td>PhotoshopAnnotations</td><td>UNDEFINED</td><td></td><td>Photoshop</td></tr>
+  <tr><td>50706</td><td>DNGVersion</td><td>BYTE</td><td>4</td><td>DNG</td></tr>
+  <tr><td>50707</td><td>DNGBackwardVersion</td><td>BYTE</td><td>4</td><td>DNG</td></tr>
+  <tr><td>50708</td><td>UniqueCameraModel</td><td>ASCII</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50709</td><td>LocalizedCameraModel</td><td>BYTE</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50710</td><td>CFAPlaneColor</td><td>BYTE</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50711</td><td>CFALayout</td><td>Short</td><td>1</td><td>DNG</td></tr>
+  <tr><td>50712</td><td>LinearizationTable</td><td>SHORT</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50713</td><td>BlackLevelRepeatDim</td><td>SHORT</td><td>2</td><td>DNG</td></tr>
+  <tr><td>50714</td><td>BlackLevel</td><td>RATIONAL</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50715</td><td>BlackLevelDeltaH</td><td>SRATIONAL</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50716</td><td>BlackLevelDeltaV</td><td>SRATIONAL</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50717</td><td>WhiteLevel</td><td>LONG</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50718</td><td>DefaultScale</td><td>RATIONAL</td><td>2</td><td>DNG</td></tr>
+  <tr><td>50719</td><td>DefaultCropOrigin</td><td>RATIONAL</td><td>2</td><td>DNG</td></tr>
+  <tr><td>50720</td><td>DefaultCropSize</td><td>RATIONAL</td><td>4</td><td>DNG</td></tr>
+  <tr><td>50721</td><td>ColorMatrix1</td><td>SRATIONAL</td><td>3*N</td><td>DNG</td></tr>
+  <tr><td>50722</td><td>ColorMatrix2</td><td>SRATIONAL</td><td>3*N</td><td>DNG</td></tr>
+  <tr><td>50723</td><td>CameraCalibration1</td><td>SRATIONAL</td><td>N*N</td><td>DNG</td></tr>
+  <tr><td>50724</td><td>CameraCalibration2</td><td>SRATIONAL</td><td>N*N</td><td>DNG</td></tr>
+  <tr><td>50725</td><td>ReductionMatrix1</td><td>SRATIONAL</td><td>3*N</td><td>DNG</td></tr>
+  <tr><td>50726</td><td>ReductionMatrix2</td><td>SRATIONAL</td><td>3*N</td><td>DNG</td></tr>
+  <tr><td>50727</td><td>AnalogBalnace</td><td>RATIONAL</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50728</td><td>AsShortNeutral</td><td>RATIONAL</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50729</td><td>AsShortWhiteXY</td><td>RATIONAL</td><td>2</td><td>DNG</td></tr>
+  <tr><td>50730</td><td>BaselineExposure</td><td>RATIONAL</td><td>1</td><td>DNG</td></tr>
+  <tr><td>50731</td><td>BaselineNoise</td><td>RATIONAL</td><td>1</td><td>DNG</td></tr>
+  <tr><td>50732</td><td>BaselineSharpness</td><td>RATIONAL</td><td>1</td><td>DNG</td></tr>
+  <tr><td>50733</td><td>BayerGreenSplit</td><td>LONG</td><td>1</td><td>DNG</td></tr>
+  <tr><td>50734</td><td>LinearResponseLimit</td><td>RATIONAL</td><td>1</td><td>DNG</td></tr>
+  <tr><td>50735</td><td>CameraSerialNumber</td><td>ASCII</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50736</td><td>LensInfo</td><td>RATIONAL</td><td>4</td><td>DNG</td></tr>
+  <tr><td>50737</td><td>ChromaBlurRadius</td><td>RATIONAL</td><td>1</td><td>DNG</td></tr>
+  <tr><td>50738</td><td>AntiAliasStrength</td><td>RATIONAL</td><td>1</td><td>DNG</td></tr>
+  <tr><td>50740</td><td>DNGPrivateDatea</td><td>BYTE</td><td>N</td><td>DNG</td></tr>
+  <tr><td>50741</td><td>MakerNoteSafety</td><td>SHORT</td><td>1</td><td>DNG</td></tr>
+  <tr><td>50778</td><td>CalibrationIlluminant1</td><td>SHORT</td><td>1</td><td>DNG</td></tr>
+  <tr><td>50779</td><td>CalibrationIlluminant2</td><td>SHORT</td><td>1</td><td>DNG</td></tr>
+  <tr><td>50780</td><td>BestQualityScale</td><td>RATIONAL</td><td>1</td><td>DNG</td></tr>
+</table>
+  <p>
+  <a class="name" name="gps">
+    <font size="+2"><strong>2 GPSInfo IFD Tags</strong></font></a>
+  </p>
+<table border="1">
+  <tr><th>Tag</th><th>Tag Name</th><th>Type</th><th>Count</th><th>Definition</th></tr>
+  <tr><td>0</td><td>GPSVersionID</td><td>BYTE</td><td>4</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>1</td><td>GPSLatitudeRef</td><td>ASCII</td><td>2</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>2</td><td>GPSLatitude</td><td>RATIONAL</td><td>3</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>3</td><td>GPSLongitudeRef</td><td>ASCII</td><td>2</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>4</td><td>GPSLongitude</td><td>RATIONAL</td><td>3</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>5</td><td>GPSAltitudeRef</td><td>BYTE</td><td>1</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>6</td><td>GPSAltitude</td><td>RATAIONAL</td><td>1</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>7</td><td>GPSTimeStamp</td><td>RATIONAL</td><td>3</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>8</td><td>GPSSatellites</td><td>ASCII</td><td>N</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>9</td><td>GPSStatus</td><td>ASCII</td><td>2</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>10</td><td>GPSMeasureMode</td><td>ASCII</td><td>2</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>11</td><td>GPSDOP</td><td>RATIONAL</td><td>1</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>12</td><td>GPSSpeedRef</td><td>ASCII</td><td>2</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>13</td><td>GPSSpeed</td><td>RATIONAL</td><td>1</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>14</td><td>GPSTrackRef</td><td>ASCII</td><td>2</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>15</td><td>GPSTrack</td><td>RATIONAL</td><td>1</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>16</td><td>GPSImgDirectionRef</td><td>ASCII</td><td>2</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>17</td><td>GPSImgDirection</td><td>RATIONAL</td><td>1</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>18</td><td>GPSMapDatum</td><td>ASCII</td><td>N</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>19</td><td>GPSDestLatitudeRef</td><td>ASCII</td><td>2</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>20</td><td>GPSDestLatitude</td><td>RATIONAL</td><td>3</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>21</td><td>GPSDestLongitudeRef</td><td>ASCII</td><td>2</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>22</td><td>GPSDestLongitude</td><td>RATIONAL</td><td>3</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>23</td><td>GPSDestBearingRef</td><td>ASCII</td><td>2</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>24</td><td>GPSDestBearing</td><td>RATIONAL</td><td>1</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>25</td><td>GPSDestDistanceRef</td><td>ASCII</td><td>2</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>26</td><td>GPSDestDistance</td><td>RATIONAL</td><td>1</td><td>TIFF/EP / Exif</td></tr>
+  <tr><td>27</td><td>GPSProcessingMethod</td><td>UNDEFINED</td><td>N</td><td>Exif</td></tr>
+  <tr><td>28</td><td>GPSAreaInformation</td><td>UNDEFINED</td><td>N</td><td>Exif</td></tr>
+  <tr><td>29</td><td>GPSDateStamp</td><td>ASCII</td><td>11</td><td>Exif</td></tr>
+  <tr><td>30</td><td>GPSDifferential</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+</table>
+<p>
+  <a class="name" name="exif">
+  <font size="+2"><strong>3 Exif IFD Tags</strong></font></a>
+</p>
+<table border="1">
+  <tr><th>Tag</th><th>Tag Name</th><th>Type</th><th>Count</th><th>Definition</th></tr>
+  <tr><td>36864</td><td>ExifVersion</td><td>UNDEFINED</td><td>4</td><td>Exif</td></tr>
+  <tr><td>36867</td><td>DateTimeOriginal</td><td>ASCII</td><td>20</td><td>Exif</td></tr>
+  <tr><td>36868</td><td>DateTimeDigitized</td><td>ASCII</td><td>20</td><td>Exif</td></tr>
+  <tr><td>33434</td><td>ExposureTime</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>33437</td><td>FNumber</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>34850</td><td>ExposureProgram</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>34852</td><td>SpectralSensitibity</td><td>ASCII</td><td>N</td><td>Exif</td></tr>
+  <tr><td>34855</td><td>ISOSpeedRatings</td><td>SHORT</td><td>N</td><td>Exif</td></tr>
+  <tr><td>34856</td><td>OECF</td><td>UNDEFINED</td><td>N</td><td>Exif</td></tr>
+  <tr><td>37121</td><td>ComponentsConfiguration</td><td>UNDEFINED</td><td>4</td><td>Exif</td></tr>
+  <tr><td>37122</td><td>CompressedBitsPerPixel</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>37377</td><td>ShutterSpeedValue</td><td>SRATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>37378</td><td>ApertureValue</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>37379</td><td>BrightnessValue</td><td>SRATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>37380</td><td>ExposureBiasValue</td><td>SRATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>37381</td><td>MaxApertureValue</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>37382</td><td>SubjectDistance</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>37383</td><td>MeteringMode</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>37384</td><td>LightSource</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>37385</td><td>Flash</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>37386</td><td>FocalLength</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>37396</td><td>SubjectArea</td><td>SHORT</td><td>N</td><td>Exif</td></tr>
+  <tr><td>37500</td><td>MakerNote</td><td>UNDEFINED</td><td>N</td><td>Exif</td></tr>
+  <tr><td>37510</td><td>UserComment</td><td>UNDEFIEND</td><td>N</td><td>Exif</td></tr>
+  <tr><td>37520</td><td>SubSecTime</td><td>ASCII</td><td>N</td><td>Exif</td></tr>
+  <tr><td>37521</td><td>SubSecTimeOriginal</td><td>ASCII</td><td>N</td><td>Exif</td></tr>
+  <tr><td>37522</td><td>SubSecTimeDigitized</td><td>ASCII</td><td>N</td><td>Exif</td></tr>
+  <tr><td>40960</td><td>FlashpixVersion</td><td>UNDEFINED</td><td>4</td><td>Exif</td></tr>
+  <tr><td>40961</td><td>ColorSpace</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>40962</td><td>PixelXDimension</td><td>SHORT/LONG</td><td>1</td><td>Exif</td></tr>
+  <tr><td>40963</td><td>PixelYDimension</td><td>SHORT/LONG</td><td>1</td><td>Exif</td></tr>
+  <tr><td>40964</td><td>RelatedSoundFile</td><td>ASCII</td><td>13</td><td>Exif</td></tr>
+  <tr><td>41483</td><td>FlashEnergy</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41484</td><td>SpatialFrequencyResponse</td><td>UNDEFINED</td><td>N</td><td>Exif</td></tr>
+  <tr><td>41486</td><td>FocalPlaneXResolution</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41487</td><td>FocalPlaneYResolution</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41488</td><td>FocalPlaneResolutionUnit</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41492</td><td>SubjectLocation</td><td>SHORT</td><td>2</td><td>Exif</td></tr>
+  <tr><td>41493</td><td>ExposureIndex</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41495</td><td>SensingMethod</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41728</td><td>FileSource</td><td>UNDEFINED</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41729</td><td>SceneType</td><td>UNDEFINED</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41730</td><td>CFAPattern</td><td>UNDEFINED</td><td>N</td><td>Exif</td></tr>
+  <tr><td>41985</td><td>CustomRendered</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41986</td><td>ExposureMode</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41987</td><td>WhiteBalance</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41988</td><td>DigitalZoomRatio</td><td>RATIONAL</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41989</td><td>FocalLengthIn35mmFilm</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41990</td><td>SceneCaptureType</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41991</td><td>GainControl</td><td>SHORT</td><td>1</td><td>Exif</td><td>The EXIF specification (JEITA CP-3451, April 2002) incorrectly identifies the type as RATIONAL in Table 5 (p. 25); it is correctly identified as SHORT on page 43</td></tr>
+  <tr><td>41992</td><td>Contrast</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41993</td><td>Saturation</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41994</td><td>Sharpness</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+  <tr><td>41995</td><td>DeviceSettingDescription</td><td>UNDEFINED</td><td>N</td><td>Exif</td></tr>
+  <tr><td>41996</td><td>SubjectDistanceRange</td><td>SHORT</td><td>1</td><td>Exif</td></tr>
+</table>
+<p>
+<a class="name" name="interoperability">
+<font size="+2"><strong>4 Exif Interoperability IFD Tags</strong></font></a>
+</p>
+<table border="1">
+<tr><th>Tag</th><th>Tag Name</th><th>Type</th><th>Count</th><th>Definition</th></tr>
+<tr><td>1</td><td>InteroperabilityIndex</td><td>ASCII</td><td>N</td><td>Exif</td></tr>
+</table>
+<p>
+  <a class="name" name="compression">
+    <font size="+2"><strong>5 TIFF Compression Schemes</strong></font></a>
+</p>
+<table border="1">
+  <tr><td>1</td><td>Uncompressed</td><td>TIFF</td></tr>
+  <tr><td>2</td><td>CCITT 1D</td><td>TIFF</td></tr>
+  <tr><td>3</td><td>CCITT Group 3</td><td>TIFF</td></tr>
+  <tr><td>4</td><td>CCITT Group 4</td><td>TIFF</td></tr>
+  <tr><td>5</td><td>LZW</td><td>TIFF <tr><td>6</td><td>JPEG</td><td>TIFF</td></tr>
+  <tr><td>7</td><td>JPEG</td><td>Photoshop</td></tr>
+  <tr><td>8</td><td>Deflate</td><td>Photoshop</td></tr>
+  <tr><td>32766</td><td>NeXT 2-bit encoding</td></tr>
+  <tr><td>32771</td><td>CCITT RLE</td><td>libTiff</td></tr>
+  <tr><td>32773</td><td>PackBits</td><td>TIFF</td></tr>
+  <tr><td>32809</td><td>ThunderScan 4-bit encoding</td></tr>
+  <tr><td>32895</td><td>RasterPadding in CT or MP</td><td>TIFF/IT</td></tr>
+  <tr><td>32896</td><td>RLE for LW</td><td>TIFF/IT</td></tr>
+  <tr><td>32897</td><td>RLE for HC</td><td>TIFF/IT</td></tr>
+  <tr><td>32898</td><td>RLE for BL</td><td>TIFF/IT</td></tr>
+  <tr><td>32908</td><td>Pixar 10-bit LZW</td><td>libTiff</td></tr>
+  <tr><td>32909</td><td>Pixar companded 11-bit ZIP encoding</td><td>libTiff</td></tr>
+  <tr><td>32946</td><td>PKZIP-style Deflate encoding (experimental)</td></tr>
+  <tr><td>32947</td><td>Kodak DCS</td></tr>
+  <tr><td>34661</td><td>JBIG</td><td>libTiff</td></tr>
+  <tr><td>34676</td><td>SGI 32-bit Log Luminance encoding (experimental)</td></tr>
+  <tr><td>34677</td><td>SGI 24-bit Log Luminance encoding (experimental)</td></tr>
+  <tr><td>34712</td><td>JPEG 2000</td><td>libTiff</td></tr>
+</table>
+<p>
+  <a class="name" name="photointerp">
+  <font size="+2"><strong>6 TIFF PhotometricInterpretation Schemes</strong></font></a>
+</p>
+<table border="1">
+  <tr><td>0</td><td>White is zero</td><td>TIFF</td></tr>
+  <tr><td>1</td><td>Black is zero</td><td>TIFF</td></tr>
+  <tr><td>2</td><td>RGB</td><td>TIFF</td></tr>
+  <tr><td>3</td><td>Palette</td><td>TIFF</td></tr>
+  <tr><td>4</td><td>Transparency mask</td><td>TIFF</td></tr>
+  <tr><td>5</td><td>CMYK</td><td>TIFF</td></tr>
+  <tr><td>6</td><td>YCbCr</td><td>TIFF</td></tr>
+  <tr><td>8</td><td>CIE L*a*b*</td><td>TIFF</td></tr>
+  <tr><td>9</td><td>ICC L*a*b*</td><td>Photoshop</td></tr>
+  <tr><td>10</td><td>ITU L*a*b*</td><td></td></tr>
+  <tr><td>32803</td><td>CFA</td><td></td></tr>
+  <tr><td>32844</td><td>CIE Log2(L)</td><td></td></tr>
+  <tr><td>32845</td><td>CIE Log2(L)(u',v')</td><td></td></tr>
+  <tr><td>34892</td><td>LinearRaw</td><td>DNG</td></tr>
+</table>
+</div>
+    {% include footer.html %}
+</body>
+</html>

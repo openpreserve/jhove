@@ -1,0 +1,210 @@
+---
+title: AIFF-hul Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+<h1>AIFF-hul Module</h1>
+
+<a class="name" name="introduction">
+<h2>Introduction</h2>
+</a>
+
+<p>
+The AIFF-hul module recognizes and validates the Audio Interchange
+File Format (AIFF)
+[<a href="/references#aiff">AIFF</a>].
+The AIFF format is itself a profile of the Electronic Arts IFF 85 format
+[<a href="/references#iff85">IFF</a>].
+</p><p>
+The module is invoked by the:
+</p>
+<blockquote>
+<pre>
+jhove ... -m AIFF-hul ...
+</pre>
+</blockquote>
+command line option.
+
+<p>
+</p>
+
+<a class="name" name="coverage">
+<h2>2 Coverage</h2></a>
+
+<p>
+The AIFF-hul module recognizes and validates the following public profiles:
+</p>
+<ul>
+<li> AIFF 1.3
+[<a href="/references#aiff">AIFF</a>]
+<li> AIFF-C
+[<a href="/references#aiff-c">AIFF-C</a>]
+</ul>
+
+<p>
+</p>
+
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2></a>
+
+<p>
+The following criteria must be met by an AIFF object for JHOVE to
+consider it well-formed:
+</p>
+
+<ul>
+<li> Magic number: "FORM" at byte offset 0; "AIFF" (for AIFF) or "AIFC"
+(for AIFF-C) at offset 8
+<li> One Form chunk containing one Common chunk and at most one Sound
+Data chunk (if <tt>numSampleFrames</tt> &gt; 0)
+<li> At most one instance of each of
+the following optional chunks: Marker, Instrument,
+Audio Recording, Comments, Name, Author, Copyright
+<li> All chunks required by a given profile exist in the file
+<li> All chunk structures are well-formed: a four ASCII character <tt>ID</tt>,
+followed by a 32 signed integer <tt>size</tt>, followed by a <tt>size</tt>
+byte data block (if <tt>size</tt> is odd, then the data block includes a
+final padding byte of value 0x00)
+<li> No data exist before the first byte of the chunk or after the
+last byte of the last chunk
+</ul>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+
+<p>
+The following criteria must be met by a AIFF file for JHOVE to consider it
+valid:
+</p>
+
+<ul>
+<li> The file is well-formed
+</ul>
+
+<p>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+
+<p>
+The MIME type is reported as: audio/x-aiff.
+</p>
+
+<p>
+In addition to the standard JHOVE
+<a href="index.html#repinfo">representation information</a>, the following
+AIFF-specific properties are reported:
+</p>
+<ul>
+<li> Property "AIFFMetadata" of type PROPERTY and arity ARRAY
+<ul>
+<li> Properties capturing the technical attributes of the AIFF
+image from all chunks
+</ul>
+</ul>
+
+<p>
+The AIFF module reports audio technical properties
+using the draft AES-X098B, <em>Core audio metadata XML
+definition</em>, currently under development by the
+<a href="http://www.aes.org/">Audio Engineering Society</a> (AES)
+<a href="http://www.aes.org/standards/b_policies/aessc-structure.cfm#SC-03">SC-03-06</a>
+Working Group on Digital Library and Archive Systems.
+</p>
+
+<h3>5.1 Profiles</h3>
+
+<ul>
+<li> <strong>AIFF 1.3</strong>
+<p>
+AIFF is an interchange format for sampled monaural or multichannel
+sampled sounds using a variety of sample rates and widths.
+</p><p>
+Profile requirements include:
+</p>
+<ul>
+<li> The Form chunk identifier is "AIFF"
+</ul>
+<p>
+
+<li> <strong>AIFF-C</strong>
+<p>
+AIFF-C is an extended AIFF format that can contain compressed audio
+data.
+</p><p>
+Profile requirements include:
+</p>
+<ul>
+<li> The Form chunk identifier is "AIFC"
+<li> The fields <tt>compressionType</tt> and <tt>compressionName</tt> in
+the Common Chunk
+<p>
+Common compression types and names include, but are not limited to:
+<blockquote>
+<table border="1">
+<tr><th>Type</th><th>Name</th><th>Note</th></tr>
+<tr><td>"NONE"</td><td>"Not compressed"</td><td>PCM data</td></tr>
+<tr><td>"ACE2"</td><td>"ACE 2-to-1"</td><td>
+<a href="http://www.apple.com/">Apple</a> IIGS ACE (Audio Compression/Expansion)</td></tr>
+<tr><td>"ACE8"</td><td>"ACE 8-to-3"</td></tr>
+<tr><td>"APD4"</td><td>"4:1 Intel/DVI ADPCM"</td><td>
+<a href="http://www.soundhack.com/">SoundHack</a></td></tr>
+<tr><td>"ALAW"</td><td>"CCITT G.711 A-law"</td><td>
+<a href="http://www.sgi.com/">SGI</a> 8-bit
+<a href="http://www.itu.int/ITU-T/">ITU-T</a>
+<a href="http://www.itu.int/rec/recommendation.asp?type=items&lang=e&parent=T-REC-G.711-198811-I">G.711</a> A-law (64 kb/s)</td></tr>
+<tr><td>"alaw"</td><td>"ALaw 2:1"</td><td>
+<a href="http://www.apple.com">Apple</a> 8-bit
+<a href="http://www.itu.int/ITU-T">ITU-T</a>
+<a href="http://www.itu.int/rec/recommendation.asp?type=items&lang=e&parent=T-REC-G.711-198811-I">G.711</a>
+A-law</td></tr>
+<tr><td>"DWVW"</td><td>"Delta With Variable Word Width"</td><td>
+Yamaha TX16W Typhoon sampler</td></tr>
+<tr><td>"FL32"</td><td>"Float 32"</td><td>
+<a href="http://www.soundhack.com/">SoundHack</a> /
+<a href="http://www.csound.com/">CSound</a>
+<a href="http://www.ieee.org/">IEEE</a> 32-bit floating point</tr>
+<tr><td>"fl32"</td><td>"32-bit floating point"</td><td>
+<a href="http://www.apple.com/">Apple</a>
+<a href="http://www.ieee.com/">IEEE</a> 32-bit floating point</td></tr>
+<tr><td>"fl64"</td><td>"64-bit floating point"</td></tr>
+<tr><td>"ima4"</td><td>"IMA 4:1"</td><td></td></tr>
+<tr><td>"MAC3"</td><td>"MACE 3-to-1"</td><td>Macintosh Audio Compression/Expansion</td></tr>
+<tr><td>"MACE6"</td><td>"MACE 6-to-1"</td></tr>
+<tr><td>"QDMC"</td><td>"QDesign Music"</td><td>
+<a href="http://www.qdesign.com/">QDesign</a> Music codec</td></tr>
+<tr><td>"Qclp"</td><td>"QualComm PureVoice"</td><td>
+<a href="http://www.qualcomm.com/">QualComm</a> PureVoice codec</td></tr>
+<tr><td>"rt24"</td><td>"RT24 50:1"</td><td>
+<a href="http://www.voxware.com/">Voxware</a> codec</td></tr>
+<tr><td>"rt29"</td><td>"RT29 50:1"</td></tr>
+<tr><td>"ULAW"</td><td>"CCITT G.711 &#x00B5;-law"</td><td>
+<a href="http://www.sgi.com/">SGI</a> 8-bit
+<a href="http://www.itu.int/ITU-T/">ITU-T</a>
+<a href="http://www.itu.int/rec/recommendation.asp?type=items&lang=e&parent=T-REC-G.711-198811-I">G.711</a> &#x00B5;-law (64 kb/s)</td></tr>
+<tr><td>"ulaw"</td><td>"&#x00B5;Law 2:1"</td><td>
+<a href="http://www.apple.com/">Apple</a> 8-bit
+<a href="http://www.itu.int/ITU-T/">ITU-T</a>
+<a href="http://www.itu.int/rec/recommendation.asp?type=items&lang=e&parent=T-REC-G.711-198811-I">G.711</a>
+&#x00B5;-law</td></tr>
+</table>
+</blockquote>
+<li> One Format Version chunk
+</ul>
+</ul>
+
+<h2>6 Additional Module Properties</h2>
+
+<ul>
+<li> Nominal file extension: .aif
+<li> Nominal file extension: .afc (for the AIFF-C profile)
+</ul>
+</div>
+{% include footer.html %}
+</body>
+</html>

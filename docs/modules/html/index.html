@@ -1,0 +1,173 @@
+---
+title: HTML-hul Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+<h1>HTML-hul Module</h1>
+<a class="name" name="introduction">
+<h2>1 Introduction</h2>
+</a>
+<p>
+  The HTML-hul module recognizes and validates the HTML (Hypertext Markup
+  Language) format.
+  [<a href="/references#xhtml-1.0">HTML</a>].
+</p>
+<p>
+  The module is invoked by the:
+</p>
+<blockquote>
+  <pre>
+    jhove ... -m HTML-hul ...
+  </pre>
+</blockquote>
+<p>
+  command line option.
+</p>
+<p>
+  The HTML-hul module recognizes XHTML 1.0 (including transitional,
+  frameset and strict) and 1.1, making use of the XML-hul module.
+  If the XML-hul module is not available, only limited information
+  will be provided on XHTML documents.
+</p>
+
+<p>
+This module can be <a href="/getting-started/config/">configured</a> with the following parameters:
+</p>
+<ul>
+<li><tt>withTextMD=true</tt> to ask for the output of a <a href="/references#textmd">textMD</a> block in the text technical properties.</li>
+</ul>
+
+<a class="name" name="coverage">
+  <h2>2 Coverage</h2>
+</a>
+<p>
+  The HTML-hul module recognizes and validates the following public profiles:
+</p>
+<ul>
+  <li>
+    HTML 3.2, and 4.0 and 4.01 (Strict, Transitional, and Frameset)
+    [<a href="/references#html-3.2">HTML 3.2</a>,
+    <a href="/references#html-4.0">HTML 4.0</a>,
+    <a href="/references#html-4.01">HTML 4.01</a>]
+  </li>
+  <li>
+    XHTML Basic and 1.0 and 1.1 (Strict, Transitional, and Frameset)
+    [<a href="/references#xhtml-basic">XHTML Basic</a>,
+    <a href="/references#xhtml-1.0">XHTML 1.0</a>,
+    <a href="/references#xhtml-1.1">XHTML 1.1</a>]
+  </li>
+</ul>
+
+<a class="name" name="well-formedness">
+  <h2>3 Well-Formedness</h2>
+</a>
+<p>
+  For the HTML profiles JHOVE uses the criteria for HTML
+  well-formedness defined by
+  [<a href="/references#html-3.2">HTML 3.2</a>,
+  <a href="/references#html-4.0">HTML 4.0</a>,
+  <a href="/references#html-4.01">HTML 4.01</a>];
+  for the XHTML profiles, JHOVE uses the criteria defined by
+  [<a href="/references#xml">XML</a>].
+  Specifically, a well-formed HTML document must have no
+  syntactic errors, and must contain at least one of the
+  tags HTML, HEAD, BODY or TITLE.
+</p>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+<p>
+  For the HTML profiles JHOVE uses the criteria for HTML validity defined by
+  [<a href="/references#html-3.2">HTML 3.2</a>,
+  <a href="/references#html-4.0">HTML 4.0</a>,
+  <a href="/references#html-4.01">HTML 4.01</a>];
+  for the XHTML profiles
+  JHOVE uses the criteria defined by
+  [<a href="/references#xhtml-1.0">XHTML 1.0</a>,
+  <a href="/references#xhtml-1.1">XHTML 1.1</a>].
+</p>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+<p>
+  The MIME type is reported as: text/html
+  [<a href="/references#rfc2854">RFC 2854</a>]
+</p>
+<p>
+  In addition to the standard JHOVE
+  <a href="/documentation#repinfo">representation information</a>, the following
+  HTML-specific properties are reported:
+</p>
+<ul>
+  <li>
+    Property "XMLMetadata" of type PROPERTY and arity LIST (for XHTML only;
+    see the documentation of the <a href="/modules/xml/">XML-hul</a> module
+    for the contents of this property).
+  </li>
+  <li>
+    Property "HTMLMetadata" of type PROPERTY and arity LIST
+    <ul>
+      <li>Property "PrimaryLanguage" of type STRING</li>
+      <li>Property "OtherLanguages" of type STRING and arity SET</li>
+      <li>Property "Title" of type STRING</li>
+      <li>
+        Property "MetaTags" of type PROPERTY and arity LIST
+        <ul>
+          <li>Property "Name" of type STRING</li>
+          <li>Property "Httpequiv" of type STRING</li>
+          <li>Property "Content" of type STRING</li>
+        </ul>
+      </li>
+      <li>Property "Frames" of type PROPERTY and arity LIST
+        <ul>
+          <li>Property "Name" of type STRING</li>
+          <li>Property "Title" of type STRING</li>
+          <li>Property "Longdesc" of type STRING</li>
+          <li>Property "Src" of type STRING</li>
+        </ul>
+      </li>
+      <li>Property "Links" of type STRING and arity LIST</li>
+      <li>Property "Scripts" of type STRING and arity LIST</li>
+      <li>
+        Property "Images" of type PROPERTY and arity LIST
+        <ul>
+          <li>Property "Alt" of type STRING</li>
+          <li>Property "Longdesc" of type STRING</li>
+          <li>Property "Src" of type STRING</li>
+          <li>Property "Height" of type STRING</li>
+          <li>Property "Width" of type STRING</li>
+        </ul>
+      </li>
+      <li>Property "Citations" of type STRING and arity LIST</li>
+      <li>Property "DefinedTerms" of type STRING and arity LIST</li>
+      <li>
+        Property "Abbreviations" of type PROPERTY and arity LIST
+        <ul>
+          <li>Property "Text" of type STRING</li>
+          <li>Property "Title" of type STRING</li>
+        </ul>
+      </li>
+      <li>Property "Entities" of type STRING and arity LIST</li>
+      <li>Property "UnicodeEntityBlocks" of type STRING and arity LIST</li>
+      <li> If withTextMD, Property "TextMDMetadata" of type TextMDMetadata and arity SCALAR</li>
+    </ul>
+  </li>
+</ul>
+
+
+<a class="name" name="extras">
+<h2>6 Additional Module Properties</h2>
+</a>
+<ul>
+  <li>Nominal file extension: .html, .htm</li>
+  <li>Macintosh OS file type: TEXT</li>
+</ul>
+</div>
+{% include footer.html %}
+</body>
+</html>

@@ -1,0 +1,74 @@
+---
+title: Bytestream Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+
+<h1>BYTESTREAM Module</h1>
+
+<h2>1 Introduction</h2>
+
+<p>
+The BYTESTREAM module recognizes and validates arbitrary bytestreams.
+This module exists merely to provide a default format during identification
+operations.
+</p><p>
+The module is invoked by the:
+</p>
+<blockquote>
+<pre>
+jhove ... -m bytestream ...
+</pre>
+</blockquote>
+command line option.
+
+<a class="name" name="coverage">
+<h2>2 Coverage</h2></a>
+
+<p>
+There are no BYTESTREAM profiles.
+</p>
+
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2></a>
+
+<p>
+The following criteria must be met by a bytestream for JHOVE to consider it
+well-formed:
+</p>
+<ul>
+<li> All bytestreams are well-formed
+</ul>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+
+<p>
+The following criteria must be met by a bytestream for JHOVE to consider it
+valid:
+</p>
+<ul>
+<li> The bytestream is well-formed
+</ul>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+
+<p>
+The MIME type is reported as: application/octet-stream
+</p>
+
+<p>
+The module does not define any additional representation information beyond
+the standard properties.
+</p>
+
+</div>
+{% include footer.html %}
+</body>
+</html>

@@ -1,0 +1,27 @@
+body {
+  min-height: 2000px;
+}
+
+.navbar-static-top {
+  margin-bottom: 19px;
+}
+
+.navbar-brand img {
+  margin-top: -10px;
+}
+
+.vertical-center {
+  text-align: center;
+}
+
+header a.btn {
+  margin-top: 20px;
+}
+
+dt {
+  margin-bottom: 10px;
+}
+
+dd {
+  margin-left: 10px;
+}
