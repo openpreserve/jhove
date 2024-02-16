@@ -1274,6 +1274,10 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 			for (int i = 0; i < iarray.length; i++) {
 				nod.add(new DefaultMutableTreeNode(Integer.toString(iarray[i]),
 						false));
+				//BitsPerSampleUnit Integer is assumed, because of BitsPerSample
+				// According to the specification, it can also be float.
+				// This is currently not supported by jHove
+				nod.add(new DefaultMutableTreeNode("Integer"));
 			}
 		}
 		if ((n = niso.getSamplesPerPixel()) != NisoImageMetadata.NULL) {
