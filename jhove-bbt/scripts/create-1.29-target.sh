@@ -58,3 +58,8 @@ cp -R "${baselineRoot}" "${targetRoot}"
 
 # Update release details for ePub module
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.2">EPUB-ptc<\/module>$/   <module release="1.3">EPUB-ptc<\/module>/' {} \;
+
+# Copy the XML file output changed by https://github.com/openpreserve/jhove/pull/889
+if [[ -f "${candidateRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml" "${targetRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml"
+fi
