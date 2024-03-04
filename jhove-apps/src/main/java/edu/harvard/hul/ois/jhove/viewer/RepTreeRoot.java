@@ -889,7 +889,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 				"NisoImageMetadata", true);
 		String s = niso.getMimeType();
 		if (s != null) {
-			val.add(new DefaultMutableTreeNode("MIMEType: " + s, false));
+			val.add(new DefaultMutableTreeNode("FormatName: " + s, false));
 		}
 		s = niso.getByteOrder();
 		if (s != null) {
