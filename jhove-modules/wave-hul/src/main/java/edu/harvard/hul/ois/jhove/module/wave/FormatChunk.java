@@ -10,7 +10,6 @@ import edu.harvard.hul.ois.jhove.module.WaveModule;
 import edu.harvard.hul.ois.jhove.module.iff.Chunk;
 import edu.harvard.hul.ois.jhove.module.iff.ChunkHeader;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -259,23 +258,23 @@ public class FormatChunk extends Chunk {
         StringBuilder guid = new StringBuilder(36);
 
         byte[] doubleWord = reverseBytes(Arrays.copyOf(guidBytes, 4));
-        guid.append(DatatypeConverter.printHexBinary(doubleWord));
+        guid.append(Checksummer.outputHexString(doubleWord));
         guid.append("-");
 
         byte[] word = reverseBytes(Arrays.copyOfRange(guidBytes, 4, 6));
-        guid.append(DatatypeConverter.printHexBinary(word));
+        guid.append(Checksummer.outputHexString(word));
         guid.append("-");
 
         word = reverseBytes(Arrays.copyOfRange(guidBytes, 6, 8));
-        guid.append(DatatypeConverter.printHexBinary(word));
+        guid.append(Checksummer.outputHexString(word));
         guid.append("-");
 
         byte[] bytes = Arrays.copyOfRange(guidBytes, 8, 10);
-        guid.append(DatatypeConverter.printHexBinary(bytes));
+        guid.append(Checksummer.outputHexString(bytes));
         guid.append("-");
 
         bytes = Arrays.copyOfRange(guidBytes, 10, 16);
-        guid.append(DatatypeConverter.printHexBinary(bytes));
+        guid.append(Checksummer.outputHexString(bytes));
 
         return guid.toString();
     }

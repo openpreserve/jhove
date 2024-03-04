@@ -1531,7 +1531,10 @@ public class PdfModule extends ModuleBase {
 						// (Most likely we've hit the keyword "trailer".
 						break;
 					}
-					_objCount = ((Numeric) _parser.getNext()).getIntegerValue();
+					token = _parser.getNext();
+					if (token instanceof Numeric) {
+						_objCount = ((Numeric) token).getIntegerValue();
+					}
 					if (_xref == null) {
 						_xref = new long[_objCount];
 					}
@@ -2367,13 +2370,20 @@ public class PdfModule extends ModuleBase {
 											.get(DICT_KEY_WIDTH);
 									PdfSimpleObject widObj = (PdfSimpleObject) resolveIndirectObject(
 											widthBase);
-									niso.setImageWidth(widObj.getIntValue());
 									PdfObject heightBase = xobdict
 											.get(DICT_KEY_HEIGHT);
 									PdfSimpleObject htObj = (PdfSimpleObject) resolveIndirectObject(
 											heightBase);
-									niso.setImageLength(htObj.getIntValue());
-
+									if(widObj != null || htObj != null ) {		
+											niso.setImageWidth(widObj.getIntValue());
+											niso.setImageLength(htObj.getIntValue());
+									} else {
+										info.setWellFormed(false);
+										JhoveMessage message = JhoveMessages.getMessageInstance(
+												MessageConstants.PDF_HUL_159.getId(), 
+												MessageConstants.PDF_HUL_159.getMessage());
+										info.setMessage(new ErrorMessage(message)); // PDF-HUL-159
+									}
 									// Check for filters to add to the filter
 									// list
 									Filter[] filters = ((PdfStream) xob)
