@@ -210,4 +210,19 @@ public class Checksummer implements java.util.zip.Checksum
         buff.append(str);
         return buff.toString();
     }
+    
+    /**
+     * Returns the hex string for the given byte array
+     * (with uppercase letters)
+     */
+    public static String outputHexString(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(String.format("%02X", b));  // (lower case: "%02x");
+        }
+        return result.toString();
+        
+        //alternative implementation:
+        //return convertToHex(bytes).toUpperCase(Locale.US);
+    }
 }

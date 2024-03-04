@@ -11,9 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.xml.bind.DatatypeConverter;
-
 import edu.harvard.hul.ois.jhove.AESAudioMetadata;
+import edu.harvard.hul.ois.jhove.Checksummer;
 import edu.harvard.hul.ois.jhove.InfoMessage;
 import edu.harvard.hul.ois.jhove.ModuleBase;
 import edu.harvard.hul.ois.jhove.Property;
@@ -225,9 +224,9 @@ public class BroadcastExtChunk extends Chunk {
 		}
 
 		if (extendedUmidExists) {
-			formattedUmid = DatatypeConverter.printHexBinary(umid);
+			formattedUmid = Checksummer.outputHexString(umid);
 		} else if (basicUmidExists) {
-			formattedUmid = DatatypeConverter.printHexBinary(basicUmid);
+			formattedUmid = Checksummer.outputHexString(basicUmid);
 		}
 
 		return formattedUmid;
