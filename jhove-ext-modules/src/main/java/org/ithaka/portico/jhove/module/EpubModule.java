@@ -82,9 +82,9 @@ public class EpubModule extends ModuleBase {
     private static final String FORMATNAME = "EPUB";
 
     private static final String NAME = "EPUB-ptc";
-    private static final String RELEASE = "1.2";
-    private static final int[] DATE = { 2023, 03, 16 };
-    private static final String RIGHTS_YEAR = "2019";
+    private static final String RELEASE = "1.3";
+    private static final int[] DATE = { 2023, 06, 12 };
+    private static final String RIGHTS_YEAR = "2023";
     private static final String[] FORMAT = { FORMATNAME };
     private static final String COVERAGE = FORMATNAME;
     private static final String[] MIMETYPE = { EPUB_MEDIATYPE };
@@ -94,18 +94,18 @@ public class EpubModule extends ModuleBase {
     private static final String NOTE = "This module uses EPUBCheck for testing of EPUB files.";
 
     // EPUB agent information
-    private static final String EPUB_AGENTNAME = "International Digital Publishing Forum";
+    private static final String EPUB_AGENTNAME = "International Digital Publishing Forum and World Wide Web Consortium";
     private static final AgentType EPUB_AGENTTYPE = AgentType.STANDARD;
-    private static final String EPUB_AGENTADDRESS = "International Digital Publishing Forum (IDPF), "
-            + "113 Cherry Street, Suite 70-719, Seattle, WA 98104";
-    private static final String EPUB_AGENTWEBSITE = "http://idpf.org";
-    private static final String EPUB_AGENTEMAIL = "membership@idpf.org";
-    private static final String EPUB_AGENTPHONE = "+1-206-451-7250";
+    private static final String EPUB_AGENTADDRESS = "W3C Inc, "
+            + "401 Edgewater Place, Suite 600, Wakefield, MA 01880, USA";
+    private static final String EPUB_AGENTWEBSITE = "https://www.w3.org/";
+    private static final String EPUB_AGENTEMAIL = "membership@w3.org";
+    private static final String EPUB_AGENTPHONE = "+1-339-273-2711";
 
     // EPUB format doc information
     private static final String EPUB_FORMATDOCTITLE = FORMATNAME;
-    private static final String EPUB_FORMATDOCDATE = "2019-05-15";
-    private static final String EPUB_FORMATDOCURL = "http://www.idpf.org/epub/dir/";
+    private static final String EPUB_FORMATDOCDATE = "2023-05-25";
+    private static final String EPUB_FORMATDOCURL = "https://www.w3.org/TR/epub/";
 
     // Signatures
     private static final String EPUB_EXTENSION = ".epub";
