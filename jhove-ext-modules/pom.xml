@@ -13,7 +13,7 @@
 
   <properties>
     <jwat.version>1.0.3</jwat.version>
-    <epubcheck.version>4.2.6</epubcheck.version>
+    <epubcheck.version>5.1.0</epubcheck.version>
   </properties>
 
   <build>
@@ -58,8 +58,8 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
     </dependency>
     <!-- JWAT for WARC, ARC and GZIP -->
     <dependency>

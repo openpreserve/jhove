@@ -1,0 +1,48 @@
+---
+title: Zip &amp; Gzip Modules
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
+
+<h1>ZIP and GZIP modules for JHOVE (draft, 4-April-2007)</h1>
+<p>
+<b>Module:</b> ZIP-ptc<br>
+<b>Version:</b> 1.1h<br>
+<b>Author:</b> Michael C. Maggio<br>
+<b>License:</b> GNU Lesser General Public License<br>
+<b>Class:</b> org.portico.tool.jhove_1_1.PTC_ZipModule_1_1<br>
+<b>Requires:</b> Command-line unzip from PKWARE for Unix. <b>Runs only on
+Unix</b>.<br>
+<b>File types:</b> ZIP-compressed files.<br>
+<b>Parameters:</b> The module parameter, if provided, is used
+as the path to the command line <code>unzip</code> command.
+The default is <code>/usr/local/bin/unzip</code> .<br>
+&nbsp;<br>
+&nbsp;<br>
+<b>Module:</b> GZIP-ptc<br>
+<b>Version:</b> 1.1h<br>
+<b>Author:</b> Michael C. Maggio<br>
+<b>License:</b> GNU Lesser General Public License<br>
+<b>Class:</b> org.portico.tool.jhove_1_1.PTC_GzipModule_1_1<br>
+<b>Requires:</b> Command-line gzip. <b>Runs only on
+Unix</b>.<br>
+<b>File types:</b> GZIP-compressed files.<br>
+<b>Parameters:</b> The module parameter, if provided, is used
+as the path to the command line <code>gzip</code> command.
+The default is <code>/usr/bin/gzip</code> .<br>
+<b>Notes:</b>The JAR includes both the ZIP and GZIP modules
+from Portico.
+<p>
+Please note that these modules are <b>unsupported</b> by HUL,
+and that you use them at your own risk.
+</p>
+<a href="ZipModule.jar" class="btn btn-primary btn-lg pad" onclick="ga('send', 'event', 'Zip actions', 'Download', 'Download 3.3.5');" download>Download Zip Module</a>
+</div>
+    {% include footer.html %}
+<p>
+</body>
+</html>
