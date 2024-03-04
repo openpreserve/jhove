@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -45,9 +46,10 @@ public class JhoveRepInfoReportTest {
     private static final MessageId WARN_MSG_ID = MessageId.CHK_001;
     private static final String WARN_MSG = "Consider yourself warned";
     private static final String WARN_MSG_SUGGEST = "Don't do it again!";
-
-    private EPUBLocation messageLoc = EPUBLocation.create("epub.opf");
-    private EPUBLocation messageLoc2 = EPUBLocation.create("content.xhtml");
+    
+    private EPUBLocation messageLoc = EPUBLocation.of(new File("epub.opf"));
+    private EPUBLocation messageLoc2 = EPUBLocation.of(new File("content.xhtml"));
+    
     private String messageArg = "fakearg";
 
 
