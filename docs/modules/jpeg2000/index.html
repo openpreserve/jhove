@@ -1,0 +1,164 @@
+---
+title: JPEG2000-hul Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+<h1>JPEG2000-hul Module</h1>
+
+<h2>1 Introduction</h2>
+
+<p>
+The JPEG2000-hul module recognizes and validates the JPEG 2000
+(ISO/IEC 15444) format, a digital representation format for lossy or
+losslessly-compressed bi-tonal, grayscale, palette color, and
+continuous color still image data.
+</p><p>
+The module is invoked by the:
+</p>
+<blockquote>
+<pre>
+jhove ... -m JPEG2000-hul ...
+</pre>
+</blockquote>
+command line option.
+
+<p>
+</p>
+
+<a class="name" name="coverage">
+<h2>2 Coverage</h2></a>
+
+<p>
+The JPEG2000-hul module recognizes and validates the following public profiles:
+</p>
+<ul>
+<li> JP2 profile (ISO/IEC 15444-1:2000/ITU-T Rec. T.800 (2002))
+[<a href="/references#jpeg2000-1">JP2</a>,
+<a href="/references#itu-t.800">ITU-T T.800</a>]
+<li> JPX profile (ISO/IEC 15444-2:2004)
+[<a href="/references#jpeg2000-2">JPX</a>]
+</ul>
+
+<p>
+</p>
+
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2></a>
+
+<p>
+The following criteria must be met by a JPEG 2000 object for JHOVE to
+consider it well-formed:
+</p>
+
+<ul>
+<li> The required Signature and File Type box structures are the first
+two boxes in the file
+<li> All boxes required by a given profile exist in the file
+<li> All box structures are well-formed (a four byte unsigned integer Box
+Length, followed by a four byte unsigned integer Box type, followed by a
+eight byte unsigned integer Box Length, followed by the Box Contents)
+<li> No data exist before the first byte of the first box or after the
+last byte of the last box
+</ul>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+
+<p>
+The following criteria must be met by a JPEG 2000 file for JHOVE to consider it
+valid:
+</p>
+
+<ul>
+<li> The file is well-formed
+</ul>
+
+<p>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+
+<p>
+The MIME type for the JP2 profile is reported as: image/jp2;
+for the JPX profile: image/jpx.
+</p>
+
+<p>
+In addition to the standard JHOVE
+<a href="index.html#repinfo">representation information</a>, the following
+JPEG 2000-specific properties are reported:
+</p>
+<ul>
+<li> Property "JPEG2000Metadata" of type PROPERTY and arity ARRAY
+<ul>
+<li> Properties capturing the technical attributes of the JPEG 2000
+image from all boxes
+</ul>
+</ul>
+
+<p>
+Image technical properties are reported in terms of the NISO
+<a href="/references#z39.87">Z39.87</a>
+data dictionary.
+</p>
+
+<h3>5.1 Profiles</h3>
+
+<ul>
+<li> <strong>JP2</strong>
+<p>
+JP2 is the file format defined by ISO/IEC 15444-1:2000/ITU-T Rec. T.800 (2002)
+[<a href="/references#jpeg2000-1">JP2</a>,
+<a href="/references#itu-t.800">ITU-T T.800</a>].
+The JP2 profile provides a baseline format for the exchange of
+still image data using a limited range of colorspaces.
+</p><p>
+Profile requirements include:
+</p>
+<ul>
+<li> The File Type box BR field is "<tt>jp2 </tt>" (note the trailing
+SPACE character)
+<li> JP2 Header superbox precedes any code stream or Label boxes
+and includes Image Header and Colour Specification boxes
+<li> The Colour Specification box APPROX field is 0 and the METH field is
+either 1 or 2
+</ul>
+<p>
+
+<li> <strong>JPX</strong>
+<p>
+JPX is the file format defined by ISO/IEC 15444-2:2004
+[<a href="/references#jpeg2000-2">JPX</a>].
+The JPX profile provides extensions to JP2 that allow additional
+colorspaces, the specification of opacity, standardized metadata, multiple
+image data streams, and
+more non-contiguous internal organization of the image data.
+</p><p>
+Profile requirements include:
+</p>
+<ul>
+<li> The File Type box BR field is "<tt>jpx </tt>" (note the trailing SPACE
+character)
+<li> Reader Requirements box immediately follows the File Type box
+<li> JP2 Header superbox includes Image Header and Colour Specification boxes
+<li> The Colour Specification box APPROX field is non-zero
+</ul>
+</ul>
+
+<h2>6 Additional Module Properties</h2>
+
+<ul>
+<li> Nominal file extension: .jp2 (for JP2 profile)
+[<a href="/references#rfc3745">RFC 3745</a>]
+<li> Nominal file extension: .jpf (for JPX profile)
+<li> Alternative file extension: .jpx (for JPX profile)
+</ul>
+</div>
+{% include footer.html %}
+</body>
+</html>

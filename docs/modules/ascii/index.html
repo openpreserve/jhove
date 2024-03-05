@@ -1,0 +1,96 @@
+---
+title: ASCII-hul Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+<h1>ASCII-hul Module</h1>
+
+<a class="name" name="introduction">
+  <h2>1 Introduction</h2>
+</a>
+
+<p>
+The ASCII-hul module recognizes and validates ASCII content streams.
+</p><p>
+The module is invoked by the:
+</p>
+<blockquote>
+<pre>
+jhove ... -m ASCII-hul ...
+</pre>
+</blockquote>
+<p>
+command line option.
+</p>
+
+<p>
+This module can be <a href="/getting-started/config/">configured</a> with the following parameters:
+</p>
+<ul>
+<li><tt>withTextMD=true</tt> to ask for the output of a <a href="/references#textmd">textMD</a> block in the text technical properties.</li>
+</ul>
+
+<a class="name" name="coverage">
+<h2>2 Coverage</h2></a>
+
+<ul>
+<li> ASCII (ANSI X3.4-1986, ECMA-6, ISO 646:1991)
+[<a href="/references#x3.4">ANSI X3.4</a>,
+<a href="/references#ecma-6">ECMA-6</a>,
+<a href="/references#iso646">ISO 646</a>,]
+</ul>
+
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2></a>
+
+<p>
+The following criteria must be met by an ASCII content stream for JHOVE to
+consider it well-formed:
+</p>
+<ul>
+<li> The integer value of every octet in the stream is in the inclusive range
+[0x00, 0x7F].
+</ul>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+
+<p>
+The following criteria must be met by an ASCII content stream for JHOVE to
+consider it valid:
+</p>
+<ul>
+<li> The ASCII content stream is well-formed
+</ul>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+
+<p>
+The MIME type is reported as: text/plain; charset=US-ASCII
+</p>
+
+<p>
+In addition to the standard JHOVE
+<a href="/documentation#repinfo">representation information</a>, the module
+defines the following properties:
+</p>
+<ul>
+<li>Property "ASCIIMetadata" of type PROPERTY and arity LIST
+<ul>
+  <li> Property "LineEndings" of type STRING and arity LIST containing: CR, CRLF, or LF</li>
+  <li> Property "ControlCharacters" of type STRING and arity LIST containing the control characters in readable form, e.g. "TAB (0x09)"</li>
+  <li> If withTextMD, Property "TextMDMetadata" of type TextMDMetadata and arity SCALAR</li>
+</ul>
+</li>
+</ul>
+</div>
+
+{% include footer.html %}
+
+</body>
+</html>

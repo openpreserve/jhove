@@ -1,0 +1,61 @@
+---
+title: Use cases
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
+  <main>
+    <a class="name" name="usecases">
+    <h1>Use Cases</h1></a>
+    <p>
+      Potential use cases for JHOVE include:
+    </p>
+    <ol>
+      <li> Identification
+        <ol type="a">
+          <li> "I have an object; what format is it?"</li>
+        </ol>
+      </li>
+      <li> Validation
+        <ol type="a">
+          <li>
+            "I have an object that purports to of format <em>F</em>; is it?"
+          </li>
+          <li>
+            "I have an object of format <em>F</em>; does it meet profile <em>P</em>
+             of <em>F</em>?"
+          </li>
+          <li>
+            "I have an object of format <em>F</em> and external metadata about
+            <em>F</em> in schema <em>S</em>; are they consistent?"
+          </li>
+        </ol>
+      </li>
+      <li> Characterization
+        <ol type="a">
+          <li>
+            "I have an object of format <em>F</em>; what are its salient properties
+            (given in schema <em>S</em>)?"
+          </li>
+        </ol>
+      </li>
+    </ol>
+    <p>
+      In terms of the OAIS Reference Model
+      [<a href="/references#oais">ISO/IEC 14721</a>],
+      JHOVE can be integrated into
+      repository workflows with respect to Submission Information Package (SIP)
+      creation and ingest validation.
+    </p>
+    <blockquote>
+      <img src="/img/workflow.gif" alt="JHOVE example workflow">
+    </blockquote>
+  </main>
+</div>
+{% include footer.html %}
+</body>
+</html>

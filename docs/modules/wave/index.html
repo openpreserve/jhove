@@ -1,0 +1,727 @@
+---
+title: WAVE-hul Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+
+<h1>WAVE-hul Module</h1>
+
+
+<h2>1 Introduction</h2>
+
+<p>
+  The WAVE-hul module recognizes and validates the Audio for Windows format 
+  (WAVE) [<a href="/references#wave">WAVE</a>,
+  <a href="/references#waveformat">WAVEFORMAT</a>]. WAVE is a variant of 
+  the Microsoft RIFF format [<a href="/references#riff">RIFF</a>], which is 
+  itself an implementation of the Electronic Arts IFF 85 format
+  [<a href="/references#iff85">IFF</a>].
+</p>
+
+<p>
+  The module can be invoked with the following command-line option:
+</p>
+
+<blockquote>
+<pre>
+  jhove ... -m WAVE-hul ...
+</pre>
+</blockquote>
+
+
+<h2 id="coverage">2 Coverage</h2>
+
+<p>
+  The WAVE-hul module recognizes and validates the following public profiles:
+</p>
+
+<ul>
+  <li>PCMWAVEFORMAT
+      [<a href="/references#pcmwaveformat">PCMWAVEFORMAT</a>]</li>
+  <li>WAVEFORMATEX
+      [<a href="/references#waveformatex">WAVEFORMATEX</a>]</li>
+  <li>WAVEFORMATEXTENSIBLE
+      [<a href="/references#waveformatextensible">WAVEFORMATEXTENSIBLE</a>]</li>
+  <li>EBU Technical Specification 3285,
+      Broadcast Wave Format (BWF) version 0, 1 and 2
+      [<a href="/references#bwf">BWF</a>,
+      <a href="/references#bwf-1">BWF Supp 1</a>,
+      <!--<a href="/references#bwf-2">BWF Supp 2</a>,-->
+      <a href="/references#bwf-3">BWF Supp 3</a>,
+      <a href="/references#bwf-4">BWF Supp 4</a>]
+      <!--<a href="/references#bwf-5">BWF Supp 5</a>]--></li>
+  <li>EBU Technical Specification 3306, RF64
+    [<a href="/references#rf64">RF64</a>]</li>
+</ul>
+
+
+<h2 id="well-formedness">3 Well-Formedness</h2>
+
+<p>
+  The following criteria must be met by a WAVE object for JHOVE to consider it 
+  well-formed:
+</p>
+
+<ul>
+  <li>"RIFF" or "RF64" at byte offset 0; "WAVE" at offset 8</li>
+  <li>All chunk structures are well-formed: a four-character printable ASCII
+      <var>ID</var>, followed by a 32-bit unsigned integer <var>size</var>, 
+      followed by a <var>size</var>-length data block (if <var>size</var> is
+      odd, then the data block includes a final padding byte of 0x00)</li>
+  <li>If RF64, the first chunk is a Data Size 64 chunk</li>
+  <li>A Format chunk exists</li>
+  <li>A Data chunk exists</li>
+</ul>
+
+
+<h2 id="validity">4 Validity</h2>
+
+<p>
+  The following criteria must be met by a WAVE file for JHOVE to consider it
+  valid:
+</p>
+
+<ul>
+  <li>The file is well-formed</li>
+  <li>All chunk IDs begin with printable ASCII</li>
+  <li>The Format chunk appears before the Data chunk</li>
+  <li>The following chunks appear no more than once:
+    <ul>
+      <li>Broadcast Audio Extension</li>
+      <li>Cart</li>
+      <li>Cue Points</li>
+      <li>Data</li>
+      <li>Format</li>
+      <li>Instrument</li>
+      <li>Link</li>
+      <li>MPEG Audio Extension</li>
+      <li>Peak Envelope</li>
+    </ul>
+  </li>
+</ul>
+
+
+<h2 id="repinfo">5 Representation Information</h2>
+
+<p>
+  The base MIME type is reported as <code>audio/vnd.wave</code>, but
+  may be extended with a <code>codec</code> parameter as described in
+  RFC&nbsp;2361 [<a href="/references#rfc2361">RFC&nbsp;2361</a>].
+</p>
+
+<p>
+  In addition to the standard JHOVE
+  <a href="/documentation#repinfo">representation information</a>,
+  the following WAVE-specific properties are reported:
+</p>
+
+<ul>
+  <li>Property "WAVEMetadata" of type PROPERTY and arity LIST
+    <ul>
+      <li>Properties capturing the technical attributes of the WAVE
+      image from all chunks</li>
+      <li>...</li>
+    </ul>
+  </li>
+</ul>
+
+<p>
+  The module reports audio properties using the draft standard AES-X098B,
+  <cite>Core audio metadata XML definition</cite>, developed by the
+  <a href="http://www.aes.org/">Audio Engineering Society</a> (AES)
+  <a href="http://www.aes.org/standards/b_policies/aessc-structure.cfm#SC-03">SC-03-06</a>
+  Working Group on Digital Library and Archive Systems.
+</p>
+
+<p>
+  The module can recognize and process the following chunks:
+</p>
+
+<table class="table table-condensed table-hover">
+  <caption>Top-level chunks</caption>
+  <tr>
+    <th style="width:10%">ID</th>
+    <th style="width:15%">List Type</th>
+    <th style="width:25%">Name</th>
+    <th style="width:25%">Property</th>
+    <th style="width:25%">References</th>
+  </tr>
+<!--
+  <tr>
+    <td><code>axml</code></td>
+    <td></td>
+    <td>AXML</td>
+    <td></td>
+    <td>[<a href="/references#bwf-5">BWF Supp 5</a>]</td>
+  </tr>
+-->
+  <tr>
+    <td><code>bext</code></td>
+    <td></td>
+    <td>Broadcast Audio Extension</td>
+    <td>BroadcastAudioExtension</td>
+    <td>[<a href="/references#bwf">BWF</a>]</td>
+  </tr>
+  <tr>
+    <td><code>cue </code></td>
+    <td></td>
+    <td>Cue Points</td>
+    <td>CuePoints</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>data</code></td>
+    <td></td>
+    <td>Data</td>
+    <td>Data</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+<!--
+  <tr>
+    <td><code>dbmd</code></td>
+    <td></td>
+    <td>Dolby Metadata</td>
+    <td></td>
+    <td>[<a href="/references#bwf-6">BWF Supp 6</a>]</td>
+  </tr>
+-->
+  <tr>
+    <td><code>ds64</code></td>
+    <td></td>
+    <td>Data Size 64</td>
+    <td></td>
+    <td>[<a href="/references#rf64">RF64</a>]</td>
+  </tr>
+  <tr>
+    <td><code>fact</code></td>
+    <td></td>
+    <td>Fact</td>
+    <td>Fact</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>fmt </code></td>
+    <td></td>
+    <td>Format</td>
+    <td></td>
+    <td>[<a href="/references#wave">WAVE</a>,
+      <a href="/references#waveformat">WAVEFORMAT</a>,<br/>
+      <a href="/references#pcmwaveformat">PCMWAVEFORMAT</a>,<br/>
+      <a href="/references#waveformatex">WAVEFORMATEX</a>,<br/>
+      <a href="/references#waveformatextensible">WAVEFORMATEXTENSIBLE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>inst</code></td>
+    <td></td>
+    <td>Instrument</td>
+    <td>Instrument</td>
+    <td>[<a href="/references#mdsu3">MDSU</a>]</td>
+  </tr>
+  <tr>
+    <td><code>labl</code></td>
+    <td></td>
+    <td>Label</td>
+    <td>Label</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>levl</code></td>
+    <td></td>
+    <td>Peak Envelope</td>
+    <td>PeakEnvelope</td>
+    <td>[<a href="/references#bwf-3">BWF Supp 3</a>]</td>
+  </tr>
+  <tr>
+    <td><code>link</code></td>
+    <td></td>
+    <td>Link</td>
+    <td>Link</td>
+    <td>[<a href="/references#bwf-4">BWF Supp 4</a>]</td>
+  </tr>
+  <tr>
+    <td><code>list</code></td>
+    <td><code>adtl</code></td>
+    <td>Associated Data List</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><code>LIST</code></td>
+    <td><code>adtl</code></td>
+    <td>Associated Data List</td>
+    <td></td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>LIST</code></td>
+    <td><code>exif</code></td>
+    <td>Exif List</td>
+    <td>Exif</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+  <tr>
+    <td><code>LIST</code></td>
+    <td><code>INFO</code></td>
+    <td>Info List</td>
+    <td>ListInfo</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>mext</code></td>
+    <td></td>
+    <td>MPEG Audio Extension</td>
+    <td>MPEG</td>
+    <td>[<a href="/references#bwf-1">BWF Supp 1</a>]</td>
+  </tr>
+  <tr>
+    <td><code>note</code></td>
+    <td></td>
+    <td>Note</td>
+    <td>Note</td>
+    <td></td>
+  </tr>
+<!--
+  <tr>
+    <td><code>qlty</code></td>
+    <td></td>
+    <td>Quality</td>
+    <td></td>
+    <td>[<a href="/references#bwf-2">BWF Supp 2</a>]</td>
+  </tr>
+-->
+  <tr>
+    <td><code>smpl</code></td>
+    <td></td>
+    <td>Sample</td>
+    <td>Sample</td>
+    <td>[<a href="/references#mdsu3">MDSU</a>]</td>
+  </tr>
+</table>
+
+<table class="table table-condensed table-hover">
+  <caption>Associated Data List chunks</caption>
+  <tr>
+    <th style="width:25%">ID</th>
+    <th style="width:25%">Name</th>
+    <th style="width:25%">Property</th>
+    <th style="width:25%">References</th>
+  </tr>
+  <tr>
+    <td><code>labl</code></td>
+    <td>Label</td>
+    <td>Label</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ltxt</code></td>
+    <td>Text with Data Length</td>
+    <td>LabeledTextItem</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>note</code></td>
+    <td>Note</td>
+    <td>Note</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+</table>
+
+<table class="table table-condensed table-hover">
+  <caption>Exif List chunks</caption>
+  <tr>
+    <th style="width:25%">ID</th>
+    <th style="width:25%">Name</th>
+    <th style="width:25%">Property</th>
+    <th style="width:25%">References</th>
+  </tr>
+  <tr>
+    <td><code>ecor</code></td>
+    <td>Make</td>
+    <td>Manufacturer</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+  <tr>
+    <td><code>emdl</code></td>
+    <td>Model</td>
+    <td>Model</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+  <tr>
+    <td><code>erel</code></td>
+    <td>Related Information</td>
+    <td>RelatedImageFile</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+  <tr>
+    <td><code>etim</code></td>
+    <td>Time</td>
+    <td>TimeCreated</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ever</code></td>
+    <td>Version</td>
+    <td>ExifVersion</td>
+    <td>[<a href="/references#exif">Exif</a>]</td>
+  </tr>
+</table>
+
+<table class="table table-condensed table-hover">
+  <caption>Info List chunks</caption>
+  <tr>
+    <th style="width:25%">ID</th>
+    <th style="width:25%">Name</th>
+    <th style="width:25%">Property</th>
+    <th style="width:25%">References</th>
+  </tr>
+  <tr>
+    <td><code>IARL</code></td>
+    <td>Archival Location</td>
+    <td>ArchivalLocation</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IART</code></td>
+    <td>Artist</td>
+    <td>Artist</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ICMS</code></td>
+    <td>Commissioned</td>
+    <td>Commissioned</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ICMT</code></td>
+    <td>Comments</td>
+    <td>Comments</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ICOP</code></td>
+    <td>Copyright</td>
+    <td>Copyright</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ICRD</code></td>
+    <td>Creation Date</td>
+    <td>CreationDate</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ICRP</code></td>
+    <td>Cropped</td>
+    <td>Cropped</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IDIM</code></td>
+    <td>Dimensions</td>
+    <td>Dimensions</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IDPI</code></td>
+    <td>Dots Per Inch</td>
+    <td>DotsPerInch</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IENG</code></td>
+    <td>Engineer</td>
+    <td>Engineer</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IGNR</code></td>
+    <td>Genre</td>
+    <td>Genre</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IKEY</code></td>
+    <td>Keywords</td>
+    <td>Keywords</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ILGT</code></td>
+    <td>Lightness</td>
+    <td>Lightness</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IMED</code></td>
+    <td>Medium</td>
+    <td>Medium</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>INAM</code></td>
+    <td>Name</td>
+    <td>Name</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IPLT</code></td>
+    <td>Palette Setting</td>
+    <td>PaletteSetting</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>IPRD</code></td>
+    <td>Product</td>
+    <td>Product</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ISBJ</code></td>
+    <td>Subject</td>
+    <td>Subject</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ISFT</code></td>
+    <td>Software</td>
+    <td>Software</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ISHP</code></td>
+    <td>Sharpness</td>
+    <td>Sharpness</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ISRC</code></td>
+    <td>Source</td>
+    <td>Source</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ISRF</code></td>
+    <td>Source Form</td>
+    <td>SourceForm</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+  <tr>
+    <td><code>ITCH</code></td>
+    <td>Technician</td>
+    <td>Technician</td>
+    <td>[<a href="/references#wave">WAVE</a>]</td>
+  </tr>
+</table>
+
+
+<h3>5.1 Profiles</h3>
+
+<p>
+  WAVE is a format for uncompressed or compressed sampled audio. The format is 
+  defined informally by references to various Microsoft API data structures:
+</p>
+
+<ul>
+  <li><a href="/references#waveformat">WAVEFORMAT</a></li>
+  <li><a href="/references#pcmwaveformat">PCMWAVEFORMAT</a></li>
+  <li><a href="/references#waveformatex">WAVEFORMATEX</a></li>
+  <li><a href="/references#waveformatextensible">WAVEFORMATEXTENSIBLE</a></li>
+</ul>
+
+<p>
+  The baseline <code>fmt</code> chunk is defined by the WAVEFORMAT structure 
+  with a length of 14 bytes:
+</p>
+
+<blockquote>
+<pre>
+  WORD  wFormatTag
+  WORD  nChannels
+  DWORD nSamplesPerSec
+  DWORD nAvgBytesPerSec
+  WORD  nBlockAlign
+</pre>
+</blockquote>
+
+<p>
+  Where <code>WORD</code> indicates a 16-bit unsigned integer and
+  <code>DWORD</code> indicates a 32-bit unsigned integer.
+</p>
+
+<p>
+  The specific form of the sampled data is specified by the <code>fmt</code>
+  chunk's <var>wFormatTag</var> field. For a list of registered
+  <var>wFormatTag</var> values, see RFC&nbsp;2361
+  [<a href="/references#rfc2361">RFC&nbsp;2361</a>].
+</p>
+
+
+<h4>PCMWAVEFORMAT</h4>
+
+<p>
+  This is an extension to the WAVEFORMAT profile in which the <code>fmt</code>
+  chunk is defined by the PCMWAVEFORMAT structure with a length of 16 bytes
+  [<a href="/references#pcmwaveformat">PCMWAVEFORMAT</a>]:
+</p>
+
+<blockquote>
+<pre>
+  WAVEFORMAT
+  WORD  wBitsPerSample
+</pre>
+</blockquote>
+
+<p>
+  Profile requirements include:
+</p>
+
+<ul>
+  <li><var>wFormatTag</var> = 0x0001</li>
+</ul>
+
+
+<h4>WAVEFORMATEX</h4>
+
+<p>
+  This is an extension to the PCMWAVEFORMAT profile supporting both PCM and
+  non-PCM audio formats [<a href="/references#waveformatex">WAVEFORMATEX</a>].
+  The <code>fmt</code> chunk is defined by the WAVEFORMATEX structure with a
+  length ≥ 18 bytes:
+</p>
+
+<blockquote>
+<pre>
+  PCMWAVEFORMAT
+  WORD  cbSize
+</pre>
+</blockquote>
+
+<p>
+  Profile requirements include:
+</p>
+
+<ul>
+  <li><var>wFormatTag</var> ≠ 0xFFFE</li>
+  <li>If <var>wFormatTag</var> = 0x0001 then
+    <ul>
+      <li><var>nAvgBytesPerSec</var> = <var>nSamplesPerSec</var>
+          × <var>nBlockAlign</var> (recommended)</li>
+      <li><var>nBlockAlign</var> = <var>nChannels</var>
+          × <b>ceiling(</b><var>wBitsPerSample</var> / 8<b>)</b></li>
+      <li><var>wBitsPerSample</var> = 8 or 16</li>
+    </ul>
+  </li>
+</ul>
+
+
+<h4>WAVEFORMATEXTENSIBLE</h4>
+
+<p>
+  This is the most recent version of the Microsoft WAVE format for audio
+  sample data with greater than two channels or 16-bit sampling
+  [<a href="/references#waveformatextensible">WAVEFORMATEXTENSIBLE</a>].
+  The <code>fmt</code> chunk is defined by the WAVEFORMATEXTENSIBLE structure
+  with a length ≥ 40 bytes:
+</p>
+
+<blockquote>
+<pre>
+  WAVEFORMATEX
+  UNION samples   {
+    WORD  wValidBitsPerSample
+    WORD  wSamplesPerBlock
+    WORD  wReserved
+  }
+  DWORD dwChannelMask
+  GUID  subFormat {
+    DWORD f1
+    WORD  f2
+    WORD  f3
+    CHAR  f4[8]
+  }
+</pre>
+</blockquote>
+
+<p>
+  Where <code>UNION</code> is a C-style union structure and <code>CHAR</code>
+  is an 8-bit unsigned integer.
+</p>
+
+<p>
+  Profile requirements include:
+</p>
+
+<ul>
+  <li><var>wFormatTag</var> = 0xFFFE</li>
+  <li><var>nBlockAlign</var> = <var>nChannels</var>
+      × <b>ceiling(</b><var>wBitsPerSample</var> / 8<b>)</b></li>
+  <li><var>wBitsPerSample</var> is a multiple of 8</li>
+  <li><var>cbSize</var> &gt; 21</li>
+  <li><var>wValidBitsPerSample</var> ≤ <var>wBitsPerSample</var></li>
+</ul>
+
+
+<h4>BWF</h4>
+
+<p>
+  Broadcast Wave Format is an extension of the WAVEFORMATEX profile, defined by
+  the European Broadcast Union (EBU) as EBU Technical Specification 3285 and
+  its supplements
+  [<a href="/references#bwf">BWF</a>,
+  <a href="/references#bwf-1">BWF Supp 1</a>,
+  <a href="/references#bwf-2">BWF Supp 2</a>,
+  <a href="/references#bwf-3">BWF Supp 3</a>,
+  <a href="/references#bwf-4">BWF Supp 4</a>,
+  <a href="/references#bwf-5">BWF Supp 5</a>,
+  <a href="/references#bwf-6">BWF Supp 6</a>].
+</p>
+
+<p>
+  Profile requirements include:
+</p>
+
+<ul>
+  <li><code>bext</code> chunk exists</li>
+  <li><var>wFormatTag</var> = 0x0001 or 0x0050</li>
+  <li>If <var>wFormatTag</var> = 0x0050 then
+    <ul>
+      <li><code>fact</code> chunk exists</li>
+    </ul>
+  </li>
+</ul>
+
+
+<h4>RF64</h4>
+
+<p>
+  The RF64 format was defined by the European Broadcast Union (EBU) in
+  EBU Technical Specification 3306 to allow WAVE format files and chunks
+  to exceed 4 gigabytes in size [<a href="/references#rf64">RF64</a>].
+</p>
+
+<p>
+  Profile requirements include:
+</p>
+
+<ul>
+  <li>"RF64" at byte offset 0</li>
+</ul>
+
+
+<h2>6 Additional Module Properties</h2>
+
+<ul>
+  <li>Nominal file extension: .wav</li>
+  <li>Alternative file extensions: .bwf, .rf64</li>
+</ul>
+
+</div>
+{% include footer.html %}
+</body>
+</html>
