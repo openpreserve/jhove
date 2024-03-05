@@ -63,3 +63,14 @@ find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module
 if [[ -f "${candidateRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml" "${targetRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml"
 fi
+
+# Copy the PDF Module results changed by https://github.com/openpreserve/jhove/pull/871
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pr_871_a.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/regression/modules/PDF-hul/pr_871_a.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pr_871_a.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pr_871_b.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/regression/modules/PDF-hul/pr_871_b.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pr_871_b.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pr_871_c.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/regression/modules/PDF-hul/pr_871_c.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pr_871_c.pdf.jhove.xml"
+fi
