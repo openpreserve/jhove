@@ -74,3 +74,8 @@ fi
 if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pr_871_c.pdf.jhove.xml" ]]; then
 	cp "${candidateRoot}/regression/modules/PDF-hul/pr_871_c.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pr_871_c.pdf.jhove.xml"
 fi
+
+# Copy the PNG Module results changed by https://github.com/openpreserve/jhove/pull/843
+if [[ -f "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" ]]; then
+	cp "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" "${targetRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml"
+fi
