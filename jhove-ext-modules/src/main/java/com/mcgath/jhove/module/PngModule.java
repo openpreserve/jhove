@@ -43,8 +43,8 @@ public class PngModule extends ModuleBase {
      ******************************************************************/
 
     private static final String NAME = "PNG-gdm";
-    private static final String RELEASE = "1.2";
-    private static final int[] DATE = { 2023, 03, 16 };
+    private static final String RELEASE = "1.3";
+    private static final int[] DATE = { 2024, 03, 05 };
     private static final String[] FORMAT = {
             "PNG", " ISO/IEC 15948:2003", "Portable Network Graphics"
     };
@@ -254,8 +254,8 @@ public class PngModule extends ModuleBase {
             return 0;
         } catch (EOFException e) {
             JhoveMessage msg = JhoveMessages.getMessageInstance(
-                MessageConstants.PNG_GDM_69.getId(),
-                String.format(MessageConstants.PNG_GDM_69.getMessage(), _nByte));
+                    MessageConstants.PNG_GDM_69.getId(),
+                    String.format(MessageConstants.PNG_GDM_69.getMessage(), _nByte));
             info.setMessage(new ErrorMessage(msg));
             info.setWellFormed(false);
             return 0;
@@ -264,8 +264,8 @@ public class PngModule extends ModuleBase {
             // But it's better to catch them than let them fall through.
             // Treat them as bugs.
             JhoveMessage msg = JhoveMessages.getMessageInstance(
-                MessageConstants.PNG_GDM_70.getId(),
-                String.format(MessageConstants.PNG_GDM_70.getMessage(), e.getClass().getName()));
+                    MessageConstants.PNG_GDM_70.getId(),
+                    String.format(MessageConstants.PNG_GDM_70.getMessage(), e.getClass().getName()));
             info.setMessage(new ErrorMessage(msg));
             info.setWellFormed(false);
             return 0;
