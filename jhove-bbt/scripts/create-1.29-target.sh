@@ -90,3 +90,30 @@ fi
 if [[ -f "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" ]]; then
 	cp "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" "${targetRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml"
 fi
+
+declare -a indent_affected=("errors/modules/PDF-hul/pdf-hul-14-govdocs-489354.pdf.jhove.xml"
+				"errors/modules/PDF-hul/pdf-hul-9-govdocs-065694.pdf.jhove.xml"
+				"errors/modules/PDF-hul/pdf-hul-1-govdocs-519846.pdf.jhove.xml"
+				"errors/modules/PDF-hul/pdf-hul-49-32932439X.pdf.jhove.xml"
+				"errors/modules/JPEG2000-hul/is_jpx.jp2.jhove.xml"
+				"errors/modules/WAVE-hul/wf-pcm-44khz-8bit-mono-fmt-chunk-2-unrecognized-bytes.wav.jhove.xml"
+				"regression/modules/PNG-gdm/issue_694.png.jhove.xml"
+				"regression/modules/PDF-hul/null-string.pdf.jhove.xml"
+				"regression/modules/PDF-hul/pdf-hul-94-false-positive.pdf.jhove.xml"
+				"regression/modules/PDF-hul/issue_646.pdf.jhove.xml"
+				"regression/modules/PDF-hul/null-string-sig-2.pdf.jhove.xml"
+				"regression/modules/PDF-hul/null-string-sig-1.pdf.jhove.xml"
+				"regression/modules/PDF-hul/pdf-hul-40-govdocs-088919.pdf.jhove.xml"
+				"examples/modules/TIFF-hul/cramps.tif.jhove.xml"
+				"examples/modules/TIFF-hul/text.tif.jhove.xml"
+				"examples/modules/TIFF-hul/testpage-small.tif.jhove.xml"
+				"examples/modules/JPEG2000-hul/ROITest.jpx.jhove.xml"
+				"examples/modules/WAVE-hul/8-Bit-Noise-1.wav.jhove.xml"
+				"examples/modules/WAVE-hul/8-Bit-Noise-2.wav.jhove.xml"
+				)
+for filename in "${indent_affected[@]}"
+do
+	if [[ -f "${candidateRoot}/${filename}" ]]; then
+		cp "${candidateRoot}/${filename}" "${targetRoot}/${filename}"
+	fi
+done

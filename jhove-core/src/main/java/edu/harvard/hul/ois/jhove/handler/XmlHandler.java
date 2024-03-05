@@ -744,11 +744,6 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
     }
 
     protected void showProperty(Property property) {
-        String margin = getIndent(++_level);
-        String margn2 = margin + " ";
-        String margn3 = margn2 + " ";
-        String margn4 = margn3 + " ";
-
         PropertyArity arity = property.getArity();
         PropertyType type = property.getType();
 
@@ -756,6 +751,11 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
         // as this could result in a schema violation.
         if (Utils.isPropertyEmpty(property, arity))
             return;
+		
+        String margin = getIndent(++_level);
+        String margn2 = margin + " ";
+        String margn3 = margn2 + " ";
+        String margn4 = margn3 + " ";
 
         boolean valueIsProperty = PropertyType.PROPERTY.equals(type);
         boolean valueIsNiso = PropertyType.NISOIMAGEMETADATA.equals(type);
