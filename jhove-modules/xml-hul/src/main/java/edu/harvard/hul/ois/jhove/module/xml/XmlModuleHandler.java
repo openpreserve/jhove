@@ -189,12 +189,12 @@ public class XmlModuleHandler extends DefaultHandler {
 						// and location URIs separated by white space. Any
 						// number of such pairs may be declared in a single
 						// schemaLocation attribute.
-						String[] uris = val.split("\\s");
+						String[] uris = val.trim().split("\\s+");
 						for (int j = 0; j < uris.length; j += 2) {
 							SchemaInfo schema = new SchemaInfo();
-							schema.namespaceURI = uris[j].trim();
+							schema.namespaceURI = uris[j];
 							if (uris.length > j + 1) {
-								schema.location = uris[j + 1].trim();
+								schema.location = uris[j + 1];
 							} else {
 								schema.location = "";
 							}

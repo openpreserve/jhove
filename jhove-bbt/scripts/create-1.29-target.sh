@@ -55,3 +55,38 @@ echo "TEST BASELINE: Creating baseline"
 # Simply copy baseline for now we're not making any changes
 echo " - copying ${baselineRoot} baseline to ${targetRoot}"
 cp -R "${baselineRoot}" "${targetRoot}"
+
+# Update release details for ePub module
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.2">EPUB-ptc<\/module>$/   <module release="1.3">EPUB-ptc<\/module>/' {} \;
+
+# Copy the XML file output changed by https://github.com/openpreserve/jhove/pull/889
+if [[ -f "${candidateRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml" "${targetRoot}/examples/modules/XML-hul/jhoveconf.xml.jhove.xml"
+fi
+
+# Copy the PDF Module results changed by https://github.com/openpreserve/jhove/pull/871
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pr_871_a.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/regression/modules/PDF-hul/pr_871_a.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pr_871_a.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pr_871_b.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/regression/modules/PDF-hul/pr_871_b.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pr_871_b.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/pr_871_c.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/regression/modules/PDF-hul/pr_871_c.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/pr_871_c.pdf.jhove.xml"
+fi
+
+# Copy the PDF Module results changed by https://github.com/openpreserve/jhove/pull/882
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-10-govdocs-803945.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-10-govdocs-803945.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-10-govdocs-803945.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-5-govdocs-659152.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-5-govdocs-659152.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-5-govdocs-659152.pdf.jhove.xml"
+fi
+if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_306.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/regression/modules/PDF-hul/issue_306.pdf.jhove.xml" "${targetRoot}/regression/modules/PDF-hul/issue_306.pdf.jhove.xml"
+fi
+
+# Copy the PNG Module results changed by https://github.com/openpreserve/jhove/pull/843
+if [[ -f "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" ]]; then
+	cp "${candidateRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml" "${targetRoot}/regression/modules/PNG-gdm/issue_148.png.jhove.xml"
+fi

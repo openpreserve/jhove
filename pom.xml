@@ -85,9 +85,6 @@
     <jacoco.version>0.8.11</jacoco.version>
     <java.source.version>1.8</java.source.version>
     <java.target.version>1.8</java.target.version>
-    <jaxb.api.version>2.4.0-b180830.0359</jaxb.api.version>
-    <jaxb.impl.version>4.0.4</jaxb.impl.version>
-    <jaxb.core.version>4.0.4</jaxb.core.version>
     <junit.version>5.10.2</junit.version>
     <mvn.target.release>8</mvn.target.release>
     <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
@@ -231,37 +228,10 @@
         <version>${junit.version}</version>
         <scope>test</scope>
       </dependency>
-      <dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>${jaxb.api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>${jaxb.impl.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-core</artifactId>
-        <version>${jaxb.core.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
-    <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-core</artifactId>
-    </dependency>
   </dependencies>
   <profiles>
     <profile>
