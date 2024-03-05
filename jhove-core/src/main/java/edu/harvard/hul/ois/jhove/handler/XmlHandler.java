@@ -83,10 +83,10 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
     private static final String NAME = "XML";
 
     /** Handler release identifier. */
-    private static final String RELEASE = "1.10";
+    private static final String RELEASE = "1.11";
 
     /** Handler release date. */
-    private static final int[] DATE = { 2023, 04, 18 };
+    private static final int[] DATE = { 2024, 03, 05 };
 
     /** Handler informative note. */
     private static final String NOTE = "This output handler is defined by the XML Schema "
@@ -751,7 +751,7 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
         // as this could result in a schema violation.
         if (Utils.isPropertyEmpty(property, arity))
             return;
-		
+
         String margin = getIndent(++_level);
         String margn2 = margin + " ";
         String margn3 = margn2 + " ";

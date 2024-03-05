@@ -68,13 +68,13 @@ public class JsonHandler extends HandlerBase {
 	private static final String NAME = "JSON";
 
 	/** Handler release identifier. */
-	private static final String RELEASE = "1.1";
+	private static final String RELEASE = "1.2";
 
 	/** String release. */
 	private static final String RELEASE_CONSTANT = "release";
 
 	/** Handler release date. */
-	private static final int[] DATE = { 2022, 04, 22 };
+	private static final int[] DATE = { 2024, 03, 05 };
 
 	private static final String DATE_CONSTANT = "date";
 
