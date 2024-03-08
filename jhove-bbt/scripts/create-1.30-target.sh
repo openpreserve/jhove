@@ -115,71 +115,71 @@ if [[ -f "${candidateRoot}/regression/modules/PDF-hul/issue_306.pdf.jhove.xml" ]
 fi
 
 # Copy the TIFF Module results changed by https://github.com/openpreserve/jhove/pull/915
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/AA_Banner.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/AA_Banner.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/AA_Banner.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/AA_Banner.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/AA_Banner.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/AA_Banner.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/strike.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/strike.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/strike.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/strike.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/strike.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/strike.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/testpage-large.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/testpage-large.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/testpage-large.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/testpage-large.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/testpage-large.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/testpage-large.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/testpage-medium.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/testpage-medium.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/testpage-medium.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/testpage-medium.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/testpage-medium.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/testpage-medium.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/oxford.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/oxford.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/oxford.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/oxford.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/oxford.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/oxford.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/jim___gg.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/jim___gg.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/jim___gg.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/jim___gg.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/jim___gg.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/jim___gg.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/bathy1.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/bathy1.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/bathy1.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/bathy1.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/bathy1.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/bathy1.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/jim___cg.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/jim___cg.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/jim___cg.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/jim___cg.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/jim___cg.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/jim___cg.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/quad-tile.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/quad-tile.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/quad-tile.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/quad-tile.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/quad-tile.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/quad-tile.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/compos.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/compos.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/compos.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/compos.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/compos.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/compos.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/pagemaker.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/pagemaker.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/pagemaker.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/pagemaker.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/pagemaker.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/pagemaker.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/jello.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/jello.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/jello.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/jello.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/jello.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/jello.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/little-endian.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/little-endian.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/little-endian.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/little-endian.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/little-endian.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/little-endian.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/cramps-tile.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/cramps-tile.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/cramps-tile.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/cramps-tile.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/cramps-tile.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/cramps-tile.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/jim___ah.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/jim___ah.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/jim___ah.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/jim___ah.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/jim___ah.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/jim___ah.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/g3test.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/g3test.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/g3test.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/g3test.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/g3test.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/g3test.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/6mp_soft.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/6mp_soft.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/6mp_soft.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/6mp_soft.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/6mp_soft.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/6mp_soft.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/ycbcr-cat.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/ycbcr-cat.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/ycbcr-cat.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/ycbcr-cat.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/ycbcr-cat.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/ycbcr-cat.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/quad-lzw.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/quad-lzw.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/quad-lzw.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/quad-lzw.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/quad-lzw.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/quad-lzw.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/jim___dg.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/jim___dg.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/jim___dg.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/badfiles/jim___dg.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/badfiles/jim___dg.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/badfiles/jim___dg.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/fax2d.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/fax2d.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/fax2d.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/ddap/fax2d.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/ddap/fax2d.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/ddap/fax2d.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/regression/modules/TIFF-hul/peppers.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/regression/modules/TIFF-hul/peppers.tif.jhove.xml" "${targetRoot}/regression/modules/TIFF-hul/peppers.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/ddap/peppers.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/ddap/peppers.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/ddap/peppers.tif.jhove.xml"
 fi
 
 # Copy the PNG Module results changed by https://github.com/openpreserve/jhove/pull/843
