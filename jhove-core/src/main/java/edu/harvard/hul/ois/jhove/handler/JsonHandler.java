@@ -1648,19 +1648,19 @@ public class JsonHandler extends HandlerBase {
 
 		n = niso.getOrientation();
 		if (n != NisoImageMetadata.NULL) {
+			if (n > 9 || n < 1) {
+				n = 9; // force "unknown" for reserved value
+			}
 			if (bMix10) {
 				mixBuilder.add("mix:orientation", n);
 			} else {
-				final String[] orient = { "unknown", "normal*",
+				final String[] orient = { "", "normal*",
 						"normal, image flipped", "normal, rotated 180\u00B0",
 						"normal, image flipped, rotated 180\u00B0",
 						"normal, image flipped, rotated cw 90\u00B0",
 						"normal, rotated ccw 90\u00B0",
 						"normal, image flipped, rotated ccw 90\u00B0",
-						"normal, rotated cw 90\u00B0" };
-				if (n > 8 || n < 0) {
-					n = 0; // force "unknown" for bad value
-				}
+						"normal, rotated cw 90\u00B0", "unknown" };
 				mixBuilder.add("mix:orientation", orient[n]);
 			}
 			hasBuilder = true;
