@@ -172,14 +172,14 @@ fi
 if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/quad-lzw.tif.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/TIFF-hul/quad-lzw.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/quad-lzw.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/badfiles/jim___dg.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/examples/modules/TIFF-hul/badfiles/jim___dg.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/badfiles/jim___dg.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/jim___dg.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/jim___dg.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/jim___dg.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/ddap/fax2d.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/examples/modules/TIFF-hul/ddap/fax2d.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/ddap/fax2d.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/fax2d.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/fax2d.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/fax2d.tif.jhove.xml"
 fi
-if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/ddap/peppers.tif.jhove.xml" ]]; then
-	cp "${candidateRoot}/examples/modules/TIFF-hul/ddap/peppers.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/ddap/peppers.tif.jhove.xml"
+if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/peppers.tif.jhove.xml" ]]; then
+	cp "${candidateRoot}/examples/modules/TIFF-hul/peppers.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/peppers.tif.jhove.xml"
 fi
 
 # Copy the PNG Module results changed by https://github.com/openpreserve/jhove/pull/843
