@@ -1131,6 +1131,8 @@ public class TiffIFD extends IFD {
 		// This function has gotten obscenely large. Split it up.
 		addNisoProperties(entries, rawOutput);
 		addMiscProperties(entries, rawOutput);
+		// Add Strip and Tile information from NISO since not displayed in MIX v1.0+
+		addNonDisplayedNisoProperties(entries, rawOutput);
 		addTiffITProperties(entries, rawOutput);
 		addTiffEPProperties(entries, rawOutput);
 		addGeoTiffProperties(entries, rawOutput);
@@ -1337,6 +1339,58 @@ public class TiffIFD extends IFD {
 		if (_freeOffsets != null) {
 			entries.add(new Property("FreeOffsets", PropertyType.LONG,
 					PropertyArity.ARRAY, _freeOffsets));
+		}
+	}
+
+	// Add Strip and Tile information from NISO since not displayed in v1.0 and subsequent
+	private void addNonDisplayedNisoProperties(List<Property> entries, boolean rawOutput) {
+		if (_niso == null) return;
+
+		int segmentType = _niso.getSegmentType();
+		if (segmentType != NULL) {
+			entries.add(new Property("SegmentType", PropertyType.INTEGER,
+					segmentType));
+		}
+		long[] stripOffsets = _niso.getStripOffsets();
+		if (stripOffsets != null) {
+			entries.add(new Property("StripOffsets", PropertyType.LONG,
+				PropertyArity.ARRAY, stripOffsets));
+		}
+		long rowsPerStrip = _niso.getRowsPerStrip();
+		if (rowsPerStrip != NULL) {
+			entries.add(new Property("RowsPerStrip", PropertyType.LONG,
+					rowsPerStrip));
+		}
+		long[] stripByteCounts = _niso.getStripByteCounts();
+		if (stripByteCounts != null) {
+			entries.add(new Property("StripByteCounts", PropertyType.LONG,
+				PropertyArity.ARRAY, stripByteCounts));
+		}
+
+		long tileWidth = _niso.getTileWidth();
+		if (tileWidth != NULL) {
+			entries.add(new Property("TileWidth", PropertyType.LONG,
+					tileWidth));
+		}
+		long tileLength = _niso.getTileLength();
+		if (tileLength != NULL) {
+			entries.add(new Property("TileLength", PropertyType.LONG,
+					tileLength));
+		}
+		long[] tileOffsets = _niso.getTileOffsets();
+		if (tileOffsets != null) {
+			entries.add(new Property("TileOffsets", PropertyType.LONG,
+				PropertyArity.ARRAY, tileOffsets));
+		}
+		long[] tileByteCounts = _niso.getTileByteCounts();
+		if (tileByteCounts != null) {
+			entries.add(new Property("TileByteCounts", PropertyType.LONG,
+				PropertyArity.ARRAY, tileByteCounts));
+		}
+		int planarConfiguration = _niso.getPlanarConfiguration();
+		if (planarConfiguration != NULL) {
+			entries.add(new Property("PlanarConfiguration", PropertyType.INTEGER,
+					planarConfiguration));
 		}
 	}
 
