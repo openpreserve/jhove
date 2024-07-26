@@ -66,8 +66,11 @@ jobs:
           name: coverage-report
           path: jhove-apps/target/site/jacoco-aggregate/
       - name: Codecov coverage reporting
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
           fail_ci_if_error: true # optional (default = false)
           verbose: true # optional (default = false)
+          name: codecov-jhove
+          token: ${{ secrets.CODECOV_TOKEN }} # required
+
