@@ -3502,6 +3502,7 @@ public class PdfModule extends ModuleBase {
                         JhoveMessages.getMessageInstance(
                                 e.getJhoveMessage().getId(), e.getJhoveMessage().getMessage(),
                                 e.getJhoveMessage().getSubMessage())));
+                info.setValid(false);
             }
         } catch (Exception e) {
 
