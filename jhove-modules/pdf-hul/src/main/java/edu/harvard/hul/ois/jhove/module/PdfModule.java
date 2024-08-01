@@ -380,8 +380,8 @@ public class PdfModule extends ModuleBase {
      ******************************************************************/
 
     private static final String NAME = "PDF-hul";
-    private static final String RELEASE = "1.12.5";
-    private static final int[] DATE = { 2024, 03, 05 };
+    private static final String RELEASE = "1.12.6";
+    private static final int[] DATE = { 2024, 07, 31 };
     private static final String[] FORMAT = { "PDF",
             "Portable Document Format" };
     private static final String COVERAGE = "PDF 1.0-1.6; "
@@ -3502,6 +3502,7 @@ public class PdfModule extends ModuleBase {
                         JhoveMessages.getMessageInstance(
                                 e.getJhoveMessage().getId(), e.getJhoveMessage().getMessage(),
                                 e.getJhoveMessage().getSubMessage())));
+                info.setValid(false);
             }
         } catch (Exception e) {
 
