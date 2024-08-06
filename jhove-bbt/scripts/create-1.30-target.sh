@@ -64,10 +64,10 @@ find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/outputHandl
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/outputHandler release="1.1">JSON/outputHandler release="1.2">JSON/' {} \;
 
 # Update release details for PDF module
-find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.12.4" date="2023-03-16">PDF-hul<\/reportingModule>$/  <reportingModule release="1.12.5" date="2024-03-05">PDF-hul<\/reportingModule>/' {} \;
-find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.12.4">PDF-hul<\/module>$/   <module release="1.12.5">PDF-hul<\/module>/' {} \;
-find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <release>1.12.4<\/release>$/  <release>1.12.5<\/release>/' {} \;
-find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/2023-03-16/2024-03-05/' {} \;
+find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.12.4" date="2023-03-16">PDF-hul<\/reportingModule>$/  <reportingModule release="1.12.6" date="2024-07-31">PDF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/^   <module release="1.12.4">PDF-hul<\/module>$/   <module release="1.12.6">PDF-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/^  <release>1.12.4<\/release>$/  <release>1.12.6<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/2023-03-16/2024-07-31/' {} \;
 
 # Update release details for PNG module
 find "${targetRoot}" -type f -name "*.png.jhove.xml" -exec sed -i 's/^  <reportingModule release="1.2" date="2023-03-16">PNG-gdm<\/reportingModule>$/  <reportingModule release="1.3" date="2024-03-05">PNG-gdm<\/reportingModule>/' {} \;
