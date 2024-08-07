@@ -75,6 +75,9 @@ public final class Destination {
 			_indirect = true;
 			_indirectDest = (PdfSimpleObject) destObj;
 			return;
+		} else if (!named && destObj instanceof PdfIndirectObj) {
+			_pageDest =  findDirectDest(module, (PdfArray) module.resolveIndirectObject(destObj));
+			return;
 		}
 		PdfArray destArray = null;
 		try {
