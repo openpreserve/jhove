@@ -67,7 +67,7 @@ public final class Destination {
 	 *            from a named destination.
 	 */
 	public Destination(final PdfObject destObj, final PdfModule module,
-			final boolean named) throws PdfException {
+			final boolean named) throws PdfException, IOException {
     	if (destObj == null) {
     		throw new IllegalArgumentException("Parameter destObj cannot be null.");
     	}
