@@ -634,7 +634,9 @@ public class PdfModule extends ModuleBase {
 
         _signature.add(new ExternalSignature(EXT, SignatureType.EXTENSION,
                 SignatureUseType.OPTIONAL));
-        _signature.add(new InternalSignature(PdfHeader.PDF_SIG_HEADER,
+        _signature.add(new InternalSignature(PdfHeader.PDF_1_SIG_HEADER,
+                SignatureType.MAGIC, SignatureUseType.MANDATORY, 0));
+        _signature.add(new InternalSignature(PdfHeader.PDF_2_SIG_HEADER,
                 SignatureType.MAGIC, SignatureUseType.MANDATORY, 0));
 
         doc = new Document(
