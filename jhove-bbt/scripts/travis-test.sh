@@ -54,7 +54,7 @@ fi
 [[ -d "${TARGET_ROOT}" ]] || mkdir -p "${TARGET_ROOT}"
 
 # Grab the Major and Minor versions from the full Maven project version string
-MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
+MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec -f jhove-installer/pom.xml)
 MAJOR_MINOR_VER="${MVN_VERSION%.*}"
 JHOVE_INSTALLER="./jhove-installer/target/jhove-xplt-installer-${MVN_VERSION}.jar"
 

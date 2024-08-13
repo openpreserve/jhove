@@ -107,8 +107,8 @@
     </pack>
     <pack name="JHOVE External Modules" required="no">
       <description>Third-party validation modules developed for JHOVE, currently GZIP, PNG and WARC.</description>
-      <file targetdir="$INSTALL_PATH/bin" src="bin/jhove-ext-modules-${project.version}.jar"/>
-      <executable targetfile="$INSTALL_PATH/bin/jhove-ext-modules-${project.version}.jar"/>
+      <file targetdir="$INSTALL_PATH/bin" src="bin/jhove-ext-modules-1.30.0.jar"/>
+      <executable targetfile="$INSTALL_PATH/bin/jhove-ext-modules-1.30.0.jar"/>
       <file targetdir="$INSTALL_PATH/conf" override="true" src="config/ext-modules/jhove.conf"/>
       <parsable targetfile="$INSTALL_PATH/conf/jhove.conf" type="xml"/>
     </pack>
