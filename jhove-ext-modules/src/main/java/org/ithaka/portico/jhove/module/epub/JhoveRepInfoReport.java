@@ -421,6 +421,7 @@ public class JhoveRepInfoReport extends MasterReport {
         if (isoDate == null || isoDate.length() == 0) {
             return null;
         }
+    	isoDate = isoDate.trim();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ISO_DATE_PATTERN);
         Date date;
