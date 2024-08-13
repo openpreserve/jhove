@@ -1311,6 +1311,9 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
         }
         n = niso.getOrientation();
         if (n != NisoImageMetadata.NULL) {
+            if (n > 9 || n < 1) {
+                n = 9; // force "unknown" for reserved value
+            }
             fileBuf.append(margn4
                     + element("mix:Orientation", Integer.toString(n)) + EOL);
             useFileBuf = true;
@@ -2717,6 +2720,9 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
 
         n = niso.getOrientation();
         if (n != NisoImageMetadata.NULL) {
+            if (n > 9 || n < 1) {
+                n = 9; // force "unknown" for reserved value
+            }
             captureBuffer.append(margn3
                     + element("mix:orientation", Integer.toString(n)) + EOL);
             useCaptureBuffer = true;
@@ -3780,15 +3786,16 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
 
         n = niso.getOrientation();
         if (n != NisoImageMetadata.NULL) {
-            final String[] orient = { "unknown", "normal*",
+        	// Values defined in the MIX 2.0 schema
+            final String[] orient = { "", "normal*",
                     "normal, image flipped", "normal, rotated 180\u00B0",
                     "normal, image flipped, rotated 180\u00B0",
                     "normal, image flipped, rotated cw 90\u00B0",
                     "normal, rotated ccw 90\u00B0",
                     "normal, image flipped, rotated ccw 90\u00B0",
-                    "normal, rotated cw 90\u00B0" };
-            if (n > 8 || n < 0) {
-                n = 0; // force "unknown" for bad value
+                    "normal, rotated cw 90\u00B0", "unknown" };
+            if (n > 9 || n < 1) {
+                n = 9; // force "unknown" for reserved value
             }
             captureBuffer.append(margn3 + element("mix:orientation", orient[n])
                     + EOL);
