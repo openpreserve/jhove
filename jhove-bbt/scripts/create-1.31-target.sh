@@ -126,9 +126,19 @@ fi
 
 declare -a tiff_affected=("examples/modules/TIFF-hul/cramps.tif.jhove.xml"
 				"examples/modules/TIFF-hul/text.tif.jhove.xml"
-				"examples/modules/TIFF-hul/testpage-small.tif.jhove.xml"
-				)
+				"examples/modules/TIFF-hul/testpage-small.tif.jhove.xml")
 for filename in "${tiff_affected[@]}"
+do
+	if [[ -f "${candidateRoot}/${filename}" ]]; then
+		cp "${candidateRoot}/${filename}" "${targetRoot}/${filename}"
+	fi
+done
+
+declare -a xhtml_affected=("errors/modules/HTML-hul/xhtml-trans-no-xml-dec.html.jhove.xml"
+				"errors/modules/HTML-hul/xhtml-strict-no-xml-dec.html.jhove.xml"
+				"errors/modules/HTML-hul/xhtml-frames-no-xml-dec.html.jhove.xml"
+				"errors/modules/HTML-hul/xhtml-1-1-no-xml-dec.html.jhove.xml")
+for filename in "${xhtml_affected[@]}"
 do
 	if [[ -f "${candidateRoot}/${filename}" ]]; then
 		cp "${candidateRoot}/${filename}" "${targetRoot}/${filename}"

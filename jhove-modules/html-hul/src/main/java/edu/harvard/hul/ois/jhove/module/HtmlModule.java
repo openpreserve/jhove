@@ -102,6 +102,7 @@ public class HtmlModule extends ModuleBase {
 	private static final String HTML_4_0 = "HTML 4.0";
 	private static final String HTML_4_01 = "HTML 4.01";
 	private static final String XHTML_1_0 = "XHTML 1.0";
+	private static final String XHTML_1_1_STR = "XHTML 1.1";
 
 	private static final String NAME = "HTML-hul";
     private static final String RELEASE = "1.4.3";
@@ -162,7 +163,7 @@ public class HtmlModule extends ModuleBase {
 	/* Version names, matching the above indices */
 	private static final String[] VERSIONNAMES = { null, "HTML 3.2", HTML_4_0,
 			HTML_4_0, HTML_4_0, HTML_4_01, HTML_4_01, HTML_4_01, XHTML_1_0,
-			XHTML_1_0, XHTML_1_0, "XHTML 1.1" };
+			XHTML_1_0, XHTML_1_0, XHTML_1_1_STR };
 
 	/* Flag to know if the property TextMDMetadata is to be added */
 	protected boolean _withTextMD = false;
@@ -675,7 +676,15 @@ public class HtmlModule extends ModuleBase {
 						return HTML_4_01_TRANSITIONAL;
 					case "-//W3C//DTD HTML 4.01 FRAMESET//EN":
 						return HTML_4_01_FRAMESET;
-					default:
+                    case "-//W3C//DTD XHTML 1.0 STRICT//EN":
+                        return XHTML_1_0_STRICT;
+                    case "-//W3C//DTD XHTML 1.0 TRANSITIONAL//EN":
+                        return XHTML_1_0_TRANSITIONAL;
+                    case "-//W3C//DTD XHTML 1.0 FRAMESET//EN":
+                        return XHTML_1_0_FRAMESET;
+                    case "-//W3C//DTD XHTML 1.1//EN":
+                        return XHTML_1_1;
+                    default:
 						break;
 				}
 		} catch (Exception e) {
