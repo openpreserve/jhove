@@ -1,10 +1,12 @@
 package edu.harvard.hul.ois.jhove.module.pdf;
 
-import java.net.URISyntaxException;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.junit.Test;
-
-import edu.harvard.hul.ois.jhove.RepInfo;
 
 /**
  * Tests for the {@link Literal} class.
@@ -23,9 +25,9 @@ public class LiteralTests {
      */
     @Test
     public final void testValidDates() throws PdfInvalidException {
-        Literal.parseDate("D:20180313112810Z");
-        Literal.parseDate("D:20180313112810+01'00'");
-        Literal.parseDate("D:20180313112810+01'00");
+        assertNotNull(Literal.parseDate("D:20180313112810Z"));
+        assertNotNull(Literal.parseDate("D:20180313112810+01'00'"));
+        assertNotNull(Literal.parseDate("D:20180313112810+01'00"));
     }
 
     @Test(expected = PdfInvalidException.class)
