@@ -4285,7 +4285,7 @@ public class PdfModule extends ModuleBase {
      * We return the page sequence number for the referenced page.
      * If we can't find a match for the reference, we return -1.
      */
-    protected int resolveIndirectDest(PdfSimpleObject key, RepInfo info) throws PdfException {
+    protected int resolveIndirectDest(PdfSimpleObject key, RepInfo info) throws PdfException, IOException {
         if (key == null) {
             throw new IllegalArgumentException("Argument key can not be null");
         }
