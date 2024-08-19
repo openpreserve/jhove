@@ -4344,7 +4344,7 @@ public class PdfModule extends ModuleBase {
      * with a string value, to a specified List.
      */
     protected void addDateProperty(PdfDictionary dict, List<Property> propList,
-            String key, String propName) throws PdfException {
+            String key, String propName) throws PdfInvalidException {
         if (_encrypted) {
             String propText = ENCRYPTED;
             propList.add(new Property(propName, PropertyType.STRING, propText));
@@ -4354,12 +4354,11 @@ public class PdfModule extends ModuleBase {
                 Token tok = ((PdfSimpleObject) propObject).getToken();
                 if (tok instanceof Literal) {
                     Literal lit = (Literal) tok;
-                    Date propDate = lit.parseDate();
-                    if (propDate != null) {
-                        propList.add(new Property(propName, PropertyType.DATE, propDate));
-                        // Ignore empty literals as this isn't an error
-                    } else if (!lit.getValue().isEmpty()) {
-                        throw new PdfInvalidException(MessageConstants.PDF_HUL_133, 0); // PDF-HUL-133
+                    if (!lit.getValue().isEmpty()) {
+                        Date propDate = lit.parseDate();
+                        if (propDate != null) {
+                            propList.add(new Property(propName, PropertyType.DATE, propDate));
+                        }
                     }
                 }
             }
