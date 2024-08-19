@@ -124,6 +124,7 @@ if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/peppers.tif.jhove.xml" ]]; 
 	cp "${candidateRoot}/examples/modules/TIFF-hul/peppers.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/peppers.tif.jhove.xml"
 fi
 
+# Copy the TIFF fix affected files from the candidate to the target
 declare -a tiff_affected=("examples/modules/TIFF-hul/cramps.tif.jhove.xml"
 				"examples/modules/TIFF-hul/text.tif.jhove.xml"
 				"examples/modules/TIFF-hul/testpage-small.tif.jhove.xml")
@@ -134,10 +135,26 @@ do
 	fi
 done
 
+# Copy the XHTML fix affected files from the candidate to the target
 declare -a xhtml_affected=("errors/modules/HTML-hul/xhtml-trans-no-xml-dec.html.jhove.xml"
 				"errors/modules/HTML-hul/xhtml-strict-no-xml-dec.html.jhove.xml"
 				"errors/modules/HTML-hul/xhtml-frames-no-xml-dec.html.jhove.xml"
 				"errors/modules/HTML-hul/xhtml-1-1-no-xml-dec.html.jhove.xml")
+for filename in "${xhtml_affected[@]}"
+do
+	if [[ -f "${candidateRoot}/${filename}" ]]; then
+		cp "${candidateRoot}/${filename}" "${targetRoot}/${filename}"
+	fi
+done
+
+# Copy the XML fix affected files from the candidate to the target
+declare -a xhtml_affected=("errors/modules/HTML-hul/xhtml-trans-xml-dec.html.jhove.xml"
+				"errors/modules/HTML-hul/xhtml-strict-xml-dec.html.jhove.xml"
+				"errors/modules/HTML-hul/xhtml-frames-xml-dec.html.jhove.xml"
+				"errors/modules/HTML-hul/xhtml-1-1-xml-dec.html.jhove.xml"
+				"examples/modules/XML-hul/valid-external.dtd.jhove.xml"
+				"examples/modules/XML-hul/external-unparsed-entity.ent.jhove.xml"
+				"examples/modules/XML-hul/external-parsed-entity.ent.jhove.xml")
 for filename in "${xhtml_affected[@]}"
 do
 	if [[ -f "${candidateRoot}/${filename}" ]]; then
