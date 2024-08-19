@@ -71,8 +71,8 @@ public class WaveModule extends ModuleBase {
 
     /* Module metadata */
     private static final String NAME = "WAVE-hul";
-    private static final String RELEASE = "1.8.2";
-	private static final int [] DATE = { 2022, 04, 22 };
+    private static final String RELEASE = "1.8.3";
+	private static final int [] DATE = { 2024, 03, 05 };
     private static final String[] FORMATS = { "WAVE", "Audio for Windows",
             "EBU Technical Specification 3285", "Broadcast Wave Format", "BWF",
             "EBU Technical Specification 3306", "RF64" };

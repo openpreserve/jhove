@@ -83,10 +83,10 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
     private static final String NAME = "XML";
 
     /** Handler release identifier. */
-    private static final String RELEASE = "1.10";
+    private static final String RELEASE = "1.11";
 
     /** Handler release date. */
-    private static final int[] DATE = { 2023, 04, 18 };
+    private static final int[] DATE = { 2024, 03, 05 };
 
     /** Handler informative note. */
     private static final String NOTE = "This output handler is defined by the XML Schema "
@@ -744,11 +744,6 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
     }
 
     protected void showProperty(Property property) {
-        String margin = getIndent(++_level);
-        String margn2 = margin + " ";
-        String margn3 = margn2 + " ";
-        String margn4 = margn3 + " ";
-
         PropertyArity arity = property.getArity();
         PropertyType type = property.getType();
 
@@ -756,6 +751,11 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
         // as this could result in a schema violation.
         if (Utils.isPropertyEmpty(property, arity))
             return;
+
+        String margin = getIndent(++_level);
+        String margn2 = margin + " ";
+        String margn3 = margn2 + " ";
+        String margn4 = margn3 + " ";
 
         boolean valueIsProperty = PropertyType.PROPERTY.equals(type);
         boolean valueIsNiso = PropertyType.NISOIMAGEMETADATA.equals(type);
@@ -1311,6 +1311,9 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
         }
         n = niso.getOrientation();
         if (n != NisoImageMetadata.NULL) {
+            if (n > 9 || n < 1) {
+                n = 9; // force "unknown" for reserved value
+            }
             fileBuf.append(margn4
                     + element("mix:Orientation", Integer.toString(n)) + EOL);
             useFileBuf = true;
@@ -2717,6 +2720,9 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
 
         n = niso.getOrientation();
         if (n != NisoImageMetadata.NULL) {
+            if (n > 9 || n < 1) {
+                n = 9; // force "unknown" for reserved value
+            }
             captureBuffer.append(margn3
                     + element("mix:orientation", Integer.toString(n)) + EOL);
             useCaptureBuffer = true;
@@ -3780,15 +3786,16 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
 
         n = niso.getOrientation();
         if (n != NisoImageMetadata.NULL) {
-            final String[] orient = { "unknown", "normal*",
+        	// Values defined in the MIX 2.0 schema
+            final String[] orient = { "", "normal*",
                     "normal, image flipped", "normal, rotated 180\u00B0",
                     "normal, image flipped, rotated 180\u00B0",
                     "normal, image flipped, rotated cw 90\u00B0",
                     "normal, rotated ccw 90\u00B0",
                     "normal, image flipped, rotated ccw 90\u00B0",
-                    "normal, rotated cw 90\u00B0" };
-            if (n > 8 || n < 0) {
-                n = 0; // force "unknown" for bad value
+                    "normal, rotated cw 90\u00B0", "unknown" };
+            if (n > 9 || n < 1) {
+                n = 9; // force "unknown" for reserved value
             }
             captureBuffer.append(margn3 + element("mix:orientation", orient[n])
                     + EOL);

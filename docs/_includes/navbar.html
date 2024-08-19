@@ -1,0 +1,39 @@
+{% assign navurl = page.url | remove: 'index.html' %}
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/" title="JHOVE home page."><img src="/img/jhovelogo-nav.png" alt="JHOVE logo"/></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+{% for item in include.nav %}
+    {% if item.subcategories != null %}
+        <li class="dropdown">
+          <a href="{{ site.url }}{{ item.href }}" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">{{ item.title }} <span class="caret"></a>
+          <ul class="dropdown-menu">
+          {% for subcategory in item.subcategories %}
+              <li><a href="{{ site.url }}{{ item.href }}{{ subcategory.subhref }}">{{ subcategory.subtitle }}</a></li>
+          {% endfor %}
+          </ul>
+    {% else %}
+
+    <!-- display the top level navigation for items that don’t have a submenu -->
+        {% if item.url == navurl %}
+            <li class="active">
+        {% else %}
+            <li>
+        {% endif %}
+    <a href="{{ site.url }}{{ item.href }}">{{ item.title }}</a>
+    {% endif %}
+    </li>
+{% endfor %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>

@@ -1,0 +1,120 @@
+---
+title: UTF8-hul Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+  <h1>UTF8-hul Module</h1>
+
+<a class="name" name="introduction">
+  <h2>1 Introduction</h2>
+</a>
+
+<p>
+    The UTF8-hul module recognizes and validates content streams encoded with the
+    Unicode UTF-8 encoding.
+  </p>
+  <p>
+  The module is invoked by the:
+  </p>
+    <pre>
+      jhove ... -m UTF8-hul ...
+    </pre>
+  <p>
+  command line option.
+  </p>
+
+<p>
+This module can be <a href="/getting-started/config/">configured</a> with the following parameters:
+</p>
+<ul>
+<li><tt>withTextMD=true</tt> to ask for the output of a <a href="/references#textmd">textMD</a> block in the text technical properties.</li>
+</ul>
+  <a class="name" name="coverage">
+    <h2>Coverage</h2>
+  </a>
+  <ul>
+    <li>
+      UTF-8 encoded content streams
+      [<a href="/references#unicode">Unicode</a>]
+    </li>
+  </ul>
+  <a class="name" name="well-formedness">
+    <h2>Well-Formedness</h2>
+  </a>
+  <p>
+    The following criteria must be met by an UTF8 content streams
+    for JHOVE to consider it well-formed:
+  </p>
+  <ul>
+    <li>
+      The stream consists of an optional three-octet encoded Byte Order Mark
+      (BOM) character, <tt>0xEFBBBF</tt>, followed by an arbitrary number of
+      the following one- to four-octet sequences:
+      <table>
+        <tr><td>Single octet:</td>
+        <td><tt>0<em>xxxxxxx</em></tt></td></tr>
+        <tr><td>Two octets:</td>
+        <td><tt>110<em>yyyyy</em> 10<em>xxxxxx</em></tt></td></tr>
+        <tr><td>Three octets:</td>
+        <td><tt>1110<em>zzzz</em> 10<em>yyyyyy</em> 10<em>yyyyyy</em></tt><br>
+        <tr><td>Four octets:</td>
+        <td><tt>11110<em>uuu</em> 10<em>uuzzzz</em> 10<em>yyyyyy</em> 10<em>xxxxxx</em></tt></td></tr>
+      </table>
+    </li>
+    <li>
+      The presence of an initial Byte Order Mark (BOM) character in the form of
+      any of the following two- or four-octet sequences automatically taints the
+      content stream as non-well-formed UTF-8:
+      <table>
+        <tr><td rowspan="2">Two octets:</td><td><tt>0xEF&nbsp;0xFF</tt></td>
+        <td>UTF-16 big-endian encoding</td></tr>
+        <tr><td><tt>0xFFFE</tt></td>
+        <td>UTF-16 little-endian encoding</td></tr>
+        <tr><td rowspan="2">Four octets:</td>
+        <td><tt>0x0000FEFF</tt></td>
+        <td>UCS-4 big-endian encoding</td></tr>
+        <tr><td><tt>0xFFFE0000</tt></td>
+        <td>UCS-4 little-endian encoding</td></tr>
+      </table>
+    </li>
+  </ul>
+  <a class="name" name="validity">
+    <h2>Validity</h2>
+  </a>
+  <p>
+    The following criteria must be met by an UTF-8 encoded file for JHOVE to
+    consider it valid:
+  </p>
+  <ul>
+    <li> The UTF-8 encoded file is well-formed</li>
+  </ul>
+  <a class="name" name="repinfo">
+  <h2>Representation Information</h2>
+  </a>
+  <p>
+    The MIME type is reported as: text/plain; charset=UTF-8
+  </p>
+  <p>
+    In addition to the standard JHOVE
+    <a href="/documentation#repinfo">representation information</a>, the module
+    defines the following properties:
+  </p>
+  <ul>
+    <li>Property "UTF8Metadata" of type PROPERTY and arity LIST
+      <ul>
+        <li> Property "Characters" of type LONG and arity SCALAR containing the number of characters</li>
+        <li> Property "UnicodeBlocks" of type STRING and arity LIST containing Unicode 6.0.0 code blocks [<a href="/references#blocks">Unicode Code Blocks</a>]</li>
+        <li> Property "LineEndings" of type STRING and arity LIST containing: CR, CRLF, or LF</li>
+        <li> If withTextMD, Property "TextMDMetadata" of type TextMDMetadata and arity SCALAR</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+{% include footer.html %}
+</body>
+</html>

@@ -1,0 +1,159 @@
+---
+title: EPUB-ptc Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+<h1>EPUB-ptc Module</h1>
+<h2>1 Introduction</h2>
+<p>
+  The EPUB-ptc module recognizes and validates the EPUB format.
+</p>
+<p>
+  The module is invoked by the:
+</p>
+<blockquote>
+  <pre>
+    jhove ... -m EPUB-ptc ...
+  </pre>
+</blockquote>
+<p>
+command line option.
+</p>
+<p>  
+   The EPUB-ptc JHOVE module is a wrapper around the <a href="https://github.com/w3c/epubcheck" target="_blank">official EPUBCheck tool</a>. Visit the <a href=
+  "http://www.idpf.org/epub/dir/" target="_blank">EPUB Specifications and Projects page</a> for more information on the EPUB format.
+</p>
+<a class="name" name="coverage"></a><h2>2 Coverage</h2>
+<p>
+  The EPUB-ptc module recognizes and validates the following public profiles:
+</p>
+<ul>
+  <li>EPUB 2 (up to 2.0.1) [<a href="/references#epub2">EPUB 2.0.1</a>]</li>
+  <li>EPUB 3, (up to 3.2) [<a href="/references#epub3">EPUB 3.2</a>]</li>
+</ul>
+<p>
+Important note: The internal EPUB metadata only reveals its <em>major</em> version - which is currently either EPUB2 or EPUB3. This is based on the "version" property on the "package" tag within the OPF XML. The EPUBCheck tool will validate the file against the specification of the most recent point release associated with that major version - and it is this number that will appear as the "version" in the JHOVE report. To clarify, all EPUB2s will validate as 2.0.1 and all EPUB3s as 3.2 until a new EPUB version is released along with an updated EPUBCheck tool. Additional metadata provided as properties in the report (detailed below) will indicate the presence of features that may be dependent on the e-book software's support for them.
+</p>
+
+<a class="name" name="well-formedness"></a>
+<h2>3 Well-Formedness</h2>
+<p>
+  EPUBs are a form of ZIP archive file. Well formed status is based on evaluation of both the archive file as a whole and on the presence of specific files within it. The JHOVE report outputs the messages as provided by EPUBCheck - a full list of these can be seen <a href="https://github.com/w3c/epubcheck/blob/v4.2.2/src/test/resources/com/adobe/epubcheck/test/command_line/listSeverities_expected_results.txt">in the EPUBCheck code base</a>. In addition to this list, an undefined failure within the EPUBCheck module will report as a FATAL error - this happens if a non-EPUB file is passed into the module, for example. A message will cause a status of "Not Well Formed" if either:
+</p>
+<ol>
+  <li>it has a severity level of FATAL</li>
+  <li>it is a package-related message (starts with "PKG-") with a severity level of ERROR.</li>
+</ol>
+<p>
+The following are some of the key criteria that must be met for an EPUB object to be considered Well Formed in the JHOVE report. For the full list, please refer to the EPUBCheck messages link provided above:
+</p>
+<ul>
+  <li>The EPUB must have a valid header. There must be "PK" at byte 0, "mimetype" at byte 30, and "application/epub+zip" at byte 38.</li>
+  <li>The EPUB and each of the files within it must not be corrupted.</li>
+  <li>The package must contain an OPF XML file. </li>
+  <li>The package must contain a META-INF/container.xml file.</li>
+  <li>All files referenced in the OPF must be present in the package and have valid file names</li>
+</ul>
+
+<a class="name" name="validity"></a>
+<h2>4 Validity</h2>
+
+<p>
+As with the "Well Formed" status, the criteria that determine "Validity" are based on the <a href="https://github.com/w3c/epubcheck/blob/v4.2.2/src/test/resources/com/adobe/epubcheck/test/command_line/listSeverities_expected_results.txt">messages output by the EPUBCheck module</a>. If the EPUB has a status of "Well Formed", but contains one or more message with a severity level of "ERROR" the EPUB is labelled as "Not Valid". As mentioned in the previous section, the exception is package ERRORs (PKG-*), which will always result in a "Not Well Formed" assignment.
+</p>
+<a class="name" name="repinfo"></a>
+<h2>5 Representation Information</h2>
+
+<p>
+The MIME type is reported as: application/epub+zip
+</p>
+<p>
+In addition to the standard JHOVE
+<a href="index.html#repinfo">representation information</a>, the following
+EPUB-specific properties are reported:
+</p>
+<ul>
+  <li>Property "EPUBMetadata" of type PROPERTY and arity LIST
+    <ul>
+      <li>Property "PageCount" of type LONG and arity SCALAR</li>
+      <li>Property "CharacterCount" of type LONG and arity SCALAR</li>
+      <li>Property "Language" of type STRING and arity SCALAR</li>
+      <li>Property "Info" of type PROPERTY and arity SET
+        <ul>
+          <li>Property "Identifier" of type STRING and arity SCALAR</li>
+          <li>Property "Title" of type STRING and arity ARRAY</li>
+          <li>Property "Creator" of type STRING and arity ARRAY</li>
+          <li>Property "Contributor" of type STRING and arity ARRAY</li>
+          <li>Property "Date" of type LONG and arity SCALAR</li>
+          <li>Property "Publisher" of type PROPERTY and arity SCALAR</li>
+          <li>Property "Subject" of type STRING and arity ARRAY</li>
+          <li>Property "Rights" of type PROPERTY and arity SCALAR</li>
+        </ul>
+      </li>
+      <li>Property "Fonts" of type PROPERTY and arity SET
+        <ul>
+          <li>Property "Font" of type PROPERTY and arity SET
+            <ul>
+              <li>Property "FontName" of type STRING and arity SCALAR</li>
+              <li>Property "FontFile" of type STRING and arity SCALAR</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Property "MediaTypes" of type STRING and arity ARRAY</li>
+      <li>Property "References" of type STRING and arity ARRAY</li>
+      <li>Property "Resources" of type STRING and arity ARRAY</li>
+      <li>Property "hasEncryption" of type BOOLEAN and arity SCALAR</li>
+      <li>Property "hasSignatures" of type BOOLEAN and arity SCALAR</li>
+      <li>Property "hasAudio" of type BOOLEAN and arity SCALAR</li>
+      <li>Property "hasVideo" of type BOOLEAN and arity SCALAR</li>
+      <li>Property "hasFixedLayout" of type BOOLEAN and arity SCALAR</li>
+      <li>Property "hasScripts" of type BOOLEAN and arity SCALAR</li>
+    </ul>
+  </li>
+</ul>
+
+<h3>5.1 Profiles</h3>
+<ul>
+  <li>
+    <strong>EPUB 2.0.1</strong>
+    <p>
+      The presence of "version=2.0" in the package tag of the OPF XML will result in validation using the 2.0.1 specification. [<a href="/references#epub2">EPUB2</a>].
+    </p>
+  </li>
+  <li>
+    <strong>EPUB 3.2</strong>
+    <p>
+      The presence of "version=3.0" in package tag of the OPF XML will result in validation using the 3.2 specification. [<a href="/references#epub3">EPUB3</a>].
+    </p>
+  </li>
+</ul>
+
+<a class="name" name="additionalProperties"></a>
+<h2>6 Additional Module Properties</h2>
+
+<ul>
+  <li>Nominal file extension: .epub</li>
+</ul>
+
+<a class="name" name="troubleshooting"></a>
+<h2>7 Troubleshooting</h2>
+<p>The EPUB JHOVE module uses the EPUBCheck tool. This means it inherits a <a href="https://github.com/w3c/epubcheck/wiki/Running#javalangstackoverflowerror">problem caused by the thread stack size being too small</a> to process the EPUB in certain situations. This will likely manifest as a "StackOverflowError" in the console. Using a 32-bit JVM instead of a 64-bit one can cause this error. The work around is to increase the thread stack size by adding "-Xss1024k" as a parameter on the java command. To do this, open the jhove[.bat] file and manually modify the java command as follows:</p>
+<blockquote>
+  <pre>java -Xss1024k -classpath "%CP%" Jhove -c "%CONFIG%" %*</pre>
+</blockquote>
+<p>
+If using the JHOVE GUI, open the jhove-gui[.bat] file and modify the following line to fix this issue:
+</p>
+<blockquote>
+  <pre>java -Xss1024k -classpath "%CP%" JhoveView -c "%CONFIG%" %*</pre>
+</blockquote>
+</div>
+{% include footer.html %}
+</body>
+</html>

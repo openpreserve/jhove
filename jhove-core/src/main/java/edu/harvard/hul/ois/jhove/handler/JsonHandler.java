@@ -27,11 +27,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonWriter;
+import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonWriter;
 
 import edu.harvard.hul.ois.jhove.AESAudioMetadata;
 import edu.harvard.hul.ois.jhove.Agent;
@@ -68,13 +68,13 @@ public class JsonHandler extends HandlerBase {
 	private static final String NAME = "JSON";
 
 	/** Handler release identifier. */
-	private static final String RELEASE = "1.1";
+	private static final String RELEASE = "1.2";
 
 	/** String release. */
 	private static final String RELEASE_CONSTANT = "release";
 
 	/** Handler release date. */
-	private static final int[] DATE = { 2022, 04, 22 };
+	private static final int[] DATE = { 2024, 03, 05 };
 
 	private static final String DATE_CONSTANT = "date";
 
@@ -1648,19 +1648,19 @@ public class JsonHandler extends HandlerBase {
 
 		n = niso.getOrientation();
 		if (n != NisoImageMetadata.NULL) {
+			if (n > 9 || n < 1) {
+				n = 9; // force "unknown" for reserved value
+			}
 			if (bMix10) {
 				mixBuilder.add("mix:orientation", n);
 			} else {
-				final String[] orient = { "unknown", "normal*",
+				final String[] orient = { "", "normal*",
 						"normal, image flipped", "normal, rotated 180\u00B0",
 						"normal, image flipped, rotated 180\u00B0",
 						"normal, image flipped, rotated cw 90\u00B0",
 						"normal, rotated ccw 90\u00B0",
 						"normal, image flipped, rotated ccw 90\u00B0",
-						"normal, rotated cw 90\u00B0" };
-				if (n > 8 || n < 0) {
-					n = 0; // force "unknown" for bad value
-				}
+						"normal, rotated cw 90\u00B0", "unknown" };
 				mixBuilder.add("mix:orientation", orient[n]);
 			}
 			hasBuilder = true;

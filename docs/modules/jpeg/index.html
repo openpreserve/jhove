@@ -1,0 +1,354 @@
+---
+title: JPEG-hul Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+<h1>JPEG-hul Module</h1>
+<h2>1 Introduction</h2>
+<p>
+  The JPEG-hul module recognizes and validates the JPEG
+  format.
+</p>
+<p>
+  The module is invoked by the:
+</p>
+<blockquote>
+  <pre>
+    jhove ... -m JPEG-hul ...
+  </pre>
+</blockquote>
+<p>
+command line option.
+</p>
+<p>
+  Formally, JPEG refers to a format for compressed images created by the
+  Joint Photographic Experts Group and codified in ISO/IEC 10918-1
+  [<a href="/references#jpeg-1">JPEG</a>].
+  In 1992 C-Cube Microsystems published a specification for an interchange
+  file format called JFIF (JPEG File Interchange Format)
+  that encapsulates the JPEG data stream
+  [<a href="/references#jfif">JFIF</a>].
+  What most people refer to as "JPEG" files are more properly JFIF files.
+  However, many existing "JPEG" files do in fact contain only the "raw"
+  JPEG data stream.
+</p>
+<a class="name" name="coverage"><h2>2 Coverage</h2></a>
+<p>
+  The JPEG-hul module recognizes and validates the following public profiles:
+</p>
+<ul>
+  <li>
+    JPEG (ISO/IEC 10918-1:1994) [<a href="/references#jpeg-1">JPEG</a>]
+  </li>
+  <li>
+    JFIF 1.02 (JPEG File Interchange Format)
+    [<a href="/references#jfif">JFIF</a>]
+  </li>
+  <li>
+    Exif 2.0, 2.1 (JEIDA-49-1998) 2.1, and 2.2 (JEITA CP-3451)
+    [<a href="/references#exif2.1">Exif 2.1</a>, <a href="/references#exif">Exif 2.2</a>,]
+  </li>
+  <li>
+    SPIFF (ISO/IEC 10918-3:1997) [<a href="/references#jpeg-3">SPIFF</a>]
+  </li>
+  <li>
+    JTIP (ISO/IEC 10918-3:1997) [<a href="/references#jpeg-3">JTIP</a>]
+  </li>
+  <li>
+    JPEG-LS (ISO/IEC 14495) [<a href="/references#jpeg-ls-1">JPEG</a>]
+  </li>
+</ul>
+
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2></a>
+<p>
+  The following criteria must be met by a JPEG object for JHOVE to consider it
+  well-formed:
+</p>
+<ul>
+  <li>The first three bytes of the file are 0xFF, 0xD8, 0xFF</li>
+  <li>
+    The file consists of one or more correctly formatted segments.
+    Segment markers 0xC0 through 0xFE are recognized.
+  </li>
+  <li>Data streams following RSTn and SOS markers are correctly terminated.</li>
+</ul>
+<p>
+JHOVE uses the JPEG-LS algorithm for recognizing the end of a data
+stream, looking for a byte of 0xFF followed by a byte in the range
+0X80 through 0XFE.  The standard JPEG algorithm looks for a byte of
+0XFF followed by any byte which is not 0 or 0xFF.  Since all
+valid markers in existing versions of JPEG are in the range 0X80
+through 0XFE, this algorithm works correctly for both JPEG and
+JPEG-LS.
+</p>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+
+<p>
+The following criteria must be met by a JPEG file for JHOVE to consider it
+valid:
+</p>
+<ul>
+  <li>The file is well-formed</li>
+  <li>
+    The file contains one of the following segments as the first
+    segment of the file, not counting comments:
+    <ul>
+      <li>
+        APP0 (0xE0) with identifier 0x4A, 0x46, 0x49, 0x46, 0x00,
+        indicating a JFIF or JTIP file.
+      </li>
+      <li>
+        APP1 (0xE1) with identifier 0x45, 0x78, 0x69, 0x66,  0x00, 0x00,
+  	    indicating an Exif file.
+      </li>
+      <li>
+        APP8 (0xE8) with identifier 0x53, 0x50, 0x49, 0x46, 0x46, 0x00,
+        indicating a SPIFF file.
+      </li>
+      <li>JPG7 (0xF7), also known as SOF55, indicating a JPEG-LS file.</li>
+    </ul>
+  </li>
+  <li>
+    The file does not contain a D8 segment marker except at the
+    beginning of the file.
+  </li>
+  <li>Any DTT (0xF2) segment is preceded by a DTI (0xF1) segment.</li>
+  <li>All tiling types from DTI segments have a value of 0, 1, or 2.</li>
+</ul>
+<p>
+A file which consists of a JPEG data stream, but does not
+contain the required segments for a JFIF, SPIFF, Exif,
+JTIP, or JPEG-LS file is considered well-formed
+but not valid.
+</p>
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+
+<p>
+The MIME type is reported as: image/jpeg
+</p>
+<p>
+In addition to the standard JHOVE
+<a href="index.html#repinfo">representation information</a>, the following
+JPEG-specific properties are reported:
+</p>
+<ul>
+  <li>Property "JPEGMetadata" of type PROPERTY and arity ARRAY
+    <ul>
+      <li>Property "CompressionType" of type STRING and arity SCALAR</li>
+      <li>Property "Images" of type PROPERTY and arity LIST
+        <ul>
+          <li> Property "Image" of type PROPERTY and arity LIST
+            <ul>
+              <li>Property "Tiling" of type PROPERTY and arity ARRAY
+                <ul>
+                  <li>
+                    Property "TilingType" of type STRING (if raw output off)
+                    or INTEGER (if raw output on) and arity SCALAR
+                  </li>
+                  <li>Property "VerticalScale" of type INTEGER and arity SCALAR</li>
+                  <li>Property "HorizontalScale" of type INTEGER and arity SCALAR</li>
+                  <li>Property "RefGridHeight" of type LONG and arity SCALAR</li>
+                  <li>Property "RefGridWidth" of type LONG and arity SCALAR</li>
+                  <li>Property "Tiles" of type PROPERTY and arity LIST
+                    <ul>
+                      <li> Property "Tile" of type PROPERTY and arity ARRAY
+                        <ul>
+                          <li>Property "VerticalScale" of type LONG and arity SCALAR</li>
+                          <li>Property "HorizontalScale" of type LONG and arity SCALAR</li>
+                          <li>Property "VerticalOffset" of type LONG and arity SCALAR</li>
+                          <li>Property "HorizontalOffset" of type LONG and arity SCALAR</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+                <li>Property "RestartInterval" of type INTEGER and arity SCALAR</li>
+                <li>Property "Scans" of type INTEGER and arity SCALAR</li>
+                <li>Property "QuantizationTables" of type PROPERTY and arity LIST
+                  <ul>
+                    <li>Property "QuantizationTable" of type PROPERTY and arity ARRAY
+                      <ul>
+                        <li>
+                          Property "Precision" of type INTEGER (if raw output)
+                          or STRING (if not raw output) and arity SCALAR
+                        </li>
+                        <li>Property "DestinationIdentifier" of type INTEGER and arity SCALAR</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>Property "ArithmeticConditioning" of type PROPERTY and arity LIST
+                  <ul>
+                    <li>
+                      Property "TableClass" of type INTEGER (if raw output)
+                      or STRING (if not raw output) and arity SCALAR
+                    </li>
+                    <li>Property "DestinationIdentifier" of type INTEGER and arity SCALAR</li>
+                  </ul>
+                </li>
+                <li>Property "SelectivelyRefinedScan" of type PROPERTY and arity ARRAY
+                  <ul>
+                    <li>Property "VerticalOffset" of type INTEGER and arity SCALAR</li>
+                    <li>Property "HorizontalOffset" of type INTEGER and arity SCALAR</li>
+                    <li>Property "VerticalSize" of type INTEGER and arity SCALAR</li>
+                    <li>Property "HorizontalSize" of type INTEGER and arity SCALAR</li>
+                  </ul>
+                </li>
+                <li> Property "Exif" of type PROPERTY and arity LIST
+                  <ul>
+                    <li>Property "IFD" of type PROPERTY and arity ARRAY
+                      <ul>
+                       <li>Property "Offset" of type LONG and arity SCALAR</li>
+                       <li>Property "Type" of type STRING and arity SCALAR</li>
+                       <li>
+                         Property "Entries" of type PROPERTY and arity LIST
+                         <p>
+                           The contents of the "Entries" list are TIFF IFD properties.  The <a href="/modules/tiff">TIFF-HUL</a> module must be present for
+                           Exif information to be extracted from a JPEG file.
+                         </p>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li>Property "XMP" or type STRING and arity SCALAR</li>
+              <li>Property "SelectivelyRefinedScans" of type PROPERTY and arity LIST</li>
+            </ul>
+          </li>
+          <li>Property "ThumbImage" of type PROPERTY and arity LIST
+            <ul>
+              <li>Property "NisoImageMetadata" of type NISOIMAGEMETADATA and arity SCALAR</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Property "Comments" of type STRING and arity LIST</li>
+      <li>Property "Extensions" of type STRING and arity LIST</li>
+      <li>Property "ApplicationSegments" of type STRING and arity LIST</li>
+      <li>Property "ExpansionSegments" of type PROPERTY and arity LIST
+        <ul>
+          <li>Property "Expansion" of type PROPERTY and arity ARRAY
+            <ul>
+              <li>Property "Horizontal" of type BOOLEAN and arity SCALAR</li>
+              <li>Property "Vertical" of type BOOLEAN and arity SCALAR</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<p>
+Image technical properties are reported in terms of the NISO
+<a href="/references#z39.87">Z39.87</a>
+data dictionary.
+</p>
+
+<h3>5.1 Profiles</h3>
+
+<ul>
+  <li>
+    <strong>JPEG</strong>
+    <p>
+      ISO/IEC 10918-1 is a lossy image compression format
+      [<a href="/references#jpeg-1">JPEG</a>].
+    </p>
+  </li>
+  <li>
+    <strong>JFIF 1.2</strong>
+    <p>
+      JFIF is the JPEG File Interchange Format
+      [<a href="/references#jfif">JFIF</a>].
+      The JFIF profile is indicated by the presence of an APP0 marker segment with
+      the identifier "<tt>JFXX</tt>" immediately following the SOI marker.
+    </p>
+  </li>
+  <li>
+    <strong>Exif</strong>
+    <p>
+      Exif 2.0, 2.1 (JEIDA-49-1998), and 2.2 (JEITA CP-3451) define
+      camera-specific metadata
+      [<a href="/references#exif2.1">Exif 2.1</a>,
+      <a href="/references#exif">Exif 2.2</a>].
+      The following tags are mandatory in the primary TIFF IFD:
+    </p>
+    <blockquote>
+      <table border="1">
+        <tr><th colspan="2">Tag Name and Number</th><th>Value</th><th>Note</th></tr>
+        <tr><td>ImageWidth</td><td>256</td><td></td><td>If Compression (259) = 1</td></tr>
+        <tr><td>ImageLength</td><td>257</td><td></td><td>If Compression (259) = 1</td></tr>
+        <tr><td>BitsPerSample</td><td>258</td><td>8,8,8</td><td>If Compression (259) = 1</td></tr>
+        <tr><td rowspan="2">Compression</td><td rowspan="2">259</td><td>1</td>
+        <td>If primary TIFF IFD <em>and</em> JPEGInterchangeFormat (513) not defined</td></tr>
+        <tr><td>1 or 6</td><td>If thumbnail TIFF IFD</td></tr>
+        <tr><td>PhotometricInterpretation</td><td>262</td><td>2 or 6</td><td>If Compression (259) = 1</td></tr>
+        <tr><td>StripOffsets</td><td>273</td><td></td><td>If Compression (259) = 1</td></tr>
+        <tr><td>SamplesPerPixel</td><td>277</td><td>3</td><td>If Compression (259) = 1</td></tr>
+        <tr><td>RowsPerStrip</td><td>278</td><td></td><td>If Compression (259) = 1</td></tr>
+        <tr><td>StripByteCounts</td><td>279</td><td></td><td>If Compression (259) = 1</td></tr>
+        <tr><td>XResolution</td><td>282</td><td></td></tr>
+        <tr><td>YResolution</td><td>283</td><td></td></tr>
+        <tr><td>ResolutionUnit</td><td>296</td><td>2 or 3</td></tr>
+        <tr><td>ExifIFD</td><td>34665</td><td></td><td>If primary TIFF IFD</td></tr>
+      </table>
+    </blockquote>
+    <p>
+      The primary TIFF IFD is the first IFD in the file, whose offset is defined
+      in the TIFF header. The optional thumbnail TIFF IFD is a subsequent IFD whose
+      offset is defined following the primary TIFF IFD.
+    </p>
+    <p>
+      The following tags are mandatory in the Exif IFD:
+    </p>
+    <blockquote>
+      <table border="1">
+        <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+        <tr><td>ExifVersion</td><td>36864</td><td>"0220" (Version 2.2)<br>"0210" (Version 2.1)<br>"0200" (Version 2.0)</td></tr>
+        <tr><td>FlashpixVersion</td><td>40960</td><td>"0100"</td></tr>
+        <tr><td>ColorSpace</td><td>40961</td><td>1 or 65535</td></tr>
+      </table>
+    </blockquote>
+  </li>
+  <li>
+    <strong>SPIFF</strong>
+    <p>
+      SPIFF (ISO/IEC 10918-3) is the Still Picture Interchange File Format
+      [<a href="/references#jpeg-3">SPIFF</a>].
+    </p>
+  </li>
+  <li>
+    <strong>JTIP</strong>
+    <p>
+      JTIP (ISO/IEC 10918-3) is the JPEG Tiled Image Pyramid format
+      [<a href="/references#jpeg-3">JTIP</a>].
+    </p>
+  </li>
+  <li>
+    <strong>JPEG-LS</strong>
+    <p>
+      JPEG-LS (ISO/IEC 14495) is a standard for lossless and near-lossless
+      compression of images [<a href="/references#jpeg-ls-1">JPEG-LS</a>].
+    </p>
+  </li>
+</ul>
+
+<h2>6 Additional Module Properties</h2>
+
+<ul>
+  <li>Nominal file extension: .jpg</li>
+  <li>Nominal file extension: .jls (for JPEG-LS)</li>
+  <li>Nominal file extension: .spf (for SPIFF)</li>
+</ul>
+</div>
+{% include footer.html %}
+</body>
+</html>

@@ -185,8 +185,8 @@ public class NisoImageMetadata
     /** 6.2.4 orientation value labels. */
     public static final String [] ORIENTATION = {
 	"", "normal", "reflected horiz", "rotated 180 deg", "reflected vert",
-	"left top", "rotated cw 90 deg", "Right bottom", "Rotated ccw 90 deg",
-	"Unknown"
+	"left top", "rotated cw 90 deg", "right bottom", "rotated ccw 90 deg",
+	"unknown"
     };
 
     /** 6.1.6 planar configuration value labels. */

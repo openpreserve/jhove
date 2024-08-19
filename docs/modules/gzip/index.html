@@ -1,0 +1,108 @@
+---
+title: GZIP-kb Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+<h1>GZip-kb Module</h1>
+<a class="name" name="introduction">
+<h2>1 Introduction</h2>
+</a>
+<p>
+  The GZIP-kb module recognizes and validates the Gzip (GNU zip) format.
+  [<a href="/references#gzip">GZip</a>].
+</p>
+<p>
+  The module is invoked by the:
+</p>
+<blockquote>
+  <pre>
+    jhove ... -m GZIP-kb ...
+  </pre>
+</blockquote>
+<p>
+  command line option.
+</p>
+<p>
+  The GZIP-kb module recognizes and validates <a href="/references#gzip">GZip version 4.3</a>. It also supports multiple member GZip files. This module uses the <a href="/references#jwat">JWAT</a> library for GZip parsing.
+</p>
+
+<p>
+This module doesn't have configurable parameters.
+</p>
+
+<a class="name" name="coverage">
+  <h2>2 Coverage</h2>
+</a>
+<p>
+  The GZIP-kb module recognizes and validates the following public profiles:
+</p>
+<ul>
+  <li>
+    <a href="/references#gzip">RFC 1952</a>
+  </li>
+</ul>
+
+<a class="name" name="well-formedness">
+  <h2>3 Well-Formedness</h2>
+</a>
+<p>
+  The GZip module checks well-formedness.
+</p>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+<p>
+ The following criteria must be met by a GZip file for JHOVE to consider it valid:
+</p>
+<ul>
+<li> The file is well-formed. In GZIP-kb module the well-formedness and validity are equivalent.
+</ul>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+<p>
+  The MIME type is reported as: application/gzip [<a href="/references#rfc6713">RFC 6713</a>]. Application/x-gzip is also supported
+  
+</p>
+<p>
+  In addition to the standard JHOVE
+  <a href="/documentation#repinfo">representation information</a>, the following
+  GZip-specific properties are reported:
+</p>
+<ul>
+<li>
+    Property "GzipEntryProperties"
+    <ul>
+		<li>Property "Is non compliant" of type STRING</li>
+		<li>Property "Offset value" of type STRING</li>
+		<li>Property "GZip entry name" of type STRING</li>
+		<li>Property "GZip entry comment" of type STRING</li>
+		<li>Property "GZip entry date" of type STRING</li>
+		<li>Property "GZip entry compression method" of type STRING</li>
+		<li>Property "GZip entry operating system" of type STRING</li>
+		<li>Property "GZip entry header crc16" of type STRING</li>
+		<li>Property "GZip entry crc32" of type STRING</li>
+		<li>Property "GZip entry extracted size (ISIZE)" of type STRING</li>
+		<li>Property "GZip entry (computed) uncompressed size, in bytes" of type STRING</li>
+		<li>Property "GZip entry (computed) compressed size, in bytes" of type STRING</li>
+		<li>Property "GZip entry (computed) compression ratio" of type STRING</li>
+	</ul>
+</li>
+</ul>
+
+
+<a class="name" name="extras">
+<h2>6 Additional Module Properties</h2>
+</a>
+<ul>
+  <li>Nominal file extension: .gz</li>
+</ul>
+</div>
+{% include footer.html %}
+</body>
+</html>
