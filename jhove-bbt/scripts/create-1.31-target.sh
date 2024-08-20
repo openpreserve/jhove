@@ -161,3 +161,8 @@ do
 		cp "${candidateRoot}/${filename}" "${targetRoot}/${filename}"
 	fi
 done
+
+# Copy all of the AIF and WAV results as these are changed by the AES schema changes
+cp -rf "${candidateRoot}/examples/modules/AIFF-hul" "${targetRoot}/examples/modules/"
+cp -rf "${candidateRoot}/examples/modules/WAVE-hul" "${targetRoot}/examples/modules/"
+cp -rf "${candidateRoot}/errors/modules/WAVE-hul" "${targetRoot}/errors/modules/"
