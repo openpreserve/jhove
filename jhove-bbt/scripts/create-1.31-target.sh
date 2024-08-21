@@ -169,3 +169,14 @@ cp -rf "${candidateRoot}/errors/modules/WAVE-hul" "${targetRoot}/errors/modules/
 
 # Copy the results of the new XML fixes for multiple redirect lookups and to ensure no regression for repeat XML warnings
 cp -rf "${candidateRoot}/errors/modules/XML-hul" "${targetRoot}/errors/modules/"
+
+# Copy the results of the PDF offset message fix
+declare -a pdf_offset_affected=("errors/modules/PDF-hul/pdf-hul-5-govdocs-659152.pdf.jhove.xml"
+				"errors/modules/PDF-hul/pdf-hul-10-govdocs-803945.pdf.jhove.xml"
+				"regression/modules/PDF-hul/issue_306.pdf.jhove.xml")
+for filename in "${pdf_offset_affected[@]}"
+do
+	if [[ -f "${candidateRoot}/${filename}" ]]; then
+		cp "${candidateRoot}/${filename}" "${targetRoot}/${filename}"
+	fi
+done
