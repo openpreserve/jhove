@@ -75,19 +75,6 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
     private static final String FORMAT = "Format: ";
     private static final String VERSION = "Version: ";
     private static final String BYTE_ORDER = "ByteOrder: ";
-    private static final String FRAME_COUNT_30 = "FrameCount: 30";
-    private static final String TIME_BASE_1000 = "TimeBase: 1000";
-    private static final String VIDEO_FIELD_FIELD_1 = "VideoField: FIELD_1";
-    private static final String COUNTING_MODE_NTSC_NON_DROP_FRAME = "CountingMode: NTSC_NON_DROP_FRAME";
-    private static final String HOURS = "Hours: ";
-    private static final String MINUTES = "Minutes: ";
-    private static final String SECONDS = "Seconds: ";
-    private static final String FRAMES = "Frames: ";
-    private static final String SAMPLES = "Samples";
-    private static final String NUMBER_OF_SAMPLES = "NumberOfSamples: ";
-    private static final String FILM_FRAMING = "FilmFraming";
-    private static final String FRAMING_NOT_APPLICABLE = "Framing: NOT_APPLICABLE";
-    private static final String NTSC_FILM_FRAMING_TYPE = "Type: ntscFilmFramingType";
 
     /**
      * Constructs a DefaultMutableTreeNode representing a property
@@ -99,9 +86,8 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
         if (arity == PropertyArity.SCALAR) {
             if (null == typ) {
                 // Simple types: just use name plus string value.
-                DefaultMutableTreeNode val = new DefaultMutableTreeNode(
+                return new DefaultMutableTreeNode(
                         pProp.getName() + ": " + pValue.toString());
-                return val;
             } else {
                 TextMDMetadata tData;
                 DefaultMutableTreeNode val;
@@ -214,10 +200,6 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
         if (null == propType) {
             return 0; // non-object array type
         } else
-            // if (child instanceof LeafHolder) {
-            // return ((LeafHolder) child).getPosition ();
-            // }
-            // else
             switch (propType) {
                 case DATE:
                     dateArray = (java.util.Date[]) pProp.getValue();
@@ -335,7 +317,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 
         // Report modules that said their signatures match
         List<String> sigList = _info.getSigMatch();
-        if (sigList != null && sigList.size() > 0) {
+        if (sigList != null && !sigList.isEmpty()) {
             DefaultMutableTreeNode sigNode = new DefaultMutableTreeNode(
                     "SignatureMatches");
             infoNode.add(sigNode);
@@ -347,7 +329,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
         }
         // Compile a list of messages and offsets into a subtree
         List<Message> messageList = _info.getMessage();
-        if (messageList != null && messageList.size() > 0) {
+        if (messageList != null && !messageList.isEmpty()) {
             DefaultMutableTreeNode msgNode = new DefaultMutableTreeNode(
                     "Messages");
             infoNode.add(msgNode);
@@ -397,7 +379,7 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
 
         // Compile a list of profile strings into a string list
         List<String> profileList = _info.getProfile();
-        if (profileList != null && profileList.size() > 0) {
+        if (profileList != null && !profileList.isEmpty()) {
             DefaultMutableTreeNode profNode = new DefaultMutableTreeNode(
                     "Profiles");
             infoNode.add(profNode);
@@ -426,7 +408,6 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
             DefaultMutableTreeNode ckNode = new DefaultMutableTreeNode(
                     "Checksums");
             infoNode.add(ckNode);
-            // List cPropList = new LinkedList ();
             for (Checksum cksum : cksumList) {
                 DefaultMutableTreeNode csNode = new DefaultMutableTreeNode(
                         "Checksum");
@@ -567,7 +548,6 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
         Map<?, ?> m = (Map<?, ?>) p.getValue();
         PropertyType ptyp = p.getType();
         Boolean canHaveChildren = Boolean.TRUE;
-        // Iterator iter = m.values ().iterator ();
         Iterator<?> iter = m.keySet().iterator();
         while (iter.hasNext()) {
             DefaultMutableTreeNode itemNode;
@@ -1446,7 +1426,6 @@ public class RepTreeRoot extends DefaultMutableTreeNode {
             // Simple objects just need a leaf.
             itemNode = (new DefaultMutableTreeNode(item, allowsChildren));
         } else
-            // Object item = iter.next ();
             switch (ptyp) {
                 case PROPERTY:
                     itemNode = (propToNode((Property) item));

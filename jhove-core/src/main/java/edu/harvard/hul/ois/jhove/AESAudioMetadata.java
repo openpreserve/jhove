@@ -760,9 +760,9 @@ public class AESAudioMetadata {
      * Sets the byte order.
      */
     public void setByteOrder(String order) {
-        if (order.substring(0, 3).toLowerCase().equals("big")) {
+        if (order.substring(0, 3).equalsIgnoreCase("big")) {
             _byteOrder = BIG_ENDIAN;
-        } else if (order.substring(0, 6).toLowerCase().equals("little")) {
+        } else if (order.substring(0, 6).equalsIgnoreCase("little")) {
             _byteOrder = LITTLE_ENDIAN;
         }
     }
@@ -851,7 +851,7 @@ public class AESAudioMetadata {
      * set the otherType.
      */
     public void setOtherPrimaryIdentifierType(String otherType) {
-        _primaryIdentifierType = "OTHER";
+        _primaryIdentifierType = OTHER;
         _primaryIdentifierOtherType = otherType;
     }
 
