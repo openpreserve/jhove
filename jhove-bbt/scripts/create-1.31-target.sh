@@ -166,3 +166,6 @@ done
 cp -rf "${candidateRoot}/examples/modules/AIFF-hul" "${targetRoot}/examples/modules/"
 cp -rf "${candidateRoot}/examples/modules/WAVE-hul" "${targetRoot}/examples/modules/"
 cp -rf "${candidateRoot}/errors/modules/WAVE-hul" "${targetRoot}/errors/modules/"
+
+# Copy the results of the new XML fixes for multiple redirect lookups and to ensure no regression for repeat XML warnings
+cp -rf "${candidateRoot}/errors/modules/XML-hul" "${targetRoot}/errors/modules/"
