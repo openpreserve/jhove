@@ -27,7 +27,7 @@
     <jpeg.hul.version>1.5.4</jpeg.hul.version>
     <pdf.hul.version>1.12.7</pdf.hul.version>
     <tiff.hul.version>1.9.5</tiff.hul.version>
-    <utf8.hul.version>1.7.3</utf8.hul.version>
+    <utf8.hul.version>1.7.4</utf8.hul.version>
     <wave.hul.version>1.8.3</wave.hul.version>
     <xml.hul.version>1.5.5</xml.hul.version>
   </properties>
