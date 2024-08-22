@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
-    <version>1.31.0-SNAPSHOT</version>
+    <version>1.32.0-RC1</version>
   </parent>
 
   <artifactId>jhove-installer</artifactId>
-  <version>1.31.0-SNAPSHOT</version>
+  <version>1.32.0-RC1</version>
   <name>JHOVE Installer</name>
   <description>Maven-built IzPack installer for JHOVE.</description>
 
@@ -22,14 +22,14 @@
     <aiff.hul.version>1.6.2</aiff.hul.version>
     <ascii.hul.version>1.4.2</ascii.hul.version>
     <gif.hul.version>1.4.3</gif.hul.version>
-    <html.hul.version>1.4.3</html.hul.version>
+    <html.hul.version>1.4.4</html.hul.version>
     <jpeg2000.hul.version>1.4.4</jpeg2000.hul.version>
     <jpeg.hul.version>1.5.4</jpeg.hul.version>
-    <pdf.hul.version>1.12.6</pdf.hul.version>
-    <tiff.hul.version>1.9.4</tiff.hul.version>
+    <pdf.hul.version>1.12.7</pdf.hul.version>
+    <tiff.hul.version>1.9.5</tiff.hul.version>
     <utf8.hul.version>1.7.3</utf8.hul.version>
     <wave.hul.version>1.8.3</wave.hul.version>
-    <xml.hul.version>1.5.4</xml.hul.version>
+    <xml.hul.version>1.5.5</xml.hul.version>
   </properties>
 
   <build>
@@ -175,7 +175,7 @@
     <dependency>
       <groupId>org.openpreservation.jhove</groupId>
       <artifactId>jhove-ext-modules</artifactId>
-      <version>1.31.0-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openpreservation.jhove.modules</groupId>

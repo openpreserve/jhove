@@ -49,8 +49,8 @@ import edu.harvard.hul.ois.jhove.module.xml.*;
 public class XmlModule extends ModuleBase {
 
     private static final String NAME = "XML-hul";
-    private static final String RELEASE = "1.5.4";
-    private static final int[] DATE = { 2024, 03, 05 };
+    private static final String RELEASE = "1.5.5";
+    private static final int[] DATE = { 2024, 8, 22 };
     private static final String[] FORMAT = { "XML", "XHTML" };
     private static final String COVERAGE = "XML 1.0";
     private static final String[] MIMETYPE = { "text/xml", "application/xml",

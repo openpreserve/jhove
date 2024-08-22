@@ -83,10 +83,10 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
     private static final String NAME = "XML";
 
     /** Handler release identifier. */
-    private static final String RELEASE = "1.11";
+    private static final String RELEASE = "1.12";
 
     /** Handler release date. */
-    private static final int[] DATE = { 2024, 03, 05 };
+    private static final int[] DATE = { 2024, 8, 22 };
 
     /** Handler informative note. */
     private static final String NOTE = "This output handler is defined by the XML Schema "
@@ -3786,7 +3786,7 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
 
         n = niso.getOrientation();
         if (n != NisoImageMetadata.NULL) {
-        	// Values defined in the MIX 2.0 schema
+            // Values defined in the MIX 2.0 schema
             final String[] orient = { "", "normal*",
                     "normal, image flipped", "normal, rotated 180\u00B0",
                     "normal, image flipped, rotated 180\u00B0",
@@ -4383,10 +4383,10 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
                     sampleRate != AESAudioMetadata.NILL ||
                     wordSize != AESAudioMetadata.NULL) {
                 _writer.println(margn2 + elementStart("aes:formatList"));
-                String[][] frAttr = { { "ID", formatRegionID }, 
-                    {"xsi:type", "aes:formatRegionType"}, 
-                    {"ownerRef", faceRegionID},
-                    {"label", "JHOVE"}};
+                String[][] frAttr = { { "ID", formatRegionID },
+                        { "xsi:type", "aes:formatRegionType" },
+                        { "ownerRef", faceRegionID },
+                        { "label", "JHOVE" } };
                 _writer.println(margn3 + elementStart("aes:formatRegion", frAttr));
                 if (bitDepth != AESAudioMetadata.NULL) {
                     _writer.println(margn4 + element("aes:bitDepth",
@@ -4446,10 +4446,10 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
         }
 
         String[][] attributes = {
-                {"editRate", formatters.get().format(sampleRate)},
-                {"factorNumerator", "1"},
-                {"factorDenominator", "1"}
-            };
+                { "editRate", formatters.get().format(sampleRate) },
+                { "factorNumerator", "1" },
+                { "factorDenominator", "1" }
+        };
 
         _writer.println(indent +
                 element(elementName, attributes, String.valueOf(timeDesc.getSamples())));

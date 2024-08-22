@@ -2,7 +2,7 @@
 # First build the app on a maven open jdk 11 container
 FROM maven:3-eclipse-temurin-11-focal as dev-builder
 ARG JHOVE_VERSION
-ENV JHOVE_VERSION=${JHOVE_VERSION:-1.27.0-SNAPSHOT}
+ENV JHOVE_VERSION=${JHOVE_VERSION:-1.32.0-RC1}
 
 # Copy the current dev source branch to a local build dir
 COPY . /build/jhove/
@@ -31,7 +31,7 @@ ARG JAVA_OPTS
 ENV JAVA_OPTS=$JAVA_OPTS
 # Specify the veraPDF REST version if you want to (to be used in build automation)
 ARG JHOVE_VERSION
-ENV JHOVE_VERSION=${JHOVE_VERSION:-1.27.0-SNAPSHOT}
+ENV JHOVE_VERSION=${JHOVE_VERSION:-1.32.0-RC1}
 
 # Copy the JRE from the previous stage
 ENV JAVA_HOME=/opt/java/openjdk
