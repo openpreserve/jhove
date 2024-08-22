@@ -1,0 +1,719 @@
+---
+title: TIFF-hul Module
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container" role="main">
+<h1>JHOVE TIFF-hul Module</h1>
+
+<a class="name" name="introduction">
+<h2>1 Introduction</h2>
+</a>
+
+<p>
+The TIFF-hul module recognizes and validates the TIFF (Tagged Image File
+Format) format
+[<a href="/references#tiff6">TIFF 6.0</a>].
+Several TIFF related links are available from the JHOVE
+<a href="/resources#tiff">Resources page</a>.
+</p>
+<p>
+The module is invoked by the:
+</p>
+<blockquote>
+<pre>
+jhove ... -m TIFF-hul ...
+</pre>
+</blockquote>
+<p>
+command line option.
+</p>
+
+<p>
+This module can be <a href="/getting-started/config/">configured</a> with the following parameters:
+</p>
+<ul>
+<li><tt>byteoffset=true</tt> to consider TIFFs without byte-aligned offsets as well-formed.</li>
+</ul>
+
+<a class="name" name="coverage"><h2>2 Coverage</h2></a>
+<p>
+The TIFF-hul module recognizes and validates the following public profiles:
+</p>
+<ul>
+  <li>TIFF version 4.0, 5.0, and 6.0 [<a href="/references#tiff4">TIFF 4.0</a>,
+      <a href="/references#tiff5">TIFF 5.0</a>, <a href="/references#tiff6">TIFF 6.0</a>]</li>
+  <li>Baseline 6.0 bilevel (previously known as 5.0 Class B),
+      grayscale (Class G), palette-color (Class P), and RGB (Class R)
+      [<a href="/references#tiff6">TIFF 6.0</a>]</li>
+  <li>6.0 extension YCbCr (Class Y) [<a href="/references#tiff6">TIFF 6.0</a>]</li>
+  <li>TIFF/IT (ISO 12639:2003), including file types CT, LW, HC, MP, BP, BL,
+      and FP, and conformance levels P1 and P2 [<a href="/references#tiffit">TIFF/IT</a>]
+  </li>
+  <li>TIFF/EP (ISO 12234-2:2001) [<a href="/references#tiffep">TIFF/EP</a>]</li>
+  <li>Exif 2.0, 2.1 (JEIDA-49-1998), and 2.2 (JEITA CP-3451) [<a href="/references#exif2.1">Exif 2.1</a>,
+      <a href="/references#exif">Exif 2.2</a>]</li>
+  <li>GeoTIFF 1.0 [<a href="/references#geotiff">GeoTIFF</a>]</li>
+  <li>DLF Benchmark for Faithful Digital Reproductions of Monographs and
+      Serials [<a href="/references#dlfbenchmark">DLF</a>]</li>
+<!--
+<li> Adobe PageMaker 6.0 and Photoshop 'Advanced TIFF'
+[<a href="/references#pagemaker">PageMaker</a>,
+<a href="/references#photoshop">Photoshop</a>]
+-->
+  <li>TIFF-FX (RFC 2301), including Profiles C, F, J, L, M, and S
+      [<a href="/references#tiff-fx">TIFF-FX</a>]</li>
+  <li>Class F (RFC 2306) [<a href="/references#classf">Class F</a>,
+       <a href="/references#rfc2306">RFC 2306</a>]</li>
+  <li>RFC 1314 [<a href="/references#rfc1314">RFC 1314</a>]</li>
+  <li> DNG (Adobe Digital Negative) [<a href="/references#dng">DNG</a>]</li>
+</ul>
+<a class="name" name="well-formedness">
+<h2>3 Well-Formedness</h2></a>
+<p>
+The following criteria must be met by a TIFF object for JHOVE to consider it
+well-formed:
+</p>
+<ul>
+  <li>Header with 0x4D4D002A (if big-endian) or 0x49492A00 (if little-endian)
+      at offset 0</li>
+  <li>At least one IFD</li>
+  <li>All IFD offsets are 16-bit word aligned</li>
+  <li>All IFDs have at least one entry</li>
+  <li>All IFD entries are sorted in ascending order by tag number</li>
+  <li>All IFD entries specify the correct type and count</li>
+  <li>All value offsets are 16-bit word aligned</li>
+  <li>All value offsets reference locations within the file</li>
+  <li>The final IFD is followed by an offset of 0</li>
+</ul>
+
+<p>Note that the 16-bit word aligned criteria can be by-passed by setting the byteoffset parameter</p>
+
+<a class="name" name="validity">
+<h2>4 Validity</h2></a>
+<p>
+The following criteria must be met by a TIFF file for JHOVE to consider it
+valid:
+</p>
+<ul>
+  <li>The file is well-formed</li>
+  <li>The ImageLength (tag 257), ImageWidth (256),
+    and PhotometricInterpretation (262) tags are defined</li>
+  <li>If version 4.0 or 5.0 then StripByteCounts (279) and StripOffsets (273)
+    are defined; if version 6.0 then either all of StripByteCounts and StripOffsets
+    or TileByteCounts (325), TileLength (323), TileOffsets (324),
+    and TileWidth (322) are defined</li>
+  <li>If PhotometricInterpretation = 4, then bit 2 of NewSubfileType (254) = 1,
+    and vice versa</li>
+  <li>If PhotometricInterpretation = 4, then SamplesPerPixel = 1 and BitsPerSample = 1</li>
+  <li>If PhotometricInterpretation = 0,1,3, or 4, then SamplesPerPixel = 1</li>
+  <li>If PhotometricInterpretation = 2,6, or 8, then SamplesPerPixel = 3</li>
+  <li>If PhotometricInterpretation = 3, then ColorMap is defined with 2<sup>BitsPerSample[0]</sup>
+      + 2<sup>BitsPerSample[1]</sup> + 2<sup>BitsPerSample[2]</sup> values</li>
+  <li>The values for DotRange (336) are in the range [0, (2<sup>BitsPerSample[<em>i</em>]</sup>)-1]</li>
+  <li>CellLength (265) defined only if Threshholding (263) = 2</li>
+  <li>If PhotometricInterpretation = 6, then JPEGProc is defined</li>
+  <li>If PhotometricInterpretation = 8 or 9, then BitsPerSample = 8 or 16
+    and SamplesPerPixel-ExtraSamples = 1 or 3</li>
+  <li>If ClipPath (343) is defined, then XClipPathUnits (344) is defined</li>
+  <li>TileWidth (322) and TileLength (323) values are integral multiples of 16</li>
+  <li>DateTime (306) tag is properly formatted:
+    <tt>"<em>YYYY</em>:<em>MM</em>:<em>DD</em>&nbsp;<em>HH</em>:<em>MM</em>:<em>SS</em>"</tt>
+  </li>
+</ul>
+
+<a class="name" name="repinfo">
+<h2>5 Representation Information</h2></a>
+
+<p>
+The MIME type is reported as: <tt>image/tiff</tt>,
+except for the TIFF-FX profile, which is reported as: <tt>image/tiff-fx</tt>,
+and the Class F profile, which is reported as: <tt>image/ief</tt>.
+</p>
+<p>
+In addition to the standard JHOVE
+<a href="/documentation#repinfo">representation information</a>,
+all <a href="tags">TIFF tags</a> and their values are displayed.
+</p>
+<p>
+By default numeric flag values are displayed using descriptive text labels and
+rational values are displayed as real decimals.
+To see the actual "raw" data values use the <tt>-r</tt> command line option.
+</p>
+<blockquote>
+<table border="1">
+<tr><th>Tag value</th><th>Default display</th><th><tt>-r</tt> display</tr>
+<tr><td>Compression = 4</td><td>"<tt>CCITT Group 4</tt>"</td>
+<td align="center">"<tt>4</tt>"</td></tr>
+<tr><td>YCbCrCoefficient = 587/1000</td>
+<td align="center">"<tt>0.587</tt>"</td>
+<td>"<tt>587/1000</tt>"</tr>
+</table>
+</blockquote>
+<p>
+Image technical properties are reported in terms of the NISO
+<a href="/references#z39.87">Z39.87</a>
+data dictionary.
+</p>
+<a class="name" name="profiles">
+<h3>5.1 Profiles</h3></a>
+
+<ul>
+  <li><strong>TIFF 4.0</strong>
+    <p>
+      A TIFF file is assumed to be version 4.0 until otherwise indicated.
+    </p>
+  </li>
+  <li><strong>TIFF 5.0</strong>
+    <p>
+      The presence of the following tags indicates version 5.0:
+    </p>
+    <blockquote>
+      Artist (315),
+      ColorMap (320),
+      DateTime (306),
+      HostComputer (316),
+      NewSubfileType (254),
+      Predictor (317),
+      PrimaryChromaticities (319),
+      Software (305),
+      WhitePoint (318)
+    </blockquote>
+    <p>
+      The presence of a PhotometricInterpretation (262) value of 3 (Palette color) or
+      4 (Transparency mask) indicates version 5.0.
+      The presence of a Compression (259) value of 5 (LZW) indicates version 5.0.
+    </p>
+  </li>
+  <li><strong>TIFF 6.0</strong>
+    <p>
+      The presence of the following tags indicates version 6.0:
+    </p>
+    <blockquote>
+      Copyright (33432),
+      DotRange (336),
+      ExtraSamples (338),
+      HalftoneHints (321),
+      InkNames (333),
+      InkSet (332),
+      JPEGACTables (521),
+      JPEGDCTables (520),
+      JPEGInterchangeFormat (513),
+      JPEGInterchangeFormatLength (514),
+      JPEGLosslessPredictors (517),
+      JPEGPointTransforms (518),
+      JPEGProc (512),
+      JPEGRestartInterval (515),
+      JPEGQTables (519),
+      NumberOfInks (334),
+      ReferenceBlackWhite (532),
+      SampleFormat (339),
+      SMinSampleValue (340),
+      SMaxSampleValue (341),
+      TargetPrinter (337),
+      TileLength (323),
+      TileOffsets (324),
+      TileWidth (322),
+      TileByteCounts (325),
+      TransferRange (342),
+      YCbCrCoefficients (529),
+      YCbCrPositioning (531),
+      YCbCrSubSampling (530)
+    </blockquote>
+    <p>
+      The presence of a Compression (259) value of 6 (JPEG),
+      or the presence of a PhotometricInterpretation (262) value of 5 (CMYK),
+      6 (YCbCr), or 8 (CIE L*a*b*) indicates version 6.0.
+    </p>
+    <p>
+      The presence of a data type 6 (SBYTE), 7 (UNDEFINED), 8 (SSHORT), 9 (SLONG),
+      10 (SRATIONAL), 11 (FLOAT), or 12 (DOUBLE) indicates version 6.0.
+    </p>
+    <p>
+      The following tag is mandatory:
+    </p>
+    <blockquote>
+      <table border="1">
+        <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+        <tr><td>PhotometricInterpretation</td><td>262</td><td></td></tr>
+      </table>
+    </blockquote>
+  </li>
+  <li><strong>Baseline 6.0 profiles</strong>
+    <p>
+      All of the Baseline 6.0 profiles are defined in
+      [<a href="/references#tiff6">TIFF 6.0</a>].
+    </p>
+    <ul>
+      <li><strong>Baseline bilevel (Class B)</strong>
+        <p>
+          The bilevel profile is for black and white images.
+          The following tags are mandatory:
+        </p>
+        <blockquote>
+          <table border="1">
+            <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+            <tr><td>ImageWidth</td><td>256</td><td></td></tr>
+            <tr><td>ImageLength</td><td>257</td><td></td></tr>
+            <tr><td>Compression</td><td>259</td><td>1, 2, or 32773</td></tr>
+            <tr><td>PhotometricInterpretation</td><td>262</td><td>0 or 1</td></tr>
+            <tr><td>StripOffsets</td><td>273</td><td></td></tr>
+            <tr><td>RowsPerStrip</td><td>278</td><td></td></tr>
+            <tr><td>StripByteCounts</td><td>279</td><td></td></tr>
+            <tr><td>XResolution</td><td>282</td><td></td></tr>
+            <tr><td>YResolution</td><td>283</td><td></td></tr>
+            <tr><td>ResolutionUnit</td><td>296</td><td>1, 2, or 3</td></tr>
+          </table>
+        </blockquote>
+      </li>
+    <li><strong>Baseline grayscale (Class G)</strong>
+      <p>
+        The grayscale profile is for grayscale images.
+        The following tags are mandatory:
+      </p>
+      <blockquote>
+        <table border="1">
+          <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+          <tr><td>ImageWidth</td><td>256</td><td></td></tr>
+          <tr><td>ImageLength</td><td>257</td><td></td></tr>
+          <tr><td>BitsPerSample</td><td>258</td><td>4 or 8</td></tr>
+          <tr><td>Compression</td><td>259</td><td>1 or 32773</td></tr>
+          <tr><td>PhotometricInterpretation</td><td>262</td><td>0 or 1</td></tr>
+          <tr><td>StripOffsets</td><td>273</td><td></td></tr>
+          <tr><td>RowsPerStrip</td><td>278</td><td></td></tr>
+          <tr><td>StripByteCounts</td><td>279</td><td></td></tr>
+          <tr><td>XResolution</td><td>282</td><td></td></tr>
+          <tr><td>YResolution</td><td>283</td><td></td></tr>
+          <tr><td>ResolutionUnit</td><td>296</td><td>1, 2, or 3</td></tr>
+        </table>
+      </blockquote>
+    </li>
+    <li><strong>Baseline palette-color (Class P)</strong>
+      <p>
+        The palette-color profile is for images using a lookup-table (or
+        color map). The following tags are mandatory:
+      </p>
+      <blockquote>
+        <table border="1">
+          <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+          <tr><td>ImageWidth</td><td>256</td><td></td></tr>
+          <tr><td>ImageLength</td><td>257</td><td></td></tr>
+          <tr><td>BitsPerSample</td><td>258</td><td>4 or 8</td></tr>
+          <tr><td>Compression</td><td>259</td><td>1 or 32773</td></tr>
+          <tr><td>PhotometricInterpretation</td><td>262</td><td>3</td></tr>
+          <tr><td>StripOffsets</td><td>273</td><td></td></tr>
+          <tr><td>RowsPerStrip</td><td>278</td><td></td></tr>
+          <tr><td>StripByteCounts</td><td>279</td><td></td></tr>
+          <tr><td>XResolution</td><td>282</td><td></td></tr>
+          <tr><td>YResolution</td><td>283</td><td></td></tr>
+          <tr><td>ResolutionUnit</td><td>296</td><td>1, 2, or 3</td></tr>
+          <tr><td>ColorMap</td><td>320</td><td></td></tr>
+        </table>
+      </blockquote>
+    </li>
+    <li><strong>Baseline RGB (Class R)</strong>
+      <p>
+        The RGB profile is for full-color RGB images.
+        The following tags are mandatory:
+      </p>
+      <blockquote>
+        <table border="1">
+          <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+          <tr><td>ImageWidth</td><td>256</td><td></td></tr>
+          <tr><td>ImageLength</td><td>257</td><td></td></tr>
+          <tr><td>BitsPerSample</td><td>258</td><td>8,8,8</td></tr>
+          <tr><td>Compression</td><td>259</td><td>1 or 32773</td></tr>
+          <tr><td>PhotometricInterpretation</td><td>262</td><td>2</td></tr>
+          <tr><td>StripOffsets</td><td>273</td><td></td></tr>
+          <tr><td>SamplesPerPixel</td><td>277</td><td>&gt;= 3</td></tr>
+          <tr><td>RowsPerStrip</td><td>278</td><td></td></tr>
+          <tr><td>StripByteCounts</td><td>279</td><td></td></tr>
+          <tr><td>XResolution</td><td>282</td><td></td></tr>
+          <tr><td>YResolution</td><td>283</td><td></td></tr>
+          <tr><td>ResolutionUnit</td><td>296</td><td>1, 2, or 3</td></tr>
+        </table>
+      </blockquote>
+    </li>
+  </ul>
+  <li><strong>6.0 Extension profiles</strong>
+    <p>
+      All of the 6.0 extension profiles are defined in
+      [<a href="/references#tiff6">TIFF 6.0</a>].
+    </p>
+    <ul>
+      <li><strong>Extension YCbCr (Class Y)</strong>
+        <p>
+          The YCbCr profile is for images using the YCbCr colorspace.
+          The following tags are mandatory:
+        </p>
+        <blockquote>
+          <table border="1">
+            <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+            <tr><td>ImageWidth</td><td>256</td><td></td></tr>
+            <tr><td>ImageLength</td><td>257</td><td></td></tr>
+            <tr><td>BitsPerSample</td><td>258</td><td>8,8,8</td></tr>
+            <tr><td>Compression</td><td>259</td><td>1, 5, or 6</td></tr>
+            <tr><td>PhotometricInterpretation</td><td>262</td><td>6</td></tr>
+            <tr><td>StripOffsets</td><td>273</td><td></td></tr>
+            <tr><td>SamplesPerPixel</td><td>277</td><td>3</td></tr>
+            <tr><td>RowsPerStrip</td><td>278</td><td></td></tr>
+            <tr><td>StripByteCounts</td><td>279</td><td></td></tr>
+            <tr><td>XResolution</td><td>282</td><td></td></tr>
+            <tr><td>YResolution</td><td>283</td><td></td></tr>
+            <tr><td>ResolutionUnit</td><td>296</td><td>1, 2, or 3</td></tr>
+            <tr><td>ReferenceBlackWhite</td><td>532</td><td></td></tr>
+          </table>
+        </blockquote>
+      </li>
+    </ul>
+    <li><strong>TIFF/IT (ISO 12639:2003)</strong>
+      <p>
+        The TIFF/IT profile is for images used in pre-press data exchange
+        [<a href="/references#tiffit">TIFF/IT</a>].
+      </p>
+      <p>
+        Profiles are defined for file types
+        BL (binary line art),
+        BP (binary picture),
+        CT (color continuous tone),
+        FP (final page)
+        HC (high resolution continuous tone),
+        LW (color line art), and
+        MP (monochrome continuous tone),
+        each at conformance levels full, P1 or P2.
+        For the specific values required for each profile see the TIFF/IT
+        specification [<a href="/references#tiffit">TIFF/IT</a>].
+      </p>
+    </li>
+    <li><strong>TIFF/EP (ISO 12234-2:2001)</strong>
+      <p>
+        The TIFF/EP profile is for images created by digital cameras
+        [<a href="/references#tiffep">TIFF/EP</a>]. The following tags are mandatory:
+      </p>
+      <blockquote>
+        <table border="1">
+          <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+          <tr><td>NewSubfileType</td><td>254</td><td>0 or 1</td></tr>
+          <tr><td>ImageWidth</td><td>256</td><td></td></tr>
+          <tr><td>ImageLength</td><td>257</td><td></td></tr>
+          <tr><td>BitsPerSample</td><td>258</td><td>8,8,8</td></tr>
+          <tr><td>Compression</td><td>259</td><td>1, 7, or &gt; 32767</td></tr>
+          <tr><td>PhotometricInterpretation</td><td>262</td><td>1, 2, 6, 32803, or
+          &gt; 32767</td></tr>
+          <tr><td>Make</td><td>271</td><td></td></tr>
+          <tr><td>Model</td><td>272</td><td></td></tr>
+          <tr><td>Orientation</td><td>274</td><td>if defined must be
+          1, 3, 6, 8, or 9</td></tr>
+          <tr><td>XResolution</td><td>282</td><td></td></tr>
+          <tr><td>YResolution</td><td>283</td><td></td></tr>
+          <tr><td>PlanarConfiguration</td><td>284</td><td>1 or 2</td></tr>
+          <tr><td>ResolutionUnit</td><td>296</td><td>1, 2 or 3</td></tr>
+          <tr><td>Software</td><td>305</td><td></td></tr>
+          <tr><td>DateTime</td><td>306</td><td></td></tr>
+          <tr><td>YCbCrCoefficients</td><td>529</td><td>defined if
+          PhotometricInterpretation = 6</td></tr>
+          <tr><td>YCbCrSubSampling</td><td>530</td><td>defined if
+          PhotometricInterpretation = 6</td></tr>
+          <tr><td>YCbCrPositioning</td><td>531</td><td>defined if
+          PhotometricInterpretation = 6</td></tr>
+          <tr><td>ReferenceBlackWhite</td><td>532</td><td>defined if
+          PhotometricInterpretation = 6</td></tr>
+          <tr><td>CFARepeatPatternDim</td><td>33421</td><td>defined if
+          PhotometricInterpretation = 32803</td></tr>
+          <tr><td>CFAPattern</td><td>33422</td><td>defined if
+          PhotometricInterpretation = 32803</td></tr>
+          <tr><td>Copyright</td><td>33432</td><td></td></tr>
+          <tr><td>DateTimeOriginal</td><td>36867</td><td></td></tr>
+          <tr><td>TIFF/EPStandardID</td><td>37398</td><td>1,0,0,0</td></tr>
+          <tr><td>SensingMethod</td><td>37399</td><td>0, 1, 2, 3, 4, 5, 6, 7, or
+          8</td></tr>
+        </table>
+      </blockquote>
+      <p>
+        Additionally, either all of:
+      </p>
+      <ul>
+        <li>StripOffsets (273), RowsPerStrip (278), and StripByteCounts (279); or</li>
+        <li>TileWidth (322), TileLength (323), TileOffsets (324), and TileByteCounts (325)</li>
+      </ul>
+      <p>
+        must be defined, depending upon whether stripped or tiled organization is used.
+      </p>
+    </li>
+    <li><strong>Exif</strong>
+      <p>
+        Exif 2.0, 2.1 (JEIDA-49-1998), and 2.2 (JEITA CP-3451) define camera-specific
+        metadata [<a href="/references#exif2.1">Exif 2.1</a>, <a href="/references#exif">Exif 2.2</a>].
+        The following tags are mandatory in the primary TIFF IFD:
+      </p>
+      <blockquote>
+        <table border="1">
+          <tr><th colspan="2">Tag Name and Number</th><th>Value</th><th>Note</th></tr>
+          <tr><td>ImageWidth</td><td>256</td><td></td><td>If Compression (259) = 1</td></tr>
+          <tr><td>ImageLength</td><td>257</td><td></td><td>If Compression (259) = 1</td></tr>
+          <tr><td>BitsPerSample</td><td>258</td><td>8,8,8</td><td>If Compression (259) = 1</td></tr>
+          <tr><td rowspan="2">Compression</td><td rowspan="2">259</td><td>1</td>
+          <td>If primary TIFF IFD <em>and</em> JPEGInterchangeFormat (513) not defined</td></tr>
+          <tr><td>1 or 6</td><td>If thumbnail TIFF IFD</td></tr>
+          <tr><td>PhotometricInterpretation</td><td>262</td><td>2 or 6</td><td>If Compression (259) = 1</td></tr>
+          <tr><td>StripOffsets</td><td>273</td><td></td><td>If Compression (259) = 1</td></tr>
+          <tr><td>SamplesPerPixel</td><td>277</td><td>3</td><td>If Compression (259) = 1</td></tr>
+          <tr><td>RowsPerStrip</td><td>278</td><td></td><td>If Compression (259) = 1</td></tr>
+          <tr><td>StripByteCounts</td><td>279</td><td></td><td>If Compression (259) = 1</td></tr>
+          <tr><td>XResolution</td><td>282</td><td></td></tr>
+          <tr><td>YResolution</td><td>283</td><td></td></tr>
+          <tr><td>ResolutionUnit</td><td>296</td><td>2 or 3</td></tr>
+          <tr><td>ExifIFD</td><td>34665</td><td></td><td>If primary TIFF IFD</td></tr>
+        </table>
+      </blockquote>
+      <p>
+        The primary TIFF IFD is the first IFD in the file, whose offset is defined
+        in the TIFF header.
+        The optional thumbnail TIFF IFD is a subsequent IFD whose offset is defined
+        following the primary TIFF IFD.
+      </p>
+      <p>
+        The following tags are mandatory in the Exif IFD:
+      </p>
+      <blockquote>
+        <table border="1">
+          <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+          <tr><td>ExifVersion</td><td>36864</td><td>"0220" (Version 2.2)<br>"0210" (Version 2.1)<br>"0200" (Version 2.0)</td></tr>
+          <tr><td>FlashpixVersion</td><td>40960</td><td>"0100"</td></tr>
+          <tr><td>ColorSpace</td><td>40961</td><td>1 or 65535</td></tr>
+        </table>
+      </blockquote>
+    </li>
+    <li><strong>Baseline GeoTIFF 1.0</strong>
+      <p>
+        GeoTIFF defines an industry-standard tagset for the management of
+        geo-referenced or geo-coded raster imagery
+        [<a href="/references#geotiff">GeoTIFF</a>].
+        The following tags are mandatory:
+      </p>
+      <blockquote>
+        <table border="1">
+          <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+          <tr><td>PhotometricInterpretation</td><td>262</td><td></td></tr>
+          <tr><td>GeoKeyDirectoryTag</td><td>34735</td><td></td></tr>
+        </table>
+      </blockquote>
+      <p>
+        Additionally, either ModelTiepointTag (33922) or ModelTransformationTag
+        (34264) must be defined, but not both.
+      </p>
+    </li>
+    <li><strong>DLF Benchmark for Faithful Digital Reproductions of Monographs
+and Serials</strong>
+      <p>
+        The DLF benchmarks [<a href="/references#dlfbenchmark">DLF</a>]
+        define the minimum characteristics for effective digital reproduction of
+        monograph and serial pages.
+      </p>
+      <ul>
+        <li><strong>Black and White</strong>
+          <p>
+            The DLF black and white benchmark requires lossless compression, one 1-bit
+            sample value per pixel, and a minimum resolution.
+          </p>
+          <blockquote>
+            <table border="1">
+              <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+              <tr><td>BitsPerSample</td><td>258</td><td>1</td></tr>
+              <tr><td>Compression</td><td>259</td><td>1 (none) or
+              4 (T.6/Group 4)</td></tr>
+              <tr><td>PhotometricInterpretation</td><td>262</td><td>0 or 1</td></tr>
+              <tr><td>SamplesPerPixel</td><td>277</td><td>1</td></tr>
+              <tr><td>XResolution</td><td>282</td><td>&gt;= 600 (in) or 1520 (cm)</td></tr>
+              <tr><td>YResolution</td><td>283</td><td>&gt;= 600 (in) or 1520 (cm)</td></tr>
+            </table>
+          </blockquote>
+        </li>
+        <li><strong>Grayscale</strong>
+          <p>
+            The DLF grayscale benchmark requires lossless compression, one 8-bit
+            sample value per pixel, and a minimum resolution.
+          </p>
+          <blockquote>
+            <table border="1">
+              <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+              <tr><td>BitsPerSample</td><td>258</td><td>8</td></tr>
+              <tr><td>Compression</td><td>259</td><td>1 (none), 5 (LZW),
+              32773 (PackBits RLE)</td></tr>
+              <tr><td>PhotometricInterpretation</td><td>262</td><td>0 or 1</td></tr>
+              <tr><td>SamplesPerPixel</td><td>277</td><td>1</td></tr>
+              <tr><td>XResolution</td><td>282</td><td>&gt;= 300 (in) or 760 (cm)</td></tr>
+              <tr><td>YResolution</td><td>283</td><td>&gt;= 300 (in) or 760 (cm)</td></tr>
+            </table>
+          </blockquote>
+        </li>
+        <li><strong>Color</strong>
+          <p>
+            The DLF color benchmark requires lossless compression,
+            three 8-bit sample values per pixel, and a minimum resolution.
+          </p>
+          <blockquote>
+            <table border="1">
+              <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+              <tr><td>BitsPerSample</td><td>258</td><td>8, 8, 8</td></tr>
+              <tr><td>Compression</td><td>259</td><td>1 (none), 5 (LZW), or
+              32773 (PackBits RLE)</td></tr>
+              <tr><td>PhotometricInterpretation</td><td>262</td><td>2 (RGB) or 6
+              (YCbCr)</td></tr>
+              <tr><td>SamplesPerPixel</td><td>277</td><td>3</td></tr>
+              <tr><td>XResolution</td><td>282</td><td>&gt;= 300 (in) or 760 (cm)</td></tr>
+              <tr><td>YResolution</td><td>283</td><td>&gt;= 300 (in) or 760 (cm)</td></tr>
+            </table>
+          </blockquote>
+        </li>
+      </ul>
+    </li>
+<!--
+<li> <strong>Adobe PageMaker 6.0</strong>
+<p>
+TIFF support for PageMaker is specified in
+[<a href="/references#pagemaker">PageMaker</a>].
+<blockquote>
+<table border="1">
+<tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+<tr><td>ImageWidth</td><td>256</td><td></td></tr>
+<tr><td>ImageLength</td><td>257</td><td></td></tr>
+<tr><td>BitsPerSample</td><td>258</td>
+<td>1, 2, 4, or 8 if grayscale and palette-color;
+8 if RGB, CMYK, CIELAB</td></tr>
+<tr><td>Compression</td><td>259</td><td>1, 3, 5, 32773, 32895, or
+32896</td></tr>
+<tr><td>PhotometricInterpretation</td><td>262</td><td>0, 1, 2, 3, 5, 8, or
+9</td></tr>
+<tr><td>SamplesPerPixel</td><td>277</td><td>1 (if monochrome or palette-color),
+3 (if RGB, CIELab), 4 (if CMYK)</td></tr>
+<tr><td>ResolutionUnit</td><td>296</td><td>1, 2, or 3</td></tr>
+<tr><td>ColorMap</td><td>320</td><td>defined if palette-color</td></tr>
+<tr><td>InkNames</td><td>333</td><td>defined if InkSet (332) = 2</td></tr>
+<tr><td>NumberOfInks</td><td>333</td><td>defined if InkSet = 2</td></tr>
+</table>
+</blockquote>
+</p>
+
+<li> <strong>Adobe Photoshop 'Advanced TIFF'</strong>
+TIFF options supported by the Photoshop 'Advanced TIFF' dialog
+are specified in
+[<a href="/references#photoshop">Photoshop</a>].  Note that
+the presence of either one of the following tags is sufficient for
+profile conformance.
+<blockquote>
+<table border="1">
+<tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+<tr><td>Compression</td><td>259</td><td>6 or 8</td></tr>
+<tr><td>ImageSourceData
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>37724</td><td></td></tr>
+</table>
+</blockquote>
+<p>
+-->
+    <li><strong>TIFF-FX (RFC 2301)</strong>
+      <p>
+        TIFF-FX [<a href="/references#tiff-fx">TIFF-FX</a>]
+        is a representation of image data for black and white and color facsimile.
+        The MIME type for this profile is reported as: <tt>image/tiff-fx</tt>.
+      </p>
+      <p>
+        Profiles are defined for minimal black-and-white using binary MH
+        compression (S), extended black-and-white using binary MH, MR, and MMR
+        compression (F), lossless JBIG black-and-white with JBIG compression (J),
+        lossy color and grayscale mode using JPEG compression (C),
+        lossless color and grayscale using JBIG compression (L), and
+        mixed raster content (M).
+      </p>
+    </li>
+    <li><strong>Class F (RFC 2306)</strong>
+      <p>
+        TIFF Class F [<a href="/references#classf">Class F</a>,
+        <a href="/references#rfc2306">RFC 2306</a>]
+        is a sub-class of Class B defined for representing CCITT Group 3 (G3)
+        facsimile images. The MIME type for this profile is reported as: <tt>image/ief</tt>.
+      </p>
+      <blockquote>
+        <table border="1">
+          <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+          <tr><td>NewSubfileType</td><td>254</td><td>2</td></tr>
+          <tr><td>ImageWidth</td><td>256</td><td>1728, 2048 2432,
+          2592, 3072, 3648, 3456, 4096, 4864
+          </td></tr>
+          <tr><td>ImageLength</td><td>257</td><td></td></tr>
+          <tr><td>BitsPerSample</td><td>258</td><td>1</td></tr>
+          <tr><td>Compression</td><td>259</td><td>3 or 4</td></tr>
+          <tr><td>PhotometricInterpretation</td><td>262</td><td>0 or 1</td></tr>
+          <tr><td>FillOrder</td><td>266</td><td>1 or 2</td></tr>
+          <tr><td>StripOffsets</td><td>273</td><td></td></tr>
+          <tr><td>SamplesPerPixel</td><td>277</td><td>1</td></tr>
+            <tr><td>RowsPerStrip</td><td>278</td><td></td></tr>
+          <tr><td>StripByteCounts</td><td>279</td><td></td></tr>
+          <tr><td>XResolution</td><td>282</td><td>204, 200, 300, 400, 408
+          (inches)</td></tr>
+          <tr><td>YResolution</td><td>283</td><td>98, 196, 100, 200, 300, 391, 400
+          (inches)</td></tr>
+          <tr><td>Group3Options</td><td>292</td><td>0, 1, 4 or 5
+          (if compression is 3)</td></tr>
+          <tr><td>Group4Options</td><td>293</td><td>2 (if compression is 4)</td></tr>
+          <tr><td>ResolutionUnit</td><td>296</td><td>2 or 3</td></tr>
+          <tr><td>PageNumber</td><td>297</td><td></td></tr>
+        </table>
+      </blockquote>
+      <p>
+        The Group3Options tag must be specified if and only if Compression = 3.
+        The Group4Options tag must be specified if and only if Compression = 4.
+      </p>
+      <p>
+        ImageWidths of 1728, 2048, and 2432 are permitted only if the X and YResolution
+        is 204x98, 204x196, 204x391, 200x100, or 200x200.<br>
+        ImageWidths of 2592, 3072, and 3648 are permitted only if the X and YResolution
+        is 300x300.<br>
+        ImageWidths of 3456, 4096, and 4864 are permitted only if the X and YResolution
+        is 408x391 or 400x400.
+      </p>
+    </li>
+    <li><strong>RFC 1314</strong>
+      <p>
+        RFC 1314 [<a href="/references#rfc1314">RFC 1314</a>]
+        is a sub-type of Class B proposed as a standard for representing FAX-like
+        black and white images within the Internet.
+      </p>
+      <blockquote>
+        <table border="1">
+          <tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+          <tr><td>NewSubfileType</td><td>254</td><td></td></tr>
+          <tr><td>BitsPerSample</td><td>258</td><td>1</td></tr>
+          <tr><td>Compression</td><td>259</td><td>1, 3, or 4</td></tr>
+          <tr><td>ImageWidth</td><td>256</td><td></td></tr>
+          <tr><td>ImageLength</td><td>257</td><td></td></tr>
+          <tr><td>PhotometricInterpretation</td><td>262</td><td>0 or 1</td></tr>
+          <tr><td>StripOffsets</td><td>273</td><td></td></tr>
+          <tr><td>SamplesPerPixel</td><td>277</td><td>1</td></tr>
+          <tr><td>RowsPerStrip</td><td>278</td><td></td></tr>
+          <tr><td>StripByteCounts</td><td>279</td><td></td></tr>
+          <tr><td>XResolution</td><td>282</td><td></td></tr>
+          <tr><td>YResolution</td><td>283</td><td></td></tr>
+          <tr><td>ResolutionUnit</td><td>296</td><td>2 or 3</td></tr>
+        </table>
+      </blockquote>
+    </li>
+</ul>
+
+<a class="name" name="extras">
+<h2>6 Additional Module Properties</h2>
+</a>
+
+<ul>
+<li> Nominal file extension: .tif
+<li> Mac OS file type: TIFF
+</ul>
+</div>
+{% include footer.html %}
+</body>
+</html>

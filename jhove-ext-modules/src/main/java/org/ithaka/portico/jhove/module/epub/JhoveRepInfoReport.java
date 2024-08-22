@@ -72,6 +72,8 @@ public class JhoveRepInfoReport extends MasterReport {
     protected static final String ISO_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     protected static final String FALLBACK_FORMAT = "application/octet-stream";
 
+    protected static final String FRAGMENT_START = "#";
+
     public JhoveRepInfoReport(String ePubName) {
         this.setEpubFileName(PathUtil.removeWorkingDirectory(ePubName));
 
@@ -146,7 +148,8 @@ public class JhoveRepInfoReport extends MasterReport {
             this.references.add(value);
             break;
         case RESOURCE:
-            this.resources.add(value);
+            String no_fragment = value.split(FRAGMENT_START)[0];
+            this.resources.add(no_fragment);
             break;
         case DC_LANGUAGE:
             this.language = value;
@@ -418,6 +421,7 @@ public class JhoveRepInfoReport extends MasterReport {
         if (isoDate == null || isoDate.length() == 0) {
             return null;
         }
+    	isoDate = isoDate.trim();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ISO_DATE_PATTERN);
         Date date;

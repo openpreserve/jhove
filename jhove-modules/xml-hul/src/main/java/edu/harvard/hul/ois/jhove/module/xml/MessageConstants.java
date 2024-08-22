@@ -1,5 +1,9 @@
 package edu.harvard.hul.ois.jhove.module.xml;
 
+import java.text.MessageFormat;
+
+import org.xml.sax.SAXParseException;
+
 import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessageFactory;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
@@ -63,4 +67,15 @@ public enum MessageConstants {
 			.getMessage("XML-HUL-12");
 	public static final JhoveMessage XML_HUL_13 = messageFactory
 			.getMessage("XML-HUL-13");
+
+    public final JhoveMessage makeSaxParseMessage(final SAXParseException spe) {
+        return JhoveMessages.getMessageInstance(
+                MessageConstants.XML_HUL_1.getId(),
+                MessageFormat.format(MessageConstants.XML_HUL_1.getMessage(),
+                        spe.getMessage()),
+                MessageFormat.format(
+                        MessageConstants.XML_HUL_1_SUB.getMessage(),
+                        spe.getLineNumber(),
+                        spe.getColumnNumber()));
+    }
 }

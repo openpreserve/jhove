@@ -41,11 +41,11 @@ public class PhysChunk extends PNGChunk {
 		long yPixelsPerUnit = readUnsignedInt();
 		int unit = readUnsignedByte();
 		Property prop = new Property ("X pixels per unit",
-				PropertyType.INTEGER,
+				PropertyType.LONG,
 				Long.valueOf(xPixelsPerUnit));
 		info.setProperty (prop);
 		prop = new Property ("Y pixels per unit",
-				PropertyType.INTEGER,
+				PropertyType.LONG,
 				Long.valueOf(yPixelsPerUnit));
 		info.setProperty (prop);
 		String unitStr;

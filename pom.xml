@@ -10,7 +10,7 @@
 
   <groupId>org.openpreservation.jhove</groupId>
   <artifactId>jhove</artifactId>
-  <version>1.29.0-SNAPSHOT</version>
+  <version>1.32.0-RC1</version>
   <packaging>pom</packaging>
 
   <name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
@@ -68,28 +68,24 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <mvn.antrun.version>3.1.0</mvn.antrun.version>
     <mvn.assembly.version>3.6.0</mvn.assembly.version>
-    <mvn.clean.version>3.2.0</mvn.clean.version>
-    <mvn.compiler.version>3.11.0</mvn.compiler.version>
-    <mvn.dependency.version>3.6.0</mvn.dependency.version>
+    <mvn.clean.version>3.3.2</mvn.clean.version>
+    <mvn.compiler.version>3.12.1</mvn.compiler.version>
+    <mvn.dependency.version>3.6.1</mvn.dependency.version>
     <mvn.deploy.version>3.1.1</mvn.deploy.version>
     <mvn.install.version>3.1.1</mvn.install.version>
     <mvn.resources.version>3.3.1</mvn.resources.version>
-    <mvn.site.version>4.0.0-M8</mvn.site.version>
+    <mvn.site.version>4.0.0-M13</mvn.site.version>
     <mvn.gpg.version>3.1.0</mvn.gpg.version>
     <mvn.jar.version>3.3.0</mvn.jar.version>
-    <mvn.javadoc.version>3.5.0</mvn.javadoc.version>
+    <mvn.javadoc.version>3.6.3</mvn.javadoc.version>
     <mvn.source.version>3.3.0</mvn.source.version>
-    <mvn.surefire.version>3.1.2</mvn.surefire.version>
+    <mvn.surefire.version>3.2.5</mvn.surefire.version>
     <mvn.release.version>3.0.1</mvn.release.version>
-    <jacoco.version>0.8.10</jacoco.version>
+    <jacoco.version>0.8.11</jacoco.version>
     <java.source.version>1.8</java.source.version>
     <java.target.version>1.8</java.target.version>
-    <jaxb.api.version>2.4.0-b180830.0359</jaxb.api.version>
-    <jaxb.impl.version>4.0.3</jaxb.impl.version>
-    <jaxb.core.version>4.0.3</jaxb.core.version>
-    <junit.version>4.13.2</junit.version>
+    <junit.version>5.10.2</junit.version>
     <mvn.target.release>8</mvn.target.release>
     <jhove.timestamp>${maven.build.timestamp}</jhove.timestamp>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -98,11 +94,6 @@
   <build>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-antrun-plugin</artifactId>
-          <version>${mvn.antrun.version}</version>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
@@ -224,43 +215,23 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
         <version>${junit.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>${jaxb.api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>${jaxb.impl.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-core</artifactId>
-        <version>${jaxb.core.version}</version>
+        <groupId>org.junit.vintage</groupId>
+        <artifactId>junit-vintage-engine</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
-    <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-core</artifactId>
-    </dependency>
   </dependencies>
   <profiles>
     <profile>
@@ -302,12 +273,13 @@
       </build>
       <dependencies>
 
-        <dependency>
-          <groupId>org.codehaus.sonar-plugins.java</groupId>
-          <artifactId>sonar-jacoco-listeners</artifactId>
-          <version>1.2</version>
-          <scope>test</scope>
-        </dependency>
+      <!-- https://mvnrepository.com/artifact/org.sonarsource.java/sonar-jacoco-listeners -->
+      <dependency>
+        <groupId>org.sonarsource.java</groupId>
+        <artifactId>sonar-jacoco-listeners</artifactId>
+        <version>5.14.0.18788</version>
+        <scope>test</scope>
+      </dependency>
 
       </dependencies>
     </profile>

@@ -12,96 +12,96 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
  */
 public abstract class Message {
 
-	/******************************************************************
-	 * PUBLIC CLASS FIELDS.
-	 ******************************************************************/
+    /******************************************************************
+     * PUBLIC CLASS FIELDS.
+     ******************************************************************/
 
-	/** Value indicating a null offset. */
-	public static final long NULL = -1;
+    /** Value indicating a null offset. */
+    public static final long NULL = -1;
 
-	/******************************************************************
-	 * PRIVATE INSTANCE FIELDS.
-	 ******************************************************************/
+    /******************************************************************
+     * PRIVATE INSTANCE FIELDS.
+     ******************************************************************/
 
     protected final JhoveMessage jhoveMessage;
 
-	/** Additional information. */
+    /** Additional information. */
     protected final String subMessage;
 
-	/** Byte offset to which message applies. */
+    /** Byte offset to which message applies. */
     protected final long offset;
 
     protected final String prefix;
 
-	/******************************************************************
-	 * CLASS CONSTRUCTOR.
-	 ******************************************************************/
+    /******************************************************************
+     * CLASS CONSTRUCTOR.
+     ******************************************************************/
 
-	/**
-	 * Creates a Message with an identifier.
-	 * This constructor cannot be invoked directly,
-	 * since Message is abstract. The second argument
-	 * adds secondary details to the primary message;
-	 * the message will typically be displayed in the
-	 * form "message: subMessage".
-	 * 
-	 * @param message
-	 *            The message text and its identifier.
-	 * @param subMessage
-	 *            Human-readable additional information.
-	 * @param offset
-	 *            Byte offset associated with the message.
-	 */
+    /**
+     * Creates a Message with an identifier.
+     * This constructor cannot be invoked directly,
+     * since Message is abstract. The second argument
+     * adds secondary details to the primary message;
+     * the message will typically be displayed in the
+     * form "message: subMessage".
+     * 
+     * @param message
+     *                   The message text and its identifier.
+     * @param subMessage
+     *                   Human-readable additional information.
+     * @param offset
+     *                   Byte offset associated with the message.
+     */
     protected Message(final JhoveMessage message, final String subMessage,
             final long offset, final String prefix) {
-		super();
+        super();
         this.jhoveMessage = message;
         this.subMessage = (subMessage.isEmpty()) ? null : subMessage;
         this.offset = offset;
         this.prefix = prefix;
-	}
+    }
 
-	/******************************************************************
-	 * PUBLIC INSTANCE METHODS.
-	 *
-	 * Accessor methods.
-	 ******************************************************************/
+    /******************************************************************
+     * PUBLIC INSTANCE METHODS.
+     *
+     * Accessor methods.
+     ******************************************************************/
 
-	/**
-	 * Returns the message text.
-	 */
-	public String getMessage() {
+    /**
+     * Returns the message text.
+     */
+    public String getMessage() {
         return this.jhoveMessage.getMessage();
-	}
+    }
 
-	/**
-	 * Returns the submessage text.
-	 */
-	public String getSubMessage() {
+    /**
+     * Returns the submessage text.
+     */
+    public String getSubMessage() {
         return this.subMessage;
-	}
+    }
 
-	/**
-	 * Returns the offset to which this message is related.
-	 */
-	public long getOffset() {
+    /**
+     * Returns the offset to which this message is related.
+     */
+    public long getOffset() {
         return this.offset;
-	}
+    }
 
-	/**
-	 * Returns the message's identifier.
-	 */
-	public String getId() {
+    /**
+     * Returns the message's identifier.
+     */
+    public String getId() {
         return this.jhoveMessage.getId();
-	}
+    }
 
-	public JhoveMessage getJhoveMessage() {
+    public JhoveMessage getJhoveMessage() {
         return this.jhoveMessage;
-	}
+    }
 
-	public String getPrefix() {
+    public String getPrefix() {
         return this.prefix;
-	}
+    }
 
     @Override
     public String toString() {
