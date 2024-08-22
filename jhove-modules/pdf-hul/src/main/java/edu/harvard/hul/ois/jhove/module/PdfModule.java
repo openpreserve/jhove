@@ -3492,18 +3492,10 @@ public class PdfModule extends ModuleBase {
                             destPg));
                 }
             }
-        } catch (PdfMalformedException e) {
+        } catch (PdfException e) {
             propList.add(new Property(propName, PropertyType.STRING, PROP_VAL_NULL));
             info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
             info.setValid(false);
-        } catch (PdfInvalidException e) {
-            if (e.getJhoveMessage() != null) {
-                info.setMessage(new ErrorMessage(
-                        JhoveMessages.getMessageInstance(
-                                e.getJhoveMessage().getId(), e.getJhoveMessage().getMessage(),
-                                e.getJhoveMessage().getSubMessage())));
-                info.setValid(false);
-            }
         } catch (Exception e) {
 
             String msg = e.getClass().getName();
@@ -4302,10 +4294,7 @@ public class PdfModule extends ModuleBase {
                     key.getStringValue());
             JhoveMessage message = JhoveMessages.getMessageInstance(
                     MessageConstants.PDF_HUL_149.getId(), mess);
-            info.setMessage(new ErrorMessage(message));
             throw new PdfInvalidException(message); // PDF-HUL-149
-            // OR if this is not considered invalid
-            // return -1;
         }
         Destination dest = new Destination(destObj, this, true);
         return dest.getPageDestObjNumber();
