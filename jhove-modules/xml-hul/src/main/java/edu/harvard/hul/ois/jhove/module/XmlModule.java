@@ -49,8 +49,8 @@ import edu.harvard.hul.ois.jhove.module.xml.*;
 public class XmlModule extends ModuleBase {
 
     private static final String NAME = "XML-hul";
-    private static final String RELEASE = "1.5.4";
-    private static final int[] DATE = { 2024, 03, 05 };
+    private static final String RELEASE = "1.5.5";
+    private static final int[] DATE = { 2024, 8, 22 };
     private static final String[] FORMAT = { "XML", "XHTML" };
     private static final String COVERAGE = "XML 1.0";
     private static final String[] MIMETYPE = { "text/xml", "application/xml",
@@ -396,13 +396,7 @@ public class XmlModule extends ModuleBase {
             if (handler.getSigFlag() && !_parseFromSig) {
                 info.setSigMatch(_name);
             }
-            info.setMessage(new ErrorMessage(
-                    MessageConstants.XML_HUL_1,
-                    MessageFormat.format(
-                            MessageConstants.XML_HUL_1_SUB.getMessage(),
-                            spe.getMessage(),
-                            spe.getLineNumber(),
-                            spe.getColumnNumber())));
+            info.setMessage(new ErrorMessage(MessageConstants.INSTANCE.makeSaxParseMessage(spe)));
             info.setWellFormed(false);
             return 0;
         } catch (SAXException se) {

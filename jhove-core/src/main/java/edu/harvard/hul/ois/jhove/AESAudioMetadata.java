@@ -14,8 +14,7 @@ import java.util.*;
  * @author Gary McGath
  *
  */
-public class AESAudioMetadata 
-{
+public class AESAudioMetadata {
     /******************************************************************
      * PUBLIC CLASS FIELDS.
      ******************************************************************/
@@ -27,14 +26,13 @@ public class AESAudioMetadata
     public static final int LITTLE_ENDIAN = 1;
 
     /** Analog / digital labels. */
-    public static final String [] A_D = {
-    "ANALOG", "PHYS_DIGITAL", "FILE_DIGITAL"
+    public static final String[] A_D = {
+            "ANALOG", "PHYS_DIGITAL", "FILE_DIGITAL"
     };
-    
+
     /** Values for primary identifier type */
-    public static final String
-        FILE_NAME = "FILE_NAME",
-        OTHER = "OTHER";
+    public static final String FILE_NAME = "FILE_NAME",
+            OTHER = "OTHER";
 
     /** Constant for an undefined integer value. */
     public static final int NULL = -1;
@@ -47,8 +45,8 @@ public class AESAudioMetadata
      ******************************************************************/
 
     /** Constant value for the SchemaVersion field */
-    public static final String SCHEMA_VERSION = "1.02b";
-    
+    public static final String SCHEMA_VERSION = "1.0.0";
+
     /** Constant value for the disposition field */
     private static final String DEFAULT_DISPOSITION = "validation";
 
@@ -78,10 +76,10 @@ public class AESAudioMetadata
      * CLASS CONSTRUCTOR.
      ******************************************************************/
 
-    /** Instantiate a <code>NisoImageMetadata</code> object.
+    /**
+     * Instantiate a <code>NisoImageMetadata</code> object.
      */
-    public AESAudioMetadata ()
-    {
+    public AESAudioMetadata() {
         _schemaVersion = SCHEMA_VERSION;
         _disposition = DEFAULT_DISPOSITION;
         _analogDigitalFlag = null;
@@ -92,151 +90,170 @@ public class AESAudioMetadata
         _primaryIdentifierType = null;
         _use = null;
 
-        // We add one format region to get started.  In practice,
+        // We add one format region to get started. In practice,
         // that one is all we're likely to need. but more can be
         // added if necessary.
-        _formatList = new LinkedList<> ();
-        _faceList = new LinkedList<> ();
-        addFormatRegion ();
-        addFace ();
+        _formatList = new LinkedList<>();
+        _faceList = new LinkedList<>();
+        addFormatRegion();
+        addFace();
         _numChannels = NULL;
         _byteOrder = NULL;
         _firstSampleOffset = NULL;
     }
-    
+
     /******************************************************************
      * PUBLIC STATIC INTERFACES.
      * 
      ******************************************************************/
     /**
-     *  Public interface to the nested FormatRegion object.  Instances
-     *  of this should be created only by addFormatRegion, but can be
-     *  accessed through the public methods of this interface.
+     * Public interface to the nested FormatRegion object. Instances
+     * of this should be created only by addFormatRegion, but can be
+     * accessed through the public methods of this interface.
      */
     public static interface FormatRegion {
         /** Returns the bit depth. */
-        public int getBitDepth ();
-        /** Returns the bitrate reduction (compression information).
-         *  This will be an array of seven strings (which may be
-         *  empty, but should never be null) interpreted as follows:
-         *  <ul>
-         *  <li>0: codecName
-         *  <li>1: codecNameVersion
-         *  <li>2: codecCreatorApplication
-         *  <li>3: codecCreatorApplicationVersion
-         *  <li>4: codecQuality
-         *  <li>5: dataRate
-         *  <li>6: dataRateMode
-         *  </ul> 
+        public int getBitDepth();
+
+        /**
+         * Returns the bitrate reduction (compression information).
+         * This will be an array of seven strings (which may be
+         * empty, but should never be null) interpreted as follows:
+         * <ul>
+         * <li>0: codecName
+         * <li>1: codecNameVersion
+         * <li>2: codecCreatorApplication
+         * <li>3: codecCreatorApplicationVersion
+         * <li>4: codecQuality
+         * <li>5: dataRate
+         * <li>6: dataRateMode
+         * </ul>
          */
-        public String[] getBitrateReduction ();
+        public String[] getBitrateReduction();
+
         /** Returns the sample rate. */
-        public double getSampleRate ();
+        public double getSampleRate();
+
         /** Returns the word size. */
-        int getWordSize ();
+        int getWordSize();
+
         /** Returns <code>true</code> if the region is empty. */
-        public boolean isEmpty ();
+        public boolean isEmpty();
+
         /** Sets the bit depth value. */
-        public void setBitDepth (int bitDepth);
+        public void setBitDepth(int bitDepth);
+
         /** Sets the bitrate reduction information to null (no compression). */
-        public void clearBitrateReduction ();
+        public void clearBitrateReduction();
+
         /** Sets the bitrate reduction (aka compression type). */
-        public void setBitrateReduction (String codecName,
+        public void setBitrateReduction(String codecName,
                 String codecNameVersion,
                 String codecCreatorApplication,
                 String codecCreatorApplicationVersion,
                 String codecQuality,
                 String dataRate,
                 String dataRateMode);
+
         /** Sets the sample rate. */
-        public void setSampleRate (double sampleRate);
+        public void setSampleRate(double sampleRate);
+
         /** Sets the word size. */
-        public void setWordSize (int wordSize);
+        public void setWordSize(int wordSize);
     }
 
     /**
-     *  Public interface to the nested TimeDesc object.  Instances
-     *  of this should be created only by appropriate methods, but can be
-     *  accessed through the public methods of this interface.
+     * Public interface to the nested TimeDesc object. Instances
+     * of this should be created only by appropriate methods, but can be
+     * accessed through the public methods of this interface.
      */
     public static interface TimeDesc {
-        /** Returns the hours component. */
-        public long getHours ();
-        /** Returns the minutes component. */
-        public long getMinutes ();
-        /** Returns the seconds component. */
-        public long getSeconds ();
-        /** Returns the frames component of the fraction of a second.
-         *  We always consider frames to be thirtieths of a second. */
-        public long getFrames ();
-        /** Returns the samples remaining after the frames part of
-         *  the fractional second. */
-        public long getSamples ();
-        /** Returns the sample rate on which the samples remainder
-         *  is based. */
-        public double getSampleRate ();
+        /**
+         * Returns the number of samples.
+         */
+        public long getSamples();
+
+        /**
+         * Returns the sample rate.
+         */
+        public double getSampleRate();
     }
-    
-    /** Public interface to the nested Face object. Instances
-     *  of this should be created only by appropriate methods, but can be
-     *  accessed through the public methods of this interface. */
+
+    /**
+     * Public interface to the nested Face object. Instances
+     * of this should be created only by appropriate methods, but can be
+     * accessed through the public methods of this interface.
+     */
     public static interface Face {
         /** Returns an indexed FaceRegion. */
-        public FaceRegion getFaceRegion (int i);
-        
-        /** Adds a FaceRegion. This may be called repeatedly to
-         *  add multiple FaceRegions. */
-        public void addFaceRegion ();
-        
-        /** Returns the starting time. */
-        public TimeDesc getStartTime ();
-        
-        /** Returns the duration. */
-        public TimeDesc getDuration ();
-        
-        /** Returns the direction. */
-        public String getDirection ();
-        
-        /** Sets the starting time.  This will be converted
-         *  into a TimeDesc. */
-        public void setStartTime (long samples);
-        
-        /** Sets the duration. This will be converted
-         *  into a TimeDesc. */
-        public void setDuration (long samples);
-        
-        /** Sets the direction.  This must be one of the
-         *  directionTypes.  FORWARD is recommended for most
-         *  or all cases. 
+        public FaceRegion getFaceRegion(int i);
+
+        /**
+         * Adds a FaceRegion. This may be called repeatedly to
+         * add multiple FaceRegions.
          */
-        public void setDirection (String direction);
+        public void addFaceRegion();
+
+        /** Returns the starting time. */
+        public TimeDesc getStartTime();
+
+        /** Returns the duration. */
+        public TimeDesc getDuration();
+
+        /** Returns the direction. */
+        public String getDirection();
+
+        /**
+         * Sets the starting time. This will be converted
+         * into a TimeDesc.
+         */
+        public void setStartTime(long samples);
+
+        /**
+         * Sets the duration. This will be converted
+         * into a TimeDesc.
+         */
+        public void setDuration(long samples);
+
+        /**
+         * Sets the direction. This must be one of the
+         * directionTypes. FORWARD is recommended for most
+         * or all cases.
+         */
+        public void setDirection(String direction);
 
         /* End of interface Face */
     }
-    
-    /** Public interface to the nested FaceRegion object. Instances
-     *  of this should be created only by appropriate methods, but can be
-     *  accessed through the public methods of this interface. */
+
+    /**
+     * Public interface to the nested FaceRegion object. Instances
+     * of this should be created only by appropriate methods, but can be
+     * accessed through the public methods of this interface.
+     */
     public static interface FaceRegion {
         /** Returns the starting time. */
-        public TimeDesc getStartTime ();
-        
-        /** Returns the duration. */
-        public TimeDesc getDuration ();
+        public TimeDesc getStartTime();
 
-        /** Returns the channel map locations.  The array length must
-         *  equal the number of channels. */
-        public String[] getMapLocations ();
+        /** Returns the duration. */
+        public TimeDesc getDuration();
+
+        /**
+         * Returns the channel map locations. The array length must
+         * equal the number of channels.
+         */
+        public String[] getMapLocations();
 
         /** Sets the starting time. */
-        public void setStartTime (long samples);
-        
+        public void setStartTime(long samples);
+
         /** Sets the duration. */
-        public void setDuration (long samples);
-        
-        /** Sets the channel map locations.  The array length must
-         *  equal the number of channels. */
-        public void setMapLocations (String[] locations);
+        public void setDuration(long samples);
+
+        /**
+         * Sets the channel map locations. The array length must
+         * equal the number of channels.
+         */
+        public void setMapLocations(String[] locations);
 
         /* End of interface FaceRegion */
     }
@@ -245,101 +262,97 @@ public class AESAudioMetadata
      * STATIC MEMBER CLASSES.
      * 
      ******************************************************************/
-    /** The implementation of the FormatRegion interface.  The combination
-     *  of a public interface and a private implementation is suggested
-     *  in _Java in a Nutshell_.
+    /**
+     * The implementation of the FormatRegion interface. The combination
+     * of a public interface and a private implementation is suggested
+     * in _Java in a Nutshell_.
      */
     class FormatRegionImpl implements FormatRegion {
-        
+
         private int _bitDepth;
         private double _sampleRate;
         private int _wordSize;
         private String[] _bitrateReduction;
 
-        public FormatRegionImpl () {
+        public FormatRegionImpl() {
             _bitDepth = NULL;
             _sampleRate = NILL;
             _wordSize = NULL;
             _bitrateReduction = null;
         }
-        
+
         /** Returns bit depth. */
         @Override
-        public int getBitDepth ()
-        {
+        public int getBitDepth() {
             return _bitDepth;
         }
-        
-        /** Returns the bitrate reduction (compression information).
-         *  This will be an array of seven strings (which may be
-         *  empty but not null) interpreted respectively as follows:
-         *  <ul>
-         *  <li>0: codecName
-         *  <li>1: codecNameVersion
-         *  <li>2: codecCreatorApplication
-         *  <li>3: codecCreatorApplicationVersion
-         *  <li>4: codecQuality
-         *  <li>5: dataRate
-         *  <li>6: dataRateMode
-         *  </ul> 
+
+        /**
+         * Returns the bitrate reduction (compression information).
+         * This will be an array of seven strings (which may be
+         * empty but not null) interpreted respectively as follows:
+         * <ul>
+         * <li>0: codecName
+         * <li>1: codecNameVersion
+         * <li>2: codecCreatorApplication
+         * <li>3: codecCreatorApplicationVersion
+         * <li>4: codecQuality
+         * <li>5: dataRate
+         * <li>6: dataRateMode
+         * </ul>
          */
         @Override
-        public String[] getBitrateReduction ()
-        {
+        public String[] getBitrateReduction() {
             return _bitrateReduction;
         }
-        
+
         /** Returns sample rate. */
         @Override
-        public double getSampleRate ()
-        {
+        public double getSampleRate() {
             return _sampleRate;
         }
-        
+
         /** Returns word size. */
         @Override
-        public int getWordSize ()
-        {
+        public int getWordSize() {
             return _wordSize;
         }
-        
-        /** Returns true if the FormatRegion contains only
-         *  default values. */
+
+        /**
+         * Returns true if the FormatRegion contains only
+         * default values.
+         */
         @Override
-        public boolean isEmpty ()
-        {
+        public boolean isEmpty() {
             return _bitDepth == NULL &&
-                   _sampleRate == NILL &&
-                   _wordSize == NULL;
+                    _sampleRate == NILL &&
+                    _wordSize == NULL;
         }
 
         /** Sets bit depth. */
         @Override
-        public void setBitDepth (int bitDepth)
-        {
+        public void setBitDepth(int bitDepth) {
             _bitDepth = bitDepth;
         }
 
         /** Sets the bitrate reduction information to null (no compression). */
         @Override
-        public void clearBitrateReduction ()
-        {
+        public void clearBitrateReduction() {
             _bitrateReduction = null;
         }
 
         /** Sets the bitrate reduction (compression type). */
         @Override
-        public void setBitrateReduction (String codecName,
+        public void setBitrateReduction(String codecName,
                 String codecNameVersion,
                 String codecCreatorApplication,
                 String codecCreatorApplicationVersion,
                 String codecQuality,
                 String dataRate,
-                String dataRateMode)
-        {
+                String dataRateMode) {
             _bitrateReduction = new String[7];
             _bitrateReduction[0] = codecName;
-            _bitrateReduction[1] = codecNameVersion;  
+            _bitrateReduction[1] = codecNameVersion;
             _bitrateReduction[2] = codecCreatorApplication;
             _bitrateReduction[3] = codecCreatorApplicationVersion;
             _bitrateReduction[4] = codecQuality;
@@ -349,275 +362,225 @@ public class AESAudioMetadata
 
         /** Sets sample rate. */
         @Override
-        public void setSampleRate (double sampleRate)
-        {
+        public void setSampleRate(double sampleRate) {
             _sampleRate = sampleRate;
         }
-        
-        
+
         /** Sets word size. */
         @Override
-        public void setWordSize (int wordSize)
-        {
+        public void setWordSize(int wordSize) {
             _wordSize = wordSize;
         }
-        
+
         /* End of FormatRegionImpl */
     }
 
-    /** The implementation of the TimeDesc interface.  The combination
-     *  of a public interface and a private implementation is suggested
-     *  in _Java in a Nutshell_.
+    /**
+     * The implementation of the TimeDesc interface. The combination
+     * of a public interface and a private implementation is suggested
+     * in _Java in a Nutshell_.
      */
-    class TimeDescImpl implements TimeDesc
-    {
-        private long _hours;
-        private long _minutes;
-        private long _seconds;
-        private long _frames;
+    class TimeDescImpl implements TimeDesc {
         private long _samples;
         private double _sampleRate;
-        private long _frameCount;
-        
-	/* Constructor rewritten to avoid rounding errors when converting to
-	 * TCF. Now uses integer remainder math instead of floating point.
-	 * Changed the base unit from a double representing seconds to a long
-	 * representing samples. Changed all existing calls (that I could find)
-	 * to this method to accomodate this change.
-	 *
-	 * @author David Ackerman
-	 */
-        public TimeDescImpl (long samples)
-	{
-	    long _sample_count = samples;
-	    _frameCount = 30;
-	    _sampleRate = _curFormatRegion.getSampleRate ();
-			
-	    /* It seems that this method is initially called before a valid
-	     * sample rate has been established, causing a divide by zero
-	     * error.
-	     */
-	    if (_sampleRate < 0) {
-                _sampleRate = 44100.0; //reasonable default value 
+
+        /*
+         * Constructor rewritten to avoid rounding errors when converting to
+         * TCF. Now uses integer remainder math instead of floating point.
+         * Changed the base unit from a double representing seconds to a long
+         * representing samples. Changed all existing calls (that I could find)
+         * to this method to accomodate this change.
+         *
+         * @author David Ackerman
+         */
+        public TimeDescImpl(long samples) {
+            _samples = samples;
+            _sampleRate = _curFormatRegion.getSampleRate();
+
+            /*
+             * It seems that this method is initially called before a valid
+             * sample rate has been established, causing a divide by zero
+             * error.
+             */
+            if (_sampleRate < 0) {
+                _sampleRate = 44100.0; // reasonable default value
             }
 
-	    long sample_in_1_frame = (long)(_sampleRate/_frameCount);
-	    long sample_in_1_second = sample_in_1_frame * _frameCount;
-	    long sample_in_1_minute = sample_in_1_frame * _frameCount * 60;
-	    long sample_in_1_hour = sample_in_1_frame * _frameCount * 60 * 60;
-	    long sample_in_1_day = sample_in_1_frame * _frameCount * 60 * 60 * 24;
-			
-	    // BWF allows for a negative timestamp but tcf does not, so adjust
-	    // time accordingly
-	    // this might be a good place to report a warning during validation
-	    if (_sample_count < 0) {
-		_sample_count += sample_in_1_day;
-		_sample_count = (_sample_count % sample_in_1_day);
-	    }
-		
-	    _hours = _sample_count / sample_in_1_hour;
-	    _sample_count -= _hours * sample_in_1_hour;
-	    _minutes = _sample_count / sample_in_1_minute;
-	    _sample_count -= _minutes * sample_in_1_minute;
-	    _seconds = _sample_count / sample_in_1_second;
-	    _sample_count -= _seconds * sample_in_1_second;
-	    _frames = _sample_count / sample_in_1_frame;
-	    _sample_count -= _frames * sample_in_1_frame;
-	    _samples = _sample_count;
-			
-	    /* At present TCF does not have the ability to handle time stamps
-	     * > midnight. Industry practice is to roll the clock forward to
-	     * zero or back to 23:59:59:29... when crossing this boundary
-	     * condition.
-	     */
-	    _hours = _hours % 24;	
-        }
-        
-        /** Returns the hours component. */
-        @Override
-        public long getHours () {
-            return _hours;
         }
 
-        /** Returns the minutes component. */
+        /**
+         * Returns the number of samples.
+         */
         @Override
-        public long getMinutes () {
-            return _minutes;
-        }
-
-        /** Returns the seconds component. */
-        @Override
-        public long getSeconds () {
-            return _seconds;
-        }
-
-        /** Returns the frames component of the fraction of a second.
-         *  We always consider frames to be thirtieths of a second. */
-        @Override
-        public long getFrames () {
-            return _frames;
-        }
-
-        /** Returns the samples remaining after the frames part of
-         *  the fractional second. */
-        @Override
-        public long getSamples () {
+        public long getSamples() {
             return _samples;
         }
-        
-        /** Returns the sample rate on which the samples remainder
-         *  is based. */
+
+        /**
+         * Returns the sample rate.
+         */
         @Override
-        public double getSampleRate () {
+        public double getSampleRate() {
             return _sampleRate;
         }
     } /* End of TimeDescImpl */
 
-    /** The implementation of the Face interface.  The combination
-     *  of a public interface and a private implementation is suggested
-     *  in _Java in a Nutshell_.
+    /**
+     * The implementation of the Face interface. The combination
+     * of a public interface and a private implementation is suggested
+     * in _Java in a Nutshell_.
      */
     class FaceImpl implements Face {
         private List<FaceRegion> _regionList;
         private TimeDesc _startTime;
         private TimeDesc _duration;
         private String _direction;
-        
-        
-        /** Constructor.  Initially the duration is set
-         *  to null, indicating unknown value. */
-        public FaceImpl ()
-        {
+
+        /**
+         * Constructor. Initially the duration is set
+         * to null, indicating unknown value.
+         */
+        public FaceImpl() {
             _regionList = new ArrayList<>();
-            _startTime = new TimeDescImpl (0);
+            _startTime = new TimeDescImpl(0);
             _duration = null;
         }
 
-
         /** Returns an indexed FaceRegion. */
         @Override
-        public FaceRegion getFaceRegion (int i) {
-            return _regionList.get (i);
+        public FaceRegion getFaceRegion(int i) {
+            return _regionList.get(i);
         }
-        
-        /** Adds a FaceRegion. This may be called repeatedly to
-         *  add multiple FaceRegions. */
+
+        /**
+         * Adds a FaceRegion. This may be called repeatedly to
+         * add multiple FaceRegions.
+         */
         @Override
-        public void addFaceRegion () {
-            _regionList.add (new FaceRegionImpl ());
+        public void addFaceRegion() {
+            _regionList.add(new FaceRegionImpl());
         }
-        
-        /** Returns the starting time. Will be zero if not
-         *  explicitly specified. */
+
+        /**
+         * Returns the starting time. Will be zero if not
+         * explicitly specified.
+         */
         @Override
-        public TimeDesc getStartTime () {
+        public TimeDesc getStartTime() {
             return _startTime;
         }
-        
-        /** Returns the duration. May be null if the duration
-         *  is unspecified. */
+
+        /**
+         * Returns the duration. May be null if the duration
+         * is unspecified.
+         */
         @Override
-        public TimeDesc getDuration () {
+        public TimeDesc getDuration() {
             return _duration;
         }
 
         /** Returns the direction. */
         @Override
-        public String getDirection ()
-        {
+        public String getDirection() {
             return _direction;
         }
 
-        /** Sets the starting time.  This will be converted
-         *  into a TimeDesc. */
-        @Override
-        public void setStartTime (long samples)
-        {
-            _startTime = new TimeDescImpl (samples);
-        }
-        
-        /** Sets the duration. This will be converted
-         *  into a TimeDesc. */
-        @Override
-        public void setDuration (long samples)
-        {
-            _duration = new TimeDescImpl (samples);
-        }
-
-        /** Sets the direction.  This must be one of the
-         *  directionTypes.  FORWARD is recommended for most
-         *  or all cases. 
+        /**
+         * Sets the starting time. This will be converted
+         * into a TimeDesc.
          */
         @Override
-        public void setDirection (String direction)
-        {
+        public void setStartTime(long samples) {
+            _startTime = new TimeDescImpl(samples);
+        }
+
+        /**
+         * Sets the duration. This will be converted
+         * into a TimeDesc.
+         */
+        @Override
+        public void setDuration(long samples) {
+            _duration = new TimeDescImpl(samples);
+        }
+
+        /**
+         * Sets the direction. This must be one of the
+         * directionTypes. FORWARD is recommended for most
+         * or all cases.
+         */
+        @Override
+        public void setDirection(String direction) {
             _direction = direction;
         }
 
         /* End of FaceImpl */
     }
 
-
-    /** The implementation of the Face interface.  The combination
-     *  of a public interface and a private implementation is suggested
-     *  in _Java in a Nutshell_.
+    /**
+     * The implementation of the Face interface. The combination
+     * of a public interface and a private implementation is suggested
+     * in _Java in a Nutshell_.
      */
     class FaceRegionImpl implements FaceRegion {
         private TimeDesc _startTime;
         private TimeDesc _duration;
         private String[] _mapLocations;
-        
-        public FaceRegionImpl ()
-        {
-            _startTime = new TimeDescImpl (0);
+
+        public FaceRegionImpl() {
+            _startTime = new TimeDescImpl(0);
             _duration = null;
         }
-        
+
         /** Returns the starting time. */
         @Override
-        public TimeDesc getStartTime () {
+        public TimeDesc getStartTime() {
             return _startTime;
         }
-        
+
         /** Returns the duration. */
         @Override
-        public TimeDesc getDuration () {
+        public TimeDesc getDuration() {
             return _duration;
         }
-        
-        /** Returns the channel map locations.  The array length
-         *  will equal the number of channels. */
+
+        /**
+         * Returns the channel map locations. The array length
+         * will equal the number of channels.
+         */
         @Override
-        public String[] getMapLocations ()
-        {
+        public String[] getMapLocations() {
             return _mapLocations;
         }
 
-        /** Sets the duration. This will be converted
-         *  into a TimeDesc. */
+        /**
+         * Sets the duration. This will be converted
+         * into a TimeDesc.
+         */
         @Override
-        public void setStartTime (long samples) {
-            _startTime = new TimeDescImpl (samples);
-        }
-        
-        /** Sets the duration. This will be converted
-         *  into a TimeDesc. */
-        @Override
-        public void setDuration (long samples)
-        {
-            _duration = new TimeDescImpl (samples);
+        public void setStartTime(long samples) {
+            _startTime = new TimeDescImpl(samples);
         }
 
-        /** Sets the channel map locations.  The array length must
-         *  equal the number of channels. */
+        /**
+         * Sets the duration. This will be converted
+         * into a TimeDesc.
+         */
         @Override
-        public void setMapLocations (String[] locations)
-        {
+        public void setDuration(long samples) {
+            _duration = new TimeDescImpl(samples);
+        }
+
+        /**
+         * Sets the channel map locations. The array length must
+         * equal the number of channels.
+         */
+        @Override
+        public void setMapLocations(String[] locations) {
             _mapLocations = locations;
-        }        
+        }
         /* End of FaceRegionImpl */
     }
-   
+
     /* End of inner classes */
 
     /******************************************************************
@@ -626,345 +589,327 @@ public class AESAudioMetadata
      * Accessor methods.
      ******************************************************************/
 
-    /** Returns analog/digital flag.  Value will always be
-     *  "FILE_DIGITAL" in practice. */
-    public String getAnalogDigitalFlag ()
-    {
+    /**
+     * Returns analog/digital flag. Value will always be
+     * "FILE_DIGITAL" in practice.
+     */
+    public String getAnalogDigitalFlag() {
         return _analogDigitalFlag;
     }
-    
-    /** Returns application-specific data.  We assume this is
-     *  representable in String format. 
+
+    /**
+     * Returns application-specific data. We assume this is
+     * representable in String format.
      */
-    public String getAppSpecificData ()
-    {
+    public String getAppSpecificData() {
         return _appSpecificData;
     }
-    
+
     /** Returns audio data encoding. */
-    public String getAudioDataEncoding ()
-    {
+    public String getAudioDataEncoding() {
         return _audioDataEncoding;
     }
 
-    /** Returns the bitrate reduction (compression information).
-     *  This will be an array of seven strings (which may be
-     *  empty, but should never be null) interpreted as follows:
-     *  <ul>
-     *  <li>0: codecName
-     *  <li>1: codecNameVersion
-     *  <li>2: codecCreatorApplication
-     *  <li>3: codecCreatorApplicationVersion
-     *  <li>4: codecQuality
-     *  <li>5: dataRate
-     *  <li>6: dataRateMode
-     *  </ul> 
+    /**
+     * Returns the bitrate reduction (compression information).
+     * This will be an array of seven strings (which may be
+     * empty, but should never be null) interpreted as follows:
+     * <ul>
+     * <li>0: codecName
+     * <li>1: codecNameVersion
+     * <li>2: codecCreatorApplication
+     * <li>3: codecCreatorApplicationVersion
+     * <li>4: codecQuality
+     * <li>5: dataRate
+     * <li>6: dataRateMode
+     * </ul>
      */
-    public String[] getBitrateReduction ()
-    {
+    public String[] getBitrateReduction() {
         return _curFormatRegion.getBitrateReduction();
     }
 
     /* Returns the sample rate. */
-    public double getSampleRate ()
-    {
-	return _curFormatRegion.getSampleRate ();
+    public double getSampleRate() {
+        return _curFormatRegion.getSampleRate();
     }
 
     /** Return the byte order: 0 = big-endian; 1 = little-endian. */
-    public int getByteOrder ()
-    {
+    public int getByteOrder() {
         return _byteOrder;
     }
-    
+
     /** Returns disposition. */
-    public String getDisposition ()
-    {
+    public String getDisposition() {
         return _disposition;
     }
-    
-    /** Gets the list of Faces. Normally there will be only one face
-     *  in a digital file. */
-    public List<Face> getFaceList ()
-    {
+
+    /**
+     * Gets the list of Faces. Normally there will be only one face
+     * in a digital file.
+     */
+    public List<Face> getFaceList() {
         return _faceList;
     }
-    
+
     /** Return the offset of the first byte of sample data. */
-    public long getFirstSampleOffset ()
-    {
+    public long getFirstSampleOffset() {
         return _firstSampleOffset;
     }
 
     /** Returns format name. */
-    public String getFormat ()
-    {
+    public String getFormat() {
         return _format;
     }
-    
-    /** Gets the list of Format Regions.  Since one is created
-     *  automatically on initialization, it's possible that the
-     *  list will contain a Format Region with only default values.
-     *  This should be checked with isEmpty ().
+
+    /**
+     * Gets the list of Format Regions. Since one is created
+     * automatically on initialization, it's possible that the
+     * list will contain a Format Region with only default values.
+     * This should be checked with isEmpty ().
      */
-    public List<FormatRegion> getFormatList ()
-    {
+    public List<FormatRegion> getFormatList() {
         return _formatList;
     }
-    
-    /** Returns the names of the map locations.
-     *  The returned
-     *  value is an array whose length equals the number of
-     *  channels and whose elements correspond to channels 0, 1,
-     *  etc. 
+
+    /**
+     * Returns the names of the map locations.
+     * The returned
+     * value is an array whose length equals the number of
+     * channels and whose elements correspond to channels 0, 1,
+     * etc.
      */
     public String[] getMapLocations() {
         return _curFace.getFaceRegion(0).getMapLocations();
     }
-    
+
     /** Returns number of channels. */
-    public int getNumChannels ()
-    {
+    public int getNumChannels() {
         return _numChannels;
     }
 
     /** Returns primary identifier. */
-    public String getPrimaryIdentifier ()
-    {
+    public String getPrimaryIdentifier() {
         return _primaryIdentifier;
     }
 
     /** Returns primary identifier type. */
-    public String getPrimaryIdentifierType ()
-    {
+    public String getPrimaryIdentifierType() {
         return _primaryIdentifierType;
     }
 
     /** Returns schema version. */
-    public String getSchemaVersion ()
-    {
+    public String getSchemaVersion() {
         return _schemaVersion;
     }
-    
+
     /** Returns specification version of the document format. */
-    public String getSpecificationVersion ()
-    {
+    public String getSpecificationVersion() {
         return _specificationVersion;
     }
-    
-    /** Returns the use (role of the document).
-     *  The value returned is an array of two strings,
-     *  the useType and the otherType. */
-    public String[] getUse ()
-    {
+
+    /**
+     * Returns the use (role of the document).
+     * The value returned is an array of two strings,
+     * the useType and the otherType.
+     */
+    public String[] getUse() {
         return _use;
     }
-    
-
-    
-
 
     /******************************************************************
      * Mutator methods.
      ******************************************************************/
-    
-    /** Sets the analog/digital flag.  The value set should always
-     *  be "FILE_DIGITAL". */
-    public void  setAnalogDigitalFlag (String flagType)
-    {
+
+    /**
+     * Sets the analog/digital flag. The value set should always
+     * be "FILE_DIGITAL".
+     */
+    public void setAnalogDigitalFlag(String flagType) {
         _analogDigitalFlag = flagType;
     }
 
     /** Sets the bitrate reduction (compression type). */
-    public void setBitrateReduction (String codecName,
+    public void setBitrateReduction(String codecName,
             String codecNameVersion,
             String codecCreatorApplication,
             String codecCreatorApplicationVersion,
             String codecQuality,
             String dataRate,
-            String dataRateMode)
-    {
-        _curFormatRegion.setBitrateReduction (codecName,
+            String dataRateMode) {
+        _curFormatRegion.setBitrateReduction(codecName,
                 codecNameVersion, codecCreatorApplication,
                 codecCreatorApplicationVersion,
                 codecQuality, dataRate, dataRateMode);
     }
-    
+
     /** Set the bitrate reduction information to null (no compression). */
-    public void clearBitrateReduction ()
-    {
-        _curFormatRegion.clearBitrateReduction ();
+    public void clearBitrateReduction() {
+        _curFormatRegion.clearBitrateReduction();
     }
 
-    /** Sets the byte order.
+    /**
+     * Sets the byte order.
+     * 
      * @param order Byte order: 0 = big-endian, 1 = little-endian
      */
-    public void setByteOrder (int order)
-    {
-	   _byteOrder = order;
+    public void setByteOrder(int order) {
+        _byteOrder = order;
     }
 
-    /** Sets the byte order.
+    /**
+     * Sets the byte order.
      */
-    public void setByteOrder (String order)
-    {
-    	if (order.substring (0, 3).toLowerCase ().equals ("big")) {
-    	    _byteOrder = BIG_ENDIAN;
-    	}
-    	else if (order.substring (0, 6).toLowerCase ().equals ("little")) {
-    	    _byteOrder = LITTLE_ENDIAN;
-    	}
+    public void setByteOrder(String order) {
+        if (order.substring(0, 3).equalsIgnoreCase("big")) {
+            _byteOrder = BIG_ENDIAN;
+        } else if (order.substring(0, 6).equalsIgnoreCase("little")) {
+            _byteOrder = LITTLE_ENDIAN;
+        }
     }
 
     /** Sets the audio data encoding. */
-    public void setAudioDataEncoding (String audioDataEncoding)
-    {
+    public void setAudioDataEncoding(String audioDataEncoding) {
         _audioDataEncoding = audioDataEncoding;
     }
-    
-    /** Set the application-specific data.  For present purposes,
-     *  we assume this is representable as a text string. */
-    public void setAppSpecificData (String data)
-    {
+
+    /**
+     * Set the application-specific data. For present purposes,
+     * we assume this is representable as a text string.
+     */
+    public void setAppSpecificData(String data) {
         _appSpecificData = data;
     }
-    
+
     /** Sets the bit depth. */
-    public void setBitDepth (int bitDepth)
-    {
-        _curFormatRegion.setBitDepth (bitDepth);
+    public void setBitDepth(int bitDepth) {
+        _curFormatRegion.setBitDepth(bitDepth);
     }
-    
+
     /** Sets the disposition. */
-    public void setDisposition (String disposition)
-    {
+    public void setDisposition(String disposition) {
         _disposition = disposition;
     }
 
-    /** Sets the direction.  
-     *  This must be one of the values 
-     *  FORWARD, REVERSE, A_WIND, B_WIND, C_WIND, D_WIND,
-     *  FRONT, BACK.  FORWARD may be the only one that
-     *  makes sense for digital formats.
+    /**
+     * Sets the direction.
+     * This must be one of the values
+     * FORWARD, REVERSE, A_WIND, B_WIND, C_WIND, D_WIND,
+     * FRONT, BACK. FORWARD may be the only one that
+     * makes sense for digital formats.
      */
-    public void setDirection (String direction)
-    {
-        _curFace.setDirection (direction);
+    public void setDirection(String direction) {
+        _curFace.setDirection(direction);
     }
-    
-    /** Sets the duration in samples. 
+
+    /**
+     * Sets the duration in samples.
      * This affects the current face and its first FaceRegion.
      */
-    public void setDuration (long duration)
-    {
-	_curFace.setDuration (duration);
-	_curFace.getFaceRegion(0).setDuration (duration);
+    public void setDuration(long duration) {
+        _curFace.setDuration(duration);
+        _curFace.getFaceRegion(0).setDuration(duration);
     }
 
     /** Sets the offset of the first byte of sample data. */
-    public void setFirstSampleOffset (long offset)
-    {
+    public void setFirstSampleOffset(long offset) {
         _firstSampleOffset = offset;
     }
 
     /** Sets the format name. */
-    public void setFormat (String format)
-    {
+    public void setFormat(String format) {
         _format = format;
     }
-    
-    /** Sets the array of channel map locations. The length
-     *  of the array must equal the number of channels. */
-    public void setMapLocations (String[] locations) {
-        _curFace.getFaceRegion(0).setMapLocations (locations);
+
+    /**
+     * Sets the array of channel map locations. The length
+     * of the array must equal the number of channels.
+     */
+    public void setMapLocations(String[] locations) {
+        _curFace.getFaceRegion(0).setMapLocations(locations);
     }
 
     /** Sets the number of channels. */
-    public void setNumChannels (int numChannels)
-    {
+    public void setNumChannels(int numChannels) {
         _numChannels = numChannels;
     }
 
     /** Sets the primary identifier. */
-    public void setPrimaryIdentifier (String primaryIdentifier)
-    {
+    public void setPrimaryIdentifier(String primaryIdentifier) {
         _primaryIdentifier = primaryIdentifier;
     }
-    
-    /** Sets the primary identifier type. If the primary identifier
-     *  type is OTHER, use setOtherPrimaryIdentifierType instead.
+
+    /**
+     * Sets the primary identifier type. If the primary identifier
+     * type is OTHER, use setOtherPrimaryIdentifierType instead.
      */
-    public void setPrimaryIdentifierType (String primaryIdentifierType)
-    {
+    public void setPrimaryIdentifierType(String primaryIdentifierType) {
         _primaryIdentifierType = primaryIdentifierType;
     }
 
-    /** Sets the primary identifier type as "OTHER", and
-     *  set the otherType.
+    /**
+     * Sets the primary identifier type as "OTHER", and
+     * set the otherType.
      */
-    public void setOtherPrimaryIdentifierType (String otherType)
-    {
-        _primaryIdentifierType = "OTHER";
+    public void setOtherPrimaryIdentifierType(String otherType) {
+        _primaryIdentifierType = OTHER;
         _primaryIdentifierOtherType = otherType;
     }
-    
+
     /** Sets the sample rate. */
-    public void setSampleRate (double sampleRate)
-    {
-        _curFormatRegion.setSampleRate (sampleRate);
+    public void setSampleRate(double sampleRate) {
+        _curFormatRegion.setSampleRate(sampleRate);
     }
-    
-    /** Sets the specification version of the document format.*/
-    public void setSpecificationVersion (String specificationVersion)
-    {
+
+    /** Sets the specification version of the document format. */
+    public void setSpecificationVersion(String specificationVersion) {
         _specificationVersion = specificationVersion;
     }
 
-    /** Sets the start time in samples. 
+    /**
+     * Sets the start time in samples.
      * This affects the current face and its first FaceRegion.
      */
-    public void setStartTime (long samples)
-    {
-	_curFace.setStartTime (samples);
-	_curFace.getFaceRegion(0).setStartTime (samples);
+    public void setStartTime(long samples) {
+        _curFace.setStartTime(samples);
+        _curFace.getFaceRegion(0).setStartTime(samples);
     }
-    
-    /** Sets the role of the document. Permitted values are
-     *  ORIGINAL_MASTER, PRESERVATION_MASTER, PRODUCTION_MASTER, 
-     *  SERVICE, PREVIEW, or OTHER.
-     *  If useType is "OTHER", then otherType
-     *  is significant.  Since OTHER is the only meaningful
-     *  value for a digital document, the code assumes this will always
-     *  be the case and uses otherType. */
-    public void setUse (String useType, String otherType)
-    {
-        _use = new String[] {useType, otherType};
+
+    /**
+     * Sets the role of the document. Permitted values are
+     * ORIGINAL_MASTER, PRESERVATION_MASTER, PRODUCTION_MASTER,
+     * SERVICE, PREVIEW, or OTHER.
+     * If useType is "OTHER", then otherType
+     * is significant. Since OTHER is the only meaningful
+     * value for a digital document, the code assumes this will always
+     * be the case and uses otherType.
+     */
+    public void setUse(String useType, String otherType) {
+        _use = new String[] { useType, otherType };
     }
-    
+
     /** Sets the word size. */
-    public void setWordSize (int wordSize)
-    {
-        _curFormatRegion.setWordSize (wordSize);
+    public void setWordSize(int wordSize) {
+        _curFormatRegion.setWordSize(wordSize);
     }
-    
-    /** Adds a FormatRegion object to a FormatSize list.
-     *  The most recently added FormatRegion object will
-     *  be filled in by setBitDepth, setSampleRate, and
-     *  setWordSize.
+
+    /**
+     * Adds a FormatRegion object to a FormatSize list.
+     * The most recently added FormatRegion object will
+     * be filled in by setBitDepth, setSampleRate, and
+     * setWordSize.
      */
-    public void addFormatRegion ()
-    {
-        _curFormatRegion = new FormatRegionImpl ();
-        _formatList.add (_curFormatRegion);
+    public void addFormatRegion() {
+        _curFormatRegion = new FormatRegionImpl();
+        _formatList.add(_curFormatRegion);
     }
-    
-    /** Adds a Face.  
+
+    /**
+     * Adds a Face.
      */
-    public void addFace ()
-    {
-        _curFace = new FaceImpl ();
-        _faceList.add (_curFace);
+    public void addFace() {
+        _curFace = new FaceImpl();
+        _faceList.add(_curFace);
         _curFace.addFaceRegion();
     }
-    
+
 }
