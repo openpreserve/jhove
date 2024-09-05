@@ -380,8 +380,8 @@ public class PdfModule extends ModuleBase {
      ******************************************************************/
 
     private static final String NAME = "PDF-hul";
-    private static final String RELEASE = "1.12.6";
-    private static final int[] DATE = { 2024, 07, 31 };
+    private static final String RELEASE = "1.12.7";
+    private static final int[] DATE = { 2024, 8, 22 };
     private static final String[] FORMAT = { "PDF",
             "Portable Document Format" };
     private static final String COVERAGE = "PDF 1.0-1.6; "
@@ -3494,18 +3494,10 @@ public class PdfModule extends ModuleBase {
                             destPg));
                 }
             }
-        } catch (PdfMalformedException e) {
+        } catch (PdfException e) {
             propList.add(new Property(propName, PropertyType.STRING, PROP_VAL_NULL));
             info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
             info.setValid(false);
-        } catch (PdfInvalidException e) {
-            if (e.getJhoveMessage() != null) {
-                info.setMessage(new ErrorMessage(
-                        JhoveMessages.getMessageInstance(
-                                e.getJhoveMessage().getId(), e.getJhoveMessage().getMessage(),
-                                e.getJhoveMessage().getSubMessage())));
-                info.setValid(false);
-            }
         } catch (Exception e) {
 
             String msg = e.getClass().getName();
@@ -4304,10 +4296,7 @@ public class PdfModule extends ModuleBase {
                     key.getStringValue());
             JhoveMessage message = JhoveMessages.getMessageInstance(
                     MessageConstants.PDF_HUL_149.getId(), mess);
-            info.setMessage(new ErrorMessage(message));
             throw new PdfInvalidException(message); // PDF-HUL-149
-            // OR if this is not considered invalid
-            // return -1;
         }
         Destination dest = new Destination(destObj, this, true);
         return dest.getPageDestObjNumber();
@@ -4346,7 +4335,7 @@ public class PdfModule extends ModuleBase {
      * with a string value, to a specified List.
      */
     protected void addDateProperty(PdfDictionary dict, List<Property> propList,
-            String key, String propName) throws PdfException {
+            String key, String propName) throws PdfInvalidException {
         if (_encrypted) {
             String propText = ENCRYPTED;
             propList.add(new Property(propName, PropertyType.STRING, propText));
@@ -4356,12 +4345,11 @@ public class PdfModule extends ModuleBase {
                 Token tok = ((PdfSimpleObject) propObject).getToken();
                 if (tok instanceof Literal) {
                     Literal lit = (Literal) tok;
-                    Date propDate = lit.parseDate();
-                    if (propDate != null) {
-                        propList.add(new Property(propName, PropertyType.DATE, propDate));
-                        // Ignore empty literals as this isn't an error
-                    } else if (!lit.getValue().isEmpty()) {
-                        throw new PdfInvalidException(MessageConstants.PDF_HUL_133, 0); // PDF-HUL-133
+                    if (!lit.getValue().isEmpty()) {
+                        Date propDate = lit.parseDate();
+                        if (propDate != null) {
+                            propList.add(new Property(propName, PropertyType.DATE, propDate));
+                        }
                     }
                 }
             }

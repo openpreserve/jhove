@@ -68,13 +68,13 @@ public class JsonHandler extends HandlerBase {
 	private static final String NAME = "JSON";
 
 	/** Handler release identifier. */
-	private static final String RELEASE = "1.2";
+	private static final String RELEASE = "1.3";
 
 	/** String release. */
 	private static final String RELEASE_CONSTANT = "release";
 
 	/** Handler release date. */
-	private static final int[] DATE = { 2024, 03, 05 };
+	private static final int[] DATE = { 2024, 8, 22 };
 
 	private static final String DATE_CONSTANT = "date";
 
@@ -1944,13 +1944,11 @@ public class JsonHandler extends HandlerBase {
 			if (nchan != AESAudioMetadata.NULL) {
 				faceBuilder.add("aes:numChannels", nchan);
 			}
-			String[] locs = aes.getMapLocations();
 			JsonArrayBuilder streamsBuilder = Json.createArrayBuilder();
 			for (int ch = 0; ch < nchan; ch++) {
 				// write a stream description for each channel
 				streamsBuilder.add(Json.createObjectBuilder()
-						.add("aes:channelNum", ch)
-						.add("aes:mapLocation", locs[ch]));
+						.add("aes:channelNum", ch));
 			}
 			faceBuilder.add("aes:streams", streamsBuilder);
 			aesBuilder.add("aes:face", faceBuilder);
@@ -2016,72 +2014,26 @@ public class JsonHandler extends HandlerBase {
 	 */
 	private JsonObjectBuilder writeAESTimeRange(
 			AESAudioMetadata.TimeDesc start, AESAudioMetadata.TimeDesc duration) {
-		double sr = start.getSampleRate();
-		if (sr == 1.0) {
-			sr = _sampleRate;
-		}
-
 		JsonObjectBuilder timerangeBuilder = Json.createObjectBuilder();
-		timerangeBuilder
-				.add("tcf:startTime",
-						Json.createObjectBuilder()
-								.add("tcf:frameCount", 30)
-								.add("tcf:timeBase", 1000)
-								.add("tcf:videoField", "FIELD_1")
-								.add("tcf:countingMode", NTSC_NON_DROP_FRAME)
-								.add("tcf:hours", start.getHours())
-								.add("tcf:minutes", start.getMinutes())
-								.add("tcf:seconds", start.getSeconds())
-								.add("tcf:frames", start.getFrames())
-								.add("tcf:samples",
-										Json.createObjectBuilder()
-												.add("tcf:sampleRate",
-														"S"
-																+ Integer
-																		.toString((int) sr))
-												.add("tcf:numberOfSamples",
-														start.getSamples()))
-								.add("tcf:filmFraming",
-										Json.createObjectBuilder()
-												.add("tcf:framing",
-														"NOT_APPLICABLE")
-												.add("tcf:framingType",
-														"tcf:ntscFilmFramingType")));
+        this.writeAESTimeRangePart(timerangeBuilder, "aes:start", start);
+
 		if (duration != null) {
-			sr = duration.getSampleRate();
-			if (sr == 1.0) {
-				sr = _sampleRate;
-			}
-			timerangeBuilder
-					.add("tcf:duration",
-							Json.createObjectBuilder()
-									.add("tcf:frameCount", 30)
-									.add("tcf:timeBase", 1000)
-									.add("tcf:videoField", "FIELD_1")
-									.add("tcf:countingMode",
-											NTSC_NON_DROP_FRAME)
-									.add("tcf:hours", duration.getHours())
-									.add("tcf:minutes", duration.getMinutes())
-									.add("tcf:seconds", duration.getSeconds())
-									.add("tcf:frames", duration.getFrames())
-									.add("tcf:samples",
-											Json.createObjectBuilder()
-													.add("tcf:sampleRate",
-															"S"
-																	+ Integer
-																			.toString((int) sr))
-													.add("tcf:numberOfSamples",
-															duration.getSamples()))
-									.add("tcf:filmFraming",
-											Json.createObjectBuilder()
-													.add("tcf:framing",
-															"NOT_APPLICABLE")
-													.add("tcf:framingType",
-															"tcf:ntscFilmFramingType")));
+            this.writeAESTimeRangePart(timerangeBuilder, "aes:duration", duration);
 		}
 		return timerangeBuilder;
 	}
 
+    private void writeAESTimeRangePart(final JsonObjectBuilder timerangeBuilder, final String name,
+        AESAudioMetadata.TimeDesc part) {
+            double sr = (part.getSampleRate() == 1.0) ? _sampleRate : part.getSampleRate();
+            timerangeBuilder
+            .add(name,
+                    Json.createObjectBuilder()
+                            .add("aes:value", part.getSamples())
+                            .add("aes:editRate", (int) sr)
+                            .add("aes:factorNumerator", "1")
+                            .add("aes:factorDenominator", "1"));
+    }
 	protected JsonArrayBuilder showArray(int[] iarray) {
 		JsonArrayBuilder aBuilder = Json.createArrayBuilder();
 		for (int i : iarray) {

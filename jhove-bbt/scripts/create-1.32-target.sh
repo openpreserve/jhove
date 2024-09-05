@@ -56,6 +56,37 @@ echo "TEST BASELINE: Creating baseline"
 echo " - copying ${baselineRoot} baseline to ${targetRoot}"
 cp -R "${baselineRoot}" "${targetRoot}"
 
+# Patch release details of the reporting module in the audit file
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/outputHandler release="1.11">XML/outputHandler release="1.12">XML/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/outputHandler release="1.2">JSON/outputHandler release="1.3">JSON/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/outputHandler release="1.6">TEXT/outputHandler release="1.7">TEXT/' {} \;
+
+# Update release details for HTML module
+find "${targetRoot}" -type f -name "*.html.jhove.xml" -exec sed -i 's/<reportingModule release="1.4.3" date="2023-03-16">HTML-hul<\/reportingModule>/<reportingModule release="1.4.4" date="2024-08-22">HTML-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/<module release="1.4.3">HTML-hul<\/module>/<module release="1.4.4">HTML-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-HTML-hul.jhove.xml" -exec sed -i 's/<release>1.4.3<\/release>/<release>1.4.4<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-HTML-hul.jhove.xml" -exec sed -i 's/2023-03-16/2024-08-22/' {} \;
+
+# Update release details for PDF module
+find "${targetRoot}" -type f -name "*.pdf.jhove.xml" -exec sed -i 's/<reportingModule release="1.12.6" date="2024-07-31">PDF-hul<\/reportingModule>/<reportingModule release="1.12.7" date="2024-08-22">PDF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/<module release="1.12.6">PDF-hul<\/module>/<module release="1.12.7">PDF-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/<release>1.12.6<\/release>/<release>1.12.7<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-PDF-hul.jhove.xml" -exec sed -i 's/2024-07-31/2024-08-22/' {} \;
+
+# Update release details for TIFF module
+find "${targetRoot}" -type f -name "*.tiff.jhove.xml" -exec sed -i 's/<reportingModule release="1.9.4" date="2023-03-16">TIFF-hul<\/reportingModule>/<reportingModule release="1.9.5" date="2024-08-22">TIFF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.tif.jhove.xml" -exec sed -i 's/<reportingModule release="1.9.4" date="2023-03-16">TIFF-hul<\/reportingModule>/<reportingModule release="1.9.5" date="2024-08-22">TIFF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "*.g3.jhove.xml" -exec sed -i 's/<reportingModule release="1.9.4" date="2023-03-16">TIFF-hul<\/reportingModule>/<reportingModule release="1.9.5" date="2024-08-22">TIFF-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/<module release="1.9.4">TIFF-hul<\/module>/<module release="1.9.5">TIFF-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-TIFF-hul.jhove.xml" -exec sed -i 's/<release>1.9.4<\/release>/<release>1.9.5<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-TIFF-hul.jhove.xml" -exec sed -i 's/2023-03-16/2024-08-22/' {} \;
+
+# Update release details for XML module
+find "${targetRoot}" -type f -name "*.xml.jhove.xml" -exec sed -i 's/<reportingModule release="1.5.4" date="2024-03-05">XML-hul<\/reportingModule>/<reportingModule release="1.5.5" date="2024-08-22">XML-hul<\/reportingModule>/' {} \;
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/<module release="1.5.4">XML-hul<\/module>/<module release="1.5.5">XML-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-XML-hul.jhove.xml" -exec sed -i 's/<release>1.5.4<\/release>/<release>1.5.5<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-XML-hul.jhove.xml" -exec sed -i 's/2024-03-05/2024-08-22/' {} \;
+
 # Copy the TIFF Module results changed by https://github.com/openpreserve/jhove/pull/915
 if [[ -f "${candidateRoot}/examples/modules/TIFF-hul/AA_Banner.tif.jhove.xml" ]]; then
 	cp "${candidateRoot}/examples/modules/TIFF-hul/AA_Banner.tif.jhove.xml" "${targetRoot}/examples/modules/TIFF-hul/AA_Banner.tif.jhove.xml"
