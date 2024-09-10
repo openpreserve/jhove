@@ -7,9 +7,16 @@ import java.util.regex.Pattern;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 
 final class PdfVersion {
+    final PdfVersion.PdfMajorVersions majorVersion;
+    final int minorVersion;
+
     enum PdfMajorVersions {
         PDF_2(2, 0, 0),
         PDF_1(1, 0, 7);
+
+        final int version;
+        final int maxMinorVersion;
+        final int minMinorVersion;
 
         static final String getMajorVersionRange() {
             return String.format("[%d-%d]", PDF_1.version, PDF_2.version);
@@ -25,12 +32,6 @@ final class PdfVersion {
                     String.format("PDF major version must be in the range %s, major version number: %d detected",
                             getMajorVersionRange(), majorVersion)));
         }
-
-        final int version;
-
-        final int maxMinorVersion;
-
-        final int minMinorVersion;
 
         private PdfMajorVersions(final int version, final int minMinorVersion, final int maxMinorVersion) {
             this.version = version;
@@ -101,10 +102,6 @@ final class PdfVersion {
                     offset); // PDF-HUL-155
         }
     }
-
-    final PdfVersion.PdfMajorVersions majorVersion;
-
-    final int minorVersion;
 
     private PdfVersion(final PdfVersion.PdfMajorVersions majorVersion, final int minorVersion) {
         this.majorVersion = majorVersion;

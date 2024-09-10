@@ -30,15 +30,15 @@ public class Jhove {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(Jhove.class.getCanonicalName());
 
-    private Jhove() {
-        throw new AssertionError("Should never enter private constructor");
-    }
-
     private static final String C_CONFIG_OPTION = "-c";
     private static final String X_CONFIG_OPTION = "-x";
     private static final String NOT_FOUND = "not found";
     private static final String HANDLER = "Handler '";
     private static final String MODULE = "Module";
+
+    private Jhove() {
+        throw new AssertionError("Should never enter private constructor");
+    }
 
     /**
      * MAIN ENTRY POINT.

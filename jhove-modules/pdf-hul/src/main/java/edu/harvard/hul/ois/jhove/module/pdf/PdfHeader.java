@@ -21,9 +21,12 @@ public final class PdfHeader {
     public static final String PDF_VER2_HEADER_PREFIX = PDF_HEADER_PREFIX + "2."; //$NON-NLS-1$
     public static final String PDF_1_SIG_HEADER = "%" + PDF_VER1_HEADER_PREFIX; //$NON-NLS-1$
     public static final String PDF_2_SIG_HEADER = "%" + PDF_VER2_HEADER_PREFIX; //$NON-NLS-1$
-
     public static final String POSTSCRIPT_HEADER_PREFIX = "!PS-Adobe-"; //$NON-NLS-1$
+
     public static final int MAX_VALID_MAJOR_VERSION = 2;
+
+    private final PdfVersion version;
+    private final boolean isPdfACompilant;
 
     /**
      * Factory method for {@link PdfHeader} that parses a new instance using the
@@ -127,10 +130,6 @@ public final class PdfHeader {
         }
         return (ctlcnt > 3);
     }
-
-    private final PdfVersion version;
-
-    private final boolean isPdfACompilant;
 
     /**
      *
