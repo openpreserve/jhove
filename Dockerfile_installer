@@ -44,9 +44,12 @@ RUN addgroup -S jhove && adduser -S -G jhove -h /opt/jhove jhove
 RUN mkdir --parents /var/opt/jhove/logs && chown -R jhove:jhove /var/opt/jhove
 
 USER jhove
-
 WORKDIR /opt/jhove
+
 # Copy the application from the previous stage
 COPY --from=app-installer /opt/jhove/ /opt/jhove/
+
+WORKDIR /data
+VOLUME [ "/data" ]
 
 ENTRYPOINT ["/opt/jhove/jhove"]
