@@ -3,7 +3,7 @@ JHOVE
 *JSTOR/Harvard Object Validation Environment*
 
 ![example branch parameter](https://github.com/openpreserve/jhove/actions/workflows/test-pr.yml/badge.svg?branch=integration)
-[![Build Status](https://jenkins.openpreservation.org/job/JHOVE/job/jhove-1.32-RC/badge/icon)](https://jenkins.openpreservation.org/job/JHOVE/job/jhove-1.32-RC/ "OPF Jenkins")
+[![Build Status](https://jenkins.openpreservation.org/job/JHOVE/job/jhove-1.32/badge/icon)](https://jenkins.openpreservation.org/job/JHOVE/job/jhove-1.32/ "OPF Jenkins")
 [![Maven Central](https://img.shields.io/maven-central/v/org.openpreservation.jhove/jhove.svg)](http://repo1.maven.org/maven2/org/openpreservation/jhove/ "JHOVE on Maven central")
 [![CodeCov Coverage](https://img.shields.io/codecov/c/github/openpreserve/jhove.svg)](https://codecov.io/gh/openpreserve/jhove/ "CodeCov test coverage figure")
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/42f8b3de592740e7b2a22a419462815d)](https://app.codacy.com/gh/openpreserve/jhove/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
