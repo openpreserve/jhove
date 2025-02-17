@@ -3641,7 +3641,7 @@ public class TiffIFD extends IFD {
 			} catch (SAXException se) {
 				String msg = se.getMessage();
 				if (msg != null && msg.startsWith("ENC=")) {
-					String encoding = msg.substring(5);
+					String encoding = msg.substring(6);
 					try {
 						// Reader rdr = new InputStreamReader (stream,
 						// encoding);
