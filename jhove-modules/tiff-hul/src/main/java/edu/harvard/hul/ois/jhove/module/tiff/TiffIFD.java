@@ -3641,22 +3641,52 @@ public class TiffIFD extends IFD {
 			} catch (SAXException se) {
 				String msg = se.getMessage();
 				if (msg != null && msg.startsWith("ENC=")) {
+					// The XMPHandler found an xpacket wrapper with an encoding
+					// declaration and notifies us about this using an exception. But why,
+					// for the love of God, using an exception?! And why a generic
+					// exception where we have to match on the message string?
 					String encoding = msg.substring(6);
 					try {
-						// Reader rdr = new InputStreamReader (stream,
-						// encoding);
+						// Parse again, this time with an explicit encoding as declared in
+						// the packet wrapper.
+						strm = new ByteArrayInputStream(buf);
 						src = new ByteArrayXMPSource(strm, encoding);
 						parser.parse(src);
+						xmpProp = src.makeProperty();
+						return xmpProp;
 					} catch (UnsupportedEncodingException uee) {
+						// An encoding was specified in the xpacket wrapper that's not
+						// supported by Java. This is disturbing because XMP in TIFF must be
+						// encoded using UTF-8.
 						throw new TiffException(MessageConstants.TIFF_HUL_14);
+					} catch (SAXException ex) {
+						String innerMsg = ex.getMessage();
+						if (innerMsg != null && innerMsg.startsWith("ENC=")) {
+							// Since we parsed the same data again we met the xpacket wrapper
+							// again, prompting the same exception that again notifies us
+							// about the encoding declaration, but this time we ignore it.
+							// TODO However, now all other SAXExceptions that are raised after
+							// the xpacket/encoding thing will be ignored as well, so invalid
+							// XML enclosed by packet wrapper that declares a supported
+							// encoding goes unnoticed. See why using exceptions for
+							// non-exceptional program flow is not a good idea?
+							xmpProp = src.makeProperty();
+							return xmpProp;
+						} else {
+							// If this exception wasn't about encoding, something indeed went
+							// wrong during XML parsing, so raise an error.
+							throw new TiffException(MessageConstants.TIFF_HUL_14);
+						}
 					}
 				}
-				xmpProp = src.makeProperty();
-				return xmpProp;
+				// If this exception wasn't about encoding, something indeed went wrong
+				// during XML parsing, so raise an error.
+				throw new TiffException(MessageConstants.TIFF_HUL_14);
 			}
 		} catch (TiffException e) {
 			throw e;
 		} catch (Exception f) {
+			// TODO Shouldn't we re-throw this exception?
 			return null;
 		}
 	}
