@@ -1198,7 +1198,7 @@ public class JpegModule extends ModuleBase {
 			--length;
 			byte[] xmpBuf = new byte[length - 8];
 			readByteBuf(_dstream, xmpBuf, this);
-			_xmpProp = readXMP(xmpBuf);
+			_xmpProp = readXMP(xmpBuf, info);
 		} else {
 			skipBytes(_dstream, length - 8, this);
 		}
@@ -1796,44 +1796,24 @@ public class JpegModule extends ModuleBase {
 	}
 
 	/* Read XMP data from the tag, and return as a string. */
-	protected Property readXMP(byte[] buf) {
+	protected Property readXMP(byte[] buf, RepInfo info) {
 		Property xmpProp = null;
-		// final String badMetadata = "Invalid or ill-formed XMP metadata";
 		try {
 			ByteArrayInputStream strm = new ByteArrayInputStream(buf);
-			ByteArrayXMPSource src = new ByteArrayXMPSource(strm);
-
-			// Create an InputSource to feed the parser.
+			ByteArrayXMPSource src = new ByteArrayXMPSource(strm, "UTF-8");
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			factory.setNamespaceAware(true);
 			XMLReader parser = factory.newSAXParser().getXMLReader();
 			XMPHandler handler = new XMPHandler();
 			parser.setContentHandler(handler);
 			parser.setErrorHandler(handler);
-			// We have to parse twice. The first time, we may get
-			// an encoding change as part of an exception thrown. If this
-			// happens, we create a new InputSource with the encoding, and
-			// continue.
-			try {
-				parser.parse(src);
-				xmpProp = src.makeProperty();
-				return xmpProp;
-			} catch (SAXException se) {
-				String msg = se.getMessage();
-				if (msg != null && msg.startsWith("ENC=")) {
-					String encoding = msg.substring(5);
-					try {
-						// Reader rdr = new InputStreamReader (stream,
-						// encoding);
-						src = new ByteArrayXMPSource(strm, encoding);
-						parser.parse(src);
-					} catch (UnsupportedEncodingException uee) {
-						return null;
-					}
-				}
-				xmpProp = src.makeProperty();
-				return xmpProp;
-			}
+			parser.parse(src);
+			xmpProp = src.makeProperty();
+			return xmpProp;
+		} catch (SAXException se) {
+			info.setMessage(new ErrorMessage(MessageConstants.JPEG_HUL_15));
+			info.setWellFormed(false);
+			return null;
 		} catch (Exception e) {
 			return null;
 		}
