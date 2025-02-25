@@ -3620,72 +3620,18 @@ public class TiffIFD extends IFD {
 		try {
 			byte[] buf = readTrueByteArray(BYTE, count, value);
 			ByteArrayInputStream strm = new ByteArrayInputStream(buf);
-			ByteArrayXMPSource src = new ByteArrayXMPSource(strm);
-
-			// Create an InputSource to feed the parser.
+			ByteArrayXMPSource src = new ByteArrayXMPSource(strm, "UTF-8");
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			factory.setNamespaceAware(true);
 			XMLReader parser = factory.newSAXParser().getXMLReader();
-			// InputStream stream = new XMLWrapperStream
-			// (new StreamInputStream (metadata, getFile ()), "dummyroot");
 			XMPHandler handler = new XMPHandler();
 			parser.setContentHandler(handler);
-			// We have to parse twice. The first time, we may get
-			// an encoding change as part of an exception thrown. If this
-			// happens, we create a new InputSource with the encoding, and
-			// continue.
-			try {
-				parser.parse(src);
-				xmpProp = src.makeProperty();
-				return xmpProp;
-			} catch (SAXException se) {
-				String msg = se.getMessage();
-				if (msg != null && msg.startsWith("ENC=")) {
-					// The XMPHandler found an xpacket wrapper with an encoding
-					// declaration and notifies us about this using an exception. But why,
-					// for the love of God, using an exception?! And why a generic
-					// exception where we have to match on the message string?
-					String encoding = msg.substring(6);
-					try {
-						// Parse again, this time with an explicit encoding as declared in
-						// the packet wrapper.
-						strm = new ByteArrayInputStream(buf);
-						src = new ByteArrayXMPSource(strm, encoding);
-						parser.parse(src);
-						xmpProp = src.makeProperty();
-						return xmpProp;
-					} catch (UnsupportedEncodingException uee) {
-						// An encoding was specified in the xpacket wrapper that's not
-						// supported by Java. This is disturbing because XMP in TIFF must be
-						// encoded using UTF-8.
-						throw new TiffException(MessageConstants.TIFF_HUL_14);
-					} catch (SAXException ex) {
-						String innerMsg = ex.getMessage();
-						if (innerMsg != null && innerMsg.startsWith("ENC=")) {
-							// Since we parsed the same data again we met the xpacket wrapper
-							// again, prompting the same exception that again notifies us
-							// about the encoding declaration, but this time we ignore it.
-							// TODO However, now all other SAXExceptions that are raised after
-							// the xpacket/encoding thing will be ignored as well, so invalid
-							// XML enclosed by packet wrapper that declares a supported
-							// encoding goes unnoticed. See why using exceptions for
-							// non-exceptional program flow is not a good idea?
-							xmpProp = src.makeProperty();
-							return xmpProp;
-						} else {
-							// If this exception wasn't about encoding, something indeed went
-							// wrong during XML parsing, so raise an error.
-							throw new TiffException(MessageConstants.TIFF_HUL_14);
-						}
-					}
-				}
-				// If this exception wasn't about encoding, something indeed went wrong
-				// during XML parsing, so raise an error.
-				throw new TiffException(MessageConstants.TIFF_HUL_14);
-			}
-		} catch (TiffException e) {
-			throw e;
-		} catch (Exception f) {
+			parser.parse(src);
+			xmpProp = src.makeProperty();
+			return xmpProp;
+		} catch (SAXException se) {
+			throw new TiffException(MessageConstants.TIFF_HUL_14);
+		} catch (Exception ex) {
 			// TODO Shouldn't we re-throw this exception?
 			return null;
 		}
