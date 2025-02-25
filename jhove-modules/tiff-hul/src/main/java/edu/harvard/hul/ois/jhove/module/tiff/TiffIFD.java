@@ -3631,7 +3631,9 @@ public class TiffIFD extends IFD {
 			xmpProp = src.makeProperty();
 			return xmpProp;
 		} catch (SAXException se) {
-			throw new TiffException(MessageConstants.TIFF_HUL_14);
+			_info.setMessage(new ErrorMessage(MessageConstants.TIFF_HUL_14));
+			_info.setValid(false);
+			return null;
 		} catch (Exception ex) {
 			// TODO Shouldn't we re-throw this exception?
 			return null;

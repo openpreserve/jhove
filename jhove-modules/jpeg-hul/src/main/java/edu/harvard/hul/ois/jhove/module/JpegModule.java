@@ -1812,7 +1812,7 @@ public class JpegModule extends ModuleBase {
 			return xmpProp;
 		} catch (SAXException se) {
 			info.setMessage(new ErrorMessage(MessageConstants.JPEG_HUL_15));
-			info.setWellFormed(false);
+			info.setValid(false);
 			return null;
 		} catch (Exception e) {
 			return null;

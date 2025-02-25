@@ -891,7 +891,7 @@ public class GifModule extends ModuleBase {
             return appDataSize;
         } catch (SAXException se) {
             info.setMessage(new ErrorMessage(MessageConstants.GIF_HUL_11));
-            info.setWellFormed(RepInfo.FALSE);
+            info.setValid(false);
             return appDataSize;
         } catch (Exception e) {
             return appDataSize;
