@@ -620,7 +620,7 @@ public class GifModule extends ModuleBase {
                 appAuth[0] == (short) 'X' &&
                 appAuth[1] == (short) 'M' &&
                 appAuth[2] == (short) 'P') {
-            appDataSize = readXMP();
+            appDataSize = readXMP(info);
         } else {
             // Zip through the application data blocks, totalling their size
             for (;;) {
@@ -822,7 +822,7 @@ public class GifModule extends ModuleBase {
      * bytes read. When we reach a 0 byte, we've hit the
      * end of the "magic" trailer.
      */
-    protected int readXMP() throws IOException {
+    protected int readXMP(RepInfo info) throws IOException {
         // Read bytes till we get to the trailer. Annoyingly,
         // we don't know how big the byte buffer has to be,
         // so we build a List of fixed-size buffers. We don't add
@@ -877,47 +877,25 @@ public class GifModule extends ModuleBase {
 
         // OK. All that was just to get the XMP into one big byte
         // buffer. Now process it.
-        final String badMetadata = "Invalid or ill-formed XMP metadata";
         try {
             ByteArrayInputStream strm = new ByteArrayInputStream(bigBuf);
             ByteArrayXMPSource src = new ByteArrayXMPSource(strm, "UTF-8");
-
-            // Create an InputSource to feed the parser.
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
             XMLReader parser = factory.newSAXParser().getXMLReader();
             XMPHandler handler = new XMPHandler();
             parser.setContentHandler(handler);
             parser.setErrorHandler(handler);
-            // We have to parse twice. The first time, we may get
-            // an encoding change as part of an exception thrown. If this
-            // happens, we create a new InputSource with the encoding, and
-            // continue.
-            try {
-                parser.parse(src);
-                _xmpProp = src.makeProperty();
-                return appDataSize;
-            } catch (SAXException se) {
-                String msg = se.getMessage();
-                if (msg != null && msg.startsWith("ENC=")) {
-                    String encoding = msg.substring(5);
-                    try {
-                        // The only permitted encoding is UTF-8, but
-                        // that may come under various aliased names,
-                        // so we assume the encoding is legitimate.
-                        src = new ByteArrayXMPSource(strm, encoding);
-                        parser.parse(src);
-                    } catch (UnsupportedEncodingException uee) {
-                        return appDataSize;
-                    }
-                }
-                _xmpProp = src.makeProperty();
-                return appDataSize;
-            }
+            parser.parse(src);
+            _xmpProp = src.makeProperty();
+            return appDataSize;
+        } catch (SAXException se) {
+            info.setMessage(new ErrorMessage(MessageConstants.GIF_HUL_11));
+            info.setWellFormed(RepInfo.FALSE);
+            return appDataSize;
         } catch (Exception e) {
             return appDataSize;
         }
-
     }
 
     protected Property addByteProperty(String name, int value,
