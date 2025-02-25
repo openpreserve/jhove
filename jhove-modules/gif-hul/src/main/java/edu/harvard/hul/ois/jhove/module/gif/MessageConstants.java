@@ -32,4 +32,6 @@ public enum MessageConstants {
 			.getMessage("GIF-HUL-9");
 	public static final JhoveMessage GIF_HUL_10 = messageFactory
 			.getMessage("GIF-HUL-10");
+	public static final JhoveMessage GIF_HUL_11 = messageFactory
+			.getMessage("GIF-HUL-11");
 }
