@@ -110,10 +110,5 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
     @Override
     public void fatalError(SAXParseException exception)
     {
-        // TODO Does this really work as intended? "Of course, you could always
-        // override the fatalError() method to throw a different exception. But
-        // if your code does not throw an exception when a fatal error occurs,
-        // then the SAX parser will. The XML specification requires it."
-        // <https://docs.oracle.com/javase/tutorial/jaxp/sax/parsing.html>
     }
 }

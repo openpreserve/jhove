@@ -3626,6 +3626,7 @@ public class TiffIFD extends IFD {
 			XMLReader parser = factory.newSAXParser().getXMLReader();
 			XMPHandler handler = new XMPHandler();
 			parser.setContentHandler(handler);
+			parser.setErrorHandler(handler);
 			parser.parse(src);
 			xmpProp = src.makeProperty();
 			return xmpProp;
