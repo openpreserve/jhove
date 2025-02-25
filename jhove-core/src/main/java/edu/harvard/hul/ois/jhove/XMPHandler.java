@@ -12,12 +12,6 @@ import org.xml.sax.*;
  *  This class encapsulates XMP metadata within a file.  It makes use
  *  of an InputStream as a data source.
  *
- *  This differs from normal XML handling in that it's necessary to
- *  process the xpacket processing instruction in order to determine
- *  the encoding of the XML.  the processingInstruction function looks
- *  for xpacket, and throws a special SAXException if it's necessary
- *  to change encoding.
- *
  *  We don't actually extract any information from the XMP, but
  *  simply check it for well-formedness.  By convention, XMPHandler
  *  should be invoked on an XMPSource (TBW), which provides the
@@ -40,7 +34,7 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
 //        "http://ns.adobe.com/photoshop/1.0/";
 
     private boolean pdfaCompliant;
-        
+
     public XMPHandler ()
     {
         super ();
@@ -53,70 +47,45 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
     public boolean isPdfaCompliant () {
         return pdfaCompliant;
     }
-    
-    
+
+
     @Override
     public void processingInstruction (String target, String data)
-                        throws SAXException
     {
+        // Parse a so-called packet wrapper, a pair of XML processing
+        // instructions enclosing the actual XMP data. This is intended to
+        // facilitate searching for XMP when its location in a file is unknown
+        // (byte scanning) but is not recommended (albeit neither strictly
+        // illegal) when it is clear from the file format specs where to look
+        // for XMP. All file types in which JHOVE currently handles XMP (TIFF,
+        // GIF, JPEG, PDF including PDF/A) fall in the latter category, so we
+        // could safely ignore the packet wrapper, if it wasn't for a little
+        // PDF/A tidbit.
         if ("xpacket".equals (target)) {
-            // We assume that the data will be non-endian (i.e., simply
-            // a stream of bytes) unless we find a valid endian code.
-            boolean bigEndian = false;
-            boolean noEndian = true;
-            // a Processing Instruction can't really have attributes,
-            // so we have to parse the data string ourselves.  The order
-            // of the attributes is guaranteed, fortunately.
-            int idx = data.indexOf ("begin=");
-            idx = data.indexOf ('"', idx + 1);
-            if (data.length () >= idx + 2) {
-                int char1 = data.charAt (idx + 1);
-                int char2 = data.charAt (idx + 2);
-                if (char1 == 0XFF && char2 == 0XFE) {
-                    noEndian = false;
-                    bigEndian = false;
-                } 
-                else if (char1 == 0XFE && char2 == 0XFF) {
-                    noEndian = false;
-                    bigEndian = true;
-                } 
-                // EF BB B8 signifies UTF-8, but that's the default anyway.
-            }
-            // Check the bytes attribute. We don't do anything with it except
-            // note that it isn't allowed with PDF/A.
-            idx = data.indexOf("bytes=");
-            if (idx > 0) {
+            // Note that it is possible to declare the encoding of the XMP
+            // packet in its packet wrapper. Either implicitly via a BOM
+            // (U+FEFF) in the begin attribute; this can be used to distinguish
+            // between UTF-16BE/LE, UTF-32BE/LE, and UTF-8. Or explicitly using
+            // the deprecated encoding attribute, see below. However, UTF-8 has
+            // been prescribed in all file formats in which JHOVE currently
+            // looks for XMP (TIFF, GIF, JPEG, PDF including PDF/A) anyway since
+            // at least 2010, see
+            // <https://web.archive.org/web/20101009095526/http://www.adobe.com/content/dam/Adobe/en/devnet/xmp/pdfs/XMPSpecificationPart3.pdf>.
+            // So let's just ignore what the packet wrapper says. If we run into
+            // an error because the XMP is encoded in an unexpected (i.e., not
+            // UTF-8) encoding we'd rather know about that anyway, right?
+            int idx = data.indexOf ("begin="); // ignored
+            // The bytes and encoding attributes are not allowed in PDF/A (ISO
+            // 19005-1:2005, section 6.7.5). They also have both been deprecated
+            // in the XMP specification since at least January 2004, see
+            // <https://web.archive.org/web/20040612130530/http://partners.adobe.com/asn/tech/xmp/pdf/xmpspecification.pdf>.
+            if (data.indexOf("bytes=") >= 0 || data.indexOf("encoding=") >= 0) {
                 pdfaCompliant = false;
-            }
-            // Next find encoding, which is optional.
-            idx = data.indexOf ("encoding=");
-            if (idx > 0) {
-                pdfaCompliant = false;          // not allowed in PDF/A
-                idx = data.indexOf ('"', idx + 1);
-                int encEnd = data.indexOf ('"', idx + 1 );
-                String encoding = data.substring (idx + 1, encEnd);
-                // Throw a SAXException which consists of 
-                // "ENC=<endian>,<enc>", where 
-                // endian is either 'B' (big), 'L' (little) or space (none), and 
-                // enc is the encoding attribute.
-                // This is an expected exception, not an error.
-                String exText = "ENC=";
-                if (noEndian) {
-                    exText += " ,";
-                }
-                else if (bigEndian) {
-                    exText += "B,";
-                }
-                else {
-                    exText += "L,";
-                }
-                exText += encoding;
-                throw new SAXException (exText);
             }
         }
     }
-    
-    
+
+
     /**
      *  Catches the end of an element.
      */
@@ -129,10 +98,11 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
             if ("Bag".equals (rawName)||
                     "Seq".equals (rawName) ||
                     "Alt".equals (rawName)) {
+                // TODO This doesn't do anything. Do we really need this method?
             }
         }
     }
-    
+
     /** Catch a fatal error.  This is put here because the default
      *  behavior is to report a "fatal error" to standard output,
      *  which is harmless but scary.  
@@ -140,5 +110,10 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
     @Override
     public void fatalError(SAXParseException exception)
     {
+        // TODO Does this really work as intended? "Of course, you could always
+        // override the fatalError() method to throw a different exception. But
+        // if your code does not throw an exception when a fatal error occurs,
+        // then the SAX parser will. The XML specification requires it."
+        // <https://docs.oracle.com/javase/tutorial/jaxp/sax/parsing.html>
     }
 }
