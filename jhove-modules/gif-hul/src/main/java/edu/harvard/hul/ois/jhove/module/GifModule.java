@@ -33,10 +33,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 import edu.harvard.hul.ois.jhove.Agent;
 import edu.harvard.hul.ois.jhove.Agent.Builder;
@@ -58,7 +55,7 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.Signature;
 import edu.harvard.hul.ois.jhove.SignatureType;
 import edu.harvard.hul.ois.jhove.SignatureUseType;
-import edu.harvard.hul.ois.jhove.XMPHandler;
+import edu.harvard.hul.ois.jhove.XMPParser;
 import edu.harvard.hul.ois.jhove.module.gif.GifStrings;
 import edu.harvard.hul.ois.jhove.module.gif.MessageConstants;
 
@@ -880,14 +877,7 @@ public class GifModule extends ModuleBase {
         try {
             ByteArrayInputStream strm = new ByteArrayInputStream(bigBuf);
             ByteArrayXMPSource src = new ByteArrayXMPSource(strm, "UTF-8");
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-            XMLReader parser = factory.newSAXParser().getXMLReader();
-            XMPHandler handler = new XMPHandler();
-            parser.setContentHandler(handler);
-            parser.setErrorHandler(handler);
-            parser.parse(src);
-            _xmpProp = src.makeProperty();
+            _xmpProp = XMPParser.parse(src);
             return appDataSize;
         } catch (SAXException se) {
             info.setMessage(new ErrorMessage(MessageConstants.GIF_HUL_11));

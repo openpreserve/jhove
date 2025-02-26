@@ -39,10 +39,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipException;
 
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 import edu.harvard.hul.ois.jhove.Agent;
 import edu.harvard.hul.ois.jhove.Document;
@@ -62,7 +59,7 @@ import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.SignatureType;
 import edu.harvard.hul.ois.jhove.SignatureUseType;
-import edu.harvard.hul.ois.jhove.XMPHandler;
+import edu.harvard.hul.ois.jhove.XMPParser;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import edu.harvard.hul.ois.jhove.module.pdf.Comment;
@@ -2142,14 +2139,7 @@ public class PdfModule extends ModuleBase {
                 return true; // Not required
             }
             PdfXMPSource src = new PdfXMPSource(metadata, getFile(), "UTF-8");
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-            XMLReader parser = factory.newSAXParser().getXMLReader();
-            XMPHandler handler = new XMPHandler();
-            parser.setContentHandler(handler);
-            parser.setErrorHandler(handler);
-            parser.parse(src);
-            _xmpProp = src.makeProperty();
+            _xmpProp = XMPParser.parse(src);
         } catch (UnsupportedEncodingException uee) {
             // TODO Might be raised by PdfXMPSource but won't because "UTF-8" is
             // quite OK. So why catch this at all? Rather check above whether

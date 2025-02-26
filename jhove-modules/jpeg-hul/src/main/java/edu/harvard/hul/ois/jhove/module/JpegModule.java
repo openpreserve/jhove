@@ -35,10 +35,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 import edu.harvard.hul.ois.jhove.Agent;
 import edu.harvard.hul.ois.jhove.AgentType;
@@ -62,7 +59,7 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.Signature;
 import edu.harvard.hul.ois.jhove.SignatureType;
 import edu.harvard.hul.ois.jhove.SignatureUseType;
-import edu.harvard.hul.ois.jhove.XMPHandler;
+import edu.harvard.hul.ois.jhove.XMPParser;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import edu.harvard.hul.ois.jhove.module.jpeg.ArithConditioning;
@@ -1801,15 +1798,7 @@ public class JpegModule extends ModuleBase {
 		try {
 			ByteArrayInputStream strm = new ByteArrayInputStream(buf);
 			ByteArrayXMPSource src = new ByteArrayXMPSource(strm, "UTF-8");
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-			factory.setNamespaceAware(true);
-			XMLReader parser = factory.newSAXParser().getXMLReader();
-			XMPHandler handler = new XMPHandler();
-			parser.setContentHandler(handler);
-			parser.setErrorHandler(handler);
-			parser.parse(src);
-			xmpProp = src.makeProperty();
-			return xmpProp;
+			return XMPParser.parse(src);
 		} catch (SAXException se) {
 			info.setMessage(new ErrorMessage(MessageConstants.JPEG_HUL_15));
 			info.setValid(false);

@@ -12,9 +12,7 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
-import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
-import javax.xml.parsers.SAXParserFactory;
 
 /**
  * Encapsulation of standard TIFF IFD.
@@ -3615,21 +3613,13 @@ public class TiffIFD extends IFD {
 	}
 
 	/* Read XMP data from the tag, and return as a string. */
-	private Property readXMP(long count, long value) throws TiffException {
+	private Property readXMP(long count, long value) {
 		Property xmpProp = null;
 		try {
 			byte[] buf = readTrueByteArray(BYTE, count, value);
 			ByteArrayInputStream strm = new ByteArrayInputStream(buf);
 			ByteArrayXMPSource src = new ByteArrayXMPSource(strm, "UTF-8");
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-			factory.setNamespaceAware(true);
-			XMLReader parser = factory.newSAXParser().getXMLReader();
-			XMPHandler handler = new XMPHandler();
-			parser.setContentHandler(handler);
-			parser.setErrorHandler(handler);
-			parser.parse(src);
-			xmpProp = src.makeProperty();
-			return xmpProp;
+			return XMPParser.parse(src);
 		} catch (SAXException se) {
 			_info.setMessage(new ErrorMessage(MessageConstants.TIFF_HUL_14));
 			_info.setValid(false);
