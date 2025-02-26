@@ -74,7 +74,9 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
             // So let's just ignore what the packet wrapper says. If we run into
             // an error because the XMP is encoded in an unexpected (i.e., not
             // UTF-8) encoding we'd rather know about that anyway, right?
-            int idx = data.indexOf ("begin="); // ignored
+            //
+            // int idx = data.indexOf ("begin="); // ignored
+            //
             // The bytes and encoding attributes are not allowed in PDF/A (ISO
             // 19005-1:2005, section 6.7.5). They also have both been deprecated
             // in the XMP specification since at least January 2004, see
