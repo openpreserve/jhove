@@ -82,7 +82,6 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
             (data.indexOf("bytes=") >= 0 || data.indexOf("encoding=") >= 0)) {
                 pdfaCompliant = false;
             }
-        }
     }
 
 

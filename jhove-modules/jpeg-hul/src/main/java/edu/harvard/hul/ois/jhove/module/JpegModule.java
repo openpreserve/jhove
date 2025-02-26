@@ -1794,7 +1794,6 @@ public class JpegModule extends ModuleBase {
 
 	/* Read XMP data from the tag, and return as a string. */
 	protected Property readXMP(byte[] buf, RepInfo info) {
-		Property xmpProp = null;
 		try {
 			ByteArrayInputStream strm = new ByteArrayInputStream(buf);
 			ByteArrayXMPSource src = new ByteArrayXMPSource(strm, "UTF-8");
