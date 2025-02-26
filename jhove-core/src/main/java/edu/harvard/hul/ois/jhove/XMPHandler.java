@@ -61,27 +61,25 @@ public class XMPHandler extends org.xml.sax.helpers.DefaultHandler {
         // GIF, JPEG, PDF including PDF/A) fall in the latter category, so we
         // could safely ignore the packet wrapper, if it wasn't for a little
         // PDF/A tidbit.
-        if ("xpacket".equals (target)) {
-            // Note that it is possible to declare the encoding of the XMP
-            // packet in its packet wrapper. Either implicitly via a BOM
-            // (U+FEFF) in the begin attribute; this can be used to distinguish
-            // between UTF-16BE/LE, UTF-32BE/LE, and UTF-8. Or explicitly using
-            // the deprecated encoding attribute, see below. However, UTF-8 has
-            // been prescribed in all file formats in which JHOVE currently
-            // looks for XMP (TIFF, GIF, JPEG, PDF including PDF/A) anyway since
-            // at least 2010, see
-            // <https://web.archive.org/web/20101009095526/http://www.adobe.com/content/dam/Adobe/en/devnet/xmp/pdfs/XMPSpecificationPart3.pdf>.
-            // So let's just ignore what the packet wrapper says. If we run into
-            // an error because the XMP is encoded in an unexpected (i.e., not
-            // UTF-8) encoding we'd rather know about that anyway, right?
-            //
-            // int idx = data.indexOf ("begin="); // ignored
-            //
-            // The bytes and encoding attributes are not allowed in PDF/A (ISO
-            // 19005-1:2005, section 6.7.5). They also have both been deprecated
-            // in the XMP specification since at least January 2004, see
-            // <https://web.archive.org/web/20040612130530/http://partners.adobe.com/asn/tech/xmp/pdf/xmpspecification.pdf>.
-            if (data.indexOf("bytes=") >= 0 || data.indexOf("encoding=") >= 0) {
+        //
+        // Note that it is possible to declare the encoding of the XMP packet in
+        // its packet wrapper. Either implicitly via a BOM (U+FEFF) in the begin
+        // attribute; this can be used to distinguish between UTF-16BE/LE,
+        // UTF-32BE/LE, and UTF-8. Or explicitly using the deprecated encoding
+        // attribute, see below. However, UTF-8 has been prescribed in all file
+        // formats in which JHOVE currently looks for XMP (TIFF, GIF, JPEG, PDF
+        // including PDF/A) anyway since at least 2010, see
+        // <https://web.archive.org/web/20101009095526/http://www.adobe.com/content/dam/Adobe/en/devnet/xmp/pdfs/XMPSpecificationPart3.pdf>.
+        // So let's just ignore what the packet wrapper says. If we run into an
+        // error because the XMP is encoded in an unexpected (i.e., not UTF-8)
+        // encoding we'd rather know about that anyway, right?
+        //
+        // The bytes and encoding attributes are not allowed in PDF/A (ISO
+        // 19005-1:2005, section 6.7.5). They also have both been deprecated in
+        // the XMP specification since at least January 2004, see
+        // <https://web.archive.org/web/20040612130530/http://partners.adobe.com/asn/tech/xmp/pdf/xmpspecification.pdf>.
+        if ("xpacket".equals (target) &&
+            (data.indexOf("bytes=") >= 0 || data.indexOf("encoding=") >= 0)) {
                 pdfaCompliant = false;
             }
         }
