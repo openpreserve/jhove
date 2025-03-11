@@ -7,6 +7,7 @@ package edu.harvard.hul.ois.jhove.module.pdf;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -30,7 +31,7 @@ public class Parser
     /** The number of array starts on stack. */
     private int _arrayDepth;
     /** The file's object map. */
-    private Map<Long, PdfObject> _objectMap;
+    private Map<Long, PdfObject> _objectMap = new HashMap<>();
     /** PDF/A compliance flag. */
     private boolean _pdfACompliant;
 	protected PdfModule _module;
@@ -46,12 +47,6 @@ public class Parser
         _tokenizer = tokenizer;
         _pdfACompliant = true;
         reset ();
-    }
-
-    /** Sets the object map on which the parser will work. */
-    public void setObjectMap (Map<Long, PdfObject> objectMap)
-    {
-        _objectMap = objectMap;
     }
 
     /**
@@ -100,7 +95,7 @@ public class Parser
         else if (tok instanceof DictionaryEnd) {
             --_dictDepth;
             if (_dictDepth < 0) {
-                throw new PdfMalformedException (MessageConstants.PDF_HUL_33); // PDF-HUL-33
+                throw new PdfMalformedException(MessageConstants.PDF_HUL_33, getOffset()); // PDF-HUL-33
             }
         }
         if (tok instanceof ArrayStart) {
@@ -109,7 +104,7 @@ public class Parser
         else if (tok instanceof ArrayEnd) {
             --_arrayDepth;
             if (_arrayDepth < 0) {
-                throw new PdfMalformedException (MessageConstants.PDF_HUL_34); // PDF-HUL-34
+                throw new PdfMalformedException(MessageConstants.PDF_HUL_34, getOffset()); // PDF-HUL-34
             }
         }
         return tok;
@@ -126,7 +121,7 @@ public class Parser
     {
         Token tok = getNext ();
         if (!clas.isInstance (tok)) {
-            throw new PdfInvalidException (errMsg);
+            throw new PdfInvalidException(errMsg, getOffset());
         }
         if (!tok.isPdfACompliant()) {
             _pdfACompliant = false;
@@ -216,7 +211,7 @@ public class Parser
         Numeric genNumTok = (Numeric) getNext (Numeric.class, MessageConstants.PDF_HUL_36); // PDF-HUL-36
         Keyword objKey = (Keyword) getNext (Keyword.class, MessageConstants.PDF_HUL_37); // PDF-HUL-37
         if (!"obj".equals (objKey.getValue ())) {
-            throw new PdfMalformedException (MessageConstants.PDF_HUL_38); // PDF-HUL-38
+            throw new PdfMalformedException(MessageConstants.PDF_HUL_38, getOffset()); // PDF-HUL-38
         }
         if (_tokenizer.getWSString ().length () > 1) {
             _pdfACompliant = false;
@@ -360,7 +355,7 @@ public class Parser
                     if ((vecSize % 2) != 0) {
                         String mess = MessageFormat.format(MessageConstants.PDF_HUL_41.getMessage(), Integer.valueOf(vecSize));
                         JhoveMessage message = JhoveMessages.getMessageInstance(MessageConstants.PDF_HUL_41.getId(), mess);
-                        throw new PdfMalformedException(message, getOffset ()); // PDF-HUL-41
+                        throw new PdfMalformedException(message, getOffset()); // PDF-HUL-41
                     }
                     for (int i = 0; i < vecSize; i += 2) {
                         try {
@@ -370,7 +365,7 @@ public class Parser
                             dict.add (key.getValue (), value);
                         }
                         catch (Exception f) {
-                            throw new PdfMalformedException (MessageConstants.PDF_HUL_42, getOffset ()); // PDF-HUL-42
+                            throw new PdfMalformedException (MessageConstants.PDF_HUL_42, getOffset()); // PDF-HUL-42
                         }
                     }
                     if (!dict.isPdfACompliant()) {
@@ -430,8 +425,6 @@ public class Parser
                         int genNum = ntok.getIntegerValue ();
                         v.set (i - 2, new PdfIndirectObj
                                 (objNum, genNum, _objectMap));
-                        //v.removeElementAt (i);
-                        //v.removeElementAt (i - 1);
                         // Put in null as placeholder, to be removed below
                         v.set(i, null);
                         v.set(i - 1, null);
@@ -440,7 +433,7 @@ public class Parser
                     }
                     catch (Exception e) {
                         throw new PdfMalformedException 
-                            (MessageConstants.PDF_HUL_44); // PDF-HUL-44
+                            (MessageConstants.PDF_HUL_44, getOffset()); // PDF-HUL-44
                     }
                 }
             }

@@ -96,6 +96,7 @@ import edu.harvard.hul.ois.jhove.module.pdf.PdfProfile;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfSimpleObject;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfStream;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfStrings;
+import edu.harvard.hul.ois.jhove.module.pdf.PdfTextStream;
 import edu.harvard.hul.ois.jhove.module.pdf.PdfXMPSource;
 import edu.harvard.hul.ois.jhove.module.pdf.StringValuedToken;
 import edu.harvard.hul.ois.jhove.module.pdf.TaggedProfile;
@@ -380,8 +381,8 @@ public class PdfModule extends ModuleBase {
      ******************************************************************/
 
     private static final String NAME = "PDF-hul";
-    private static final String RELEASE = "1.12.7";
-    private static final int[] DATE = { 2024, 8, 22 };
+    private static final String RELEASE = "1.12.8";
+    private static final int[] DATE = { 2025, 02, 05 };
     private static final String[] FORMAT = { "PDF",
             "Portable Document Format" };
     private static final String COVERAGE = "PDF 1.0-1.6; "
@@ -430,14 +431,13 @@ public class PdfModule extends ModuleBase {
     protected long _eof;
     protected long _startxref;
     protected long _prevxref;
-    protected int _numFreeObjects;
+    protected int _freeObjectCount;
     protected Property _idProperty;
     protected int _objCount; // Count of objects in the cross-reference
                              // table
-    protected int _numObjects; // Value of the "Size" entry in the trailer
+    protected int _trailerSize; // Value of the "Size" entry in the trailer
                                // dictionary
-    protected int _numTrailers; // Count of the number of trailers (updates)
-    protected Map _objects; // Map of the objects in the file
+    protected int _trailerCount; // Count of the number of trailers (updates)
     protected long[] _xref; // Array of object offsets from XRef table
     protected int[][] _xref2; // Array of int[2], giving object stream and
                               // offset when _xref[i] < 0
@@ -634,7 +634,9 @@ public class PdfModule extends ModuleBase {
 
         _signature.add(new ExternalSignature(EXT, SignatureType.EXTENSION,
                 SignatureUseType.OPTIONAL));
-        _signature.add(new InternalSignature(PdfHeader.PDF_SIG_HEADER,
+        _signature.add(new InternalSignature(PdfHeader.PDF_1_SIG_HEADER,
+                SignatureType.MAGIC, SignatureUseType.MANDATORY, 0));
+        _signature.add(new InternalSignature(PdfHeader.PDF_2_SIG_HEADER,
                 SignatureType.MAGIC, SignatureUseType.MANDATORY, 0));
 
         doc = new Document(
@@ -783,12 +785,10 @@ public class PdfModule extends ModuleBase {
             throws IOException {
         initParse();
         initInfo(info);
-        _objects = new HashMap<>();
         _raf = raf;
 
         Tokenizer tok = new FileTokenizer(_raf);
         _parser = new Parser(tok);
-        _parser.setObjectMap(_objects);
 
         List<Property> metadataList = new ArrayList<Property>(11);
         /*
@@ -823,7 +823,7 @@ public class PdfModule extends ModuleBase {
             if (!readXRefInfo(info)) {
                 return;
             }
-            ++_numTrailers;
+            ++_trailerCount;
             if (_xrefIsStream) {
                 /*
                  * If we have an xref stream, readXRefInfo dealt with all
@@ -865,19 +865,21 @@ public class PdfModule extends ModuleBase {
         }
         findImages(info);
         findFonts(info);
+        checkPageTextStreams(info);
 
         /* Object is well-formed PDF. */
+
 
         // Calculate checksums if not already present
         checksumIfRafNotCopied(info, raf);
 
         info.setVersion(_version);
         metadataList.add(new Property(PROP_NAME_OBJECTS, PropertyType.INTEGER,
-                new Integer(_numObjects)));
+                Integer.valueOf(_trailerSize)));
         metadataList.add(new Property(PROP_NAME_FREE_OBJECTS,
-                PropertyType.INTEGER, new Integer(_numFreeObjects)));
+                PropertyType.INTEGER, Integer.valueOf(_freeObjectCount)));
         metadataList.add(new Property(PROP_NAME_INC_UPDATES,
-                PropertyType.INTEGER, new Integer(_numTrailers)));
+                PropertyType.INTEGER, Integer.valueOf(_trailerCount)));
         if (_docCatalogList != null) {
             metadataList.add(
                     new Property(PROP_NAME_DOC_CATALOG, PropertyType.PROPERTY,
@@ -995,8 +997,7 @@ public class PdfModule extends ModuleBase {
         _xref = null;
         _xref2 = null;
         _version = "";
-        _objects = null;
-        _numFreeObjects = 0;
+        _freeObjectCount = 0;
         _objCount = 0;
         _docInfoList = null;
         _extStreamsList = null;
@@ -1035,31 +1036,27 @@ public class PdfModule extends ModuleBase {
         _skippedPagesReported = false;
         _idProperty = null;
         _actionsExist = false;
-        _numObjects = 0;
-        _numTrailers = -1;
+        _trailerSize = 0;
+        _trailerCount = -1;
         _pdfACompliant = true; // assume compliance till disproven
         _xmpProp = null;
         _cachedStreamIndex = -1;
         _nFonts = 0;
     }
 
-    protected boolean parseHeader(RepInfo info) throws IOException {
+    protected boolean parseHeader(RepInfo info) {
         PdfHeader header = null;
         try {
             header = PdfHeader.parseHeader(_parser);
-        } catch (PdfMalformedException e) {
-            info.setWellFormed(false);
-            info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_155, 0L)); // PDF-HUL-155
+        } catch (PdfException e) {
+            info.setMessage(new ErrorMessage(e.getJhoveMessage(), 0L)); // PDF-HUL-155
+            if (e instanceof PdfInvalidException) {
+                info.setValid(false);
+                return true;
+            } else {
+                info.setWellFormed(false);
+            }
             return false;
-        }
-        if (header == null) {
-            info.setWellFormed(false);
-            info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_137, 0L)); // PDF-HUL-137
-            return false;
-        }
-        if (!header.isVersionValid()) {
-            info.setValid(false);
-            info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_148, 0L)); // PDF-HUL-148
         }
         _version = header.getVersionString();
         _pdfACompliant = header.isPdfACompliant();
@@ -1339,22 +1336,22 @@ public class PdfModule extends ModuleBase {
             obj = _trailerDict.get(DICT_KEY_SIZE);
             _docCatDictRef = (PdfIndirectObj) _trailerDict.get(DICT_KEY_ROOT);
             if (obj != null) {
-                _numObjects = -1;
+                _trailerSize = -1;
                 if (obj instanceof PdfSimpleObject) {
                     token = ((PdfSimpleObject) obj).getToken();
                     if (token instanceof Numeric) {
-                        _numObjects = ((Numeric) token).getIntegerValue();
-                        _xref = new long[_numObjects];
+                        _trailerSize = ((Numeric) token).getIntegerValue();
+                        _xref = new long[_trailerSize];
                     } else {
                         throw new PdfInvalidException(MessageConstants.PDF_HUL_73, // PDF-HUL-73
                                 _parser.getOffset());
                     }
                 }
-                if (_numObjects < 0) {
+                if (_trailerSize < 0) {
                     throw new PdfInvalidException(MessageConstants.PDF_HUL_73, // PDF-HUL-73
                             _parser.getOffset());
                 }
-                if (_numObjects > 8388607) {
+                if (_trailerSize > 8388607) {
                     // Appendix C implementation limit is enforced by PDF/A
                     _pdfACompliant = false;
                 }
@@ -1490,7 +1487,7 @@ public class PdfModule extends ModuleBase {
                             }
                         }
                     }
-                    _numFreeObjects += xstream.getFreeCount();
+                    _freeObjectCount += xstream.getFreeCount();
                 } catch (IOException e) {
                     info.setWellFormed(false);
                     info.setMessage(
@@ -1552,6 +1549,16 @@ public class PdfModule extends ModuleBase {
                         if (_parser.getWSString().length() > 1) {
                             _pdfACompliant = false;
                         }
+                        // Check whether we've overflown the object count specificed in trailer.Size
+                        if (firstObj + i >= _trailerSize) {
+                            info.setValid(false);
+                            final String subMessage = MessageFormat.format(
+                                    MessageConstants.PDF_HUL_165_SUB.getMessage(),
+                                    firstObj + i, _trailerSize);
+                            info.setMessage(new ErrorMessage(JhoveMessages.getMessageInstance(MessageConstants.PDF_HUL_165, subMessage), // PDF-HUL-83
+                                    _parser.getOffset()));
+                            continue;
+                        }
                         // A keyword of "n" signifies an object in use,
                         // "f" signifies a free object. If we already
                         // have an entry for this object, don't replace it.
@@ -1561,7 +1568,7 @@ public class PdfModule extends ModuleBase {
                                 _xref[firstObj + i] = offset;
                             }
                         } else if ("f".equals(keyval)) {
-                            _numFreeObjects++;
+                            _freeObjectCount++;
                         } else {
                             throw new PdfMalformedException(
                                     MessageConstants.PDF_HUL_84, // PDF-HUL-84
@@ -1891,7 +1898,7 @@ public class PdfModule extends ModuleBase {
                     algValue = ((Numeric) tok).getIntegerValue();
                     if (_je != null && _je.getShowRawFlag()) {
                         p = new Property(PROP_NAME_ALGORITHM,
-                                PropertyType.INTEGER, new Integer(algValue));
+                                PropertyType.INTEGER, Integer.valueOf(algValue));
                     } else {
                         try {
                             p = new Property(PROP_NAME_ALGORITHM,
@@ -1917,7 +1924,7 @@ public class PdfModule extends ModuleBase {
                 }
                 if (_je != null) {
                     p = new Property(PROP_NAME_KEY_LENGTH, PropertyType.INTEGER,
-                            new Integer(keyLen));
+                            Integer.valueOf(keyLen));
                     _encryptList.add(p);
                 }
             }
@@ -1944,7 +1951,7 @@ public class PdfModule extends ModuleBase {
                     stdList.add(p);
 
                     stdList.add(new Property(PROP_NAME_REVISION,
-                            PropertyType.INTEGER, new Integer(rev)));
+                            PropertyType.INTEGER, Integer.valueOf(rev)));
                 }
                 PdfObject oObj = _encryptDict.get("O");
                 if (oObj != null) {
@@ -2031,9 +2038,9 @@ public class PdfModule extends ModuleBase {
             // CreationDate requires string-to-date conversion
             // ModDate does too
             addDateProperty(_docInfoDict, _docInfoList, DICT_KEY_CREATION_DATE,
-                    PROP_NAME_CREATION_DATE);
+                    PROP_NAME_CREATION_DATE, info);
             addDateProperty(_docInfoDict, _docInfoList, DICT_KEY_MODIFIED_DATE,
-                    PROP_NAME_MODIFIED_DATE);
+                    PROP_NAME_MODIFIED_DATE, info);
             addStringProperty(_docInfoDict, _docInfoList, DICT_KEY_TRAPPED,
                     PROP_NAME_TRAPPED);
         } catch (PdfException e) {
@@ -2198,17 +2205,14 @@ public class PdfModule extends ModuleBase {
                     break;
                 }
                 // Get the streams for the page and walk through them
-                List<PdfStream> streams = page.getContentStreams();
-                if (streams != null) {
-                    ListIterator<PdfStream> streamIter = streams.listIterator();
-                    while (streamIter.hasNext()) {
-                        PdfStream stream = streamIter.next();
-                        String specStr = stream.getFileSpecification();
-                        if (specStr != null) {
-                            Property prop = new Property(PROP_NAME_FILE,
-                                    PropertyType.STRING, specStr);
-                            _extStreamsList.add(prop);
-                        }
+                ListIterator<PdfStream> streamIter = page.getContentStreams().listIterator();
+                while (streamIter.hasNext()) {
+                    PdfStream stream = streamIter.next();
+                    String specStr = stream.getFileSpecification();
+                    if (specStr != null) {
+                        Property prop = new Property(PROP_NAME_FILE,
+                                PropertyType.STRING, specStr);
+                        _extStreamsList.add(prop);
                     }
                 }
             }
@@ -2247,14 +2251,11 @@ public class PdfModule extends ModuleBase {
                     break;
                 }
                 // Get the streams for the page and walk through them
-                List<PdfStream> streams = page.getContentStreams();
-                if (streams != null) {
-                    ListIterator<PdfStream> streamIter = streams.listIterator();
-                    while (streamIter.hasNext()) {
-                        PdfStream stream = streamIter.next();
-                        Filter[] filters = stream.getFilters();
-                        extractFilters(filters, stream);
-                    }
+                ListIterator<PdfStream> streamIter = page.getContentStreams().listIterator();
+                while (streamIter.hasNext()) {
+                    PdfStream stream = streamIter.next();
+                    Filter[] filters = stream.getFilters();
+                    extractFilters(filters);
                 }
             }
         } catch (PdfException e) {
@@ -2274,7 +2275,7 @@ public class PdfModule extends ModuleBase {
      * Returns the filter string whether it's added or not,
      * or null if there are no filters.
      */
-    protected String extractFilters(Filter[] filters, PdfStream stream) {
+    protected String extractFilters(Filter[] filters) {
         /*
          * Concatenate the names into a string of names separated
          * by spaces.
@@ -2393,8 +2394,7 @@ public class PdfModule extends ModuleBase {
                                     String mimeType = imageMimeFromFilters(
                                             filters);
                                     niso.setMimeType(mimeType);
-                                    String filt = extractFilters(filters,
-                                            (PdfStream) xob);
+                                    String filt = extractFilters(filters);
                                     if (filt != null) {
                                         // If the filter is one which the NISO
                                         // schema
@@ -2486,7 +2486,7 @@ public class PdfModule extends ModuleBase {
                                         // imgList.add(new
                                         // Property(DICT_KEY_BITS_PER_COMPONENT,
                                         // PropertyType.INTEGER,
-                                        // new Integer (bpc.getIntValue())));
+                                        // Integer.valueOf (bpc.getIntValue())));
                                         niso.setBitsPerSample(new int[] {
                                                 bpc.getIntValue() });
                                     }
@@ -2522,7 +2522,7 @@ public class PdfModule extends ModuleBase {
                                         while (diter.hasNext()) {
                                             PdfSimpleObject d = (PdfSimpleObject) diter
                                                     .next();
-                                            dcdlst.add(new Integer(
+                                            dcdlst.add(Integer.valueOf(
                                                     d.getIntValue()));
                                         }
                                         imgList.add(new Property(
@@ -2678,7 +2678,7 @@ public class PdfModule extends ModuleBase {
                     .get(DICT_KEY_FONT_SUBTYPE);
             subtypeStr = subtype.getStringValue();
             if (FONT_TYPE0.equals(subtypeStr)) {
-                _type0FontsMap.put(new Integer(font.getObjNumber()), font);
+                _type0FontsMap.put(Integer.valueOf(font.getObjNumber()), font);
                 // If the font is Type 0, we must go
                 // through its descendant fonts
                 PdfObject desc0 = font.get(DICT_KEY_DESCENDANT_FONTS);
@@ -2691,17 +2691,17 @@ public class PdfModule extends ModuleBase {
                     addFontToMap((PdfDictionary) subfont);
                 }
             } else if (FONT_TYPE1.equals(subtypeStr)) {
-                _type1FontsMap.put(new Integer(font.getObjNumber()), font);
+                _type1FontsMap.put(Integer.valueOf(font.getObjNumber()), font);
             } else if (FONT_MM_TYPE1.equals(subtypeStr)) {
-                _mmFontsMap.put(new Integer(font.getObjNumber()), font);
+                _mmFontsMap.put(Integer.valueOf(font.getObjNumber()), font);
             } else if (FONT_TYPE3.equals(subtypeStr)) {
-                _type3FontsMap.put(new Integer(font.getObjNumber()), font);
+                _type3FontsMap.put(Integer.valueOf(font.getObjNumber()), font);
             } else if (FONT_TRUE_TYPE.equals(subtypeStr)) {
-                _trueTypeFontsMap.put(new Integer(font.getObjNumber()), font);
+                _trueTypeFontsMap.put(Integer.valueOf(font.getObjNumber()), font);
             } else if (FONT_CID_TYPE0.equals(subtypeStr)) {
-                _cid0FontsMap.put(new Integer(font.getObjNumber()), font);
+                _cid0FontsMap.put(Integer.valueOf(font.getObjNumber()), font);
             } else if (FONT_CID_TYPE2.equals(subtypeStr)) {
-                _cid2FontsMap.put(new Integer(font.getObjNumber()), font);
+                _cid2FontsMap.put(Integer.valueOf(font.getObjNumber()), font);
             }
             return subtypeStr;
         } catch (Exception e) {
@@ -3012,8 +3012,8 @@ public class PdfModule extends ModuleBase {
                 if (page == null) {
                     break;
                 }
-                _pageSeqMap.put(new Integer(page.getDict().getObjNumber()),
-                        new Integer(pageIndex + 1));
+                _pageSeqMap.put(Integer.valueOf(page.getDict().getObjNumber()),
+                        Integer.valueOf(pageIndex + 1));
             }
             _docTreeRoot.startWalk();
             for (;;) {
@@ -3060,7 +3060,7 @@ public class PdfModule extends ModuleBase {
                 // Page sequence is different from label, or
                 // there is no label. Make it 1-based.
                 pagePropList.add(new Property(PROP_NAME_SEQUENCE,
-                        PropertyType.INTEGER, new Integer(idx + 1)));
+                        PropertyType.INTEGER, Integer.valueOf(idx + 1)));
 
             }
         } catch (PdfException e) {
@@ -3130,7 +3130,7 @@ public class PdfModule extends ModuleBase {
             }
             if (rot != null && rot.getIntValue() != 0) {
                 pagePropList.add(new Property(PROP_NAME_ROTATE,
-                        PropertyType.INTEGER, new Integer(rot.getIntValue())));
+                        PropertyType.INTEGER, Integer.valueOf(rot.getIntValue())));
             }
 
             // UserUnit property (1.6), not inheritable
@@ -3478,7 +3478,7 @@ public class PdfModule extends ModuleBase {
                                 PROP_VAL_EXTERNAL));
                     } else {
                         propList.add(new Property(propName,
-                                PropertyType.INTEGER, new Integer(pageObjNum)));
+                                PropertyType.INTEGER, Integer.valueOf(pageObjNum)));
                     }
                 }
             } else {
@@ -3486,7 +3486,7 @@ public class PdfModule extends ModuleBase {
                     return; // can't get the page object number
                 }
                 int pageObjNum = dest.getPageDestObjNumber();
-                Integer destPg = _pageSeqMap.get(new Integer(pageObjNum));
+                Integer destPg = _pageSeqMap.get(Integer.valueOf(pageObjNum));
                 if (destPg != null) {
                     propList.add(new Property(propName, PropertyType.INTEGER,
                             destPg));
@@ -3513,11 +3513,45 @@ public class PdfModule extends ModuleBase {
         }
     }
 
+    protected void checkPageTextStreams(final RepInfo info) {
+        if (_encrypted) {
+            // Don't bother trying to check text streams if the file is encrypted
+            return;
+        }
+        _docTreeRoot.startWalk();
+        try {
+            for (;;) {
+                // Get all the page objects in the document sequentially
+                PageObject page = _docTreeRoot.nextPageObject();
+                if (page == null) {
+                    break;
+                }
+                // Get the streams for the page and walk through them
+                ListIterator<PdfStream> streamIter = page.getContentStreams().listIterator();
+                while (streamIter.hasNext()) {
+                    PdfTextStream textStream = new PdfTextStream(streamIter.next(), _raf);
+                    textStream.validate();
+                }
+            }
+        } catch (PdfException e) {
+            e.disparage(info);
+            info.setMessage(new ErrorMessage(e.getJhoveMessage()));
+        } catch (IOException e) {
+            info.setWellFormed(false);
+            String subMess = e.getMessage();
+            JhoveMessage message = JhoveMessages.getMessageInstance(
+                    MessageConstants.PDF_HUL_163, subMess);
+            info.setMessage(new ErrorMessage(message)); // PDF-HUL-102
+        } catch (NegativeArraySizeException e) {
+            // Do nothing with this now as it seems to be a bug in the xref stream handler
+        }
+    }
+
     /*
      * Build up a property for one of the kinds of fonts
      * in the file.
      */
-    protected Property buildFontProperty(String name, Map map, int fontType) {
+    protected Property buildFontProperty(String name, Map<Integer, PdfObject> map, int fontType) {
         List<Property> fontList = new LinkedList<Property>(); // list of fonts
         Iterator<PdfObject> fontIter = map.values().iterator();
         while (fontIter.hasNext()) {
@@ -3606,7 +3640,7 @@ public class PdfModule extends ModuleBase {
             try {
                 int firstChar = ((PdfSimpleObject) firstCharObj).getIntValue();
                 prop = new Property(PROP_NAME_FIRST_CHAR, PropertyType.INTEGER,
-                        new Integer(firstChar));
+                        Integer.valueOf(firstChar));
                 fontPropList.add(prop);
             } catch (Exception e) {
             }
@@ -3618,7 +3652,7 @@ public class PdfModule extends ModuleBase {
             try {
                 int lastChar = ((PdfSimpleObject) lastCharObj).getIntValue();
                 prop = new Property(PROP_NAME_LAST_CHAR, PropertyType.INTEGER,
-                        new Integer(lastChar));
+                        Integer.valueOf(lastChar));
                 fontPropList.add(prop);
             } catch (Exception e) {
             }
@@ -3800,7 +3834,7 @@ public class PdfModule extends ModuleBase {
             try {
                 int suppvalue = ((PdfSimpleObject) supp).getIntValue();
                 subprop = new Property(PROP_NAME_SUPPLEMENT,
-                        PropertyType.INTEGER, new Integer(suppvalue));
+                        PropertyType.INTEGER, Integer.valueOf(suppvalue));
                 propList.add(subprop);
             } catch (Exception e) {
             }
@@ -4078,7 +4112,7 @@ public class PdfModule extends ModuleBase {
             // }
             int listCount = 0; // Guard against looping
             while (item != null) {
-                Integer onum = new Integer(item.getObjNumber());
+                Integer onum = Integer.valueOf(item.getObjNumber());
                 Property p = buildOutlineItemProperty((PdfDictionary) item,
                         info);
                 itemList.add(p);
@@ -4169,7 +4203,7 @@ public class PdfModule extends ModuleBase {
                             PropertyType.STRING, dest.getIndirectDest().getStringValue()));
                 } else {
                     int pageObjNum = dest.getPageDestObjNumber();
-                    Integer destPg = _pageSeqMap.get(new Integer(pageObjNum));
+                    Integer destPg = _pageSeqMap.get(Integer.valueOf(pageObjNum));
                     if (destPg != null) {
                         itemList.add(new Property(PROP_NAME_DESTINATION,
                                 PropertyType.INTEGER, destPg));
@@ -4188,7 +4222,7 @@ public class PdfModule extends ModuleBase {
                 // on the list just to be safe.
                 int listCount = 0;
                 while (child != null) {
-                    Integer onum = new Integer(child.getObjNumber());
+                    Integer onum = Integer.valueOf(child.getObjNumber());
                     if (_visitedOutlineNodes.contains(onum)) {
                         /* We have recursion! */
                         if (!_recursionWarned) {
@@ -4333,25 +4367,40 @@ public class PdfModule extends ModuleBase {
      * with a string value, to a specified List.
      */
     protected void addDateProperty(PdfDictionary dict, List<Property> propList,
-            String key, String propName) throws PdfInvalidException {
+                 String key, String propName, final RepInfo info) {
         if (_encrypted) {
             String propText = ENCRYPTED;
             propList.add(new Property(propName, PropertyType.STRING, propText));
-        } else {
-            PdfObject propObject = dict.get(key);
-            if (propObject instanceof PdfSimpleObject) {
-                Token tok = ((PdfSimpleObject) propObject).getToken();
-                if (tok instanceof Literal) {
-                    Literal lit = (Literal) tok;
-                    if (!lit.getValue().isEmpty()) {
-                        Date propDate = lit.parseDate();
-                        if (propDate != null) {
-                            propList.add(new Property(propName, PropertyType.DATE, propDate));
-                        }
-                    }
+            return;
+        }
+        PdfObject propObject = dict.get(key);
+        if (propObject == null) {
+            return;
+        }
+        Literal lit = getDateLiteral(propObject);
+        if (lit != null && !lit.getValue().isEmpty()) {
+            try {
+                Date propDate = lit.parseDate();
+                if (propDate != null) {
+                    propList.add(new Property(propName, PropertyType.DATE, propDate));
+                    return;
                 }
+            } catch (PdfInvalidException e) {
+                info.setValid(false);
+                info.setMessage(new ErrorMessage(JhoveMessages.getMessageInstance(
+                    MessageConstants.PDF_HUL_133.getId(), MessageConstants.PDF_HUL_133.getMessage(), "For date property: " + propName.trim() + ", value: " + lit.getValue().trim()), _parser.getOffset()));
             }
         }
+    }
+
+    private Literal getDateLiteral(final PdfObject obj) {
+        if (obj instanceof PdfSimpleObject) {
+            Token tok = ((PdfSimpleObject) obj).getToken();
+            if (tok instanceof Literal) {
+                return (Literal) tok;
+            }
+        }
+        return null;
     }
 
     /*
@@ -4362,7 +4411,7 @@ public class PdfModule extends ModuleBase {
     protected Property buildBitmaskProperty(int val, String name,
             String[] valueNames, String defaultStr) {
         if (_je != null && _je.getShowRawFlag()) {
-            return new Property(name, PropertyType.INTEGER, new Integer(val));
+            return new Property(name, PropertyType.INTEGER, Integer.valueOf(val));
         }
         List<String> slist = new LinkedList<String>();
         try {

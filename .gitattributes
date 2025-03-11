@@ -1,12 +1,12 @@
 # Prevent interpretation as text and end-of-line conversions.
-*.warc binary
-*.pdf binary
-*.gif binary
-*.jpg binary
-*.jp2 binary
-*.jpx binary
-*.tif binary
-*.wav binary
+*.warc -text -diff binary
+*.pdf -text -diff binary
+*.gif -text -diff binary
+*.jpg -text -diff binary
+*.jp2 -text -diff binary
+*.jpx -text -diff binary
+*.tif -text -diff binary
+*.wav -text -diff binary
 
 # Set the default behavior, in case people don't have core.autocrlf set.
 * text=auto

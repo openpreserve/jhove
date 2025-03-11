@@ -1,18 +1,22 @@
 # See https://docs.docker.com/engine/userguide/eng-image/multistage-build/
 # First build the app on a maven open jdk 11 container
-FROM maven:3-eclipse-temurin-11-focal as dev-builder
+ARG JHOVE_VERSION=1.33.0-SNAPSHOT
+FROM maven:3-eclipse-temurin-11-alpine AS dev-builder
 ARG JHOVE_VERSION
-ENV JHOVE_VERSION=${JHOVE_VERSION:-1.32.0-RC1}
+ENV JHOVE_VERSION=${JHOVE_VERSION}
 
-# Copy the current dev source branch to a local build dir
-COPY . /build/jhove/
+RUN apk add --no-cache git
+WORKDIR /build
+
+# Clone the repo, checkout the revision and build the application
+RUN git clone https://github.com/openpreserve/jhove.git
+
 WORKDIR /build/jhove
-
-RUN mvn clean package && java -jar jhove-installer/target/jhove-xplt-installer-${JHOVE_VERSION}.jar docker-install.xml
+RUN git checkout v${JHOVE_VERSION} && mvn clean package && java -jar jhove-installer/target/jhove-xplt-installer-${JHOVE_VERSION}.jar docker-install.xml
 
 # Now build a Java JRE for the Alpine application image
 # https://github.com/docker-library/docs/blob/master/eclipse-temurin/README.md#creating-a-jre-using-jlink
-FROM eclipse-temurin:11 as jre-builder
+FROM eclipse-temurin:11-jdk-alpine AS jre-builder
 
 # Create a custom Java runtime
 RUN "$JAVA_HOME/bin/jlink" \
@@ -24,14 +28,14 @@ RUN "$JAVA_HOME/bin/jlink" \
          --output /javaruntime
 
 # Now the final application image
-FROM debian:bullseye-slim
+FROM alpine:3
 
 # Set for additional arguments passed to the java run command, no default
 ARG JAVA_OPTS
 ENV JAVA_OPTS=$JAVA_OPTS
 # Specify the veraPDF REST version if you want to (to be used in build automation)
 ARG JHOVE_VERSION
-ENV JHOVE_VERSION=${JHOVE_VERSION:-1.32.0-RC1}
+ENV JHOVE_VERSION=${JHOVE_VERSION}
 
 # Copy the JRE from the previous stage
 ENV JAVA_HOME=/opt/java/openjdk
@@ -40,7 +44,7 @@ COPY --from=jre-builder /javaruntime $JAVA_HOME
 
 # Since this is a running network service we'll create an unprivileged account
 # which will be used to perform the rest of the work and run the actual service:
-RUN useradd --system --user-group --home-dir=/opt/jhove jhove
+RUN addgroup -S jhove && adduser -S -G jhove -h /opt/jhove jhove
 RUN mkdir --parents /var/opt/jhove/logs && chown -R jhove:jhove /var/opt/jhove
 
 USER jhove
