@@ -382,7 +382,7 @@ public class PdfModule extends ModuleBase {
 
     private static final String NAME = "PDF-hul";
     private static final String RELEASE = "1.12.8";
-    private static final int[] DATE = { 2025, 02, 05 };
+    private static final int[] DATE = { 2025, 03, 12 };
     private static final String[] FORMAT = { "PDF",
             "Portable Document Format" };
     private static final String COVERAGE = "PDF 1.0-1.6; "
@@ -1036,7 +1036,7 @@ public class PdfModule extends ModuleBase {
         _skippedPagesReported = false;
         _idProperty = null;
         _actionsExist = false;
-        _trailerSize = 0;
+        _trailerSize = -1;
         _trailerCount = -1;
         _pdfACompliant = true; // assume compliance till disproven
         _xmpProp = null;
@@ -1550,7 +1550,7 @@ public class PdfModule extends ModuleBase {
                             _pdfACompliant = false;
                         }
                         // Check whether we've overflown the object count specificed in trailer.Size
-                        if (firstObj + i >= _trailerSize) {
+                        if (_trailerSize >= 0 && (firstObj + i >= _trailerSize)) {
                             info.setValid(false);
                             final String subMessage = MessageFormat.format(
                                     MessageConstants.PDF_HUL_165_SUB.getMessage(),
