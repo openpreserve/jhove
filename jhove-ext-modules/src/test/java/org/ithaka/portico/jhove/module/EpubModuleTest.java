@@ -101,9 +101,7 @@ public class EpubModuleTest {
         assertEquals(EXPECTED_MEDIATYPE, info.getMimeType());
         assertEquals(EXPECTED_VERSION_3_3, info.getVersion());
         // these may change, so just check they aren't null
-        // note: this property is missing in 5.1.0 of epubcheck but 
-        // due for fix in next maintence release, uncomment when fixed.
-        //assertNotNull(info.getCreated());
+        assertNotNull(info.getCreated());
         assertNotNull(info.getLastModified());
 
         Property metadata = info.getProperty(EPUBMETADATA_KEY);
@@ -250,9 +248,7 @@ public class EpubModuleTest {
         assertEquals(EXPECTED_MEDIATYPE, info.getMimeType());
         assertEquals("2.0.1", info.getVersion());
         // may change, so just check it isn't null
-        // note: this property is missing in 5.1.0 of epubcheck but 
-        // due for fix in next maintence release, uncomment when fixed.
-        //assertNotNull(info.getCreated());
+        assertNotNull(info.getCreated());
 
         Property metadata = info.getProperty(EPUBMETADATA_KEY);
         Map<String, Object> props = toMap(metadata);
