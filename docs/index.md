@@ -1,5 +1,6 @@
 ---
 title: JSTOR/Harvard Object Validation Environment
+layout: page
 ---
 
 ![JHOVE logo](img/jhovelogo.png)
