@@ -5,7 +5,7 @@ layout: page
 
 # Documentation
 
-## An introduction to JHOVE
+## An introduction to JHOVE {#introduction}
 
 JHOVE provides functions to perform format-specific identification, validation, and characterization of digital objects.
 
@@ -24,12 +24,12 @@ JHOVE provides functions to perform format-specific identification, validation, 
 Identification, validation, and characterization actions are frequently necessary during routine operation of digital repositories and for digital preservation activities. These actions are performed by *modules*. The output from JHOVE is controlled by *output handlers*. JHOVE uses an extensible plug-in architecture; it can be configured at the time of its invocation to include whatever specific format modules and output handlers that are desired.  
 The initial release of JHOVE includes [modules](/modules/) for [arbitrary byte streams](/modules/bytestream), [ASCII](/modules/ascii) and [UTF-8](/modules/utf8) encoded text, [GIF](/modules/gif), [JPEG2000](/modules/jpeg2000), [JPEG](/modules/jpeg), and [TIFF](/modules/tiff) images, [AIFF](/modules/aiff) and [WAVE](/modules/wave) audio, [PDF](/modules/pdf), [HTML](/modules/html), and [XML](/modules/xml); and text and XML output handlers.
 
-## Tutorial
+## Tutorial {#tutorial}
 
 - [Getting started with JHOVE](/getting-started/) (2015-10-20)
 - [Selecting an XML parser](/documentation/parser/) (2007-04-04)
 
-## For JHOVE Developers
+## For JHOVE Developers {#for-developers}
 
 - A guide to [building JHOVE from source](/documentation/build/).
 - JHOVE [JavaDoc for all packages and classes](/javadoc/)
@@ -37,12 +37,12 @@ The initial release of JHOVE includes [modules](/modules/) for [arbitrary byte s
 - A guide to [writing a JHOVE Module](/documentation/dev-module/) (2005-02-07)
 - A guide to [logging in JHOVE](/documentation/logging/)
 
-## Schemas
+## Schemas {#schemas}
 
 - JHOVE output schema [jhove.xsd](http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd)
 - JHOVE configuration file schema [jhoveConfig.xsd](http://hul.harvard.edu/ois/xml/xsd/jhove/jhoveConfig.xsd)
 
-## Modules and Format Specifications
+## Modules and Format Specifications {#specifications}
 
 Standard JHOVE modules:
 
