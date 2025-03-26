@@ -1,5 +1,6 @@
 ---
 title: Distribution
+layout: page
 ---
 
 # JHOVE Distribution
