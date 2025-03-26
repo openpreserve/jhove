@@ -1,11 +1,9 @@
 ---
 title: About
-layout: default
+layout: page
 ---
 
 # About JHOVE
-
-About MARKDOWN TEST
 
 JHOVE is currently maintained by the [Open Preservation Foundation](http://openpreservation.org). Development effort is guided by the JHOVE Product Board, comprising OPF members and software supporters.
 
