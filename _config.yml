@@ -1,0 +1,25 @@
+title: JHOVE Documentation
+description: Open source file format identification, validation & characterisation
+baseurl: "/" # Adjust if the site is hosted in a subdirectory
+url: "jhove.darrendignam.com" # Replace with your GitHub Pages URL
+theme: minima
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude files and directories from the build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - node_modules
+  - browserconfig.xml
+  - manifest.json
+
+# Navigation links
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
