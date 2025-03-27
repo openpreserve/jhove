@@ -39,6 +39,7 @@ dd {
   top: 0;
   color: #337ab7;
   cursor: pointer;
+  font-size: 60%;
 }
 
 .blockquote {
