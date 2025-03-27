@@ -9,7 +9,7 @@ layout: page
 ## 1 Application
 
 ```
-unix% <strong>jhove -c conf/jhove.conf</strong>
+unix% jhove -c conf/jhove.conf
 Jhove (Rel. 1.0, 2005-05-26)
 Date: 2005-05-26 15:30:42 EST
 App:
@@ -42,7 +42,7 @@ App:
 ## 2 Module
 
 ```
-unix% <strong>jhove -c conf/jhove.conf -m bytestream</strong>
+unix% jhove -c conf/jhove.conf -m bytestream
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 15:32:34 EST
  Module: BYTESTREAM
@@ -67,7 +67,7 @@ Jhove (Rel. 1.0, 2005-05-26)
 ## 3 Output Handler
 
 ```
-unix% <strong>jhove -c conf/jhove.conf -H xml</strong>
+unix% jhove -c conf/jhove.conf -H xml
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 15:35:12 EST
  Handler: XML
@@ -88,7 +88,7 @@ Jhove (Rel. 1.0, 2005-05-26)
 ### 4.1 ASCII
 
 ```
-unix% <strong>jhove -c conf/jhove.conf -k examples/ascii/control.txt</strong>
+unix% jhove -c conf/jhove.conf -k examples/ascii/control.txt
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 16:06:49 EST
  RepresentationInformation: examples/ascii/control.txt
@@ -112,7 +112,7 @@ Jhove (Rel. 1.0, 2005-05-26)
 ### 4.2 UTF-8
 
 ```
-unix% <strong>jhove -c conf/jhove.conf -k examples/utf-8/sample.txt</strong>
+unix% jhove -c conf/jhove.conf -k examples/utf-8/sample.txt
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 16:14:58 EST
  RepresentationInformation: examples/utf-8/sample.txt
@@ -137,7 +137,7 @@ Jhove (Rel. 1.0, 2005-05-26)
 ### 4.3 PDF
 
 ```
-unix%  <strong>jhove -c conf/jhove.conf -k examples/pdf/ddap/DDAP_Singlev3.pdf</strong>
+unix%  jhove -c conf/jhove.conf -k examples/pdf/ddap/DDAP_Singlev3.pdf
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 14:21:51 EDT
  RepresentationInformation: examples/pdf/ddap/DDAP_Singlev3.pdf
@@ -274,7 +274,7 @@ Jhove (Rel. 1.0, 2005-05-26)
 ### 4.4 TIFF
 
 ```
-unix% <strong>jhove -c conf/jhove.conf -k examples/tiff/little-endian.tif</strong>
+unix% jhove -c conf/jhove.conf -k examples/tiff/little-endian.tif
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 14:23:21 EDT
  RepresentationInformation: examples/tiff/little-endian.tif
