@@ -5,6 +5,7 @@ layout: page
 
 # Getting Started with JHOVE
 
+{: #introduction .section-heading}
 ## Introduction
 
 JHOVE (pronounced "jove"), the JSTOR/Harvard Object Validation Environment, is an extensible software framework for performing format identification, validation, and characterization of digital objects.
@@ -24,6 +25,7 @@ Identification, validation, and characterization actions are frequently necessar
 
 The output from JHOVE is controlled by *output handlers*. JHOVE uses an extensible plug-in architecture; it can be configured at the time of its invocation to include whatever specific format modules and output handlers that are desired. The initial release of JHOVE includes modules for [arbitrary byte streams](/modules/bytestream/), [ASCII](/modules/ascii/) and [UTF-8](/modules/utf8/) encoded text, [TIFF](/modules/tiff/), [HTML](/modules/html/), [XML](/modules/xml/), [JPEG](/modules/jpeg/), [JPEG2000](/modules/jpeg2000/), [PDF](/modules/pdf/), [AIFF](/modules/aiff/), [WAVE](/modules/wave/) audio; and [text](#text) and [XML](#xml) output handlers.
 
+{: #getting-jhove .section-heading}
 ## Getting JHOVE
 
 JHOVE is written in [Java](http://java.sun.com/j2se/). A J2SE 1.5-compliant Java Runtime Environment (JRE) is required for proper operation of JHOVE. JHOVE should be usable on any Unix, Windows, or OS X platform with the appropriate Java installation.
@@ -36,6 +38,7 @@ There's now a beta of the new JHOVE installer, the latest version can be [downlo
 
 If you'd like to get JHOVE via Maven or build the project from source, please read our [build guide](/documentation/build/).
 
+{: #installing-jhove .section-heading}
 ## Installing JHOVE
 
 Download the [latest JHOVE installer](http://software.openpreservation.org/rel/jhove-latest.jar), this requires Java 1.6 or later to be pre-installed. We'll assume that you've downloaded:
@@ -60,6 +63,7 @@ C:\Users\yourName\jhove\jhove-gui
 
 ...existing content for Windows, Mac OS, and Linux installation...
 
+{: #running-jhove .section-heading}
 ## Running JHOVE
 
 There should be no issues configuring the current JHOVE beta, but just in case we've retained the [old configuration guide](/getting-started/config/).
@@ -73,5 +77,3 @@ java Jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
 ```
 
 ...existing content for usage, format identification, validation, characterization, and GUI interface...
-
-{% include footer.html %}
