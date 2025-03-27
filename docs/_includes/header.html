@@ -18,6 +18,8 @@
     <meta name="application-name" content="JHOVE">
     <meta name="theme-color" content="#ffffff">
 
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -32,4 +34,34 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".section-heading").forEach(function (heading) {
+                heading.addEventListener("click", function () {
+                    const id = heading.getAttribute("id");
+                    const url = `${window.location.origin}${window.location.pathname}#${id}`;
+                    
+                    // Copy the link to the clipboard
+                    navigator.clipboard.writeText(url).then(() => {
+                        // Create a temporary "Copied!" notification
+                        const notification = document.createElement("span");
+                        notification.textContent = "Copied!";
+                        notification.className = "copied-notification badge bg-success";
+                        notification.style.position = "absolute";
+                        notification.style.marginLeft = "10px";
+                        
+                        // Append the notification next to the heading
+                        heading.appendChild(notification);
+    
+                        // Fade out and remove the notification after 2 seconds
+                        setTimeout(() => {
+                            notification.style.opacity = "0";
+                            setTimeout(() => notification.remove(), 500);
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
 </head>
