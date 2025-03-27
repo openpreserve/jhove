@@ -28,15 +28,16 @@ dd {
 
 .section-heading {
   color:#337ab7;
+  position: relative;
 }
 .section-heading:hover::after {
   content: "\f0c1"; /* Font Awesome link icon */
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
-  position: absolute;
-  right: -1.5em; /* Adjust spacing as needed */
+  position: relative;
+  right: -.5em; 
   top: 0;
-  color: #337ab7; /* Match your site's color scheme */
+  color: #337ab7;
   cursor: pointer;
 }
 

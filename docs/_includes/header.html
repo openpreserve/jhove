@@ -21,10 +21,8 @@
     <!-- Fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Bootstrap -->
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified CSS for Bootstrap 4 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.6.2/css/bootstrap.min.css">
     <!-- Our theme -->
     <link rel="stylesheet" href="/css/jhove.css">
 
@@ -46,10 +44,10 @@
                     navigator.clipboard.writeText(url).then(() => {
                         // Create a temporary "Copied!" notification
                         const notification = document.createElement("span");
-                        notification.textContent = "Copied!";
+                        notification.textContent = "Hyperlink Copied!";
                         notification.className = "copied-notification badge bg-success";
                         notification.style.position = "absolute";
-                        notification.style.marginLeft = "10px";
+                        notification.style.marginLeft = "20px";
                         
                         // Append the notification next to the heading
                         heading.appendChild(notification);
