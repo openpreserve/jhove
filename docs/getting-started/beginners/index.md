@@ -2,12 +2,12 @@
 layout: page
 title: JHOVE - A Beginners Guide
 ---
-{{ page.title }}
-================
+# {{ page.title }}
+
 JHOVE is an open source file format identification, validation and characterisation tool. Format identification and validation are essential first steps in digital preservation workflows. This guide assists newcomers to JHOVE (pronounced 'jove') with installation of the software and using the graphical user interface (GUI).
 
-Getting JHOVE
--------------
+{: #getting-jhove .section-heading}
+## Getting JHOVE
 
 ### From the Open Preservation web site
 1. You can find out more about JHOVE and download the latest installer from the Open Preservation Foundation (OPF) JHOVE product page : [http://openpreservation.org/technology/products/jhove/](http://openpreservation.org/technology/products/jhove/).
@@ -21,6 +21,7 @@ Getting JHOVE
 2. Again, press the "Download JHOVE" button :<br/>
 ![Screenshot of the JHOVE website home page](/img/jhove-download.png "JHOVE website home page")
 
+{: #installing-jhove .section-heading}
 ### Installing JHOVE
 1. This will start to download the file `jhove-latest.jar` into the location where you download your files, such as your Downloads folder:<br/>
 ![Screenshot of the Windows explorer showing the downloaded JHOVE jar](/img/jhove-down-windows.png "JHOVE download in Windows Explorer")

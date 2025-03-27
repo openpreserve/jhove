@@ -5,10 +5,11 @@ layout: page
 
 # JHOVE Examples
 
+{: #application .section-heading}
 ## 1 Application
 
 ```
-unix% jhove -c conf/jhove.conf
+unix% **jhove -c conf/jhove.conf**
 Jhove (Rel. 1.0, 2005-05-26)
 Date: 2005-05-26 15:30:42 EST
 App:
@@ -37,75 +38,300 @@ App:
   Rights: Copyright 2004-2005 by the President and Fellows of Harvard College. Released under the GNU Lesser General Public License.
 ```
 
+{: #moule .section-heading}
 ## 2 Module
 
 ```
-unix% jhove -c conf/jhove.conf -m bytestream
+unix% **jhove -c conf/jhove.conf -m bytestream**
 Jhove (Rel. 1.0, 2005-05-26)
-Date: 2005-05-26 15:32:34 EST
-Module: BYTESTREAM
+ Date: 2005-05-26 15:32:34 EST
+ Module: BYTESTREAM
   Release: 1.2
   Date: 2005-03-09
   Format: bytestream
   MIMEtype: application/octet-stream
-  ...
+   Feature: edu.harvard.hul.ois.jhove.canValidate
+   Feature: edu.harvard.hul.ois.jhove.canCharacterize
+  Methodology:
+   Well-formed: All bytestreams are well-formed
+  Vendor: Harvard University Library
+   Type: Educational
+   Address: Office for Information Systems, 1280 Massachusetts Avenue, Suite 404, Cambridge, MA 02138
+   Telephone: +1 (617) 495-3724
+   Email: jhove-support at hulmail.harvard.edu
+  Note: This is the default format
+  Rights: Copyright 2003-2005 by JSTOR and the President and Fellows of Harvard College. Released under the GNU Lesser General Public License.
 ```
 
+{: #output-handler .section-heading}
 ## 3 Output Handler
 
 ```
-unix% jhove -c conf/jhove.conf -H xml
+unix% **jhove -c conf/jhove.conf -H xml**
 Jhove (Rel. 1.0, 2005-05-26)
-Date: 2005-05-26 15:35:12 EST
-Handler: XML
+ Date: 2005-05-26 15:35:12 EST
+ Handler: XML
   Release: 1.3
   Date: 2005-05-05
   Vendor: Harvard University Library
-  ...
+   Type: Educational
+   Address: Office for Information Systems, 1280 Massachusetts Avenue, Suite 404, Cambridge, MA 02138
+   Telephone: +1 (617) 495-3724
+   Email: jhove-support at hulmail.harvard.edu
+  Note: This output handler is defined by the XML Schema http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd
+  Rights: Copyright 2003-2005 by JSTOR and the President and Fellows of Harvard College. Released under the GNU Lesser General Public License.
 ```
 
+{: #identification .section-heading}
 ## 4 Identification
 
 ### 4.1 ASCII
 
 ```
-unix% jhove -c conf/jhove.conf -k examples/ascii/control.txt
+unix% **jhove -c conf/jhove.conf -k examples/ascii/control.txt**
 Jhove (Rel. 1.0, 2005-05-26)
-Date: 2005-05-26 16:06:49 EST
-RepresentationInformation: examples/ascii/control.txt
+ Date: 2005-05-26 16:06:49 EST
+ RepresentationInformation: examples/ascii/control.txt
   ReportingModule: ASCII-hul, Rel. 1.1 (2005-01-11)
-  ...
+  LastModified: 2003-09-09 16:56:50 EDT
+  Size: 51
+  Format: ASCII
+  Status: Well-formed and valid
+  MIMEtype: text/plain; charset=US-ASCII
+  ASCIIMetadata:
+   LineEndings: LF
+   ControlCharacters: TAB (0x09), VT (0x0B), FF (0x0C), SUB (0x1A)
+  Checksum: bae406b6
+   Type: CRC32
+  Checksum: 2774395cac046bf2fd1898ebed8a5f9a
+   Type: MD5
+  Checksum: 6753be3059ba36fd970ff620a7ebe3fff95c13fe
+   Type: SHA-1
 ```
 
 ### 4.2 UTF-8
 
 ```
-unix% jhove -c conf/jhove.conf -k examples/utf-8/sample.txt
+unix% **jhove -c conf/jhove.conf -k examples/utf-8/sample.txt**
 Jhove (Rel. 1.0, 2005-05-26)
-Date: 2005-05-26 16:14:58 EST
-RepresentationInformation: examples/utf-8/sample.txt
+ Date: 2005-05-26 16:14:58 EST
+ RepresentationInformation: examples/utf-8/sample.txt
   ReportingModule: UTF8-hul, Rel. 1.1 (2005-01-11)
-  ...
+  LastModified: 2003-08-06 16:10:12 EDT
+  Size: 1348
+  Format: UTF-8
+  Status: Well-formed and valid
+  MIMEtype: text/plain; charset=UTF-8
+  UTF8Metadata:
+   Characters: 988
+   UnicodeBlocks: Basic Latin, Latin-1 Supplement, Latin Extended-A, IPA Extensions, Greek and Coptic, Cyrillic, Hebrew, Thai, Georgian, Latin Extended Additional, Greek Extended, General Punctuation, Hiragana, Katakana, CJK Unified Ideographs, Hangul Syllables, Arabic Presentation Forms-A, Arabic Presentation Forms-B
+   LineEndings: CRLF
+  Checksum: 6f48961b
+   Type: CRC32
+  Checksum: 5850861d6891efaadaf472c509559f02
+   Type: MD5
+  Checksum: e09d2fcb13e4daabe285282e19c7bf93b0c1c2a4
+   Type: SHA-1
 ```
 
 ### 4.3 PDF
 
 ```
-unix% jhove -c conf/jhove.conf -k examples/pdf/ddap/DDAP_Singlev3.pdf
+unix%  **jhove -c conf/jhove.conf -k examples/pdf/ddap/DDAP_Singlev3.pdf**
 Jhove (Rel. 1.0, 2005-05-26)
-Date: 2005-05-26 14:21:51 EDT
-RepresentationInformation: examples/pdf/ddap/DDAP_Singlev3.pdf
+ Date: 2005-05-26 14:21:51 EDT
+ RepresentationInformation: examples/pdf/ddap/DDAP_Singlev3.pdf
   ReportingModule: PDF-hul, Rel. 1.4 (2005-03-09)
-  ...
+  LastModified: 2003-10-07 10:52:36 EDT
+  Size: 21423
+  Format: PDF
+  Version: 1.3
+  Status: Well-Formed, but not valid
+  SignatureMatches:
+   PDF-hul
+  ErrorMessage: Outline dictionary missing required entry
+   Offset: 18766
+  MIMEtype: application/pdf
+  Profile: Linearized PDF, ISO PDF/A-1, Level B (Draft Proposal), ISO PDF/X-1, ISO PDF/X-1a
+  PDFMetadata:
+   Objects: 45
+   FreeObjects: 1
+   IncrementalUpdates: 2
+   DocumentCatalog:
+    PageLayout: SinglePage
+    PageMode: UseNone
+   Info:
+    Title: DDAP_Single3
+    Author: Frank Scott
+    Creator: QuarkXPress PassportB* 4.11 [k]: AdobePS 8.7.2 (104)
+    Producer: Acrobat Distiller 4.05 for Macintosh
+    CreationDate: Thu Jan 03 08:36:33 EST 2002
+    ModDate: Tue Mar 26 08:27:45 EST 2002
+   ID: 0x29a07bc8f2b880fced92f193e0e57c81, 0xd9f569fa0fe3a1db44b0cf6fc2f3854c
+   Filters:
+    FilterPipeline: FlateDecode
+   Fonts:
+    Type1:
+     Font:
+      BaseFont: PPJJFN+Futura-ExtraBold
+      FontSubset: true
+      FirstChar: 32
+      LastChar: 181
+      FontDescriptor:
+       FontName: PPJJFN+Futura-ExtraBold
+       Flags: Nonsymbolic, ForceBold
+       FontBBox: -249, -260, 1662, 1009
+       FontFile3: true
+      Encoding: WinAnsiEncoding
+     Font:
+      BaseFont: PPJIPF+Helvetica
+      FontSubset: true
+      FirstChar: 32
+      LastChar: 181
+      FontDescriptor:
+       FontName: PPJIPF+Helvetica
+       Flags: Nonsymbolic
+       FontBBox: -166, -225, 1000, 931
+       FontFile3: true
+      Encoding: WinAnsiEncoding
+     Font:
+      BaseFont: PPJIPF+Helvetica
+      FontSubset: true
+      FirstChar: 32
+      LastChar: 240
+      FontDescriptor:
+       FontName: PPJIPF+Helvetica
+       Flags: Nonsymbolic
+       FontBBox: -166, -225, 1000, 931
+       FontFile3: true
+      Encoding: MacRomanEncoding
+     Font:
+      BaseFont: PPJJCK+Helvetica-Bold
+      FontSubset: true
+      FirstChar: 32
+      LastChar: 240
+      FontDescriptor:
+       FontName: PPJJCK+Helvetica-Bold
+       Flags: Nonsymbolic, ForceBold
+       FontBBox: -170, -228, 1003, 962
+       FontFile3: true
+      Encoding: MacRomanEncoding
+   XMP: <rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+ xmlns:iX='http://ns.adobe.com/iX/1.0/'>
+
+ <rdf:Description about=''
+  xmlns='http://ns.adobe.com/pdf/1.3/'
+  xmlns:pdf='http://ns.adobe.com/pdf/1.3/'>
+  <pdf:CreationDate>2002-01-03T13:36:33Z</pdf:CreationDate>
+  <pdf:Producer>Acrobat Distiller 4.05 for Macintosh</pdf:Producer>
+  <pdf:Author>Frank Scott</pdf:Author>
+  <pdf:Creator>QuarkXPress Passporto?=o?= 4.11 [k]: AdobePS 8.7.2 (104)</pdf:Creator>
+  <pdf:Title>DDAP_Single3</pdf:Title>
+  <pdf:ModDate>2002-03-26T13:27:45-05:00</pdf:ModDate>
+ </rdf:Description>
+
+ <rdf:Description about=''
+  xmlns='http://ns.adobe.com/pdfx/1.3/'
+  xmlns:pdfx='http://ns.adobe.com/pdfx/1.3/'>
+  <pdfx:GTS_PDFXConformance>PDF/X-1a:2001</pdfx:GTS_PDFXConformance>
+  <pdfx:Apag_PDFX_Checkup>1.3</pdfx:Apag_PDFX_Checkup>
+  <pdfx:GTS_PDFXVersion>PDF/X-1:2001</pdfx:GTS_PDFXVersion>
+ </rdf:Description>
+
+ <rdf:Description about=''
+  xmlns='http://ns.adobe.com/xap/1.0/'
+  xmlns:xap='http://ns.adobe.com/xap/1.0/'>
+  <xap:CreateDate>2002-01-03T13:36:33Z</xap:CreateDate>
+  <xap:Author>Frank Scott</xap:Author>
+  <xap:Title>
+   <rdf:Alt>
+    <rdf:li xml:lang='x-default'>DDAP_Single3</rdf:li>
+   </rdf:Alt>
+  </xap:Title>
+  <xap:ModifyDate>2002-03-26T13:27:45-05:00</xap:ModifyDate>
+  <xap:MetadataDate>2002-03-26T13:27:45-05:00</xap:MetadataDate>
+ </rdf:Description>
+
+ <rdf:Description about=''
+  xmlns='http://purl.org/dc/elements/1.1/'
+  xmlns:dc='http://purl.org/dc/elements/1.1/'>
+  <dc:creator>Frank Scott</dc:creator>
+  <dc:title>DDAP_Single3</dc:title>
+ </rdf:Description>
+
+</rdf:RDF>
+   Pages:
+    Page:
+     Label: 1
+  Checksum: 5b07663e
+   Type: CRC32
+  Checksum: 2f23f6c3b04644cda146d2c72069ad55
+   Type: MD5
+  Checksum: 3294a96298b59e14660b022ecc1f4b7569fa781c
+   Type: SHA-1
 ```
 
 ### 4.4 TIFF
 
 ```
-unix% jhove -c conf/jhove.conf -k examples/tiff/little-endian.tif
+unix% **jhove -c conf/jhove.conf -k examples/tiff/little-endian.tif**
 Jhove (Rel. 1.0, 2005-05-26)
-Date: 2005-05-26 14:23:21 EDT
-RepresentationInformation: examples/tiff/little-endian.tif
+ Date: 2005-05-26 14:23:21 EDT
+ RepresentationInformation: examples/tiff/little-endian.tif
   ReportingModule: TIFF-hul, Rel. 1.3 (2005-05-05)
-  ...
+  LastModified: 2003-08-06 16:09:48 EDT
+  Size: 26292
+  Format: TIFF
+  Version: 5.0
+  Status: Well-Formed and valid
+  SignatureMatches:
+   TIFF-hul
+  MIMEtype: image/tiff
+  Profile: TIFF/IT-BP/P2 (ISO 12639:1998)
+  TIFFMetadata:
+   ByteOrder: little-endian
+   IFDs:
+    Number: 1
+    IFD:
+     Offset: 8
+     Type: TIFF
+     Entries:
+      NisoImageMetadata:
+       MIMEType: image/tiff
+       ByteOrder: little-endian
+       CompressionScheme: CCITT Group 4
+       ColorSpace: white is zero
+       StripOffsets: 520
+       RowsPerStrip: 4620
+       StripByteCounts: 25772
+       PlanarConfiguration: chunky
+       Orientation: normal
+       ScanningSoftware: Pixel Translations Inc., PIXTIFF Version 54.2.210
+       SamplingFrequencyUnit: inch
+       XSamplingFrequency: 600
+       YSamplingFrequency: 600
+       ImageWidth: 2948
+       ImageLength: 4620
+       BitsPerSample: 1
+       SamplesPerPixel: 1
+      NewSubfileType: 0
+      SampleFormat: 1
+      MinSampleValue: 0
+      MaxSampleValue: 1
+      Threshholding: 1
+      T6Options: 0
+      TIFFITProperties:
+       BackgroundColorIndicator: background not defined
+       ImageColorIndicator: image not defined
+       TransparencyIndicator: no transparency
+       PixelIntensityRange: 0, 1
+       RasterPadding: 1 byte
+       BitsPerRunLength: 8
+       BitsPerExtendedRunLength: 16
+  Checksum: d26149d3
+   Type: CRC32
+  Checksum: ce0ffcb1c1662240edbab4903d6307c5
+   Type: MD5
+  Checksum: 304ac95579c21f3498dfdff71107d3845220d34f
+   Type: SHA-1
 ```

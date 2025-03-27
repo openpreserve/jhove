@@ -6,6 +6,7 @@ layout: page
 # JHOVE Installation Guide for Windows XP  
 <span class="note">[Contributed 2006-08-22 by Michael Stuart, UCSD]</span>
 
+{: #download-install-jre .section-heading}
 ## 1 Download and install a J2SE 6 Java Runtime Environment (JRE)
 
 a. The Sun J2SE 6 SDK (including a JRE and all code packages necessary for re-compilation) is available [here](http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html).
@@ -13,6 +14,7 @@ a. The Sun J2SE 6 SDK (including a JRE and all code packages necessary for re-co
 b. Execute the downloaded file, installing the SDK in the folder:  
 `C:\Program Files\Java`
 
+{: #download-install-jhove .section-heading}
 ## 2 Download and install JHOVE
 
 a. JHOVE is available [here](https://github.com/openpreserve/jhove).
@@ -45,6 +47,7 @@ d. Edit the JHOVE batch file:
    JAVA=%JAVA_HOME%\bin\java
    ```
 
+{: #using-jhove-gui .section-heading}
 ## 3 Using the JHOVE GUI Interface
 
 a. There are two ways to launch the JHOVE GUI interface:  

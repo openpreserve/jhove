@@ -106,6 +106,31 @@ xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/jhove/jhoveConfig
 </jhoveConfig>
 ```
 
-...existing content continues...
+The optional `<defaultEncoding>` element specifies the default character encoding used by output handlers. This option can also be specified by the -e encoding command line argument. The default output encoding is UTF-8.
 
-{% include footer.html %}
+The optional `<tempDirectory>` element specifies the pathname of the directory in which temporary files are created. This option can also be specified by the -t directory command line argument. On most Unix systems, a reasonable temporary directory is "/var/tmp"; on Windows, "C:\temp".
+
+The optional `<bufferSize>` element specifies the buffer size use for buffered I/O. This option can also be specified by the -b buffer command line argument.
+
+The optional `<mixVersion>` element specifies the MIX schema version conformance for the output produced by the XML output handler. By default the handler output conforms to version 2.0 of the schema. For version 1.0 conformance, specify:
+```
+    <mixVersion>1.0<mixVersion>
+```
+The optional `<sigBytes>` element specifies the maximum number of byte that JHOVE modules will examine looking for an internal signature (or magic number). The default value is 1024.
+
+The optional `<logLevel>` element specifies the logging level, used by calls to the logging API. This option can also be specified by the -l log-level command line argument. The default is SEVERE.
+
+All class names must be fully qualified with their package name, for example:
+```
+    edu.harvard.hul.ois.jhove.module.AsciiModule
+    edu.harvard.hul.ois.jhove.module.PdfModule
+    edu.harvard.hul.ois.jhove.module.TiffModule
+    edu.harvard.hul.ois.jhove.module.Utf8Module
+```
+The order in which format modules are defined is important; when performing a format identification operation, JHOVE will search for a matching module in the order in which the modules are defined in the configuration file. In general, the modules for more generic formats should come later in the list. For example, the standard module ASCII should be defined before the UTF-8 module, since all ASCII objects are, by definition, UTF-8 objects, but not vice versa.
+
+The optional `<init>` element is used to pass a module-specific argument to a module at the time it is first instantiated within JHOVE. See the details for the individual modules to see if such an argument is defined. The use of the `<init>` argument is currently not defined for any of the standard JHOVE modules.
+
+The optional and repeatable `<param>` element is used to pass a module-specific parameter to a module immediately prior to each invocation of the module's parse() method. See the details for the individual modules to see if such a parameter is defined.
+
+In addition to the modules and output handlers specified in the configuration file, JHOVE is also always statically linked with the standard Bytestream module and Text and XML output handlers.
