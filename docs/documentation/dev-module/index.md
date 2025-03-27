@@ -5,11 +5,12 @@ layout: page
 
 # Writing a JHOVE Module (*draft*, 2005-02-07)
 
-## 1 The Module Interface
+## 1 The Module Interface {#module-interface .section-heading}
 
 All JHOVE modules implement the `module` interface.  
 (Details of all interfaces and classes are available [here](/javadoc/).)
 
+{: .blockquote}
 ```java
 package edu.harvard.hul.ois.jhove;
 import java.io.*;
@@ -58,6 +59,7 @@ public void init  (String init)  throws Exception;
 public void param (String param) throws Exception;
 ```
 
+{: .blockquote}
 The `init()` method is invoked once at the time the module class is instantiated, passing the argument optionally specified in the configuration file for this module, or `null`.
 
 ```xml
@@ -68,6 +70,7 @@ The `init()` method is invoked once at the time the module class is instantiated
 </module>
 ```
 
+{: .blockquote}
 The `param()` method is invoked once every time the module object is invoked, passing an argument specified by the `-p <param>` command line option, or `null`.
 
 ### 1.2 Mutator Methods
@@ -76,20 +79,24 @@ The `param()` method is invoked once every time the module object is invoked, pa
 public void setApp (App app);
 ```
 
+{: .blockquote}
 The `setApp()` method passes the application state object to the module.
 
 ```java
 public void setBase (JhoveBase je);
 ```
 
+{: .blockquote}
 The `setBase()` method passes the application state object to the module. The `JhoveBase` object provides the module with state information about the surrounding context from which the module is invoked.
 
 ```java
 public void setVerbosity (int verbosity);
 ```
 
+{: .blockquote}
 The `setVerbosity()` method specifies the level of verbosity of object representation information that the module should report via the `RepInfo` object returned by the `parse()` method. Each module can decide what representation information should be displayed for each level.
 
+{: .table .table-striped}
 | `verbosity`                  | Value | Level                  |
 |-------------------------------|-------|------------------------|
 | `Module.MAXIMUM_VERBOSITY`    | 1     | Maximum verbosity      |
@@ -109,18 +116,21 @@ public String getRights ();
 public List getFeatures ();
 ```
 
+{: .blockquote}
 These methods return scalar `String`-valued module descriptive information: module name, release identifier, format coverage, methodological notes on well-formedness, validity, and representation information, general informative note, and intellectual property rights statement.
 
 ```java
 public Date getDate ();
 ```
 
+{: .blockquote}
 The `getDate()` method returns the module release date.
 
 ```java
 public Agent getVendor ();
 ```
 
+{: .blockquote}
 The `getVendor()` method returns an `Agent` object describing the module vendor.
 
 ```java
@@ -128,6 +138,7 @@ public String [] getFormat ();
 public String [] getMimeType ();
 ```
 
+{: .blockquote}
 These methods return arrays of `String`-valued module descriptive information: variant format names and MIME types associated with the format.
 
 ```java
@@ -135,18 +146,21 @@ public List getSpecification ();
 public List getSignature ();
 ```
 
+{: .blockquote}
 These methods return `List` containers of `Document` and `Signature` objects respectively. The documents are specification documents for the format used to construct the module. The signatures are the internal and external format signatures recognized by the module.
 
 ```java
 public boolean isRandomAccess ();
 ```
 
+{: .blockquote}
 The `isRandomAccess()` method must return `true` if parsing of formatted-objects requires random access to the object content stream. The method should return `false` if the parsing can occur on a stream access basis.
 
 ```java
 public List getFeatures ();
 ```
 
+{: .blockquote}
 This method returns a List of Strings identifying the features of the Module. See the discussion of Module features further on.
 
 ### 1.4 Parse Methods
@@ -156,6 +170,7 @@ public void checkSignatures (InputStream stream,    RepInfo info) throws IOExcep
 public void checkSignatures (RandomAccessFile raf, RepInfo info) throws IOException;
 ```
 
+{: .blockquote}
 The `checkSignatures()` methods attempt to identify the object (represented as either a stream or random access file) using only internal signatures, i.e., magic numbers. Representation information about the object is returned through the `RepInfo` object.
 
 ```java
@@ -163,15 +178,16 @@ public int parse (InputStream stream,    RepInfo info, int parseIndex) throws IO
 public int parse (RandomAccessFile file, RepInfo info) throws IOException;
 ```
 
+{: .blockquote}
 The `parse()` methods parse the object (represented by either a stream or random access file). Representation information about the object is returned through the `RepInfo` object. The stream version of `parse` may be invoked multiple times, if it is necessary to do multiple passes on the data.
 
-```java
-RepInfo info;
-int parseIndex = 0;
-while ((parseIndex = parse (..., info, parseIndex)) != 0);
-```
+    ```java
+    RepInfo info;
+    int parseIndex = 0;
+    while ((parseIndex = parse (..., info, parseIndex)) != 0);
+    ```
 
-The `parse` method for a RandomAccessFile does not have this feature, and does not have a `parseIndex` parameter, since it is always possible to move back to a previously examined position in the file.
+    The `parse` method for a RandomAccessFile does not have this feature, and does not have a `parseIndex` parameter, since it is always possible to move back to a previously examined position in the file.
 
 ### 1.5 Descriptive Methods
 
@@ -179,14 +195,16 @@ The `parse` method for a RandomAccessFile does not have this feature, and does n
 public void show (Output handler);
 ```
 
+{: .blockquote}
 The `show()` method uses the specified output handler to display descriptive information about the module itself, including module name, release identifier, build date, format names, MIME types, coverage statement, specifications, signatures, methodology statements, vendor, rights statement, and notes.
 
-## 2 ModuleBase Class
+## 2 ModuleBase Class {#modulebase-class .section-heading}
 
 The `Module` interface is implemented by the abstract `ModuleBase` class from which all JHOVE modules are extended. The class provides concrete implementations of the initialization, mutator, and accessor methods, and the `show()` method.
 
 A new module *must* override the stub methods `checkSignature()` and `parse()`.
 
+{: .blockquote}
 ```java
 package edu.harvard.hul.ois.jhove;
 import java.io.*;
@@ -239,19 +257,28 @@ public abstract class ModuleBase
     public static Rational readSignedRational (RandomAccessFile file, boolean endian)
 }
 ```
+The ModuleBase class defines a number of static convenience methods for type-specific reading of random access files and input streams.
 
-## 3 New Module Construction
+```
+public static DataInputStream getBufferedDataStream (InputStream stream, int size)
+```
+{: .blockquote}
+This is a convenience method for converting a generic InputStream into a DataInputStream as required by the convenience reading methods. The new stream is buffered for optimized performance. If the value of 0 is specified for the size argument then the default JRE buffer size is used.
+
+## 3 New Module Construction {#module-construction .section-heading}
 
 ### 3.1 Module name
 
 Module names should consist of two parts, an uppercase format name and a lowercase vendor name, separated by a hyphen:
 
+{: .blockquote}
 ```
 FORMAT-vendor
 ```
 
-For example:
+The format and vendor names should be abbreviated, if necessary. For example:
 
+{: .blockquote}
 ```
 ASCII-hul
 ```
@@ -262,12 +289,14 @@ is the name for the ASCII module created by the Harvard University Library.
 
 A JHOVE module is encapsulated in one or more classes. The main module class name should be based on the format that the module supports:
 
+{: .blockquote}
 ```java
 public class FormatModule { ... }
 ```
 
 For example:
 
+{: .blockquote}
 ```java
 public class AsciiModule { ... }
 ```
@@ -278,6 +307,7 @@ is the class name for the ASCII module created by the Harvard University Library
 
 Module classes must be in the classpath used by JHOVE. In addition, they must be specified in the configuration file. A configuration file will include several `<module>` elements; you simply have to add an appropriate element for the module class you have created, using the following pattern.
 
+{: .blockquote}
 ```xml
 <module>
   <class>fully-package-qualified-class-name</class>
@@ -291,6 +321,7 @@ All format modules *must* extend the `ModuleBase` class.
 
 The constructor for a module takes no parameters. It *must* first invoke its the superclass constructor for passing in arguments defining the static descriptive information about the module. The optional `WELLFORMED`, `VALIDITY`, `REPINFO`, methodology notes and the informative `NOTE` may be set to `null` if appropriate.
 
+{: .blockquote}
 ```java
 import edu.harvard.hul.ois.jhove.*;
 import java.io.*;
@@ -326,47 +357,47 @@ public class FormatModule
 ### 3.4.1 Module constructor arguments
 
 `private static final String NAME`
-
+{: .blockquote}
 The module name as described [above](#modulename).
 
 `private static final String RELEASE`
-
+{: .blockquote}
 The module release identifier, typically formatted as a major and minor release number: `major.minor`, e.g. `"10.3"` for release 10.3.
 
 `private static final int [] DATE`
-
+{: .blockquote}
 An array of three integers specifying the year, month, and day module release, e.g. `{2004, 4, 12}` for a April 12, 2004, release date.
 
 `private static final String [] FORMAT`
-
+{: .blockquote}
 An array of names for the formats supported by the module. The first entry should be be most generally appropriate format name, e.g. `{"TIFF, "Tagged Image File Format", "TIFF/EP", "TIFF/IT", ...}`.
 
 `private static final String [] MIMETYPE`
-
+{: .blockquote}
 An array of MIME types applicable for the formats supported by the module. The first entry should be be most generally appropriate MIME type, e.g. `image/tiff`.
 
 `private static final String COVERAGE`
-
+{: .blockquote}
 A comma-separated list of format profiles supported by the module, e.g. `"TIFF, TIFF/IT (ISO 12639:2003), TIFF/EP (ISO 12234-2:2001), Exif 2.2 (JEITA CP-3451), ..."`.
 
 `private static final String VALIDITY`
-
+{: .blockquote}
 Optional statement of validity methodology used by the module, or `null`.
 
 `private static final String REPINFO`
-
+{: .blockquote}
 Optional description of special properties of the representation information returned by this module, or `null`.
 
 `private static final String NOTE`
-
+{: .blockquote}
 Optional informative note about the module, or `null`.
 
 `private static final String RIGHTS`
-
+{: .blockquote}
 Intellectual property rights statement for the module. Typically this will include a copyright notice and summary of the license terms under which the module is available.
 
 `private static final boolean RANDOM`
-
+{: .blockquote}
 Random access flag: `true` for modules that require random access to objects, in which case the method `parse(RandomAccessFile file, ...)` *must* be defined; `false` for modules that accept stream access to objects, in which case the method `parse(InputStream stream, ...)` *must* be defined.
 
 The `ModuleBase` constructor defines `_specification` as an initially empty List of `Document` objects which give information about the specification of the format as treated by the `Module`. The module constructor may define `Document` objects for this purpose and add these objects to `_specification`.
@@ -442,6 +473,7 @@ For your module to be reasonably efficient, it is necessary to read data in the 
 
 To allow greater flexibility in incorporating third-party modules with different degrees of functionality, JHOVE modules can be queried for their "features." Names for features should follow the same conventions as Java packages. Currently, all HUL modules report the following features:
 
+{: .table .table-striped}
 | Feature                                      | Description                  |
 |----------------------------------------------|------------------------------|
 | `edu.harvard.hul.ois.jhove.canCharacterize`  | Gives descriptive information|
@@ -494,16 +526,16 @@ The `Document`'s title is any suitable descriptive string; the actual title of t
 
 Other information may be added to a `Document` using its setter methods:
 
-```java
-public void setAuthor (Agent author);
-public void setDate (String date);
-public void setEdition (String edition);
-public void setEnumeration (String enum);
-public void setIdentifier (Identifier identifier);
-public void setNote (String note);
-public void setPages (String pages);
-public void setPublisher (Agent publisher);
-```
+
+- `public void setAuthor (Agent author);`
+- `public void setDate (String date);`
+- `public void setEdition (String edition);`
+- `public void setEnumeration (String enum);`
+- `public void setIdentifier (Identifier identifier);`
+- `public void setNote (String note);`
+- `public void setPages (String pages);`
+- `public void setPublisher (Agent publisher);`
+
 
 The author and publisher of a `Document` are defined using `Agent` objects. The identifier is defined using an `Identifier` object.
 
@@ -511,18 +543,35 @@ The author and publisher of a `Document` are defined using `Agent` objects. The 
 
 `Signature` objects are used to specify quick checks for whether a document conforms to a format. When checking for signatures, the document is not checked in any details, but only examined for characteristic data, such as a header or filename extension. `Signature` is an abstract class; JHOVE defines subclasses `ExternalSignature` and `InternalSignature`. `InternalSignature` is used for signatures based on the document content; `ExternalSignature` is used for signatures based on the file name, metadata, or other information located other than in the document content.
 
-```java
-public ExternalSignature (String value, SignatureType type, SignatureUseType use);
-public ExternalSignature (int[] value, SignatureType type, SignatureUseType use);
-public InternalSignature (String value, SignatureType type, SignatureUseType use);
-public InternalSignature (int[] value, SignatureType type, SignatureUseType use);
-public InternalSignature (String value, SignatureType type, SignatureUseType use, int offset);
-public InternalSignature (int[] value, SignatureType type, SignatureUseType use, int offset);
-public InternalSignature (String value, SignatureType type, SignatureUseType use, String note);
-public InternalSignature (int[] value, SignatureType type, SignatureUseType use, String note);
-public InternalSignature (String value, SignatureType type, SignatureUseType use, int offset, String note);
-public InternalSignature (int[] value, SignatureType type, SignatureUseType use, int offset, String note);
-```
+- `public ExternalSignature (String value, SignatureType type,SignatureUseType use);`
+Used when the signature is represented as a character string.
+
+- `public ExternalSignature (int[] value, SignatureType type, SignatureUseType use);`
+Used when the signature is represented as an array of bytes.
+
+- `public InternalSignature (String value, SignatureType type, SignatureUseType use);`
+Used when the signature is represented as a character string and the offset in the file is indeterminate.
+
+- `public InternalSignature (int[] value, SignatureType type, SignatureUseType use);`
+Used when the signature is represented as an array of bytes and the offset in the file is indeterminate.
+
+- `public InternalSignature (String value, SignatureType type, SignatureUseType use, int offset);`
+Used when the signature is represented as a character string and must occur at a specific offset in the file.
+
+- `public InternalSignature (int[] value, SignatureType type, SignatureUseType use, int offset);`
+Used when the signature is represented as an array of bytes and must occur at a specific offset in the file.
+
+- `public InternalSignature (String value, SignatureType type, SignatureUseType use, String note);`
+Used when the signature is represented as a character string and the offset in the file is indeterminate, and a note is specified.
+
+- `public InternalSignature (int[] value, SignatureType type, SignatureUseType use, String note);`
+Used when the signature is represented as an array of bytes and the offset in the file is indeterminate, and a note is specified.
+
+- `public InternalSignature (String value, SignatureType type, SignatureUseType use, int offset, String note);`
+Used when the signature is represented as a character string and must occur at a specific offset in the file, and a note is specified.
+
+- `public InternalSignature (int[] value, SignatureType type, SignatureUseType use, int offset, String note);`
+Used when the signature is represented as an array of bytes and must occur at a specific offset in the file, and a note is specified.
 
 The type parameter must be one of the predefined instances of `SignatureType`. For an `ExternalSignature`, the value may be `EXTENSION` or `FILETYPE`. `EXTENSION` indicates a file extension (more properly, the end of a file name, whether the file system supports extensions or not), such as ".pdf". `FILETYPE` is applicable only to the Macintosh OS, and indicates a four-character file type stored in the file's metadata, such as "TIFF". For an `InternalSignature`, the value must be `MAGIC`, signifying a "magic number" stored in the file.
 
@@ -532,16 +581,30 @@ At this time, the code checks only internal signatures. A document which does no
 
 The module's `parse` method may place information into the variable `_info`, which is a `RepInfo` object. The setting of the `valid` and `wellFormed` fields has already been discussed. In addition, the module may call the following methods to add information to `RepInfo`:
 
-```java
-public void setFormat (String format);
-public void setMessage (Message message);
-public void setMimeType (String mimeType);
-public void setProfile (String profile);
-public void setProperty (Property property);
-public void setSize (long size);
-public void setNote (String note);
-public void setSigMatch (String modname);
-```
+- `public void setFormat (String format);`
+Sets a `String` identifying the format of the document. This should be an element of the module's `FORMAT` array.
+
+- `public void setMessage (Message message);`
+Adds a `Message` to the list of informational and error messages. If a document is not valid, there should be at least one `ErrorMessage` explaining the problem.
+
+- `public void setMimeType (String mimeType);`
+Sets the MIME type which the document satisfies.
+
+- `public void setProfile (String profile);`
+Sets the name of a profile which the document satisfies. A profile denotes a set of document characteristics which conform to a recognized subclass of the document format, such as TIFF Class P and Class R. More than one profile may be set for a document.
+
+- `public void setProperty (Property property);`
+Adds a Property of the document to the list of Properties. Any number of Properties may be set. Each module should have a consistent set of Properties which are reported for documents that are valid under it. A module which does not do characterization (does not have the `edu.harvard.hul.ois.jhove.canCharacterize` feature) should not add any Properties.  
+In creating Properties, a module should pay attention to the value of `_verbosity` (inherited from `ModuleBase`). If `_verbosity` has a value of `MIMIMUM_VERBOSITY`, the module should omit information which is voluminous and of relatively little use. If `_verbosity` has a value of `MAXIMUM_VERBOSITY`, then the maximum amount of available data should be reported.
+
+- `public void setSize (long size);`
+Sets the size of the document in bytes.
+
+- `public void setNote (String note);`
+Sets a note as may be appropriate.
+
+- `public void setSigMatch (String modname);`
+Adds a `String` to a list of module names, indicating that the document's signature satisfies the module. By convention, this should be called with `_name` as its argument. If a module recognizes an internal signature or "magic number" as an initial step in identifying the file, it should call `setSigMatch(_name)` as soon as the signature has been verified. `JhoveBase` treats this list specially, so that values set by successive modules for the same document will be accumulated. The notation that the signature was satisfied will be retained even if the module reports the document as not well-formed. Modules which do not check internal signatures should not call this. A file extension or type should not be used as a basis for calling this.
 
 ### 3.12 The App object
 
@@ -551,21 +614,21 @@ There is a single object of type `App`, which holds information describing the a
 
 There may be one or more than one `JhoveBase` objects, depending on the application architecture. It holds information relevant to a particular invocation of JHOVE. `ModuleBase` makes this available as the field `_je` ("JHOVE engine"). The following functions are of interest:
 
-```java
-public int getBufferSize ();
-public boolean getShowRawFlag ();
-public boolean getChecksumFlag ();
-```
+- `public int getBufferSize ();`
+Returns the user's preferred buffer size, as specified in the command line. This is subject to interpretation, but in general buffers allocated by the application should be that large. If the value returned is negative, the application has not specified a buffer size.
+
+- `public boolean getShowRawFlag ();`
+Returns the "raw output" flag. If this function returns true, then properties with numeric values that have specific interpretations should contain only the numeric values; if it returns false, the module may substitute interpretive text strings for the numeric values.
+
+- `public boolean getChecksumFlag ();`
+Returns true if the application has been asked to do checksum calculations.
 
 ### 3.14 The Agent object
 
 The `Agent` object defines a party that has a role in the creation, publication, or distribution of a `Document`.
 
-```java
 public Agent (String name, AgentType type);
-```
-
-The `Agent`'s name is any suitable descriptive string. The type must be one of the predefined instances of `AgentType`:
+The Agent's name is any suitable descriptive string. The type must be one of the predefined instances of AgentType:
 
 - `AgentType.COMMERCIAL`
 - `AgentType.GOVERNMENT`
@@ -576,22 +639,20 @@ The `Agent`'s name is any suitable descriptive string. The type must be one of t
 
 Other information may be added to an `Agent` using its setter methods:
 
-```java
-public void setAddress (String address);
-public void setEmail (String email);
-public void setFax (String fax);
-public void setNote (String note);
-public void setTelephone (String telephone);
-public void setWeb (String web);
-```
+- `public void setAddress (String address);`
+- `public void setEmail (String email);`
+- `public void setFax (String fax);`
+- `public void setNote (String note);`
+- `public void setTelephone (String telephone);`
+- `public void setWeb (String web);`
+
 
 ### 3.15 The Identifier object
 
 The `Identifier` object provides various ways of assigning an identifier to a `Document`.
 
-```java
-public Identifier (String value, IdentifierType type, String note);
-```
+- `public Identifier (String value, IdentifierType type, String note);`
+
 
 The `Identifier`'s value should be appropriate to the `IdentifierType`. The type must be one of the predefined values of `IdentifierType`:
 
@@ -622,10 +683,10 @@ The note parameter may be null.
 
 Properties are used to report information about a document. Output handlers and the viewer application present Properties in an appropriate output format. JHOVE provides a rich set of options for defining properties. Properties can be single objects or ordered or unordered sets. The constituent members of a `Property` can themselves be Properties, allowing a hierarchical structure. All constituent members of a given `Property` must have the same type.
 
-```java
-public Property (String name, PropertyType type, Object value);
-public Property (String name, PropertyType type, PropertyArity arity, Object value);
-```
+
+- `public Property (String name, PropertyType type, Object value);`
+- `public Property (String name, PropertyType type, PropertyArity arity, Object value);`
+
 
 The first constructor creates a `Property` with an arity of `PropertyArity.SCALAR`.
 
@@ -633,6 +694,7 @@ The property name should be a valid XML name; in particular, it should not conta
 
 The arity (type of organization) of the property must be one of the predefined instances of `PropertyArity`. The type of value must be in agreement with the value of `arity`, as specified by the following table.
 
+{: .table .table-striped}
 | `PropertyArity` | Value Type |
 |-----------------|------------|
 | `ARRAY`         | Java array |
@@ -643,6 +705,7 @@ The arity (type of organization) of the property must be one of the predefined i
 
 The type must be one of the predefined instances of `PropertyType`. The type of the constituents of value must be in agreement with the value of `type`, as specified by the following table. If the arity is `SCALAR`, the type of value itself must be in agreement with the value of `type`. With arity `ARRAY`, members of the array are primitive Java types rather than Objects where applicable, so the type in the last column must be used. The object type must be used with all other arities.
 
+{: .table .table-striped}
 | `PropertyType` | Object Type |
 |----------------|-------------|
 | `AESAUDIOMETADATA` | `edu.harvard.hul.ois.jhove.AESAudioMetadata` |
@@ -665,12 +728,12 @@ The type must be one of the predefined instances of `PropertyType`. The type of 
 
 A `Message` object is used to report information about the document. `Message` is an abstract class with two subclasses, `InfoMessage` and `ErrorMessage`. The only difference between the classes is the significance of the message; an `ErrorMessage` should be used for a situation that makes a document invalid or ill-formed, and an `InfoMessage` for other cases.
 
-```java
-public InfoMessage (String message, long offset);
-public InfoMessage (String message);
-public ErrorMessage (String message, long offset);
-public ErrorMessage (String message);
-```
+
+- `public InfoMessage (String message, long offset);`
+- `public InfoMessage (String message);`
+- `public ErrorMessage (String message, long offset);`
+- `public ErrorMessage (String message);`
+
 
 If the circumstance which gives rise to the message occurs at a known offset into the document, the constructor with an offset should be used; otherwise the single-argument constructor should be used.
 
@@ -678,9 +741,8 @@ If the circumstance which gives rise to the message occurs at a known offset int
 
 `NisoImageMetadata` provides a standard way to report many common document properties. The output handlers include dedicated methods for displaying `NisoImageMetadata` properties.
 
-```java
-public NisoImageMetadata ();
-```
+- `public NisoImageMetadata ();`
+
 
 Setter methods are provided for the properties which `NisoImageMetadata` supports. The source code, the JavaDoc for the class and the NISO documentation should be consulted for detailed information on setter functions and parameter values.
 
@@ -688,8 +750,7 @@ Setter methods are provided for the properties which `NisoImageMetadata` support
 
 A `Rational` object provides a way to represent the ratio of two integers. A `Rational` is stored as its numerator and denominator values. No protection against zero division is provided by the class.
 
-```java
-public Rational (long numerator, long denominator);
-```
+- `public Rational (long numerator, long denominator);`
+
 
 See the [JavaDoc](/javadoc/) for further details.
