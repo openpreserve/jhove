@@ -2,11 +2,11 @@
 layout: page
 title: Building JHOVE
 ---
-{{ page.title }}
-================
+# {{ page.title }}
 
-Building JHOVE from Source
---------------------------
+{: #build-from-source .section-heading}
+## Building JHOVE from Source
+
 Clone this project, checkout the integration branch, and use Maven, e.g.:
 
     git clone git@github.com:openpreserve/jhove.git
@@ -14,8 +14,9 @@ Clone this project, checkout the integration branch, and use Maven, e.g.:
     git checkout integration
     mvn clean install
 
-Including JHOVE from Maven
---------------------------
+{: #include-from-maven .section-heading}
+## Including JHOVE from Maven
+
 From v1.16 onwards all production releases of JHOVE are deployed to Maven central. Add the version of JHOVE you'd like to use as a property in your Maven
 POM:
 

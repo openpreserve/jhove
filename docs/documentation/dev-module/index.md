@@ -5,7 +5,8 @@ layout: page
 
 # Writing a JHOVE Module (*draft*, 2005-02-07)
 
-## 1 The Module Interface {#module-interface .section-heading}
+{: #module-interface .section-heading}
+## 1 The Module Interface
 
 All JHOVE modules implement the `module` interface.  
 (Details of all interfaces and classes are available [here](/javadoc/).)
@@ -96,7 +97,7 @@ public void setVerbosity (int verbosity);
 {: .blockquote}
 The `setVerbosity()` method specifies the level of verbosity of object representation information that the module should report via the `RepInfo` object returned by the `parse()` method. Each module can decide what representation information should be displayed for each level.
 
-{: .table .table-striped}
+{: .table}
 | `verbosity`                  | Value | Level                  |
 |-------------------------------|-------|------------------------|
 | `Module.MAXIMUM_VERBOSITY`    | 1     | Maximum verbosity      |
@@ -198,7 +199,8 @@ public void show (Output handler);
 {: .blockquote}
 The `show()` method uses the specified output handler to display descriptive information about the module itself, including module name, release identifier, build date, format names, MIME types, coverage statement, specifications, signatures, methodology statements, vendor, rights statement, and notes.
 
-## 2 ModuleBase Class {#modulebase-class .section-heading}
+{: #modulebase-class .section-heading}
+## 2 ModuleBase Class
 
 The `Module` interface is implemented by the abstract `ModuleBase` class from which all JHOVE modules are extended. The class provides concrete implementations of the initialization, mutator, and accessor methods, and the `show()` method.
 
@@ -265,7 +267,8 @@ public static DataInputStream getBufferedDataStream (InputStream stream, int siz
 {: .blockquote}
 This is a convenience method for converting a generic InputStream into a DataInputStream as required by the convenience reading methods. The new stream is buffered for optimized performance. If the value of 0 is specified for the size argument then the default JRE buffer size is used.
 
-## 3 New Module Construction {#module-construction .section-heading}
+{: #module-construction .section-heading}
+## 3 New Module Construction
 
 ### 3.1 Module name
 
@@ -473,7 +476,7 @@ For your module to be reasonably efficient, it is necessary to read data in the 
 
 To allow greater flexibility in incorporating third-party modules with different degrees of functionality, JHOVE modules can be queried for their "features." Names for features should follow the same conventions as Java packages. Currently, all HUL modules report the following features:
 
-{: .table .table-striped}
+{: .table}
 | Feature                                      | Description                  |
 |----------------------------------------------|------------------------------|
 | `edu.harvard.hul.ois.jhove.canCharacterize`  | Gives descriptive information|

@@ -3,10 +3,10 @@ layout: page
 title: Logging
 ---
 
-A Guide to Logging in JHOVE
-===========================
+# A Guide to Logging in JHOVE
 
-## Controlling JHOVE Application Logging Levels {#controlling-jhove-application-logging-levels .section-heading}
+{#controlling-jhove-application-logging-levels .section-heading}
+## Controlling JHOVE Application Logging Levels
 
 To change the logging level when you run the code, you can either add something like this to the config file:
 
@@ -42,7 +42,8 @@ So setting `<logLevel>ALL</logLevel>` shows all message, where `<logLevel>WARNIN
 
 You can also change the logging level by passing a `-l` param with the same level values, e.g. `jhove --version -l ALL` would set the log level to `ALL` and overrides the config setting.
 
-## Logging from Java Code {#logging-from-java-code .section-heading}
+{: #logging-from-java-code .section-heading}
+## Logging from Java Code
 
 If you're new to Java or Java logging please read the official guide to [Java logging](https://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html).
 Please use native Java logging rather than introduce a dependency.

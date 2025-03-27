@@ -9,7 +9,8 @@ JHOVE is currently maintained by the [Open Preservation Foundation](http://openp
 
 The original JHOVE project was a collaboration between [JSTOR](http://www.jstor.org) and [Harvard University Library](http://hul.harvard.edu/) with funding from the [Andrew W. Mellon Foundation](http://www.mellon.org) for the Electronic-Archiving Initiative.
 
-## Support JHOVE {#support-jhove .section-heading}
+{: #support-jhove .section-heading}
+## Support JHOVE
 
 JHOVE is one of the most widely-used digital preservation tools in the community, and it is also used as a component in several commercial digital preservation systems. It is open source, meaning it is free to download, use, and modify. However, it is not free of costs to host, maintain, support, or develop the software. Currently, only OPF members support JHOVE as part of their membership fees.
 
