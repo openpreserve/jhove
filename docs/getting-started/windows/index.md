@@ -34,7 +34,7 @@ layout: page
     
     1.  Change the value of the `<jhoveHome>` tag so that it reads as follows:
         
-                  <jhoveHome>"C:\Documents and Settings\_USERNAME_\jhove"</jhoveHome>
+                  <jhoveHome>"C:\Documents and Settings\USERNAME\jhove"</jhoveHome>
                 
         
         Make sure to include the quotation marks at the beginning and end of the tag value.

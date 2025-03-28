@@ -62,7 +62,7 @@ Simply double click the downloaded installer JAR in Explorer. If Java is install
 
 Once the installation is finished you'll be able to double click
 
-      C:\\Users\\yourName\\jhove\\jhove-gui
+      C:\Users\yourName\jhove\jhove-gui
     
 
 to start the JHOVE GUI. Alternatively start a command window, e.g.
@@ -79,8 +79,8 @@ cmd
 
 then issue these commands:
 
-      C:\\Users\\yourName>cd jhove
-      C:\\Users\\yourName\\jhove>jhove
+      C:\Users\yourName>cd jhove
+      C:\Users\yourName\jhove>jhove
     
 
 to display the command line usage message.
