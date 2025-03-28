@@ -12,7 +12,7 @@ The JPEG2000-hul module recognizes and validates the JPEG 2000 (ISO/IEC 15444) f
 
 The module is invoked by the:
 
->     `jhove ... -m JPEG2000-hul ...`
+>     jhove ... -m JPEG2000-hul ...
 
 command line option.
 

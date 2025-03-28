@@ -15,5 +15,4 @@ layout: page
 
 Please note that this module is **unsupported** by HUL, and that you use it at your own risk.
 
-{: .btn.btn-primary.btn-lg.pad}
-[Download MP3 Module](Mp3Module.jar)
+<a href="Mp3Module.jar" class="btn btn-primary btn-lg pad" onclick="ga('send', 'event', 'MP3 actions', 'Download', 'Download 3.3.5');" download="">Download MP3 Module</a>

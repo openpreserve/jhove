@@ -27,5 +27,4 @@ layout: page
 
 Please note that these modules are **unsupported** by HUL, and that you use them at your own risk.
 
-{: .btn.btn-primary.btn-lg.pad}
-[Download Zip Module](ZipModule.jar)
+<a href="ZipModule.jar" class="btn btn-primary btn-lg pad" onclick="ga('send', 'event', 'Zip actions', 'Download', 'Download 3.3.5');" download="">Download Zip Module</a>

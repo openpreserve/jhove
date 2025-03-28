@@ -218,7 +218,7 @@ If the file or URI contains spaces, then it must be enclosed in quotation marks,
 
 If running in a Unix/Linux shell, the quotation marks must be escaped with backslashes, e.g.,
 
-    jhove ... \\"name with spaces\\"
+    jhove ... \"name with spaces\"
 
 This is clunky but unavoidable, because of the way Java processes command line input. Backslash-quoting the spaces doesn't work. The backslashes should be omitted with the Windows command line.
 

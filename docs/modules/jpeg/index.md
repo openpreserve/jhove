@@ -12,7 +12,7 @@ The JPEG-hul module recognizes and validates the JPEG format.
 
 The module is invoked by the:
 
->     `jhove ... -m JPEG-hul ...`
+>     jhove ... -m JPEG-hul ...
 
 command line option.
 
@@ -132,34 +132,34 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
     
     Exif 2.0, 2.1 (JEIDA-49-1998), and 2.2 (JEITA CP-3451) define camera-specific metadata \[[Exif 2.1](/references#exif2.1), [Exif 2.2](/references#exif)\]. The following tags are mandatory in the primary TIFF IFD:
     
-    {: .table}
-    > | Tag Name and Number |     | Value | Note |
-    > | --- | --- | --- | --- |
-    > | ImageWidth | 256 |     | If Compression (259) = 1 |
-    > | ImageLength | 257 |     | If Compression (259) = 1 |
-    > | BitsPerSample | 258 | 8,8,8 | If Compression (259) = 1 |
-    > | Compression | 259 | 1   | If primary TIFF IFD _and_ JPEGInterchangeFormat (513) not defined |
-    > | 1 or 6 | If thumbnail TIFF IFD |
-    > | PhotometricInterpretation | 262 | 2 or 6 | If Compression (259) = 1 |
-    > | StripOffsets | 273 |     | If Compression (259) = 1 |
-    > | SamplesPerPixel | 277 | 3   | If Compression (259) = 1 |
-    > | RowsPerStrip | 278 |     | If Compression (259) = 1 |
-    > | StripByteCounts | 279 |     | If Compression (259) = 1 |
-    > | XResolution | 282 |     |
-    > | YResolution | 283 |     |
-    > | ResolutionUnit | 296 | 2 or 3 |
-    > | ExifIFD | 34665 |     | If primary TIFF IFD |
+    {: .table.blockquote}
+    | Tag Name and Number |     | Value | Note |
+    | --- | --- | --- | --- |
+    | ImageWidth | 256 |     | If Compression (259) = 1 |
+    | ImageLength | 257 |     | If Compression (259) = 1 |
+    | BitsPerSample | 258 | 8,8,8 | If Compression (259) = 1 |
+    | Compression | 259 | 1   | If primary TIFF IFD _and_ JPEGInterchangeFormat (513) not defined |
+    | 1 or 6 | If thumbnail TIFF IFD |
+    | PhotometricInterpretation | 262 | 2 or 6 | If Compression (259) = 1 |
+    | StripOffsets | 273 |     | If Compression (259) = 1 |
+    | SamplesPerPixel | 277 | 3   | If Compression (259) = 1 |
+    | RowsPerStrip | 278 |     | If Compression (259) = 1 |
+    | StripByteCounts | 279 |     | If Compression (259) = 1 |
+    | XResolution | 282 |     |
+    | YResolution | 283 |     |
+    | ResolutionUnit | 296 | 2 or 3 |
+    | ExifIFD | 34665 |     | If primary TIFF IFD |
     
     The primary TIFF IFD is the first IFD in the file, whose offset is defined in the TIFF header. The optional thumbnail TIFF IFD is a subsequent IFD whose offset is defined following the primary TIFF IFD.
     
     The following tags are mandatory in the Exif IFD:
     
-    {: .table}
-    > | Tag Name and Number |     | Value |
-    > | --- | --- | --- |
-    > | ExifVersion | 36864 | "0220" (Version 2.2)  <br>"0210" (Version 2.1)  <br>"0200" (Version 2.0) |
-    > | FlashpixVersion | 40960 | "0100" |
-    > | ColorSpace | 40961 | 1 or 65535 |
+    {: .table.blockquote}
+    | Tag Name and Number |     | Value |
+    | --- | --- | --- |
+    | ExifVersion | 36864 | "0220" (Version 2.2)  <br>"0210" (Version 2.1)  <br>"0200" (Version 2.0) |
+    | FlashpixVersion | 40960 | "0100" |
+    | ColorSpace | 40961 | 1 or 65535 |
     
 -   **SPIFF**
     

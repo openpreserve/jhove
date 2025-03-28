@@ -269,6 +269,7 @@ This is a convenience method for converting a generic InputStream into a DataInp
 {: #module-construction .section-heading}
 ## 3 New Module Construction
 
+{: #module-name .section-heading}
 ### 3.1 Module name
 
 Module names should consist of two parts, an uppercase format name and a lowercase vendor name, separated by a hyphen:
@@ -310,12 +311,15 @@ is the class name for the ASCII module created by the Harvard University Library
 
 Module classes must be in the classpath used by JHOVE. In addition, they must be specified in the configuration file. A configuration file will include several <module> elements; you simply have to add an appropriate element for the module class you have created, using the following pattern.
 
-> ...
-> <module>
->   <class>fully-package-qualified-class-name</class>
->   <init>optional-initialization-argument</init>
-> </module>
-> ...
+{: .blockquote}
+```java
+...
+<module>
+  <class>fully-package-qualified-class-name</class>
+  <init>optional-initialization-argument</init>
+ </module>
+...
+```
 
 where the initialization parameter is optional. If defined, it will be passed to the module's init() method once at the time the module class object is instantiated.
 
@@ -366,46 +370,57 @@ public class FormatModule
 ### 3.4.1 Module constructor arguments
 
 `private static final String NAME`
+
 {: .blockquote}
 The module name as described [above](#modulename).
 
 `private static final String RELEASE`
+
 {: .blockquote}
 The module release identifier, typically formatted as a major and minor release number: `major.minor`, e.g. `"10.3"` for release 10.3.
 
 `private static final int [] DATE`
+
 {: .blockquote}
 An array of three integers specifying the year, month, and day module release, e.g. `{2004, 4, 12}` for a April 12, 2004, release date.
 
 `private static final String [] FORMAT`
+
 {: .blockquote}
 An array of names for the formats supported by the module. The first entry should be be most generally appropriate format name, e.g. `{"TIFF, "Tagged Image File Format", "TIFF/EP", "TIFF/IT", ...}`.
 
 `private static final String [] MIMETYPE`
+
 {: .blockquote}
 An array of MIME types applicable for the formats supported by the module. The first entry should be be most generally appropriate MIME type, e.g. `{image/tiff}`.
 
 `private static final String COVERAGE`
+
 {: .blockquote}
 A comma-separated list of format profiles supported by the module, e.g. `"TIFF, TIFF/IT (ISO 12639:2003), TIFF/EP (ISO 12234-2:2001), Exif 2.2 (JEITA CP-3451), ..."`.
 
 `private static final String VALIDITY`
+
 {: .blockquote}
 Optional statement of validity methodology used by the module, or `null`.
 
 `private static final String REPINFO`
+
 {: .blockquote}
 Optional description of special properties of the representation information returned by this module, or `null`.
 
 `private static final String NOTE`
+
 {: .blockquote}
 Optional informative note about the module, or `null`.
 
 `private static final String RIGHTS`
+
 {: .blockquote}
 Intellectual property rights statement for the module. Typically this will include a copyright notice and summary of the license terms under which the module is available.
 
 `private static final boolean RANDOM`
+
 {: .blockquote}
 Random access flag: `true` for modules that require random access to objects, in which case the method `parse(RandomAccessFile file, ...)` *must* be defined; `false` for modules that accept stream access to objects, in which case the method `parse(InputStream stream, ...)` *must* be defined.
 
@@ -417,9 +432,9 @@ A Jhove module may be either stream-based or random-access. The choice depends o
 
 One of the first actions of the `parse()` method should be to call `initParse()`. The module's `initParse` method must begin by calling its superclass constructor:
 
-```java
-protected void initParse ();
-```
+
+    - `protected void initParse ();`
+
 
 The superclass constructor in `ModuleBase` will initialize checksum calculations and the byte count (`_nbyte`). The module's `initParse` method should initialize all variables that must start from a known state when parsing a document.
 
@@ -455,6 +470,7 @@ A `ChecksumInputStream` is designed to calculate [checksums](#checksum) automati
 -   `public static double readDouble (DataInputStream stream, boolean endian,   ModuleBase counted);`
 -   `public void skipBytes (DataInputStream stream, int bytesToSkip,   ModuleBase counted);`
 
+{: #randomaccess .section-heading}
 ### 3.6 Reading a random-access document
 
 There is less built-in support for random-access modules than for stream-based modules, since random access is more varied. If you have a choice for a given file format, it is usually simpler to write a stream-based module than a random-access module. However, if a format uses file pointers or offsets, it will probably be necessary to use random access.
@@ -473,6 +489,7 @@ If checksum calculation is requested (`_app.getDoChecksum()` returns `true`), an
 
 For your module to be reasonably efficient, it is necessary to read data in the largest chunks that are feasible; doing single-byte reads everywhere and making frequent calls to `RandomAccessFile.seek()` will slow operations down painfully. A useful trick when reading a structure of known size is to read it into a byte array, then create a `ByteArrayInputStream` on it, and a `DataInputStream` on the `ByteArrayInputStream`. You can then use any of the stream-based data reading functions provided by `ModuleBase` (listed above). Be sure to pass `null` where a `ModuleBase` parameter is expected, since updating `_nByte` is meaningless and possibly harmful in this context.
 
+{: #features .section-heading}
 ### 3.7 Module features
 
 To allow greater flexibility in incorporating third-party modules with different degrees of functionality, JHOVE modules can be queried for their "features." Names for features should follow the same conventions as Java packages. Currently, all HUL modules report the following features:
@@ -487,6 +504,7 @@ If a Module's features indicate that it cannot validate, JHOVE will call it only
 
 Features of a Module can be queried with `hasFeature` for a particular feature, or `getFeatures` to retrieve the complete list.
 
+{: #checksum .section-heading}
 ### 3.8 Checksum calculations
 
 One of the tasks of the module's parse() function is to calculate checksums on the module if requested. The module should call `_app.getDoChecksum()` to determine if it has been requested to calculate checksums. In addition, it should examine the value of `info.getChecksum()`; if it is a non-empty list, then the application has already calculated the checksum and no further action is needed. The classes `Checksummer` and `ChecksumInputStream` aid in doing the calculations.
@@ -505,6 +523,7 @@ To calculate the checksum, it is simply necessary to call `Checksummer.update()`
 
 If the module uses a `ChecksumInputStream` as the argument to `ModuleBase.getBufferedDataStream`, then the checksum calculations will be done in the course of reading the `BufferedDataStream`. This technique cannot be used with random-access modules.
 
+{: #document .section-heading}
 ### 3.9 The Document object
 
 The `Document` object is used to define sources of documentation for a module. `Document` objects are added to the module's `_specification` list.
@@ -533,6 +552,7 @@ Other information may be added to a `Document` using its setter methods:
 
 The author and publisher of a `Document` are defined using [`Agent`](#agent) objects. The identifier is defined using an [`Identifier`](#identifier) object.
 
+{: #signature .section-heading}
 ### 3.10 The Signature object
 
 `Signature` objects are used to specify quick checks for whether a document conforms to a format. When checking for signatures, the document is not checked in any details, but only examined for characteristic data, such as a header or filename extension. `Signature` is an abstract class; JHOVE defines subclasses `ExternalSignature` and `InternalSignature`. `InternalSignature` is used for signatures based on the document content; `ExternalSignature` is used for signatures based on the file name, metadata, or other information located other than in the document content.
@@ -552,11 +572,12 @@ The author and publisher of a `Document` are defined using [`Agent`](#agent) obj
 -   `public InternalSignature (String value, SignatureType type, SignatureUseType use, String note);`  
     Used when the signature is represented as a character string and the offset in the file is indeterminate, and a note is specified.
 -   `public InternalSignature (int[] value, SignatureType type, SignatureUseType use, String note);   Used when the signature is represented as an array of bytes and the offset in the file is indeterminate, and a note is specified.`
-``-   `public InternalSignature (String value, SignatureType type,   SignatureUseType use, int offset, String note);`       Used when the signature is represented as a character string and must occur at a specific offset in the file, and a note is specified. -   `public InternalSignature (int[] value, SignatureType type,   SignatureUseType use, int offset, String note);`       Used when the signature is represented as an array of bytes and must occur at a specific offset in the file, and a note is specified.``
-
-``   The type parameter must be one of the predefined instances of `SignatureType`. For an `ExternalSignature`, the value may be `EXTENSION` or `FILETYPE`. `EXTENSION` indicates a file extension (more properly, the end of a file name, whether the file system supports extensions or not), such as ".pdf". `FILETYPE` is applicable only to the Macintosh OS, and indicates a four-character file type stored in the file's metadata, such as "TIFF". For an `InternalSignature`, the value must be `MAGIC`, signifying a "magic number" stored in the file.  At this time, the code checks only internal signatures. A document which does not satisfy internal signature specifications is reported as not consistent.   ``
+-   `public InternalSignature (String value, SignatureType type,   SignatureUseType use, int offset, String note);`       Used when the signature is represented as a character string and must occur at a specific offset in the file, and a note is specified. -   `public InternalSignature (int[] value, SignatureType type,   SignatureUseType use, int offset, String note);`       Used when the signature is represented as an array of bytes and must occur at a specific offset in the file, and a note is specified.
 
 
+The type parameter must be one of the predefined instances of `SignatureType`. For an `ExternalSignature`, the value may be `EXTENSION` or `FILETYPE`. `EXTENSION` indicates a file extension (more properly, the end of a file name, whether the file system supports extensions or not), such as ".pdf". `FILETYPE` is applicable only to the Macintosh OS, and indicates a four-character file type stored in the file's metadata, such as "TIFF". For an `InternalSignature`, the value must be `MAGIC`, signifying a "magic number" stored in the file.  At this time, the code checks only internal signatures. A document which does not satisfy internal signature specifications is reported as not consistent.   
+
+{: #repinfo .section-heading}
 ### 3.11 The RepInfo object
 
 The module's `parse` method may place information into the variable `_info`, which is a `RepInfo` object. The setting of the `valid` and `wellFormed` fields has already been discussed. In addition, the module may call the following methods to add information to `RepInfo`:
@@ -579,10 +600,12 @@ The module's `parse` method may place information into the variable `_info`, whi
 -   `public void setSigMatch (String modname);`  
     Adds a String to a list of module names, indicating that the document's signature satisfies the module. By convention, this should be called with `_name` as its argument. If a module recognizes an internal signature or "magic number" as an initial step in identifying the file, it should call `setSigMatch(_name)` as soon as the signature has been verified. `JhoveBase` treats this list specially, so that values set by successive modules for the same document will be accumulated. The notation that the signature was satisfied will be retained even if the module reports the document as not well-formed. Modules which do not check internal signatures should not call this. A file extension or type should **not** be used as a basis for calling this.
 
+{: #app .section-heading}
 ### 3.12 The App object
 
 There is a single object of type `App`, which holds information describing the application state. `ModuleBase` makes this available as the field `_app`. With the architectural changes in Beta 3, there is little or no need to make use of this object. References previously made to the `App` object should now refer to the `JhoveBase` object.
 
+{: #jhovebase .section-heading}
 ### 3.13 The JhoveBase object
 
 There may be one or more than one `JhoveBase` objects, depending on the application architecture. It holds information relevant to a particular invocation of JHOVE. `ModuleBase` makes this available as the field `_je` ("JHOVE engine"). The following functions are of interest:
@@ -594,6 +617,7 @@ There may be one or more than one `JhoveBase` objects, depending on the applicat
 -   `public boolean getChecksumFlag ();`  
     Returns `true` if the application has been asked to do checksum calculations.
 
+{: #agent .section-heading}
 ### 3.14 The Agent object
 
 The `Agent` object defines a party that has a role in the creation, publication, or distribution of a `Document`.
@@ -618,6 +642,7 @@ Other information may be added to an `Agent` using its setter methods:
 -   `public void setTelephone (String telephone);`
 -   `public void setWeb (String web);`
 
+{: #identifier .section-heading}
 ### 3.15 The Identifier object
 
 The `Identifier` object provides various ways of assigning an identifier to a `Document`.
@@ -649,6 +674,7 @@ The `Identifier`'s value should be appropriate to the `IdentifierType`. The type
 
 The note parameter may be null.
 
+{: #property .section-heading}
 ### 3.16 The Property object
 
 Properties are used to report information about a document. Output handlers and the viewer application present Properties in an appropriate output format. JHOVE provides a rich set of options for defining properties. Properties can be single objects or ordered or unordered sets. The constituent members of a `Property` can themselves be Properties, allowing a hierarchical structure. All constituent members of a given `Property` must have the same type.
@@ -692,6 +718,7 @@ The type must be one of the predefined instances of `PropertyType`. The type of 
 | `PropertyType.SHORT` | `java.lang.Short` | `short` |
 | `PropertyType.STRING` | `java.lang.String` |
 
+{: #message .section-heading}
 ### 3.17 The Message object
 
 A `Message` object is used to report information about the document. `Message` is an abstract class with two subclasses, `InfoMessage` and `ErrorMessage`. The only difference between the classes is the significance of the message; an `ErrorMessage` should be used for a situation that makes a document invalid or ill-formed, and an `InfoMessage` for other cases.
@@ -703,6 +730,7 @@ A `Message` object is used to report information about the document. `Message` i
 
 If the circumstance which gives rise to the message occurs at a known offset into the document, the constructor with an offset should be used; otherwise the single-argument constructor should be used.
 
+{: #nisoimagemetadata .section-heading}
 ### 3.18 The NisoImageMetadata object
 
 `NisoImageMetadata` provides a standard way to report many common document properties. The output handlers include dedicated methods for displaying `NisoImageMetadata` properties.
@@ -711,6 +739,7 @@ If the circumstance which gives rise to the message occurs at a known offset int
 
 Setter methods are provided for the properties which `NisoImageMetadata` supports.The source code, the JavaDoc for the class and the NISO documentation should be consulted for detailed information on setter functions and parameter values.
 
+{: #rational .section-heading}
 ### 3.19 The Rational object
 
 A `Rational` object provides a way to represent the ratio of two integers. A `Rational` is stored as its numerator and denominator values. No protection against zero division is provided by the class.

@@ -80,30 +80,30 @@ Profile requirements include:
 - The Form chunk identifier is "AIFC"
 - The fields `compressionType` and `compressionName` in the Common Chunk
 
-Common compression types and names include, but are not limited to:
+    Common compression types and names include, but are not limited to:
 
-{: .blockquote .table .table-striped}
-| Type   | Name                     | Note                                                                 |
-|--------|--------------------------|----------------------------------------------------------------------|
-| "NONE" | "Not compressed"         | PCM data                                                            |
-| "ACE2" | "ACE 2-to-1"             | [Apple](http://www.apple.com/) IIGS ACE (Audio Compression/Expansion) |
-| "ACE8" | "ACE 8-to-3"             |                                                                      |
-| "APD4" | "4:1 Intel/DVI ADPCM"    | [SoundHack](http://www.soundhack.com/)                              |
-| "ALAW" | "CCITT G.711 A-law"      | [SGI](http://www.sgi.com/) 8-bit [ITU-T](http://www.itu.int/ITU-T/) G.711 A-law (64 kb/s) |
-| "alaw" | "ALaw 2:1"               | [Apple](http://www.apple.com) 8-bit [ITU-T](http://www.itu.int/ITU-T) G.711 A-law |
-| "DWVW" | "Delta With Variable Word Width" | Yamaha TX16W Typhoon sampler                                      |
-| "FL32" | "Float 32"               | [SoundHack](http://www.soundhack.com/) / [CSound](http://www.csound.com/) [IEEE](http://www.ieee.org/) 32-bit floating point |
-| "fl32" | "32-bit floating point"  | [Apple](http://www.apple.com/) [IEEE](http://www.ieee.com/) 32-bit floating point |
-| "fl64" | "64-bit floating point"  |                                                                      |
-| "ima4" | "IMA 4:1"                |                                                                      |
-| "MAC3" | "MACE 3-to-1"            | Macintosh Audio Compression/Expansion                               |
-| "MACE6" | "MACE 6-to-1"           |                                                                      |
-| "QDMC" | "QDesign Music"          | [QDesign](http://www.qdesign.com/) Music codec                      |
-| "Qclp" | "QualComm PureVoice"     | [QualComm](http://www.qualcomm.com/) PureVoice codec                |
-| "rt24" | "RT24 50:1"              | [Voxware](http://www.voxware.com/) codec                            |
-| "rt29" | "RT29 50:1"              |                                                                      |
-| "ULAW" | "CCITT G.711 µ-law"      | [SGI](http://www.sgi.com/) 8-bit [ITU-T](http://www.itu.int/ITU-T/) G.711 µ-law (64 kb/s) |
-| "ulaw" | "µLaw 2:1"               | [Apple](http://www.apple.com/) 8-bit [ITU-T](http://www.itu.int/ITU-T/) G.711 µ-law |
+    {: .blockquote .table .table-striped}
+    | Type   | Name                     | Note                                                                 |
+    |--------|--------------------------|----------------------------------------------------------------------|
+    | "NONE" | "Not compressed"         | PCM data                                                            |
+    | "ACE2" | "ACE 2-to-1"             | [Apple](http://www.apple.com/) IIGS ACE (Audio Compression/Expansion) |
+    | "ACE8" | "ACE 8-to-3"             |                                                                      |
+    | "APD4" | "4:1 Intel/DVI ADPCM"    | [SoundHack](http://www.soundhack.com/)                              |
+    | "ALAW" | "CCITT G.711 A-law"      | [SGI](http://www.sgi.com/) 8-bit [ITU-T](http://www.itu.int/ITU-T/) G.711 A-law (64 kb/s) |
+    | "alaw" | "ALaw 2:1"               | [Apple](http://www.apple.com) 8-bit [ITU-T](http://www.itu.int/ITU-T) G.711 A-law |
+    | "DWVW" | "Delta With Variable Word Width" | Yamaha TX16W Typhoon sampler                                      |
+    | "FL32" | "Float 32"               | [SoundHack](http://www.soundhack.com/) / [CSound](http://www.csound.com/) [IEEE](http://www.ieee.org/) 32-bit floating point |
+    | "fl32" | "32-bit floating point"  | [Apple](http://www.apple.com/) [IEEE](http://www.ieee.com/) 32-bit floating point |
+    | "fl64" | "64-bit floating point"  |                                                                      |
+    | "ima4" | "IMA 4:1"                |                                                                      |
+    | "MAC3" | "MACE 3-to-1"            | Macintosh Audio Compression/Expansion                               |
+    | "MACE6" | "MACE 6-to-1"           |                                                                      |
+    | "QDMC" | "QDesign Music"          | [QDesign](http://www.qdesign.com/) Music codec                      |
+    | "Qclp" | "QualComm PureVoice"     | [QualComm](http://www.qualcomm.com/) PureVoice codec                |
+    | "rt24" | "RT24 50:1"              | [Voxware](http://www.voxware.com/) codec                            |
+    | "rt29" | "RT29 50:1"              |                                                                      |
+    | "ULAW" | "CCITT G.711 µ-law"      | [SGI](http://www.sgi.com/) 8-bit [ITU-T](http://www.itu.int/ITU-T/) G.711 µ-law (64 kb/s) |
+    | "ulaw" | "µLaw 2:1"               | [Apple](http://www.apple.com/) 8-bit [ITU-T](http://www.itu.int/ITU-T/) G.711 µ-law |
 
 - One Format Version chunk
 

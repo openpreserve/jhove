@@ -7,8 +7,8 @@ layout: page
 
 For proper operation, the `<jhoveHome>` element in the configuration file, `jhove/conf/jhove.conf`, must be edited to point to the absolute pathname of the JHOVE installation, or home, directory and the temporary directory (in which temporary files are created):
 
-      <jhoveHome>_jhove-home-directory_</jhoveHome>
-      <tempDirectory>_temporary-directory_</tempDirectory>
+      <jhoveHome>jhove-home-directory</jhoveHome>
+      <tempDirectory>temporary-directory</tempDirectory>
   
 
 The JHOVE home directory is the top-most directory in the distribution TAR or ZIP file. On Unix systems, /var/tmp is an appropriate temporary directory; on Windows, C:\\Temp. For example, if the distribution TAR file is disaggregated on a Unix system in the directory "/users/stephen/projects", then the configuration file should read:
@@ -19,35 +19,35 @@ The JHOVE home directory is the top-most directory in the distribution TAR or ZI
 
 In the JHOVE home directory, copy the JHOVE Bourne shell driver script template, "jhove.tmpl", to "jhove" (or the equivalent Windows shell script, "jhove\_bat.tmpl" to "jhove.bat"), and set the JHOVE home directory, Java home directory, and Java interpreter:
 
-    JHOVE\_HOME=_jhove-home-directory_
-    JAVA\_HOME=_java-home-directory_
-    JAVA=_java-interpreter_
+    JHOVE_HOME=jhove-home-directory
+    JAVA_HOME=java-home-directory
+    JAVA=java-interpreter
   
 
 where JHOVE\_HOME is set to specify the absolute pathname of the JHOVE home directory; JAVA\_HOME is set to specify the absolute pathname of the Java home directory; and JAVA is set to specify the absolute pathname of the Java interpreter. For example:
 
-    JHOVE\_HOME=/users/\[username\]/projects/jhove
-    JAVA\_HOME=/usr/local/java/jdk1.6.0\_20-32
-    JAVA=$JAVA\_HOME/bin/java
+    JHOVE_HOME=/users/[username]/projects/jhove
+    JAVA_HOME=/usr/local/java/jdk1.6.0_20-32
+    JAVA=$JAVA_HOME/bin/java
   
 
 In the Windows shell driver script, "jhove.bat", the equivalent three variables are:
 
-    SET JHOVE\_HOME=_jhove-home-directory_
-    SET JAVA\_HOME=_java-home-directory_
-    SET JAVA=%JAVA\_HOME%\\bin\\java
-  
+    SET JHOVE_HOME=jhove-home-directory
+    SET JAVA_HOME=java-home-directory
+    SET JAVA=%JAVA_HOME%\bin\java
+
 
 For example:
 
-    SET JHOVE\_HOME="C:\\Program Files\\jhove"
-    SET JAVA\_HOME="C:\\Program Files\\java\\jdk1.6.0\_20-32"
-    SET JAVA=%JAVA\_HOME%\\bin\\java
+    SET JHOVE_HOME="C:\Program Files\jhove"
+    SET JAVA_HOME="C:\Program Files\java\jdk1.6.0_20-32"
+    SET JAVA=%JAVA_HOME%\bin\java
   
 
 The quotation marks are necessary because of the embedded space characters. On Windows platforms it may also be necessary to add the Java bin subdirectory to the System PATH environment variable:
 
-    PATH=C:\\Program Files\\java\\jdk1.6.0\_20-32\\bin;...
+    PATH=C:\Program Files\java\jdk1.6.0_20-32\bin;...
   
 
 Specific instructions on installing JHOVE in a Windows XP environment are [available](/getting-started/windows/). For additional information on setting a Windows environment variable, consult your local documentation or system administrator.

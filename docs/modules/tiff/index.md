@@ -119,6 +119,7 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
     The presence of a data type 6 (SBYTE), 7 (UNDEFINED), 8 (SSHORT), 9 (SLONG), 10 (SRATIONAL), 11 (FLOAT), or 12 (DOUBLE) indicates version 6.0.
     
     The following tag is mandatory:
+    
     {: .table.blockquote}
     | Tag Name and Number |     | Value |
     | --- | --- | --- |
