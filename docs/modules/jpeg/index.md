@@ -12,7 +12,10 @@ The JPEG-hul module recognizes and validates the JPEG format.
 
 The module is invoked by the:
 
->     jhove ... -m JPEG-hul ...
+{: .blockquote}
+```bash
+jhove ... -m JPEG-hul ...
+```
 
 command line option.
 

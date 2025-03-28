@@ -12,7 +12,10 @@ The WARC-kb module recognizes and validates the WARC (Web ARChive) format. \[[WA
 
 The module is invoked by the:
 
->     jhove ... -m WARC-kb ...
+{: .blockquote}
+```bash
+jhove ... -m WARC-kb ...
+```
 
 command line option.
 

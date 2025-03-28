@@ -12,7 +12,10 @@ The EPUB-ptc module recognizes and validates the EPUB format.
 
 The module is invoked by the:
 
->     jhove ... -m EPUB-ptc ...
+{: .blockquote}
+```bash
+jhove ... -m EPUB-ptc ...
+```
 
 command line option.
 
@@ -94,7 +97,7 @@ In addition to the standard JHOVE [representation information](index.html#repinf
     The presence of "version=3.0" in package tag of the OPF XML will result in validation using the 3.2 specification. \[[EPUB3](/references#epub3)\].
     
 
-{: #additional-module-properties .section-heading}
+{: #additional-modul>     `e-properties .section-heading}
 ## 6 Additional Module Properties
 
 -   Nominal file extension: .epub
