@@ -3,11 +3,14 @@ title: JSTOR/Harvard Object Validation Environment
 layout: page
 ---
 
+<header class="jumbotron vertical-center">
 ![JHOVE logo](img/jhovelogo.png)
 
 ## Open source file format identification, validation & characterisation
 
+{: .btn.btn-primary.btn-lg.pad}
 [Download JHOVE](https://software.openpreservation.org/rel/jhove-latest.jar){: .btn .btn-primary .btn-lg .pad download}
+</header>
 
 ### Software
 
@@ -19,6 +22,7 @@ JHOVE is a file format identification, validation, and characterisation tool. It
 
 ### Supported Formats
 
+{: .table .table-striped}
 | Module          | Format                              | Extension                     | MIME                          |
 |------------------|-------------------------------------|-------------------------------|-------------------------------|
 | [AIFF-hul](/modules/aiff/) | Audio Interchange File Format | .aif                          | audio/x-aiff                  |
