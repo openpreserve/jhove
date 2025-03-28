@@ -12,8 +12,7 @@ The WARC-kb module recognizes and validates the WARC (Web ARChive) format. \[[WA
 
 The module is invoked by the:
 
->     jhove ... -m WARC-kb ...
->   
+>     `jhove ... -m WARC-kb ...`
 
 command line option.
 
@@ -38,7 +37,7 @@ The WARC module doesn't check the well-formedness
 
 The WARC module only validates the WARC file format, WARC headers. It doesn't check the payload of the WARC records.
 
-{: #representation-information .section-heading}
+{: #repinfo .section-heading}
 ## 5 Representation Information
 
 The MIME type is reported as: application/warc \[[application/warc, application/warc-fields](https://iipc.github.io/warc-specifications/specifications/warc-format/warc-1.1/#warc-file-name-size-and-compression)\].

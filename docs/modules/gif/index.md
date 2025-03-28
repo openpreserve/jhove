@@ -44,7 +44,7 @@ The following criteria must be met by a GIF file for JHOVE to consider it valid:
 - At most one global color map
 - At most one graphic control extension preceding an image descriptor or a plain text extension
 
-{: #representation-information .section-heading}
+{: #repinfo .section-heading}
 ## 5 Representation Information
 
 The MIME type is reported as: image/gif

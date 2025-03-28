@@ -27,4 +27,5 @@ layout: page
 
 Please note that these modules are **unsupported** by HUL, and that you use them at your own risk.
 
+{: .btn.btn-primary.btn-lg.pad}
 [Download Zip Module](ZipModule.jar)

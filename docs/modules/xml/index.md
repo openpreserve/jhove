@@ -59,7 +59,7 @@ JHOVE uses the criteria for XML validity defined by \[[XML](/references#xml)\].
 
 Note that the concept of validity applies only to XML files that explicitly reference a DTD or XML Schema. JHOVE can determine if either of these conditions are met and if so, it will automatically invoke the SAX2 parser in a validating mode. Otherwise, the parser is invoked in a manner that only checks for well-formedness.
 
-{: #representation-information .section-heading}
+{: #repinfo .section-heading}
 ## 5 Representation Information
 
 The MIME type is reported as: text/xml

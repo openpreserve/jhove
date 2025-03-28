@@ -12,7 +12,7 @@ The JPEG2000-hul module recognizes and validates the JPEG 2000 (ISO/IEC 15444) f
 
 The module is invoked by the:
 
-> jhove ... -m JPEG2000-hul ...
+>     `jhove ... -m JPEG2000-hul ...`
 
 command line option.
 
@@ -41,7 +41,7 @@ The following criteria must be met by a JPEG 2000 file for JHOVE to consider it 
 
 -   The file is well-formed
 
-{: #representation-information .section-heading}
+{: #repinfo .section-heading}
 ## 5 Representation Information
 
 The MIME type for the JP2 profile is reported as: image/jp2; for the JPX profile: image/jpx.

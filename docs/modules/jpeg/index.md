@@ -13,7 +13,6 @@ The JPEG-hul module recognizes and validates the JPEG format.
 The module is invoked by the:
 
 >     `jhove ... -m JPEG-hul ...`
->   
 
 command line option.
 
@@ -59,7 +58,7 @@ The following criteria must be met by a JPEG file for JHOVE to consider it valid
 
 A file which consists of a JPEG data stream, but does not contain the required segments for a JFIF, SPIFF, Exif, JTIP, or JPEG-LS file is considered well-formed but not valid.
 
-{: #representation-information .section-heading}
+{: #repinfo .section-heading}
 ## 5 Representation Information
 
 The MIME type is reported as: image/jpeg

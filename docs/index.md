@@ -22,24 +22,24 @@ JHOVE is a file format identification, validation, and characterisation tool. It
 ### Supported Formats
 
 {: .table .table-striped}
-| Module          | Format                              | Extension                     | MIME                          |
-|------------------|-------------------------------------|-------------------------------|-------------------------------|
-| [AIFF-hul](/modules/aiff/) | Audio Interchange File Format | .aif                          | audio/x-aiff                  |
-| [ASCII-hul](/modules/ascii/) | ASCII text                     |                               | application/octet-stream      |
-| [GIF-hul](/modules/gif/) | Graphics Interchange Format    | .gif                          | image/gif                     |
-| [GZIP-kb](/modules/gzip/) | Gzip (GNU zip) format         | .gz                           | application/gzip              |
-| [HTML-hul](/modules/html/) | HTML format                   | .html, .htm                   | text/html                     |
-| [JPEG-hul](/modules/jpeg/) | JPEG format                   | .jpg/.jls/.spf                | image/jpeg                    |
-| [JPEG2000-hul](/modules/jpeg2000/) | JPEG 2000 format             | .jp2/.jpx                     | image/jp2, image/jpx          |
-| [PDF-hul](/modules/pdf/) | PDF format                    | .pdf                          | application/pdf               |
-| [TIFF-hul](/modules/tiff/) | TIFF format                   | .tiff                         | image/tiff                    |
-| [UTF8-hul](/modules/utf8/) | UTF-8 text                   |                               | text/plain; charset=UTF-8     |
-| [WARC-kb](/modules/warc/) | WARC format                   | .warc/.warc.gz                | application/warc              |
-| [WAVE-hul](/modules/wave/) | Audio for Windows format      | .wav/.bwf/.rt64               | audio/vnd.wave                |
-| [XML-hul](/modules/xml/) | XML format                    | .xml                          | text/xml                      |
-| [EPUB-ptc](/modules/epub/) | EPUB format                   | .epub                         | application/epub+zip          |
-| [MP3](/modules/mp3/) | MP3-MnH                        |                               |                               |
-| [ZIP/GZIP](/modules/zip/) | ZIP-ptc/GZIP-ptc             |                               |                               |
+| Module | Format | Extension | MIME |
+| --- | --- | --- | --- |
+| [AIFF-hul](/modules/aiff/) | Audio Interchange File Format | .aif | audio/x-aiff |
+| [ASCII-hul](/modules/ascii/) | ASCII text |     | application/octet-stream |
+| [GIF-hul](/modules/gif/) | Graphics Interchange Format | .gif | image/gif |
+| [GZIP-kb](/modules/gzip/) | Gzip (GNU zip) format | .gz | application/gzip |
+| [HTML-hul](/modules/html/) | HTML (Hypertext Markup Language) format | .html, .htm | text/html |
+| [JPEG-hul](/modules/jpeg/) | JPEG format | .jpg/.jls(for JPEG-LA)/.spf(for SPIFF) | image/jpeg |
+| [JPEG2000-hul](/modules/jpeg2000/) | JPEG 2000 (ISO/IEC 15444) format | .jpg/.jls(for JPEG-LA)/.spf(for SPIFF) | image/jp2 (for JP2)/ image/jpx (for JPX) |
+| [PDF-hul](/modules/pdf/) | PDF (Portable Document Format) format | .pdf | application/pdf |
+| [JHOVE TIFF-hul](/modules/tiff/) | TIFF (Tagged Image File Format) format | .tiff (nominal)/ TIFF (Mac OS) | image/tiff/ image/tiff-fx (for TIFF-FX)/ image.ief (for Class F) |
+| [UTF8-hul](/modules/utf8/) |     |     | text/plain; charset=UTF-8 |
+| [WARC-kb](/modules/warc/) | WARC (Web ARChive) format | .warc/ .warc.gz | application/warc |
+| [WAVE-hul](/modules/wave/) | Audio for Windows format (WAVE) | .wav/ .bwf/ .rt64 | audio/vnd.wave |
+| [XML-hul](/modules/xml/) | XML (Extensible Markup Language) format | .xml | text/xml |
+| [EPUB-ptc](/modules/epub/) | EPUB format | .epub | application/epub+zip |
+| [MP3](/modules/mp3/) | MP3-MnH |     |     |
+| [ZIP/ GZIP](/modules/zip/) | ZIP-ptc/ GZIP-ptc |     |     |
 
 {: #getting-started .section-heading}
 ## Getting Started

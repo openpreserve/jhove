@@ -1,6 +1,6 @@
 ---
 title: AIFF-hul Module
-layout: keep
+layout: page
 ---
 
 # AIFF-hul Module
@@ -49,7 +49,7 @@ The following criteria must be met by an AIFF file for JHOVE to consider it vali
 
 - The file is well-formed
 
-{: #representation-information .section-heading}
+{: #repinfo .section-heading}
 ## 5 Representation Information
 
 The MIME type is reported as: `audio/x-aiff`.

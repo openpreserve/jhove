@@ -55,7 +55,7 @@ The following criteria must be met by a WAVE file for JHOVE to consider it valid
     -   MPEG Audio Extension
     -   Peak Envelope
 
-{: #representation-information .section-heading}
+{: #repinfo .section-heading}
 ## 5 Representation Information
 
 The base MIME type is reported as `audio/vnd.wave`, but may be extended with a `codec` parameter as described in RFC 2361 \[[RFC 2361](/references#rfc2361)\].
@@ -70,10 +70,11 @@ The module reports audio properties using the draft standard AES-X098B, Core aud
 
 The module can recognize and process the following chunks:
 
+Top-level chunks
+
 {: .table}
-|     |     |     |     |     |
-| --- | --- | --- | --- | --- |Top-level chunks
 | ID  | List Type | Name | Property | References |
+| --- | --- | --- | --- | --- |
 | `bext` |     | Broadcast Audio Extension | BroadcastAudioExtension | \[[BWF](/references#bwf)\] |
 | `cue` |     | Cue Points | CuePoints | \[[WAVE](/references#wave)\] |
 | `data` |     | Data | Data | \[[WAVE](/references#wave)\] |
@@ -92,28 +93,32 @@ The module can recognize and process the following chunks:
 | `note` |     | Note | Note |     |
 | `smpl` |     | Sample | Sample | \[[MDSU](/references#mdsu3)\] |
 
+
+Associated Data List chunks
+
 {: .table}
-|     |     |     |     |
-| --- | --- | --- | --- |Associated Data List chunks
 | ID  | Name | Property | References |
+| --- | --- | --- | --- |
 | `labl` | Label | Label | \[[WAVE](/references#wave)\] |
 | `ltxt` | Text with Data Length | LabeledTextItem | \[[WAVE](/references#wave)\] |
 | `note` | Note | Note | \[[WAVE](/references#wave)\] |
 
+Exif List chunks
+
 {: .table}
-|     |     |     |     |
-| --- | --- | --- | --- |Exif List chunks
 | ID  | Name | Property | References |
+| --- | --- | --- | --- |
 | `ecor` | Make | Manufacturer | \[[Exif](/references#exif)\] |
 | `emdl` | Model | Model | \[[Exif](/references#exif)\] |
 | `erel` | Related Information | RelatedImageFile | \[[Exif](/references#exif)\] |
 | `etim` | Time | TimeCreated | \[[Exif](/references#exif)\] |
 | `ever` | Version | ExifVersion | \[[Exif](/references#exif)\] |
 
+Info List chunks
+
 {: .table}
-|     |     |     |     |
-| --- | --- | --- | --- |Info List chunks
 | ID  | Name | Property | References |
+| --- | --- | --- | --- |
 | `IARL` | Archival Location | ArchivalLocation | \[[WAVE](/references#wave)\] |
 | `IART` | Artist | Artist | \[[WAVE](/references#wave)\] |
 | `ICMS` | Commissioned | Commissioned | \[[WAVE](/references#wave)\] |
@@ -149,11 +154,14 @@ WAVE is a format for uncompressed or compressed sampled audio. The format is def
 
 The baseline `fmt` chunk is defined by the WAVEFORMAT structure with a length of 14 bytes:
 
->   WORD  wFormatTag
->   WORD  nChannels
->   DWORD nSamplesPerSec
->   DWORD nAvgBytesPerSec
->   WORD  nBlockAlign
+{: .blockquote}
+```
+  WORD  wFormatTag
+  WORD  nChannels
+  DWORD nSamplesPerSec
+  DWORD nAvgBytesPerSec
+  WORD  nBlockAlign
+```
 
 Where `WORD` indicates a 16-bit unsigned integer and `DWORD` indicates a 32-bit unsigned integer.
 
@@ -163,8 +171,11 @@ The specific form of the sampled data is specified by the `fmt` chunk's wFormatT
 
 This is an extension to the WAVEFORMAT profile in which the `fmt` chunk is defined by the PCMWAVEFORMAT structure with a length of 16 bytes \[[PCMWAVEFORMAT](/references#pcmwaveformat)\]:
 
->   WAVEFORMAT
->   WORD  wBitsPerSample
+{: .blockquote}
+```
+   WAVEFORMAT
+   WORD  wBitsPerSample
+```
 
 Profile requirements include:
 
@@ -174,8 +185,11 @@ Profile requirements include:
 
 This is an extension to the PCMWAVEFORMAT profile supporting both PCM and non-PCM audio formats \[[WAVEFORMATEX](/references#waveformatex)\]. The `fmt` chunk is defined by the WAVEFORMATEX structure with a length ≥ 18 bytes:
 
->   PCMWAVEFORMAT
->   WORD  cbSize
+{: .blockquote}
+```
+   PCMWAVEFORMAT
+   WORD  cbSize
+```
 
 Profile requirements include:
 
@@ -188,20 +202,22 @@ Profile requirements include:
 #### WAVEFORMATEXTENSIBLE
 
 This is the most recent version of the Microsoft WAVE format for audio sample data with greater than two channels or 16-bit sampling \[[WAVEFORMATEXTENSIBLE](/references#waveformatextensible)\]. The `fmt` chunk is defined by the WAVEFORMATEXTENSIBLE structure with a length ≥ 40 bytes:
-
->   WAVEFORMATEX
->   UNION samples   {
->     WORD  wValidBitsPerSample
->     WORD  wSamplesPerBlock
->     WORD  wReserved
->   }
->   DWORD dwChannelMask
->   GUID  subFormat {
->     DWORD f1
->     WORD  f2
->     WORD  f3
->     CHAR  f4\[8\]
->   }
+{: .blockquote}
+```
+   WAVEFORMATEX
+   UNION samples   {
+     WORD  wValidBitsPerSample
+     WORD  wSamplesPerBlock
+     WORD  wReserved
+   }
+   DWORD dwChannelMask
+   GUID  subFormat {
+     DWORD f1
+     WORD  f2
+     WORD  f3
+     CHAR  f4\[8\]
+   }
+```
 
 Where `UNION` is a C-style union structure and `CHAR` is an 8-bit unsigned integer.
 

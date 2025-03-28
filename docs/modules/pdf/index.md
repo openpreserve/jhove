@@ -12,22 +12,19 @@ The PDF-hul module recognizes and validates the PDF (Portable Document Format) f
 
 The module is invoked by the:
 
->     jhove ... -m PDF-hul ...
->   
+>     `jhove ... -m PDF-hul ...`
 
 command line option.
 
 Parameters may be set in the configuration file to control the amount of information supplied by the module. (In earlier versions of JHOVE, these were set by the -p option of the command line, and added information rather than reducing it.) These parameters are set in the <param> element under the <module> element. The parameters may be specified as a string of letters, or as separate one-letter parameters, e.g.:
 
 >     <param>apn500</param>
->   
 
 or
 
 >     <param>a</param>
 >     <param>p</param>
 >     <param>n500</param>
->   
 
 The parameters function as flags with the following significance:
 
@@ -62,15 +59,12 @@ The following criteria must be met by a PDF object for JHOVE to consider it well
 -   JHOVE uses the criteria for well-formedness defined in \[[PDF](/references#pdf1.4), **Chapter 3, Syntax**\].
     
     In general, a file is well-formed if it has a header:
-    
-    >         %PDF-_m_._n_
-    >       
-    
+
+    >         %PDF-_m_._n_   
+
     a body consisting of well-formed objects; a cross-reference table; and a trailer defining the cross-reference table size, and an indirect reference to the document catalog dictionary, and ending with:
     
-    >         %%EOF
-    >       
-    
+    >         %%EOF  
 
 {: #validity .section-heading}
 ## 4 Validity

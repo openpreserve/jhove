@@ -3,9 +3,10 @@ title: TIFF Tags
 layout: page
 ---
 
+{: #tags .section-heading}
 # TIFF Tags
 
-{: .table}
+{: .table .table-striped}
 | Tag | Tag Name | Type | Count | Definition | Note |
 | --- | --- | --- | --- | --- | --- |
 | 254 | NewSubFileType | LONG | 1   | TIFF |
@@ -210,9 +211,10 @@ layout: page
 | 50779 | CalibrationIlluminant2 | SHORT | 1   | DNG |
 | 50780 | BestQualityScale | RATIONAL | 1   | DNG |
 
+{: #gps .section-heading}
 **2 GPSInfo IFD Tags**
 
-{: .table}
+{: .table .table-striped}
 | Tag | Tag Name | Type | Count | Definition |
 | --- | --- | --- | --- | --- |
 | 0   | GPSVersionID | BYTE | 4   | TIFF/EP / Exif |
@@ -247,9 +249,10 @@ layout: page
 | 29  | GPSDateStamp | ASCII | 11  | Exif |
 | 30  | GPSDifferential | SHORT | 1   | Exif |
 
+{: #exif .section-heading}
 **3 Exif IFD Tags**
 
-{: .table}
+{: .table .table-striped}
 | Tag | Tag Name | Type | Count | Definition |
 | --- | --- | --- | --- | --- | --- |
 | 36864 | ExifVersion | UNDEFINED | 4   | Exif |
@@ -308,16 +311,18 @@ layout: page
 | 41995 | DeviceSettingDescription | UNDEFINED | N   | Exif |
 | 41996 | SubjectDistanceRange | SHORT | 1   | Exif |
 
+{: #interoperability .section-heading}
 **4 Exif Interoperability IFD Tags**
 
-{: .table}
+{: .table .table-striped}
 | Tag | Tag Name | Type | Count | Definition |
 | --- | --- | --- | --- | --- |
 | 1   | InteroperabilityIndex | ASCII | N   | Exif |
 
+{: #compression .section-heading}
 **5 TIFF Compression Schemes**
 
-{: .table}
+{: .table .table-striped}
 |     |     |     |
 | --- | --- | --- |
 | 1   | Uncompressed | TIFF |
@@ -345,9 +350,10 @@ layout: page
 | 34677 | SGI 24-bit Log Luminance encoding (experimental) |
 | 34712 | JPEG 2000 | libTiff |
 
+{: #photointerp .section-heading}
 **6 TIFF PhotometricInterpretation Schemes**
 
-{: .table}
+{: .table .table-striped}
 |     |     |     |
 | --- | --- | --- |
 | 0   | White is zero | TIFF |

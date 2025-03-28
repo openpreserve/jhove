@@ -12,7 +12,7 @@ The TIFF-hul module recognizes and validates the TIFF (Tagged Image File Format)
 
 The module is invoked by the:
 
-> jhove ... -m TIFF-hul ...
+> `jhove ... -m TIFF-hul ...`
 
 command line option.
 
@@ -76,7 +76,7 @@ The following criteria must be met by a TIFF file for JHOVE to consider it valid
 -   TileWidth (322) and TileLength (323) values are integral multiples of 16
 -   DateTime (306) tag is properly formatted: "_YYYY_:_MM_:_DD_ _HH_:_MM_:_SS_"
 
-{: #representation-information .section-heading}
+{: #repinfo .section-heading}
 ## 5 Representation Information
 
 The MIME type is reported as: image/tiff, except for the TIFF-FX profile, which is reported as: image/tiff-fx, and the Class F profile, which is reported as: image/ief.
@@ -85,14 +85,15 @@ In addition to the standard JHOVE [representation information](/documentation#re
 
 By default numeric flag values are displayed using descriptive text labels and rational values are displayed as real decimals. To see the actual "raw" data values use the \-r command line option.
 
-{: .table}
-> | Tag value | Default display | \-r display |
-> | --- | --- | --- |
-> | Compression = 4 | "CCITT Group 4" | "4" |
-> | YCbCrCoefficient = 587/1000 | "0.587" | "587/1000" |
+{: .table.blockquote}
+| Tag value | Default display | \-r display |
+| --- | --- | --- |
+| Compression = 4 | "CCITT Group 4" | "4" |
+| YCbCrCoefficient = 587/1000 | "0.587" | "587/1000" |
 
 Image technical properties are reported in terms of the NISO [Z39.87](/references#z39.87) data dictionary.
 
+{: #profiles .section-heading}
 ### 5.1 Profiles
 
 -   **TIFF 4.0**
@@ -118,10 +119,10 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
     The presence of a data type 6 (SBYTE), 7 (UNDEFINED), 8 (SSHORT), 9 (SLONG), 10 (SRATIONAL), 11 (FLOAT), or 12 (DOUBLE) indicates version 6.0.
     
     The following tag is mandatory:
-    {: .table}
-    > | Tag Name and Number |     | Value |
-    > | --- | --- | --- |
-    > | PhotometricInterpretation | 262 |     |
+    {: .table.blockquote}
+    | Tag Name and Number |     | Value |
+    | --- | --- | --- |
+    | PhotometricInterpretation | 262 |     |
     
 -   **Baseline 6.0 profiles**
     
@@ -131,78 +132,78 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
         
         The bilevel profile is for black and white images. The following tags are mandatory:
         
-        {: .table}
-        > | Tag Name and Number |     | Value |
-        > | --- | --- | --- |
-        > | ImageWidth | 256 |     |
-        > | ImageLength | 257 |     |
-        > | Compression | 259 | 1, 2, or 32773 |
-        > | PhotometricInterpretation | 262 | 0 or 1 |
-        > | StripOffsets | 273 |     |
-        > | RowsPerStrip | 278 |     |
-        > | StripByteCounts | 279 |     |
-        > | XResolution | 282 |     |
-        > | YResolution | 283 |     |
-        > | ResolutionUnit | 296 | 1, 2, or 3 |
+        {: .table.blockquote}
+        | Tag Name and Number |     | Value |
+        | --- | --- | --- |
+        | ImageWidth | 256 |     |
+        | ImageLength | 257 |     |
+        | Compression | 259 | 1, 2, or 32773 |
+        | PhotometricInterpretation | 262 | 0 or 1 |
+        | StripOffsets | 273 |     |
+        | RowsPerStrip | 278 |     |
+        | StripByteCounts | 279 |     |
+        | XResolution | 282 |     |
+        | YResolution | 283 |     |
+        | ResolutionUnit | 296 | 1, 2, or 3 |
         
     -   **Baseline grayscale (Class G)**
         
         The grayscale profile is for grayscale images. The following tags are mandatory:
         
-        {: .table}
-        > | Tag Name and Number |     | Value |
-        > | --- | --- | --- |
-        > | ImageWidth | 256 |     |
-        > | ImageLength | 257 |     |
-        > | BitsPerSample | 258 | 4 or 8 |
-        > | Compression | 259 | 1 or 32773 |
-        > | PhotometricInterpretation | 262 | 0 or 1 |
-        > | StripOffsets | 273 |     |
-        > | RowsPerStrip | 278 |     |
-        > | StripByteCounts | 279 |     |
-        > | XResolution | 282 |     |
-        > | YResolution | 283 |     |
-        > | ResolutionUnit | 296 | 1, 2, or 3 |
+        {: .table.blockquote}
+        | Tag Name and Number |     | Value |
+        | --- | --- | --- |
+        | ImageWidth | 256 |     |
+        | ImageLength | 257 |     |
+        | BitsPerSample | 258 | 4 or 8 |
+        | Compression | 259 | 1 or 32773 |
+        | PhotometricInterpretation | 262 | 0 or 1 |
+        | StripOffsets | 273 |     |
+        | RowsPerStrip | 278 |     |
+        | StripByteCounts | 279 |     |
+        | XResolution | 282 |     |
+        | YResolution | 283 |     |
+        | ResolutionUnit | 296 | 1, 2, or 3 |
         
     -   **Baseline palette-color (Class P)**
         
         The palette-color profile is for images using a lookup-table (or color map). The following tags are mandatory:
         
-        {: .table}
-        > | Tag Name and Number |     | Value |
-        > | --- | --- | --- |
-        > | ImageWidth | 256 |     |
-        > | ImageLength | 257 |     |
-        > | BitsPerSample | 258 | 4 or 8 |
-        > | Compression | 259 | 1 or 32773 |
-        > | PhotometricInterpretation | 262 | 3   |
-        > | StripOffsets | 273 |     |
-        > | RowsPerStrip | 278 |     |
-        > | StripByteCounts | 279 |     |
-        > | XResolution | 282 |     |
-        > | YResolution | 283 |     |
-        > | ResolutionUnit | 296 | 1, 2, or 3 |
-        > | ColorMap | 320 |     |
+        {: .table.blockquote}
+        | Tag Name and Number |     | Value |
+        | --- | --- | --- |
+        | ImageWidth | 256 |     |
+        | ImageLength | 257 |     |
+        | BitsPerSample | 258 | 4 or 8 |
+        | Compression | 259 | 1 or 32773 |
+        | PhotometricInterpretation | 262 | 3   |
+        | StripOffsets | 273 |     |
+        | RowsPerStrip | 278 |     |
+        | StripByteCounts | 279 |     |
+        | XResolution | 282 |     |
+        | YResolution | 283 |     |
+        | ResolutionUnit | 296 | 1, 2, or 3 |
+        | ColorMap | 320 |     |
         
     -   **Baseline RGB (Class R)**
         
         The RGB profile is for full-color RGB images. The following tags are mandatory:
         
-        {: .table}
-        > | Tag Name and Number |     | Value |
-        > | --- | --- | --- |
-        > | ImageWidth | 256 |     |
-        > | ImageLength | 257 |     |
-        > | BitsPerSample | 258 | 8,8,8 |
-        > | Compression | 259 | 1 or 32773 |
-        > | PhotometricInterpretation | 262 | 2   |
-        > | StripOffsets | 273 |     |
-        > | SamplesPerPixel | 277 | \>= 3 |
-        > | RowsPerStrip | 278 |     |
-        > | StripByteCounts | 279 |     |
-        > | XResolution | 282 |     |
-        > | YResolution | 283 |     |
-        > | ResolutionUnit | 296 | 1, 2, or 3 |
+        {: .table.blockquote}
+        | Tag Name and Number |     | Value |
+        | --- | --- | --- |
+        | ImageWidth | 256 |     |
+        | ImageLength | 257 |     |
+        | BitsPerSample | 258 | 8,8,8 |
+        | Compression | 259 | 1 or 32773 |
+        | PhotometricInterpretation | 262 | 2   |
+        | StripOffsets | 273 |     |
+        | SamplesPerPixel | 277 | \>= 3 |
+        | RowsPerStrip | 278 |     |
+        | StripByteCounts | 279 |     |
+        | XResolution | 282 |     |
+        | YResolution | 283 |     |
+        | ResolutionUnit | 296 | 1, 2, or 3 |
         
 -   **6.0 Extension profiles**
     
@@ -212,22 +213,22 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
         
         The YCbCr profile is for images using the YCbCr colorspace. The following tags are mandatory:
         
-        {: .table}
-        > | Tag Name and Number |     | Value |
-        > | --- | --- | --- |
-        > | ImageWidth | 256 |     |
-        > | ImageLength | 257 |     |
-        > | BitsPerSample | 258 | 8,8,8 |
-        > | Compression | 259 | 1, 5, or 6 |
-        > | PhotometricInterpretation | 262 | 6   |
-        > | StripOffsets | 273 |     |
-        > | SamplesPerPixel | 277 | 3   |
-        > | RowsPerStrip | 278 |     |
-        > | StripByteCounts | 279 |     |
-        > | XResolution | 282 |     |
-        > | YResolution | 283 |     |
-        > | ResolutionUnit | 296 | 1, 2, or 3 |
-        > | ReferenceBlackWhite | 532 |     |
+        {: .table.blockquote}
+        | Tag Name and Number |     | Value |
+        | --- | --- | --- |
+        | ImageWidth | 256 |     |
+        | ImageLength | 257 |     |
+        | BitsPerSample | 258 | 8,8,8 |
+        | Compression | 259 | 1, 5, or 6 |
+        | PhotometricInterpretation | 262 | 6   |
+        | StripOffsets | 273 |     |
+        | SamplesPerPixel | 277 | 3   |
+        | RowsPerStrip | 278 |     |
+        | StripByteCounts | 279 |     |
+        | XResolution | 282 |     |
+        | YResolution | 283 |     |
+        | ResolutionUnit | 296 | 1, 2, or 3 |
+        | ReferenceBlackWhite | 532 |     |
         
 -   **TIFF/IT (ISO 12639:2003)**
     
@@ -239,34 +240,34 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
     
     The TIFF/EP profile is for images created by digital cameras \[[TIFF/EP](/references#tiffep)\]. The following tags are mandatory:
     
-    {: .table}
-    > | Tag Name and Number |     | Value |
-    > | --- | --- | --- |
-    > | NewSubfileType | 254 | 0 or 1 |
-    > | ImageWidth | 256 |     |
-    > | ImageLength | 257 |     |
-    > | BitsPerSample | 258 | 8,8,8 |
-    > | Compression | 259 | 1, 7, or > 32767 |
-    > | PhotometricInterpretation | 262 | 1, 2, 6, 32803, or > 32767 |
-    > | Make | 271 |     |
-    > | Model | 272 |     |
-    > | Orientation | 274 | if defined must be 1, 3, 6, 8, or 9 |
-    > | XResolution | 282 |     |
-    > | YResolution | 283 |     |
-    > | PlanarConfiguration | 284 | 1 or 2 |
-    > | ResolutionUnit | 296 | 1, 2 or 3 |
-    > | Software | 305 |     |
-    > | DateTime | 306 |     |
-    > | YCbCrCoefficients | 529 | defined if PhotometricInterpretation = 6 |
-    > | YCbCrSubSampling | 530 | defined if PhotometricInterpretation = 6 |
-    > | YCbCrPositioning | 531 | defined if PhotometricInterpretation = 6 |
-    > | ReferenceBlackWhite | 532 | defined if PhotometricInterpretation = 6 |
-    > | CFARepeatPatternDim | 33421 | defined if PhotometricInterpretation = 32803 |
-    > | CFAPattern | 33422 | defined if PhotometricInterpretation = 32803 |
-    > | Copyright | 33432 |     |
-    > | DateTimeOriginal | 36867 |     |
-    > | TIFF/EPStandardID | 37398 | 1,0,0,0 |
-    > | SensingMethod | 37399 | 0, 1, 2, 3, 4, 5, 6, 7, or 8 |
+    {: .table.blockquote}
+    | Tag Name and Number |     | Value |
+    | --- | --- | --- |
+    | NewSubfileType | 254 | 0 or 1 |
+    | ImageWidth | 256 |     |
+    | ImageLength | 257 |     |
+    | BitsPerSample | 258 | 8,8,8 |
+    | Compression | 259 | 1, 7, or > 32767 |
+    | PhotometricInterpretation | 262 | 1, 2, 6, 32803, or > 32767 |
+    | Make | 271 |     |
+    | Model | 272 |     |
+    | Orientation | 274 | if defined must be 1, 3, 6, 8, or 9 |
+    | XResolution | 282 |     |
+    | YResolution | 283 |     |
+    | PlanarConfiguration | 284 | 1 or 2 |
+    | ResolutionUnit | 296 | 1, 2 or 3 |
+    | Software | 305 |     |
+    | DateTime | 306 |     |
+    | YCbCrCoefficients | 529 | defined if PhotometricInterpretation = 6 |
+    | YCbCrSubSampling | 530 | defined if PhotometricInterpretation = 6 |
+    | YCbCrPositioning | 531 | defined if PhotometricInterpretation = 6 |
+    | ReferenceBlackWhite | 532 | defined if PhotometricInterpretation = 6 |
+    | CFARepeatPatternDim | 33421 | defined if PhotometricInterpretation = 32803 |
+    | CFAPattern | 33422 | defined if PhotometricInterpretation = 32803 |
+    | Copyright | 33432 |     |
+    | DateTimeOriginal | 36867 |     |
+    | TIFF/EPStandardID | 37398 | 1,0,0,0 |
+    | SensingMethod | 37399 | 0, 1, 2, 3, 4, 5, 6, 7, or 8 |
     
     Additionally, either all of:
     
@@ -279,44 +280,44 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
     
     Exif 2.0, 2.1 (JEIDA-49-1998), and 2.2 (JEITA CP-3451) define camera-specific metadata \[[Exif 2.1](/references#exif2.1), [Exif 2.2](/references#exif)\]. The following tags are mandatory in the primary TIFF IFD:
     
-    {: .table}
-    > | Tag Name and Number |     | Value | Note |
-    > | --- | --- | --- | --- |
-    > | ImageWidth | 256 |     | If Compression (259) = 1 |
-    > | ImageLength | 257 |     | If Compression (259) = 1 |
-    > | BitsPerSample | 258 | 8,8,8 | If Compression (259) = 1 |
-    > | Compression | 259 | 1   | If primary TIFF IFD _and_ JPEGInterchangeFormat (513) not defined |
-    > | 1 or 6 | If thumbnail TIFF IFD |
-    > | PhotometricInterpretation | 262 | 2 or 6 | If Compression (259) = 1 |
-    > | StripOffsets | 273 |     | If Compression (259) = 1 |
-    > | SamplesPerPixel | 277 | 3   | If Compression (259) = 1 |
-    > | RowsPerStrip | 278 |     | If Compression (259) = 1 |
-    > | StripByteCounts | 279 |     | If Compression (259) = 1 |
-    > | XResolution | 282 |     |
-    > | YResolution | 283 |     |
-    > | ResolutionUnit | 296 | 2 or 3 |
-    > | ExifIFD | 34665 |     | If primary TIFF IFD |
+    {: .table.blockquote}
+    | Tag Name and Number |     | Value | Note |
+    | --- | --- | --- | --- |
+    | ImageWidth | 256 |     | If Compression (259) = 1 |
+    | ImageLength | 257 |     | If Compression (259) = 1 |
+    | BitsPerSample | 258 | 8,8,8 | If Compression (259) = 1 |
+    | Compression | 259 | 1   | If primary TIFF IFD _and_ JPEGInterchangeFormat (513) not defined |
+    | 1 or 6 | If thumbnail TIFF IFD |
+    | PhotometricInterpretation | 262 | 2 or 6 | If Compression (259) = 1 |
+    | StripOffsets | 273 |     | If Compression (259) = 1 |
+    | SamplesPerPixel | 277 | 3   | If Compression (259) = 1 |
+    | RowsPerStrip | 278 |     | If Compression (259) = 1 |
+    | StripByteCounts | 279 |     | If Compression (259) = 1 |
+    | XResolution | 282 |     |
+    | YResolution | 283 |     |
+    | ResolutionUnit | 296 | 2 or 3 |
+    | ExifIFD | 34665 |     | If primary TIFF IFD |
     
     The primary TIFF IFD is the first IFD in the file, whose offset is defined in the TIFF header. The optional thumbnail TIFF IFD is a subsequent IFD whose offset is defined following the primary TIFF IFD.
     
     The following tags are mandatory in the Exif IFD:
     
-    {: .table}
-    > | Tag Name and Number |     | Value |
-    > | --- | --- | --- |
-    > | ExifVersion | 36864 | "0220" (Version 2.2)  <br>"0210" (Version 2.1)  <br>"0200" (Version 2.0) |
-    > | FlashpixVersion | 40960 | "0100" |
-    > | ColorSpace | 40961 | 1 or 65535 |
+    {: .table.blockquote}
+    | Tag Name and Number |     | Value |
+    | --- | --- | --- |
+    | ExifVersion | 36864 | "0220" (Version 2.2)  <br>"0210" (Version 2.1)  <br>"0200" (Version 2.0) |
+    | FlashpixVersion | 40960 | "0100" |
+    | ColorSpace | 40961 | 1 or 65535 |
     
 -   **Baseline GeoTIFF 1.0**
     
     GeoTIFF defines an industry-standard tagset for the management of geo-referenced or geo-coded raster imagery \[[GeoTIFF](/references#geotiff)\]. The following tags are mandatory:
     
-    {: .table}
-    > | Tag Name and Number |     | Value |
-    > | --- | --- | --- |
-    > | PhotometricInterpretation | 262 |     |
-    > | GeoKeyDirectoryTag | 34735 |     |
+    {: .table.blockquote}
+    | Tag Name and Number |     | Value |
+    | --- | --- | --- |
+    | PhotometricInterpretation | 262 |     |
+    | GeoKeyDirectoryTag | 34735 |     |
     
     Additionally, either ModelTiepointTag (33922) or ModelTransformationTag (34264) must be defined, but not both.
     
@@ -328,43 +329,43 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
         
         The DLF black and white benchmark requires lossless compression, one 1-bit sample value per pixel, and a minimum resolution.
 
-        {: .table}
-        > | Tag Name and Number |     | Value |
-        > | --- | --- | --- |
-        > | BitsPerSample | 258 | 1   |
-        > | Compression | 259 | 1 (none) or 4 (T.6/Group 4) |
-        > | PhotometricInterpretation | 262 | 0 or 1 |
-        > | SamplesPerPixel | 277 | 1   |
-        > | XResolution | 282 | \>= 600 (in) or 1520 (cm) |
-        > | YResolution | 283 | \>= 600 (in) or 1520 (cm) |
+        {: .table.blockquote}
+        | Tag Name and Number |     | Value |
+        | --- | --- | --- |
+        | BitsPerSample | 258 | 1   |
+        | Compression | 259 | 1 (none) or 4 (T.6/Group 4) |
+        | PhotometricInterpretation | 262 | 0 or 1 |
+        | SamplesPerPixel | 277 | 1   |
+        | XResolution | 282 | \>= 600 (in) or 1520 (cm) |
+        | YResolution | 283 | \>= 600 (in) or 1520 (cm) |
         
     -   **Grayscale**
         
         The DLF grayscale benchmark requires lossless compression, one 8-bit sample value per pixel, and a minimum resolution.
         
-        {: .table}
-        > | Tag Name and Number |     | Value |
-        > | --- | --- | --- |
-        > | BitsPerSample | 258 | 8   |
-        > | Compression | 259 | 1 (none), 5 (LZW), 32773 (PackBits RLE) |
-        > | PhotometricInterpretation | 262 | 0 or 1 |
-        > | SamplesPerPixel | 277 | 1   |
-        > | XResolution | 282 | \>= 300 (in) or 760 (cm) |
-        > | YResolution | 283 | \>= 300 (in) or 760 (cm) |
+        {: .table.blockquote}
+        | Tag Name and Number |     | Value |
+        | --- | --- | --- |
+        | BitsPerSample | 258 | 8   |
+        | Compression | 259 | 1 (none), 5 (LZW), 32773 (PackBits RLE) |
+        | PhotometricInterpretation | 262 | 0 or 1 |
+        | SamplesPerPixel | 277 | 1   |
+        | XResolution | 282 | \>= 300 (in) or 760 (cm) |
+        | YResolution | 283 | \>= 300 (in) or 760 (cm) |
         
     -   **Color**
         
         The DLF color benchmark requires lossless compression, three 8-bit sample values per pixel, and a minimum resolution.
         
-        {: .table}
-        > | Tag Name and Number |     | Value |
-        > | --- | --- | --- |
-        > | BitsPerSample | 258 | 8, 8, 8 |
-        > | Compression | 259 | 1 (none), 5 (LZW), or 32773 (PackBits RLE) |
-        > | PhotometricInterpretation | 262 | 2 (RGB) or 6 (YCbCr) |
-        > | SamplesPerPixel | 277 | 3   |
-        > | XResolution | 282 | \>= 300 (in) or 760 (cm) |
-        > | YResolution | 283 | \>= 300 (in) or 760 (cm) |
+        {: .table.blockquote}
+        | Tag Name and Number |     | Value |
+        | --- | --- | --- |
+        | BitsPerSample | 258 | 8, 8, 8 |
+        | Compression | 259 | 1 (none), 5 (LZW), or 32773 (PackBits RLE) |
+        | PhotometricInterpretation | 262 | 2 (RGB) or 6 (YCbCr) |
+        | SamplesPerPixel | 277 | 3   |
+        | XResolution | 282 | \>= 300 (in) or 760 (cm) |
+        | YResolution | 283 | \>= 300 (in) or 760 (cm) |
         
 -   **TIFF-FX (RFC 2301)**
     
@@ -376,26 +377,26 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
     
     TIFF Class F \[[Class F](/references#classf), [RFC 2306](/references#rfc2306)\] is a sub-class of Class B defined for representing CCITT Group 3 (G3) facsimile images. The MIME type for this profile is reported as: image/ief.
     
-    {: .table}
-    > | Tag Name and Number |     | Value |
-    > | --- | --- | --- |
-    > | NewSubfileType | 254 | 2   |
-    > | ImageWidth | 256 | 1728, 2048 2432, 2592, 3072, 3648, 3456, 4096, 4864 |
-    > | ImageLength | 257 |     |
-    > | BitsPerSample | 258 | 1   |
-    > | Compression | 259 | 3 or 4 |
-    > | PhotometricInterpretation | 262 | 0 or 1 |
-    > | FillOrder | 266 | 1 or 2 |
-    > | StripOffsets | 273 |     |
-    > | SamplesPerPixel | 277 | 1   |
-    > | RowsPerStrip | 278 |     |
-    > | StripByteCounts | 279 |     |
-    > | XResolution | 282 | 204, 200, 300, 400, 408 (inches) |
-    > | YResolution | 283 | 98, 196, 100, 200, 300, 391, 400 (inches) |
-    > | Group3Options | 292 | 0, 1, 4 or 5 (if compression is 3) |
-    > | Group4Options | 293 | 2 (if compression is 4) |
-    > | ResolutionUnit | 296 | 2 or 3 |
-    > | PageNumber | 297 |     |
+    {: .table.blockquote}
+    | Tag Name and Number |     | Value |
+    | --- | --- | --- |
+    | NewSubfileType | 254 | 2   |
+    | ImageWidth | 256 | 1728, 2048 2432, 2592, 3072, 3648, 3456, 4096, 4864 |
+    | ImageLength | 257 |     |
+    | BitsPerSample | 258 | 1   |
+    | Compression | 259 | 3 or 4 |
+    | PhotometricInterpretation | 262 | 0 or 1 |
+    | FillOrder | 266 | 1 or 2 |
+    | StripOffsets | 273 |     |
+    | SamplesPerPixel | 277 | 1   |
+    | RowsPerStrip | 278 |     |
+    | StripByteCounts | 279 |     |
+    | XResolution | 282 | 204, 200, 300, 400, 408 (inches) |
+    | YResolution | 283 | 98, 196, 100, 200, 300, 391, 400 (inches) |
+    | Group3Options | 292 | 0, 1, 4 or 5 (if compression is 3) |
+    | Group4Options | 293 | 2 (if compression is 4) |
+    | ResolutionUnit | 296 | 2 or 3 |
+    | PageNumber | 297 |     |
     
     The Group3Options tag must be specified if and only if Compression = 3. The Group4Options tag must be specified if and only if Compression = 4.
     
@@ -407,24 +408,25 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
     
     RFC 1314 \[[RFC 1314](/references#rfc1314)\] is a sub-type of Class B proposed as a standard for representing FAX-like black and white images within the Internet.
     
-    {: .table}
-    > | Tag Name and Number |     | Value |
-    > | --- | --- | --- |
-    > | NewSubfileType | 254 |     |
-    > | BitsPerSample | 258 | 1   |
-    > | Compression | 259 | 1, 3, or 4 |
-    > | ImageWidth | 256 |     |
-    > | ImageLength | 257 |     |
-    > | PhotometricInterpretation | 262 | 0 or 1 |
-    > | StripOffsets | 273 |     |
-    > | SamplesPerPixel | 277 | 1   |
-    > | RowsPerStrip | 278 |     |
-    > | StripByteCounts | 279 |     |
-    > | XResolution | 282 |     |
-    > | YResolution | 283 |     |
-    > | ResolutionUnit | 296 | 2 or 3 |
+    {: .table.blockquote}
+    | Tag Name and Number |     | Value |
+    | --- | --- | --- |
+    | NewSubfileType | 254 |     |
+    | BitsPerSample | 258 | 1   |
+    | Compression | 259 | 1, 3, or 4 |
+    | ImageWidth | 256 |     |
+    | ImageLength | 257 |     |
+    | PhotometricInterpretation | 262 | 0 or 1 |
+    | StripOffsets | 273 |     |
+    | SamplesPerPixel | 277 | 1   |
+    | RowsPerStrip | 278 |     |
+    | StripByteCounts | 279 |     |
+    | XResolution | 282 |     |
+    | YResolution | 283 |     |
+    | ResolutionUnit | 296 | 2 or 3 |
     
 
+{: #extras .section-heading}
 ## 6 Additional Module Properties
 
 -   Nominal file extension: .tif

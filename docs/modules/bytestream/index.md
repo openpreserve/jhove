@@ -8,14 +8,15 @@ layout: page
 {: #introduction .section-heading}
 ## 1 Introduction
 
-The BYTESTREAM module recognizes and validates arbitrary bytestreams.  
-This module exists merely to provide a default format during identification operations.
+The BYTESTREAM module recognizes and validates arbitrary bytestreams. This module exists merely to provide a default format during identification operations.
 
 The module is invoked by the:
+
 {: .blockquote}
 ```
 jhove ... -m bytestream ...
 ```
+
 command line option.
 
 {: #coverage .section-heading}

@@ -12,8 +12,7 @@ The UTF8-hul module recognizes and validates content streams encoded with the Un
 
 The module is invoked by the:
 
->      jhove ... -m UTF8-hul ...
->    
+>      `jhove ... -m UTF8-hul ...`
 
 command line option.
 
@@ -59,7 +58,7 @@ The following criteria must be met by an UTF-8 encoded file for JHOVE to conside
 
 -   The UTF-8 encoded file is well-formed
 
-{: #representation-information .section-heading}
+{: #repinfo .section-heading}
 ## Representation Information
 
 The MIME type is reported as: text/plain; charset=UTF-8

@@ -5,7 +5,7 @@ title: Logging
 
 # A Guide to Logging in JHOVE
 
-{#controlling-jhove-application-logging-levels .section-heading}
+{: #controlling-jhove-application-logging-levels .section-heading}
 ## Controlling JHOVE Application Logging Levels
 
 To change the logging level when you run the code, you can either add something like this to the config file:

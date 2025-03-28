@@ -42,7 +42,7 @@ The following criteria must be met by a GZip file for JHOVE to consider it valid
 
 - The file is well-formed. In the GZIP-kb module, well-formedness and validity are equivalent.
 
-{: #representation-information .section-heading}
+{: #repinfo .section-heading}
 ## 5 Representation Information
 
 The MIME type is reported as: application/gzip [<a href="/references#rfc6713">RFC 6713</a>]. Application/x-gzip is also supported.

@@ -11,10 +11,12 @@ layout: page
 The ASCII-hul module recognizes and validates ASCII content streams.
 
 The module is invoked by the:
+
 {: .blockquote}
 ```
 jhove ... -m ASCII-hul ...
 ```
+
 command line option.
 
 This module can be [configured](/getting-started/config/) with the following parameters:

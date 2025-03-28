@@ -8,8 +8,7 @@ layout: page
 {: #module-interface .section-heading}
 ## 1 The Module Interface
 
-All JHOVE modules implement the `module` interface.  
-(Details of all interfaces and classes are available [here](/javadoc/).)
+All JHOVE modules implement the `module` interface. (Details of all interfaces and classes are available [here](/javadoc/).)
 
 {: .blockquote}
 ```java
@@ -65,9 +64,9 @@ The `init()` method is invoked once at the time the module class is instantiated
 
 ```xml
 <module>
-  <class><em>fully-package-qualified-module-class-name</em></class>
-  [ <init><em>optional-module-init-argument</em></init> ]
-  [ <param><em>optional-module-parameter</em></param> ]
+  <class>fully-package-qualified-module-class-name</class>
+  [ <init>optional-module-init-argument</init> ]
+  [ <param>optional-module-parameter</param> ]
 </module>
 ```
 
@@ -166,7 +165,7 @@ This method returns a List of Strings identifying the features of the Module. Se
 
 ### 1.4 Parse Methods
 
-```java
+```
 public void checkSignatures (InputStream stream,    RepInfo info) throws IOException;
 public void checkSignatures (RandomAccessFile raf, RepInfo info) throws IOException;
 ```
@@ -174,21 +173,21 @@ public void checkSignatures (RandomAccessFile raf, RepInfo info) throws IOExcept
 {: .blockquote}
 The `checkSignatures()` methods attempt to identify the object (represented as either a stream or random access file) using only internal signatures, i.e., magic numbers. Representation information about the object is returned through the `RepInfo` object.
 
-```java
+```
 public int parse (InputStream stream,    RepInfo info, int parseIndex) throws IOException;
 public int parse (RandomAccessFile file, RepInfo info) throws IOException;
 ```
 
-{: .blockquote}
-The `parse()` methods parse the object (represented by either a stream or random access file). Representation information about the object is returned through the `RepInfo` object. The stream version of `parse` may be invoked multiple times, if it is necessary to do multiple passes on the data.
-
-    ```java
-    RepInfo info;
-    int parseIndex = 0;
-    while ((parseIndex = parse (..., info, parseIndex)) != 0);
-    ```
-
-    The `parse` method for a RandomAccessFile does not have this feature, and does not have a `parseIndex` parameter, since it is always possible to move back to a previously examined position in the file.
+> The parse() methods parse the object (represented by either a stream or random access file). Representation information about the object is returned through the RepInfo object. The stream version of parsemay be invoked multiple times, if it is necessary to do multiple passes on the data. On the first invocation of this method parseIndex is set to 0. If the method returns a non-zero value then it is invoked again, with parseIndex set to the return value.
+> 
+> >       ...
+> >       RepInfo info;
+> >       int parseIndex = 0;
+> >       while ((parseIndex = parse (..., info, parseIndex)) != 0);
+> >       ...
+> >     
+> > 
+> > The parse method for a RandomAccessFile does not have this feature, and does not have a parseIndex parameter, since it is always possible to move back to a previously examined position in the file.
 
 ### 1.5 Descriptive Methods
 
@@ -308,15 +307,22 @@ is the class name for the ASCII module created by the Harvard University Library
 
 ### 3.3 Installing a module
 
-Module classes must be in the classpath used by JHOVE. In addition, they must be specified in the configuration file. A configuration file will include several `<module>` elements; you simply have to add an appropriate element for the module class you have created, using the following pattern.
 
-{: .blockquote}
-```xml
-<module>
-  <class>fully-package-qualified-class-name</class>
-  <init>optional-initialization-argument</init>
-</module>
-```
+Module classes must be in the classpath used by JHOVE. In addition, they must be specified in the configuration file. A configuration file will include several <module> elements; you simply have to add an appropriate element for the module class you have created, using the following pattern.
+
+> ...
+> <module>
+>   <class>fully-package-qualified-class-name</class>
+>   <init>optional-initialization-argument</init>
+> </module>
+> ...
+
+where the initialization parameter is optional. If defined, it will be passed to the module's init() method once at the time the module class object is instantiated.
+
+The position of the module's definition in the configuration file is significant; modules will be applied in the order in which they appear in the configuration file. Since a document will be matched by the first module it satisfies, modules for specific format files should appear before more general ones. For example, if your module verifies XHTML documents, the element declaring it should appear before the element declaring the XML module, since all valid XHTML documents are also XML documents.
+
+If you install a new module, you must restart JHOVE for the new module to be usable.
+
 
 ### 3.4 Making a module class
 
@@ -377,7 +383,7 @@ An array of names for the formats supported by the module. The first entry shoul
 
 `private static final String [] MIMETYPE`
 {: .blockquote}
-An array of MIME types applicable for the formats supported by the module. The first entry should be be most generally appropriate MIME type, e.g. `image/tiff`.
+An array of MIME types applicable for the formats supported by the module. The first entry should be be most generally appropriate MIME type, e.g. `{image/tiff}`.
 
 `private static final String COVERAGE`
 {: .blockquote}
@@ -433,26 +439,21 @@ Other information which may be stored in `_info` is discussed in the `RepInfo` s
 
 When reading a Stream-based document, buffering and tracking the byte count are supported for the module, provided that the data is read properly. It is assumed that the `parse()` function will use the `InputStream` passed to it to set up a `BufferedDataStream` through code such as the following:
 
-```java
-BufferedDataStream _dstream = getBufferedDataStream (stream, _app != null ?
-                    _app.getBufferSize () : 0);
-```
+-   `BufferedDataStream _dstream = getBufferedDataStream (stream, _app != null ?   _app.getBufferSize () : 0);`
 
-A `ChecksumInputStream` is designed to calculate checksums automatically as the stream is read. The `BufferedDataStream` is used for the reading of data from the document. `getBufferedDataStream` is defined by `ModuleBase`. Only the functions indicated here (defined in `ModuleBase`) should be used to read the `BufferedDataStream`; if this is done, then the value of `_nByte` is kept up to date as the current offset into the file. The `ModuleBase` argument must be the value of the calling module (normally `this`), or null if the function is being called in a context where `_nByte` should not be updated.
+A `ChecksumInputStream` is designed to calculate [checksums](#checksum) automatically as the stream is read. The `BufferedDataStream` is used for the reading of data from the document. `getBufferedDataStream` is defined by `ModuleBase`. Only the functions indicated here (defined in `ModuleBase`) should be used to read the `BufferedDataStream`; if this is done, then the value of `_nByte` is kept up to date as the current offset into the file. The `ModuleBase` argument must be the value of the calling module (normally `this`), or null if the function is being called in a context where `_nByte` should not be updated.
 
-```java
-public static int readUnsignedByte (DataInputStream stream, ModuleBase counted);
-public static void readByteBuf (DataInputStream stream, byte[] buf, ModuleBase counted);
-public static int readUnsignedShort (DataInputStream stream, boolean bigEndian, ModuleBase counted);
-public static long readUnsignedInt (DataInputStream stream, boolean bigEndian, ModuleBase counted);
-public static Rational readUnsignedRational (DataInputStream stream, boolean endian, ModuleBase counted);
-public static int readSignedByte (DataInputStream stream, ModuleBase counted);
-public static int readSignedShort (DataInputStream stream, boolean endian, ModuleBase counted);
-public static int readSignedInt (DataInputStream stream, boolean endian, ModuleBase counted);
-public static float readFloat (DataInputStream stream, boolean endian, ModuleBase counted);
-public static double readDouble (DataInputStream stream, boolean endian, ModuleBase counted);
-public void skipBytes (DataInputStream stream, int bytesToSkip, ModuleBase counted);
-```
+-   `public static int readUnsignedByte (DataInputStream stream, ModuleBase counted);`
+-   `public static void readByteBuf (DataInputStream stream,   byte[] buf,   ModuleBase counted);`
+-   `public static int readUnsignedShort (DataInputStream stream,   boolean bigEndian,   ModuleBase counted);`
+-   `public static long readUnsignedInt (DataInputStream stream,   boolean bigEndian,   ModuleBase counted);`
+-   `public static Rational readUnsignedRational (DataInputStream stream,   boolean endian,   ModuleBase counted);`
+-   `public static int readSignedByte (DataInputStream stream,   ModuleBase counted);`
+-   `public static int readSignedShort (DataInputStream stream, boolean endian,   ModuleBase counted);`
+-   `public static int readSignedInt (DataInputStream stream, boolean endian,   ModuleBase counted);`
+-   `public static float readFloat (DataInputStream stream, boolean endian,   ModuleBase counted);`
+-   `public static double readDouble (DataInputStream stream, boolean endian,   ModuleBase counted);`
+-   `public void skipBytes (DataInputStream stream, int bytesToSkip,   ModuleBase counted);`
 
 ### 3.6 Reading a random-access document
 
@@ -475,12 +476,10 @@ For your module to be reasonably efficient, it is necessary to read data in the 
 ### 3.7 Module features
 
 To allow greater flexibility in incorporating third-party modules with different degrees of functionality, JHOVE modules can be queried for their "features." Names for features should follow the same conventions as Java packages. Currently, all HUL modules report the following features:
-
-{: .table}
-| Feature                                      | Description                  |
-|----------------------------------------------|------------------------------|
-| `edu.harvard.hul.ois.jhove.canCharacterize`  | Gives descriptive information|
-| `edu.harvard.hul.ois.jhove.canValidate`      | Reports document validity    |
+{: .table}|     |     |
+| --- | --- |
+| `edu.harvard.hul.ois.jhove.canCharacterize` | Gives descriptive information |
+| `edu.harvard.hul.ois.jhove.canValidate` | Reports document validity |
 
 If a Module supports a different set of features, it must override `ModuleBase.initFeatures`. The features list should never be empty or void.
 
@@ -496,17 +495,13 @@ Calculating the checksums can be a time-consuming operation if the document is l
 
 `Checksummer` provides the capability for calculating CRC32, MD5, and SHA1 checksums or message digests. The availability of the MD5 and SHA1 message digests depends on the version of the Java library which is available; in most cases, though, they should be available.
 
-```java
-public Checksummer ();
-```
+-   `public Checksummer ();`
 
 To calculate the checksum, it is simply necessary to call `Checksummer.update()` with each byte of the document in sequence. The caller can then call `getCRC32()`, `getMD5()`, and `getSHA1()` to obtain the calculated values.
 
 `ChecksumInputStream` further automates the generation of these values by incorporating them into the reading of the stream.
 
-```java
-public ChecksumInputStream(InputStream stream, Checksummer cksummer);
-```
+-   `public ChecksumInputStream(InputStream stream, Checksummer cksummer);`
 
 If the module uses a `ChecksumInputStream` as the argument to `ModuleBase.getBufferedDataStream`, then the checksum calculations will be done in the course of reading the `BufferedDataStream`. This technique cannot be used with random-access modules.
 
@@ -514,100 +509,75 @@ If the module uses a `ChecksumInputStream` as the argument to `ModuleBase.getBuf
 
 The `Document` object is used to define sources of documentation for a module. `Document` objects are added to the module's `_specification` list.
 
-```java
-public Document (String title, DocumentType type);
-```
+-   `public Document (String title, DocumentType type);`
 
 The `Document`'s title is any suitable descriptive string; the actual title of the document is recommended. The type must be one of the predefined instances of `DocumentType`:
 
-- `DocumentType.ARTICLE`
-- `DocumentType.BOOK`
-- `DocumentType.REPORT`
-- `DocumentType.RFC`
-- `DocumentType.STANDARD`
-- `DocumentType.OTHER`
+-   `DocumentType.ARTICLE`
+-   `DocumentType.BOOK`
+-   `DocumentType.REPORT`
+-   `DocumentType.RFC`
+-   `DocumentType.STANDARD`
+-   `DocumentType.OTHER`
 
 Other information may be added to a `Document` using its setter methods:
 
+-   `public void setAuthor (Agent author);`
+-   `public void setDate (String date);`
+-   `public void setEdition (String edition);`
+-   `public void setEnumeration (String enum);`
+-   `public void setIdentifier (Identifier identifier);`
+-   `public void setNote (String note);`
+-   `public void setPages (String pages);`
+-   `public void setPublisher (Agent publisher);`
 
-- `public void setAuthor (Agent author);`
-- `public void setDate (String date);`
-- `public void setEdition (String edition);`
-- `public void setEnumeration (String enum);`
-- `public void setIdentifier (Identifier identifier);`
-- `public void setNote (String note);`
-- `public void setPages (String pages);`
-- `public void setPublisher (Agent publisher);`
-
-
-The author and publisher of a `Document` are defined using `Agent` objects. The identifier is defined using an `Identifier` object.
+The author and publisher of a `Document` are defined using [`Agent`](#agent) objects. The identifier is defined using an [`Identifier`](#identifier) object.
 
 ### 3.10 The Signature object
 
 `Signature` objects are used to specify quick checks for whether a document conforms to a format. When checking for signatures, the document is not checked in any details, but only examined for characteristic data, such as a header or filename extension. `Signature` is an abstract class; JHOVE defines subclasses `ExternalSignature` and `InternalSignature`. `InternalSignature` is used for signatures based on the document content; `ExternalSignature` is used for signatures based on the file name, metadata, or other information located other than in the document content.
 
-- `public ExternalSignature (String value, SignatureType type,SignatureUseType use);`
-Used when the signature is represented as a character string.
+-   `public ExternalSignature (String value, SignatureType type,   SignatureUseType use);`  
+    Used when the signature is represented as a character string.
+-   `public ExternalSignature (int[] value, SignatureType type, SignatureUseType use);`  
+    Used when the signature is represented as an array of bytes.
+-   `public InternalSignature (String value, SignatureType type,   SignatureUseType use);`  
+    Used when the signature is represented as a character string and the offset in the file is indeterminate.
+-   `public InternalSignature (int[] value, SignatureType type,   SignatureUseType use);`  
+    Used when the signature is represented as an array of bytes and the offset in the file is indeterminate.
+-   `public InternalSignature (String value, SignatureType type,   SignatureUseType use, int offset);`  
+    Used when the signature is represented as a character string and must occur at a specific offset in the file.
+-   `public InternalSignature (int[] value, SignatureType type,   SignatureUseType use, int offset);`  
+    Used when the signature is represented as an array of bytes and must occur at a specific offset in the file.
+-   `public InternalSignature (String value, SignatureType type, SignatureUseType use, String note);`  
+    Used when the signature is represented as a character string and the offset in the file is indeterminate, and a note is specified.
+-   `public InternalSignature (int[] value, SignatureType type, SignatureUseType use, String note);   Used when the signature is represented as an array of bytes and the offset in the file is indeterminate, and a note is specified.`
+``-   `public InternalSignature (String value, SignatureType type,   SignatureUseType use, int offset, String note);`       Used when the signature is represented as a character string and must occur at a specific offset in the file, and a note is specified. -   `public InternalSignature (int[] value, SignatureType type,   SignatureUseType use, int offset, String note);`       Used when the signature is represented as an array of bytes and must occur at a specific offset in the file, and a note is specified.``
 
-- `public ExternalSignature (int[] value, SignatureType type, SignatureUseType use);`
-Used when the signature is represented as an array of bytes.
+``   The type parameter must be one of the predefined instances of `SignatureType`. For an `ExternalSignature`, the value may be `EXTENSION` or `FILETYPE`. `EXTENSION` indicates a file extension (more properly, the end of a file name, whether the file system supports extensions or not), such as ".pdf". `FILETYPE` is applicable only to the Macintosh OS, and indicates a four-character file type stored in the file's metadata, such as "TIFF". For an `InternalSignature`, the value must be `MAGIC`, signifying a "magic number" stored in the file.  At this time, the code checks only internal signatures. A document which does not satisfy internal signature specifications is reported as not consistent.   ``
 
-- `public InternalSignature (String value, SignatureType type, SignatureUseType use);`
-Used when the signature is represented as a character string and the offset in the file is indeterminate.
-
-- `public InternalSignature (int[] value, SignatureType type, SignatureUseType use);`
-Used when the signature is represented as an array of bytes and the offset in the file is indeterminate.
-
-- `public InternalSignature (String value, SignatureType type, SignatureUseType use, int offset);`
-Used when the signature is represented as a character string and must occur at a specific offset in the file.
-
-- `public InternalSignature (int[] value, SignatureType type, SignatureUseType use, int offset);`
-Used when the signature is represented as an array of bytes and must occur at a specific offset in the file.
-
-- `public InternalSignature (String value, SignatureType type, SignatureUseType use, String note);`
-Used when the signature is represented as a character string and the offset in the file is indeterminate, and a note is specified.
-
-- `public InternalSignature (int[] value, SignatureType type, SignatureUseType use, String note);`
-Used when the signature is represented as an array of bytes and the offset in the file is indeterminate, and a note is specified.
-
-- `public InternalSignature (String value, SignatureType type, SignatureUseType use, int offset, String note);`
-Used when the signature is represented as a character string and must occur at a specific offset in the file, and a note is specified.
-
-- `public InternalSignature (int[] value, SignatureType type, SignatureUseType use, int offset, String note);`
-Used when the signature is represented as an array of bytes and must occur at a specific offset in the file, and a note is specified.
-
-The type parameter must be one of the predefined instances of `SignatureType`. For an `ExternalSignature`, the value may be `EXTENSION` or `FILETYPE`. `EXTENSION` indicates a file extension (more properly, the end of a file name, whether the file system supports extensions or not), such as ".pdf". `FILETYPE` is applicable only to the Macintosh OS, and indicates a four-character file type stored in the file's metadata, such as "TIFF". For an `InternalSignature`, the value must be `MAGIC`, signifying a "magic number" stored in the file.
-
-At this time, the code checks only internal signatures. A document which does not satisfy internal signature specifications is reported as not consistent.
 
 ### 3.11 The RepInfo object
 
 The module's `parse` method may place information into the variable `_info`, which is a `RepInfo` object. The setting of the `valid` and `wellFormed` fields has already been discussed. In addition, the module may call the following methods to add information to `RepInfo`:
 
-- `public void setFormat (String format);`
-Sets a `String` identifying the format of the document. This should be an element of the module's `FORMAT` array.
-
-- `public void setMessage (Message message);`
-Adds a `Message` to the list of informational and error messages. If a document is not valid, there should be at least one `ErrorMessage` explaining the problem.
-
-- `public void setMimeType (String mimeType);`
-Sets the MIME type which the document satisfies.
-
-- `public void setProfile (String profile);`
-Sets the name of a profile which the document satisfies. A profile denotes a set of document characteristics which conform to a recognized subclass of the document format, such as TIFF Class P and Class R. More than one profile may be set for a document.
-
-- `public void setProperty (Property property);`
-Adds a Property of the document to the list of Properties. Any number of Properties may be set. Each module should have a consistent set of Properties which are reported for documents that are valid under it. A module which does not do characterization (does not have the `edu.harvard.hul.ois.jhove.canCharacterize` feature) should not add any Properties.  
-In creating Properties, a module should pay attention to the value of `_verbosity` (inherited from `ModuleBase`). If `_verbosity` has a value of `MIMIMUM_VERBOSITY`, the module should omit information which is voluminous and of relatively little use. If `_verbosity` has a value of `MAXIMUM_VERBOSITY`, then the maximum amount of available data should be reported.
-
-- `public void setSize (long size);`
-Sets the size of the document in bytes.
-
-- `public void setNote (String note);`
-Sets a note as may be appropriate.
-
-- `public void setSigMatch (String modname);`
-Adds a `String` to a list of module names, indicating that the document's signature satisfies the module. By convention, this should be called with `_name` as its argument. If a module recognizes an internal signature or "magic number" as an initial step in identifying the file, it should call `setSigMatch(_name)` as soon as the signature has been verified. `JhoveBase` treats this list specially, so that values set by successive modules for the same document will be accumulated. The notation that the signature was satisfied will be retained even if the module reports the document as not well-formed. Modules which do not check internal signatures should not call this. A file extension or type should not be used as a basis for calling this.
+-   `public void setFormat (String format);`  
+    Sets a `String` identifying the format of the document. This should be an element of the module's `FORMAT` array.
+-   `public void setMessage (Message message);`  
+    Adds a `Message` to the list of informational and error messages. If a document is not valid, there should be at least one `ErrorMessage` explaining the problem.
+-   `public void setMimeType (String mimeType);`  
+    Sets the MIME type which the document satisfies.
+-   `public void setProfile (String profile);`  
+    Sets the name of a profile which the document satisfies. A profile denotes a set of document characteristics which conform to a recognized subclass of the document format, such as TIFF Class P and Class R. More than one profile may be set for a document.
+-   `public void setProperty (Property property);`  
+    Adds a [`Property`](#property) of the document to the list of Properties. Any number of Properties may be set. Each module should have a consistent set of Properties which are reported for documents that are valid under it. A module which does not do characterization (does not have the `edu.harvard.hul.ois.jhove.canCharacterize` feature) should not add any Properties.    
+    In creating Properties, a module should pay attention to the value of `_verbosity` (inherited from `ModuleBase`). If \_verbosity has a value of `MIMIMUM_VERBOSITY`, the module should omit information which is voluminous and of relatively little use. If `_verbosity` has a value of `MAXIMUM_VERBOSITY`, then the maximum amount of available data should be reported.
+-   `public void setSize (long size);`  
+    Sets the size of the document in bytes.
+-   `public void setNote (String note);`  
+    Sets a note as may be appropriate.
+-   `public void setSigMatch (String modname);`  
+    Adds a String to a list of module names, indicating that the document's signature satisfies the module. By convention, this should be called with `_name` as its argument. If a module recognizes an internal signature or "magic number" as an initial step in identifying the file, it should call `setSigMatch(_name)` as soon as the signature has been verified. `JhoveBase` treats this list specially, so that values set by successive modules for the same document will be accumulated. The notation that the signature was satisfied will be retained even if the module reports the document as not well-formed. Modules which do not check internal signatures should not call this. A file extension or type should **not** be used as a basis for calling this.
 
 ### 3.12 The App object
 
@@ -617,68 +587,65 @@ There is a single object of type `App`, which holds information describing the a
 
 There may be one or more than one `JhoveBase` objects, depending on the application architecture. It holds information relevant to a particular invocation of JHOVE. `ModuleBase` makes this available as the field `_je` ("JHOVE engine"). The following functions are of interest:
 
-- `public int getBufferSize ();`
-Returns the user's preferred buffer size, as specified in the command line. This is subject to interpretation, but in general buffers allocated by the application should be that large. If the value returned is negative, the application has not specified a buffer size.
-
-- `public boolean getShowRawFlag ();`
-Returns the "raw output" flag. If this function returns true, then properties with numeric values that have specific interpretations should contain only the numeric values; if it returns false, the module may substitute interpretive text strings for the numeric values.
-
-- `public boolean getChecksumFlag ();`
-Returns true if the application has been asked to do checksum calculations.
+-   `public int getBufferSize ();`  
+    Returns the user's preferred buffer size, as specified in the command line. This is subject to interpretation, but in general buffers allocated by the application should be that large. If the value returned is negative, the application has not specified a buffer size.
+-   `public boolean getShowRawFlag ();`  
+    Returns the "raw output" flag. If this function returns `true`, then properties with numeric values that have specific interpretations should contain only the numeric values; if it returns `false`, the module may substitute interpretive text strings for the numeric values.
+-   `public boolean getChecksumFlag ();`  
+    Returns `true` if the application has been asked to do checksum calculations.
 
 ### 3.14 The Agent object
 
 The `Agent` object defines a party that has a role in the creation, publication, or distribution of a `Document`.
 
-public Agent (String name, AgentType type);
-The Agent's name is any suitable descriptive string. The type must be one of the predefined instances of AgentType:
+-   `public Agent (String name, AgentType type);`
 
-- `AgentType.COMMERCIAL`
-- `AgentType.GOVERNMENT`
-- `AgentType.EDUCATIONAL`
-- `AgentType.NONPROFIT`
-- `AgentType.STANDARD`
-- `AgentType.OTHER`
+The `Agent`'s name is any suitable descriptive string. The type must be one of the predefined instances of `AgentType`:
+
+-   `AgentType.COMMERCIAL`
+-   `AgentType.GOVERNMENT`
+-   `AgentType.EDUCATIONAL`
+-   `AgentType.NONPROFIT`
+-   `AgentType.STANDARD`
+-   `AgentType.OTHER`
 
 Other information may be added to an `Agent` using its setter methods:
 
-- `public void setAddress (String address);`
-- `public void setEmail (String email);`
-- `public void setFax (String fax);`
-- `public void setNote (String note);`
-- `public void setTelephone (String telephone);`
-- `public void setWeb (String web);`
-
+-   `public void setAddress (String address);`
+-   `public void setEmail (String email);`
+-   `public void setFax (String fax);`
+-   `public void setNote (String note);`
+-   `public void setTelephone (String telephone);`
+-   `public void setWeb (String web);`
 
 ### 3.15 The Identifier object
 
 The `Identifier` object provides various ways of assigning an identifier to a `Document`.
 
-- `public Identifier (String value, IdentifierType type, String note);`
-
+-   `public Identifier (String value, IdentifierType type, String note);`
 
 The `Identifier`'s value should be appropriate to the `IdentifierType`. The type must be one of the predefined values of `IdentifierType`:
 
-- `IdentifierType.ANSI` (American National Standards Institute)
-- `IdentifierType.DDC` (Dewey Decimal Classification)
-- `IdentifierType.DOI` (Digital Object Identifier)
-- `IdentifierType.ECMA`
-- `IdentifierType.HANDLE` (CNRI Handle)
-- `IdentifierType.ISO` (International Standards Organization)
-- `IdentifierType.ISBN` (International Standard Book Number)
-- `IdentifierType.LC` (Library of Congress classification)
-- `IdentifierType.LCCN` (Library of Congress catalogue number)
-- `IdentifierType.NISO` (NISO standard number)
-- `IdentifierType.PII` (Publisher Item Identifier)
-- `IdentifierType.RFC` (IETF Request for Comment)
-- `IdentifierType.SICI` (Serial Item and Contribution Identifier)
-- `IdentifierType.URI` (Uniform Resource Identifier)
-- `IdentifierType.URL` (Uniform Resource Locator)
-- `IdentifierType.URN` (Uniform Resource Name)
-- `IdentifierType.CCITT`
-- `IdentifierType.ITU` (International Telecommunication Union)
-- `IdentifierType.JEITA` (Japan Electronics and Information Technology Industries Association)
-- `IdentifierType.OTHER`
+-   `IdentifierType.ANSI` (American National Standards Institute)
+-   `IdentifierType.DDC` (Dewey Decimal Classification)
+-   `IdentifierType.DOI` (Digital Object Identifier)
+-   `IdentifierType.ECMA`
+-   `IdentifierType.HANDLE` (CNRI Handle)
+-   `IdentifierType.ISO` (International Standards Organization)
+-   `IdentifierType.ISBN` (International Standard Book Number)
+-   `IdentifierType.LC` (Library of Congress classification)
+-   `IdentifierType.LCCN` (Library of Congress catalogue number)
+-   `IdentifierType.NISO` (NISO standard number)
+-   `IdentifierType.PII` (Publisher Item Identifier)
+-   `IdentifierType.RFC` (IETF Request for Comment)
+-   `IdentifierType.SICI` (Serial Item and Contribution Identifier)
+-   `IdentifierType.URI` (Uniform Resource Identifier)
+-   `IdentifierType.URL` (Uniform Resource Locator)
+-   `IdentifierType.URN` (Uniform Resource Name)
+-   `IdentifierType.CCITT`
+-   `IdentifierType.ITU` (International Telecommunication Union)
+-   `IdentifierType.JEITA` (Japan Electronics and Information Technology Industries Association)
+-   `IdentifierType.OTHER`
 
 The note parameter may be null.
 
@@ -686,10 +653,8 @@ The note parameter may be null.
 
 Properties are used to report information about a document. Output handlers and the viewer application present Properties in an appropriate output format. JHOVE provides a rich set of options for defining properties. Properties can be single objects or ordered or unordered sets. The constituent members of a `Property` can themselves be Properties, allowing a hierarchical structure. All constituent members of a given `Property` must have the same type.
 
-
-- `public Property (String name, PropertyType type, Object value);`
-- `public Property (String name, PropertyType type, PropertyArity arity, Object value);`
-
+-   `public Property (String name, PropertyType type, Object value);`
+-   `public Property (String name, PropertyType type, PropertyArity arity, Object value);`
 
 The first constructor creates a `Property` with an arity of `PropertyArity.SCALAR`.
 
@@ -698,45 +663,43 @@ The property name should be a valid XML name; in particular, it should not conta
 The arity (type of organization) of the property must be one of the predefined instances of `PropertyArity`. The type of value must be in agreement with the value of `arity`, as specified by the following table.
 
 {: .table .table-striped}
-| `PropertyArity` | Value Type |
-|-----------------|------------|
-| `ARRAY`         | Java array |
-| `LIST`          | `java.util.List` |
-| `MAP`           | `java.util.Map` |
-| `SCALAR`        | Type indicated by `type` |
-| `SET`           | `java.util.Set` |
+|     |     |
+| --- | --- |
+| `PropertyArity.ARRAY` | Java array |
+| `PropertyArity.LIST` | `java.util.List` |
+| `PropertyArity.MAP` | `java.util.Map` |
+| `PropertyArity.SCALAR` | Type indicated by `type` |
+| `PropertyArity.SET` | `java.util.Set` |
 
 The type must be one of the predefined instances of `PropertyType`. The type of the constituents of value must be in agreement with the value of `type`, as specified by the following table. If the arity is `SCALAR`, the type of value itself must be in agreement with the value of `type`. With arity `ARRAY`, members of the array are primitive Java types rather than Objects where applicable, so the type in the last column must be used. The object type must be used with all other arities.
 
 {: .table .table-striped}
-| `PropertyType` | Object Type |
-|----------------|-------------|
-| `AESAUDIOMETADATA` | `edu.harvard.hul.ois.jhove.AESAudioMetadata` |
-| `BOOLEAN` | `java.lang.Boolean` |
-| `BYTE` | `java.lang.Byte` |
-| `CHARACTER` | `java.lang.Character` |
-| `DATE` | `java.util.Date` |
-| `DOUBLE` | `java.lang.Double` |
-| `FLOAT` | `java.lang.Float` |
-| `INTEGER` | `java.lang.Integer` |
-| `LONG` | `java.lang.Long` |
-| `NISOIMAGEMETADATA` | `edu.harvard.hul.ois.jhove.NisoImageMetadata` |
-| `OBJECT` | `java.lang.Object` |
-| `PROPERTY` | `edu.harvard.hul.ois.jhove.Property` |
-| `RATIONAL` | `edu.harvard.hul.ois.jhove.Rational` |
-| `SHORT` | `java.lang.Short` |
-| `STRING` | `java.lang.String` |
+|     |     |     |
+| --- | --- | --- |
+| `PropertyType.AESAUDIOMETADATA` | `edu.harvard.hul.ois.jhove.AESAudioMetadata` |
+| `PropertyType.BOOLEAN` | `java.lang.Boolean` | `boolean` |
+| `PropertyType.BYTE` | `java.lang.Byte` | `byte` |
+| `PropertyType.CHARACTER` | `java.lang.Character` | `char` |
+| `PropertyType.DATE` | `java.util.Date` |
+| `PropertyType.DOUBLE` | `java.lang.Double` | `double` |
+| `PropertyType.FLOAT` | `java.lang.Float` | `float` |
+| `PropertyType.INTEGER` | `java.lang.Integer` | `int` |
+| `PropertyType.LONG` | `java.lang.Long` | `long` |
+| `PropertyType.NISOIMAGEMETADATA` | `edu.harvard.hul.ois.jhove.NisoImageMetadata` |
+| `PropertyType.OBJECT` | `java.lang.Object` |
+| `PropertyType.PROPERTY` | `edu.harvard.hul.ois.jhove.Property` |
+| `PropertyType.RATIONAL` | `edu.harvard.hul.ois.jhove.Rational` |
+| `PropertyType.SHORT` | `java.lang.Short` | `short` |
+| `PropertyType.STRING` | `java.lang.String` |
 
 ### 3.17 The Message object
 
 A `Message` object is used to report information about the document. `Message` is an abstract class with two subclasses, `InfoMessage` and `ErrorMessage`. The only difference between the classes is the significance of the message; an `ErrorMessage` should be used for a situation that makes a document invalid or ill-formed, and an `InfoMessage` for other cases.
 
-
-- `public InfoMessage (String message, long offset);`
-- `public InfoMessage (String message);`
-- `public ErrorMessage (String message, long offset);`
-- `public ErrorMessage (String message);`
-
+-   `public InfoMessage (String message, long offset);`
+-   `public InfoMessage (String message);`
+-   `public ErrorMessage (String message, long offset);`
+-   `public ErrorMessage (String message);`
 
 If the circumstance which gives rise to the message occurs at a known offset into the document, the constructor with an offset should be used; otherwise the single-argument constructor should be used.
 
@@ -744,16 +707,14 @@ If the circumstance which gives rise to the message occurs at a known offset int
 
 `NisoImageMetadata` provides a standard way to report many common document properties. The output handlers include dedicated methods for displaying `NisoImageMetadata` properties.
 
-- `public NisoImageMetadata ();`
+-   `public NisoImageMetadata ();`
 
-
-Setter methods are provided for the properties which `NisoImageMetadata` supports. The source code, the JavaDoc for the class and the NISO documentation should be consulted for detailed information on setter functions and parameter values.
+Setter methods are provided for the properties which `NisoImageMetadata` supports.The source code, the JavaDoc for the class and the NISO documentation should be consulted for detailed information on setter functions and parameter values.
 
 ### 3.19 The Rational object
 
 A `Rational` object provides a way to represent the ratio of two integers. A `Rational` is stored as its numerator and denominator values. No protection against zero division is provided by the class.
 
 - `public Rational (long numerator, long denominator);`
-
 
 See the [JavaDoc](/javadoc/) for further details.
