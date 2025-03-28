@@ -9,6 +9,7 @@ layout: page
     <a href="https://software.openpreservation.org/rel/jhove-latest.jar" class="btn btn-primary btn-lg pad" download="">Download JHOVE</a>
 </header>
 
+{: #software .section-heading}
 ### Software
 
 **Currently v1.32.1 06-02-2025**
@@ -17,6 +18,7 @@ Details of the latest release, including release notes, [can be found on GitHub]
 
 JHOVE is a file format identification, validation, and characterisation tool. It is implemented as a [Java](https://www.oracle.com/java/technologies/) application and is usable on any Unix, Windows, or OS X platform with appropriate Java installation.
 
+{: #introduction .section-heading}
 ### Supported Formats
 
 {: .table .table-striped}
@@ -39,11 +41,13 @@ JHOVE is a file format identification, validation, and characterisation tool. It
 | [MP3](/modules/mp3/) | MP3-MnH                        |                               |                               |
 | [ZIP/GZIP](/modules/zip/) | ZIP-ptc/GZIP-ptc             |                               |                               |
 
-### Getting Started
+{: #getting-started .section-heading}
+## Getting Started
 
 The [getting started guide is on this site](/getting-started/).
 
-### License
+{: #license .section-heading}
+## License
 
 JHOVE is made available by the [Open Preservation Foundation](https://openpreservation.org) under the [GNU Lesser General Public License (LGPL)](https://www.gnu.org/licenses/licenses.html#LGPL).
 
