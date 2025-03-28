@@ -4,12 +4,9 @@ layout: page
 ---
 
 <header class="jumbotron vertical-center">
-![JHOVE logo](img/jhovelogo.png)
-
-## Open source file format identification, validation & characterisation
-
-{: .btn.btn-primary.btn-lg.pad}
-[Download JHOVE](https://software.openpreservation.org/rel/jhove-latest.jar){: .btn .btn-primary .btn-lg .pad download}
+    <img src="img/jhovelogo.png" alt="JHOVE logo">
+    <h2>Open source file format identification, validation &amp; characterisation</h2>
+    <a href="https://software.openpreservation.org/rel/jhove-latest.jar" class="btn btn-primary btn-lg pad" download="">Download JHOVE</a>
 </header>
 
 ### Software
