@@ -21,6 +21,7 @@ JHOVE is one of the most widely-used digital preservation tools in the community
 By becoming a member of the OPF, organisations are directly helping to fund the hosting, maintenance, and development of the software, ensuring it is robust and reliable.
 
 Members can also choose to guide the roadmap and:
+
 - Sit on the JHOVE Product Board
 - Vote for bug fixes and enhancements to be included in each release cycle
 - Receive technical support
@@ -40,6 +41,7 @@ Make a donation to support JHOVE development:
 #### Contribute to JHOVE
 
 We also welcome community contributions. We are looking for users and developers to join our active JHOVE community and help:
+
 - Test the software
 - Improve documentation
 - Contribute test files
