@@ -12,7 +12,7 @@ The UTF8-hul module recognizes and validates content streams encoded with the Un
 
 The module is invoked by the:
 
-  > jhove ... -m UTF8-hul ...
+  > `jhove ... -m UTF8-hul ...`
 
 command line option.
 

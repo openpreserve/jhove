@@ -12,7 +12,7 @@ The GIF-hul module recognizes and validates the GIF (Tagged Interchange Format) 
 
 The module is invoked by the:
 
-  > jhove ... -m gif-hul ...
+  > `jhove ... -m gif-hul ...`
 
 command line option.
 

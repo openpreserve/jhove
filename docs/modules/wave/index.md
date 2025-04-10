@@ -12,7 +12,7 @@ The WAVE-hul module recognizes and validates the Audio for Windows format (WAVE)
 
 The module can be invoked with the following command-line option:
 
-  > jhove ... -m WAVE-hul ...
+  > `jhove ... -m WAVE-hul ...`
 
 {: #coverage .section-heading}
 ## 2 Coverage

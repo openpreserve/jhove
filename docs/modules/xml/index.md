@@ -12,7 +12,7 @@ The XML-hul module recognizes and validates the XML (Extensible Markup Language)
 
 The module can be invoked with the following command-line options:
 
-  > jhove ... -m XML-hul [-x sax-class] ...
+  > `jhove ... -m XML-hul [-x sax-class] ...`
 
 ### XML Parser Options
 

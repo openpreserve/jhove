@@ -12,7 +12,7 @@ The ASCII-hul module recognizes and validates ASCII content streams.
 
 The module is invoked by the:
 
-  > jhove ... -m ASCII-hul ...
+  > `jhove ... -m ASCII-hul ...`
 
 command line option.
 

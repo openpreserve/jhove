@@ -12,7 +12,7 @@ The BYTESTREAM module recognizes and validates arbitrary bytestreams. This modul
 
 The module is invoked by the:
 
-  > jhove ... -m bytestream ...
+  > `jhove ... -m bytestream ...`
 
 command line option.
 
