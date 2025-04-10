@@ -30,6 +30,7 @@ dd {
   color:#337ab7;
   position: relative;
 }
+
 .section-heading:hover::after {
   content: "\f0c1"; /* Font Awesome link icon */
   font-family: "Font Awesome 5 Free", Arial, sans-serif;
