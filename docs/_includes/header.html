@@ -37,6 +37,10 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Add .table class to all tables
+            document.querySelectorAll("table").forEach(function (table) {
+                table.classList.add("table", "table-striped");
+            });
             document.querySelectorAll(".section-heading").forEach(function (heading) {
                 heading.addEventListener("click", function () {
                     const id = heading.getAttribute("id");
