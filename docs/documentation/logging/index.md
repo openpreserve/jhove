@@ -25,6 +25,7 @@ To change the logging level when you run the code, you can either add something 
   <logLevel>ALL</logLevel>
 </jhoveConfig>
 ```
+
 Where the log level honours the following values:
 
 ```xml
@@ -38,6 +39,7 @@ Where the log level honours the following values:
 <xs:enumeration value="FINEST"/>
 <xs:enumeration value="ALL"/>
 ```
+
 So setting `<logLevel>ALL</logLevel>` shows all message, where `<logLevel>WARNING</logLevel>` would display `WARNING` and `SEVERE` log messages only. JHOVE's default settings show only `SEVERE` messages.
 
 You can also change the logging level by passing a `-l` param with the same level values, e.g. `jhove --version -l ALL` would set the log level to `ALL` and overrides the config setting.
