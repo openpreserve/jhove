@@ -151,14 +151,14 @@ public List getFeatures ();
 
 ### 1.4 Parse Methods
 
-```
+```text
 public void checkSignatures (InputStream stream,    RepInfo info) throws IOException;
 public void checkSignatures (RandomAccessFile raf, RepInfo info) throws IOException;
 ```
 
 > The `checkSignatures()` methods attempt to identify the object (represented as either a stream or random access file) using only internal signatures, i.e., magic numbers. Representation information about the object is returned through the `RepInfo` object.
 
-```
+```text
 public int parse (InputStream stream,    RepInfo info, int parseIndex) throws IOException;
 public int parse (RandomAccessFile file, RepInfo info) throws IOException;
 ```
@@ -241,10 +241,10 @@ public abstract class ModuleBase
     public static Rational readUnsignedRational (RandomAccessFile file,  boolean endian) { ... }
     public static Rational readSignedRational (RandomAccessFile file, boolean endian)
 }
-```
+```text
 The ModuleBase class defines a number of static convenience methods for type-specific reading of random access files and input streams.
 
-```
+```text
 public static DataInputStream getBufferedDataStream (InputStream stream, int size)
 ```
 
@@ -259,14 +259,14 @@ public static DataInputStream getBufferedDataStream (InputStream stream, int siz
 Module names should consist of two parts, an uppercase format name and a lowercase vendor name, separated by a hyphen:
 
 {: .blockquote}
-```
+```text
 FORMAT-vendor
 ```
 
 The format and vendor names should be abbreviated, if necessary. For example:
 
 {: .blockquote}
-```
+```text
 ASCII-hul
 ```
 
@@ -403,7 +403,7 @@ A Jhove module may be either stream-based or random-access. The choice depends o
 
 One of the first actions of the `parse()` method should be to call `initParse()`. The module's `initParse` method must begin by calling its superclass constructor:
 
-```
+```text
 - `protected void initParse ();`
 ```
 
