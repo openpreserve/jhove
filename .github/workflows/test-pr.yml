@@ -37,6 +37,10 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots install -DjacocoAgg
+      - name: Lint Markdown files
+        run: |
+          npm install -g markdownlint-cli
+          markdownlint "**/*.md"
       - name: Integration(matrix.java-version == 8) && (steps.filter.outputs.jhove == 'true')
         run: ./bbt-jhove
         shell: bash
@@ -72,5 +76,5 @@ jobs:
           verbose: true # optional (default = false)
           name: codecov-jhove
           token: ${{ secrets.CODECOV_TOKEN }} # required
-        
+
 
