@@ -13,8 +13,7 @@ layout: page
 **Requires:** Command-line unzip from PKWARE for Unix. **Runs only on Unix**.  
 **File types:** ZIP-compressed files.  
 **Parameters:** The module parameter, if provided, is used as the path to the command line `unzip` command. The default is `/usr/local/bin/unzip` .  
-   
-   
+
 **Module:** GZIP-ptc  
 **Version:** 1.1h  
 **Author:** Michael C. Maggio  

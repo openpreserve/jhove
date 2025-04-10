@@ -6,7 +6,7 @@ layout: page
 # JHOVE Installation Guide for Windows XP
 
 {: .note}
-[Contributed 2006-08-22 by Michael Stuart, UCSD]</span>
+[Contributed 2006-08-22 by Michael Stuart, UCSD]
 
 {: #download-install-jre .section-heading}
 ## 1 Download and install a J2SE 6 Java Runtime Environment (JRE)

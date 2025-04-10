@@ -12,10 +12,7 @@ The ASCII-hul module recognizes and validates ASCII content streams.
 
 The module is invoked by the:
 
-{: .blockquote}
-```
-jhove ... -m ASCII-hul ...
-```
+  > jhove ... -m ASCII-hul ...
 
 command line option.
 
@@ -27,9 +24,9 @@ This module can be [configured](/getting-started/config/) with the following par
 ## 2 Coverage
 
 - ASCII (ANSI X3.4-1986, ECMA-6, ISO 646:1991)
-  [ [ANSI X3.4](/references#x3.4),
+  \[[ANSI X3.4](/references#x3.4),
   [ECMA-6](/references#ecma-6),
-  [ISO 646](/references#iso646) ]
+  [ISO 646](/references#iso646)\]
 
 {: #well-formedness .section-heading}
 ## 3 Well-Formedness

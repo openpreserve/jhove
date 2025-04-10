@@ -8,14 +8,11 @@ layout: page
 {: #introduction .section-heading}
 ## 1 Introduction
 
-The GIF-hul module recognizes and validates the GIF (Tagged Interchange Format) format [<a href="/references#gif89a">GIF89a</a>].
+The GIF-hul module recognizes and validates the GIF (Tagged Interchange Format) format \[[GIF89a](/references#gif89a)\].
 
 The module is invoked by the:
 
-{: .blockquote}
-```
-jhove ... -m gif-hul ...
-```
+  > jhove ... -m gif-hul ...
 
 command line option.
 
@@ -24,7 +21,7 @@ command line option.
 
 The GIF-hul module recognizes and validates the following public profiles:
 
-- GIF version 87a and 89a [<a href="/references#gif87a">GIF87a</a>, <a href="/references#gif89a">GIF89a</a>]
+- GIF version 87a and 89a \[[GIF87a](/references#gif87a), [GIF89a](/references#gif89a)\]
 
 {: #well-formedness .section-heading}
 ## 3 Well-Formedness
@@ -136,7 +133,6 @@ Image technical properties are reported in terms of the NISO [Z39.87](https://ww
 
 {: #additional-module-properties .section-heading}
 ## 6 Additional Module Properties
-
 
 - Nominal file extension: .gif
 

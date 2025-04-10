@@ -49,8 +49,7 @@ If you'd like to get JHOVE via Maven or build the project from source please rea
 
 Download the [latest JHOVE installer](http://software.openpreservation.org/rel/jhove-latest.jar) , this requires Java 1.6 or later to be pre-installed. We'll assume that you've downloaded
 
-      /Downloads/jhove-latest.jar
-    
+    /Downloads/jhove-latest.jar
 
 Installation is OS dependant.
 
@@ -60,8 +59,7 @@ Simply double click the downloaded installer JAR in Explorer. If Java is install
 
 Once the installation is finished you'll be able to double click
 
-      C:\Users\yourName\jhove\jhove-gui
-    
+    C:\Users\yourName\jhove\jhove-gui
 
 to start the JHOVE GUI. Alternatively start a command window, e.g.
 
@@ -73,9 +71,8 @@ then type
 
 then issue these commands:
 
-      C:\Users\yourName>cd jhove
-      C:\Users\yourName\jhove>jhove
-    
+    C:\Users\yourName>cd jhove
+    C:\Users\yourName\jhove>jhove
 
 to display the command line usage message.
 
@@ -85,7 +82,7 @@ Simply double click the downloaded installer JAR in Explorer. If Java is install
 
 Once the installation is finished you'll be able to double click
 
-      /Users/yourName/jhove/jhove-gui
+    /Users/yourName/jhove/jhove-gui
     
 to start the JHOVE GUI. Alternatively start a command window
 

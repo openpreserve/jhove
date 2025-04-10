@@ -15,9 +15,7 @@ The AIFF format is itself a profile of the Electronic Arts IFF 85 format
 
 The module is invoked by the:
 
-> ```bash
-> jhove ... -m AIFF-hul ...
-> ```
+  > jhove ... -m AIFF-hul ...
 
 command line option.
 

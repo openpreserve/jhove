@@ -8,15 +8,11 @@ layout: page
 {: #introduction .section-heading}
 ## 1 Introduction
 
-The HTML-hul module recognizes and validates the HTML (Hypertext Markup Language) format.
-[<a href="/references#xhtml-1.0">HTML</a>].
+The HTML-hul module recognizes and validates the HTML (Hypertext Markup Language) format. \[[HTML](/references#xhtml-1.0)\].
 
 The module is invoked by the:
 
-{: .blockquote}
-```
-jhove ... -m HTML-hul ...
-```
+  > jhove ... -m HTML-hul ...
 
 command line option.
 
@@ -31,23 +27,23 @@ This module can be [configured](/getting-started/config/) with the following par
 
 The HTML-hul module recognizes and validates the following public profiles:
 
-- HTML 3.2, and 4.0 and 4.01 (Strict, Transitional, and Frameset) [<a href="/references#html-3.2">HTML 3.2</a>, <a href="/references#html-4.0">HTML 4.0</a>, <a href="/references#html-4.01">HTML 4.01</a>]
-- XHTML Basic and 1.0 and 1.1 (Strict, Transitional, and Frameset) [<a href="/references#xhtml-basic">XHTML Basic</a>, <a href="/references#xhtml-1.0">XHTML 1.0</a>, <a href="/references#xhtml-1.1">XHTML 1.1</a>]
+- HTML 3.2, and 4.0 and 4.01 (Strict, Transitional, and Frameset) \[[HTML 3.2](/references#html-3.2), [HTML 4.0](/references#html-4.0), [HTML 4.01](/references#html-4.01)\]
+- XHTML Basic and 1.0 and 1.1 (Strict, Transitional, and Frameset) \[[XHTML Basic](/references#xhtml-basic), [XHTML 1.0](/references#xhtml-1.0), [XHTML 1.1](/references#xhtml-1.1)\]
 
 {: #well-formedness .section-heading}
 ## 3 Well-Formedness
 
-For the HTML profiles JHOVE uses the criteria for HTML well-formedness defined by [<a href="/references#html-3.2">HTML 3.2</a>, <a href="/references#html-4.0">HTML 4.0</a>, <a href="/references#html-4.01">HTML 4.01</a>]; for the XHTML profiles, JHOVE uses the criteria defined by [<a href="/references#xml">XML</a>]. Specifically, a well-formed HTML document must have no syntactic errors, and must contain at least one of the tags HTML, HEAD, BODY or TITLE.
+For the HTML profiles JHOVE uses the criteria for HTML well-formedness defined by \[[HTML 3.2](/references#html-3.2), [HTML 4.0](/references#html-4.0), [HTML 4.01](/references#html-4.01)\]; for the XHTML profiles, JHOVE uses the criteria defined by \[[XML](/references#xml)\]. Specifically, a well-formed HTML document must have no syntactic errors, and must contain at least one of the tags HTML, HEAD, BODY or TITLE.
 
 {: #validity .section-heading}
 ## 4 Validity
 
-For the HTML profiles JHOVE uses the criteria for HTML validity defined by [<a href="/references#html-3.2">HTML 3.2</a>, <a href="/references#html-4.0">HTML 4.0</a>, <a href="/references#html-4.01">HTML 4.01</a>]; for the XHTML profiles JHOVE uses the criteria defined by [<a href="/references#xhtml-1.0">XHTML 1.0</a>, <a href="/references#xhtml-1.1">XHTML 1.1</a>].
+For the HTML profiles JHOVE uses the criteria for HTML validity defined by \[[HTML 3.2](/references#html-3.2), [HTML 4.0](/references#html-4.0), [HTML 4.01](/references#html-4.01)\]; for the XHTML profiles JHOVE uses the criteria defined by \[[XHTML 1.0](/references#xhtml-1.0), [XHTML 1.1](/references#xhtml-1.1)\].
 
 {: #representation-information .section-heading}
 ## 5 Representation Information
 
-The MIME type is reported as: text/html [<a href="/references#rfc2854">RFC 2854</a>]
+The MIME type is reported as: text/html \[[RFC 2854](/references#rfc2854)\]
 
 In addition to the standard JHOVE [representation information](/documentation#repinfo), the following HTML-specific properties are reported:
 
