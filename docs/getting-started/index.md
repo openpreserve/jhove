@@ -7,25 +7,25 @@ layout: page
 
 {: #introduction .section-heading}
 ## Introduction
+
 JHOVE (pronounced "jove"), the JSTOR/Harvard Object Validation Environment, is an extensible software framework for performing format identification, validation, and characterization of digital objects.
 
--   Format _identification_ is the process of determining the format to which a digital object conforms; in other words, it answers the question: "I have a digital object; what format is it?"
--   Format _validation_ is the process of determining the level of compliance of a digital object to the specification for its purported format, e.g.: "I have an object purportedly of format _F_; is it?"
-    
+- Format _identification_ is the process of determining the format to which a digital object conforms; in other words, it answers the question: "I have a digital object; what format is it?"
+- Format _validation_ is the process of determining the level of compliance of a digital object to the specification for its purported format, e.g.: "I have an object purportedly of format _F_; is it?"
+
     Format validation conformance is determined at three levels: _well-formedness_, _validity_, and _consistency_.
-    
-    1.  A digital object is _well-formed_ if it meets the purely syntactic requirements for its format
-    2.  An object is _valid_ if it is well-formed and it meets the higher-level semantic requirements for format validity
-    3.  An object is _consistent_ if it is valid and its internally extracted representation information is consistent with externally supplied representation information
-    
+
+    1. A digital object is _well-formed_ if it meets the purely syntactic requirements for its format
+    2. An object is _valid_ if it is well-formed and it meets the higher-level semantic requirements for format validity
+    3. An object is _consistent_ if it is valid and its internally extracted representation information is consistent with externally supplied representation information
+
     For example, a [TIFF](/references#tiff6) object is well-formed if it starts with an 8 byte header followed by a sequence of Image File Directories (IFDs), each composed of a 2 byte entry count and a series of 8 byte tagged entries. The object is valid if it meets certain additional semantic-level rules, such as that an RGB file must have at least three sample values per pixel. The object is consistent with external [NISO Z39.87](/references#z39.87) metadata if that metadata is consistent with the representation information of the object that is extracted by JHOVE.
-    
+
     The concept of distinguishing between well-formedness (syntactic correctness) and validity (semantic correctness) was taken from [XML](/references#xml).
-    
--   Format _characterization_ is the process of determining the format-specific significant properties of an object of a given format, e.g.: "I have an object of format _F_; what are its salient properties?"
-    
+
+- Format _characterization_ is the process of determining the format-specific significant properties of an object of a given format, e.g.: "I have an object of format _F_; what are its salient properties?"
+
     The set of characteristics reported by JHOVE about a digital object is known as the object's _representation information_, a concept introduced by the Open Archival Information System (OAIS) reference model \[[ISO/IEC 14721](/references#oais)\]. The standard representation information reported by JHOVE includes: file pathname or URI, last modification date, byte size, format, format version, MIME type, format profiles, and optionally, CRC32, MD5, and SHA-1 digests \[[CRC32](/references#crc32), [MD5](/references#md5), [SHA-1](/references#sha1)\].
-    
 
 Identification, validation, and characterization actions are frequently necessary during routine operation of digital repositories and for digital preservation activities.
 
@@ -56,8 +56,6 @@ Installation is OS dependant.
 
 ### Windows
 
-_Currently only tested on Windows 7_
-
 Simply double click the downloaded installer JAR in Explorer. If Java is installed then the windowed installer will guide you through selection. It's best to stay with the default choices if installing the beta.
 
 Once the installation is finished you'll be able to double click
@@ -67,15 +65,11 @@ Once the installation is finished you'll be able to double click
 
 to start the JHOVE GUI. Alternatively start a command window, e.g.
 
-```
-winkey
-```
+    winkey
 
 then type
 
-```
-cmd
-```
+    cmd
 
 then issue these commands:
 
@@ -87,8 +81,6 @@ to display the command line usage message.
 
 ### Mac OS
 
-_Currently only tested on Mavericks_
-
 Simply double click the downloaded installer JAR in Explorer. If Java is installed then the windowed installer will guide you through selection. It's best to stay with the default choices if installing the beta.
 
 Once the installation is finished you'll be able to double click
@@ -97,42 +89,37 @@ Once the installation is finished you'll be able to double click
     
 to start the JHOVE GUI. Alternatively start a command window
 
-```
-Terminal
-```
+    Terminal
 
 and then issue these commands:
 
-      cd ~/jhove
-      ./jhove
+    cd ~/jhove
+    ./jhove
     
-
 to display the command line usage message.
 
 ### Linux
 
 _Currently only tested on Ubuntu 14.10_ Once the installer is downloaded start a terminal, e.g.
 
-```
-ctrl+alt+T
-```
+    ctrl+alt+T
 
 and type the following, assuming the download is in:
 
-      ~/Downloads
-      java -jar ~/Downloads/jhove-latest.jar
+    ~/Downloads
+    java -jar ~/Downloads/jhove-latest.jar
     
 
 Once the installation is finished you'll be able to:
 
-      cd ~/jhove
-      ./jhove
+    cd ~/jhove
+    ./jhove
     
 
 to run the command line application and show the usage message. Alternatively:
 
-      cd ~/jhove
-      ./jhove-gui
+    cd ~/jhove
+    ./jhove-gui
     
 
 will run the GUI application.
@@ -142,6 +129,7 @@ will run the GUI application.
 
 There should be no issues configuring the current JHOVE beta but just in case we've retained the [old configuration guide](/getting-started/config/).
 
+{: #invocation .section-heading}
 ### Usage
 
     java Jhove \[-c config\] \[-m module\] \[-h handler\] \[-e encoding\] \[-H handler\]
@@ -163,14 +151,12 @@ There should be no issues configuring the current JHOVE beta but just in case we
      -s          Format identification based on internal signatures only
      dir-file-or-uri Directory or file pathname or URI of formated content
                      stream
-  
 
 All named modules and output handlers must be found on the Java CLASSPATH at the time of invocation. The JHOVE driver script, jhove/jhove, automatically sets the CLASSPATH and invokes the Jhove main class:
 
     jhove \[-c config\] \[-m module\] \[-h handler\] \[-e encoding\] \[-H handler\]
           \[-o output\] \[-x saxclass\] \[-t tempdir\] \[-b bufsize\] \[-l loglevel\]
           \[\[-krs\] dir-file-or-uri \[...\]\]
-  
 
 The following additional programs are available, primarily for testing and debugging purposes. They display a minimally processed, human-readable version of the contents of AIFF, GIF, JPEG, JPEG 2000, PDF, TIFF, and WAVE files:
 
@@ -191,7 +177,6 @@ For convenience, the following driver scripts are also available:
     pdump  pdf-file
     tdump  tiff-file
     wdump  wave-file
-  
 
 The JHOVE Swing-based GUI interface can be invoked from a command shell from the jhove/bin sub-directory:
 
@@ -206,7 +191,6 @@ There are some [usage examples](/getting-started/examples/) to help you get star
 The following syntax is used to discover, or identify, the format of a digital object.
 
     jhove ... \[-ks\] _file-or-uri1 .. file-or-uriN_
-  
 
 where the first ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
 
@@ -263,14 +247,14 @@ The menu options are:
 
 |     |     |     |     |
 | --- | --- | --- | --- |
-| **File** |
+| **File** |     |     |     |
 |     | **Open file...** |     | Select file (equivalent to command line option: jhove ... _file-or-uri_) |
 |     | **Open URL...** |     | Select URI (jhove ... _file-or-uri_) |
 |     | **Close all document windows** |     | Close all open document windows |
 |     | **Exit** |     | Terminate JHOVE |
-| **Edit** |
+| **Edit** |     |     |     |
 |     | **Select** | **module** | Select JHOVE module |
-|     |     | **(Any)** |
+|     |     | **(Any)** |     |
 |     |     | **AIFF-hul** | Select AIFF module (jhove ... -m aiff-hul ...) |
 |     |     | **ASCII-hul** | Select ASCII module (jhove ... -m ascii-hul ...) |
 |     |     | **BYTESTREAM** | Select BYTESTREAM module (jhove ... -m bytestream ...) |
@@ -285,32 +269,34 @@ The menu options are:
 |     |     | **XML-hul** | Select XML module (jhove ... -m xml-hul ...) |
 |     | **Edit configuration...** |     | Edit configuration file |
 |     | **Preferences...** |     | Set preferences (jhove ... \[-kr\] ...) |
-| **Help** |
+| **Help** |     |     |     |
 |     | **About module...** |     | Display module descriptive information (jhove ... -m _module_) |
 |     | **About Jhove...** |     | Display JHOVE descriptive information (jhove) |
 
+{: #modules .section-heading}
 ## Standard Modules
 
 The initial JHOVE distribution includes the following standard modules.
 
--   [AIFF](/modules/aiff/)
--   [ASCII](/modules/ascii/)
--   [BYTESTREAM](/modules/bytestream/)
--   [GIF](/modules/gif/)
--   [HTML](/modules/html/)
--   [JPEG](/modules/jpeg/)
--   [JPEG 2000](/modules/jpeg2000/)
--   [PDF](/modules/pdf/)
--   [TIFF](/modules/tiff/)
--   [UTF-8](/modules/utf8/)
--   [WAVE](/modules/wave/)
--   [XML](/modules/xml/)
+- [AIFF](/modules/aiff/)
+- [ASCII](/modules/ascii/)
+- [BYTESTREAM](/modules/bytestream/)
+- [GIF](/modules/gif/)
+- [HTML](/modules/html/)
+- [JPEG](/modules/jpeg/)
+- [JPEG 2000](/modules/jpeg2000/)
+- [PDF](/modules/pdf/)
+- [TIFF](/modules/tiff/)
+- [UTF-8](/modules/utf8/)
+- [WAVE](/modules/wave/)
+- [XML](/modules/xml/)
 
 {: #standard-output-handlers .section-heading}
 ## Standard Output Handlers
 
 The initial JHOVE distribution includes the following standard output handlers.
 
+{: #text .section-heading}
 ### TEXT Output Handler
 
 The Text handler is the default output handler; if no other handler is explicitly specified, the Text handler is used.
@@ -324,6 +310,7 @@ jhove ... -h text ...
 
 Regardless of the [configuration](config/) options, JHOVE always statically loads the Text output handler.
 
+{: #xml .section-heading}
 ### XML Output Handler
 
 The XML handler output is defined by the JHOVE schema <[http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd](http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd)\>.
@@ -338,6 +325,7 @@ Audio representation information is formatted according to the proposed AES-X098
 
 Regardless of the [configuration](/getting-started/config/) options, JHOVE always statically loads the XML output handler.
 
+{: #audit .section-heading}
 ### Audit Output Handler
 
 The Audit handler should be invoked against a directory (or directories) without specifying a module. The handler produces an XML-formatted summary of all of the files in the directory, e.g.:
@@ -377,19 +365,20 @@ Total: 9 (7,2) + 0,0
 
 The numbers in the MIME type summary are to be read as follows:
 
-```
+```text
 number of files (number of valid files, number of well-formed files)
 ```
 
 So in the example there are 6 PDF files, 4 of them valid and 2 well-formed, and 3 plain text files, all of them valid. This sums up to a total of 9 files, 7 valid and 2 well-formed. The numbers in the directory summary are to be read as follows:
 
-```
+```text
 number of files (number of valid files, number of well-formed files) + number of
 files that were not processed, number of files that were not found
 ```
 
 It is intended that the Audit handler will form the basis for other, more interesting handlers but it can also be used for a quick overview of MIME types and validity status.
-```
+
+```text
 jhove ... -h audit ...
 ```
 

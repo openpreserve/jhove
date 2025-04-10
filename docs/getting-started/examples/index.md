@@ -8,7 +8,7 @@ layout: page
 {: #application .section-heading}
 ## 1 Application
 
-```
+```bash
 unix% jhove -c conf/jhove.conf
 Jhove (Rel. 1.0, 2005-05-26)
 Date: 2005-05-26 15:30:42 EST
@@ -41,7 +41,7 @@ App:
 {: #moule .section-heading}
 ## 2 Module
 
-```
+```bash
 unix% jhove -c conf/jhove.conf -m bytestream
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 15:32:34 EST
@@ -66,7 +66,7 @@ Jhove (Rel. 1.0, 2005-05-26)
 {: #output-handler .section-heading}
 ## 3 Output Handler
 
-```
+```bash
 unix% jhove -c conf/jhove.conf -H xml
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 15:35:12 EST
@@ -87,7 +87,7 @@ Jhove (Rel. 1.0, 2005-05-26)
 
 ### 4.1 ASCII
 
-```
+```bash
 unix% jhove -c conf/jhove.conf -k examples/ascii/control.txt
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 16:06:49 EST
@@ -111,7 +111,7 @@ Jhove (Rel. 1.0, 2005-05-26)
 
 ### 4.2 UTF-8
 
-```
+```bash
 unix% jhove -c conf/jhove.conf -k examples/utf-8/sample.txt
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 16:14:58 EST
@@ -136,7 +136,7 @@ Jhove (Rel. 1.0, 2005-05-26)
 
 ### 4.3 PDF
 
-```
+```bash
 unix%  jhove -c conf/jhove.conf -k examples/pdf/ddap/DDAP_Singlev3.pdf
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 14:21:51 EDT
@@ -273,7 +273,7 @@ Jhove (Rel. 1.0, 2005-05-26)
 
 ### 4.4 TIFF
 
-```
+```bash
 unix% jhove -c conf/jhove.conf -k examples/tiff/little-endian.tif
 Jhove (Rel. 1.0, 2005-05-26)
  Date: 2005-05-26 14:23:21 EDT

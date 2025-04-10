@@ -15,10 +15,9 @@ The AIFF format is itself a profile of the Electronic Arts IFF 85 format
 
 The module is invoked by the:
 
-{: .blockquote}
-```bash
-jhove ... -m AIFF-hul ...
-```
+> ```bash
+> jhove ... -m AIFF-hul ...
+> ```
 
 command line option.
 
@@ -82,8 +81,7 @@ Profile requirements include:
 
     Common compression types and names include, but are not limited to:
 
-    {: .blockquote .table .table-striped}
-    | Type   | Name                     | Note                                                                 |
+    > | Type   | Name                     | Note                                                                 |
     |--------|--------------------------|----------------------------------------------------------------------|
     | "NONE" | "Not compressed"         | PCM data                                                            |
     | "ACE2" | "ACE 2-to-1"             | [Apple](http://www.apple.com/) IIGS ACE (Audio Compression/Expansion) |
