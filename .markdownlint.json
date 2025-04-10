@@ -1,0 +1,18 @@
+{
+    "MD013": false,
+    "MD003": { 
+        "style": "atx" 
+    },
+    "MD025": {
+        "front_matter_title": "none"
+    },
+    "MD022":{
+        "lines_above": 0
+    },
+    "overrides": {
+        "files": "docs/about/index.md",
+        "config": {
+            "MD033": false
+        }
+    }
+}
