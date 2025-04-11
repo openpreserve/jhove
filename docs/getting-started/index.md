@@ -29,7 +29,7 @@ JHOVE (pronounced "jove"), the JSTOR/Harvard Object Validation Environment, is a
 
 Identification, validation, and characterization actions are frequently necessary during routine operation of digital repositories and for digital preservation activities.
 
-The output from JHOVE is controlled by _output handlers_. JHOVE uses an extensible plug-in architecture; it can be configured at the time of its invocation to include whatever specific format modules and output handlers that are desired. The initial release of JHOVE includes modules for [arbitrary byte streams](/modules/bytestream/), [ASCII](/modules/ascii/) and [UTF-8](/modules/utf8/) encoded text, [TIFF](/modules/tiff/), [HTML](/modules/html/), [XML](/modules/xml/), [JPEG](/modules/jpeg/), [JPEG2000](/modules/jpeg2000/), [PDF](/modules/pdf/), [AIFF](/modules/aiff/), [WAVE](/modules/wave/) audio; and [text](#text) and [XML](#xml) output handlers.
+The output from JHOVE is controlled by _output handlers_. JHOVE uses an extensible plug-in architecture; it can be configured at the time of its invocation to include whatever specific format modules and output handlers that are desired. The initial release of JHOVE includes modules for [arbitrary byte streams](/modules/bytestream/), [ASCII](/modules/ascii/) and [UTF-8](/modules/utf8/) encoded text, [TIFF](/modules/tiff/), [HTML](/modules/html/), [XML](/modules/xml/), [JPEG](/modules/jpeg/), [JPEG2000](/modules/jpeg2000/), [PDF](/modules/pdf/), [AIFF](/modules/aiff/), [WAVE](/modules/wave/) audio; and [text](#TEXT Output Handler) and [XML](#XML Output Handler) output handlers.
 
 {: #getting-jhove .section-heading}
 ## Getting JHOVE
@@ -189,7 +189,7 @@ The following syntax is used to discover, or identify, the format of a digital o
 
     jhove ... \[-ks\] _file-or-uri1 .. file-or-uriN_
 
-where the first ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
+where the first ellipsis ... is a placeholder for any of the optional standard options defined [above](#usage).
 
 The digital object(s) can be specified as a file or directory pathname or as a URI. If a directory is specified, JHOVE will recursively walk through the directory. The optional \-s flag specified that the identification should be performed solely on the basis of the internal signatures (e.g., magic numbers) associated with the formats, rather than by a complete parsing of the object. After the object's format has been identified, its representation information is [displayed](examples#identification). The optional \-k flag specifies that object checksum values should be calculated and displayed as part of the representation information.
 
@@ -209,7 +209,7 @@ The following syntax is used to determine the validity of a digital object with 
 
   jhove ... -m _module_ \[-kr\] _file-or-uri_
 
-where the ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
+where the ellipsis ... is a placeholder for any of the optional standard options defined [above](#usage).
 
 Many formats use numeric flags to specify format properties. By default, JHOVE will translate these numeric values into descriptive strings. For example, the TIFF compression value 2 corresponds to "CCITT Group 3 RLE". The optional \-r flag specifies that the "raw" data values should be displayed, not the text labels. The optional \-k flag specifies that object checksum values should be calculated and displayed as part of the representation information.
 
@@ -223,7 +223,7 @@ The following syntax options display descriptive information about various compo
   jhove ... -m _module_
   jhove ... -H _output-handler_
 
-where the ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
+where the ellipsis ... is a placeholder for any of the optional standard options defined [above](#usage).
 
 The first invocation option will display descriptive information about [JHOVE](examples#app) itself, including a list of all loaded modules and output handlers. The second option will display descriptive information about the named [module](examples#module). The third option will display descriptive information about the named [output handler](examples#handler).
 

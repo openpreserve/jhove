@@ -294,11 +294,13 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
   The following tags are mandatory in the Exif IFD:
 
+<!-- markdownlint-disable -->
   | Tag Name and Number |     | Value |
   | --- | --- | --- |
   | ExifVersion | 36864 | "0220" (Version 2.2)  <br>"0210" (Version 2.1)  <br>"0200" (Version 2.0) |
   | FlashpixVersion | 40960 | "0100" |
   | ColorSpace | 40961 | 1 or 65535 |
+<!-- markdownlint-enable -->
 
 - **Baseline GeoTIFF 1.0**
 

@@ -15,10 +15,10 @@ Individuals or institutions wishing to donate locally-developed modules for redi
 
 See also [Writing a Module](/documentation/dev-module/).
 
-### Third-party modules available for download
+## Third-party modules available for download
 
 Please note that these modules are **unsupported** by HUL, and that you use them at your own risk.
 
--   [MP3 module](mp3/)
--   [ZIP and GZIP modules](zip/)
--   [EPUB module](epub/)
+- [MP3 module](mp3/)
+- [ZIP and GZIP modules](zip/)
+- [EPUB module](epub/)
