@@ -164,14 +164,14 @@ public int parse (RandomAccessFile file, RepInfo info) throws IOException;
 ```
 
 > The parse() methods parse the object (represented by either a stream or random access file). Representation information about the object is returned through the RepInfo object. The stream version of parsemay be invoked multiple times, if it is necessary to do multiple passes on the data. On the first invocation of this method parseIndex is set to 0. If the method returns a non-zero value then it is invoked again, with parseIndex set to the return value.
-> 
+>
 > >       ...
 > >       RepInfo info;
 > >       int parseIndex = 0;
 > >       while ((parseIndex = parse (..., info, parseIndex)) != 0);
 > >       ...
 > >     
-> > 
+> >
 > > The parse method for a RandomAccessFile does not have this feature, and does not have a parseIndex parameter, since it is always possible to move back to a previously examined position in the file.
 
 ### 1.5 Descriptive Methods
@@ -189,62 +189,63 @@ The `Module` interface is implemented by the abstract `ModuleBase` class from wh
 
 A new module *must* override the stub methods `checkSignature()` and `parse()`.
 
-{: .blockquote}
+> ```java
+> package edu.harvard.hul.ois.jhove;
+> import java.io.*;
+> import java.security.*;
+> import java.util.*;
+> import java.util.zip.*;
+>
+> public abstract class ModuleBase
+>     implements Module
+> {
+>     protected ModuleBase (String name, String release, int [] date, String [] format,
+>                           String coverage, String [] mimeType, String wellFormedNote,
+>                           String validityNote, String repInfoNote, String note,
+>                           String rights, boolean isRandomAccess)
+>     {
+>         ...
+>     }
+>     public void checkSignature (File file, ..., RepInfo info) throws IOException
+>     {                /* Do nothing */
+>     }
+>     public int  parse (..., RepInfo info, int parseIndex) thows IOException
+>     {
+>         return 0;    /* Do nothing */
+>     }
+>     protected void initParse () { ... }
+>
+>     public static DataInputStream getBufferedDataStream (InputStream stream, int size) { ... }
+>
+>     public static int readUnsignedByte (DataInputStream stream, ModuleBase counted) { ... }
+>     public static int readUnsignedByte (RandomAccessFile file) { ... }
+>     public static void readByteBuf (DataInputStream stream, byte [] buf, ModuleBase counted) { ...}
+>     public static int readSignedByte (DataInputStream stream, ModuleBase counted) { ...}
+>     public static int readSignedByte (RandomAccessFile file) { ... }
+>     public static int readUnsignedShort (DataInputStream stream, boolean bigEndian, ModuleBase counted) { ... }
+>     public static int readUnsignedShort (RandomAccessFile file,  boolean bigEndian) { ... }
+>     public static int readSignedShort (DataInputStream stream, boolean endian, ModuleBase counted) { ... }
+>     public static int readSignedShort (RandomAccessFile file,  boolean endian) { ...}
+>     public static long readUnsignedInt (DataInputStream stream, boolean bigEndian, ModuleBase counted) { ... }
+>     public static long readUnsignedInt (RandomAccessFile file,  boolean bigEndian) { ... }
+>     public static int readSignedInt (DataInputStream stream, boolean endian, ModuleBase counted) { ... }
+>     public static int readSignedInt (RandomAccessFile file,  boolean endian) { ...}
+>     public static long readSignedLong (DataInputStream stream, boolean bigEndian, ModuleBase counted) { ... }
+>     public static long readSignedLong (RandomAccessFile file, boolean bigEndian) { ... }
+>     public static float readFloat (DataInputStream stream, boolean endian, ModuleBase counted) { ... }
+>     public static float readFloat (RandomAccessFile file,  boolean endian) { ... }
+>     public static double readDouble (DataInputStream stream, boolean endian, ModuleBase counted) { ... }
+>     public static double readDouble (RandomAccessFile file,  boolean endian) { ... }
+>     public static Rational readUnsignedRational (DataInputStream stream, boolean endian, ModuleBase counted) { ... }
+>     public static Rational readUnsignedRational (RandomAccessFile file,  boolean endian) { ... }
+>     public static Rational readSignedRational (RandomAccessFile file, boolean endian)
+> }
+> ```
+>
+
+ The ModuleBase class defines a number of static convenience methods for type-specific reading of random access files and input streams.
+
 ```java
-package edu.harvard.hul.ois.jhove;
-import java.io.*;
-import java.security.*;
-import java.util.*;
-import java.util.zip.*;
-
-public abstract class ModuleBase
-    implements Module
-{
-    protected ModuleBase (String name, String release, int [] date, String [] format,
-                          String coverage, String [] mimeType, String wellFormedNote,
-                          String validityNote, String repInfoNote, String note,
-                          String rights, boolean isRandomAccess)
-    {
-        ...
-    }
-    public void checkSignature (File file, ..., RepInfo info) throws IOException
-    {                /* Do nothing */
-    }
-    public int  parse (..., RepInfo info, int parseIndex) thows IOException
-    {
-        return 0;    /* Do nothing */
-    }
-    protected void initParse () { ... }
-
-    public static DataInputStream getBufferedDataStream (InputStream stream, int size) { ... }
-
-    public static int readUnsignedByte (DataInputStream stream, ModuleBase counted) { ... }
-    public static int readUnsignedByte (RandomAccessFile file) { ... }
-    public static void readByteBuf (DataInputStream stream, byte [] buf, ModuleBase counted) { ...}
-    public static int readSignedByte (DataInputStream stream, ModuleBase counted) { ...}
-    public static int readSignedByte (RandomAccessFile file) { ... }
-    public static int readUnsignedShort (DataInputStream stream, boolean bigEndian, ModuleBase counted) { ... }
-    public static int readUnsignedShort (RandomAccessFile file,  boolean bigEndian) { ... }
-    public static int readSignedShort (DataInputStream stream, boolean endian, ModuleBase counted) { ... }
-    public static int readSignedShort (RandomAccessFile file,  boolean endian) { ...}
-    public static long readUnsignedInt (DataInputStream stream, boolean bigEndian, ModuleBase counted) { ... }
-    public static long readUnsignedInt (RandomAccessFile file,  boolean bigEndian) { ... }
-    public static int readSignedInt (DataInputStream stream, boolean endian, ModuleBase counted) { ... }
-    public static int readSignedInt (RandomAccessFile file,  boolean endian) { ...}
-    public static long readSignedLong (DataInputStream stream, boolean bigEndian, ModuleBase counted) { ... }
-    public static long readSignedLong (RandomAccessFile file, boolean bigEndian) { ... }
-    public static float readFloat (DataInputStream stream, boolean endian, ModuleBase counted) { ... }
-    public static float readFloat (RandomAccessFile file,  boolean endian) { ... }
-    public static double readDouble (DataInputStream stream, boolean endian, ModuleBase counted) { ... }
-    public static double readDouble (RandomAccessFile file,  boolean endian) { ... }
-    public static Rational readUnsignedRational (DataInputStream stream, boolean endian, ModuleBase counted) { ... }
-    public static Rational readUnsignedRational (RandomAccessFile file,  boolean endian) { ... }
-    public static Rational readSignedRational (RandomAccessFile file, boolean endian)
-}
-```text
-The ModuleBase class defines a number of static convenience methods for type-specific reading of random access files and input streams.
-
-```text
 public static DataInputStream getBufferedDataStream (InputStream stream, int size)
 ```
 
@@ -258,17 +259,15 @@ public static DataInputStream getBufferedDataStream (InputStream stream, int siz
 
 Module names should consist of two parts, an uppercase format name and a lowercase vendor name, separated by a hyphen:
 
-{: .blockquote}
-```text
-FORMAT-vendor
-```
+> ```text
+> FORMAT-vendor
+> ```
 
 The format and vendor names should be abbreviated, if necessary. For example:
 
-{: .blockquote}
-```text
-ASCII-hul
-```
+> ```text
+> ASCII-hul
+> ```
 
 is the name for the ASCII module created by the Harvard University Library.
 
@@ -276,33 +275,30 @@ is the name for the ASCII module created by the Harvard University Library.
 
 A JHOVE module is encapsulated in one or more classes. The main module class name should be based on the format that the module supports:
 
-{: .blockquote}
-```java
-public class FormatModule { ... }
-```
+> ```java
+> public class FormatModule { ... }
+> ```
 
 For example:
 
-{: .blockquote}
-```java
-public class AsciiModule { ... }
-```
+> ```java
+> public class AsciiModule { ... }
+> ```
 
 is the class name for the ASCII module created by the Harvard University Library.
 
 ### 3.3 Installing a module
 
-Module classes must be in the classpath used by JHOVE. In addition, they must be specified in the configuration file. A configuration file will include several <module> elements; you simply have to add an appropriate element for the module class you have created, using the following pattern.
+Module classes must be in the classpath used by JHOVE. In addition, they must be specified in the configuration file. A configuration file will include several `<module>` elements; you simply have to add an appropriate element for the module class you have created, using the following pattern.
 
-{: .blockquote}
-```java
-...
-<module>
-  <class>fully-package-qualified-class-name</class>
-  <init>optional-initialization-argument</init>
- </module>
-...
-```
+> ```java
+> ...
+> <module>
+>   <class>fully-package-qualified-class-name</class>
+>   <init>optional-initialization-argument</init>
+>  </module>
+> ...
+> ```
 
 where the initialization parameter is optional. If defined, it will be passed to the module's init() method once at the time the module class object is instantiated.
 
@@ -316,44 +312,43 @@ All format modules *must* extend the `ModuleBase` class.
 
 The constructor for a module takes no parameters. It *must* first invoke its the superclass constructor for passing in arguments defining the static descriptive information about the module. The optional `WELLFORMED`, `VALIDITY`, `REPINFO`, methodology notes and the informative `NOTE` may be set to `null` if appropriate.
 
-{: .blockquote}
-```java
-import edu.harvard.hul.ois.jhove.*;
-import java.io.*;
-import java.util.*;
-public class FormatModule
-    extends ModuleBase
-{
-    private static final String    NAME       =  "FORMAT-vendor";
-    private static final String    RELEASE    =  "major.minor";
-    private static final int    [] DATE       = {yyyy, mm, dd};
-    private static final String [] FORMAT     = {"format", ...};
-    private static final String [] MIMETYPE   = {"mime", ...};
-    private static final String    WELLFORMED =  "note";
-    private static final String    VALIDITY   =  "note";
-    private static final String    REPINFO    =  "note";
-    private static final String    NOTE       =  "note";
-    private static final String    RIGHTS     =  "statement";
-    private static final boolean   RANDOM     =   flag;
-
-    public FormatModule ()
-    {
-        super (NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
-               VALIDITY, REPINFO, NOTE, RIGHTS, RANDOM);
-        ...
-    }
-
-    public void checkSignature (File file, ..., RepInfo info) { ... }
-    public int  parse (..., RepInfo info, int parseIndex) { ... }
-    ...
-}
-```
+> ```java
+> import edu.harvard.hul.ois.jhove.*;
+> import java.io.*;
+> import java.util.*;
+> public class FormatModule
+>     extends ModuleBase
+> {
+>     private static final String    NAME       =  "FORMAT-vendor";
+>     private static final String    RELEASE    =  "major.minor";
+>     private static final int    [] DATE       = {yyyy, mm, dd};
+>     private static final String [] FORMAT     = {"format", ...};
+>     private static final String [] MIMETYPE   = {"mime", ...};
+>     private static final String    WELLFORMED =  "note";
+>     private static final String    VALIDITY   =  "note";
+>     private static final String    REPINFO    =  "note";
+>     private static final String    NOTE       =  "note";
+>     private static final String    RIGHTS     =  "statement";
+>     private static final boolean   RANDOM     =   flag;
+>
+>     public FormatModule ()
+>     {
+>         super (NAME, RELEASE, DATE, FORMAT, COVERAGE, MIMETYPE, WELLFORMED,
+>                VALIDITY, REPINFO, NOTE, RIGHTS, RANDOM);
+>         ...
+>     }
+>
+>     public void checkSignature (File file, ..., RepInfo info) { ... }
+>     public int  parse (..., RepInfo info, int parseIndex) { ... }
+>     ...
+> }
+> ```
 
 ### 3.4.1 Module constructor arguments
 
 `private static final String NAME`
 
-> The module name as described [above](#modulename).
+> The module name as described [above](#3.1 Module name).
 
 `private static final String RELEASE`
 
@@ -427,7 +422,7 @@ When reading a Stream-based document, buffering and tracking the byte count are 
 
 - `BufferedDataStream _dstream = getBufferedDataStream (stream, _app != null ?   _app.getBufferSize () : 0);`
 
-A `ChecksumInputStream` is designed to calculate [checksums](#checksum) automatically as the stream is read. The `BufferedDataStream` is used for the reading of data from the document. `getBufferedDataStream` is defined by `ModuleBase`. Only the functions indicated here (defined in `ModuleBase`) should be used to read the `BufferedDataStream`; if this is done, then the value of `_nByte` is kept up to date as the current offset into the file. The `ModuleBase` argument must be the value of the calling module (normally `this`), or null if the function is being called in a context where `_nByte` should not be updated.
+A `ChecksumInputStream` is designed to calculate [checksums](#3.8 Checksum calculations) automatically as the stream is read. The `BufferedDataStream` is used for the reading of data from the document. `getBufferedDataStream` is defined by `ModuleBase`. Only the functions indicated here (defined in `ModuleBase`) should be used to read the `BufferedDataStream`; if this is done, then the value of `_nByte` is kept up to date as the current offset into the file. The `ModuleBase` argument must be the value of the calling module (normally `this`), or null if the function is being called in a context where `_nByte` should not be updated.
 
 - `public static int readUnsignedByte (DataInputStream stream, ModuleBase counted);`
 - `public static void readByteBuf (DataInputStream stream,   byte[] buf,   ModuleBase counted);`
@@ -522,7 +517,7 @@ Other information may be added to a `Document` using its setter methods:
 - `public void setPages (String pages);`
 - `public void setPublisher (Agent publisher);`
 
-The author and publisher of a `Document` are defined using [`Agent`](#agent) objects. The identifier is defined using an [`Identifier`](#identifier) object.
+The author and publisher of a `Document` are defined using [`Agent`](#3.14 The Agent object) objects. The identifier is defined using an [`Identifier`](#3.15 the Identifier object) object.
 
 {: #signature .section-heading}
 ### 3.10 The Signature object
@@ -546,8 +541,7 @@ The author and publisher of a `Document` are defined using [`Agent`](#agent) obj
 - `public InternalSignature (int[] value, SignatureType type, SignatureUseType use, String note);   Used when the signature is represented as an array of bytes and the offset in the file is indeterminate, and a note is specified.`
 - `public InternalSignature (String value, SignatureType type,   SignatureUseType use, int offset, String note);`       Used when the signature is represented as a character string and must occur at a specific offset in the file, and a note is specified. -   `public InternalSignature (int[] value, SignatureType type,   SignatureUseType use, int offset, String note);`       Used when the signature is represented as an array of bytes and must occur at a specific offset in the file, and a note is specified.
 
-
-The type parameter must be one of the predefined instances of `SignatureType`. For an `ExternalSignature`, the value may be `EXTENSION` or `FILETYPE`. `EXTENSION` indicates a file extension (more properly, the end of a file name, whether the file system supports extensions or not), such as ".pdf". `FILETYPE` is applicable only to the Macintosh OS, and indicates a four-character file type stored in the file's metadata, such as "TIFF". For an `InternalSignature`, the value must be `MAGIC`, signifying a "magic number" stored in the file.  At this time, the code checks only internal signatures. A document which does not satisfy internal signature specifications is reported as not consistent.   
+The type parameter must be one of the predefined instances of `SignatureType`. For an `ExternalSignature`, the value may be `EXTENSION` or `FILETYPE`. `EXTENSION` indicates a file extension (more properly, the end of a file name, whether the file system supports extensions or not), such as ".pdf". `FILETYPE` is applicable only to the Macintosh OS, and indicates a four-character file type stored in the file's metadata, such as "TIFF". For an `InternalSignature`, the value must be `MAGIC`, signifying a "magic number" stored in the file.  At this time, the code checks only internal signatures. A document which does not satisfy internal signature specifications is reported as not consistent.
 
 {: #repinfo .section-heading}
 ### 3.11 The RepInfo object
@@ -563,7 +557,7 @@ The module's `parse` method may place information into the variable `_info`, whi
 - `public void setProfile (String profile);`  
     Sets the name of a profile which the document satisfies. A profile denotes a set of document characteristics which conform to a recognized subclass of the document format, such as TIFF Class P and Class R. More than one profile may be set for a document.
 - `public void setProperty (Property property);`  
-    Adds a [`Property`](#property) of the document to the list of Properties. Any number of Properties may be set. Each module should have a consistent set of Properties which are reported for documents that are valid under it. A module which does not do characterization (does not have the `edu.harvard.hul.ois.jhove.canCharacterize` feature) should not add any Properties.    
+    Adds a [`Property`](#3.16 The Property object) of the document to the list of Properties. Any number of Properties may be set. Each module should have a consistent set of Properties which are reported for documents that are valid under it. A module which does not do characterization (does not have the `edu.harvard.hul.ois.jhove.canCharacterize` feature) should not add any Properties.
     In creating Properties, a module should pay attention to the value of `_verbosity` (inherited from `ModuleBase`). If \_verbosity has a value of `MIMIMUM_VERBOSITY`, the module should omit information which is voluminous and of relatively little use. If `_verbosity` has a value of `MAXIMUM_VERBOSITY`, then the maximum amount of available data should be reported.
 - `public void setSize (long size);`  
     Sets the size of the document in bytes.
@@ -672,21 +666,21 @@ The type must be one of the predefined instances of `PropertyType`. The type of 
 
 |     |     |     |
 | --- | --- | --- |
-| `PropertyType.AESAUDIOMETADATA` | `edu.harvard.hul.ois.jhove.AESAudioMetadata` |
+| `PropertyType.AESAUDIOMETADATA` | `edu.harvard.hul.ois.jhove.AESAudioMetadata` | |
 | `PropertyType.BOOLEAN` | `java.lang.Boolean` | `boolean` |
 | `PropertyType.BYTE` | `java.lang.Byte` | `byte` |
 | `PropertyType.CHARACTER` | `java.lang.Character` | `char` |
-| `PropertyType.DATE` | `java.util.Date` |
+| `PropertyType.DATE` | `java.util.Date` | |
 | `PropertyType.DOUBLE` | `java.lang.Double` | `double` |
 | `PropertyType.FLOAT` | `java.lang.Float` | `float` |
 | `PropertyType.INTEGER` | `java.lang.Integer` | `int` |
 | `PropertyType.LONG` | `java.lang.Long` | `long` |
-| `PropertyType.NISOIMAGEMETADATA` | `edu.harvard.hul.ois.jhove.NisoImageMetadata` |
-| `PropertyType.OBJECT` | `java.lang.Object` |
-| `PropertyType.PROPERTY` | `edu.harvard.hul.ois.jhove.Property` |
-| `PropertyType.RATIONAL` | `edu.harvard.hul.ois.jhove.Rational` |
+| `PropertyType.NISOIMAGEMETADATA` | `edu.harvard.hul.ois.jhove.NisoImageMetadata` | |
+| `PropertyType.OBJECT` | `java.lang.Object` | |
+| `PropertyType.PROPERTY` | `edu.harvard.hul.ois.jhove.Property` | |
+| `PropertyType.RATIONAL` | `edu.harvard.hul.ois.jhove.Rational` | |
 | `PropertyType.SHORT` | `java.lang.Short` | `short` |
-| `PropertyType.STRING` | `java.lang.String` |
+| `PropertyType.STRING` | `java.lang.String` | |
 
 {: #message .section-heading}
 ### 3.17 The Message object
