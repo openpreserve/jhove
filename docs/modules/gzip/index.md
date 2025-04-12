@@ -12,7 +12,9 @@ The GZIP-kb module recognizes and validates the Gzip (GNU zip) format. \[[GZip](
 
 The module is invoked by the:
 
-  > `jhove ... -m GZIP-kb ...`
+ > ```bash
+ > jhove ... -m GZIP-kb ...
+ > ```
 
 command line option.
 

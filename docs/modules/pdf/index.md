@@ -12,7 +12,9 @@ The PDF-hul module recognizes and validates the PDF (Portable Document Format) f
 
 The module is invoked by the:
 
-  > `jhove ... -m PDF-hul ...`
+ > ```bash
+ > jhove ... -m PDF-hul ...
+ > ```
 
 command line option.
 

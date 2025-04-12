@@ -12,7 +12,9 @@ The TIFF-hul module recognizes and validates the TIFF (Tagged Image File Format)
 
 The module is invoked by the:
 
-  > `jhove ... -m TIFF-hul ...`
+ > ```bash
+ > jhove ... -m TIFF-hul ...
+ > ```
 
 command line option.
 

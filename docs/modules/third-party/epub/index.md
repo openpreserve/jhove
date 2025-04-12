@@ -12,7 +12,9 @@ The EPUB-ptc module recognizes and validates the EPUB format.
 
 The module is invoked by the:
 
-  > `jhove ... -m EPUB-ptc ...`
+ > ```bash
+ > jhove ... -m EPUB-ptc ...
+ > ```
 
 command line option.
 

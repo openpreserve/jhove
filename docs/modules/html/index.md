@@ -12,7 +12,9 @@ The HTML-hul module recognizes and validates the HTML (Hypertext Markup Language
 
 The module is invoked by the:
 
-  > `jhove ... -m HTML-hul ...`
+ > ```bash
+ > jhove ... -m HTML-hul ...
+ > ```
 
 command line option.
 
