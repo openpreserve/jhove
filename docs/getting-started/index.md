@@ -29,7 +29,7 @@ JHOVE (pronounced "jove"), the JSTOR/Harvard Object Validation Environment, is a
 
 Identification, validation, and characterization actions are frequently necessary during routine operation of digital repositories and for digital preservation activities.
 
-The output from JHOVE is controlled by _output handlers_. JHOVE uses an extensible plug-in architecture; it can be configured at the time of its invocation to include whatever specific format modules and output handlers that are desired. The initial release of JHOVE includes modules for [arbitrary byte streams](/modules/bytestream/), [ASCII](/modules/ascii/) and [UTF-8](/modules/utf8/) encoded text, [TIFF](/modules/tiff/), [HTML](/modules/html/), [XML](/modules/xml/), [JPEG](/modules/jpeg/), [JPEG2000](/modules/jpeg2000/), [PDF](/modules/pdf/), [AIFF](/modules/aiff/), [WAVE](/modules/wave/) audio; and [text](#TEXT Output Handler) and [XML](#XML Output Handler) output handlers.
+The output from JHOVE is controlled by _output handlers_. JHOVE uses an extensible plug-in architecture; it can be configured at the time of its invocation to include whatever specific format modules and output handlers that are desired. The initial release of JHOVE includes modules for [arbitrary byte streams](/modules/bytestream/), [ASCII](/modules/ascii/) and [UTF-8](/modules/utf8/) encoded text, [TIFF](/modules/tiff/), [HTML](/modules/html/), [XML](/modules/xml/), [JPEG](/modules/jpeg/), [JPEG2000](/modules/jpeg2000/), [PDF](/modules/pdf/), [AIFF](/modules/aiff/), [WAVE](/modules/wave/) audio; and [text](#text) and [XML](#xml) output handlers.
 
 {: #getting-jhove .section-heading}
 ## Getting JHOVE
@@ -122,49 +122,55 @@ to run the command line application and show the usage message. Alternatively:
 will run the GUI application.
 
 {: #running-jhove .section-heading}
-## Running JHOVE
+f## Running JHOVE
 
 There should be no issues configuring the current JHOVE beta but just in case we've retained the [old configuration guide](/getting-started/config/).
 
 {: #invocation .section-heading}
 ### Usage
 
-    java Jhove \[-c config\] \[-m module\] \[-h handler\] \[-e encoding\] \[-H handler\]
-                \[-o output\] \[-x saxclass\] \[-t tempdir\] \[-b bufsize\]
-                \[-l loglevel\] \[\[-krs\] dir-file-or-uri \[...\]\]
+```bash
+java Jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
+            [-o output] [-x saxclass] [-t tempdir] [-b bufsize]
+            [-l loglevel] [[-krs] dir-file-or-uri [...]]
 
-     -c config   Configuration file pathname
-     -m module   Module name
-     -h handler  Output handler name (defaults to TEXT)
-     -e encoding Character encoding used by output handler (defaults to UTF-8)
-     -H handler  About handler name
-     -o output   Output file pathname (defaults to standard output)
-     -x saxclass SAX parser class (defaults to J2SE default)
-     -t tempdir  Temporary directory in which to create temporary files
-     -b bufsize  Buffer size for buffered I/O (defaults to J2SE 1.4 default)
-     -l loglevel Logging level
-     -k          Calculate CRC32, MD5, and SHA-1 checksums
-     -r          Display raw data flags, not textual equivalents
-     -s          Format identification based on internal signatures only
-     dir-file-or-uri Directory or file pathname or URI of formated content
-                     stream
+    -c config   Configuration file pathname
+    -m module   Module name
+    -h handler  Output handler name (defaults to TEXT)
+    -e encoding Character encoding used by output handler (defaults to UTF-8)
+    -H handler  About handler name
+    -o output   Output file pathname (defaults to standard output)
+    -x saxclass SAX parser class (defaults to J2SE default)
+    -t tempdir  Temporary directory in which to create temporary files
+    -b bufsize  Buffer size for buffered I/O (defaults to J2SE 1.4 default)
+    -l loglevel Logging level
+    -k          Calculate CRC32, MD5, and SHA-1 checksums
+    -r          Display raw data flags, not textual equivalents
+    -s          Format identification based on internal signatures only
+    dir-file-or-uri Directory or file pathname or URI of formated content
+                    stream
+```
 
 All named modules and output handlers must be found on the Java CLASSPATH at the time of invocation. The JHOVE driver script, jhove/jhove, automatically sets the CLASSPATH and invokes the Jhove main class:
 
-    jhove \[-c config\] \[-m module\] \[-h handler\] \[-e encoding\] \[-H handler\]
-          \[-o output\] \[-x saxclass\] \[-t tempdir\] \[-b bufsize\] \[-l loglevel\]
-          \[\[-krs\] dir-file-or-uri \[...\]\]
+```bash
+jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
+      [-o output] [-x saxclass] [-t tempdir] [-b bufsize] [-l loglevel]
+      [[-krs] dir-file-or-uri [...]]
+```
 
 The following additional programs are available, primarily for testing and debugging purposes. They display a minimally processed, human-readable version of the contents of AIFF, GIF, JPEG, JPEG 2000, PDF, TIFF, and WAVE files:
 
-    java ADump  aiff-file
-    java GDump  gif-file
-    java JDump  jpeg-file
-    java J2Dump jpeg2000-file
-    java PDump  pdf-file
-    java TDump  tiff-file
-    java WDump  wave-file
-  
+```bash
+java ADump  aiff-file
+java GDump  gif-file
+java JDump  jpeg-file
+java J2Dump jpeg2000-file
+java PDump  pdf-file
+java TDump  tiff-file
+java WDump  wave-file
+```
+
 For convenience, the following driver scripts are also available:
 
     adump  aiff-file
@@ -189,7 +195,7 @@ The following syntax is used to discover, or identify, the format of a digital o
 
     jhove ... \[-ks\] _file-or-uri1 .. file-or-uriN_
 
-where the first ellipsis ... is a placeholder for any of the optional standard options defined [above](#usage).
+where the first ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
 
 The digital object(s) can be specified as a file or directory pathname or as a URI. If a directory is specified, JHOVE will recursively walk through the directory. The optional \-s flag specified that the identification should be performed solely on the basis of the internal signatures (e.g., magic numbers) associated with the formats, rather than by a complete parsing of the object. After the object's format has been identified, its representation information is [displayed](examples#identification). The optional \-k flag specifies that object checksum values should be calculated and displayed as part of the representation information.
 
@@ -209,7 +215,7 @@ The following syntax is used to determine the validity of a digital object with 
 
   jhove ... -m _module_ \[-kr\] _file-or-uri_
 
-where the ellipsis ... is a placeholder for any of the optional standard options defined [above](#usage).
+where the ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
 
 Many formats use numeric flags to specify format properties. By default, JHOVE will translate these numeric values into descriptive strings. For example, the TIFF compression value 2 corresponds to "CCITT Group 3 RLE". The optional \-r flag specifies that the "raw" data values should be displayed, not the text labels. The optional \-k flag specifies that object checksum values should be calculated and displayed as part of the representation information.
 
@@ -223,7 +229,7 @@ The following syntax options display descriptive information about various compo
   jhove ... -m _module_
   jhove ... -H _output-handler_
 
-where the ellipsis ... is a placeholder for any of the optional standard options defined [above](#usage).
+where the ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
 
 The first invocation option will display descriptive information about [JHOVE](examples#app) itself, including a list of all loaded modules and output handlers. The second option will display descriptive information about the named [module](examples#module). The third option will display descriptive information about the named [output handler](examples#handler).
 

@@ -10,6 +10,7 @@
     "MD022":{
         "lines_above": 0
     },
+    "MD051":false,
     "overrides": {
         "files": "docs/about/index.md",
         "config": {
