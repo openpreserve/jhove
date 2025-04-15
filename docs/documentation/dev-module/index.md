@@ -61,14 +61,17 @@ public void param (String param) throws Exception;
 > The `init()` method is invoked once at the time the module class is instantiated, passing the argument optionally specified in the configuration file for this module, or `null`.
 
 ```xml
+...
 <module>
   <class>fully-package-qualified-module-class-name</class>
   [ <init>optional-module-init-argument</init> ]
   [ <param>optional-module-parameter</param> ]
+  ...
 </module>
+...
 ```
 
-> The `param()` method is invoked once every time the module object is invoked, passing an argument specified by the `-p <param>` command line option, or `null`.
+> The `param()` method is invoked once every time the module object is invoked, passing an argument specified by the `-p param` command line option, or `null`.
 
 ### 1.2 Mutator Methods
 
@@ -90,7 +93,7 @@ public void setVerbosity (int verbosity);
 
 > The `setVerbosity()` method specifies the level of verbosity of object representation information that the module should report via the `RepInfo` object returned by the `parse()` method. Each module can decide what representation information should be displayed for each level.
 
-| `verbosity`                  | Value | Level                  |
+| verbosity                     | Value | Level                  |
 |-------------------------------|-------|------------------------|
 | `Module.MAXIMUM_VERBOSITY`    | 1     | Maximum verbosity      |
 | `Module.MINIMUM_VERBOSITY`    | 2     | Minimum verbosity (default) |
@@ -151,26 +154,27 @@ public List getFeatures ();
 
 ### 1.4 Parse Methods
 
-```text
+```java
 public void checkSignatures (InputStream stream,    RepInfo info) throws IOException;
 public void checkSignatures (RandomAccessFile raf, RepInfo info) throws IOException;
 ```
 
 > The `checkSignatures()` methods attempt to identify the object (represented as either a stream or random access file) using only internal signatures, i.e., magic numbers. Representation information about the object is returned through the `RepInfo` object.
 
-```text
+```java
 public int parse (InputStream stream,    RepInfo info, int parseIndex) throws IOException;
 public int parse (RandomAccessFile file, RepInfo info) throws IOException;
 ```
 
 > The parse() methods parse the object (represented by either a stream or random access file). Representation information about the object is returned through the RepInfo object. The stream version of parsemay be invoked multiple times, if it is necessary to do multiple passes on the data. On the first invocation of this method parseIndex is set to 0. If the method returns a non-zero value then it is invoked again, with parseIndex set to the return value.
 >
-> >       ...
-> >       RepInfo info;
-> >       int parseIndex = 0;
-> >       while ((parseIndex = parse (..., info, parseIndex)) != 0);
-> >       ...
-> >     
+> > ```java
+> > ...
+> > RepInfo info;
+> > int parseIndex = 0;
+> > while ((parseIndex = parse (..., info, parseIndex)) != 0);
+> > ...
+> > ```
 > >
 > > The parse method for a RandomAccessFile does not have this feature, and does not have a parseIndex parameter, since it is always possible to move back to a previously examined position in the file.
 
@@ -291,12 +295,12 @@ is the class name for the ASCII module created by the Harvard University Library
 
 Module classes must be in the classpath used by JHOVE. In addition, they must be specified in the configuration file. A configuration file will include several `<module>` elements; you simply have to add an appropriate element for the module class you have created, using the following pattern.
 
-> ```java
+> ```xml
 > ...
 > <module>
 >   <class>fully-package-qualified-class-name</class>
 >   <init>optional-initialization-argument</init>
->  </module>
+> </module>
 > ...
 > ```
 
@@ -398,9 +402,7 @@ A Jhove module may be either stream-based or random-access. The choice depends o
 
 One of the first actions of the `parse()` method should be to call `initParse()`. The module's `initParse` method must begin by calling its superclass constructor:
 
-```text
 - `protected void initParse ();`
-```
 
 The superclass constructor in `ModuleBase` will initialize checksum calculations and the byte count (`_nbyte`). The module's `initParse` method should initialize all variables that must start from a known state when parsing a document.
 
