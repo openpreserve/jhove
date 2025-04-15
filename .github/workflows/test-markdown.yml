@@ -27,8 +27,6 @@ jobs:
       # Debug step: List files in the root directory and check for the config file
       - name: Check for config file
         run: |
-          echo "Listing files in the root directory:"
-          ls -al
           echo "Checking for .markdownlint.json file:"
           cat .markdownlint.json || echo "Config file not found!"
 
