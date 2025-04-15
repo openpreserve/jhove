@@ -24,9 +24,11 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
 
-      # Debug step: List files in the root directory and check for the config file
+      # Debug step: List files in the root directory and check for the config file, omitting this step, and the next step fails as it seems the config file is not present
       - name: Check for config file
         run: |
+          echo "Listing files in the root directory:"
+          ls -al
           echo "Checking for .markdownlint.json file:"
           cat .markdownlint.json || echo "Config file not found!"
 
@@ -34,4 +36,4 @@ jobs:
       - name: Lint Markdown files
         run: |
           npm install -g markdownlint-cli
-          markdownlint --config ./.markdownlint.json "docs/**/*.md"
+          markdownlint --config .markdownlint.json "docs/**/*.md"
