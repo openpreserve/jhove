@@ -72,6 +72,4 @@ jobs:
           verbose: true # optional (default = false)
           name: codecov-jhove
           token: ${{ secrets.CODECOV_TOKEN }} # required
-
-
-	
+          
