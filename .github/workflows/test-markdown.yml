@@ -23,6 +23,11 @@ jobs:
         with:
           # Use the branch specified in workflow_dispatch input
           ref: ${{ github.event.inputs.branch }}
+          
+      - name: Check for config file
+        run: cat .markdownlint.json
+        run: ls -al
+
       - name: Lint Markdown files
         run: |
           npm install -g markdownlint-cli
