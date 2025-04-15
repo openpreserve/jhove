@@ -63,9 +63,9 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
     Profile requirements include:
 
-      - The File Type box BR field is "jp2 " (note the trailing SPACE character)
-      - JP2 Header superbox precedes any code stream or Label boxes and includes Image Header and Colour Specification boxes
-      - The Colour Specification box APPROX field is 0 and the METH field is either 1 or 2
+  - The File Type box BR field is "jp2 " (note the trailing SPACE character)
+  - JP2 Header superbox precedes any code stream or Label boxes and includes Image Header and Colour Specification boxes
+  - The Colour Specification box APPROX field is 0 and the METH field is either 1 or 2
 
 - **JPX**
 
@@ -73,10 +73,10 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
     Profile requirements include:
 
-      - The File Type box BR field is "jpx " (note the trailing SPACE character)
-      - Reader Requirements box immediately follows the File Type box
-      - JP2 Header superbox includes Image Header and Colour Specification boxes
-      - The Colour Specification box APPROX field is non-zero
+  - The File Type box BR field is "jpx " (note the trailing SPACE character)
+  - Reader Requirements box immediately follows the File Type box
+  - JP2 Header superbox includes Image Header and Colour Specification boxes
+  - The Colour Specification box APPROX field is non-zero
 
 {: #additional-module-properties .section-heading}
 ## 6 Additional Module Properties

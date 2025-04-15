@@ -71,24 +71,24 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://hul.harvard.edu/ois/xml/ns/jhove/jhoveConfig"
 xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/jhove/jhoveConfig
                     http://hul.harvard.edu/ois/xml/xsd/jhove/jhoveConfig.xsd">
-<jhoveHome><em>jhove-home-directory</em></jhoveHome>
-[ <defaultEncoding><em>encoding</em></defaultEncoding> ]
-[ <tempDirectory><em>directory</em></tempDirectory> ]
-[ <bufferSize><em>buffer</em></bufferSize> ]
-[ <mixVersion><em>version</em></mixVersion> ]
-[ <sigBytes><em>n</em></sigBytes> ]
+<jhoveHome>jhove-home-directory</jhoveHome>
+[ <defaultEncoding>encoding</defaultEncoding> ]
+[ <tempDirectory>directory</tempDirectory> ]
+[ <bufferSize>buffer</bufferSize> ]
+[ <mixVersion>version</mixVersion> ]
+[ <sigBytes>n</sigBytes> ]
 <module>
-<class><em>module-class-name</em></class>
-[ <init><em>optional-module-init-argument</em></init> ]
-[ <param><em>optional-module-parameter</em></param> ]
+<class>module-class-name</class>
+[ <init>optional-module-init-argument</init> ]
+[ <param>optional-module-parameter</param> ]
 ...
 </module>
 ...
 <outputHandler>
-<class><em>output-handler-class-name</em></class>
+<class>output-handler-class-name</class>
 </outputHandler>
 ...
-[ <logLevel><em>logging-level</em></logLevel> ]
+[ <logLevel>logging-level</logLevel> ]
 </jhoveConfig>
 ```
 

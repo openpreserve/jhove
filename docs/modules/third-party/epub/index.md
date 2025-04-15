@@ -105,8 +105,12 @@ In addition to the standard JHOVE [representation information](index.html#repinf
 
 The EPUB JHOVE module uses the EPUBCheck tool. This means it inherits a [problem caused by the thread stack size being too small](https://github.com/w3c/epubcheck/wiki/Running#javalangstackoverflowerror) to process the EPUB in certain situations. This will likely manifest as a "StackOverflowError" in the console. Using a 32-bit JVM instead of a 64-bit one can cause this error. The work around is to increase the thread stack size by adding "-Xss1024k" as a parameter on the java command. To do this, open the jhove\[.bat\] file and manually modify the java command as follows:
 
-> `java -Xss1024k -classpath "%CP%" Jhove -c "%CONFIG%" %\*`
+> ```bash
+> java -Xss1024k -classpath "%CP%" Jhove -c "%CONFIG%" %\*`
+> ```
 
 If using the JHOVE GUI, open the jhove-gui\[.bat\] file and modify the following line to fix this issue:
 
-> `java -Xss1024k -classpath "%CP%" JhoveView -c "%CONFIG%" %\*`
+> ```bash
+> java -Xss1024k -classpath "%CP%" JhoveView -c "%CONFIG%" %\*`
+> ```

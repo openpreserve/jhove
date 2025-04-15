@@ -122,7 +122,7 @@ to run the command line application and show the usage message. Alternatively:
 will run the GUI application.
 
 {: #running-jhove .section-heading}
-f## Running JHOVE
+## Running JHOVE
 
 There should be no issues configuring the current JHOVE beta but just in case we've retained the [old configuration guide](/getting-started/config/).
 
@@ -183,7 +183,9 @@ For convenience, the following driver scripts are also available:
 
 The JHOVE Swing-based GUI interface can be invoked from a command shell from the jhove/bin sub-directory:
 
-    java -jar JhoveView.jar -c 
+```bash
+java -jar JhoveView.jar -c 
+```
 
 where is the pathname of the JHOVE configuration file.
 
@@ -193,7 +195,7 @@ There are some [usage examples](/getting-started/examples/) to help you get star
 
 The following syntax is used to discover, or identify, the format of a digital object.
 
-    jhove ... \[-ks\] _file-or-uri1 .. file-or-uriN_
+    jhove ... [-ks] file-or-uri1 .. file-or-uriN
 
 where the first ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
 
@@ -213,7 +215,7 @@ This is clunky but unavoidable, because of the way Java processes command line i
 
 The following syntax is used to determine the validity of a digital object with respect to a particular format, and to display format-specific representation information.
 
-  jhove ... -m _module_ \[-kr\] _file-or-uri_
+    jhove ... -m module [-kr] file-or-uri
 
 where the ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
 
@@ -225,9 +227,11 @@ The class file implementing the named module must be found on the Java CLASSPATH
 
 The following syntax options display descriptive information about various components of JHOVE.
 
-  jhove ...
-  jhove ... -m _module_
-  jhove ... -H _output-handler_
+```bash
+jhove ...
+jhove ... -m module
+jhove ... -H output-handler
+```
 
 where the ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
 
@@ -240,7 +244,9 @@ The class file implementing the named module or output handler must be found on 
 
 The JHOVE [Swing](http://java.sun.com/products/jfc/#swing)\-based GUI interface is invoked from a command shell:
 
-  java -jar bin/JhoveView.jar
+```bash
+java -jar bin/JhoveView.jar
+```
 
 or by the appropriate mouse click behavior defined by the windowing system.
 
@@ -318,7 +324,9 @@ Regardless of the [configuration](config/) options, JHOVE always statically load
 
 The XML handler output is defined by the JHOVE schema <[http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd](http://hul.harvard.edu/ois/xml/xsd/jhove/jhove.xsd)\>.
 
+```bash
 jhove ... -h xml ...
+```
 
 (Recall that JHOVE output handlers can be specified in a case-insensitive manner.)
 
@@ -342,14 +350,14 @@ The Audit handler should be invoked against a directory (or directories) without
           name="Jhove" release="1.18.1" date="2017-11-30">
  <date>2018-03-02T09:37:11-05:00</date>
  <audit home="/home/user">
-  <file mime="application/pdf" status="valid">jhove/examples/pdf/AA\_Banner-single.pdf</file>
-  <file mime="text/plain; charset=US-ASCII" status="valid">jhove/examples/pdf/AA\_Banner.pdf</file>
+  <file mime="application/pdf" status="valid">jhove/examples/pdf/AA_Banner-single.pdf</file>
+  <file mime="text/plain; charset=US-ASCII" status="valid">jhove/examples/pdf/AA_Banner.pdf</file>
   <file mime="text/plain; charset=US-ASCII" status="valid">jhove/examples/pdf/README</file>
   <file mime="application/pdf" status="valid">jhove/examples/pdf/bedfordcompressed.pdf</file>
   <file mime="application/pdf" status="valid">jhove/examples/pdf/fallforum03.pdf</file>
   <file mime="application/pdf" status="valid">jhove/examples/pdf/imd.pdf</file>
-  <file mime="application/pdf" status="well-formed">jhove/examples/pdf/ddap/DDAP\_Singlev3.pdf</file>
-  <file mime="application/pdf" status="well-formed">jhove/examples/pdf/ddap/DDAP\_Spreadv3.pdf</file>
+  <file mime="application/pdf" status="well-formed">jhove/examples/pdf/ddap/DDAP_Singlev3.pdf</file>
+  <file mime="application/pdf" status="well-formed">jhove/examples/pdf/ddap/DDAP_Spreadv3.pdf</file>
   <file mime="text/plain; charset=US-ASCII" status="valid">jhove/examples/pdf/ddap/README</file>
  </audit>
 </jhove>

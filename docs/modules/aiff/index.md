@@ -8,10 +8,8 @@ layout: page
 {: #introduction .section-heading}
 ## Introduction
 
-The AIFF-hul module recognizes and validates the Audio Interchange File Format (AIFF)  
-[AIFF](/references#aiff).  
-The AIFF format is itself a profile of the Electronic Arts IFF 85 format  
-[IFF](/references#iff85).
+The AIFF-hul module recognizes and validates the Audio Interchange File Format (AIFF) \[[AIFF](/references#aiff)\].
+The AIFF format is itself a profile of the Electronic Arts IFF 85 format \[[IFF](/references#iff85)\].
 
 The module is invoked by the:
 
@@ -26,8 +24,8 @@ command line option.
 
 The AIFF-hul module recognizes and validates the following public profiles:
 
-- AIFF 1.3 [AIFF](/references#aiff)
-- AIFF-C [AIFF-C](/references#aiff-c)
+- AIFF 1.3 \[[AIFF](/references#aiff)\]
+- AIFF-C \[[AIFF-C](/references#aiff-c)\]
 
 {: #well-formedness .section-heading}
 ## 3 Well-Formedness

@@ -32,13 +32,13 @@ For example, if you would like to use the latest [Apache Xerces](http://xerces.a
 
 This module can be [configured](/getting-started/config/) with the following parameters:
 
-schema=schema-URL;local-schema-path
+**schema=_schema-URL;local-schema-path_**
 
 Specifies the local schema file to use for validation in place of any occurrences of the external schema in an XML document. Using a local file is typically faster and more reliable than retrieving files over a network such as the internet, and is recommended when processing large volumes of XML. This parameter can be declared as many times as necessary.
 
 Example: `schema=http://example.com/schema.xsd;C:\schemas\example.com\schema.xsd`
 
-withtextmd=true
+**withtextmd=_true_**
 
 Indicates that [textMD](/references#textmd) metadata should be included as part of a document's representation information.
 

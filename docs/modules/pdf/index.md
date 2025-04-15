@@ -105,55 +105,55 @@ The MIME type is reported as: application/pdf
 
     The PDF/X-1 profile is for pre-press data exchange using CMYK data \[[PDF/X-1](/references#pdfx1)\].
 
-      - PDF 1.3
-      - GTS\_PDFXVersion key value of (PDF/X-1:2001) or (CGATS.12/1-1999)
-      - Font subsets for all characters used in the file are embedded within the file
-      - Objects may be compressed using Flate and RunLength compression; for **Image XObjects** JPEG and CCITT (for monochrome images) compression are also allowed
-      - Information dictionary **Trapped** key is defined
-      - No Actions or JavaScripts
+  - PDF 1.3
+  - GTS\_PDFXVersion key value of (PDF/X-1:2001) or (CGATS.12/1-1999)
+  - Font subsets for all characters used in the file are embedded within the file
+  - Objects may be compressed using Flate and RunLength compression; for **Image XObjects** JPEG and CCITT (for monochrome images) compression are also allowed
+  - Information dictionary **Trapped** key is defined
+  - No Actions or JavaScripts
 
 - **PDF/X-1a**
 
     The PDF/X-1 profile is for pre-press data exchange using CMYK and spot color data \[[PDF/X-1a](/references#pdfx1a)\].
 
-      - All requirements of PDF/X-1 are met
-      - GTS\_PDFXVersion key value of (PDF/X-1a:2001)
-      - No encryption dictionary
-      - If a BleedBox is present and if the ViewerPreferences dictionary contains the ViewClip, PrintArea or PrintClip keys, each of those keys present has the value MediaBox or BleedBox
-      - SMask keys are absent or have a value of "None"
-      - No JBIG2 or LZW filters
-      - No Ref key in Form dictionary
+  - All requirements of PDF/X-1 are met
+  - GTS\_PDFXVersion key value of (PDF/X-1a:2001)
+  - No encryption dictionary
+  - If a BleedBox is present and if the ViewerPreferences dictionary contains the ViewClip, PrintArea or PrintClip keys, each of those keys present has the value MediaBox or BleedBox
+  - SMask keys are absent or have a value of "None"
+  - No JBIG2 or LZW filters
+  - No Ref key in Form dictionary
 - **PDF/X-2**
 
     The PDF/X-2 profile is for partial pre-press data exchange \[[PDF/X-2](/references#pdfx2)\].
 
-      - OutputIntents array in Document Catalog Dictionary, with subtype of "GTS\_PDFX", with keys OutputConditionIdentifier and AtoB1Tag, and with either RegistryName or DestOutputProfile
-      - Each page includes or inherits a MediaBox
-      - Each page has a TrimBox or an ArtBox, but not both.
-      - The document information dictionary has a Trapped key with a value of either True or False
-      - If an ExtGState object is present, it does not have TR, TR2, or HTP entries
-      - SMask keys are absent or have a value of "None"
-      - No OPI key in Form or Image objects
+  - OutputIntents array in Document Catalog Dictionary, with subtype of "GTS\_PDFX", with keys OutputConditionIdentifier and AtoB1Tag, and with either RegistryName or DestOutputProfile
+  - Each page includes or inherits a MediaBox
+  - Each page has a TrimBox or an ArtBox, but not both.
+  - The document information dictionary has a Trapped key with a value of either True or False
+  - If an ExtGState object is present, it does not have TR, TR2, or HTP entries
+  - SMask keys are absent or have a value of "None"
+  - No OPI key in Form or Image objects
 - **PDF/X-3**
 
     The PDF/X-3 profile is for pre-press data exchange using color-managed workflows \[[PDF/X-3](/references#pdfx3)\].
 
-      - OutputIntents array in Document Catalog Dictionary with subtype of "GTS\_PDFX"
-      - Any Separation and DeviceN resources have an AlternateSpace of DeviceGray or DeviceCMYK
-      - No PostScript or OPI objects
-      - No OPI key in Form or Image objects
-      - Image Alternates do not have a DefaultForPrinting key
+  - OutputIntents array in Document Catalog Dictionary with subtype of "GTS\_PDFX"
+  - Any Separation and DeviceN resources have an AlternateSpace of DeviceGray or DeviceCMYK
+  - No PostScript or OPI objects
+  - No OPI key in Form or Image objects
+  - Image Alternates do not have a DefaultForPrinting key
 - **Linearized PDF**
 
     The Linearized PDF profile is for optimized viewing over a network \[[PDF 1.4](/references#pdf1.4)\]
 
-      - First object from beginning of file is valid linearization dictionary
+  - First object from beginning of file is valid linearization dictionary
 - **Tagged PDF**
 
     The Tagged PDF profile provides access to higher-level structural and semantic information contained in PDF files \[[PDF 1.4](/references#pdf1.4)\]
 
-      - Document catalog dictionary has MarkInfo dictionary
-      - A valid structure tree is present
+  - Document catalog dictionary has MarkInfo dictionary
+  - A valid structure tree is present
 
 {: #additional-module-properties .section-heading}
 ## 6 Additional Module Properties

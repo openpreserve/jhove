@@ -42,13 +42,26 @@ The following criteria must be met by an UTF8 content streams for JHOVE to consi
   | Four octets: | 11110_uuu_ 10_uuzzzz_ 10_yyyyyy_ 10_xxxxxx_ |
 
 - The presence of an initial Byte Order Mark (BOM) character in the form of any of the following two- or four-octet sequences automatically taints the content stream as non-well-formed UTF-8:
+<!-- markdownlint-disable -->
+  <table>
+  <tbody><tr><td rowspan="2">Two octets:</td><td><tt>0xEF&nbsp;0xFF</tt></td>
+  <td>UTF-16 big-endian encoding</td></tr>
+  <tr><td><tt>0xFFFE</tt></td>
+  <td>UTF-16 little-endian encoding</td></tr>
+  <tr><td rowspan="2">Four octets:</td>
+  <td><tt>0x0000FEFF</tt></td>
+  <td>UCS-4 big-endian encoding</td></tr>
+  <tr><td><tt>0xFFFE0000</tt></td>
+  <td>UCS-4 little-endian encoding</td></tr>
+  </tbody></table>
+  <!-- markdownlint-enable -->
 
-  |     |     |     |
+  <!-- |     |     |     |
   | --- | --- | --- |
   | Two octets: | 0xEF 0xFF | UTF-16 big-endian encoding |
   | 0xFFFE | UTF-16 little-endian encoding | |
   | Four octets: | 0x0000FEFF | UCS-4 big-endian encoding |
-  | 0xFFFE0000 | UCS-4 little-endian encoding | |
+  | 0xFFFE0000 | UCS-4 little-endian encoding | | -->
 
 {: #validity .section-heading}
 ## Validity

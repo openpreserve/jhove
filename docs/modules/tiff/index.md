@@ -121,7 +121,7 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
     The following tag is mandatory:
 
-    | Tag Name and Number |     | Value |
+    > | Tag Name and Number |     | Value |
     | --- | --- | --- |
     | PhotometricInterpretation | 262 |     |
 
@@ -133,7 +133,7 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
     The bilevel profile is for black and white images. The following tags are mandatory:
 
-    | Tag Name and Number |     | Value |
+    > | Tag Name and Number |     | Value |
     | --- | --- | --- |
     | ImageWidth | 256 |     |
     | ImageLength | 257 |     |
@@ -146,11 +146,11 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
     | YResolution | 283 |     |
     | ResolutionUnit | 296 | 1, 2, or 3 |
 
-  -**Baseline grayscale (Class G)**
+  - **Baseline grayscale (Class G)**
 
     The grayscale profile is for grayscale images. The following tags are mandatory:
 
-    | Tag Name and Number |     | Value |
+    > | Tag Name and Number |     | Value |
     | --- | --- | --- |
     | ImageWidth | 256 |     |
     | ImageLength | 257 |     |
@@ -164,11 +164,11 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
     | YResolution | 283 |     |
     | ResolutionUnit | 296 | 1, 2, or 3 |
 
-  -**Baseline palette-color (Class P)**
+  - **Baseline palette-color (Class P)**
 
     The palette-color profile is for images using a lookup-table (or color map). The following tags are mandatory:
 
-    | Tag Name and Number |     | Value |
+    > | Tag Name and Number |     | Value |
     | --- | --- | --- |
     | ImageWidth | 256 |     |
     | ImageLength | 257 |     |
@@ -187,7 +187,7 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
     The RGB profile is for full-color RGB images. The following tags are mandatory:
 
-    | Tag Name and Number |     | Value |
+    > | Tag Name and Number |     | Value |
     | --- | --- | --- |
     | ImageWidth | 256 |     |
     | ImageLength | 257 |     |
@@ -210,7 +210,7 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
     The YCbCr profile is for images using the YCbCr colorspace. The following tags are mandatory:
 
-    | Tag Name and Number |     | Value |
+    > | Tag Name and Number |     | Value |
     | --- | --- | --- |
     | ImageWidth | 256 |     |
     | ImageLength | 257 |     |
@@ -236,7 +236,7 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
   The TIFF/EP profile is for images created by digital cameras \[[TIFF/EP](/references#tiffep)\]. The following tags are mandatory:
 
-  | Tag Name and Number |     | Value |
+  > | Tag Name and Number |     | Value |
   | --- | --- | --- |
   | NewSubfileType | 254 | 0 or 1 |
   | ImageWidth | 256 |     |
@@ -275,7 +275,7 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
   Exif 2.0, 2.1 (JEIDA-49-1998), and 2.2 (JEITA CP-3451) define camera-specific metadata \[[Exif 2.1](/references#exif2.1), [Exif 2.2](/references#exif)\]. The following tags are mandatory in the primary TIFF IFD:
 
-  | Tag Name and Number |     | Value | Note |
+  > | Tag Name and Number |     | Value | Note |
   | --- | --- | --- | --- |
   | ImageWidth | 256 |     | If Compression (259) = 1 |
   | ImageLength | 257 |     | If Compression (259) = 1 |
@@ -295,20 +295,23 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
   The primary TIFF IFD is the first IFD in the file, whose offset is defined in the TIFF header. The optional thumbnail TIFF IFD is a subsequent IFD whose offset is defined following the primary TIFF IFD.
 
   The following tags are mandatory in the Exif IFD:
-
-<!-- markdownlint-disable -->
-  | Tag Name and Number |     | Value |
-  | --- | --- | --- |
-  | ExifVersion | 36864 | "0220" (Version 2.2)  <br>"0210" (Version 2.1)  <br>"0200" (Version 2.0) |
-  | FlashpixVersion | 40960 | "0100" |
-  | ColorSpace | 40961 | 1 or 65535 |
-<!-- markdownlint-enable -->
+  
+  <!-- markdownlint-disable -->
+    <blockquote>
+      <table>
+        <tbody><tr><th colspan="2">Tag Name and Number</th><th>Value</th></tr>
+        <tr><td>ExifVersion</td><td>36864</td><td>"0220" (Version 2.2)<br>"0210" (Version 2.1)<br>"0200" (Version 2.0)</td></tr>
+        <tr><td>FlashpixVersion</td><td>40960</td><td>"0100"</td></tr>
+        <tr><td>ColorSpace</td><td>40961</td><td>1 or 65535</td></tr>
+      </tbody></table>
+    </blockquote>
+  <!-- markdownlint-enable -->
 
 - **Baseline GeoTIFF 1.0**
 
   GeoTIFF defines an industry-standard tagset for the management of geo-referenced or geo-coded raster imagery \[[GeoTIFF](/references#geotiff)\]. The following tags are mandatory:
 
-  | Tag Name and Number |     | Value |
+  > | Tag Name and Number |     | Value |
   | --- | --- | --- |
   | PhotometricInterpretation | 262 |     |
   | GeoKeyDirectoryTag | 34735 |     |
@@ -323,7 +326,7 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
     The DLF black and white benchmark requires lossless compression, one 1-bit sample value per pixel, and a minimum resolution.
 
-    | Tag Name and Number |     | Value |
+    > | Tag Name and Number |     | Value |
     | --- | --- | --- |
     | BitsPerSample | 258 | 1   |
     | Compression | 259 | 1 (none) or 4 (T.6/Group 4) |
@@ -332,11 +335,11 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
     | XResolution | 282 | \>= 600 (in) or 1520 (cm) |
     | YResolution | 283 | \>= 600 (in) or 1520 (cm) |
 
-  -**Grayscale**
+  - **Grayscale**
 
     The DLF grayscale benchmark requires lossless compression, one 8-bit sample value per pixel, and a minimum resolution.
 
-    | Tag Name and Number |     | Value |
+    > | Tag Name and Number |     | Value |
     | --- | --- | --- |
     | BitsPerSample | 258 | 8   |
     | Compression | 259 | 1 (none), 5 (LZW), 32773 (PackBits RLE) |
@@ -349,7 +352,7 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
     The DLF color benchmark requires lossless compression, three 8-bit sample values per pixel, and a minimum resolution.
 
-    | Tag Name and Number |     | Value |
+    > | Tag Name and Number |     | Value |
     | --- | --- | --- |
     | BitsPerSample | 258 | 8, 8, 8 |
     | Compression | 259 | 1 (none), 5 (LZW), or 32773 (PackBits RLE) |
@@ -368,7 +371,7 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
   TIFF Class F \[[Class F](/references#classf), [RFC 2306](/references#rfc2306)\] is a sub-class of Class B defined for representing CCITT Group 3 (G3) facsimile images. The MIME type for this profile is reported as: image/ief.
 
-  | Tag Name and Number |     | Value |
+  > | Tag Name and Number |     | Value |
   | --- | --- | --- |
   | NewSubfileType | 254 | 2   |
   | ImageWidth | 256 | 1728, 2048 2432, 2592, 3072, 3648, 3456, 4096, 4864 |
@@ -398,7 +401,7 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
 
   RFC 1314 \[[RFC 1314](/references#rfc1314)\] is a sub-type of Class B proposed as a standard for representing FAX-like black and white images within the Internet.
 
-  | Tag Name and Number |     | Value |
+  > | Tag Name and Number |     | Value |
   | --- | --- | --- |
   | NewSubfileType | 254 |     |
   | BitsPerSample | 258 | 1   |

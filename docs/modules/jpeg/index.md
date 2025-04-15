@@ -154,13 +154,17 @@ Image technical properties are reported in terms of the NISO [Z39.87](/reference
     The primary TIFF IFD is the first IFD in the file, whose offset is defined in the TIFF header. The optional thumbnail TIFF IFD is a subsequent IFD whose offset is defined following the primary TIFF IFD.
 
     The following tags are mandatory in the Exif IFD:
-<!-- markdownlint-disable -->
-    > | Tag Name and Number |     | Value |
+
+    <!-- markdownlint-disable -->
+
+    > | Tag Name and Number | | Value |
     | --- | --- | --- |
     | ExifVersion | 36864 | "0220" (Version 2.2)  <br>"0210" (Version 2.1)  <br>"0200" (Version 2.0) |
     | FlashpixVersion | 40960 | "0100" |
     | ColorSpace | 40961 | 1 or 65535 |
-<!-- markdownlint-enable -->
+
+    <!-- markdownlint-enable -->
+
 - **SPIFF**
 
     SPIFF (ISO/IEC 10918-3) is the Still Picture Interchange File Format \[[SPIFF](/references#jpeg-3)\].

@@ -75,6 +75,7 @@ The module can recognize and process the following chunks:
 Top-level chunks
 
 <!-- markdownlint-disable -->
+
 | ID  | List Type | Name | Property | References |
 | --- | --- | --- | --- | --- |
 | `bext` |     | Broadcast Audio Extension | BroadcastAudioExtension | \[[BWF](/references#bwf)\] |
@@ -94,6 +95,7 @@ Top-level chunks
 | `mext` |     | MPEG Audio Extension | MPEG | \[[BWF Supp 1](/references#bwf-1)\] |
 | `note` |     | Note | Note |     |
 | `smpl` |     | Sample | Sample | \[[MDSU](/references#mdsu3)\] |
+
 <!-- markdownlint-enable -->
 
 Associated Data List chunks
