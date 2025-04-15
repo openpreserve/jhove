@@ -1,5 +1,5 @@
 name: Test Markdown Files
-# This workflow lints Markdown files in the repository.
+# This workflow lints Markdown files in the repository and checks for the config file.
 # It is triggered on pull requests and can also be run manually.
 
 on:
@@ -19,17 +19,21 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      # Check out the branch specified in the workflow_dispatch input
       - uses: actions/checkout@v4
         with:
-          # Use the branch specified in workflow_dispatch input
           ref: ${{ github.event.inputs.branch }}
-          
-      - name: Check for config file
-        run: cat .markdownlint.json
-        run: ls -al
 
+      # Debug step: List files in the root directory and check for the config file
+      - name: Check for config file
+        run: |
+          echo "Listing files in the root directory:"
+          ls -al
+          echo "Checking for .markdownlint.json file:"
+          cat .markdownlint.json || echo "Config file not found!"
+
+      # Run markdownlint if the config file exists
       - name: Lint Markdown files
         run: |
           npm install -g markdownlint-cli
           markdownlint --config .markdownlint.json "docs/**/*.md"
-
