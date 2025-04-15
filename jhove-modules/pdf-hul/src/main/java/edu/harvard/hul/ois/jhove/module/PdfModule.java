@@ -1752,7 +1752,9 @@ public class PdfModule extends ModuleBase {
                                     double ver = Double.parseDouble(versString);
                                     double infoVer = Double.parseDouble(infoVersString);
                                     try {
-                                        if (infoVer != ver) {
+                                        // BaseVersion "shall be less than or equal to the PDF version" and "may be different from the version number in the document header or that supplied by the Version key in the Catalog [...] because it reflects the version of the standard that has been extended and not the version of this particular file"
+                                        if (ver > infoVer) {
+                                            // FIXME: this needs a separate error ID as this is a distinct case
                                             String mess = MessageFormat.format(
                                                     MessageConstants.PDF_HUL_87.getMessage(),
                                                     infoVersString, ver);
