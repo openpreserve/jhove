@@ -1760,7 +1760,7 @@ public class PdfModule extends ModuleBase {
                                                     MessageConstants.PDF_HUL_87.getId(), mess);
                                             info.setMessage(new InfoMessage(message));
                                         } else {
-                                            p = new Property(PROP_NAME_BASEVERSION, PropertyType.STRING, ver);
+                                            p = new Property(PROP_NAME_BASEVERSION, PropertyType.STRING, versString);
                                             _docCatalogList.add(p);
                                         }
                                     } catch (NumberFormatException e) {
