@@ -1,5 +1,7 @@
 {
-    "MD013": false,
+    "MD013": {
+        "line_length": 512
+      },
     "MD046": false,
     "MD003": { 
         "style": "atx" 
