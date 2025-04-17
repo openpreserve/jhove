@@ -172,7 +172,7 @@ public class Literal
                     setValue(buffer.toString());
                     return offset;
                 } else if (ch == BACKSLASH) {
-                    ch = readBackslashSequence(false, tok);
+                    ch = readBackslashSequence(tok);
                     switch (ch) {
                         case -1:
                             continue; // invalid escape sequence, ignore
@@ -204,7 +204,7 @@ public class Literal
                         setPDFDocEncoding(false);
                         break;
                     case BACKSLASH:
-                        ch = readBackslashSequence(false, tok);
+                        ch = readBackslashSequence(tok);
                         if (ch < 0) {
                             continue; // invalid escape sequence, ignore
                         }
@@ -237,7 +237,7 @@ public class Literal
                     setValue(buffer.toString());
                     return offset;
                 } else if (ch == BACKSLASH) {
-                    ch = readBackslashSequence(false, tok);
+                    ch = readBackslashSequence(tok);
                     if (ch < 0) {
                         continue; // invalid escape sequence, ignore
                     }
@@ -256,7 +256,7 @@ public class Literal
                         setValue(buffer.toString());
                         return offset;
                     case BACKSLASH:
-                        utfch = readBackslashSequence(true, tok);
+                        utfch = readBackslashSequence(tok);
                         if (utfch < 0) {
                             continue; // invalid escape sequence, ignore
                         }
@@ -272,7 +272,7 @@ public class Literal
             } else if (_state == (State.LITERAL_UTF16_2)) {
                 // Second byte of a UTF16 character.
                 if (ch == BACKSLASH) {
-                    ch = readBackslashSequence(false, tok);
+                    ch = readBackslashSequence(tok);
                     if (ch < 0) {
                         continue; // Invalid escape sequence, ignore
                     }
@@ -592,16 +592,16 @@ public class Literal
      * sequence. If we don't find a valid escape sequence,
      * return -1.
      */
-    private int readBackslashSequence(boolean utf16, Tokenizer tok)
+    private int readBackslashSequence(Tokenizer tok)
             throws IOException {
-        int ch = tok.readChar1(utf16);
+        int ch = tok.readChar();
         if (ch >= 0X30 && ch <= 0X37) {
             int num = ch - 0X30;
             // Read octal sequence. We may get 1, 2, or 3 characters.
             // If we get a non-numeric character, we're done and we
             // put it back.
             for (int i = 0; i < 2; i++) {
-                int ch1 = tok.readChar1(utf16);
+                int ch1 = tok.readChar();
                 if (ch1 >= 0X30 && ch1 <= 0X37) {
                     num = num * 8 + (ch1 - 0X30);
                 } else {
