@@ -174,8 +174,8 @@ public class Literal
                 } else if (ch == BACKSLASH) {
                     ch = readBackslashSequence(false, tok);
                     switch (ch) {
-                        case 0:
-                            continue; // invalid character, ignore
+                        case -1:
+                            continue; // invalid escape sequence, ignore
                         case FE:
                             _state = State.LITERAL_FE;
                             break;
@@ -205,8 +205,8 @@ public class Literal
                         break;
                     case BACKSLASH:
                         ch = readBackslashSequence(false, tok);
-                        if (ch == 0) {
-                            continue; // invalid character, ignore
+                        if (ch < 0) {
+                            continue; // invalid escape sequence, ignore
                         }
                         if (ch == FF) {
                             _state = State.LITERAL_UTF16_1;
@@ -238,8 +238,8 @@ public class Literal
                     return offset;
                 } else if (ch == BACKSLASH) {
                     ch = readBackslashSequence(false, tok);
-                    if (ch == 0) {
-                        continue; // invalid character, ignore
+                    if (ch < 0) {
+                        continue; // invalid escape sequence, ignore
                     }
                     // any other char is treated nonspecially
                     buffer.append(PDFDOCENCODING[ch]);
@@ -257,28 +257,24 @@ public class Literal
                         return offset;
                     case BACKSLASH:
                         utfch = readBackslashSequence(true, tok);
-                        if (utfch == 0) {
-                            continue; // invalid character, ignore
+                        if (utfch < 0) {
+                            continue; // invalid escape sequence, ignore
                         }
+
+                        b1 = utfch;
                         break;
                     default:
-                        _state = State.LITERAL_UTF16_2;
                         b1 = ch;
                         break;
                 }
+
+                _state = State.LITERAL_UTF16_2;
             } else if (_state == (State.LITERAL_UTF16_2)) {
                 // Second byte of a UTF16 character.
-                /*
-                 * It turns out that a backslash may be double-byte,
-                 * rather than the assumed single.byte. The following
-                 * allows for this. Suggested by Justin Litman, Library
-                 * of Congress, 2006-03-17.
-                 */
                 if (ch == BACKSLASH) {
                     ch = readBackslashSequence(false, tok);
-                    if (ch == 0) {
-                        _state = State.LITERAL_UTF16_2; // skip the wrong char and reset to previous state
-                        continue; /* Invalid character, ignore. */
+                    if (ch < 0) {
+                        continue; // Invalid escape sequence, ignore
                     }
                 }
                 utfch = 256 * b1 + ch;
@@ -594,7 +590,7 @@ public class Literal
     /**
      * After a backslash, read characters into an escape
      * sequence. If we don't find a valid escape sequence,
-     * return 0.
+     * return -1.
      */
     private int readBackslashSequence(boolean utf16, Tokenizer tok)
             throws IOException {
@@ -637,7 +633,7 @@ public class Literal
             case BACKSLASH:
                 return BACKSLASH;
             default:
-                return 0;
+                return -1;
         }
     }
 
