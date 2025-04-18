@@ -30,6 +30,9 @@ class PDFDocEncodingCharset extends Charset {
                         return CoderResult.OVERFLOW;
                     byte c = from.get();
                     char d = PDFDOCENCODING[c & 0xFF];
+                    if (!Character.isDefined(d)) {
+                        return CoderResult.unmappableForLength(1);
+                    }
                     to.put(d);
                 }
 
@@ -63,9 +66,27 @@ class PDFDocEncodingCharset extends Charset {
 
     /** Mapping between PDFDocEncoding and Unicode code points. */
     public static char[] PDFDOCENCODING = {
-            '\u0000', '\u0001', '\u0002', '\u0003', '\u0004', '\u0005', '\u0006', '\u0007',
-            '\b', '\t', '\n', '\u000b', '\f', '\r', '\u000e', '\u000f',
-            '\u0010', '\u0011', '\u0012', '\u0013', '\u0014', '\u0015', '\u0016', '\u0017',
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED,
+            Character.UNASSIGNED, '\t', '\n', 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, '\r', 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED,
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED, 
+            Character.UNASSIGNED,
             '\u02d8', '\u02c7', '\u02c6', '\u02d9', '\u02dd', '\u02db', '\u02da', '\u02dc',
             '\u0020', '\u0021', '\"', '\u0023', '\u0024', '\u0025', '\u0026', '\'',
             '\u0028', '\u0029', '\u002a', '\u002b', '\u002c', '\u002d', '\u002e', '\u002f',
@@ -78,13 +99,16 @@ class PDFDocEncodingCharset extends Charset {
             '\u0060', '\u0061', '\u0062', '\u0063', '\u0064', '\u0065', '\u0066', '\u0067',
             '\u0068', '\u0069', '\u006a', '\u006b', '\u006c', '\u006d', '\u006e', '\u006f',
             '\u0070', '\u0071', '\u0072', '\u0073', '\u0074', '\u0075', '\u0076', '\u0077',
-            '\u0078', '\u0079', '\u007a', '\u007b', '\u007c', '\u007d', '\u007e', '\u007f',
+            '\u0078', '\u0079', '\u007a', '\u007b', '\u007c', '\u007d', '\u007e', 
+            Character.UNASSIGNED,
             '\u2022', '\u2020', '\u2021', '\u2026', '\u2003', '\u2002', '\u0192', '\u2044',
             '\u2039', '\u203a', '\u2212', '\u2030', '\u201e', '\u201c', '\u201d', '\u2018',
             '\u2019', '\u201a', '\u2122', '\ufb01', '\ufb02', '\u0141', '\u0152', '\u0160',
-            '\u0178', '\u017d', '\u0131', '\u0142', '\u0153', '\u0161', '\u017e', '\u009f',
+            '\u0178', '\u017d', '\u0131', '\u0142', '\u0153', '\u0161', '\u017e', 
+            Character.UNASSIGNED,
             '\u20ac', '\u00a1', '\u00a2', '\u00a3', '\u00a4', '\u00a5', '\u00a6', '\u00a7',
-            '\u00a8', '\u00a9', '\u00aa', '\u00ab', '\u00ac', '\u00ad', '\u00ae', '\u00af',
+            '\u00a8', '\u00a9', '\u00aa', '\u00ab', '\u00ac', 
+            Character.UNASSIGNED, '\u00ae', '\u00af',
             '\u00b0', '\u00b1', '\u00b2', '\u00b3', '\u00b4', '\u00b5', '\u00b6', '\u00b7',
             '\u00b8', '\u00b9', '\u00ba', '\u00bb', '\u00bc', '\u00bd', '\u00be', '\u00bf',
             '\u00c0', '\u00c1', '\u00c2', '\u00c3', '\u00c4', '\u00c5', '\u00c6', '\u00c7',
