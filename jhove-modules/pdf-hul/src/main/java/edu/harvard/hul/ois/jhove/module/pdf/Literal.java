@@ -10,18 +10,18 @@ import java.text.*;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
  * Class for Tokens which represent PDF strings. The class maintains
- * a field for determining whether the string is encoded as PDF encoding
- * or UTF-16. This is determined in the course of analyzing the
+ * a field for determining whether the string is encoded in PDFDocEncoding, UTF-16BE
+ * or UTF-8. This is determined in the course of analyzing the
  * characters for the token.
  */
 public class Literal
         extends StringValuedToken {
-    /** True if literal is in PDFDocEncoding; false if UTF-16. */
-    private boolean _pdfDocEncoding;
+    private Charset _encoding;
 
     /** Used for accommodating the literal */
     private ByteArrayOutputStream buffer;
@@ -34,9 +34,6 @@ public class Literal
 
     /** The high half-byte character */
     private int hi;
-
-    /** First byte of a UTF-16 character. */
-    int firstByte;
 
     /** First digit of a hexadecimal string value. */
     // int h1;
@@ -67,6 +64,9 @@ public class Literal
     private static final int BACKSLASH = 0x5C;
     private static final int FE = 0xFE;
     private static final int FF = 0xFF;
+    private static final int EF = 0xEF;
+    private static final int BB = 0xBB;
+    private static final int BF = 0xBF;
 
     private static final int LINE_CONTINUATION = -1;
     private static final int UNKNOWN_SEQUENCE = -2;
@@ -74,7 +74,7 @@ public class Literal
     /** Creates an instance of a string literal */
     public Literal() {
         super();
-        _pdfDocEncoding = true;
+        _encoding = new PDFDocEncodingCharset();
         buffer = new ByteArrayOutputStream();
         haveHi = false;
     }
@@ -134,8 +134,7 @@ public class Literal
                 }
 
                 setValue(new String(buffer.toByteArray(),
-                        isPDFDocEncoding() ? new PDFDocEncodingCharset()
-                                : StandardCharsets.UTF_16BE));
+                        _encoding));
                 return offset;
             } else if (ch == OPEN_PARENTHESIS) {
                 // Count (non-escaped) open parens to be matched by close parens
@@ -159,22 +158,49 @@ public class Literal
             if (_state == State.LITERAL) {
                 // We are still in a state of flux, determining the encoding
                 if (ch == FE) {
+                    // might be UTF-16BE
                     _state = State.LITERAL_FE;
+                } else if (ch == EF) {
+                    // might be UTF-8
+                    _state = State.LITERAL_EF;
                 } else {
-                    // We now know we're in 8-bit PDF encoding
+                    // definitely PDFDocEncoding
                     _state = State.LITERAL_PDF;
                     buffer.write(ch);
                 }
             } else if (_state == State.LITERAL_FE) {
                 if (ch == FF) {
                     _state = State.LITERAL_UTF16;
-                    setPDFDocEncoding(false);
+                    _encoding = StandardCharsets.UTF_16BE;
                 } else {
-                    // We now know we're in 8-bit PDF encoding
                     _state = State.LITERAL_PDF;
 
                     // The FE was just an FE, put it in the buffer
                     buffer.write(FE);
+                    buffer.write(ch);
+                }
+            } else if (_state == State.LITERAL_EF) {
+                if (ch == BB) {
+                    // might still be UTF-8
+                    _state = State.LITERAL_EFBB;
+                } else {
+                    // definitely PDFDocEncoding
+                    _state = State.LITERAL_PDF;
+
+                    // The EF was just an EF, put it in the buffer
+                    buffer.write(EF);
+                    buffer.write(ch);
+                }
+            } else if (_state == State.LITERAL_EFBB) {
+                if (ch == BF) {
+                    _state = State.LITERAL_UTF8;
+                    _encoding = StandardCharsets.UTF_8;
+                } else {
+                    _state = State.LITERAL_PDF;
+
+                    // The EFBB was just an EFBB, put it in the buffer
+                    buffer.write(EF);
+                    buffer.write(BB);
                     buffer.write(ch);
                 }
             } else {
@@ -193,36 +219,34 @@ public class Literal
 
     /**
      * Convert the raw hex data.Two buffers are saved: _rawBytes
-     * for the untranslated hex-encoded data, and _value for the
-     * PDF or UTF encoded string.
+     * for the string bytes decoded from the hexadecimal digits, and _value for the
+     * PDFDocEncoding-, UTF-16BE or UTF-8-decoded string.
      * 
      * @throws edu.harvard.hul.ois.jhove.module.pdf.PdfException
      */
     public void convertHex() throws PdfException {
         if (_rawBytes != null) {
-            boolean utf = false;
-            StringBuilder localBuffer = new StringBuilder();
             // If a high byte is left hanging, complete it with a '0'
             if (haveHi) {
                 _rawBytes.add(hexToInt(hi, '0'));
                 _pdfACompliant = false; // PDF/A requires an even number of digits in hexadecimal strings
             }
-            if (_rawBytes.size() >= 2 && rawByte(0) == 0XFE &&
-                    rawByte(1) == 0XFF) {
-                utf = true;
-            }
-            if (utf) {
-                // Gather pairs of bytes into characters without conversion
-                for (int i = 2; i < _rawBytes.size(); i += 2) {
-                    localBuffer.append((char) (rawByte(i) * 256 + rawByte(i + 1)));
+
+            if (_rawBytes.size() >= 2 && _rawBytes.get(0) == FE &&
+                    _rawBytes.get(1) == FF) {
+                _encoding = StandardCharsets.UTF_16BE;
+                for (Integer stringByte : _rawBytes.subList(2, _rawBytes.size())) {
+                    buffer.write(stringByte);
                 }
-            } else {
-                // Convert single bytes to PDF encoded characters.
-                for (int i = 0; i < _rawBytes.size(); i++) {
-                    localBuffer.append(Tokenizer.PDFDOCENCODING[rawByte(i)]);
+            } else if (_rawBytes.size() >= 3 && _rawBytes.get(0) == EF && _rawBytes.get(1) == BB
+                    && _rawBytes.get(2) == BF) {
+                _encoding = StandardCharsets.UTF_8;
+                for (Integer stringByte : _rawBytes.subList(3, _rawBytes.size())) {
+                    buffer.write(stringByte);
                 }
             }
-            _value = localBuffer.toString();
+
+            _value = new String(buffer.toByteArray(), _encoding);
         }
     }
 
@@ -256,25 +280,6 @@ public class Literal
             return 0;
         }
         return _rawBytes.elementAt(idx);
-    }
-
-    /**
-     * Returns <code>true</code> if this string is in PDFDocEncoding,
-     * false if UTF-16.
-     * 
-     * @return isPdfDocEncoding
-     */
-    public boolean isPDFDocEncoding() {
-        return _pdfDocEncoding;
-    }
-
-    /**
-     * Sets the value of pDFDocEncoding.
-     * 
-     * @param pdfDocEncoding: boolean if the is in PDFDocEncoding
-     */
-    public void setPDFDocEncoding(boolean pdfDocEncoding) {
-        _pdfDocEncoding = pdfDocEncoding;
     }
 
     /**
@@ -477,6 +482,10 @@ public class Literal
      */
     public boolean isPDFACompliant() {
         return _pdfACompliant;
+    }
+
+    public String getEncoding() {
+        return _encoding.name();
     }
 
     /*

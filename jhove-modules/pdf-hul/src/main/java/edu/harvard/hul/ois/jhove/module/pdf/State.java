@@ -41,9 +41,12 @@ public class State
     public static final State KEYWORD = new State ("KEYWORD");
     public static final State LESS_THAN = new State ("LESS_THAN");
     public static final State LITERAL = new State ("LITERAL");
-    public static final State LITERAL_FE = new State ("LITERAL_FE");
+    public static final State LITERAL_FE = new State("LITERAL_FE");
+    public static final State LITERAL_EF = new State("LITERAL_EF");
+    public static final State LITERAL_EFBB = new State("LITERAL_EFBB");
     public static final State LITERAL_PDF = new State ("LITERAL_PDF");
     public static final State LITERAL_UTF16 = new State("LITERAL_UTF16");
+    public static final State LITERAL_UTF8 = new State("LITERAL_UTF8");
     public static final State NAME = new State ("NAME");
     public static final State NUMERIC = new State ("NUMERIC");
     public static final State STREAM = new State ("STREAM");
