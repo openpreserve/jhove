@@ -306,6 +306,7 @@ public class Literal
             // If a high byte is left hanging, complete it with a '0'
             if (haveHi) {
                 _rawBytes.add(hexToInt(hi, '0'));
+                _pdfACompliant = false; // PDF/A requires an even number of digits in hexadecimal strings
             }
             if (_rawBytes.size() >= 2 && rawByte(0) == 0XFE &&
                     rawByte(1) == 0XFF) {
@@ -605,9 +606,7 @@ public class Literal
                 if (ch1 >= 0X30 && ch1 <= 0X37) {
                     num = num * 8 + (ch1 - 0X30);
                 } else {
-                    // _fileBufferOffset--; // put it back
-                    tok.backupChar(); // add this function to Tokenizer****
-                    _pdfACompliant = false; // octal sequences must be 3 chars in PDF/A
+                    tok.backupChar(); // put it back
                     return num;
                 }
             }
