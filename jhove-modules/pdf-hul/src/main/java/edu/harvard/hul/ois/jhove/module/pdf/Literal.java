@@ -102,6 +102,9 @@ public class Literal
     private static final int FE = 0xFE;
     private static final int FF = 0xFF;
 
+    private static final int LINE_CONTINUATION = -1;
+    private static final int UNKNOWN_SEQUENCE = -2;
+
     /** Creates an instance of a string literal */
     public Literal() {
         super();
@@ -174,8 +177,9 @@ public class Literal
                 } else if (ch == BACKSLASH) {
                     ch = readBackslashSequence(tok);
                     switch (ch) {
-                        case -1:
-                            continue; // invalid escape sequence, ignore
+                        case LINE_CONTINUATION:
+                        case UNKNOWN_SEQUENCE:
+                            continue;
                         case FE:
                             _state = State.LITERAL_FE;
                             break;
@@ -205,8 +209,8 @@ public class Literal
                         break;
                     case BACKSLASH:
                         ch = readBackslashSequence(tok);
-                        if (ch < 0) {
-                            continue; // invalid escape sequence, ignore
+                        if (ch == LINE_CONTINUATION || ch == UNKNOWN_SEQUENCE) {
+                            continue;
                         }
                         if (ch == FF) {
                             _state = State.LITERAL_UTF16_1;
@@ -238,8 +242,8 @@ public class Literal
                     return offset;
                 } else if (ch == BACKSLASH) {
                     ch = readBackslashSequence(tok);
-                    if (ch < 0) {
-                        continue; // invalid escape sequence, ignore
+                    if (ch == LINE_CONTINUATION || ch == UNKNOWN_SEQUENCE) {
+                        continue;
                     }
                     // any other char is treated nonspecially
                     buffer.append(PDFDOCENCODING[ch]);
@@ -257,8 +261,8 @@ public class Literal
                         return offset;
                     case BACKSLASH:
                         utfch = readBackslashSequence(tok);
-                        if (utfch < 0) {
-                            continue; // invalid escape sequence, ignore
+                        if (ch == LINE_CONTINUATION || ch == UNKNOWN_SEQUENCE) {
+                            continue;
                         }
 
                         b1 = utfch;
@@ -273,8 +277,8 @@ public class Literal
                 // Second byte of a UTF16 character.
                 if (ch == BACKSLASH) {
                     ch = readBackslashSequence(tok);
-                    if (ch < 0) {
-                        continue; // Invalid escape sequence, ignore
+                    if (ch == LINE_CONTINUATION || ch == UNKNOWN_SEQUENCE) {
+                        continue;
                     }
                 }
                 utfch = 256 * b1 + ch;
@@ -617,8 +621,17 @@ public class Literal
                 return LF;
             case 0X72: // r
                 return CR;
-            case 0xd: // this is an error for CR
-                return 0;
+            // end-of-line markers after backslash indicate line continuation
+            case LF:
+                return LINE_CONTINUATION;
+            case CR:
+                // check if end-of-line marker is CRLF
+                int ch1 = tok.readChar();
+                if (ch1 != LF) {
+                    tok.backupChar();
+                }
+
+                return LINE_CONTINUATION;
             case 0X74: // t
                 return HT;
             case 0X62: // b
@@ -632,7 +645,7 @@ public class Literal
             case BACKSLASH:
                 return BACKSLASH;
             default:
-                return -1;
+                return UNKNOWN_SEQUENCE;
         }
     }
 
