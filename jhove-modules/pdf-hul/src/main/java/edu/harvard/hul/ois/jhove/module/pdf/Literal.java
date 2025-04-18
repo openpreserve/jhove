@@ -176,6 +176,15 @@ public class Literal
             } else if (ch == OPEN_PARENTHESIS) {
                 // Count (non-escaped) open parens to be matched by close parens
                 ++_parenLevel;
+            } else if (ch == CR) {
+                // check if end-of-line marker is CRLF
+                int ch1 = tok.readChar();
+                if (ch1 != LF) {
+                    tok.backupChar();
+                }
+
+                // end-of-line markers within literal strings shall always be treated as a line feed
+                ch = LF;
             } else if (ch == BACKSLASH) {
                 ch = readBackslashSequence(tok);
                 if (ch == LINE_CONTINUATION || ch == UNKNOWN_SEQUENCE) {
