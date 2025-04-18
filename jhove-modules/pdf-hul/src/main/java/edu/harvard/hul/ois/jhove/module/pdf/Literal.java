@@ -158,129 +158,62 @@ public class Literal
 
         long offset = 0;
         for (;;) {
+            offset++;
             ch = tok.readChar();
             // If we get -1, then we've hit an EOF without proper termination of
             // the literal. Throw an exception.
             if (ch < 0) {
                 throw new EOFException(MessageConstants.PDF_HUL_10.getMessage()); // PDF-HUL-10
+            } else if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
+                // We reached the end of the string
+                if (_state == State.LITERAL_FE) {
+                    // The FE was just an FE, put it in the buffer
+                    buffer.append(PDFDOCENCODING[FE]);
+                }
+
+                setValue(buffer.toString());
+                return offset;
+            } else if (ch == OPEN_PARENTHESIS) {
+                // Count (non-escaped) open parens to be matched by close parens
+                ++_parenLevel;
+            } else if (ch == BACKSLASH) {
+                ch = readBackslashSequence(tok);
+                if (ch == LINE_CONTINUATION || ch == UNKNOWN_SEQUENCE) {
+                    continue;
+                }
             }
-            offset++;
+
             if (_state == State.LITERAL) {
                 // We are still in a state of flux, determining the encoding
                 if (ch == FE) {
                     _state = State.LITERAL_FE;
-                } else if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
-                    // We have an empty string
-                    setPDFDocEncoding(true);
-                    setValue(buffer.toString());
-                    return offset;
-                } else if (ch == BACKSLASH) {
-                    ch = readBackslashSequence(tok);
-                    switch (ch) {
-                        case LINE_CONTINUATION:
-                        case UNKNOWN_SEQUENCE:
-                            continue;
-                        case FE:
-                            _state = State.LITERAL_FE;
-                            break;
-                        default:
-                            // any other char is treated nonspecially
-                            setPDFDocEncoding(true);
-                            buffer.append(PDFDOCENCODING[ch]);
-                            break;
-                    }
                 } else {
-                    // We now know we're in 8-bit PDF encoding.
-                    // Append the character to the buffer.
-                    if (ch == OPEN_PARENTHESIS) {
-                        // Count open parens to be matched by close parens.
-                        // Backslash-quoted parens won't get here.
-                        ++_parenLevel;
-                    }
+                    // We now know we're in 8-bit PDF encoding
                     _state = State.LITERAL_PDF;
-                    setPDFDocEncoding(true);
+
+                    // Append the character to the buffer
                     buffer.append(PDFDOCENCODING[ch]);
                 }
             } else if (_state == (State.LITERAL_FE)) {
-                switch (ch) {
-                    case FF:
-                        _state = State.LITERAL_UTF16_1;
-                        setPDFDocEncoding(false);
-                        break;
-                    case BACKSLASH:
-                        ch = readBackslashSequence(tok);
-                        if (ch == LINE_CONTINUATION || ch == UNKNOWN_SEQUENCE) {
-                            continue;
-                        }
-                        if (ch == FF) {
-                            _state = State.LITERAL_UTF16_1;
-                            setPDFDocEncoding(false);
-                        } else {
-                            // any other char is treated nonspecially
-                            setPDFDocEncoding(true);
-                            // The FE is just an FE, put it in the buffer
-                            buffer.append(PDFDOCENCODING[FE]);
-                            buffer.append(PDFDOCENCODING[ch]);
-                        }
-                        break;
-                    default:
-                        _state = State.LITERAL_PDF;
-                        setPDFDocEncoding(true);
-                        // The FE is just an FE, put it in the buffer
-                        buffer.append(PDFDOCENCODING[FE]);
-                        buffer.append(PDFDOCENCODING[ch]);
-                        break;
+                if (ch == FF) {
+                    _state = State.LITERAL_UTF16_1;
+                    setPDFDocEncoding(false);
+                } else {
+                    // We now know we're in 8-bit PDF encoding
+                    _state = State.LITERAL_PDF;
+
+                    // The FE was just an FE, put it in the buffer
+                    buffer.append(PDFDOCENCODING[FE]);
+                    buffer.append(PDFDOCENCODING[ch]);
                 }
             } else if (_state == (State.LITERAL_PDF)) {
-                if (ch == OPEN_PARENTHESIS) {
-                    // Count open parens to be matched by close parens.
-                    // Backslash-quoted parens won't get here.
-                    ++_parenLevel;
-                    buffer.append(PDFDOCENCODING[ch]);
-                } else if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
-                    setValue(buffer.toString());
-                    return offset;
-                } else if (ch == BACKSLASH) {
-                    ch = readBackslashSequence(tok);
-                    if (ch == LINE_CONTINUATION || ch == UNKNOWN_SEQUENCE) {
-                        continue;
-                    }
-                    // any other char is treated nonspecially
-                    buffer.append(PDFDOCENCODING[ch]);
-                } else {
-                    buffer.append(PDFDOCENCODING[ch]);
-                }
+                buffer.append(PDFDOCENCODING[ch]);
             } else if (_state == (State.LITERAL_UTF16_1)) {
-                // First byte of a UTF16 character. But a close
-                // paren or backslash is a single-byte character.
-                // Parens within the string are double-byte characters,
-                // so we don't have to worry about them.
-                switch (ch) {
-                    case CLOSE_PARENTHESIS:
-                        setValue(buffer.toString());
-                        return offset;
-                    case BACKSLASH:
-                        utfch = readBackslashSequence(tok);
-                        if (ch == LINE_CONTINUATION || ch == UNKNOWN_SEQUENCE) {
-                            continue;
-                        }
-
-                        b1 = utfch;
-                        break;
-                    default:
-                        b1 = ch;
-                        break;
-                }
-
+                // First byte of a UTF16 character
+                b1 = ch;
                 _state = State.LITERAL_UTF16_2;
             } else if (_state == (State.LITERAL_UTF16_2)) {
-                // Second byte of a UTF16 character.
-                if (ch == BACKSLASH) {
-                    ch = readBackslashSequence(tok);
-                    if (ch == LINE_CONTINUATION || ch == UNKNOWN_SEQUENCE) {
-                        continue;
-                    }
-                }
+                // Second byte of a UTF16 character
                 utfch = 256 * b1 + ch;
                 _state = State.LITERAL_UTF16_1;
                 // an ESC may appear at any point to signify
