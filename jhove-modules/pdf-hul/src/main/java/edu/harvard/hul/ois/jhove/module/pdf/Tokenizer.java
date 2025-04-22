@@ -233,11 +233,21 @@ public abstract class Tokenizer
                     // end State.WHITESPACE
                 }
                 else if (_state == (State.COMMENT)) {
-                    // We are in a comment. Only a line ender can get us out.
-
+                    // Comments are terminated only by end-of-line markers
                     if (_ch == CR || _ch == LF) {
                         _state = State.WHITESPACE;
                         ws_buffer.append((char) _ch);
+
+                        if (_ch == CR) {
+                            int ch1 = readChar();
+                            if (ch1 != LF) {
+                                backupChar();
+                            }
+
+                            _offset++;
+                            ws_buffer.append((char) ch1);
+                        }
+
                         _wsString = ws_buffer.toString();
                         ((StringValuedToken) token).setValue(buffer.toString());
                         if (!token.isPdfACompliant()) {
