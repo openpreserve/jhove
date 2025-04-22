@@ -122,11 +122,7 @@ public class Literal
         for (;;) {
             offset++;
             ch = tok.readChar();
-            // If we get -1, then we've hit an EOF without proper termination of
-            // the literal. Throw an exception.
-            if (ch < 0) {
-                throw new EOFException(MessageConstants.PDF_HUL_10.getMessage()); // PDF-HUL-10
-            } else if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
+            if (ch == CLOSE_PARENTHESIS && --_parenLevel < 0) {
                 // We reached the end of the string
                 if (_state == State.LITERAL_FE) {
                     // The FE was just an FE, put it in the buffer

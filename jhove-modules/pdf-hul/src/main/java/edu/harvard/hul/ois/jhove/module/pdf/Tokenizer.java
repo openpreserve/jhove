@@ -156,13 +156,7 @@ public abstract class Tokenizer
                 }
 
                 if (!_lookAhead) {
-                    _ch = readChar ();
-                    if (_ch < 0) {
-                        _state = State.WHITESPACE;
-                        _wsString = ws_buffer.toString();
-                        throw new PdfMalformedException(MessageConstants.PDF_HUL_64, // PDF-HUL-64
-							_offset);
-                    }
+                    _ch = readChar();
                     _offset++;
                 }
                 else {
@@ -367,8 +361,13 @@ public abstract class Tokenizer
                     }
                 }
                 else if (_state == (State.LITERAL)) {
-                    backupChar ();
-                    _offset += ((Literal) token).processLiteral (this) - 1;
+                    backupChar();
+                    long literalStartOffset = _offset;
+                    try {
+                        _offset += ((Literal) token).processLiteral(this) - 1;
+                    } catch (EOFException exc) {
+                        throw new PdfMalformedException(MessageConstants.PDF_HUL_10, literalStartOffset); // PDF-HUL-10
+                    }
                     _state = State.WHITESPACE;
                     _wsString = EMPTY;
                     return token;
