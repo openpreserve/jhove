@@ -127,6 +127,13 @@ public class Literal
                 if (_state == State.LITERAL_FE) {
                     // The FE was just an FE, put it in the buffer
                     buffer.write(FE);
+                } else if (_state == State.LITERAL_EF) {
+                    // The EF was just an EF, put it in the buffer
+                    buffer.write(EF);
+                } else if (_state == State.LITERAL_EFBB) {
+                    // The EFBB was just an EFBB, put it in the buffer
+                    buffer.write(EF);
+                    buffer.write(BB);
                 }
 
                 setValue(new String(buffer.toByteArray(),
