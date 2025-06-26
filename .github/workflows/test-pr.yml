@@ -56,16 +56,16 @@ jobs:
     needs: [ build ]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Codacy analysis reporting
-        uses: codacy/codacy-analysis-cli-action@4.0.0
+        uses: codacy/codacy-analysis-cli-action@v4.4.5
       - name: Download coverage report
         uses: actions/download-artifact@v4
         with:
           name: coverage-report
           path: jhove-apps/target/site/jacoco-aggregate/
       - name: Codecov coverage reporting
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
           fail_ci_if_error: false # optional (default = false)
