@@ -143,3 +143,8 @@ if [[ -d "${targetRoot}/regression/modules/PDF-hul" ]]; then
 	rm -rf "${targetRoot}/regression/modules/PDF-hul"
 	cp -r "${candidateRoot}/regression/modules/PDF-hul" "${targetRoot}/regression/modules/PDF-hul"
 fi
+
+# Copy the file for the XML result where the message ordering has changed
+if [[ -f "${candidateRoot}/errors/modules/XML-hul/0003.xml.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/XML-hul/0003.xml.jhove.xml" "${targetRoot}/errors/modules/XML-hul/0003.xml.jhove.xml"
+fi
