@@ -7,11 +7,11 @@ on:
 jobs:
   build:
     name: Checkout and Build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        java-version: [8, 11]
+        java-version: [8, 11, 21]
 
     steps:
       - uses: actions/checkout@v4
@@ -52,11 +52,11 @@ jobs:
 
   coverage:
     name: Quality Assurance
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     needs: [ build ]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Codacy analysis reporting
         uses: codacy/codacy-analysis-cli-action@4.0.0
       - name: Download coverage report
