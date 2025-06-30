@@ -1,0 +1,179 @@
+---
+title: JSTOR/Harvard Object Validation Environment
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include header.html %}
+<body role="document">
+
+{% include navbar.html nav=site.data.navbar %}
+<div class="container theme-showcase" role="main">
+  <header class="jumbotron vertical-center">
+    <img src="img/jhovelogo.png" alt="JHOVE logo"/>
+    <h2>Open source file format identification, validation &amp; characterisation</h2>
+    <a href="https://software.openpreservation.org/rel/jhove-latest.jar" class="btn btn-primary btn-lg pad" download>Download JHOVE</a>
+  </header>
+  <main>
+    <a class="name" name="software">
+      <h2>Software</h2>
+    </a>
+    <p class="version">Currently v${project.version} ${jhove.timestamp}</p>
+    <p>Details of the latest release, including release notes <a href="https://github.com/openpreserve/jhove/releases/latest">can be found on GitHub</a>.</p>
+    <p>
+      JHOVE is a file format identification, validation and characterisation tool. It is implemented as a
+      <a href="https://www.oracle.com/java/technologies/">Java</a>
+      application and is usable on any Unix, Windows, or OS X platform with appropriate Java installation.
+    </p>
+    <h3>Supported Formats</h3>
+    <p>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>Format</th>
+            <th>Extension</th>
+            <th>MIME</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="/modules/aiff/" hreflang="en" rel="help">AIFF-hul</a></td>
+            <td>Audio Interchange File Format</td>
+            <td>.aif</td>
+            <td>audio/x-aiff</td>
+          </tr>
+          <tr>
+            <td><a href="/modules/ascii/" hreflang="en" rel="help">ASCII-hul</a></td>
+            <td>ASCII text</td>
+            <td></td>
+            <td>application/octet-stream</td>
+          </tr>
+            <tr>
+            <td><a href="/modules/gif/" hreflang="en" rel="help">GIF-hul</a></td>
+            <td>Graphics Interchange Format</td>
+            <td>.gif</td>
+            <td>image/gif</td>
+          </tr>
+          <tr>
+            <td><a href="/modules/gzip/" hreflang="en" rel="help">GZIP-kb</a></td>
+            <td>Gzip (GNU zip) format</td>
+            <td>.gz</td>
+            <td>application/gzip</td>
+          </tr>
+          <tr>
+            <td><a href="/modules/html/" hreflang="en" rel="help">HTML-hul</a></td>
+            <td>HTML (Hypertext Markup Language) format</td>
+            <td>.html, .htm</td>
+            <td>text/html</td>
+          </tr>
+              <tr>
+            <td><a href="/modules/jpeg/" hreflang="en" rel="help">JPEG-hul</a></td>
+            <td>JPEG format</td>
+            <td>.jpg/.jls(for JPEG-LA)/.spf(for SPIFF)</td>
+            <td>image/jpeg</td>
+          </tr>
+             <tr>
+            <td><a href="/modules/jpeg2000/" hreflang="en" rel="help">JPEG2000-hul</a></td>
+            <td>JPEG 2000 (ISO/IEC 15444) format</td>
+            <td>.jpg/.jls(for JPEG-LA)/.spf(for SPIFF)</td>
+            <td>image/jp2 (for JP2)/ image/jpx (for JPX)</td>
+          </tr>
+           <tr>
+            <td><a href="/modules/pdf/" hreflang="en" rel="help">PDF-hul</a></td>
+            <td>PDF (Portable Document Format) format</td>
+            <td>.pdf</td>
+            <td>application/pdf</td>
+          </tr>
+            <tr>
+            <td><a href="/modules/tiff/" hreflang="en" rel="help">JHOVE TIFF-hul</a></td>
+            <td>TIFF (Tagged Image File Format) format</td>
+            <td>.tiff (nominal)/ TIFF (Mac OS)</td>
+            <td>image/tiff/ image/tiff-fx (for TIFF-FX)/ image.ief (for Class F)</td>
+          </tr>
+          <tr>
+            <td><a href="/modules/utf8/" hreflang="en" rel="help">UTF8-hul</a></td>
+            <td></td>
+            <td></td>
+            <td>text/plain; charset=UTF-8</td>
+          </tr>
+            <tr>
+            <td><a href="/modules/warc/" hreflang="en" rel="help">WARC-kb</a></td>
+            <td>WARC (Web ARChive) format</td>
+            <td>.warc/ .warc.gz</td>
+            <td>application/warc</td>
+          </tr>
+           <tr>
+            <td><a href="/modules/wave/" hreflang="en" rel="help">WAVE-hul</a></td>
+            <td>Audio for Windows format (WAVE)</td>
+            <td>.wav/ .bwf/ .rt64</td>
+            <td>audio/vnd.wave</td>
+          </tr>
+           <tr>
+            <td><a href="/modules/xml/" hreflang="en" rel="help">XML-hul</a></td>
+            <td>XML (Extensible Markup Language) format</td>
+            <td>.xml</td>
+            <td>text/xml</td>
+          </tr>
+             <tr>
+            <td><a href="/modules/epub/" hreflang="en" rel="help">EPUB-ptc</a></td>
+            <td>EPUB format</td>
+            <td>.epub</td>
+            <td>application/epub+zip</td>
+          </tr>
+            <tr>
+            <td><a href="/modules/mp3/" hreflang="en" rel="help">MP3</a></td>
+            <td>MP3-MnH</td>
+            <td></td>
+            <td></td>
+          </tr>
+            <tr>
+            <td><a href="/modules/zip/" hreflang="en" rel="help">ZIP/ GZIP</a></td>
+            <td>ZIP-ptc/ GZIP-ptc</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
+    <p>
+      JHOVE supports two user interfaces:
+    <ol>
+      <li>A <a href="/getting-started#running">command-line interface</a></li>
+      <li>
+        A <a href="http://java.sun.com/products/jfc/#swing">Swing</a>-based
+        <a href="/getting-started#gui">GUI interface</a>
+      </li>
+    </ol>
+
+    <a class="name" name="getting-started">
+      <h2>Getting started</h2>
+    </a>
+    <p>
+      The <a href="/getting-started/">gettting started guide is on this site</a>.
+    </p>
+    <a class="name" name="license">
+      <h2>License</h2>
+    </a>
+    <p>
+      JHOVE is made available by the
+      <a href="https://openpreservation.org" title="Open Preservation Foundation home page.">Open
+        Preservation Foundation</a>
+      under the <a href="http://www.gnu.org/">GNU</a>
+      <a href="https://www.gnu.org/licenses/licenses.html#LGPL">Lesser General Public
+      License</a> (LGPL).
+    </p>
+    <p>
+      Note that some previous versions of JHOVE were released under the
+      <a href="https://www.gnu.org/">GNU</a>
+      <a href="https://www.gnu.org/licenses/licenses.html#GPL">General Public
+      License</a> (GPL).
+    </p>
+      <h2>Mailing list</h2>
+    <p>
+      <a href="https://lists.openpreservation.org/listinfo/jhove">Subscribe</a> to the JHOVE mailing list.
+    </p>
+  </main>
+</div>
+{% include footer.html %}
+</body>
+</html>
