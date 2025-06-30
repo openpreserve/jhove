@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.33.0-SNAPSHOT</version>
+    <version>1.34.0-RC1</version>
   </parent>
   <artifactId>ascii-hul</artifactId>
   <version>1.4.2</version>
