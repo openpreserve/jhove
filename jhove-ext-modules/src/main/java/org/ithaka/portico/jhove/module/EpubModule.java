@@ -84,7 +84,7 @@ public class EpubModule extends ModuleBase {
     private static final String NAME = "EPUB-ptc";
     private static final String RELEASE = "1.4";
     private static final int[] DATE = { 2025, 06, 25 };
-    private static final String RIGHTS_YEAR = "2023";
+    private static final String RIGHTS_YEAR = "2025";
     private static final String[] FORMAT = { FORMATNAME };
     private static final String COVERAGE = FORMATNAME;
     private static final String[] MIMETYPE = { EPUB_MEDIATYPE };

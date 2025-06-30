@@ -70,6 +70,7 @@ find "${targetRoot}" -type f -name "audit-HTML-hul.jhove.xml" -exec sed -i 's/31
 # Update release details for EPUB module
 find "${targetRoot}" -type f -name "*.epub.jhove.xml" -exec sed -i 's/<reportingModule release="1.3" date="2023-06-12">EPUB-ptc<\/reportingModule>/<reportingModule release="1.4" date="2025-06-25">EPUB-ptc<\/reportingModule>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/<module release="1.3">EPUB-ptc<\/module>/<module release="1.4">EPUB-ptc<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-EPUB-ptc.jhove.xml" -exec sed -i 's/Copyright 2023/Copyright 2025/' {} \;
 find "${targetRoot}" -type f -name "audit-EPUB-ptc.jhove.xml" -exec sed -i 's/<release>1.3<\/release>/<release>1.4<\/release>/' {} \;
 find "${targetRoot}" -type f -name "audit-EPUB-ptc.jhove.xml" -exec sed -i 's/2023-06-12/2025-06-25/' {} \;
 
