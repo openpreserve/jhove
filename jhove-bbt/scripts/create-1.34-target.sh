@@ -56,6 +56,9 @@ echo "TEST BASELINE: Creating baseline"
 echo " - copying ${baselineRoot} baseline to ${targetRoot}"
 cp -R "${baselineRoot}" "${targetRoot}"
 
+# Patch JHOVE schema location in all report files
+find "${targetRoot}" -type f -name "*.jhove.xml" -exec sed -i 's/jhove\/1.9\/jhove.xsd/jhove\/1.10\/jhove.xsd/' {} \;
+
 # Patch release details of the XML reporting module in the audit file
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/outputHandler release="1.13">XML/outputHandler release="1.14">XML/' {} \;
 
