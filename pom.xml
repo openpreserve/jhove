@@ -69,7 +69,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <mvn.assembly.version>3.7.1</mvn.assembly.version>
-    <mvn.clean.version>3.4.0</mvn.clean.version>
+    <mvn.clean.version>3.5.0</mvn.clean.version>
     <mvn.compiler.version>3.12.1</mvn.compiler.version>
     <mvn.dependency.version>3.6.1</mvn.dependency.version>
     <mvn.deploy.version>3.1.1</mvn.deploy.version>
