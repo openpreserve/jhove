@@ -14,7 +14,7 @@
 
   <properties>
     <installer.output.filename>jhove-xplt-installer-${project.version}.jar</installer.output.filename>
-    <izpack.version>5.2.0</izpack.version>
+    <izpack.version>5.2.4</izpack.version>
     <izpack.staging>${project.build.directory}/staging</izpack.staging>
     <izpack.target>${project.build.directory}</izpack.target>
     <izpack.scripts>${project.build.scriptSourceDirectory}</izpack.scripts>
@@ -130,11 +130,6 @@
         <groupId>org.codehaus.izpack</groupId>
         <artifactId>izpack-maven-plugin</artifactId>
         <version>${izpack.version}</version>
-        <configuration>
-          <descriptorEncoding>UTF-8</descriptorEncoding>
-          <finalName>jhove-izpack-installer</finalName>
-          <classifier>${project.version}</classifier>
-        </configuration>
         <executions>
           <execution>
             <phase>package</phase>
@@ -145,7 +140,6 @@
               <!-- Base for relative paths in IzPack descriptor -->
               <baseDir>${izpack.staging}</baseDir>
               <installFile>${izpack.staging}/install.xml</installFile>
-              <output>${project.build.directory}/${installer.output.filename}</output>
             </configuration>
           </execution>
         </executions>
