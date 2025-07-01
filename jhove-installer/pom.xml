@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
-    <version>1.34.0-RC1</version>
+    <version>1.34.0</version>
   </parent>
 
   <artifactId>jhove-installer</artifactId>
@@ -13,7 +13,7 @@
   <description>Maven-built IzPack installer for JHOVE.</description>
 
   <properties>
-    <installer.output.filename>jhove-xplt-installer-${project.version}.jar</installer.output.filename>
+    <installer.output.filename>jhove-installer-${project.version}.jar</installer.output.filename>
     <izpack.version>5.2.4</izpack.version>
     <izpack.staging>${project.build.directory}/staging</izpack.staging>
     <izpack.target>${project.build.directory}</izpack.target>
@@ -140,6 +140,7 @@
               <!-- Base for relative paths in IzPack descriptor -->
               <baseDir>${izpack.staging}</baseDir>
               <installFile>${izpack.staging}/install.xml</installFile>
+              <finalName>${project.build.finalName}</finalName>
             </configuration>
           </execution>
         </executions>

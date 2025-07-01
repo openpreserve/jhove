@@ -56,9 +56,9 @@ fi
 # Grab the Major and Minor versions from the full Maven project version string
 # FIXME: Colorised output is not working with the following line
 # MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec -f jhove-installer/pom.xml)
-MVN_VERSION="1.34.0-RC1"
+MVN_VERSION="1.34.0"
 MAJOR_MINOR_VER="${MVN_VERSION%.*}"
-JHOVE_INSTALLER="./jhove-installer/target/jhove-installer-${MVN_VERSION}-installer.jar"
+JHOVE_INSTALLER="./jhove-installer/target/jhove-installer-${MVN_VERSION}.jar"
 
 echo "INFO: Checking dev build of Jhove installer: ${JHOVE_INSTALLER}."
 if [[ ! -e "${JHOVE_INSTALLER}" ]]

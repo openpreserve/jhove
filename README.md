@@ -425,6 +425,4 @@ The module produces two JARs, one called `jhove-installer-${project.version}`,
 which contains the JARs for the installer, and an executable JAR to install
 JHOVE:
 
-    ./jhove/jhove-installer/target/jhove-xplt-installer-${project.version}.jar
-
-The `xplt` stands for cross-platform.
+    ./jhove/jhove-installer/target/jhove-installer-${project.version}.jar
