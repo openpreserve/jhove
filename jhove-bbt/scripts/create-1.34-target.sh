@@ -62,6 +62,13 @@ find "${targetRoot}" -type f -name "*.jhove.xml" -exec sed -i 's/jhove\/1.9\/jho
 # Patch release details of the XML reporting module in the audit file
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/outputHandler release="1.13">XML/outputHandler release="1.14">XML/' {} \;
 
+# Update release details for UTF-8 module
+find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/<module release="1.7.3">UTF8-hul<\/module>/<module release="1.7.5">UTF8-hul<\/module>/' {} \;
+find "${targetRoot}" -type f -name "audit-UTF8-hul.jhove.xml" -exec sed -i 's/<release>1.7.3<\/release>/<release>1.7.5<\/release>/' {} \;
+find "${targetRoot}" -type f -name "audit-UTF8-hul.jhove.xml" -exec sed -i 's/2023-03-16/2025-06-25/' {} \;
+sed -i 's/release="1.7.3/release="1.7.5/' "${targetRoot}/examples/modules/UTF8-hul/sample.txt.jhove.xml"
+sed -i 's/2023-03-16/2025-06-25/' "${targetRoot}/examples/modules/UTF8-hul/sample.txt.jhove.xml"
+
 # Update release details for HTML module
 find "${targetRoot}" -type f -name "*.html.jhove.xml" -exec sed -i 's/<reportingModule release="1.4.4" date="2024-08-22">HTML-hul<\/reportingModule>/<reportingModule release="1.4.5" date="2025-03-12">HTML-hul<\/reportingModule>/' {} \;
 find "${targetRoot}" -type f -name "audit.jhove.xml" -exec sed -i 's/<module release="1.4.4">HTML-hul<\/module>/<module release="1.4.5">HTML-hul<\/module>/' {} \;

@@ -14,7 +14,7 @@
       <dependency>
         <groupId>org.openpreservation.jhove.modules</groupId>
         <artifactId>utf8-hul</artifactId>
-        <version>1.7.4</version>
+        <version>1.7.5</version>
       </dependency>
   </dependencies>
 
