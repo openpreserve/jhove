@@ -295,7 +295,7 @@ jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
 -k          Calculate CRC32, MD5, and SHA-1 checksums
 -r          Display raw data flags, not textual equivalents
 -s          Format identification based on internal signatures only
-dir-file-or-uri Directory or file pathname or URI of formated content
+dir-file-or-uri Directory or file pathname or URI of formatted content
                 stream
 ```
 
