@@ -61,7 +61,7 @@ public final class PdfHeader {
             } catch (final IOException ee) {
                 throw new PdfMalformedException(
                         JhoveMessages.getMessageInstance(MessageConstants.PDF_HUL_160, ee.getMessage()),
-                        offset); // PDF-HUL-137
+                        offset); // PDF-HUL-160
             } catch (PdfException e) {
                 throw new PdfMalformedException(
                         MessageConstants.PDF_HUL_137,
@@ -100,7 +100,8 @@ public final class PdfHeader {
      * @param versionString
      *                        the version number from the PDF Header, should be of
      *                        form
-     *                        <code>1.x</code> where x should be of the range 0-7.
+     *                        <code>1.x</code> where x should be of the range 0-7, or
+     *                        <code>2.0</code>
      * @param isPdfaCompliant
      *                        boolean flag indicating if the PDF/A is compliant or
      *                        non
