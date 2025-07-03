@@ -127,7 +127,7 @@ showHelp() {
 checkParams "$@"
 candidate="${paramOutputLoc:?}/${MAJOR_MINOR_VER}"
 tempInstallLoc="/tmp/to-test"
-sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.8.11\/org\.jacoco.agent-0\.8\.11-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -Xss2048k  -classpath "$CP" edu.harvard.hul.ois.jhove.Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
+sed -i 's/^java.*/java -javaagent:${HOME}\/\.m2\/repository\/org\/jacoco\/org\.jacoco\.agent\/0.8.13\/org\.jacoco.agent-0\.8\.13-runtime\.jar=destfile=jhove-apps\/target\/jacoco\.exec -Xss2048k  -classpath "$CP" edu.harvard.hul.ois.jhove.Jhove -c "${CONFIG}" "${@}"/g' "${tempInstallLoc}/jhove"
 bash "$SCRIPT_DIR/baseline-jhove.sh" -j "${tempInstallLoc}" -c "${paramCorpusLoc}" -o "${candidate}"
 
 if [[ -f "${SCRIPT_DIR}/create-${MAJOR_MINOR_VER}-target.sh" ]]

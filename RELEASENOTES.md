@@ -2,12 +2,206 @@
 
 JHOVE - JSTOR/Harvard Object Validation Environment
 Copyright 2003-2015 by JSTOR and the President and Fellows of Harvard College.
-Copyright 2015-2023 by [The Open Preservation Foundation](https://openpreservation.org).
+Copyright 2015-2025 by [The Open Preservation Foundation](https://openpreservation.org).
 JHOVE is made available under the GNU Lesser General Public License (LGPL;
 see the file LICENSE for details).
 
 Versions 1.7 to 1.11 of JHOVE released independently.
 Versions 1.12 onwards released by the Open Preservation Foundation.
+
+## JHOVE 1.34.0
+
+2025-07-02
+
+### General
+
+- Fixed updated schema location in report XML files [[#1043][]]
+- Improved URI normalistaion in XML Handler [[#972][]]
+
+### PDF Module 1.12.8
+
+- Text stream validation for literals [[#1005][]]
+- Added dection and parsing of PDF v2 headers [[#964][]]
+- Fixed issue when parsing DocInfo dates [[#985][]]
+- Check object number against trailer size [[#989][]]
+
+### HTML Module 1.4.5
+
+- Fixed invalid (XML validation) date format [[#972][]]
+
+### JPEG2000 Module 1.4.5
+
+- Don't output an XML invalid empty list when CopositeLayerHeader is empty [[#972][]]
+- Fixed JPEG2000 codestream parsing when tile-part length in SOT marker was 0 (@marhop) [[#997][]]
+
+### EPUB Module 1.4
+
+- Upgraded to latest epubcheck version 5.2.1 [[#1035][]]
+
+### Documentation
+
+- added first template files to automatically update release details (version number and date) in documentation and docker files [[#1045][]]
+
+### Maintenance
+
+- added docker files for CLI and development testing [[#963][]]
+- added GitHub action file for dependabot [[#990][]]
+- updated izpack installer to 5.2.4 [[#1044][]]
+- fixed Java 21 installer build and execution [[#1037][]]
+- updated GH Actions Ubuntu runner to 24.04 (@prettybits) [[#1027]]
+- various dependabot Maven plugin upgrades.
+
+[#1045]: https://github.com/openpreserve/jhove/pull/1045
+[#1044]: https://github.com/openpreserve/jhove/pull/1044
+[#1043]: https://github.com/openpreserve/jhove/pull/1043
+[#1037]: https://github.com/openpreserve/jhove/pull/1037
+[#1035]: https://github.com/openpreserve/jhove/pull/1035
+[#1027]: https://github.com/openpreserve/jhove/pull/1027
+[#1005]: https://github.com/openpreserve/jhove/pull/1005
+[#997]: https://github.com/openpreserve/jhove/pull/997
+[#990]: https://github.com/openpreserve/jhove/pull/990
+[#989]: https://github.com/openpreserve/jhove/pull/989
+[#985]: https://github.com/openpreserve/jhove/pull/985
+[#972]: https://github.com/openpreserve/jhove/pull/972
+[#964]: https://github.com/openpreserve/jhove/pull/964
+[#963]: https://github.com/openpreserve/jhove/pull/963
+
+## JHOVE 1.32.1
+
+2025-02-06
+
+### General
+
+- Added error message wiki links to XML reports [[#973][]]
+
+### XML Module
+
+- Fixed formatting for German XML-hul-1 message [[#958][]], [[#957][]]
+
+### Documentation
+
+- Updated some broken documentation links [[#950][]]
+
+### Maintenance
+
+- Update GitHub Actions upload task [[#931][]]
+
+
+[#973]: https://github.com/openpreserve/jhove/pull/973
+[#958]: https://github.com/openpreserve/jhove/pull/958
+[#957]: https://github.com/openpreserve/jhove/pull/957
+[#950]: https://github.com/openpreserve/jhove/pull/950
+[#931]: https://github.com/openpreserve/jhove/pull/931
+
+## JHOVE 1.32.0
+
+2024-09-23
+
+### General
+
+- Updated audio outputs to conform to the AES57-2011 spec (@pwinkles) [[#944][]]
+
+### EPUB Module 1.3
+
+- Fixed unhandled fatal error when EPUB content data is badly formatted (@karenhanson) [[#921]]
+
+### HTML Module 1.4.4
+
+- Improved XHTML DTD detection [[#941][]]
+
+## PDF Module 1.12.7
+
+- Fixed the validation of PDF-HUL-2 (@samalloing) [[#925][]]
+- Added indirect reference to Destination (@samalloing) [[#934][]]
+- Fixed PDF v2 date parsing [[#942][]]
+- Fixed PDF message offsets [[#946][]]
+
+### TIFF Module 1.9.5
+
+- Check the range of the orientation tag (@tledoux) [[#914][]]
+- Display the Tile and Strip information for TIFF files outside of Niso info (@tledoux) [[#915][]]
+
+### XML Module 1.5.4
+
+- Reverted XML SAXParseException reporting [[#943][]]
+- Fixed minor assorted XML issues [[#945][]]
+
+[#946]: https://github.com/openpreserve/jhove/pull/946
+[#945]: https://github.com/openpreserve/jhove/pull/945
+[#944]: https://github.com/openpreserve/jhove/pull/944
+[#943]: https://github.com/openpreserve/jhove/pull/943
+[#942]: https://github.com/openpreserve/jhove/pull/942
+[#941]: https://github.com/openpreserve/jhove/pull/941
+[#934]: https://github.com/openpreserve/jhove/pull/934
+[#925]: https://github.com/openpreserve/jhove/pull/925
+[#921]: https://github.com/openpreserve/jhove/pull/921
+[#915]: https://github.com/openpreserve/jhove/pull/915
+[#914]: https://github.com/openpreserve/jhove/pull/914
+
+## JHOVE 1.30.1
+
+2024-08-01
+
+### PDF-hul v1.12.5
+
+- fixed issue with PDF-HUL-2 detection (@samalloing) [[#925][]]
+
+## JHOVE 1.30.0
+
+2024-06-06
+
+### Core improvements
+
+- Empty properties causing extra indents in XmlHandler by @karenhanson [[#893][]]
+- Re-implement javax.xml.bind.DatatypeConverter.printHexBinary(byte[]) by @rsteph-de in [[#886][]]
+- provide some German messages (#894) by @rsteph-de in [[#895][]]
+- replace javax.json with jakarta.json by @rsteph-de in [[#888][]]
+
+### PDF-hul v1.12.5
+
+- Error when Image Height and Width is null by @samalloing in [[#897][]]
+- making the parsing of broken PDFs more robust by @samalloing in [[#891][]]
+- Handle filter params as indirect objects by @prettybits in [[#871][]]
+
+### XML-hul v1.5.3
+
+- XML: Fix whitespace allowances in schemaLocations by @david-russo in [[#889][]]
+- Removes invalid characters 0xfffe and 0xffff when cleaning XML by @karenhanson in [[#878][]]
+
+### EPUB-ptc v1.3
+
+- Update to use EPUB 5.1.0 by @karenhanson in [[#892][]]
+
+### PNG-gdm v1.2
+
+- PNG: fix 'pixels per unit' property type mismatch by @prettybits in [[#843][]]
+
+### GUI improvements
+
+- add BitPerSampleUnit to the GUI by @samalloing in [[#901][]]
+- Change in GUI MIX field name from mimetype to format name by @samalloing in [[#899][]]
+
+### Maintenance
+
+- FIX: Installer language pack warning by @carlwilson in [[#851][]]
+- Updated Maven build dependencies  by @carlwilson in [[#903][]]
+
+[#903]: https://github.com/openpreserve/jhove/pull/903
+[#901]: https://github.com/openpreserve/jhove/pull/901
+[#899]: https://github.com/openpreserve/jhove/pull/899
+[#897]: https://github.com/openpreserve/jhove/pull/897
+[#895]: https://github.com/openpreserve/jhove/pull/895
+[#893]: https://github.com/openpreserve/jhove/pull/893
+[#892]: https://github.com/openpreserve/jhove/pull/892
+[#891]: https://github.com/openpreserve/jhove/pull/891
+[#889]: https://github.com/openpreserve/jhove/pull/889
+[#888]: https://github.com/openpreserve/jhove/pull/888
+[#886]: https://github.com/openpreserve/jhove/pull/886
+[#878]: https://github.com/openpreserve/jhove/pull/878
+[#871]: https://github.com/openpreserve/jhove/pull/871
+[#851]: https://github.com/openpreserve/jhove/pull/851
+[#843]: https://github.com/openpreserve/jhove/pull/843
+
 
 ## JHOVE 1.28.0
 
