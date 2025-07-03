@@ -1,5 +1,5 @@
-JHOVE
-=====
+# JHOVE
+
 *JSTOR/Harvard Object Validation Environment*
 
 ![example branch parameter](https://github.com/openpreserve/jhove/actions/workflows/test-pr.yml/badge.svg?branch=integration)
@@ -10,23 +10,20 @@ JHOVE
 [![GitHub issues](https://img.shields.io/github/issues/openpreserve/jhove.svg)](https://github.com/openpreserve/jhove/issues "Open issues on GitHub")
 [![GitHub forks](https://img.shields.io/github/forks/openpreserve/jhove.svg)](https://github.com/openpreserve/jhove/network "Number of forks on GitHub")
 
-Licensing
----------
+## Licensing
 
 Copyright 2003-2012 by JSTOR and the President and Fellows of Harvard College,
-2015-2022 by the [Open Preservation Foundation](http://openpreservation.org).
+2015-2025 by the [Open Preservation Foundation](http://openpreservation.org).
 JHOVE is made available under the
 [GNU Lesser General Public License (LGPL)](http://www.gnu.org/licenses/lgpl.html).
 
-Rev. 1.32.1, 2025-02-06
+Rev. v1.34.0 2025-07-03 11:01:56
 
-JHOVE Homepage
---------------
+## JHOVE Homepage
 
 <http://jhove.openpreservation.org/>
 
-Overview
---------
+## Overview
 
 JHOVE (the JSTOR/Harvard Object Validation Environment, pronounced "jove")
 is an extensible software framework for performing format identification,
@@ -59,8 +56,7 @@ License (LGPL; see the file LICENSE for details).
 JHOVE is currently being maintained by the
 [Open Preservation Foundation](http://openpreservation.org).
 
-Pre-requisites
---------------
+## Pre-requisites
 
 1. Java JRE 1.8  
   Version 1.20 of JHOVE is built and tested against Oracle JDK 8,
@@ -70,8 +66,7 @@ Pre-requisites
 1. If you would like to build JHOVE from source, then life will be easiest if
   you use [Apache Maven](https://maven.apache.org/).
 
-Getting JHOVE
--------------
+## Getting JHOVE
 
 ### For Users: JHOVE Cross Platform Installer
 
@@ -86,7 +81,7 @@ POM:
 ```xml
 <properties>
   ...
-  <jhove.version>1.20.1</jhove.version>
+  <jhove.version>1.34.0</jhove.version>
 </properties>
 ```
 
@@ -164,7 +159,7 @@ following property:
 ```xml
 <properties>
   ...
-  <jhove.version>1.21.1</jhove.version>
+  <jhove.version>v1.34.0</jhove.version>
 </properties>
 ```
 
@@ -173,26 +168,27 @@ or even:
 ```xml
 <properties>
   ...
-  <jhove.version>[1.21.0,1.22.0]</jhove.version>
+  <jhove.version>[v1.34.0,]</jhove.version>
 </properties>
 ```
 
-to always use the latest 1.21 build.
+to always use the latest v1.34.0 2025-07-03 11:01:56 build.
 
 ### For Developers: Building JHOVE from Source
 
 Clone this project, checkout the integration branch, and use Maven, e.g.:
 
-    git clone git@github.com:openpreserve/jhove.git
-    cd jhove
-    git checkout integration
-    mvn clean install
+```shell
+git clone git@github.com:openpreserve/jhove.git
+cd jhove
+git checkout integration
+mvn clean install
+```
 
 See the [Project Structure](#project-structure) section for a guide to
 the Maven artifacts produced by the build.
 
-Installation
-------------
+## Installation
 
 ### Application Installation
 
@@ -212,12 +208,14 @@ Once the installation has finished you'll be able to double-click
 open a Command window, e.g. press the `Windows` key and type `cmd`, then issue
 these commands:
 
-    C:\Users\yourName>cd jhove
-    C:\Users\yourName\jhove>jhove
+```shell
+C:\Users\yourName>cd jhove
+C:\Users\yourName\jhove>jhove
+```
 
 to display the command-line usage message.
 
-It is also possible to use JHOVE with the openJDK, e. g. jdk-13. It might be necessary to set the java path in the Environment variables, for which one usually needs administration rights for the windows machine. 
+It is also possible to use JHOVE with the openJDK, e. g. jdk-13. It might be necessary to set the java path in the Environment variables, for which one usually needs administration rights for the windows machine.
 
 ### Mac OS
 
@@ -231,8 +229,10 @@ Once the installation has finished you'll be able to double-click
 `/Users/yourName/jhove/jhove-gui` to start the JHOVE GUI. Alternatively,
 open a Terminal command window and then issue these commands:
 
-    cd ~/jhove
-    ./jhove
+```shell
+cd ~/jhove
+./jhove
+```
 
 to display the command-line usage message.
 
@@ -243,108 +243,126 @@ to display the command-line usage message.
 Once the installer has downloaded, start a terminal, e.g. `Ctrl+Alt+T`,
 and type the following, assuming the download is in `~/Downloads`:
 
-    java -jar ~/Downloads/jhove-latest.jar
+```shell
+java -jar ~/Downloads/jhove-latest.jar
+```
 
 Once the installation is finished you'll be able to:
 
-    cd ~/jhove
-    ./jhove
+```shell
+cd ~/jhove
+/jhove
+```
 
 to run the command-line application and show the usage message. Alternatively:
 
-    cd ~/jhove
-    ./jhove-gui
+```shell
+cd ~/jhove
+./jhove-gui
+```
 
 will run the GUI application.
 
-Distribution
-------------
+# Distribution
 
 We've moved to Maven and have taken the opportunity to update the distribution.
 For now we're producing:
- * a Maven package, for developers wishing to incorporate JHOVE into their
+
+* a Maven package, for developers wishing to incorporate JHOVE into their
    own software;
- * a "fat" (1MB) JAR that contains the old CLI and desktop GUI, for anyone
+* a "fat" (1MB) JAR that contains the old CLI and desktop GUI, for anyone
    who doesn't want to use the new installer; and
- * a simple cross-platform installer that installs the application JAR, support
+* a simple cross-platform installer that installs the application JAR, support
    scripts, etc.
 
-Usage
------
+## Usage
 
-    jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
-               [-o output] [-x saxclass] [-t tempdir] [-b bufsize]
-               [-l loglevel] [[-krs] dir-file-or-uri [...]]
+```shell
+jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
+            [-o output] [-x saxclass] [-t tempdir] [-b bufsize]
+            [-l loglevel] [[-krs] dir-file-or-uri [...]]
 
-    -c config   Configuration file pathname
-    -m module   Module name
-    -h handler  Output handler name (defaults to TEXT)
-    -e encoding Character encoding used by output handler (defaults to UTF-8)
-    -H handler  About handler name
-    -o output   Output file pathname (defaults to standard output)
-    -x saxclass SAX parser class (defaults to J2SE default)
-    -t tempdir  Temporary directory in which to create temporary files
-    -b bufsize  Buffer size for buffered I/O (defaults to J2SE 1.4 default)
-    -l loglevel Logging level
-    -k          Calculate CRC32, MD5, and SHA-1 checksums
-    -r          Display raw data flags, not textual equivalents
-    -s          Format identification based on internal signatures only
-    dir-file-or-uri Directory or file pathname or URI of formated content
-                    stream
+-c config   Configuration file pathname
+-m module   Module name
+-h handler  Output handler name (defaults to TEXT)
+-e encoding Character encoding used by output handler (defaults to UTF-8)
+-H handler  About handler name
+-o output   Output file pathname (defaults to standard output)
+-x saxclass SAX parser class (defaults to J2SE default)
+-t tempdir  Temporary directory in which to create temporary files
+-b bufsize  Buffer size for buffered I/O (defaults to J2SE 1.4 default)
+-l loglevel Logging level
+-k          Calculate CRC32, MD5, and SHA-1 checksums
+-r          Display raw data flags, not textual equivalents
+-s          Format identification based on internal signatures only
+dir-file-or-uri Directory or file pathname or URI of formatted content
+                stream
+```
 
 All named modules and output handlers must be found on the Java CLASSPATH at
 the time of invocation.  The JHOVE driver script, jhove/jhove, automatically
 sets the CLASSPATH and invokes the Jhove main class:
 
-    jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
-          [-o output] [-x saxclass] [-t tempdir] [-b bufsize] [-l loglevel]
-          [[-krs] dir-file-or-uri [...]]
+```shell
+jhove [-c config] [-m module] [-h handler] [-e encoding] [-H handler]
+      [-o output] [-x saxclass] [-t tempdir] [-b bufsize] [-l loglevel]
+      [[-krs] dir-file-or-uri [...]]
+```
 
 The following additional programs are available, primarily for testing
 and debugging purposes.  They display a minimally processed, human-readable
 version of the contents of AIFF, GIF, JPEG, JPEG 2000, PDF, TIFF, and WAVE
 files:
 
-    java ADump  aiff-file
-    java GDump  gif-file
-    java JDump  jpeg-file
-    java J2Dump jpeg2000-file
-    java PDump  pdf-file
-    java TDump  tiff-file
-    java WDump  wave-file
+```shell
+java ADump  aiff-file
+java GDump  gif-file
+java JDump  jpeg-file
+java J2Dump jpeg2000-file
+java PDump  pdf-file
+java TDump  tiff-file
+java WDump  wave-file
+```
 
 For convenience, the following driver scripts are also available:
 
-    adump  aiff-file
-    gdump  gif-file
-    jdump  jpeg-file
-    j2dump jpeg2000-file
-    pdump  pdf-file
-    tdump  tiff-file
-    wdump  wave-file
+```shell
+adump  aiff-file
+gdump  gif-file
+jdump  jpeg-file
+j2dump jpeg2000-file
+pdump  pdf-file
+tdump  tiff-file
+wdump  wave-file
+```
 
 The JHOVE Swing-based GUI interface can be invoked from a command shell from
 the jhove/bin sub-directory:
 
-    jhove-gui -c <configFile>
+```shell
+jhove-gui -c <configFile>
+```
 
 where `<configFile>` is the pathname of the JHOVE configuration file.
 
-Project Structure
------------------
+## Project Structure
 
 A quick introduction to the restructured Maven project. The project's been
 broken into three Maven modules with an additional installer module added.
 
-    jhove/
-      |-jhove-apps/
-      |-jhove-core/
-      |-jhove-installer/
-      |-jhove-ext-modules/
-      |-jhove-modules/
+```shell
+jhove/
+  |-jhove-apps/
+  |-jhove-core/
+  |-jhove-installer/
+  |-jhove-ext-modules/
+  |-jhove-modules/
+```
+
 All Maven artifacts are produced in versioned form,
-i.e. `${artifactId}-${project.version}.jar`, where `${project.version}` defaults
-to `1.20.0` unless you explicitly set the version number.
+
+i.e. `jhove-1.34.0.jar`, where `1.34.0` defaults
+to `jhove` unless you explicitly set the version number.
 
 ### jhove
 
@@ -360,7 +378,9 @@ developers wishing to call and run JHOVE from their own code.
 The `jhove-core` module contains all of the main data type definitions and the
 output handlers. This module produces a single JAR:
 
-    ./jhove/jhove-core/target/jhove-core-${project.version}.jar
+```shell
+./jhove/jhove-core/target/jhove-core-1.34.0.jar
+```
 
 The `jhove-core` JAR contains a single module implementation, the default
 `BytestreamModule`. For the format-specific modules you'll need
@@ -385,7 +405,9 @@ implementations, specifically:
 
 These are all packaged in a single modules JAR:
 
-    ./jhove/jhove-modules/target/jhove-modules-${project.version}.jar
+```shell
+./jhove/jhove-modules/target/jhove-modules-1.34.0.jar
+```
 
 ### jhove-ext-modules
 
@@ -398,7 +420,9 @@ The `jhove-ext-modules` contains JHOVE modules developed by external parties, sp
 
 These are all packaged in a single modules JAR:
 
-    ./jhove/jhove-ext-modules/target/jhove-ext-modules-${project.version}.jar
+```shell
+./jhove/jhove-ext-modules/target/jhove-ext-modules-1.34.0.jar
+```
 
 ### jhove-apps
 
@@ -406,7 +430,9 @@ The `jhove-apps` module contains the command-line and GUI application code and
 builds a fat JAR containing the entire Java application. This JAR can be used
 to execute the command-line app:
 
-    ./jhove/jhove-apps/target/jhove-apps-${project.version}.jar
+```shell
+./jhove/jhove-apps/target/jhove-apps-1.34.0.jar
+```
 
 ### jhove-installer
 
@@ -421,8 +447,10 @@ looking after:
  get bash scripts; and
 * optionally generating unattended install and uninstall files.
 
-The module produces two JARs, one called `jhove-installer-${project.version}`,
+The module produces two JARs, one called `jhove-installer-1.34.0`,
 which contains the JARs for the installer, and an executable JAR to install
 JHOVE:
 
-    ./jhove/jhove-installer/target/jhove-installer-${project.version}.jar
+```shell
+./jhove/jhove-installer/target/jhove-installer-1.34.0.jar
+```
