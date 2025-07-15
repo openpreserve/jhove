@@ -213,7 +213,7 @@
         </configuration>
         <executions>
           <execution>
-            <id>copy-resources</id>
+            <id>copy-docker-template</id>
             <phase>validate</phase>
             <goals>
               <goal>copy-resources</goal>
@@ -223,6 +223,22 @@
               <resources>
                 <resource>
                   <directory>templates/docker</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-documentation</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>templates/dox</directory>
                   <filtering>true</filtering>
                 </resource>
               </resources>
