@@ -82,7 +82,7 @@
     <mvn.source.version>3.3.0</mvn.source.version>
     <mvn.surefire.version>3.5.2</mvn.surefire.version>
     <mvn.release.version>3.1.1</mvn.release.version>
-    <jacoco.version>0.8.11</jacoco.version>
+    <jacoco.version>0.8.13</jacoco.version>
     <java.source.version>1.8</java.source.version>
     <java.target.version>1.8</java.target.version>
     <junit.version>5.10.2</junit.version>
