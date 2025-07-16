@@ -1,0 +1,2 @@
+version: "${project.version}"
+release_date: "${jhove.timestamp}"
