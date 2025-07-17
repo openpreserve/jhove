@@ -15,7 +15,7 @@ layout: page
 ### Software
 
 <!-- markdownlint-disable -->
-**Currently v1.32.1 06-02-2025**
+**Currently v{{ site.data.vars.version }} {{ site.data.vars.release_date }}**
 <!-- markdownlint-enable -->
 
 Details of the latest release, including release notes, [can be found on GitHub](https://github.com/openpreserve/jhove/releases/latest).
