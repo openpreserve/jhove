@@ -17,7 +17,7 @@ Copyright 2003-2012 by JSTOR and the President and Fellows of Harvard College,
 JHOVE is made available under the
 [GNU Lesser General Public License (LGPL)](http://www.gnu.org/licenses/lgpl.html).
 
-Rev. v1.34.0 2025-07-03 11:01:56
+Rev. v${project.version} ${jhove.timestamp}
 
 ## JHOVE Homepage
 
@@ -81,7 +81,7 @@ POM:
 ```xml
 <properties>
   ...
-  <jhove.version>1.34.0</jhove.version>
+  <jhove.version>${project.version}</jhove.version>
 </properties>
 ```
 
@@ -159,7 +159,7 @@ following property:
 ```xml
 <properties>
   ...
-  <jhove.version>v1.34.0</jhove.version>
+  <jhove.version>v${project.version}</jhove.version>
 </properties>
 ```
 
@@ -168,11 +168,11 @@ or even:
 ```xml
 <properties>
   ...
-  <jhove.version>[v1.34.0,]</jhove.version>
+  <jhove.version>[v${project.version},]</jhove.version>
 </properties>
 ```
 
-to always use the latest v1.34.0 2025-07-03 11:01:56 build.
+to always use the latest v${project.version} ${jhove.timestamp} build.
 
 ### For Developers: Building JHOVE from Source
 
@@ -361,8 +361,8 @@ jhove/
 
 All Maven artifacts are produced in versioned form,
 
-i.e. `jhove-1.34.0.jar`, where `1.34.0` defaults
-to `jhove` unless you explicitly set the version number.
+i.e. `${artifactId}-${project.version}.jar`, where `${project.version}` defaults
+to `${artifactId}` unless you explicitly set the version number.
 
 ### jhove
 
@@ -379,7 +379,7 @@ The `jhove-core` module contains all of the main data type definitions and the
 output handlers. This module produces a single JAR:
 
 ```shell
-./jhove/jhove-core/target/jhove-core-1.34.0.jar
+./jhove/jhove-core/target/jhove-core-${project.version}.jar
 ```
 
 The `jhove-core` JAR contains a single module implementation, the default
@@ -406,7 +406,7 @@ implementations, specifically:
 These are all packaged in a single modules JAR:
 
 ```shell
-./jhove/jhove-modules/target/jhove-modules-1.34.0.jar
+./jhove/jhove-modules/target/jhove-modules-${project.version}.jar
 ```
 
 ### jhove-ext-modules
@@ -421,7 +421,7 @@ The `jhove-ext-modules` contains JHOVE modules developed by external parties, sp
 These are all packaged in a single modules JAR:
 
 ```shell
-./jhove/jhove-ext-modules/target/jhove-ext-modules-1.34.0.jar
+./jhove/jhove-ext-modules/target/jhove-ext-modules-${project.version}.jar
 ```
 
 ### jhove-apps
@@ -431,7 +431,7 @@ builds a fat JAR containing the entire Java application. This JAR can be used
 to execute the command-line app:
 
 ```shell
-./jhove/jhove-apps/target/jhove-apps-1.34.0.jar
+./jhove/jhove-apps/target/jhove-apps-${project.version}.jar
 ```
 
 ### jhove-installer
@@ -447,10 +447,10 @@ looking after:
  get bash scripts; and
 * optionally generating unattended install and uninstall files.
 
-The module produces two JARs, one called `jhove-installer-1.34.0`,
+The module produces two JARs, one called `jhove-installer-${project.version}`,
 which contains the JARs for the installer, and an executable JAR to install
 JHOVE:
 
 ```shell
-./jhove/jhove-installer/target/jhove-installer-1.34.0.jar
+./jhove/jhove-installer/target/jhove-installer-${project.version}.jar
 ```

@@ -61,8 +61,8 @@ public class Utf8Module extends ModuleBase {
      * PRIVATE CLASS FIELDS.
      ******************************************************************/
     private static final String NAME = "UTF8-hul";
-    private static final String RELEASE = "1.7.3";
-    private static final int[] DATE = { 2023, 03, 16 };
+    private static final String RELEASE = "1.7.5";
+    private static final int[] DATE = { 2025, 06, 25 };
     private static final String[] FORMAT = { "UTF-8" };
     private static final String COVERAGE = "Unicode 7.0.0";
     private static final String[] MIMETYPE = { "text/plain; charset=UTF-8" };

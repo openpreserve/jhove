@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.openpreservation.jhove</groupId>
     <artifactId>jhove</artifactId>
-    <version>1.34.0-RC1</version>
+    <version>1.34.0</version>
   </parent>
 
   <artifactId>jhove-installer</artifactId>
@@ -13,20 +13,20 @@
   <description>Maven-built IzPack installer for JHOVE.</description>
 
   <properties>
-    <installer.output.filename>jhove-xplt-installer-${project.version}.jar</installer.output.filename>
-    <izpack.version>5.2.0</izpack.version>
+    <installer.output.filename>jhove-installer-${project.version}.jar</installer.output.filename>
+    <izpack.version>5.2.4</izpack.version>
     <izpack.staging>${project.build.directory}/staging</izpack.staging>
     <izpack.target>${project.build.directory}</izpack.target>
     <izpack.scripts>${project.build.scriptSourceDirectory}</izpack.scripts>
     <aiff.hul.version>1.6.2</aiff.hul.version>
     <ascii.hul.version>1.4.2</ascii.hul.version>
     <gif.hul.version>1.4.3</gif.hul.version>
-    <html.hul.version>1.4.4</html.hul.version>
-    <jpeg2000.hul.version>1.4.4</jpeg2000.hul.version>
+    <html.hul.version>1.4.5</html.hul.version>
+    <jpeg2000.hul.version>1.4.5</jpeg2000.hul.version>
     <jpeg.hul.version>1.5.4</jpeg.hul.version>
     <pdf.hul.version>1.12.8</pdf.hul.version>
     <tiff.hul.version>1.9.5</tiff.hul.version>
-    <utf8.hul.version>1.7.4</utf8.hul.version>
+    <utf8.hul.version>1.7.5</utf8.hul.version>
     <wave.hul.version>1.8.3</wave.hul.version>
     <xml.hul.version>1.5.5</xml.hul.version>
   </properties>
@@ -130,11 +130,6 @@
         <groupId>org.codehaus.izpack</groupId>
         <artifactId>izpack-maven-plugin</artifactId>
         <version>${izpack.version}</version>
-        <configuration>
-          <descriptorEncoding>UTF-8</descriptorEncoding>
-          <finalName>jhove-izpack-installer</finalName>
-          <classifier>${project.version}</classifier>
-        </configuration>
         <executions>
           <execution>
             <phase>package</phase>
@@ -145,7 +140,7 @@
               <!-- Base for relative paths in IzPack descriptor -->
               <baseDir>${izpack.staging}</baseDir>
               <installFile>${izpack.staging}/install.xml</installFile>
-              <output>${project.build.directory}/${installer.output.filename}</output>
+              <finalName>${project.build.finalName}</finalName>
             </configuration>
           </execution>
         </executions>

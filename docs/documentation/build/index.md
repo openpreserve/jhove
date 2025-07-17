@@ -25,7 +25,7 @@ POM:
 ```xml
 <properties>
   ...
-  <jhove.version>1.16.6</jhove.version>
+  <jhove.version>{{ site.data.vars.version }}</jhove.version>
 </properties>
 ```
 
@@ -89,17 +89,6 @@ of writing the latest development version could be included by using the followi
 ```xml
 <properties>
   ...
-  <jhove.version>1.17.1</jhove.version>
+  <jhove.version>{{ site.data.vars.version }}</jhove.version>
 </properties>
 ```
-
-or even:
-
-```xml
-<properties>
-  ...
-  <jhove.version>[1.17.0,1.18.0]</jhove.version>
-</properties>
-```
-
-to always use the latest 1.17 build.

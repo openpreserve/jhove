@@ -96,7 +96,7 @@ getCorpusModules() {
 		if [ "$moduleName" = "EPUB-ptc" ]
 		then
 			 continue
-	  fi
+	    fi
 		if [[ ! -e "$paramOutputRootDir/audit-$moduleName.jhove.xml" ]]
 		then
 			bash "$SCRIPT_DIR/exec-with-to.sh" -t 10 "$paramJhoveLoc/jhove" -m "${moduleName}" -h xml -o "$paramOutputRootDir/audit-$moduleName.jhove.xml"
