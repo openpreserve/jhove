@@ -1,6 +1,6 @@
 # See https://docs.docker.com/engine/userguide/eng-image/multistage-build/
 # First build the app on a maven open jdk 11 container
-ARG JHOVE_VERSION=1.34.0-RC1
+ARG JHOVE_VERSION=1.34.0
 FROM maven:3-eclipse-temurin-11-alpine AS dev-builder
 ARG JHOVE_VERSION
 ENV JHOVE_VERSION=${JHOVE_VERSION}
@@ -9,7 +9,7 @@ ENV JHOVE_VERSION=${JHOVE_VERSION}
 COPY . /build/jhove/
 WORKDIR /build/jhove
 
-RUN mvn clean package && java -jar jhove-installer/target/jhove-xplt-installer-${JHOVE_VERSION}.jar docker-install.xml
+RUN mvn clean package && java -jar jhove-installer/target/jhove-installer-${JHOVE_VERSION}.jar docker-install.xml
 
 # Now build a Java JRE for the Alpine application image
 # https://github.com/docker-library/docs/blob/master/eclipse-temurin/README.md#creating-a-jre-using-jlink

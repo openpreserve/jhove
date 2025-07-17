@@ -25,3 +25,27 @@ dt {
 dd {
   margin-left: 10px;
 }
+
+.section-heading {
+  color:#337ab7;
+  position: relative;
+}
+
+.section-heading:hover::after {
+  content: "\f0c1"; /* Font Awesome link icon */
+  font-family: "Font Awesome 5 Free", Arial, sans-serif;
+  font-weight: 900;
+  position: relative;
+  right: -.5em; 
+  top: 0;
+  color: #337ab7;
+  cursor: pointer;
+  font-size: 60%;
+}
+
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 17.5px;
+  border-left: 5px solid #eee;
+}

@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.openpreservation.jhove.modules</groupId>
     <artifactId>jhove-modules</artifactId>
-    <version>1.34.0-RC1</version>
+    <version>1.34.0</version>
   </parent>
   <artifactId>jpeg2000-hul</artifactId>
-  <version>1.4.4</version>
+  <version>1.4.5</version>
   <name>JHOVE JPEG 2000 Module HUL</name>
   <description>JPEG 2000 module developed by Harvard University Library</description>
 </project>

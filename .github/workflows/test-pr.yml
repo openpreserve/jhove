@@ -7,11 +7,11 @@ on:
 jobs:
   build:
     name: Checkout and Build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        java-version: [8, 11]
+        java-version: [8, 11, 21]
 
     steps:
       - uses: actions/checkout@v4
@@ -52,25 +52,24 @@ jobs:
 
   coverage:
     name: Quality Assurance
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     needs: [ build ]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Codacy analysis reporting
-        uses: codacy/codacy-analysis-cli-action@4.0.0
+        uses: codacy/codacy-analysis-cli-action@v4.4.5
       - name: Download coverage report
         uses: actions/download-artifact@v4
         with:
           name: coverage-report
           path: jhove-apps/target/site/jacoco-aggregate/
       - name: Codecov coverage reporting
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: jhove-apps/target/site/jacoco-aggregate/jacoco.xml
           fail_ci_if_error: false # optional (default = false)
           verbose: true # optional (default = false)
           name: codecov-jhove
           token: ${{ secrets.CODECOV_TOKEN }} # required
-        
-
+          
