@@ -55,3 +55,9 @@ echo "TEST BASELINE: Creating baseline"
 # Simply copy baseline for now we're not making any changes
 echo " - copying ${baselineRoot} baseline to ${targetRoot}"
 cp -R "${baselineRoot}" "${targetRoot}"
+
+# Copy result for the PDF file that was affected by https://github.com/openpreserve/jhove/pull/1025
+# This means leading whitepace in hexadecimal strings is now correctly ignored
+if [[ -f "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-29-govdocs-375118.pdf.jhove.xml" ]]; then
+	cp "${candidateRoot}/errors/modules/PDF-hul/pdf-hul-29-govdocs-375118.pdf.jhove.xml" "${targetRoot}/errors/modules/PDF-hul/pdf-hul-29-govdocs-375118.pdf.jhove.xml"
+fi
