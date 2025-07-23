@@ -13,7 +13,7 @@ TEST_BASELINES_ROOT="${TEST_ROOT}/baselines"
 TEST_INSTALL_ROOT="${TEST_ROOT}/jhove"
 CANDIDATE_ROOT="${TEST_ROOT}/candidates"
 TARGET_ROOT="${TEST_ROOT}/targets"
-BASELINE_VERSION=1.32
+BASELINE_VERSION=1.34
 
 # Create the JHOVE test root if it doesn't exist
 [[ -d "${TEST_ROOT}" ]] || mkdir -p "${TEST_ROOT}"
@@ -56,7 +56,7 @@ fi
 # Grab the Major and Minor versions from the full Maven project version string
 # FIXME: Colorised output is not working with the following line
 # MVN_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec -f jhove-installer/pom.xml)
-MVN_VERSION="1.34.0"
+MVN_VERSION="1.35.0"
 MAJOR_MINOR_VER="${MVN_VERSION%.*}"
 JHOVE_INSTALLER="./jhove-installer/target/jhove-installer-${MVN_VERSION}.jar"
 
