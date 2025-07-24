@@ -12,7 +12,7 @@ WORKDIR /build
 RUN git clone https://github.com/openpreserve/jhove.git
 
 WORKDIR /build/jhove
-RUN git checkout v${JHOVE_VERSION} && mvn clean package && java -jar jhove-installer/target/jhove-xplt-installer-${JHOVE_VERSION}.jar docker-install.xml
+RUN git checkout v${JHOVE_VERSION} && mvn clean package && java -jar jhove-installer/target/jhove-installer-${JHOVE_VERSION}.jar docker-install.xml
 
 # Now build a Java JRE for the Alpine application image
 # https://github.com/docker-library/docs/blob/master/eclipse-temurin/README.md#creating-a-jre-using-jlink

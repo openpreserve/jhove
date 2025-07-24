@@ -366,7 +366,7 @@ public abstract class Tokenizer
                     if (_ch == '>') {
                         backupChar();
                     }
-                    else {
+                    else if (!isWhitespace(_ch)) {
                         ((Literal) token).appendHex(_ch);
                     }
                 }
