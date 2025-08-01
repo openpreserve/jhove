@@ -20,7 +20,7 @@ command line option.
 
 This module can be [configured](/getting-started/config/) with the following parameters:
 
-- byteoffset=true to consider TIFFs without byte-aligned offsets as well-formed.
+- byteoffset=true to consider TIFFs without byte-aligned offsets as well-formed. This means that [TIFF-HUL-4](https://github.com/openpreserve/jhove/wiki/TIFF-hul-Messages#tiff-hul-4) and [TIFF-HUL-59](https://github.com/openpreserve/jhove/wiki/TIFF-hul-Messages#tiff-hul-59) won't be reported as errors, but will become InfoMessages and the TIFF can be reported as Well-Formed and Valid.
 
 {: #coverage .section-heading}
 ## 2 Coverage
