@@ -77,7 +77,7 @@
     <mvn.site.version>4.0.0-M13</mvn.site.version>
     <mvn.gpg.version>3.2.8</mvn.gpg.version>
     <mvn.jar.version>3.4.2</mvn.jar.version>
-    <mvn.javadoc.version>3.11.2</mvn.javadoc.version>
+    <mvn.javadoc.version>3.11.3</mvn.javadoc.version>
     <mvn.source.version>3.3.0</mvn.source.version>
     <mvn.surefire.version>3.5.3</mvn.surefire.version>
     <mvn.release.version>3.1.1</mvn.release.version>
