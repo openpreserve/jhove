@@ -51,7 +51,7 @@ Download the [latest JHOVE installer](http://software.openpreservation.org/rel/j
 
     /Downloads/jhove-latest.jar
 
-Installation is OS dependant.
+Installation is OS dependent.
 
 ### Windows
 
