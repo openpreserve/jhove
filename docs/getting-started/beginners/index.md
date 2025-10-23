@@ -47,7 +47,7 @@ JHOVE is an open source file format identification, validation and characterisat
 7. Once the install dialog is finished then click next:  
 ![Screenshot of the JHOVE installer stage four on Windows](/img/jhv-install-win-4.png "JHOVE installer stage four")
 
-8. If everything has completed properly you'll see a screen reporting successful installation, click the "Done" button to compete installation:  
+8. If everything has completed properly you'll see a screen reporting successful installation, click the "Done" button to complete installation:  
 ![Screenshot of the JHOVE installer stage five on Windows](/img/jhv-install-win-5.png "JHOVE installer stage five")
 
 ### Running JHOVE on a Windows PC

@@ -11,7 +11,7 @@ Potential use cases for JHOVE include:
 1. Identification
     1. "I have an object; what format is it?"
 2. Validation
-    1. "I have an object that purports to of format _F_; is it?"
+    1. "I have an object that purports to be of format _F_; is it?"
     2. "I have an object of format _F_; does it meet profile _P_ of _F_?"
     3. "I have an object of format _F_ and external metadata about _F_ in schema _S_; are they consistent?"
 3. Characterization

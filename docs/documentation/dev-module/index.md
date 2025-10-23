@@ -213,7 +213,7 @@ A new module *must* override the stub methods `checkSignature()` and `parse()`.
 >     public void checkSignature (File file, ..., RepInfo info) throws IOException
 >     {                /* Do nothing */
 >     }
->     public int  parse (..., RepInfo info, int parseIndex) thows IOException
+>     public int  parse (..., RepInfo info, int parseIndex) throws IOException
 >     {
 >         return 0;    /* Do nothing */
 >     }
@@ -364,11 +364,11 @@ The constructor for a module takes no parameters. It *must* first invoke its the
 
 `private static final String [] FORMAT`
 
-> An array of names for the formats supported by the module. The first entry should be be most generally appropriate format name, e.g. `{"TIFF, "Tagged Image File Format", "TIFF/EP", "TIFF/IT", ...}`.
+> An array of names for the formats supported by the module. The first entry should be the most generally appropriate format name, e.g. `{"TIFF, "Tagged Image File Format", "TIFF/EP", "TIFF/IT", ...}`.
 
 `private static final String [] MIMETYPE`
 
-> An array of MIME types applicable for the formats supported by the module. The first entry should be be most generally appropriate MIME type, e.g. `{image/tiff}`.
+> An array of MIME types applicable for the formats supported by the module. The first entry should be the most generally appropriate MIME type, e.g. `{image/tiff}`.
 
 `private static final String COVERAGE`
 
