@@ -96,7 +96,7 @@ The optional `<defaultEncoding>` element specifies the default character encodin
 
 The optional `<tempDirectory>` element specifies the pathname of the directory in which temporary files are created. This option can also be specified by the \-t _directory_ [command line](/getting-started#invocation) argument. On most Unix systems, a reasonable temporary directory is "/var/tmp"; on Windows, "C:\\temp".
 
-The optional `<bufferSize>` element specifies the buffer size use for buffered I/O. This option can also be specified by the \-b _buffer_ [command line](/getting-started#invocation) argument.
+The optional `<bufferSize>` element specifies the buffer size used for buffered I/O. This option can also be specified by the \-b _buffer_ [command line](/getting-started#invocation) argument.
 
 The optional `<mixVersion>` element specifies the MIX schema version conformance for the output produced by the XML output handler. By default the handler output conforms to version 2.0 of the schema. For version 1.0 conformance, specify:
 
