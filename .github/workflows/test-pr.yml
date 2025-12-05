@@ -58,7 +58,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Codacy analysis reporting
-        uses: codacy/codacy-analysis-cli-action@v4.4.5
+        uses: codacy/codacy-analysis-cli-action@v4.4.7
       - name: Download coverage report
         uses: actions/download-artifact@v4
         with:
@@ -72,5 +72,4 @@ jobs:
           verbose: true # optional (default = false)
           name: codecov-jhove
           token: ${{ secrets.CODECOV_TOKEN }} # required
-        
-
+          
