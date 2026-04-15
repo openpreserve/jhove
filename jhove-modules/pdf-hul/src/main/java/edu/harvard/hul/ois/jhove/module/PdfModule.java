@@ -1588,8 +1588,9 @@ public class PdfModule extends ModuleBase {
                     e.getClass().getName());
             JhoveMessage message = JhoveMessages.getMessageInstance(
                     MessageConstants.PDF_HUL_157.getId(), mess);
-            info.setMessage(
-                    new ErrorMessage(message, e.getMessage(), _parser.getOffset()));
+            info.setMessage(new ErrorMessage(message,
+                    e.getMessage() != null ? e.getMessage() : e.getClass().getName(),
+                    _parser.getOffset()));
             return false;
         }
         return true;
