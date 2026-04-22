@@ -5,7 +5,7 @@ layout: page
 
 <!-- markdownlint-disable -->
 <header class="jumbotron vertical-center">
-    <img src="img/jhovelogo.png" alt="JHOVE logo">
+    <img src="jhovelogo.png" alt="JHOVE logo">
     <h2>Open source file format identification, validation &amp; characterisation</h2>
     <a href="https://software.openpreservation.org/rel/jhove-latest.jar" class="btn btn-primary btn-lg pad" download="">Download JHOVE</a>
 </header>

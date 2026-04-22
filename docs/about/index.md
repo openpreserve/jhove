@@ -36,7 +36,7 @@ Make a donation to support JHOVE development:
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
   <input type="hidden" name="cmd" value="_s-xclick">
   <input type="hidden" name="hosted_button_id" value="UKRJRX7A5ZJZL">
-  <input type="image" src="/img/paypal-donate.png" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
+  <input type="image" src="paypal-donate.png" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
 </form>
 <!-- markdownlint-enable -->
 
