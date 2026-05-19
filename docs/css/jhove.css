@@ -35,19 +35,19 @@ html[data-theme="dark"] {
 
 body {
   color: var(--text-main);
-  background: linear-gradient(180deg, #0d1620 0, #0d1620 88px, var(--bg-page) 88px, var(--bg-page) 100%);
+  background: var(--bg-page);
   font-size: 17px;
   line-height: 1.6;
   min-height: 100vh;
 }
 
 a {
-  color: var(--link-color);
+  color: var(--brand-green);
 }
 
 a:hover,
 a:focus {
-  color: var(--link-hover);
+  color: var(--brand-pink);
 }
 
 a:focus,
@@ -74,18 +74,20 @@ button:focus,
 }
 
 .theme-toggle {
-  background: #ffffff;
-  border: 1px solid var(--border-strong);
+  background: var(--brand-pink);
+  border: 2px solid var(--brand-pink-dark);
   border-radius: 999px;
-  color: #111111;
+  color: #ffffff;
   font-size: 13px;
   font-weight: 600;
   line-height: 1;
-  padding: 7px 12px;
+  padding: 6px 14px;
+  vertical-align: middle;
 }
 
 .theme-toggle:hover {
-  border-color: var(--brand-blue);
+  background: var(--brand-pink-dark);
+  border-color: var(--brand-pink);
 }
 
 .theme-toggle-sep {
@@ -95,14 +97,15 @@ button:focus,
 
 .navbar-static-top {
   border: 0;
-  margin-bottom: 22px;
+  margin-bottom: 0;
 }
 
 .navbar-default {
   background: #ffffff;
   border: 0;
-  border-bottom: 6px solid var(--brand-blue);
+  border-bottom: 12px solid #0f5e7b;
   box-shadow: none;
+  margin-bottom: 26px;
 }
 
 .navbar-default .navbar-nav > li > a,
@@ -115,10 +118,15 @@ button:focus,
 }
 
 .navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  background-color: var(--brand-pink);
+  color: #ffffff;
+}
+
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:focus,
 .navbar-default .navbar-nav > .active > a:hover {
-  background-color: var(--brand-blue);
+  background-color: #0f5e7b;
   color: #ffffff;
 }
 
@@ -143,7 +151,7 @@ button:focus,
 .navbar-theme-item {
   align-items: center;
   display: flex;
-  padding: 8px 10px;
+  padding: 10px 14px;
 }
 
 .navbar-brand img {
@@ -284,10 +292,14 @@ h4:focus-within .heading-anchor {
 }
 
 .site-footer-links {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-wrap: wrap;
-  gap: 18px;
-  margin-top: 14px;
+  gap: 12px;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding-top: 14px;
+  width: 100%;
 }
 
 .site-footer-meta {
@@ -301,8 +313,9 @@ h4:focus-within .heading-anchor {
 }
 
 .scroll-top {
-  background: var(--brand-pink);
-  border: 0;
+  background: var(--brand-pink) padding-box,
+    linear-gradient(135deg, var(--brand-blue), var(--brand-pink), var(--brand-green)) border-box;
+  border: 3px solid transparent;
   border-radius: 999px;
   bottom: 24px;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
