@@ -12,27 +12,33 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-{% for item in include.nav %}
-    {% if item.subcategories != null %}
-        <li class="dropdown">
-          <a href="{{ site.url }}{{ item.href }}" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">{{ item.title }} <span class="caret"></a>
-          <ul class="dropdown-menu">
-          {% for subcategory in item.subcategories %}
-              <li><a href="{{ site.url }}{{ item.href }}{{ subcategory.subhref }}">{{ subcategory.subtitle }}</a></li>
-          {% endfor %}
+{% for item in include.nav -%}
+  {% assign is_active = false %}
+  {% if navurl == item.href or navurl contains item.href %}
+    {% assign is_active = true %}
+  {% endif %}
+  {% if item.subcategories != null %}
+            <li class="dropdown{% if is_active %} active{% endif %}">
+              <a href="{{ site.url }}{{ item.href }}" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">{{ item.title }} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+{% for subcategory in item.subcategories -%}
+                <li><a href="{{ site.url }}{{ item.href }}{{ subcategory.subhref }}">{{ subcategory.subtitle }}</a></li>
+{% endfor -%}
+              </ul>
+            </li>
+  {% else %}
+            <li{% if is_active %} class="active"{% endif %}><a href="{{ site.url }}{{ item.href }}">{{ item.title }}</a></li>
+  {% endif %}
+{% endfor -%}
           </ul>
-    {% else %}
-
-    <!-- display the top level navigation for items that don’t have a submenu -->
-        {% if item.url == navurl %}
-            <li class="active">
-        {% else %}
-            <li>
-        {% endif %}
-    <a href="{{ site.url }}{{ item.href }}">{{ item.title }}</a>
-    {% endif %}
-    </li>
-{% endfor %}
+          <ul class="nav navbar-nav navbar-right">
+            <li class="navbar-theme-item">
+              <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme" aria-pressed="false">
+                <span class="theme-toggle-light">Light</span>
+                <span class="theme-toggle-sep">/</span>
+                <span class="theme-toggle-dark">Dark</span>
+              </button>
+            </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

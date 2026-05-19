@@ -6,25 +6,16 @@
 {% assign source_url = repository_url | append: "/blob/" | append: repository_branch | append: "/" | append: edit_path %}
 {% assign issue_url = repository_url | append: "/issues/new" %}
   <footer class="site-footer" role="contentinfo">
-    <div class="container site-footer-grid">
-      <div>
-        <h4>JHOVE</h4>
-        <p>Open source file format identification, validation, and characterisation.</p>
-      </div>
-      <div>
-        <h4>Page</h4>
-        <p><a href="{{ edit_url }}">Edit this page</a></p>
-        <p><a href="{{ source_url }}">View source</a></p>
-      </div>
-      <div>
-        <h4>Project</h4>
-        <p><a href="{{ repository_url }}">GitHub repository</a></p>
-        <p><a href="{{ issue_url }}">Report an issue</a></p>
-      </div>
-      <div>
-        <h4>About</h4>
-        <p><a href="https://openpreservation.org/" target="_blank" rel="noopener noreferrer">Open Preservation Foundation</a></p>
-        <p><a href="https://www.gnu.org/licenses/licenses.html#LGPL" target="_blank" rel="noopener noreferrer">LGPL license</a></p>
+    <div class="container site-footer-main">
+      <h3>JHOVE</h3>
+      <p class="site-footer-tagline">Open source file format identification, validation, and characterisation.</p>
+      <p><a href="https://openpreservation.org/" target="_blank" rel="noopener noreferrer">Open Preservation Foundation</a></p>
+      <p><a href="https://www.gnu.org/licenses/licenses.html#LGPL" target="_blank" rel="noopener noreferrer">LGPL license</a></p>
+      <div class="site-footer-links" aria-label="Page and project links">
+        <a href="{{ edit_url }}">Edit this page</a>
+        <a href="{{ source_url }}">View source</a>
+        <a href="{{ repository_url }}">GitHub repository</a>
+        <a href="{{ issue_url }}">Report an issue</a>
       </div>
     </div>
     <div class="container site-footer-meta">
