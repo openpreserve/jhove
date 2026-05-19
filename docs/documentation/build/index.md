@@ -4,7 +4,7 @@ title: Building JHOVE
 nav_title: Build
 nav_order: 2
 section: documentation
-parent: documentation
+parent: Documentation
 summary: Build JHOVE from source with Maven.
 ---
 # {{ page.title }}

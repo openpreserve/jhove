@@ -4,7 +4,7 @@ title: A Guide to Logging in JHOVE
 nav_title: Logging
 nav_order: 4
 section: documentation
-parent: documentation
+parent: Documentation
 summary: How to adjust and interpret JHOVE logging output.
 ---
 

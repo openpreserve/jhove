@@ -3,7 +3,7 @@ title: ASCII-hul Module
 nav_title: ASCII
 nav_order: 2
 section: modules
-parent: modules
+parent: Modules
 summary: Support for ASCII-encoded text.
 layout: page
 ---

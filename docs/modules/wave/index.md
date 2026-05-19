@@ -3,7 +3,7 @@ title: WAVE-hul Module
 nav_title: WAVE
 nav_order: 12
 section: modules
-parent: modules
+parent: Modules
 summary: Support for WAVE audio files.
 layout: page
 ---

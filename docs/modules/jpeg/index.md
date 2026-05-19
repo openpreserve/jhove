@@ -3,7 +3,7 @@ title: JPEG-hul Module
 nav_title: JPEG
 nav_order: 6
 section: modules
-parent: modules
+parent: Modules
 summary: Support for JPEG image files.
 layout: page
 ---

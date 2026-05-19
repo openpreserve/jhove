@@ -3,7 +3,7 @@ title: Architecture
 nav_title: Architecture
 nav_order: 5
 section: documentation
-parent: documentation
+parent: Documentation
 summary: Overview of JHOVE's layered architecture and API design.
 layout: page
 ---

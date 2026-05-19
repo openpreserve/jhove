@@ -3,7 +3,7 @@ title: Use Cases
 nav_title: Use cases
 nav_order: 6
 section: documentation
-parent: documentation
+parent: Documentation
 summary: Typical repository and preservation workflows that use JHOVE.
 layout: page
 ---

@@ -3,7 +3,7 @@ title: JHOVE Examples
 nav_title: Examples
 nav_order: 4
 section: getting-started
-parent: getting-started
+parent: Getting started
 summary: Sample invocations and output examples for JHOVE.
 layout: page
 ---

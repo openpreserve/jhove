@@ -3,7 +3,7 @@ title: Writing a JHOVE Module
 nav_title: Module guide
 nav_order: 3
 section: documentation
-parent: documentation
+parent: Documentation
 summary: Draft guidance for implementing a new JHOVE module.
 layout: page
 ---
