@@ -2,15 +2,22 @@
 Full-site sidebar. Current section expands at page load; others collapse.
 Uses a button toggle with aria-expanded so no interactive controls are nested.
 {% endcomment %}
-{%- assign all_roots = site.pages | where_exp: "p", "p.parent == nil and p.nav_title and p.url != '/'" | sort: "nav_order" -%}
+{%- assign sorted_pages = site.pages | sort: "nav_order" -%}
 <aside class="site-sidebar" aria-label="Site navigation">
   <div class="site-sidebar-panel">
     <a class="site-sidebar-home{% if page.url == '/' %} is-active{% endif %}" href="/">Home</a>
-    {% for root in all_roots %}
-      {%- assign root_children = site.pages | where_exp: "item", "item.parent == root.nav_title and item.section == root.section and item.nav_title" | sort: "nav_order" -%}
+    {% for root in sorted_pages %}
+      {% if root.parent == nil and root.nav_title and root.url != '/' %}
+      {%- assign root_has_children = false -%}
+      {% for possible_child in sorted_pages %}
+        {% if possible_child.parent == root.nav_title and possible_child.section == root.section and possible_child.nav_title %}
+          {%- assign root_has_children = true -%}
+          {% break %}
+        {% endif %}
+      {% endfor %}
       {%- assign is_current_section = false -%}
       {%- if page.section == root.section -%}{%- assign is_current_section = true -%}{%- endif -%}
-      {% if root_children.size > 0 %}
+      {% if root_has_children %}
         <div class="site-sidebar-section">
           <div class="site-sidebar-section-header">
             <a href="{{ root.url }}" class="site-sidebar-section-link{% if page.url == root.url %} is-active{% endif %}">{{ root.nav_title }}</a>
@@ -19,20 +26,30 @@ Uses a button toggle with aria-expanded so no interactive controls are nested.
             </button>
           </div>
           <div class="site-sidebar-children{% unless is_current_section %} is-collapsed{% endunless %}" id="sidebar-{{ root.section }}">
-            {% for item in root_children %}
-              {%- assign item_children = site.pages | where_exp: "c", "c.parent == item.nav_title and c.section == item.section and c.nav_title" | sort: "nav_order" -%}
+            {% for item in sorted_pages %}
+              {% if item.parent == root.nav_title and item.section == root.section and item.nav_title %}
+              {%- assign item_has_children = false -%}
+              {% for possible_grandchild in sorted_pages %}
+                {% if possible_grandchild.parent == item.nav_title and possible_grandchild.section == item.section and possible_grandchild.nav_title %}
+                  {%- assign item_has_children = true -%}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
               <div class="site-sidebar-item{% if page.url == item.url %} is-active{% elsif page.parent == item.nav_title %} is-parent{% endif %}">
                 <a href="{{ item.url }}">{{ item.nav_title }}</a>
-                {% if item_children.size > 0 %}
+                {% if item_has_children %}
                   <div class="site-sidebar-sublist">
-                    {% for child in item_children %}
+                    {% for child in sorted_pages %}
+                      {% if child.parent == item.nav_title and child.section == item.section and child.nav_title %}
                       <div class="site-sidebar-subitem{% if page.url == child.url %} is-active{% endif %}">
                         <a href="{{ child.url }}">{{ child.nav_title }}</a>
                       </div>
+                      {% endif %}
                     {% endfor %}
                   </div>
                 {% endif %}
               </div>
+              {% endif %}
             {% endfor %}
           </div>
         </div>
@@ -40,6 +57,7 @@ Uses a button toggle with aria-expanded so no interactive controls are nested.
         <div class="site-sidebar-section site-sidebar-section-plain">
           <a href="{{ root.url }}" class="site-sidebar-section-link{% if page.url == root.url %} is-active{% endif %}">{{ root.nav_title }}</a>
         </div>
+      {% endif %}
       {% endif %}
     {% endfor %}
   </div>
