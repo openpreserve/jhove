@@ -1,5 +1,10 @@
 ---
 title: Documentation
+nav_title: Documentation
+nav_order: 2
+section: documentation
+parent: null
+summary: Guides, references, and background information for JHOVE.
 layout: page
 ---
 

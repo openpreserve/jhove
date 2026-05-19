@@ -1,5 +1,10 @@
 ---
 title: Bytestream Module
+nav_title: Bytestream
+nav_order: 3
+section: modules
+parent: modules
+summary: Support for arbitrary byte streams.
 layout: page
 ---
 

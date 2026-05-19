@@ -1,5 +1,10 @@
 ---
 title: AIFF-hul Module
+nav_title: AIFF
+nav_order: 1
+section: modules
+parent: modules
+summary: Support for Audio Interchange File Format files.
 layout: page
 ---
 

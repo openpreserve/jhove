@@ -1,5 +1,10 @@
 ---
 title: Using Third-Party Modules
+nav_title: Third-party
+nav_order: 14
+section: modules
+parent: modules
+summary: Requirements and examples for modules written outside HUL.
 layout: page
 ---
 

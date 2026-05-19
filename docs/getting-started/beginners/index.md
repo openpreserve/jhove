@@ -1,6 +1,11 @@
 ---
 layout: page
 title: JHOVE - A Beginners Guide
+nav_title: Beginners guide
+nav_order: 1
+section: getting-started
+parent: getting-started
+summary: A practical installation and GUI walkthrough for newcomers.
 ---
 # {{ page.title }}
 

@@ -1,5 +1,10 @@
 ---
 title: PDF-hul Module
+nav_title: PDF
+nav_order: 8
+section: modules
+parent: modules
+summary: Support for PDF documents.
 layout: page
 ---
 

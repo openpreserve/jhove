@@ -1,5 +1,10 @@
 ---
-title: Getting started
+title: JHOVE Installation Guide for Windows XP
+nav_title: Windows
+nav_order: 3
+section: getting-started
+parent: getting-started
+summary: Archived Windows XP installation guide for JHOVE.
 layout: page
 ---
 

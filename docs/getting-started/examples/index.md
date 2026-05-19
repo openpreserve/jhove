@@ -1,5 +1,10 @@
 ---
-title: Examples
+title: JHOVE Examples
+nav_title: Examples
+nav_order: 4
+section: getting-started
+parent: getting-started
+summary: Sample invocations and output examples for JHOVE.
 layout: page
 ---
 

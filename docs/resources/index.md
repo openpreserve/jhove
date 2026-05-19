@@ -1,5 +1,10 @@
 ---
 title: Resources
+nav_title: Resources
+nav_order: 4
+section: resources
+parent: null
+summary: Useful external links and reference material for file formats.
 layout: page
 ---
 

@@ -1,5 +1,10 @@
 ---
 title: WARC-kb Module
+nav_title: WARC
+nav_order: 11
+section: modules
+parent: modules
+summary: Support for WARC web archive files.
 layout: page
 ---
 

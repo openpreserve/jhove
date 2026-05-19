@@ -1,5 +1,10 @@
 ---
 title: UTF8-hul Module
+nav_title: UTF-8
+nav_order: 10
+section: modules
+parent: modules
+summary: Support for UTF-8 encoded text.
 layout: page
 ---
 

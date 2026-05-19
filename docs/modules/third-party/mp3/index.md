@@ -1,5 +1,10 @@
 ---
 title: MP3 Module
+nav_title: MP3
+nav_order: 2
+section: modules
+parent: third-party
+summary: Support for MP3 files from a third-party module.
 layout: page
 ---
 
