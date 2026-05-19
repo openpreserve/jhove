@@ -166,13 +166,15 @@ button:focus,
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 0;
   margin-bottom: 18px;
   font-size: 15px;
+  white-space: nowrap;
 }
 
 .site-breadcrumb-separator {
   opacity: 0.6;
+  margin: 0 6px;
 }
 
 .site-breadcrumbs a {
