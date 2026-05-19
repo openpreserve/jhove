@@ -1,7 +1,13 @@
 {% assign repository_url = site.github.repository_url | default: "https://github.com/openpreserve/jhove" %}
 {% assign repository_branch = site.github.source.branch | default: "main" %}
-{% assign relative_page_path = page.path | remove_first: "/" %}
-{% assign edit_path = "docs/" | append: relative_page_path %}
+{% assign page_dir = page.dir | default: "/" %}
+{% assign page_name = page.name | default: "index.md" %}
+{% if page_dir == "/" %}
+  {% assign edit_path = "docs/" | append: page_name %}
+{% else %}
+  {% assign edit_path = "docs" | append: page_dir | append: page_name %}
+{% endif %}
+{% assign edit_path = edit_path | replace: "//", "/" %}
 {% assign edit_url = repository_url | append: "/edit/" | append: repository_branch | append: "/" | append: edit_path %}
 {% assign source_url = repository_url | append: "/blob/" | append: repository_branch | append: "/" | append: edit_path %}
 {% assign issue_url = repository_url | append: "/issues/new" %}
