@@ -1,0 +1,18 @@
+{% comment %}
+Section sidebar navigation.
+Renders the current section landing page and its child pages.
+{% endcomment %}
+
+{%- if page.section -%}
+{%- assign section_pages = site.pages | where_exp: "item", "item.section == page.section" | sort: "nav_order" -%}
+{%- assign section_root = nil -%}
+{%- for candidate in section_pages -%}
+{%- if candidate.parent == nil and candidate.nav_title -%}
+{%- assign section_root = candidate -%}
+{%- break -%}
+{%- endif -%}
+{%- endfor -%}
+{%- if section_root -%}
+<aside class="site-sidebar" aria-label="Section navigation"><div class="site-sidebar-panel"><a class="site-sidebar-root" href="{{ section_root.url }}">{{ section_root.nav_title }}</a><nav class="site-sidebar-nav" aria-label="{{ section_root.nav_title }} pages"><div class="site-sidebar-list">{%- for item in section_pages -%}{%- if item.parent == section_root.nav_title and item.nav_title -%}{%- assign item_has_children = false -%}{%- for child in section_pages -%}{%- if child.parent == item.nav_title and child.nav_title -%}{%- assign item_has_children = true -%}{%- endif -%}{%- endfor -%}<div class="site-sidebar-item{% if page.url == item.url %} is-active{% elsif page.parent == item.nav_title %} is-parent{% endif %}"><a href="{{ item.url }}">{{ item.nav_title }}</a>{%- if item_has_children -%}<div class="site-sidebar-sublist">{%- for child in section_pages -%}{%- if child.parent == item.nav_title and child.nav_title -%}<div class="site-sidebar-subitem{% if page.url == child.url %} is-active{% endif %}"><a href="{{ child.url }}">{{ child.nav_title }}</a></div>{%- endif -%}{%- endfor -%}</div>{%- endif -%}</div>{%- endif -%}{%- endfor -%}</div></nav></div></aside>
+{%- endif -%}
+{%- endif -%}

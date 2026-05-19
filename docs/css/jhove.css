@@ -186,6 +186,83 @@ button:focus,
   text-decoration: underline;
 }
 
+.site-sidebar-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  padding: 22px 18px;
+  position: sticky;
+  top: 20px;
+}
+
+.site-sidebar-root {
+  color: var(--text-main);
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  text-decoration: none;
+}
+
+.site-sidebar-root:hover,
+.site-sidebar-root:focus {
+  color: var(--brand-pink);
+  text-decoration: none;
+}
+
+.site-sidebar-nav {
+  font-size: 15px;
+}
+
+.site-sidebar-list,
+.site-sidebar-sublist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-sidebar-item {
+  margin-top: 10px;
+}
+
+.site-sidebar-item > a,
+.site-sidebar-subitem > a {
+  color: var(--text-main);
+  display: block;
+  text-decoration: none;
+}
+
+.site-sidebar-item > a:hover,
+.site-sidebar-item > a:focus,
+.site-sidebar-subitem > a:hover,
+.site-sidebar-subitem > a:focus {
+  color: var(--brand-pink);
+  text-decoration: none;
+}
+
+.site-sidebar-item.is-active > a,
+.site-sidebar-item.is-parent > a {
+  color: var(--brand-blue-dark);
+  font-weight: 700;
+}
+
+.site-sidebar-sublist {
+  border-left: 2px solid var(--border-strong);
+  margin-left: 10px;
+  margin-top: 8px;
+  padding-left: 12px;
+}
+
+.site-sidebar-subitem {
+  margin-top: 8px;
+}
+
+.site-sidebar-subitem.is-active > a {
+  color: var(--brand-green);
+  font-weight: 700;
+}
+
 .docs-surface {
   background: var(--bg-surface);
   border: 1px solid var(--border-strong);
@@ -435,6 +512,10 @@ html[data-theme="dark"] .table a {
 @media (max-width: 767px) {
   body {
     font-size: 16px;
+  }
+
+  .site-sidebar {
+    display: none;
   }
 
   .navbar-theme-item {

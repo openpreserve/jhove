@@ -5,10 +5,24 @@
 <a class="skip-link" href="#main-content">Skip to main content</a>
 {% include navbar.html nav=site.data.navbar %}
   <main id="main-content" class="container theme-showcase" role="main">
-    <div class="docs-surface doc-content">
-      {% include breadcrumbs.html %}
-      {{ content }}
-    </div>
+    {% if page.section %}
+      <div class="row docs-layout">
+        <div class="col-sm-4 col-md-3 hidden-xs">
+          {% include sidebar.html %}
+        </div>
+        <div class="col-sm-8 col-md-9">
+          <div class="docs-surface doc-content">
+            {% include breadcrumbs.html %}
+            {{ content }}
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="docs-surface doc-content">
+        {% include breadcrumbs.html %}
+        {{ content }}
+      </div>
+    {% endif %}
   </main>
   <button type="button" id="scroll-top" class="scroll-top" aria-label="Scroll to top" title="Scroll to top">
     <span aria-hidden="true">Top</span>
