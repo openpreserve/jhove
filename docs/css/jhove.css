@@ -125,8 +125,12 @@ button:focus,
 
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:focus,
-.navbar-default .navbar-nav > .active > a:hover {
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav > .open > a:hover {
   background-color: #0f5e7b;
+  background-image: none;
   color: #ffffff;
 }
 
@@ -313,8 +317,9 @@ h4:focus-within .heading-anchor {
 }
 
 .scroll-top {
-  background: var(--brand-pink) padding-box,
-    linear-gradient(135deg, var(--brand-blue), var(--brand-pink), var(--brand-green)) border-box;
+  /* background: var(--brand-pink) padding-box,
+    linear-gradient(135deg, var(--brand-blue), var(--brand-pink), var(--brand-green)) border-box; */
+  background: var(--brand-pink);
   border: 3px solid transparent;
   border-radius: 999px;
   bottom: 24px;
