@@ -106,7 +106,7 @@ public class XmlHandler extends edu.harvard.hul.ois.jhove.HandlerBase
     private final static String EOL = System.getProperty("line.separator");
 
     /** Schema version. */
-    private static final String SCHEMA_VERSION = "1.9";
+    private static final String SCHEMA_VERSION = "1.10";
 
     /******************************************************************
      * PRIVATE INSTANCE FIELDS.

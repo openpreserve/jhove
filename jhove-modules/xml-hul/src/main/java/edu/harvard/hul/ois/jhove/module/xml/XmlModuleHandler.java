@@ -375,7 +375,7 @@ public class XmlModuleHandler extends DefaultHandler {
             }
         } catch (IOException ioe) {
             // Malformed URL or bad connection.
-            System.err.println("Error resolving entity: " + ioe.getMessage());
+            System.err.println("Error resolving entity: " + entityUrl + " - " + ioe.getMessage());
             throw new SAXException(ioe);
         }
         return null;
