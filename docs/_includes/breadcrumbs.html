@@ -1,0 +1,25 @@
+{% comment %}
+Breadcrumb navigation component.
+Renders a trail from Home → parent pages → current page.
+Uses front matter: nav_title, parent, section.
+Only renders if the page has a nav_title and parent defined.
+{% endcomment %}
+
+{% if page.nav_title and page.parent %}
+  <nav aria-label="Breadcrumb" class="site-breadcrumbs">
+    <ol>
+      <li><a href="/">Home</a></li>
+      
+      {% comment %} Find and link parent page by nav_title and section {% endcomment %}
+      {% for candidate in site.pages %}
+        {% if candidate.nav_title == page.parent and candidate.section == page.section %}
+          <li><a href="{{ candidate.url }}">{{ candidate.nav_title }}</a></li>
+          {% break %}
+        {% endif %}
+      {% endfor %}
+      
+      {% comment %} Current page (no link) {% endcomment %}
+      <li aria-current="page">{{ page.nav_title }}</li>
+    </ol>
+  </nav>
+{% endif %}
