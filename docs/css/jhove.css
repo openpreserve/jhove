@@ -402,6 +402,15 @@ html[data-theme="dark"] .table a {
   .site-footer-tagline {
     font-size: 20px;
   }
+
+  .site-footer-links,
+  .site-footer-meta {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
