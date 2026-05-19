@@ -36,7 +36,7 @@ Identification, validation, and characterization actions are frequently necessar
 
 - A guide to [building JHOVE from source.](/documentation/build/)
 - JHOVE [JavaDoc for all packages and classes](/javadoc/)
-- A UML class [diagram](/img/api.gif)
+- A UML class [diagram](api.gif)
 - A guide to [writing a JHOVE Module](/documentation/dev-module/) (2005-02-07)
 - A guide to [logging in JHOVE](/documentation/logging/)
 

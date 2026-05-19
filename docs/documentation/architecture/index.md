@@ -7,4 +7,4 @@ layout: page
 
 JHOVE is designed as a layered architecture with an API (with well-defined, public interfaces) invoked by a thin application layer for a stand-alone, command line tool, applicable for batch and interactive operation. The API can be used on its own to create other compatible tools.
 
-![JHOVE architecture overview](/img/architecture.gif)
+![JHOVE architecture overview](architecture.gif)
