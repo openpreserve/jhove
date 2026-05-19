@@ -386,6 +386,28 @@ html[data-theme="dark"] .table a {
   }
 }
 
+@media (max-width: 1199px) and (min-width: 768px) {
+  .navbar-theme-item {
+    padding: 8px 6px 8px 10px;
+  }
+
+  .theme-toggle {
+    font-size: 11px;
+    padding: 5px 10px;
+    white-space: nowrap;
+  }
+
+  .theme-toggle-light,
+  .theme-toggle-dark,
+  .theme-toggle-sep {
+    display: none;
+  }
+
+  .theme-toggle::before {
+    content: "L / D";
+  }
+}
+
 @media (max-width: 767px) {
   body {
     font-size: 16px;
