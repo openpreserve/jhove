@@ -303,7 +303,7 @@ h4:focus-within .heading-anchor {
   gap: 12px;
   justify-content: space-between;
   margin-top: 18px;
-  padding-top: 14px;
+  padding: 14px 0 14px 0;
   width: 100%;
 }
 
