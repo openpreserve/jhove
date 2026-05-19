@@ -3,7 +3,7 @@ Full-site sidebar. Current section expands at page load; others collapse.
 Uses a button toggle with aria-expanded so no interactive controls are nested.
 {% endcomment %}
 {%- assign sorted_pages = site.pages | sort: "nav_order" -%}
-<aside class="site-sidebar" aria-label="Site navigation">
+<aside class="site-sidebar" id="docs-sidebar" aria-label="Site navigation">
   <div class="site-sidebar-panel">
     <a class="site-sidebar-home{% if page.url == '/' %} is-active{% endif %}" href="/">Home</a>
     {% for root in sorted_pages %}

@@ -6,17 +6,28 @@
 {% include navbar.html nav=site.data.navbar %}
   <main id="main-content" class="container theme-showcase" role="main">
     {% if page.section %}
+      <button type="button" id="sidebar-drawer-toggle" class="sidebar-drawer-toggle" aria-controls="docs-sidebar" aria-expanded="false">Sections</button>
       <div class="row docs-layout">
-        <div class="col-sm-4 col-md-3 hidden-xs">
+        <div class="col-sm-4 col-md-3 docs-sidebar-column">
           {% include sidebar.html %}
         </div>
-        <div class="col-sm-8 col-md-9">
+        <div class="col-sm-8 col-md-9 docs-content-column">
           <div class="docs-surface doc-content">
             {% include breadcrumbs.html %}
             {{ content }}
           </div>
         </div>
       </div>
+      <script>
+      (function () {
+        var btn = document.getElementById('sidebar-drawer-toggle');
+        if (!btn) { return; }
+        btn.addEventListener('click', function () {
+          var isOpen = document.body.classList.toggle('sidebar-drawer-open');
+          btn.setAttribute('aria-expanded', String(isOpen));
+        });
+      }());
+      </script>
     {% else %}
       <div class="docs-surface doc-content">
         {% include breadcrumbs.html %}
