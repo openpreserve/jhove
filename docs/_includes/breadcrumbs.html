@@ -1,27 +1,10 @@
 {% comment %}
 Breadcrumb navigation component.
-Renders a trail from Home → parent pages → current page.
+Renders a trail from Home -> parent pages -> current page.
 Uses front matter: nav_title, parent, section.
-Renders if page has nav_title and either a parent or is a top-level section (not home).
+Supports one or two levels of hierarchy.
 {% endcomment %}
 
-{% if page.nav_title and page.url != "/" and (page.parent or page.parent == null) %}
-  <nav aria-label="Breadcrumb" class="site-breadcrumbs">
-    <ol>
-      <li><a href="/">Home</a></li>
-      
-      {% comment %} Find and link parent page if it exists {% endcomment %}
-      {% if page.parent %}
-        {% for candidate in site.pages %}
-          {% if candidate.nav_title == page.parent and candidate.section == page.section %}
-            <li><a href="{{ candidate.url }}">{{ candidate.nav_title }}</a></li>
-            {% break %}
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-      
-      {% comment %} Current page (no link) {% endcomment %}
-      <li aria-current="page">{{ page.nav_title }}</li>
-    </ol>
-  </nav>
-{% endif %}
+{%- if page.nav_title and page.url != "/" -%}
+<nav aria-label="Breadcrumb" class="site-breadcrumbs"><span class="site-breadcrumb"><a href="/">Home</a></span>{%- if page.parent -%}{%- for candidate in site.pages -%}{%- if candidate.nav_title == page.parent and candidate.section == page.section -%}{%- if candidate.parent -%}{%- for ancestor in site.pages -%}{%- if ancestor.nav_title == candidate.parent and ancestor.section == candidate.section -%}<span class="site-breadcrumb-separator" aria-hidden="true">/</span><span class="site-breadcrumb"><a href="{{ ancestor.url }}">{{ ancestor.nav_title }}</a></span>{%- break -%}{%- endif -%}{%- endfor -%}{%- endif -%}<span class="site-breadcrumb-separator" aria-hidden="true">/</span><span class="site-breadcrumb"><a href="{{ candidate.url }}">{{ candidate.nav_title }}</a></span>{%- break -%}{%- endif -%}{%- endfor -%}{%- endif -%}<span class="site-breadcrumb-separator" aria-hidden="true">/</span><span class="site-breadcrumb" aria-current="page">{{ page.nav_title }}</span></nav>
+{%- endif -%}
