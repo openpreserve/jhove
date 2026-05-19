@@ -2,10 +2,32 @@
 <html lang="en">
 {% include header.html %}
 <body role="document">
-{% include navbar.html nav=site.data.navbar %}
-  <div class="container theme-showcase" role="main">
-    {{ content }}
+<a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="opf-topbar" role="complementary" aria-label="Open Preservation Foundation banner">
+    <div class="container opf-topbar-inner">
+      <span>Powered by OPF</span>
+      <a href="https://openpreservation.org/" target="_blank" rel="noopener noreferrer">OPF</a>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme" aria-pressed="false">
+        <span class="theme-toggle-light">Light</span>
+        <span class="theme-toggle-sep">/</span>
+        <span class="theme-toggle-dark">Dark</span>
+      </button>
+    </div>
   </div>
+{% include navbar.html nav=site.data.navbar %}
+  <main id="main-content" class="container theme-showcase" role="main">
+    <div class="docs-surface doc-content">
+      {{ content }}
+    </div>
+  </main>
+  <button type="button" id="scroll-top" class="scroll-top" aria-label="Scroll to top" title="Scroll to top">
+    <span aria-hidden="true">Top</span>
+  </button>
+  <noscript>
+    <style>
+      .theme-toggle, .scroll-top { display: none !important; }
+    </style>
+  </noscript>
   {% include footer.html %}
 </body>
 </html>
