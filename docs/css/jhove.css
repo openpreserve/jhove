@@ -395,6 +395,15 @@ html[data-theme="dark"] .table a {
     padding: 12px 14px;
   }
 
+  .docs-surface {
+    border-left: 0;
+    border-radius: 0;
+    border-right: 0;
+    box-shadow: none;
+    margin-bottom: 0;
+    padding: 20px 16px;
+  }
+
   .site-footer-main h3 {
     font-size: 28px;
   }
