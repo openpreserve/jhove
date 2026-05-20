@@ -158,31 +158,6 @@ button:focus,
   padding: 10px 14px;
 }
 
-.navbar-sidebar-item {
-  display: none;
-}
-
-.mobile-sidebar-toggle {
-  background: #ffffff;
-  border: 2px solid #0f5e7b;
-  color: #0f5e7b;
-  font-size: 0;
-  font-weight: 700;
-  height: 34px;
-  line-height: 1;
-  min-width: 40px;
-  padding: 0 8px;
-}
-
-.mobile-sidebar-toggle::before {
-  content: "\00BB\00BB";
-  font-size: 15px;
-}
-
-.mobile-sidebar-toggle[aria-expanded="true"]::before {
-  content: "\00AB\00AB";
-}
-
 .navbar-brand img {
   margin-top: -10px;
 }
@@ -729,10 +704,6 @@ html[data-theme="dark"] .table a {
 @media (max-width: 767px) {
   body {
     font-size: 16px;
-  }
-
-  .navbar-sidebar-item {
-    display: none !important;
   }
 
   .site-sidebar-controls {
