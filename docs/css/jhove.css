@@ -158,6 +158,31 @@ button:focus,
   padding: 10px 14px;
 }
 
+.navbar-sidebar-item {
+  display: none;
+}
+
+.mobile-sidebar-toggle {
+  background: #ffffff;
+  border: 2px solid #0f5e7b;
+  color: #0f5e7b;
+  font-size: 0;
+  font-weight: 700;
+  height: 34px;
+  line-height: 1;
+  min-width: 40px;
+  padding: 0 8px;
+}
+
+.mobile-sidebar-toggle::before {
+  content: "\00BB\00BB";
+  font-size: 15px;
+}
+
+.mobile-sidebar-toggle[aria-expanded="true"]::before {
+  content: "\00AB\00AB";
+}
+
 .navbar-brand img {
   margin-top: -10px;
 }
@@ -218,14 +243,6 @@ button:focus,
   color: var(--brand-blue-dark);
 }
 
-.sidebar-float-toggle {
-  display: none;
-  left: 8px;
-  position: fixed;
-  top: 132px;
-  z-index: 95;
-}
-
 .sidebar-backdrop {
   background: rgba(0, 0, 0, 0.45);
   display: none;
@@ -242,14 +259,6 @@ button:focus,
   display: flex;
   justify-content: flex-end;
   margin-bottom: 10px;
-}
-
-body.sidebar-collapsed .sidebar-float-toggle {
-  display: inline-block;
-}
-
-body.sidebar-collapsed .site-sidebar-controls .sidebar-drawer-toggle {
-  display: none;
 }
 
 .docs-layout {
@@ -722,9 +731,10 @@ html[data-theme="dark"] .table a {
     font-size: 16px;
   }
 
-  .sidebar-float-toggle {
-    display: inline-block;
-    top: 92px;
+  .navbar-sidebar-item {
+    align-items: center;
+    display: flex;
+    padding: 12px 14px;
   }
 
   .site-sidebar-controls {
