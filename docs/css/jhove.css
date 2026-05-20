@@ -732,9 +732,7 @@ html[data-theme="dark"] .table a {
   }
 
   .navbar-sidebar-item {
-    align-items: center;
-    display: flex;
-    padding: 12px 14px;
+    display: none !important;
   }
 
   .site-sidebar-controls {
@@ -747,6 +745,7 @@ html[data-theme="dark"] .table a {
   }
 
   .docs-sidebar-column {
+    display: none !important;
     left: -88vw;
     max-width: 82vw;
     padding-left: 0;
@@ -756,6 +755,10 @@ html[data-theme="dark"] .table a {
     transition: left 0.25s ease;
     width: 82vw;
     z-index: 90;
+  }
+
+  .sidebar-backdrop {
+    display: none !important;
   }
 
   .docs-content-column {
