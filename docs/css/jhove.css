@@ -103,9 +103,9 @@ button:focus,
 .navbar-default {
   background: #ffffff;
   border: 0;
-  border-bottom: 12px solid #0f5e7b;
+  border-bottom: 28px solid #0f5e7b;
   box-shadow: none;
-  margin-bottom: 26px;
+  /* margin-bottom: 26px; */
 }
 
 .navbar-default .navbar-nav > li > a,
