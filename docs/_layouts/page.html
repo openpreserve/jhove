@@ -12,10 +12,7 @@
         </div>
         <div class="col-sm-8 col-md-9 docs-content-column">
           <div class="docs-surface doc-content">
-            <div class="docs-toolbar">
-              {% include breadcrumbs.html %}
-              <button type="button" id="sidebar-drawer-toggle" class="sidebar-drawer-toggle" aria-controls="docs-sidebar" aria-expanded="true" aria-label="Hide navigation" title="Hide navigation"></button>
-            </div>
+            {% include breadcrumbs.html %}
             {{ content }}
           </div>
         </div>
@@ -25,38 +22,19 @@
         var btn = document.getElementById('sidebar-drawer-toggle');
         var body = document.body;
         if (!btn) { return; }
+
         function setExpanded(value) {
           btn.setAttribute('aria-expanded', value ? 'true' : 'false');
           btn.setAttribute('aria-label', value ? 'Hide navigation' : 'Show navigation');
           btn.setAttribute('title', value ? 'Hide navigation' : 'Show navigation');
         }
 
-        function isMobile() {
-          return window.matchMedia('(max-width: 767px)').matches;
-        }
-
-        function syncStateToViewport() {
-          if (isMobile()) {
-            body.classList.remove('sidebar-collapsed');
-            setExpanded(body.classList.contains('sidebar-drawer-open'));
-            return;
-          }
-          body.classList.remove('sidebar-drawer-open');
-          setExpanded(!body.classList.contains('sidebar-collapsed'));
-        }
-
         btn.addEventListener('click', function () {
-          if (isMobile()) {
-            var drawerOpen = body.classList.toggle('sidebar-drawer-open');
-            setExpanded(drawerOpen);
-            return;
-          }
           var collapsed = body.classList.toggle('sidebar-collapsed');
           setExpanded(!collapsed);
         });
 
-        syncStateToViewport();
-        window.addEventListener('resize', syncStateToViewport);
+        setExpanded(!body.classList.contains('sidebar-collapsed'));
       }());
       </script>
     {% else %}

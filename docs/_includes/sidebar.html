@@ -5,6 +5,9 @@ Uses a button toggle with aria-expanded so no interactive controls are nested.
 {%- assign sorted_pages = site.pages | sort: "nav_order" -%}
 <aside class="site-sidebar" id="docs-sidebar" aria-label="Site navigation">
   <div class="site-sidebar-panel">
+    <div class="site-sidebar-controls">
+      <button type="button" id="sidebar-drawer-toggle" class="sidebar-drawer-toggle" aria-controls="docs-sidebar" aria-expanded="true" aria-label="Hide navigation" title="Hide navigation"></button>
+    </div>
     <a class="site-sidebar-home{% if page.url == '/' %} is-active{% endif %}" href="/">Home</a>
     {% for root in sorted_pages %}
       {% if root.parent == nil and root.nav_title and root.url != '/' %}
