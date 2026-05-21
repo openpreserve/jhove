@@ -1,5 +1,10 @@
 ---
 title: TIFF Tags
+nav_title: Tags
+nav_order: 2
+section: modules
+parent: TIFF
+summary: Reference for TIFF tag definitions.
 layout: page
 ---
 

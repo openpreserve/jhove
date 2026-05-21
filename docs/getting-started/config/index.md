@@ -1,5 +1,10 @@
 ---
-title: Configuration
+title: Configuring JHOVE
+nav_title: Configuration
+nav_order: 2
+section: getting-started
+parent: Getting started
+summary: Legacy configuration instructions for older JHOVE releases.
 layout: page
 ---
 

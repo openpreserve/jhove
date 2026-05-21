@@ -1,5 +1,10 @@
 ---
 title: EPUB-ptc Module
+nav_title: EPUB
+nav_order: 1
+section: modules
+parent: Third-party
+summary: Support for EPUB files from a third-party module.
 layout: page
 ---
 

@@ -1,5 +1,10 @@
 ---
 title: GIF-hul Module
+nav_title: GIF
+nav_order: 4
+section: modules
+parent: Modules
+summary: Support for GIF image files.
 layout: page
 ---
 

@@ -2,10 +2,127 @@
 <html lang="en">
 {% include header.html %}
 <body role="document">
+<a class="skip-link" href="#main-content">Skip to main content</a>
 {% include navbar.html nav=site.data.navbar %}
-  <div class="container theme-showcase" role="main">
-    {{ content }}
-  </div>
+  <main id="main-content" class="container theme-showcase" role="main">
+    {% if page.section %}
+      <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+      <div class="row docs-layout">
+        <div class="col-sm-4 col-md-3 docs-sidebar-column">
+          {% include sidebar.html %}
+        </div>
+        <div class="col-sm-8 col-md-9 docs-content-column">
+          <div class="docs-surface doc-content">
+            {% include breadcrumbs.html %}
+            {{ content }}
+          </div>
+        </div>
+      </div>
+      <script>
+      (function () {
+        var buttons = document.querySelectorAll('.sidebar-toggle-control');
+        var backdrop = document.getElementById('sidebar-backdrop');
+        var body = document.body;
+        var storageKey = 'jhove.sidebar.collapsed';
+        if (!buttons.length) { return; }
+
+        var desktopCollapsed = false;
+        try {
+          desktopCollapsed = window.localStorage.getItem(storageKey) === '1';
+        } catch (e) {
+          // Ignore storage errors.
+        }
+
+        if (desktopCollapsed) {
+          body.classList.add('sidebar-collapsed');
+        }
+
+        function setExpanded(value) {
+          buttons.forEach(function (btn) {
+            btn.setAttribute('aria-expanded', value ? 'true' : 'false');
+            btn.setAttribute('aria-label', value ? 'Hide navigation' : 'Show navigation');
+            btn.setAttribute('title', value ? 'Hide navigation' : 'Show navigation');
+          });
+        }
+
+        function isMobile() {
+          return window.matchMedia('(max-width: 767px)').matches;
+        }
+
+        function setBackdrop(open) {
+          if (!backdrop) { return; }
+          backdrop.classList.toggle('is-visible', open);
+        }
+
+        function persistDesktopState() {
+          try {
+            window.localStorage.setItem(storageKey, desktopCollapsed ? '1' : '0');
+          } catch (e) {
+            // Ignore storage errors.
+          }
+        }
+
+        function closeMobileDrawer() {
+          body.classList.remove('sidebar-drawer-open');
+          setBackdrop(false);
+        }
+
+        function syncUi() {
+          if (isMobile()) {
+            body.classList.remove('sidebar-collapsed');
+            var drawerOpen = body.classList.contains('sidebar-drawer-open');
+            setExpanded(drawerOpen);
+            setBackdrop(drawerOpen);
+            return;
+          }
+          if (desktopCollapsed) {
+            body.classList.add('sidebar-collapsed');
+          } else {
+            body.classList.remove('sidebar-collapsed');
+          }
+          closeMobileDrawer();
+          setExpanded(!desktopCollapsed);
+        }
+
+        buttons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            if (isMobile()) {
+              body.classList.toggle('sidebar-drawer-open');
+              syncUi();
+              return;
+            }
+            desktopCollapsed = !desktopCollapsed;
+            persistDesktopState();
+            syncUi();
+          });
+        });
+
+        if (backdrop) {
+          backdrop.addEventListener('click', function () {
+            closeMobileDrawer();
+            syncUi();
+          });
+        }
+
+        window.addEventListener('resize', syncUi);
+        syncUi();
+      }());
+      </script>
+    {% else %}
+      <div class="docs-surface doc-content">
+        {% include breadcrumbs.html %}
+        {{ content }}
+      </div>
+    {% endif %}
+  </main>
+  <button type="button" id="scroll-top" class="scroll-top" aria-label="Scroll to top" title="Scroll to top">
+    <span aria-hidden="true">Top</span>
+  </button>
+  <noscript>
+    <style>
+      .theme-toggle, .scroll-top { display: none !important; }
+    </style>
+  </noscript>
   {% include footer.html %}
 </body>
 </html>

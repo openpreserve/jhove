@@ -1,5 +1,10 @@
 ---
 title: About
+nav_title: About
+nav_order: 5
+section: about
+parent: null
+summary: Background on the JHOVE project and the organisations behind it.
 layout: page
 ---
 

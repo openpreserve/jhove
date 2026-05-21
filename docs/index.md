@@ -1,5 +1,10 @@
 ---
 title: JSTOR/Harvard Object Validation Environment
+nav_title: Home
+nav_order: 1
+section: home
+parent: null
+summary: JHOVE overview and download entry point.
 layout: page
 ---
 

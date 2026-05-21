@@ -1,5 +1,10 @@
 ---
 title: JPEG2000-hul Module
+nav_title: JPEG2000
+nav_order: 7
+section: modules
+parent: Modules
+summary: Support for JPEG 2000 image files.
 layout: page
 ---
 

@@ -1,5 +1,10 @@
 ---
 title: TIFF-hul Module
+nav_title: TIFF
+nav_order: 9
+section: modules
+parent: Modules
+summary: Support for TIFF image files.
 layout: page
 ---
 

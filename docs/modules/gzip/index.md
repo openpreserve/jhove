@@ -1,5 +1,10 @@
 ---
 title: GZIP-kb Module
+nav_title: GZIP
+nav_order: 5
+section: modules
+parent: Modules
+summary: Support for GZIP compressed files.
 layout: page
 ---
 

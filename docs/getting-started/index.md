@@ -1,5 +1,10 @@
 ---
-title: Getting started
+title: Getting Started with JHOVE
+nav_title: Getting started
+nav_order: 1
+section: getting-started
+parent: null
+summary: How to download, install, and begin using JHOVE.
 layout: page
 ---
 

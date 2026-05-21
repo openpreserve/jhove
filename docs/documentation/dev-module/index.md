@@ -1,5 +1,10 @@
 ---
-title: Writing a module
+title: Writing a JHOVE Module
+nav_title: Module guide
+nav_order: 3
+section: documentation
+parent: Documentation
+summary: Draft guidance for implementing a new JHOVE module.
 layout: page
 ---
 

@@ -1,5 +1,10 @@
 ---
 title: Distribution
+nav_title: Distribution
+nav_order: 6
+section: distribution
+parent: null
+summary: Download the latest JHOVE release and related release history.
 layout: page
 ---
 

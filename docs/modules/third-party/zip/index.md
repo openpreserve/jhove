@@ -1,5 +1,10 @@
 ---
 title: Zip & Gzip Modules
+nav_title: ZIP-GZIP
+nav_order: 3
+section: modules
+parent: Third-party
+summary: Support for ZIP and GZIP files from third-party modules.
 layout: page
 ---
 

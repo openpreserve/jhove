@@ -1,5 +1,10 @@
 ---
-title: Selecting an XML parser
+title: Selecting an XML Parser
+nav_title: Parser
+nav_order: 1
+section: documentation
+parent: Documentation
+summary: Guidance for choosing and configuring an XML parser for JHOVE.
 layout: page
 ---
 

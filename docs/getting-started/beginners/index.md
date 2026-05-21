@@ -1,6 +1,11 @@
 ---
 layout: page
 title: JHOVE - A Beginners Guide
+nav_title: Beginners guide
+nav_order: 1
+section: getting-started
+parent: Getting started
+summary: A practical installation and GUI walkthrough for newcomers.
 ---
 # {{ page.title }}
 
@@ -56,11 +61,11 @@ JHOVE is an open source file format identification, validation and characterisat
 ![Screenshot of the Windows explorer showing the JHOVE GUI bat file](jhove-run-gui-win.png "JHOVE GUI batch file in Windows Explorer")
 
 2. This will first open a black command window, `cmd.exe`:  
-![Screenshot of the Windows JHOVE GUI command window](jhove-win-cmd.png "JHOVE GUI command shell on Windows")
+![Screenshot of the Windows JHOVE GUI command window](jhove-win-cmd.png "JHOVE GUI command shell on Windows")  
 Leave this window, if you close it you'll stop the GUI process.
 
 3. The JHOVE GUI window should start:  
-![Screenshot of the Windows JHOVE GUI start screen](jhv-gui-win.png "JHOVE GUI start screen on Windows")
+![Screenshot of the Windows JHOVE GUI start screen](jhv-gui-win.png "JHOVE GUI start screen on Windows")  
 
 4. If this software does not open then you may not have Java installed on your computer, or you may have an incompatible version of Java installed on your computer. (Please go to the section ‘Installing Java on a PC’ for help.)
 

@@ -39,7 +39,7 @@
       subhref: "third-party/epub/"
     - subtitle: "MP3"
       subhref: "third-party/mp3/"
-    - subtitle: "ZIP"
+    - subtitle: "ZIP-GZIP"
       subhref: "third-party/zip/"
 
 - title: "Resources"
