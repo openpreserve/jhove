@@ -8,7 +8,8 @@
   {% assign edit_path = "docs" | append: page_dir | append: page_name %}
 {% endif %}
 {% assign edit_path = edit_path | replace: "//", "/" %}
-{% assign edit_url = repository_url | append: "/edit/" | append: repository_branch | append: "/" | append: edit_path %}
+{% assign repository_dev_url = repository_url | replace: "https://github.com", "https://github.dev" %}
+{% assign edit_url = repository_dev_url | append: "/blob/" | append: repository_branch | append: "/" | append: edit_path %}
 {% assign source_url = repository_url | append: "/blob/" | append: repository_branch | append: "/" | append: edit_path %}
 {% assign issue_url = repository_url | append: "/issues/new" %}
   <footer class="site-footer" role="contentinfo">
