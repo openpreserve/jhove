@@ -1,5 +1,10 @@
 ---
 title: XML-hul Module
+nav_title: XML
+nav_order: 13
+section: modules
+parent: Modules
+summary: Support for XML documents.
 layout: page
 ---
 

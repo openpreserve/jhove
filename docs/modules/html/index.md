@@ -1,5 +1,10 @@
 ---
 title: HTML-hul Module
+nav_title: HTML
+nav_order: 5
+section: modules
+parent: Modules
+summary: Support for HTML documents.
 layout: page
 ---
 

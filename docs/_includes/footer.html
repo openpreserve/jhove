@@ -1,13 +1,136 @@
-  <footer class="container">
-    <p>
-      Copyright © 2025 Open Preservation Foundation. 
-    </p>
-    <p>
-      Updated April 2025
-    </p>
+{% assign repository_url = site.github.repository_url | default: "https://github.com/openpreserve/jhove" %}
+{% assign repository_branch = site.github.source.branch | default: "main" %}
+{% assign page_dir = page.dir | default: "/" %}
+{% assign page_name = page.name | default: "index.md" %}
+{% if page_dir == "/" %}
+  {% assign edit_path = "docs/" | append: page_name %}
+{% else %}
+  {% assign edit_path = "docs" | append: page_dir | append: page_name %}
+{% endif %}
+{% assign edit_path = edit_path | replace: "//", "/" %}
+{% assign repository_dev_url = repository_url | replace: "https://github.com", "https://github.dev" %}
+{% assign edit_url = repository_dev_url | append: "/blob/" | append: repository_branch | append: "/" | append: edit_path %}
+{% assign source_url = repository_url | append: "/blob/" | append: repository_branch | append: "/" | append: edit_path %}
+{% assign issue_url = repository_url | append: "/issues/new" %}
+  <footer class="site-footer" role="contentinfo">
+    <div class="container site-footer-main">
+      <h3>JHOVE</h3>
+      <p class="site-footer-tagline">Open source file format identification, validation, and characterisation.</p>
+      <p><a href="https://openpreservation.org/" target="_blank" rel="noopener noreferrer">Open Preservation Foundation</a></p>
+      <p><a href="https://www.gnu.org/licenses/licenses.html#LGPL" target="_blank" rel="noopener noreferrer">LGPL license</a></p>
+      <div class="site-footer-links" aria-label="Page and project links">
+        <a href="{{ edit_url }}" target="_blank" rel="noopener noreferrer">Edit this page</a>
+        <a href="{{ source_url }}">View source</a>
+        <a href="{{ repository_url }}">GitHub repository</a>
+        <a href="{{ issue_url }}">Report an issue</a>
+      </div>
+    </div>
+    <div class="container site-footer-meta">
+      <p>Copyright © {{ "now" | date: "%Y" }} Open Preservation Foundation.</p>
+      <p>Last built {{ site.time | date: "%d %B %Y" }}.</p>
+    </div>
   </footer>
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  <script>
+    (function () {
+      function slugify(value) {
+        return value
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9\s-]/g, "")
+          .replace(/\s+/g, "-")
+          .replace(/-+/g, "-");
+      }
+
+      function addHeadingAnchors() {
+        var headings = document.querySelectorAll(".doc-content h1, .doc-content h2, .doc-content h3, .doc-content h4");
+        var usedIds = {};
+
+        headings.forEach(function (heading) {
+          var existingAnchor = heading.querySelector(".heading-anchor");
+          if (existingAnchor) {
+            return;
+          }
+
+          var id = heading.id;
+          if (!id) {
+            id = slugify(heading.textContent || "section");
+            if (!id) {
+              id = "section";
+            }
+            var baseId = id;
+            var count = 1;
+            while (document.getElementById(id) || usedIds[id]) {
+              count += 1;
+              id = baseId + "-" + count;
+            }
+            heading.id = id;
+          }
+
+          usedIds[id] = true;
+          var anchor = document.createElement("a");
+          anchor.className = "heading-anchor";
+          anchor.href = "#" + id;
+          anchor.setAttribute("aria-label", "Link to this section");
+          anchor.innerHTML = "<span aria-hidden=\"true\">#</span>";
+          heading.appendChild(anchor);
+        });
+      }
+
+      function setupThemeToggle() {
+        var toggle = document.getElementById("theme-toggle");
+        if (!toggle) {
+          return;
+        }
+
+        var savedTheme = localStorage.getItem("jhove-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = savedTheme || (prefersDark ? "dark" : "light");
+
+        function applyTheme(nextTheme) {
+          document.documentElement.setAttribute("data-theme", nextTheme);
+          toggle.setAttribute("aria-pressed", String(nextTheme === "dark"));
+          localStorage.setItem("jhove-theme", nextTheme);
+        }
+
+        applyTheme(theme);
+        toggle.addEventListener("click", function () {
+          var current = document.documentElement.getAttribute("data-theme") || "light";
+          applyTheme(current === "dark" ? "light" : "dark");
+        });
+      }
+
+      function setupScrollTop() {
+        var button = document.getElementById("scroll-top");
+        if (!button) {
+          return;
+        }
+
+        function updateVisibility() {
+          var show = window.scrollY > 320;
+          button.classList.toggle("visible", show);
+        }
+
+        button.addEventListener("click", function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        window.addEventListener("scroll", updateVisibility, { passive: true });
+        updateVisibility();
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("table").forEach(function (table) {
+          table.classList.add("table", "table-striped");
+        });
+
+        addHeadingAnchors();
+        setupThemeToggle();
+        setupScrollTop();
+      });
+    })();
+  </script>

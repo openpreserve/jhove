@@ -1,5 +1,10 @@
 ---
-title: JSTOR/Harvard Object Validation Environment
+title: Standard Modules
+nav_title: Modules
+nav_order: 3
+section: modules
+parent: null
+summary: Entry point for the standard and third-party JHOVE modules.
 layout: page
 ---
 

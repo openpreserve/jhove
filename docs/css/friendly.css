@@ -59,3 +59,105 @@
 .highlight .vg { color: #bb60d5 } /* Name.Variable.Global */
 .highlight .vi { color: #bb60d5 } /* Name.Variable.Instance */
 .highlight .il { color: #40a070 } /* Literal.Number.Integer.Long */
+
+html[data-theme="dark"] .highlight {
+	color: #dde8f0;
+}
+
+html[data-theme="dark"] .highlight .hll { background-color: #2a3640 }
+html[data-theme="dark"] .highlight .c,
+html[data-theme="dark"] .highlight .cm,
+html[data-theme="dark"] .highlight .c1,
+html[data-theme="dark"] .highlight .cs,
+html[data-theme="dark"] .highlight .go {
+	color: #7ea1b7;
+	font-style: italic;
+}
+
+html[data-theme="dark"] .highlight .k,
+html[data-theme="dark"] .highlight .kc,
+html[data-theme="dark"] .highlight .kd,
+html[data-theme="dark"] .highlight .kn,
+html[data-theme="dark"] .highlight .kp,
+html[data-theme="dark"] .highlight .kr,
+html[data-theme="dark"] .highlight .ow {
+	color: #7cc4ff;
+	font-weight: 700;
+}
+
+html[data-theme="dark"] .highlight .kt,
+html[data-theme="dark"] .highlight .nc,
+html[data-theme="dark"] .highlight .nn,
+html[data-theme="dark"] .highlight .nt {
+	color: #6fd7c2;
+	font-weight: 700;
+}
+
+html[data-theme="dark"] .highlight .s,
+html[data-theme="dark"] .highlight .s1,
+html[data-theme="dark"] .highlight .s2,
+html[data-theme="dark"] .highlight .sb,
+html[data-theme="dark"] .highlight .sc,
+html[data-theme="dark"] .highlight .sd,
+html[data-theme="dark"] .highlight .se,
+html[data-theme="dark"] .highlight .sh,
+html[data-theme="dark"] .highlight .si,
+html[data-theme="dark"] .highlight .sx,
+html[data-theme="dark"] .highlight .sr,
+html[data-theme="dark"] .highlight .ss {
+	color: #f2bb7c;
+}
+
+html[data-theme="dark"] .highlight .m,
+html[data-theme="dark"] .highlight .mf,
+html[data-theme="dark"] .highlight .mh,
+html[data-theme="dark"] .highlight .mi,
+html[data-theme="dark"] .highlight .mo,
+html[data-theme="dark"] .highlight .il {
+	color: #d7a0ff;
+}
+
+html[data-theme="dark"] .highlight .na,
+html[data-theme="dark"] .highlight .nb,
+html[data-theme="dark"] .highlight .ne,
+html[data-theme="dark"] .highlight .nf,
+html[data-theme="dark"] .highlight .nl,
+html[data-theme="dark"] .highlight .no,
+html[data-theme="dark"] .highlight .nv,
+html[data-theme="dark"] .highlight .vc,
+html[data-theme="dark"] .highlight .vg,
+html[data-theme="dark"] .highlight .vi,
+html[data-theme="dark"] .highlight .bp {
+	color: #8fd8ff;
+}
+
+html[data-theme="dark"] .highlight .o,
+html[data-theme="dark"] .highlight .w {
+	color: #9aafbf;
+}
+
+html[data-theme="dark"] .highlight .gp {
+	color: #f0c36a;
+	font-weight: 700;
+}
+
+html[data-theme="dark"] .highlight .gh,
+html[data-theme="dark"] .highlight .gu {
+	color: #9cc7ff;
+	font-weight: 700;
+}
+
+html[data-theme="dark"] .highlight .gi {
+	color: #7fe3a2;
+}
+
+html[data-theme="dark"] .highlight .gd {
+	color: #f28989;
+}
+
+html[data-theme="dark"] .highlight .err,
+html[data-theme="dark"] .highlight .gr,
+html[data-theme="dark"] .highlight .gt {
+	color: #ff9a9a;
+	border-color: #d05b5b;
+}
