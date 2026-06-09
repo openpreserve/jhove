@@ -1749,10 +1749,13 @@ public class PdfModule extends ModuleBase {
                                     PdfSimpleObject BaseVersion = (PdfSimpleObject) extension.get(DICT_KEY_BASEVERSION);
                                     String infoVersString = _version;
                                     String versString = BaseVersion.getStringValue();
-                                    double ver = Double.parseDouble(versString);
-                                    double infoVer = Double.parseDouble(infoVersString);
                                     try {
-                                        if (infoVer != ver) {
+                                        double ver = Double.parseDouble(versString);
+                                        double infoVer = Double.parseDouble(infoVersString);
+
+                                        // BaseVersion "shall be less than or equal to the PDF version" and "may be different from the version number in the document header or that supplied by the Version key in the Catalog [...] because it reflects the version of the standard that has been extended and not the version of this particular file"
+                                        if (ver > infoVer) {
+                                            // FIXME: this needs a separate error ID as this is a distinct case
                                             String mess = MessageFormat.format(
                                                     MessageConstants.PDF_HUL_87.getMessage(),
                                                     infoVersString, ver);
@@ -1760,7 +1763,7 @@ public class PdfModule extends ModuleBase {
                                                     MessageConstants.PDF_HUL_87.getId(), mess);
                                             info.setMessage(new InfoMessage(message));
                                         } else {
-                                            p = new Property(PROP_NAME_BASEVERSION, PropertyType.STRING, ver);
+                                            p = new Property(PROP_NAME_BASEVERSION, PropertyType.STRING, versString);
                                             _docCatalogList.add(p);
                                         }
                                     } catch (NumberFormatException e) {
