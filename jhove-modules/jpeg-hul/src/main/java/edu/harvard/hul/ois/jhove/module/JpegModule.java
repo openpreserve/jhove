@@ -1011,6 +1011,7 @@ public class JpegModule extends ModuleBase {
 							_nByte));
 					info.setValid(false);
 					skipBytes(_dstream, length - 7, this);
+					return;
 				}
 			} else {
 				_seenJFIFFirst = true;
@@ -1057,7 +1058,7 @@ public class JpegModule extends ModuleBase {
 				_imageList.add(thumbProp);
 			}
 			_niso.setColorSpace(CS_YCC); // JFIF header usually implies YCbCr
-			skipBytes(_dstream, 3 * xThumbPix * yThumbPix, this);
+			skipBytes(_dstream, length - 16, this);
 		} else if (equalArray(ident, jfxxByte)) {
 			int extCode = readUnsignedByte(_dstream, this);
 			switch (extCode) {
