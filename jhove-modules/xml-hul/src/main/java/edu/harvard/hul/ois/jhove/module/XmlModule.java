@@ -107,6 +107,12 @@ public class XmlModule extends ModuleBase {
     /** Map of URLs to locally stored schemas. */
     protected Map<String, File> _localSchemas;
 
+    /** Optional directory for cached downloaded schemas. */
+    protected File _schemaCacheDirectory;
+
+    /** Expiration time for cached schemas in seconds. Negative means never expire. */
+    protected long _schemaCacheExpiration;
+
     /**
      * Class constructor.
      *
@@ -160,6 +166,8 @@ public class XmlModule extends ModuleBase {
     public void resetParams() {
         _baseURL = null;
         _localSchemas = new HashMap<>();
+        _schemaCacheDirectory = null;
+        _schemaCacheExpiration = -1;
         _parseFromSig = false;
         _sigWantsDecl = false;
         _withTextMD = false;
@@ -196,7 +204,38 @@ public class XmlModule extends ModuleBase {
         if (param != null) {
             param = param.trim();
             String lowerCaseParam = param.toLowerCase();
-            if (lowerCaseParam.startsWith("schema=")) {
+            if (lowerCaseParam.startsWith("schemacachedirectory=")
+                    || lowerCaseParam.startsWith("cachedirectory=")) {
+                int eq = param.indexOf('=');
+                if (eq >= 0) {
+                    String dir = param.substring(eq + 1);
+                    if (!dir.isEmpty()) {
+                        File cacheDir = new File(dir);
+                        if (!cacheDir.exists()) {
+                            cacheDir.mkdirs();
+                        }
+                        if (cacheDir.isDirectory()) {
+                            _schemaCacheDirectory = cacheDir;
+                        } else {
+                            _logger.warning("Ignoring module parameter with invalid cache directory: \""
+                                    + dir + "\"");
+                        }
+                    }
+                }
+            } else if (lowerCaseParam.startsWith("schemacacheexpiration=")
+                    || lowerCaseParam.startsWith("cacheexpiration=")) {
+                int eq = param.indexOf('=');
+                if (eq >= 0) {
+                    String value = param.substring(eq + 1);
+                    try {
+                        long seconds = Long.parseLong(value);
+                        _schemaCacheExpiration = seconds;
+                    } catch (NumberFormatException nfe) {
+                        _logger.warning("Ignoring module parameter with invalid cache expiration: \""
+                                + value + "\"");
+                    }
+                }
+            } else if (lowerCaseParam.startsWith("schema=")) {
                 addLocalSchema(param);
             } else if (lowerCaseParam.startsWith("s")) {
                 _sigWantsDecl = true;
@@ -300,6 +339,8 @@ public class XmlModule extends ModuleBase {
             handler = new XmlModuleHandler();
             handler.setXhtmlFlag(_xhtmlDoctype != null);
             handler.setLocalSchemas(_localSchemas);
+            handler.setCacheDirectory(_schemaCacheDirectory);
+            handler.setCacheExpiration(_schemaCacheExpiration);
             parser.setContentHandler(handler);
             parser.setErrorHandler(handler);
             parser.setEntityResolver(handler);
