@@ -104,6 +104,44 @@ public class XmlModuleTest {
         assertEquals(RepInfo.FALSE, info.getValid());
     }
 
+    @Test
+    public void validateXmlFailsForFineReaderXML() throws IOException {
+        File file = new File(RESOURCE_DIR + "12745764.xml");
+        RepInfo info = new RepInfo("uri:test");
+
+        module.param("schema=http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml;" + RESOURCE_DIR + "FineReader10-schema-v1.xsd");
+
+        int parseIndex = parse(file, info, 0);
+
+        assertEquals(1, parseIndex);
+        assertEquals(RepInfo.TRUE, info.getWellFormed());
+
+        parseIndex = parse(file, info, parseIndex);
+
+        assertEquals(0, parseIndex);
+        assertEquals(RepInfo.TRUE, info.getWellFormed());
+        assertEquals(RepInfo.FALSE, info.getValid());
+    }
+
+    @Test
+    public void validateXmlFailsForFineReaderExtendedXML() throws IOException {
+        File file = new File(RESOURCE_DIR + "12745764.xml");
+        RepInfo info = new RepInfo("uri:test");
+
+        module.param("schema=http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml;" + RESOURCE_DIR + "FineReader10-schema-v1-with-skew.xsd");
+
+        int parseIndex = parse(file, info, 0);
+
+        assertEquals(1, parseIndex);
+        assertEquals(RepInfo.TRUE, info.getWellFormed());
+
+        parseIndex = parse(file, info, parseIndex);
+
+        assertEquals(0, parseIndex);
+        assertEquals(RepInfo.TRUE, info.getWellFormed());
+        assertEquals(RepInfo.TRUE, info.getValid());
+    }
+
     private int parse(File file, RepInfo info, int parseIndex) throws IOException {
         try (InputStream stream = Files.newInputStream(file.toPath())) {
             return module.parse(stream, info, parseIndex);
