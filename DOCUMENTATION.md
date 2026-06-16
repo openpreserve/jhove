@@ -16,4 +16,13 @@ The source code for the website is held in the specifically named `gh-pages` bra
 If you're unfamiliar with GitHub Pages then their home page: https://pages.github.com/ is a good starting point. Under the hood it uses [Jekyll](https://jekyllrb.com/) to convert the GitHub `gh-pages` branch to the website. This conversion puts together pages and converts any Markdown files to HTML. If you're unfamiliar with Markdown, this file is written in it. It's a text-to-HTML conversion tool meaning that files can be written in a friendly plain text format, then converted to HTML. GitHub provide a comprehensive guide to [writing on GitHub](https://help.github.com/categories/writing-on-github/) which covers their own GitHub flavoured markdown. The [JHOVE beginners guide](http://jhove.openpreservation.org/getting-started/beginners/) is written in Markdown, you can see the markdown for the page alone [in the repository here](https://github.com/openpreserve/jhove/blob/gh-pages/getting-started/beginners/index.md) and the [raw source text file here](https://raw.githubusercontent.com/openpreserve/jhove/gh-pages/getting-started/beginners/index.md).
 
 ### DIY local site hosting
-If you're more technically inclined you can serve a version of the site locally. This will update as you make edits and makes working with the documentation very quick. GitHub have already produced a good guide to this https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-jekyll/.
+
+If you're more technically inclined you can serve a version of the site locally. This will update as you make edits and makes working with the documentation very quick. 
+
+As a quick start you can navigate to the `docs` folder and run the following to install the Jekyll dependencies and host the site on localhost:
+
+```bash
+bundle install && bundle exec jekyll serve
+```
+
+If you have any difficulties then GitHub have produced a good guide to this [Setting up your GitHub pages site locally with Jekyll](https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-jekyll/).

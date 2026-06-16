@@ -19,4 +19,4 @@ Potential use cases for JHOVE include:
 
 In terms of the OAIS Reference Model \[[ISO/IEC 14721](/references#oais)\], JHOVE can be integrated into repository workflows with respect to Submission Information Package (SIP) creation and ingest validation.
 
-> ![JHOVE example workflow](/img/workflow.gif)
+> ![JHOVE example workflow](workflow.gif)
