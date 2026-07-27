@@ -51,7 +51,7 @@ Download the [latest JHOVE installer](http://software.openpreservation.org/rel/j
 
     /Downloads/jhove-latest.jar
 
-Installation is OS dependant.
+Installation is OS dependent.
 
 ### Windows
 
@@ -250,7 +250,7 @@ java -jar bin/JhoveView.jar
 
 or by the appropriate mouse click behavior defined by the windowing system.
 
-![JHOVE GUI screenshot](/img/jhovegui.png)
+![JHOVE GUI screenshot](jhovegui.png)
 
 The menu options are:
 
