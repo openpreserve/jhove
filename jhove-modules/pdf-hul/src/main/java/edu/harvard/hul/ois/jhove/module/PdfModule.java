@@ -39,10 +39,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipException;
 
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 import edu.harvard.hul.ois.jhove.Agent;
 import edu.harvard.hul.ois.jhove.Document;
@@ -62,7 +59,7 @@ import edu.harvard.hul.ois.jhove.PropertyType;
 import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.SignatureType;
 import edu.harvard.hul.ois.jhove.SignatureUseType;
-import edu.harvard.hul.ois.jhove.XMPHandler;
+import edu.harvard.hul.ois.jhove.XMPParser;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import edu.harvard.hul.ois.jhove.module.pdf.Comment;
@@ -2141,48 +2138,31 @@ public class PdfModule extends ModuleBase {
             if (metadata == null) {
                 return true; // Not required
             }
-            // PdfDictionary metaDict = metadata.getDict ();
-
-            // Create an InputSource to feed the parser.
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-            XMLReader parser = factory.newSAXParser().getXMLReader();
-            PdfXMPSource src = new PdfXMPSource(metadata, getFile());
-            XMPHandler handler = new XMPHandler();
-            parser.setContentHandler(handler);
-            parser.setErrorHandler(handler);
-
-            // We have to parse twice. The first time, we may get
-            // an encoding change as part of an exception thrown. If this
-            // happens, we create a new InputSource with the encoding, and
-            // continue.
-            try {
-                parser.parse(src);
-                _xmpProp = src.makeProperty();
-            } catch (SAXException se) {
-                String msg = se.getMessage();
-                if (msg != null && msg.startsWith(ENCODING_PREFIX)) {
-                    String encoding = msg.substring(5);
-                    try {
-                        src = new PdfXMPSource(metadata, getFile(), encoding);
-                        parser.parse(src);
-                        _xmpProp = src.makeProperty();
-                    } catch (UnsupportedEncodingException uee) {
-                        _logger.log(Level.INFO,
-                                "Attempt to use explicit encoding to parse XMP metadata failed.",
-                                uee);
-                        throw new PdfInvalidException(
-                                MessageConstants.PDF_HUL_100); // PDF-HUL-100
-                    }
-                }
-            }
-
+            PdfXMPSource src = new PdfXMPSource(metadata, getFile(), "UTF-8");
+            _xmpProp = XMPParser.parse(src);
+        } catch (UnsupportedEncodingException uee) {
+            // TODO Might be raised by PdfXMPSource but won't because "UTF-8" is
+            // quite OK. So why catch this at all? Rather check above whether
+            // the input is valid UTF-8.
+            _logger.log(Level.INFO,
+                    "Attempt to use explicit encoding to parse XMP metadata failed.",
+                    uee);
+            info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_100, // PDF-HUL-100
+                    _parser.getOffset()));
+            info.setValid(false);
+            return false;
+        } catch (SAXException se) {
+            info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_101, // PDF-HUL-101
+                    _parser.getOffset()));
+            info.setValid(false);
+            return false;
         } catch (PdfException e) {
             e.disparage(info);
             info.setMessage(new ErrorMessage(e.getJhoveMessage(), _parser.getOffset()));
             // Continue parsing if it's only invalid
             return (e instanceof PdfInvalidException);
         } catch (Exception e) {
+            // TODO Really raise this for every kind of generic exception?
             info.setMessage(new ErrorMessage(MessageConstants.PDF_HUL_101, // PDF-HUL-101
                     _parser.getOffset()));
             info.setValid(false);

@@ -12,9 +12,7 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
-import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
-import javax.xml.parsers.SAXParserFactory;
 
 /**
  * Encapsulation of standard TIFF IFD.
@@ -3615,48 +3613,19 @@ public class TiffIFD extends IFD {
 	}
 
 	/* Read XMP data from the tag, and return as a string. */
-	private Property readXMP(long count, long value) throws TiffException {
+	private Property readXMP(long count, long value) {
 		Property xmpProp = null;
 		try {
 			byte[] buf = readTrueByteArray(BYTE, count, value);
 			ByteArrayInputStream strm = new ByteArrayInputStream(buf);
-			ByteArrayXMPSource src = new ByteArrayXMPSource(strm);
-
-			// Create an InputSource to feed the parser.
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-			factory.setNamespaceAware(true);
-			XMLReader parser = factory.newSAXParser().getXMLReader();
-			// InputStream stream = new XMLWrapperStream
-			// (new StreamInputStream (metadata, getFile ()), "dummyroot");
-			XMPHandler handler = new XMPHandler();
-			parser.setContentHandler(handler);
-			// We have to parse twice. The first time, we may get
-			// an encoding change as part of an exception thrown. If this
-			// happens, we create a new InputSource with the encoding, and
-			// continue.
-			try {
-				parser.parse(src);
-				xmpProp = src.makeProperty();
-				return xmpProp;
-			} catch (SAXException se) {
-				String msg = se.getMessage();
-				if (msg != null && msg.startsWith("ENC=")) {
-					String encoding = msg.substring(5);
-					try {
-						// Reader rdr = new InputStreamReader (stream,
-						// encoding);
-						src = new ByteArrayXMPSource(strm, encoding);
-						parser.parse(src);
-					} catch (UnsupportedEncodingException uee) {
-						throw new TiffException(MessageConstants.TIFF_HUL_14);
-					}
-				}
-				xmpProp = src.makeProperty();
-				return xmpProp;
-			}
-		} catch (TiffException e) {
-			throw e;
-		} catch (Exception f) {
+			ByteArrayXMPSource src = new ByteArrayXMPSource(strm, "UTF-8");
+			return XMPParser.parse(src);
+		} catch (SAXException se) {
+			_info.setMessage(new ErrorMessage(MessageConstants.TIFF_HUL_14));
+			_info.setValid(false);
+			return null;
+		} catch (Exception ex) {
+			// TODO Shouldn't we re-throw this exception?
 			return null;
 		}
 	}
