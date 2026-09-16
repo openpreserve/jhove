@@ -123,7 +123,7 @@ In addition to the standard JHOVE [representation information](/documentation#re
 
     - (Optional) property "CommentExtension" of type STRING and arity SCALAR
 
-Image technical properties are reported in terms of the NISO [Z39.87](https://www.niso.org/standards-committees/z3987) data dictionary.
+Image technical properties are reported in terms of the NISO [Z39.87](https://www.niso.org/publications/ansiniso-z3987-2006-r2017-data-dictionary-technical-metadata-digital-still-images) data dictionary.
 
 {: #profiles .section-heading}
 ### 5.1 Profiles

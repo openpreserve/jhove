@@ -94,7 +94,7 @@ Profile requirements include:
     | "ima4" | "IMA 4:1"                |                                                                      |
     | "MAC3" | "MACE 3-to-1"            | Macintosh Audio Compression/Expansion                               |
     | "MACE6" | "MACE 6-to-1"           |                                                                      |
-    | "QDMC" | "QDesign Music"          | [QDesign](http://www.qdesign.com/) Music codec                      |
+    | "QDMC" | "QDesign Music"          | QDesign Music codec                                                 |
     | "Qclp" | "QualComm PureVoice"     | [QualComm](http://www.qualcomm.com/) PureVoice codec                |
     | "rt24" | "RT24 50:1"              | [Voxware](http://www.voxware.com/) codec                            |
     | "rt29" | "RT29 50:1"              |                                                                      |
