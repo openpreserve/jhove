@@ -11,7 +11,7 @@ JHOVE is an open source file format identification, validation and characterisat
 
 ### From the Open Preservation web site
 
-1. You can find out more about JHOVE and download the latest installer from the Open Preservation Foundation (OPF) JHOVE product page : [http://openpreservation.org/technology/products/jhove/](http://openpreservation.org/technology/products/jhove/).
+1. You can find out more about JHOVE and download the latest installer from the Open Preservation Foundation (OPF) JHOVE product page : [https://openpreservation.org/tools/jhove/](https://openpreservation.org/tools/jhove/).
 
 2. Press the "Download JHOVE" button :  
 ![Screenshot of the Open Preservation Foundation website JHOVE product page](jhove-opf-download.png "OPF Site JHOVE product page")

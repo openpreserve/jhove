@@ -51,7 +51,7 @@ The following criteria must be met by an AIFF file for JHOVE to consider it vali
 
 The MIME type is reported as: `audio/x-aiff`.
 
-In addition to the standard JHOVE [representation information](index.html#repinfo), the following AIFF-specific properties are reported:
+In addition to the standard JHOVE [representation information](/documentation#repinfo), the following AIFF-specific properties are reported:
 
 - Property "AIFFMetadata" of type PROPERTY and arity ARRAY
   - Properties capturing the technical attributes of the AIFF image from all chunks
@@ -94,7 +94,7 @@ Profile requirements include:
     | "ima4" | "IMA 4:1"                |                                                                      |
     | "MAC3" | "MACE 3-to-1"            | Macintosh Audio Compression/Expansion                               |
     | "MACE6" | "MACE 6-to-1"           |                                                                      |
-    | "QDMC" | "QDesign Music"          | [QDesign](http://www.qdesign.com/) Music codec                      |
+    | "QDMC" | "QDesign Music"          | QDesign Music codec                                                 |
     | "Qclp" | "QualComm PureVoice"     | [QualComm](http://www.qualcomm.com/) PureVoice codec                |
     | "rt24" | "RT24 50:1"              | [Voxware](http://www.voxware.com/) codec                            |
     | "rt29" | "RT29 50:1"              |                                                                      |

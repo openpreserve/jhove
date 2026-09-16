@@ -48,7 +48,7 @@ The following criteria must be met by a GIF file for JHOVE to consider it valid:
 
 The MIME type is reported as: image/gif
 
-In addition to the standard JHOVE [representation information](index.html#repinfo), the following GIF-specific properties are reported:
+In addition to the standard JHOVE [representation information](/documentation#repinfo), the following GIF-specific properties are reported:
 
 - Property "GIFMetadata" of type PROPERTY and arity ARRAY
   - Property "GraphicRenderingBlocks" of type INTEGER and arity SCALAR  
@@ -123,7 +123,7 @@ In addition to the standard JHOVE [representation information](index.html#repinf
 
     - (Optional) property "CommentExtension" of type STRING and arity SCALAR
 
-Image technical properties are reported in terms of the NISO [Z39.87](https://www.niso.org/standards-committees/z3987) data dictionary.
+Image technical properties are reported in terms of the NISO [Z39.87](https://www.niso.org/publications/ansiniso-z3987-2006-r2017-data-dictionary-technical-metadata-digital-still-images) data dictionary.
 
 {: #profiles .section-heading}
 ### 5.1 Profiles

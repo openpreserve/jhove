@@ -65,7 +65,7 @@ A file which consists of a JPEG data stream, but does not contain the required s
 
 The MIME type is reported as: image/jpeg
 
-In addition to the standard JHOVE [representation information](index.html#repinfo), the following JPEG-specific properties are reported:
+In addition to the standard JHOVE [representation information](/documentation#repinfo), the following JPEG-specific properties are reported:
 
 - Property "JPEGMetadata" of type PROPERTY and arity ARRAY
   - Property "CompressionType" of type STRING and arity SCALAR

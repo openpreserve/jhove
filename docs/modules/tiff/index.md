@@ -83,7 +83,7 @@ The following criteria must be met by a TIFF file for JHOVE to consider it valid
 
 The MIME type is reported as: image/tiff, except for the TIFF-FX profile, which is reported as: image/tiff-fx, and the Class F profile, which is reported as: image/ief.
 
-In addition to the standard JHOVE [representation information](/documentation#repinfo), all [TIFF tags](tags) and their values are displayed.
+In addition to the standard JHOVE [representation information](/documentation#repinfo), all [TIFF tags](/modules/tiff/tags/) and their values are displayed.
 
 By default numeric flag values are displayed using descriptive text labels and rational values are displayed as real decimals. To see the actual "raw" data values use the \-r command line option.
 

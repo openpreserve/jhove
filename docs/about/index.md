@@ -26,7 +26,7 @@ Members can also choose to guide the roadmap and:
 - Vote for bug fixes and enhancements to be included in each release cycle
 - Receive technical support
 
-Find out more: [http://openpreservation.org/about/join/](http://openpreservation.org/about/join/)
+Find out more: [https://openpreservation.org/membership/](https://openpreservation.org/membership/)
 
 #### Donate
 

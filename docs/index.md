@@ -40,9 +40,9 @@ JHOVE is a file format identification, validation, and characterisation tool. It
 | [WARC-kb](/modules/warc/) | WARC (Web ARChive) format | .warc/ .warc.gz | application/warc |
 | [WAVE-hul](/modules/wave/) | Audio for Windows format (WAVE) | .wav/ .bwf/ .rt64 | audio/vnd.wave |
 | [XML-hul](/modules/xml/) | XML (Extensible Markup Language) format | .xml | text/xml |
-| [EPUB-ptc](/modules/epub/) | EPUB format | .epub | application/epub+zip |
-| [MP3](/modules/mp3/) | MP3-MnH |     |     |
-| [ZIP/ GZIP](/modules/zip/) | ZIP-ptc/ GZIP-ptc |     |     |
+| [EPUB-ptc](/modules/third-party/epub/) | EPUB format | .epub | application/epub+zip |
+| [MP3](/modules/third-party/mp3/) | MP3-MnH |     |     |
+| [ZIP/ GZIP](/modules/third-party/zip/) | ZIP-ptc/ GZIP-ptc |     |     |
 
 {: #getting-started .section-heading}
 ## Getting Started
