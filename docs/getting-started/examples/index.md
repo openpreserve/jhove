@@ -43,7 +43,7 @@ Jhove (Rel. 1.34.0, 2025-07-02)
   Rights: Derived from software Copyright 2004-2011 by the President and Fellows of Harvard College. Version 1.7 to 1.11 independently released. Version 1.12 onwards released by Open Preservation Foundation. Released under the GNU Lesser General Public License.
 ```
 
-{: #moule .section-heading}
+{: #module .section-heading}
 ## 2 Module
 
 ```bash

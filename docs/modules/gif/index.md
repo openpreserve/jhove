@@ -48,7 +48,7 @@ The following criteria must be met by a GIF file for JHOVE to consider it valid:
 
 The MIME type is reported as: image/gif
 
-In addition to the standard JHOVE [representation information](index.html#repinfo), the following GIF-specific properties are reported:
+In addition to the standard JHOVE [representation information](/documentation#repinfo), the following GIF-specific properties are reported:
 
 - Property "GIFMetadata" of type PROPERTY and arity ARRAY
   - Property "GraphicRenderingBlocks" of type INTEGER and arity SCALAR  

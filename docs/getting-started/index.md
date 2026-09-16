@@ -199,7 +199,7 @@ The following syntax is used to discover, or identify, the format of a digital o
 
 where the first ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
 
-The digital object(s) can be specified as a file or directory pathname or as a URI. If a directory is specified, JHOVE will recursively walk through the directory. The optional \-s flag specified that the identification should be performed solely on the basis of the internal signatures (e.g., magic numbers) associated with the formats, rather than by a complete parsing of the object. After the object's format has been identified, its representation information is [displayed](examples#identification). The optional \-k flag specifies that object checksum values should be calculated and displayed as part of the representation information.
+The digital object(s) can be specified as a file or directory pathname or as a URI. If a directory is specified, JHOVE will recursively walk through the directory. The optional \-s flag specified that the identification should be performed solely on the basis of the internal signatures (e.g., magic numbers) associated with the formats, rather than by a complete parsing of the object. After the object's format has been identified, its representation information is [displayed](/getting-started/examples/#identification). The optional \-k flag specifies that object checksum values should be calculated and displayed as part of the representation information.
 
 If the file or URI contains spaces, then it must be enclosed in quotation marks, e.g.,
 
@@ -235,7 +235,7 @@ jhove ... -H output-handler
 
 where the ellipsis ... is a placeholder for any of the optional standard options defined [above](#invocation).
 
-The first invocation option will display descriptive information about [JHOVE](examples#app) itself, including a list of all loaded modules and output handlers. The second option will display descriptive information about the named [module](examples#module). The third option will display descriptive information about the named [output handler](examples#handler).
+The first invocation option will display descriptive information about [JHOVE](/getting-started/examples/#application) itself, including a list of all loaded modules and output handlers. The second option will display descriptive information about the named [module](/getting-started/examples/#module). The third option will display descriptive information about the named [output handler](/getting-started/examples/#output-handler).
 
 The class file implementing the named module or output handler must be found on the Java CLASSPATH at the time of invocation. Note that JHOVE recognizes modules and output handler names in a case-insensitive manner: "ASCII-hul" and "ascii-hul" both specify the standard [ASCII](/modules/ascii/) module.
 
@@ -317,7 +317,7 @@ jhove ... -h text ...
 
 (Recall that JHOVE output handlers can be specified in a case-insensitive manner.)
 
-Regardless of the [configuration](config/) options, JHOVE always statically loads the Text output handler.
+Regardless of the [configuration](/getting-started/config/) options, JHOVE always statically loads the Text output handler.
 
 {: #xml .section-heading}
 ### XML Output Handler
@@ -395,7 +395,7 @@ jhove ... -h audit ...
 
 (Recall that JHOVE output handlers can be specified in a case-insensitive manner.)
 
-Regardless of the [configuration](config/) options, JHOVE always statically loads the Audit output handler.
+Regardless of the [configuration](/getting-started/config/) options, JHOVE always statically loads the Audit output handler.
 
 {: #logging-support .section-heading}
 ## Logging support

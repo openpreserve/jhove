@@ -51,7 +51,7 @@ The following criteria must be met by an AIFF file for JHOVE to consider it vali
 
 The MIME type is reported as: `audio/x-aiff`.
 
-In addition to the standard JHOVE [representation information](index.html#repinfo), the following AIFF-specific properties are reported:
+In addition to the standard JHOVE [representation information](/documentation#repinfo), the following AIFF-specific properties are reported:
 
 - Property "AIFFMetadata" of type PROPERTY and arity ARRAY
   - Properties capturing the technical attributes of the AIFF image from all chunks
