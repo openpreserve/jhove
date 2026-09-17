@@ -8,10 +8,15 @@ package edu.harvard.hul.ois.jhove.module.xml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.channels.FileLock;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -38,6 +44,8 @@ import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
  * @author Gary McGath
  */
 public class XmlModuleHandler extends DefaultHandler {
+
+    private static final Map<String, Object> CACHE_FILE_LOCKS = new ConcurrentHashMap<>();
 
     /** Map of namespace prefixes to URIs. */
     private Map<String, String> _namespaces;
@@ -111,6 +119,12 @@ public class XmlModuleHandler extends DefaultHandler {
     /** Map from URIs to local schema files. */
     private Map<String, File> _localSchemas;
 
+    /** Schema cache directory. */
+    private File _cacheDir;
+
+    /** Schema cache expiration time (in milliseconds). */
+    private long _cacheExp;
+
     /**
      * Constructor.
      */
@@ -128,6 +142,8 @@ public class XmlModuleHandler extends DefaultHandler {
         _schemas = new LinkedList<>();
         _unparsedEntities = new LinkedList<>();
         _notations = new LinkedList<>();
+        _cacheDir = null;
+        _cacheExp = -1;
         _sigFlag = false;
     }
 
@@ -145,6 +161,20 @@ public class XmlModuleHandler extends DefaultHandler {
      */
     public void setLocalSchemas(Map<String, File> schemas) {
         _localSchemas = schemas;
+    }
+
+    /**
+     * Sets the schema cache directory used for downloaded XML schemas.
+     */
+    public void setCacheDirectory(File cacheDirectory) {
+        _cacheDir = cacheDirectory;
+    }
+
+    /**
+     * Sets the expiration time for cached schemas, in milliseconds.
+     */
+    public void setCacheExpiration(long cacheExpiration) {
+        _cacheExp = cacheExpiration * 1000L;
     }
 
     /**
@@ -343,9 +373,9 @@ public class XmlModuleHandler extends DefaultHandler {
         // Attempt to resolve public identifiers to local JHOVE resources.
         InputSource ent = DTDMapper.publicIDToFile(publicId);
 
-        // Attempt to resolve redirected URLs.
+        // Attempt to resolve using the URLs.
         if (ent == null) {
-            return this.resolveEntity(systemId);
+            return this.resolveEntityFromURL(systemId);
         } else {
             // A little magic so SAX won't give up in advance on
             // relative URI's.
@@ -355,22 +385,33 @@ public class XmlModuleHandler extends DefaultHandler {
         return ent;
     }
 
-    private final InputSource resolveEntity(String entityUrl) throws SAXException {
+    /**
+     * Attempts to resolve the given system ID as a URL, following redirects
+     * and using a local cache for downloaded schemas if configured. Returns
+     * an InputSource for the resolved entity, or null if it cannot be resolved.
+     */
+    private final InputSource resolveEntityFromURL(String entityUrl) throws SAXException {
         try {
-            URLConnection conn = new URL(entityUrl).openConnection();
+            URL url = new URL(entityUrl);
+            File cacheFile = getCachedSchemaFile(url);
+            if (cacheFile != null) {
+                if (cacheFile.exists() && isCacheFresh(cacheFile)) {
+                    return new InputSource(new FileInputStream(cacheFile));
+                }
+                File downloaded = downloadToCache(url, cacheFile);
+                if (downloaded != null) {
+                    return new InputSource(new FileInputStream(downloaded));
+                }
+                if (cacheFile.exists()) {
+                    return new InputSource(new FileInputStream(cacheFile));
+                }
+            }
+
+            URLConnection conn = openURLWithRedirects(url);
             if (conn instanceof HttpURLConnection) {
                 int status = ((HttpURLConnection) conn).getResponseCode();
                 if (status == HttpURLConnection.HTTP_OK) {
                     return new InputSource(conn.getInputStream());
-                }
-                if (status == HttpURLConnection.HTTP_MOVED_TEMP
-                        || status == HttpURLConnection.HTTP_MOVED_PERM
-                        || status == HttpURLConnection.HTTP_SEE_OTHER
-                        || status == 307
-                        || status == 308) {
-
-                    String newUrl = conn.getHeaderField("Location");
-                    return this.resolveEntity(newUrl);
                 }
             }
         } catch (IOException ioe) {
@@ -379,6 +420,185 @@ public class XmlModuleHandler extends DefaultHandler {
             throw new SAXException(ioe);
         }
         return null;
+    }
+
+    /**
+     * Checks if the cache file is fresh based on the configured expiration time (in seconds).
+     */
+    private boolean isCacheFresh(File cacheFile) {
+        if (cacheFile == null || !cacheFile.exists()) {
+            return false;
+        }
+        if (_cacheExp < 0) {
+            return true;
+        }
+        long age = System.currentTimeMillis() - cacheFile.lastModified();
+        return age < _cacheExp;
+    }
+
+    /**
+     * Returns a File object for the cached schema corresponding to the given URL,
+     * or null if caching is not configured or the URL is not valid for caching.
+     */
+    private File getCachedSchemaFile(URL url) {
+        if (_cacheDir == null || url == null) {
+            return null;
+        }
+        String protocol = url.getProtocol();
+        if (!"http".equalsIgnoreCase(protocol)
+                && !"https".equalsIgnoreCase(protocol)) {
+            return null;
+        }
+        String cachedPath = getCacheRelativePath(url);
+        if (cachedPath == null || cachedPath.isEmpty()) {
+            return null;
+        }
+        File cacheFile = new File(_cacheDir, cachedPath);
+        File parentDir = cacheFile.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+        return cacheFile;
+    }
+
+    /**
+     * Generates a relative path for caching the schema based on the URL. This method
+     * converts the URL into a filesystem-friendly path by using the host and path components.
+     */
+    private String getCacheRelativePath(URL url) {
+        try {
+            URI uri = url.toURI();
+            String path = uri.getHost();
+            if (path == null) {
+                path = uri.getPath();
+            } else {
+                path += uri.getPath();
+            }
+            if (path == null) {
+                return null;
+            }
+            while (path.startsWith("/")) {
+                path = path.substring(1);
+            }
+            path = path.replaceAll("[^a-zA-Z0-9./_-]", "_");
+            return path;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Downloads the file at the given URL to the cache file, if possible.
+     * 
+     * It supports multiple instances downloading simultaneously by using 
+     * a lock file to coordinate access to the cache file. If the download 
+     * is successful, it returns the cache file. If the download fails but 
+     * a cache file already exists, it returns the existing cache file. 
+     * 
+     * If the download fails and no cache file exists, it returns null.
+     */
+    private File downloadToCache(URL url, File cacheFile) {
+        if (cacheFile == null) {
+            return null;
+        }
+
+        Object localLock;
+        try {
+            localLock = CACHE_FILE_LOCKS.computeIfAbsent(cacheFile.getCanonicalPath(), k -> new Object());
+        } catch (IOException e) {
+            localLock = new Object();
+        }
+
+        synchronized (localLock) {
+            File lockFile = new File(cacheFile.getAbsolutePath() + ".lock");
+            FileLock lock = null;
+            RandomAccessFile lockRaf = null;
+
+            try {
+                // Acquire exclusive lock to coordinate concurrent downloads across processes
+                lockRaf = new RandomAccessFile(lockFile, "rw");
+                lock = lockRaf.getChannel().lock();
+
+                // Double-check if cache file was created by another process
+                if (cacheFile.exists() && isCacheFresh(cacheFile)) {
+                    return cacheFile;
+                }
+
+                // Download the file to a temporary location
+                URLConnection conn = openURLWithRedirects(url);
+                File tempFile = new File(cacheFile.getAbsolutePath() + ".download");
+                try (InputStream in = conn.getInputStream();
+                        FileOutputStream out = new FileOutputStream(tempFile)) {
+                    byte[] buf = new byte[8192];
+                    int n;
+                    while ((n = in.read(buf)) != -1) {
+                        out.write(buf, 0, n);
+                    }
+                }
+
+                // Atomically rename temp file to cache file
+                if (!tempFile.renameTo(cacheFile)) {
+                    if (cacheFile.exists()) {
+                        cacheFile.delete();
+                    }
+                    tempFile.renameTo(cacheFile);
+                }
+                return cacheFile;
+            } catch (IOException ioe) {
+                if (cacheFile.exists()) {
+                    return cacheFile;
+                }
+                return null;
+            } finally {
+                // Release lock and clean up resources
+                if (lock != null) {
+                    try {
+                        lock.release();
+                    } catch (IOException e) {
+                        // Ignore lock release errors
+                    }
+                }
+                if (lockRaf != null) {
+                    try {
+                        lockRaf.close();
+                    } catch (IOException e) {
+                        // Ignore close errors
+                    }
+                }
+                // Clean up lock file
+                if (lockFile.exists()) {
+                    lockFile.delete();
+                }
+            }
+        }
+    }
+
+    /**
+     * Opens a URL connection, following redirects.
+     */
+    private URLConnection openURLWithRedirects(URL url) throws IOException {
+        URLConnection conn = url.openConnection();
+        if (conn instanceof HttpURLConnection) {
+            int status = ((HttpURLConnection) conn).getResponseCode();
+            if (isRedirectStatus(status)) {
+                String newUrl = conn.getHeaderField("Location");
+                if (newUrl != null && !newUrl.isEmpty()) {
+                    return openURLWithRedirects(new URL(newUrl));
+                }
+            }
+        }
+        return conn;
+    }
+
+    /**
+     * Checks if the given HTTP status code indicates a redirect.
+     */
+    private boolean isRedirectStatus(int status) {
+        return status == HttpURLConnection.HTTP_MOVED_TEMP
+                || status == HttpURLConnection.HTTP_MOVED_PERM
+                || status == HttpURLConnection.HTTP_SEE_OTHER
+                || status == 307
+                || status == 308;
     }
 
     /**

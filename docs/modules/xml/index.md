@@ -42,6 +42,23 @@ Example: `schema=http://example.com/schema.xsd;C:\schemas\example.com\schema.xsd
 
 Indicates that [textMD](/references#textmd) metadata should be included as part of a document's representation information.
 
+**cacheDirectory=_path-for-schema-cache_**
+
+Specifies the path where downloaded XML schema files will be cached. If the parameter is omitted, there will be no caching enabled.
+
+The schema files will be stored in a sub-path derived from the download URL. `https://www.example.com/schema/example.xsd` will be cached as `<cacheDirectory>/www.example.com/schema/example.xsd`.
+
+**cacheExpiration=_expiration-time-in-seconds_**
+
+The number of seconds the cached file will remain valid. If the file is expired, it will no longer be used and be overwritten with a newly downloaded file
+upon the next request for this schema.
+
+Note that the file will not be deleted after the expiration time, it will just no longer be used. Provide your own cleanup routine if you want expired schema files to be physically removed from the cache.
+
+The file's modification time is used as a reference point to calculate the expiration timestamp from.
+
+A negative value causes the cached files to never expire.
+
 {: #coverage .section-heading}
 ## 2 Coverage
 
