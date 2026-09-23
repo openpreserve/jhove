@@ -35,10 +35,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 import edu.harvard.hul.ois.jhove.Agent;
 import edu.harvard.hul.ois.jhove.AgentType;
@@ -62,7 +59,7 @@ import edu.harvard.hul.ois.jhove.RepInfo;
 import edu.harvard.hul.ois.jhove.Signature;
 import edu.harvard.hul.ois.jhove.SignatureType;
 import edu.harvard.hul.ois.jhove.SignatureUseType;
-import edu.harvard.hul.ois.jhove.XMPHandler;
+import edu.harvard.hul.ois.jhove.XMPParser;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessage;
 import edu.harvard.hul.ois.jhove.messages.JhoveMessages;
 import edu.harvard.hul.ois.jhove.module.jpeg.ArithConditioning;
@@ -1198,7 +1195,7 @@ public class JpegModule extends ModuleBase {
 			--length;
 			byte[] xmpBuf = new byte[length - 8];
 			readByteBuf(_dstream, xmpBuf, this);
-			_xmpProp = readXMP(xmpBuf);
+			_xmpProp = readXMP(xmpBuf, info);
 		} else {
 			skipBytes(_dstream, length - 8, this);
 		}
@@ -1796,44 +1793,15 @@ public class JpegModule extends ModuleBase {
 	}
 
 	/* Read XMP data from the tag, and return as a string. */
-	protected Property readXMP(byte[] buf) {
-		Property xmpProp = null;
-		// final String badMetadata = "Invalid or ill-formed XMP metadata";
+	protected Property readXMP(byte[] buf, RepInfo info) {
 		try {
 			ByteArrayInputStream strm = new ByteArrayInputStream(buf);
-			ByteArrayXMPSource src = new ByteArrayXMPSource(strm);
-
-			// Create an InputSource to feed the parser.
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-			factory.setNamespaceAware(true);
-			XMLReader parser = factory.newSAXParser().getXMLReader();
-			XMPHandler handler = new XMPHandler();
-			parser.setContentHandler(handler);
-			parser.setErrorHandler(handler);
-			// We have to parse twice. The first time, we may get
-			// an encoding change as part of an exception thrown. If this
-			// happens, we create a new InputSource with the encoding, and
-			// continue.
-			try {
-				parser.parse(src);
-				xmpProp = src.makeProperty();
-				return xmpProp;
-			} catch (SAXException se) {
-				String msg = se.getMessage();
-				if (msg != null && msg.startsWith("ENC=")) {
-					String encoding = msg.substring(5);
-					try {
-						// Reader rdr = new InputStreamReader (stream,
-						// encoding);
-						src = new ByteArrayXMPSource(strm, encoding);
-						parser.parse(src);
-					} catch (UnsupportedEncodingException uee) {
-						return null;
-					}
-				}
-				xmpProp = src.makeProperty();
-				return xmpProp;
-			}
+			ByteArrayXMPSource src = new ByteArrayXMPSource(strm, "UTF-8");
+			return XMPParser.parse(src);
+		} catch (SAXException se) {
+			info.setMessage(new ErrorMessage(MessageConstants.JPEG_HUL_15));
+			info.setValid(false);
+			return null;
 		} catch (Exception e) {
 			return null;
 		}

@@ -1110,7 +1110,7 @@ public final class AProfile extends PdfProfile
                "Perceptual".equals (str) ||
                "Saturation".equals (str));
     }
-    
+
     // See if the metadata stream from the catalog dictionary is OK
     private boolean metadataOK (PdfStream metadata)
     {
@@ -1124,47 +1124,20 @@ public final class AProfile extends PdfProfile
                 // We just metadata we didn't like. Filters aren't allowed.
                 return false;
             }
-            
-            // Create an InputSource to feed the parser.
-            SAXParserFactory factory = 
-                            SAXParserFactory.newInstance();
+            PdfXMPSource src = new PdfXMPSource (metadata, _module.getFile (), "UTF-8");
+            SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware (true);
             XMLReader parser = factory.newSAXParser ().getXMLReader ();
-            //InputStream stream = new StreamInputStream (metadata, _module.getFile ());
-            PdfXMPSource src = new PdfXMPSource (metadata, _module.getFile ());
             XMPHandler handler = new XMPHandler ();
             parser.setContentHandler (handler);
             parser.setErrorHandler (handler);
-            // We have to parse twice.  The first time, we may get
-            // an encoding change as part of an exception thrown.  If this
-            // happens, we create a new InputSource with the encoding, and
-            // continue.
-            try {
-                parser.parse (src);
-                if (!handler.isPdfaCompliant ()) {
-                    return false;
-                }
+            parser.parse (src);
+            if (!handler.isPdfaCompliant ()) {
+                return false;
             }
-            catch (SAXException se) {
-                String msg = se.getMessage ();
-                if (msg != null && msg.startsWith ("ENC=")) {
-                    // encoding change is not allowed with PDF/A, so there's no
-                    // need to re-parse
-                    return false;
-//                    String encoding = msg.substring (5);
-//                    try {
-//                        //Reader rdr = new InputStreamReader (stream, encoding);
-//                        src = new PdfXMPSource (metadata, _module.getFile (), encoding);
-//                        parser.parse (src);
-//                        if (!handler.isPdfaCompliant ()) {
-//                            return false;
-//                        }
-//                    }
-//                    catch (UnsupportedEncodingException uee) {
-//                        return false;
-//                    }
-                }
-            }
+        }
+        catch (SAXException se) {
+            return false;
         }
         catch (Exception e) {
             return false;
