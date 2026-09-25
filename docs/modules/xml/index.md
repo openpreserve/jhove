@@ -38,6 +38,12 @@ Specifies the local schema file to use for validation in place of any occurrence
 
 Example: `schema=http://example.com/schema.xsd;C:\schemas\example.com\schema.xsd`
 
+URLs containing upper case letters should be included once in the original and once in all lower case to ensure correct initial chaching and ongoing use, as the `_localSchemes` map in the `XmlModuleHandler.jar` expects lowercase versions of the URL.
+
+Example:
+`schema=http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd;schemas/MARC21slim.xsd`
+`schema=http://www.loc.gov/standards/marcxml/schema/marc21slim.xsd;schemas/MARC21slim.xsd`
+
 **withtextmd=_true_**
 
 Indicates that [textMD](/references#textmd) metadata should be included as part of a document's representation information.
