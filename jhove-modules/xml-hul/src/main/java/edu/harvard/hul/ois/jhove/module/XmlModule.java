@@ -1003,7 +1003,7 @@ public class XmlModule extends ModuleBase {
             String uriParam = param.substring(eq + 1, semi);
             String localParam = param.substring(semi + 1);
             try {
-                String locationUri = new URI(uriParam).toString();
+                String locationUri = new URI(uriParam).toString().toLowerCase();
                 File localFile = new File(localParam);
                 if (localFile.exists()) {
                     _localSchemas.put(locationUri, localFile);
