@@ -79,8 +79,7 @@ public class PDump
 		}
 		else if (token instanceof Literal) {
 		    System.out.println ("Literal[" +
-					(((Literal)token).isPDFDocEncoding () ?
-					 "PDF" : "UTF-16") + "] \"" +
+					(((Literal) token).getEncoding()) + "] \"" +
 					((Literal) token).getValue () + "\"");
 		}
 		else if (token instanceof Name) {

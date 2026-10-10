@@ -69,8 +69,8 @@ public class FileTokenizer extends Tokenizer {
                 _fileBufferPositionOffset = newOffset;
             }
             _fileBufferBytes = _file.read(_fileBuffer);
-            if (_fileBufferBytes <= 0) {
-                throw new EOFException ();
+            if (_fileBufferBytes == -1) {
+                throw new EOFException();
             }
             _fileBufferOffset = 0;
         }
